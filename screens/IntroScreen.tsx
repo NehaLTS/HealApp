@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Alert,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -8,18 +7,11 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
 import logo from "../assets/icon/logo.png";
 import { getHeight, getWidth } from "../libs/StyleHelper";
-console.log('intro screen **********')
+
 const IntroScreen = () => {
-  // const navigation = useNavigation();
-  const navigation = useNavigation<NavigationProp<any>>();
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
-  const goToScreen1 = () => {
-    // Alert.alert('kjhk')
-    navigation.navigate('Screen1');
-  };
   return (
     <SafeAreaView style={{flex:1}}>
     <View style={styles.container}>
@@ -52,7 +44,6 @@ const IntroScreen = () => {
             borderRadius: getHeight(5),
             zIndex: 1
           }}
-          onPress={goToScreen1}
         >
           <Text
             style={{
