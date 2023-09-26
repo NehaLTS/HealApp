@@ -5,20 +5,35 @@
  * @format
  */
 
-import React from "react";
-import { SafeAreaView } from "react-native";
-import IntroScreen from "./screens/IntroScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { lazy } from "react";
+import IntroStack from "./Navigator/IntroStack";
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const backgroundStyle = {
-    backgroundColor: "#fff",
-    flex: 1,
-  };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <IntroScreen />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="IntroStack"
+      >
+        <Stack.Screen
+          name="IntroStack"
+          component={IntroStack}
+        />
+        <Stack.Screen
+          name="ClientStack"
+          component={lazy(() => import("./Navigator/ClientStack"))}
+        />
+        <Stack.Screen
+          name="ProviderStack"
+          component={lazy(() => import("./Navigator/ProviderStack"))}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
