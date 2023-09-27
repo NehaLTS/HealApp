@@ -1,0 +1,43 @@
+{
+  "en": {
+    "translation": {
+      "intro":{
+        "welcome_heal":"Welcome to Heal",
+         "continue_client": "Continue as a Client",
+         "continue_provider":"Continue as a Provider"
+      }
+         
+    }
+  },
+   "he": {
+    "translation": {
+        "intro":{
+            "welcome_heal":"ברוכים הבאים לריפוי",
+             "continue_client": "המשך כלקוח",
+            "continue_provider":"המשך כספק"
+        }
+       
+    }
+  },
+  "ar": {
+    "translation": {
+        "intro":{
+          "welcome_heal":"مرحبا بكم في شفاء",
+           "continue_client": "الاستمرار كعميل",
+            "continue_provider":"الاستمرار كمزود"
+        }
+        
+    }
+  },
+   "ru": {
+    "translation": {
+        "intro":{
+             "welcome_heal":"добро пожаловать в Heal",
+              "continue_client": "Продолжить в качестве клиента",
+              "continue_provider":"Продолжить работу в качестве поставщика"
+        }
+      
+    }
+  }
+}
+  
