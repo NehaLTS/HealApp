@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import logo from "../assets/icon/logo.png";
 import { getHeight, getWidth } from "../libs/StyleHelper";
+import { GoogleButtonView } from "../common/googleauth/GoogleButtonView";
+
 
 const IntroScreen = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
@@ -45,6 +47,8 @@ const IntroScreen = () => {
             zIndex: 1
           }}
         >
+         <GoogleButtonView />
+
           <Text
             style={{
               fontSize: getHeight(24),
