@@ -3,9 +3,7 @@ import { Image, StyleSheet, TextInput, TextInputProps, TouchableOpacity, View } 
 import { colors } from '../designToken/colors';
 import { fontSize } from '../designToken/fontSizes';
 import { getHeight, getWidth } from '../libs/StyleHelper';
-import showSvg from '../designToken/svg/show.svg'
-import { SvgUri } from 'react-native-svg';
-
+import show from '../designToken/svg/show.png'
 const Input = ({ placeholder, type, onShowPassword, ...props }: { placeholder: string, type?: any, onShowPassword?: () => void } & TextInputProps) => {
 
   return (
@@ -20,11 +18,9 @@ const Input = ({ placeholder, type, onShowPassword, ...props }: { placeholder: s
       />
       {type === 'password' &&
         <TouchableOpacity onPress={onShowPassword}>
-          <SvgUri
-            width={40}
-            height={40}
-            uri={showSvg}
-         
+          <Image
+            source={show}
+            style={styles.showImage}
           />
         </TouchableOpacity>}
     </View>
@@ -46,7 +42,12 @@ const styles = StyleSheet.create({
     flex:1,
     color:"black"
   },
-
+  showImage: {
+    width: getWidth(25),
+    height: getHeight(25),
+    borderWidth: getWidth(2),
+    right:12,
+  },
 
 });
 
