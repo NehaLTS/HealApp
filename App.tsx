@@ -12,6 +12,7 @@ import LoginView from "./component/client/login/LoginView";
 import { getWidth, getHeight } from "./libs/StyleHelper";
 import { colors } from "./designToken/colors";
 import BasicInformation from "./component/client/registration/views/BasicInformation";
+import Camera from "./component/common/Camera";
 
 const App = () => {
   const backgroundStyle = {
@@ -25,7 +26,8 @@ const App = () => {
     <SafeAreaView style={backgroundStyle}>
       {/* <IntroScreen /> */}
       {/* <LoginView /> */}
-      <BasicInformation />
+      {/* <BasicInformation /> */}
+      <Camera />
     </SafeAreaView>
   );
 };
