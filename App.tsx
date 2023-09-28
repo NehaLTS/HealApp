@@ -5,30 +5,25 @@
  * @format
  */
 
-import React from "react";
-import { SafeAreaView } from "react-native";
-import IntroScreen from "./screens/IntroScreen";
-import LoginView from "./component/client/login/LoginView";
-import { getWidth, getHeight } from "./libs/StyleHelper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { lazy } from "react";
 import { colors } from "./designToken/colors";
-import BasicInformation from "./component/client/registration/views/BasicInformation";
-import Camera from "./component/common/Camera";
+import { dimens } from "./designToken/dimens";
+import { getWidth } from "./libs/StyleHelper";
+import IntroScreen from "./screens/IntroScreen";
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const backgroundStyle = {
-    backgroundColor: colors.white,
-    flex: 1,
-    paddingHorizontal: getWidth(20),
-    // paddingTop: getHeight(10),
-  };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      {/* <IntroScreen /> */}
-      {/* <LoginView /> */}
-      {/* <BasicInformation /> */}
-      <Camera />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Intro" screenOptions={{headerShown: false,}}>
+        <Stack.Screen name="Intro" component={IntroScreen} />
+        <Stack.Screen name="SignIn" component={lazy(() => import("./component/client/login/LoginView"))} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

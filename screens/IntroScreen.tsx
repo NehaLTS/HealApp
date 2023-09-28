@@ -9,10 +9,16 @@ import {
 } from "react-native";
 import logo from "../assets/icon/logo.png";
 import { getHeight, getWidth } from "../libs/StyleHelper";
-import LoginView from "../component/client/login/LoginView";
+import { useNavigation } from "@react-navigation/native";
+import { colors } from "../designToken/colors";
+import { dimens } from "../designToken/dimens";
 
 const IntroScreen = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const navigation = useNavigation()
+  const continueAsClient = () => {
+    navigation.navigate('SignIn');
+  };
   return (
     <View style={styles.container}>
       <View style={{ position: "relative" }}>
@@ -44,6 +50,7 @@ const IntroScreen = () => {
             borderRadius: getHeight(5),
             zIndex: 1
           }}
+          onPress={continueAsClient}
         >
           <Text
             style={{
@@ -84,6 +91,8 @@ export default IntroScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: getWidth(dimens.marginMd),
   },
   language: {
     color: "#000",
