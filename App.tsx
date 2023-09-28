@@ -8,10 +8,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { lazy } from "react";
-import { colors } from "./designToken/colors";
-import { dimens } from "./designToken/dimens";
-import { getWidth } from "./libs/StyleHelper";
-import IntroScreen from "./screens/IntroScreen";
+import IntroScreen from "./screens/intro/IntroScreen";
 
 const Stack = createNativeStackNavigator();
 

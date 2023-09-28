@@ -8,10 +8,10 @@ import {
   View
 } from "react-native";
 import logo from "../assets/icon/logo.png";
-import { getHeight, getWidth } from "../libs/StyleHelper";
 import { useNavigation } from "@react-navigation/native";
-import { colors } from "../designToken/colors";
-import { dimens } from "../designToken/dimens";
+import { colors } from "../../designToken/colors";
+import { dimens } from "../../designToken/dimens";
+import { getHeight, getWidth } from "../../libs/StyleHelper";
 
 const IntroScreen = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
