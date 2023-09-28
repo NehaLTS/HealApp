@@ -26,8 +26,7 @@ const App = () => {
     <SafeAreaView style={backgroundStyle}>
       {/* <IntroScreen /> */}
       {/* <LoginView /> */}
-      {/* <BasicInformation /> */}
-      <Camera />
+      <BasicInformation />
     </SafeAreaView>
   );
 };

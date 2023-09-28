@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import logo from "../../../../assets/icon/logo.png";
 import { colors } from "../../../../designToken/colors";
 import { fontSize } from "../../../../designToken/fontSizes";
@@ -9,9 +16,13 @@ import Tabs from "../../../common/Tabs";
 import Input from "../../../common/Input";
 import { fontWeight } from "../../../../designToken/fontWeights";
 import { dimes } from "../../../../designToken/dimes";
+import SelectImage from "../../../common/SelectImage";
 
 const BasicInformation = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isShowModal, setIsShowModal] = useState(false);
+
   const [currentStep, setCurrentStep] = useState(0);
   console.log(currentStep);
   const tab = [{ title: "1" }, { title: "2" }, { title: "3" }];
@@ -59,9 +70,7 @@ const BasicInformation = () => {
               keyboardType="number-pad"
             />
           </View>
-          <Text
-            style={styles.textForHelp}
-          >
+          <Text style={styles.textForHelp}>
             *It will help us to find a best doctor for you
           </Text>
         </>
@@ -80,26 +89,36 @@ const BasicInformation = () => {
               keyboardType="number-pad"
             />
           </View>
-          <Text
-            style={styles.textForHelp}
-          >
+          <Text style={styles.textForHelp}>
             *It will help us to find a best doctor for you
           </Text>
           <View style={styles.innerContainer}>
             <Text style={styles.profileText}>Add a profile photo</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={selectedImage ? 1 : 0.5}
+              onPress={() => {
+                !selectedImage && setIsShowModal(true);
+              }}
+            >
               <Image
-                source={require("../../../../assets/icon/editprofile.png")}
+                source={
+                  selectedImage
+                    ? { uri: selectedImage }
+                    : require("../../../../assets/icon/editprofile.png")
+                }
                 style={styles.editProfile}
               />
             </TouchableOpacity>
+            {selectedImage && (
+              <TouchableOpacity onPress={() => setIsShowModal(true)}>
+                <Text>hh</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </>
       ) : (
         <>
-          <View
-            style={styles.addCard}
-          >
+          <View style={styles.addCard}>
             <Image
               source={require("../../../../assets/icon/card.png")}
               style={styles.creditCard}
@@ -107,7 +126,11 @@ const BasicInformation = () => {
             <Text style={styles.profileText}>Add credit card</Text>
           </View>
           <View style={styles.inputContainer}>
-            <Input placeholder={"Credit Card Number*"} keyboardType='numeric' type='creditCardNumber' />
+            <Input
+              placeholder={"Credit Card Number*"}
+              keyboardType="numeric"
+              type="creditCardNumber"
+            />
             <View style={{ flexDirection: "row", columnGap: getHeight(20) }}>
               <Input placeholder={"MM/YY*"} containerWidth={100} />
               <Input placeholder={"CVV*"} containerWidth={70} />
@@ -134,6 +157,13 @@ const BasicInformation = () => {
         <View style={styles.skipForLater}>
           <Text style={styles.skipLaterText}>Skip for later</Text>
         </View>
+      )}
+      {isShowModal && (
+        <Modal visible={isShowModal} transparent>
+          <View style={{ backgroundColor: "#00000070", height: "100%" }}>
+            <SelectImage imageUri={setSelectedImage} closeModal={setIsShowModal} />
+          </View>
+        </Modal>
       )}
     </>
   );
@@ -194,8 +224,8 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getHeight(dimes.marginMd),
-    marginTop: getHeight(12),
+    gap: getHeight(dimes.paddingSm),
+    marginTop: getHeight(28),
   },
   profileText: {
     color: colors.black,
@@ -203,8 +233,9 @@ const styles = StyleSheet.create({
     fontWeight: fontWeight.normal,
   },
   editProfile: {
-    height: getHeight(60),
-    width: getWidth(60),
+    height: getHeight(dimes.iconMd),
+    width: getWidth(dimes.iconMd),
+    borderRadius: getHeight(12),
   },
   divider: {
     height: getWidth(1),
@@ -240,14 +271,14 @@ const styles = StyleSheet.create({
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimes.marginLg),
   },
-  textForHelp:{
+  textForHelp: {
     fontSize: fontSize.textMd,
     color: colors.black,
     paddingTop: getHeight(5),
   },
-  addCard:{
+  addCard: {
     flexDirection: "row",
     alignItems: "center",
     gap: getWidth(dimes.marginMd),
-  }
+  },
 });
