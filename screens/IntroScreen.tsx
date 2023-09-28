@@ -47,8 +47,6 @@ const IntroScreen = () => {
             zIndex: 1
           }}
         >
-         <GoogleButtonView />
-
           <Text
             style={{
               fontSize: getHeight(24),
