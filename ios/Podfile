@@ -44,7 +44,7 @@ target 'HealApp' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
+  pod 'FirebaseCore', :modular_headers => true
   target 'HealAppTests' do
     inherit! :complete
     # Pods for testing

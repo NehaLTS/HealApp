@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+    Alert,
     Image,
     SafeAreaView,
     StyleSheet,
@@ -12,13 +13,25 @@ import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { getTexts } from "../../libs/OneSkyHelper";
 import { useTranslationContext } from "../../contexts/UseTranslationsContext";
 import { IntroController } from "./IntroController";
-
+import { UseLoginClient } from "../../src/api's/UseLoginClient";
+interface requestData {
+    email: string;
+    password: string;
+}
 const Intro = () => {
+    const [dataa, setDataa] = React.useState<requestData | undefined>()
     const { languageCode } = useTranslationContext()
     const { intro } = getTexts(languageCode)
-
+    const { useLoginQuery } = UseLoginClient();
+    const { data, error, isLoading } = useLoginQuery(dataa);
     const { isChangeLanguage, handleLanguageChange, handleButtonPress } = IntroController();
-
+    const requestData = {
+        email: "adi@gmail.com",
+        password: "adit123",
+    };
+    const handleLogin = () => {
+        setDataa(requestData)
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -63,6 +76,7 @@ const Intro = () => {
                     <Text style={styles.welcomeText}>{intro.welcome_heal}</Text>
                 </View>
                 <View style={styles.buttonContainer}>
+                    <Text>{data?.token}</Text>
                     <TouchableOpacity
                         style={{
                             borderWidth: getHeight(1),
@@ -74,7 +88,7 @@ const Intro = () => {
                             borderRadius: getHeight(5),
                             zIndex: 1,
                         }}
-                        onPress={() => handleButtonPress()}
+                        onPress={handleLogin}
                     >
                         <Text
                             style={{
@@ -98,7 +112,7 @@ const Intro = () => {
                             borderRadius: getHeight(5),
 
                         }}
-                        onPress={() => handleButtonPress()}
+                        onPress={() => { }}
                     >
                         <Text
                             style={{

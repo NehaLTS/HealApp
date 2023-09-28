@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "843919956986",
+    "project_id": "heal-app-ccd03",
+    "storage_bucket": "heal-app-ccd03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843919956986:android:5e20e185d5b7459e8fe243",
+        "android_client_info": {
+          "package_name": "com.heal.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDCuh_lOpBak7wYMg5FtoHWhUCaWUDNPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

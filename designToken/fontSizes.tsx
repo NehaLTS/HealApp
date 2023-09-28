@@ -5,4 +5,4 @@ export const fontSize = {
     textXl: 18,
     heading: 24,
     headingLg: 26,
-}
+} as const
