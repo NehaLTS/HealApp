@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   signInButton: {
-    marginTop: getHeight(36),
+    marginTop: getHeight(dimes.marginLg + dimes.padding),
     alignSelf: "center",
   },
   signInViaText: {
@@ -168,6 +168,6 @@ const styles = StyleSheet.create({
   footerContainer: {
     flex: 0.88,
     justifyContent: "flex-end",
-    rowGap: getHeight(10),
+    rowGap: getHeight(dimes.marginSm),
   },
 });

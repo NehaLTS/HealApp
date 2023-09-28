@@ -14,6 +14,7 @@ import {
 import { colors } from "../../designToken/colors";
 import { fontSize } from "../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
+import { dimes } from "../../designToken/dimes";
 
 const Input = ({
   placeholder,
@@ -88,7 +89,7 @@ const Input = ({
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
-    borderWidth: getWidth(2),
+    borderWidth: getWidth(dimes.borderWidthBold),
     borderColor: colors.primary,
     borderRadius: getWidth(10),
     flexDirection: "row",
@@ -97,13 +98,13 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: fontSize.textLg,
-    padding: getHeight(10),
+    padding: getHeight(dimes.paddingXs),
     color: colors.black
   },
   showImage: {
     width: getWidth(24),
     height: getHeight(16),
-    marginRight: getHeight(10),
+    marginRight: getHeight(dimes.marginSm),
   },
   errorMessage: {
     color: colors.invalid,

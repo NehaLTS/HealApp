@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     columnGap: getHeight(16),
     alignSelf:'center',
-    paddingVertical: getHeight(10),
-    paddingBottom: getHeight(32)
+    paddingVertical: getHeight(dimes.paddingXs),
+    paddingBottom: getHeight(dimes.paddingMd + dimes.marginSm)
   },
   activeButtonText: {
     fontSize: getWidth(fontSize.textMd),

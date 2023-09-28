@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getHeight(20),
+    gap: getHeight(dimes.marginMd),
     marginTop: getHeight(12),
   },
   profileText: {
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   googlePayContainer: {
     flexDirection: "row",
-    gap: getHeight(26),
+    gap: getHeight(dimes.marginMd + dimes.padding),
     alignItems: "center",
     marginTop: getHeight(dimes.marginSm + dimes.padding),
   },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   skipLaterText: {
-    color: "black",
+    color: colors.black,
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimes.marginLg),
@@ -248,6 +248,6 @@ const styles = StyleSheet.create({
   addCard:{
     flexDirection: "row",
     alignItems: "center",
-    gap: getWidth(20),
+    gap: getWidth(dimes.marginMd),
   }
 });

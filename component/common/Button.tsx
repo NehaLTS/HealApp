@@ -2,6 +2,10 @@ import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet, TouchableOpacityProps, StyleProp, ViewStyle } from "react-native";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { fontWeight } from "../../designToken/fontWeights";
+import { fontSize } from "../../designToken/fontSizes";
+import { dimes } from "../../designToken/dimes";
+
+
 const Button = ({
   title,
   isPrimary,
@@ -30,7 +34,7 @@ const Button = ({
     >
       <Text
         style={{
-          fontSize: getHeight(24),
+          fontSize: getHeight(fontSize.heading),
           color: isPrimary ? "white" : "black",
           lineHeight: getHeight(28),
           fontWeight: (isSmall || !isPrimary) ? fontWeight.light : fontWeight.semiBold,
@@ -44,10 +48,10 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(1),
+    borderWidth: getHeight(dimes.borderWidthThin),
     alignItems: "center",
     justifyContent: "center",
-    height: getHeight(48),
+    height: getHeight(dimes.iconMd),
     borderRadius: getHeight(5),
     zIndex: 1,
   },

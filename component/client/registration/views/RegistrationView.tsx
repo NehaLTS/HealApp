@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingTop: getHeight(dimes.paddingMd + dimes.marginSm),
-    rowGap: getHeight(26),
+    rowGap: getHeight(dimes.marginSm + dimes.padding),
     paddingBottom: getHeight(dimes.paddingSm),
   },
   forgotText: {
@@ -160,6 +160,6 @@ const styles = StyleSheet.create({
   footerContainer: {
     flex: 0.88,
     justifyContent: "flex-end",
-    rowGap: getHeight(10),
+    rowGap: getHeight(dimes.marginSm),
   },
 });
