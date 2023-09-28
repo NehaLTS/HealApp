@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../../../assets/icon/logo.png";
 import { colors } from "../../../../designToken/colors";
-import { dimens } from "../../../../designToken/dimens";
+import { dimes } from "../../../../designToken/dimes";
 import { fontSize } from "../../../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Input from "../../../common/Input";
@@ -52,15 +52,15 @@ const RegistrationView = () => {
           <Text style={styles.signInViaText}>Or sign in via</Text>
           <Image
             source={require("../../../assets/icon/google.png")}
-            style={{ width: getWidth(40), height: getHeight(40) }}
+            style={{ width: getWidth(dimes.iconSmall), height: getHeight(dimes.iconSmall) }}
           />
           <Image
             source={require("../../../assets/icon/facebook.png")}
-            style={{ width: getWidth(40), height: getHeight(40) }}
+            style={{ width: getWidth(dimes.iconSmall), height: getHeight(dimes.iconSmall) }}
           />
           <Image
             source={require("../../../assets/icon/apple.png")}
-            style={{ width: getWidth(40), height: getHeight(50) }}
+            style={{ width: getWidth(dimes.iconSmall), height: getHeight(dimes.iconLg) }}
           />
         </View>
         <View style={styles.footer}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     alignSelf: "flex-end",
     padding: getHeight(5),
-    fontSize: getHeight(16),
+    fontSize: getHeight(fontSize.textLg),
     paddingRight: 0,
   },
   languagePopUp: {
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
     maxWidth: getWidth(125),
     height: getHeight(140),
     maxHeight: getHeight(142),
-    padding: getHeight(6),
-    borderWidth: getHeight(1),
+    padding: getHeight(dimes.padding),
+    borderWidth: getHeight(dimes.borderWidthThin),
     borderColor: colors.primary,
     zIndex: 1,
     borderRadius: getHeight(10),
@@ -123,21 +123,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   loginText: {
-    fontSize: getHeight(18),
+    fontSize: getHeight(fontSize.textLg),
     color: colors.black,
     alignSelf: "center",
     paddingTop: getHeight(12),
   },
   inputContainer: {
-    paddingTop: getHeight(dimens.paddingLg + dimens.marginSm),
+    paddingTop: getHeight(dimes.paddingMd + dimes.marginSm),
     rowGap: getHeight(26),
-    paddingBottom: getHeight(dimens.paddingSm),
+    paddingBottom: getHeight(dimes.paddingSm),
   },
   forgotText: {
     alignSelf: "center",
   },
   signInButton: {
-    marginTop: getHeight(36),
+    marginTop: getHeight(dimes.marginLg + dimes.padding),
     alignSelf: "center",
   },
   signInViaText: {

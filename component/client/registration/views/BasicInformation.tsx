@@ -8,6 +8,7 @@ import Button from "../../../common/Button";
 import Tabs from "../../../common/Tabs";
 import Input from "../../../common/Input";
 import { fontWeight } from "../../../../designToken/fontWeights";
+import { dimes } from "../../../../designToken/dimes";
 
 const BasicInformation = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
@@ -59,11 +60,7 @@ const BasicInformation = () => {
             />
           </View>
           <Text
-            style={{
-              fontSize: fontSize.textMd,
-              color: colors.black,
-              paddingTop: getHeight(5),
-            }}
+            style={styles.textForHelp}
           >
             *It will help us to find a best doctor for you
           </Text>
@@ -84,11 +81,7 @@ const BasicInformation = () => {
             />
           </View>
           <Text
-            style={{
-              fontSize: fontSize.textMd,
-              color: colors.black,
-              paddingTop: getHeight(5),
-            }}
+            style={styles.textForHelp}
           >
             *It will help us to find a best doctor for you
           </Text>
@@ -105,11 +98,7 @@ const BasicInformation = () => {
       ) : (
         <>
           <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: getWidth(20),
-            }}
+            style={styles.addCard}
           >
             <Image
               source={require("../../../../assets/icon/card.png")}
@@ -120,8 +109,8 @@ const BasicInformation = () => {
           <View style={styles.inputContainer}>
             <Input placeholder={"Credit Card Number*"} keyboardType='numeric' type='creditCardNumber' />
             <View style={{ flexDirection: "row", columnGap: getHeight(20) }}>
-              <Input placeholder={"MM/YY*"} containerWidth={"100%"} />
-              <Input placeholder={"CVV*"} containerWidth={"100%"} />
+              <Input placeholder={"MM/YY*"} containerWidth={100} />
+              <Input placeholder={"CVV*"} containerWidth={70} />
             </View>
             <View style={styles.divider} />
           </View>
@@ -167,7 +156,7 @@ const styles = StyleSheet.create({
   language: {
     color: colors.black,
     padding: getHeight(5),
-    fontSize: getHeight(16),
+    fontSize: getHeight(fontSize.textLg),
     paddingRight: 0,
   },
   languagePopUp: {
@@ -176,8 +165,8 @@ const styles = StyleSheet.create({
     maxWidth: getWidth(125),
     height: getHeight(140),
     maxHeight: getHeight(140),
-    padding: getHeight(6),
-    borderWidth: getHeight(1),
+    padding: getHeight(dimes.padding),
+    borderWidth: getHeight(dimes.borderWidthThin),
     borderColor: colors.primary,
     zIndex: 1,
     borderRadius: getHeight(10),
@@ -220,7 +209,7 @@ const styles = StyleSheet.create({
   divider: {
     height: getWidth(1),
     backgroundColor: colors.black,
-    marginTop: getHeight(10),
+    marginTop: getHeight(dimes.marginSm),
   },
   googlePay: {
     height: getHeight(32),
@@ -228,7 +217,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     gap: getHeight(26),
-    marginTop: getHeight(18),
+    marginTop: getHeight(dimes.marginSm + dimes.paddingXs),
   },
   creditCard: {
     width: getWidth(25),
@@ -238,7 +227,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: getHeight(26),
     alignItems: "center",
-    marginTop: getHeight(16),
+    marginTop: getHeight(dimes.marginSm + dimes.padding),
   },
   skipForLater: {
     flex: 1,
@@ -248,7 +237,17 @@ const styles = StyleSheet.create({
   skipLaterText: {
     color: "black",
     textAlign: "center",
-    fontSize: getWidth(18),
-    marginBottom: getHeight(30),
+    fontSize: getWidth(fontSize.textXl),
+    marginBottom: getHeight(dimes.marginLg),
   },
+  textForHelp:{
+    fontSize: fontSize.textMd,
+    color: colors.black,
+    paddingTop: getHeight(5),
+  },
+  addCard:{
+    flexDirection: "row",
+    alignItems: "center",
+    gap: getWidth(20),
+  }
 });

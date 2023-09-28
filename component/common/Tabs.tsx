@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
+import { dimes } from "../../designToken/dimes";
 import { fontSize } from "../../designToken/fontSizes";
 import { getWidth, getHeight } from "../../libs/StyleHelper";
 
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   activeButtonView: {
     height: getHeight(30),
     width: getWidth(30),
-    borderRadius: getWidth(dimens.marginSm),
+    borderRadius: getWidth(dimes.marginSm),
     alignItems: "center",
     justifyContent: "center",
   },
