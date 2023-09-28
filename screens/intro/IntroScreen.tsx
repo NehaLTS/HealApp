@@ -1,30 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Image,
-  SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from "react-native";
-import logo from "../assets/icon/logo.png";
-import { useNavigation } from "@react-navigation/native";
+import Button from "../../component/common/Button";
 import { colors } from "../../designToken/colors";
 import { dimens } from "../../designToken/dimens";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
+import logo from "../assets/icon/logo.png";
+import IntroController from "./IntroController";
 
 const IntroScreen = () => {
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
-  const navigation = useNavigation()
-  const continueAsClient = () => {
-    navigation.navigate('SignIn');
-  };
+  const { isChangeLanguage, onChangeLanguage, continueAsClient } = IntroController();
+
   return (
     <View style={styles.container}>
       <View style={{ position: "relative" }}>
         <Text
           style={styles.language}
-          onPress={() => setIsChangeLanguage(!isChangeLanguage)}
+          onPress={onChangeLanguage}
         >
           EN
         </Text>
@@ -39,51 +35,9 @@ const IntroScreen = () => {
         <Text style={styles.welcomeText}>Welcome to Heal</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={{
-            borderWidth: getHeight(1),
-            borderColor: "rgba(12, 127, 187, 1)",
-            backgroundColor: "rgba(12, 127, 187, 1)",
-            alignItems: "center",
-            justifyContent: "center",
-            height: getHeight(48),
-            borderRadius: getHeight(5),
-            zIndex: 1
-          }}
-          onPress={continueAsClient}
-        >
-          <Text
-            style={{
-              fontSize: getHeight(24),
-              color: "#fff",
-              fontWeight: "600",
-              lineHeight: getHeight(28),
-            }}
-          >
-            Continue as a Client
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            borderWidth: getHeight(1),
-            alignItems: "center",
-            justifyContent: "center",
-            height: getHeight(48),
-            borderRadius: getHeight(5),
-          }}
-        >
-          <Text
-            style={{
-              fontSize: getHeight(24),
-              color: "#000",
-              lineHeight: getHeight(28),
-            }}
-          >
-            Continue as a Provider
-          </Text>
-        </TouchableOpacity>
+        <Button title={"Continue as a Client"} isPrimary onPress={continueAsClient} />
+        <Button title={"Continue as a Provider"}  onPress={continueAsClient} />
       </View>
-      
     </View>
   );
 };
@@ -95,7 +49,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginMd),
   },
   language: {
-    color: "#000",
+    color: colors.black,
     alignSelf: "flex-end",
     padding: getHeight(5),
     fontSize: getHeight(16),
@@ -112,7 +66,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: getHeight(26),
-    color: "#000",
+    color: colors.black,
     alignSelf: "center",
     paddingTop: getHeight(20),
   },
@@ -130,12 +84,12 @@ const styles = StyleSheet.create({
     maxHeight: getHeight(142),
     padding: getHeight(6),
     borderWidth: getHeight(1),
-    borderColor: "rgba(12, 127, 187, 1)",
+    borderColor: colors.primary,
     zIndex: 1,
     borderRadius: getHeight(10),
     alignItems: "flex-end",
     right: 0,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     top: "88%",
   },
 });

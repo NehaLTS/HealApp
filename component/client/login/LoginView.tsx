@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../../../assets/icon/logo.png";
 import { colors } from "../../../designToken/colors";
@@ -8,21 +8,17 @@ import { getHeight, getWidth } from "../../../libs/StyleHelper";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 import TextButton from "../../common/TextButton";
+import LoginController from "./LoginController";
 
 const LoginView = () => {
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const { isChangeLanguage, onChangeLanguage } = LoginController();
 
   return (
-    <>
+    <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <View style={styles.languageContainer}>
-          <Text
-            style={styles.language}
-            onPress={() => setIsChangeLanguage(!isChangeLanguage)}
-          >
-            EN
-          </Text>
+          <Text style={styles.language} onPress={onChangeLanguage}>EN</Text>
           {isChangeLanguage && (
             <View style={styles.languagePopUp}>
               <Text style={styles.language}>English</Text>
@@ -37,10 +33,7 @@ const LoginView = () => {
       <Text style={styles.loginText}>Client Login</Text>
       <View style={styles.inputContainer}>
         <Input placeholder={"Email*"} />
-        <Input
-          placeholder="Password*"
-          type="password"
-        />
+        <Input placeholder="Password*" type="password" />
       </View>
       <TextButton
         title="Forgot password?"
@@ -49,12 +42,7 @@ const LoginView = () => {
         isActive
         style={styles.forgotText}
       />
-      <Button
-        title={"Sign In"}
-        isPrimary
-        isSmall
-        style={styles.signInButton}
-      />
+      <Button title={"Sign In"} isPrimary isSmall style={styles.signInButton} />
       <View style={styles.footerContainer}>
         <View style={styles.signInViaContainer}>
           <Text style={styles.signInViaText}>Or sign in via</Text>
@@ -81,13 +69,18 @@ const LoginView = () => {
           />
         </View>
       </View>
-    </>
+    </View>
   );
 };
 
 export default LoginView;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: getWidth(dimens.marginMd),
+  },
   container: {
     position: "relative",
     display: "flex",
