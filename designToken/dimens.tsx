@@ -1,9 +1,10 @@
-export const dimensions = {
+export const dimens = {
     // Margins and paddings
     marginSm: 10,
     marginMd: 20,
     marginLg: 30,
-    paddingSm: 8,
+    paddingXs: 8,
+    paddingSm: 12,
     paddingMd: 16,
     paddingLg: 24,
 
@@ -11,4 +12,4 @@ export const dimensions = {
     borderWidthThin: 1,
     borderWidthMedium: 2,
     borderWidthThick: 3,
-}
+} as const

@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import logo from "../assets/icon/logo.png";
 import { getHeight, getWidth } from "../libs/StyleHelper";
+import LoginView from "../component/client/login/LoginView";
 
 const IntroScreen = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
   return (
-    <SafeAreaView style={{flex:1}}>
     <View style={styles.container}>
       <View style={{ position: "relative" }}>
         <Text
@@ -76,17 +76,14 @@ const IntroScreen = () => {
           </Text>
         </TouchableOpacity>
       </View>
+      
     </View>
-    </SafeAreaView>
   );
 };
 export default IntroScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: getWidth(20),
-    backgroundColor: "#fff",
-    paddingTop: getHeight(10),
   },
   language: {
     color: "#000",
