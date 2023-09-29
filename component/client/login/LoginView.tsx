@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import logo from "../../../assets/icon/logo.png";
-import { GoogleViewController } from "../../../common/googleauth/GoogleButtonViewController";
 import { colors } from "../../../designToken/colors";
 import { dimens } from "../../../designToken/dimens";
 import { fontSize } from "../../../designToken/fontSizes";
@@ -12,19 +11,21 @@ import Button from "../../common/Button";
 import Input from "../../common/Input";
 import TextButton from "../../common/TextButton";
 import LoginController from "./LoginController";
+import { FacebookAuthProvider } from "../../../common/authprovider/FcebookAuthProvider";
+import { GoogleViewController } from "../../../common/authprovider/GoogleAuthProvider";
+
 
 const LoginView = () => {
   const navigation = useNavigation();
-
+  const {onFacebookButtonPress} = FacebookAuthProvider()
   const { isChangeLanguage, onChangeLanguage } = LoginController();
   const { onGoogleLogin } = GoogleViewController()
   const { useLoginQuery } = UseLoginClient()
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [apiData, setApiData] = useState<{ email: string, password: string }>()
-  console.log("78687687686868", JSON.stringify(apiData))
   const { data, error, isFetched, isFetching, isLoading } = useLoginQuery(apiData)
-  console.log('data', apiData, data)
+
   const handleLogin = async () => {
     await setApiData({ email, password })
     if (!error)
@@ -82,10 +83,20 @@ const LoginView = () => {
               style={{ width: getWidth(40), height: getHeight(40) }}
             />
           </TouchableOpacity>
-          <Image
-            source={require("../../../assets/icon/facebook.png")}
-            style={{ width: getWidth(40), height: getHeight(40) }}
-          />
+          <TouchableOpacity onPress={() => {
+            onFacebookButtonPress().then((userData)=>{
+              try {
+                console.log('Signed in with Facebook!', JSON.stringify(userData));
+              } catch (err) {
+                console.log('Error occurred!');
+              }
+            })
+          }}>
+            <Image
+              source={require("../../../assets/icon/facebook.png")}
+              style={{ width: getWidth(40), height: getHeight(40) }}
+            />
+          </TouchableOpacity>
           <Image
             source={require("../../../assets/icon/apple.png")}
             style={{ width: getWidth(40), height: getHeight(50) }}

@@ -7,17 +7,20 @@
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { lazy } from "react";
+import React, { lazy, useEffect } from "react";
 import IntroScreen from "./screens/intro/IntroScreen";
 import { TranslationContext } from "./contexts/UseTranslationsContext";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GOOGLE_WEBVIEW_CLIENT_ID } from "./libs/Utils";
 import { QueryClient, QueryClientProvider } from 'react-query';
 const Stack = createNativeStackNavigator();
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 const queryClient = new QueryClient()
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>('en')
+
+/** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId: GOOGLE_WEBVIEW_CLIENT_ID,
   });
