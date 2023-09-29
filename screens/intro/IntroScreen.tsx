@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: getWidth(dimens.marginMd),
+    paddingHorizontal: getWidth(dimens.marginM),
   },
   logoContainer: {
     alignSelf: "center",
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-    width: getWidth(dimens.imageLg),
-    height: getHeight(dimens.imageLg)
+  width: getWidth(dimens.imageL),
+  height: getHeight(dimens.imageL)
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingLg),

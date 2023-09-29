@@ -1,7 +1,10 @@
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet, TouchableOpacityProps, StyleProp, ViewStyle } from "react-native";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
+import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
+import { colors } from "../../designToken/colors";
+import { dimens } from "../../designToken/dimens";
+import { fontSize } from "../../designToken/fontSizes";
 import { fontWeight } from "../../designToken/fontWeights";
+import { getHeight, getWidth } from "../../libs/StyleHelper";
 const Button = ({
   title,
   isPrimary,
@@ -21,18 +24,18 @@ const Button = ({
         style,
         {
           width: isSmall ? 'auto' : '100%',
-          borderColor: isPrimary ? "rgba(12, 127, 187, 1) " : "black",
-          backgroundColor: isPrimary ? "rgba(12, 127, 187, 1) " : "transparent",
-          paddingHorizontal: getWidth(20),
+          borderColor: isPrimary ? colors.primary : colors.black,
+          backgroundColor: isPrimary ? colors.primary : "transparent",
+          paddingHorizontal: getWidth(dimens.marginM)
         },
       ]}
       {...props}
     >
       <Text
         style={{
-          fontSize: getHeight(24),
-          color: isPrimary ? "white" : "black",
-          lineHeight: getHeight(28),
+          fontSize: getHeight(fontSize.heading),
+          color: isPrimary ? colors.white : colors.black,
+          lineHeight: getHeight(dimens.marginL),
           fontWeight: (isSmall || !isPrimary) ? fontWeight.light : fontWeight.semiBold,
         }}
         adjustsFontSizeToFit
@@ -46,12 +49,13 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(1),
+    borderWidth: getHeight(dimens.borderThin),
     alignItems: "center",
     justifyContent: "center",
-    height: getHeight(50),
-    borderRadius: getHeight(5),
+    height: getHeight(dimens.imageS),
+    borderRadius: getHeight(dimens.marginS/dimens.borderBold),
     zIndex: 1,
+    minWidth: '38%'
   },
 });
 

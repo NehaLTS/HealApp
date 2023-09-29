@@ -62,9 +62,9 @@ const Input = ({
   const toggleShowPassword = () => setShowPassword(!showPassword);
   return (
     <View>
-      <View style={[styles.inputContainer, { width: containerWidth ?? 'auto' }]}>
+      <View style={[styles.inputContainer, inputStyle ,{ width: containerWidth ?? 'auto' }]}>
         <TextInput
-          style={[styles.input, inputStyle]}
+          style={styles.input}
           placeholder={placeholder}
           placeholderTextColor={colors.black}
           textContentType={type ?? "password"}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(10),
     flexDirection: "row",
     height: getHeight(50),
-    backgroundColor: colors.offWhite
+    backgroundColor: colors.offWhite,
   },
   input: {
     fontSize: fontSize.textLg,

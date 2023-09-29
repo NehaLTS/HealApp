@@ -15,7 +15,7 @@ const Header = () => {
     <View
       style={{
         position: "relative",
-        paddingHorizontal: getWidth(dimens.marginMd),
+        paddingHorizontal: getWidth(dimens.marginM),
         paddingVertical: getHeight(10),
         backgroundColor: colors.white
       }}
@@ -71,12 +71,12 @@ const styles = StyleSheet.create({
     width: getWidth(125), //TODO: should define sizes for every Width
     height: getHeight(140), //TODO: should define sizes for every Height
     padding: getHeight(dimens.paddingXs),
-    borderWidth: getHeight(dimens.borderWidthThin),
+    borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.primary,
     zIndex: 1,
-    borderRadius: getHeight(dimens.marginSm),
-    right: getHeight(dimens.paddingMd),
+    borderRadius: getHeight(dimens.marginS),
+    right: getHeight(dimens.sideMargin),
     backgroundColor: colors.offWhite,
-    top: dimens.marginLg + dimens.marginSm,
+    top: dimens.marginL + dimens.marginS,
   },
 });

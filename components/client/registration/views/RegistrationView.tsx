@@ -129,9 +129,9 @@ const styles = StyleSheet.create({
     paddingTop: getHeight(12),
   },
   inputContainer: {
-    paddingTop: getHeight(dimens.paddingLg + dimens.marginSm),
+    paddingTop: getHeight(dimens.paddingL + dimens.marginS),
     rowGap: getHeight(26),
-    paddingBottom: getHeight(dimens.paddingSm),
+    paddingBottom: getHeight(dimens.paddingS),
   },
   forgotText: {
     alignSelf: "center",
