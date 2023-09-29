@@ -2,7 +2,7 @@ import auth from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 export const FacebookAuthProvider = () => {
-  const onFacebookLogin = async () => {
+  const onFBAuthProcessing = async () => {
     // Attempt login with permissions
     const result = await LoginManager.logInWithPermissions(['public_profile']);
 
@@ -23,5 +23,5 @@ export const FacebookAuthProvider = () => {
     // Sign-in the user with the credential
     return auth().signInWithCredential(facebookCredential);
   }
-  return { onFacebookLogin }
+  return { onFBAuthProcessing }
 }

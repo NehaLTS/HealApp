@@ -14,13 +14,13 @@ import LoginController from "./LoginController";
 const LoginView = ({ isSignInButton }: { isSignInButton: boolean }) => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { images, onHandleLogin, onSocialMediaLogin } = LoginController();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const { images, onHandleLogin, onSelectSocialAuth } = LoginController();
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
   const getSocialMediaLogin = () =>
     images.map((item, index) => (
-      <TouchableOpacity key={index} onPress={() => onSocialMediaLogin(index)}>
+      <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
         <Image source={item.url} style={styles.images} />
       </TouchableOpacity>
     ));
@@ -40,7 +40,7 @@ const LoginView = ({ isSignInButton }: { isSignInButton: boolean }) => {
           inputStyle={styles.password}
         />
         <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
-      </View>
+      </View >
       <View style={styles.buttonContainer}>
         <Button
           title={isSignInButton ? signIn.sign_in : signIn.sign_up}
@@ -52,8 +52,8 @@ const LoginView = ({ isSignInButton }: { isSignInButton: boolean }) => {
         <View style={styles.footerContainer}>
           <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
           {getSocialMediaLogin()}
-        </View>
-      </View>
+        </View >
+      </View >
     </>
   );
 };
@@ -92,5 +92,5 @@ const styles = StyleSheet.create({
   },
   password: {
     marginTop: dimens.paddingL,
-  },
+  }
 });

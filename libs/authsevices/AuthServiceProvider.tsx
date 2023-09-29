@@ -1,11 +1,13 @@
-import { sendRequest } from "../api/ApiHandler";
+import { sendRequest } from "../api/RequestHandler";
 import { POST } from "../constants/ApiConstants";
 import { GoogleLoginResponse, LoginResponse, RequestUnSuccessful } from "../types/AuthRespoonseType";
 import { GOOGLE_LOGIN_API, LOGIN_API } from "../utility/Utils";
-import { BodyInit } from "./ApiTypes";
+import { BodyInit } from "../api/ApiTypes";
 
 export const AuthServicesProvider = () => {
-    const handleLogin = (body: {
+
+    /** To provide auth data to server */
+    const onSubmitAuthRequest = (body: {
         email: string;
         password: string;
     }): Promise<LoginResponse | RequestUnSuccessful> =>
@@ -14,7 +16,8 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
         })
 
-    const handleGoogleLogin = (body: {
+    /** To provide Google auth request to server */
+    const onSubmitGoogleAuthRequest = (body: {
         email: string;
         googleId: string;
     }): Promise<GoogleLoginResponse> =>
@@ -23,7 +26,8 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
         })
 
-    const handleFacebookLogin = (body: {
+    /** To provide FB auth request to server */
+    const onSubmitFBAuthRequest = (body: {
         email: string;
         facebookId: string;
     }): Promise<GoogleLoginResponse> =>
@@ -32,12 +36,8 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
         })
 
-    const handleAppleLogin = () => {
 
-    }
-
-    return { handleLogin, handleGoogleLogin, handleFacebookLogin, handleAppleLogin }
-
+    return { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest }
 }
 
 
