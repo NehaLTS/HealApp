@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from 'react-query'
+import { useQuery } from 'react-query'
 interface LoginResponse {
     existing?: string
     token?: string
@@ -21,7 +21,6 @@ interface requestData {
 export const UseLoginClient = () => {
 
     const loginAsClient = async (requestData: requestData | undefined): Promise<any> => {
-
         const headers = {
             'Content-Type': 'application/json',
             'x-access-token': 'Logicease123',
@@ -35,7 +34,6 @@ export const UseLoginClient = () => {
 
         const data = await response.json()
         if (data.error) throw new Error(data.error)
-        // console.log("data", data)
         return data
     }
     const useLoginQuery = (requestData: requestData | undefined) => {
@@ -43,7 +41,6 @@ export const UseLoginClient = () => {
 
             enabled: requestData != undefined, // You can set this to true when you're ready to execute the query
             onSuccess: (newData) => {
-                // console.log("new data", newData)
             }
         });
         return query

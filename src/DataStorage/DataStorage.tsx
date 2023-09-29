@@ -1,32 +1,44 @@
-// import { dataStorage } from './Store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-// // type StorageKeys = 'USER' | 'CHALLENGE' | 'LESSON' | 'RECENTSEARCH'
-// // type StorageObject = { USER: UserType; CHALLENGE: UserAndResult; LESSON: LessonType; RECENTSEARCH: Search }
-// type StorageKeys = 'USER' | 'LANGUAGE'
-// type StorageObject = { USER: {}, LANGUAGE: string }
-// export const setLocalData = <K extends StorageKeys>(key: K, object: Partial<StorageObject[K]>) => {
-//     const data = getLocalData(key) || {}
-//     const updatedData = { ...data, ...object }
-//     console.log("JSON.stringify(updatedData)", JSON.stringify(updatedData))
-//     dataStorage.set(key, JSON.stringify(updatedData))
-// }
+const storeData = async (key: string, value: string | {}) => {
+    try {
+        await AsyncStorage.setItem(key, JSON.stringify(value));
+        console.log('kml', value, key)
+    } catch (error) {
+        console.error('Error storing data:', error);
+    }
+};
 
-// export const getLocalData = <K extends StorageKeys>(key: K): Partial<StorageObject[K]> | undefined => {
-//     const data = dataStorage.getString(key)
-//     if (!data) return undefined
-//     return JSON.parse(data) as Partial<StorageObject[K]>
-// }
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+const getData = async (key: string) => {
+    try {
+        const data = await AsyncStorage.getItem(key);
+        if (data !== null) {
+            console.log('Data retrieved:', JSON.parse(data));
+            return JSON.parse(data);
+        } else {
+            // Key doesn't exist in storage
+            return null;
+        }
+    } catch (error) {
+        console.error('Error retrieving data:', error);
+        return null;
+    }
+};
 
-const DataStorage = () => {
-    return (
-        <View>
-            <Text>DataStorage</Text>
-        </View>
-    )
-}
+const removeData = async (key: string) => {
+    try {
+        await AsyncStorage.removeItem(key);
+    } catch (error) {
+        console.error('Error removing data:', error);
+    }
+};
 
-export default DataStorage
+const clearAllData = async () => {
+    try {
+        await AsyncStorage.clear();
+    } catch (error) {
+        console.error('Error clearing data:', error);
+    }
+};
 
-const styles = StyleSheet.create({})
+export { storeData, getData, removeData, clearAllData };
