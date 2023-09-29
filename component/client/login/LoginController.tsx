@@ -1,12 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { UseLoginClient } from "../../../src/api's/UseLoginClient";
 import { Alert } from "react-native";
-import { getData, storeData } from "../../../src/DataStorage/DataStorage";
-import { useUpdateEffect } from "../../useUpdateEffect";
 import { GoogleViewController } from "../../../common/googleauth/GoogleButtonViewController";
+import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
 import { useUserContext } from "../../../contexts/useUserContext";
+import { getData, storeData } from "../../../src/DataStorage/DataStorage";
+import { UseLoginClient } from "../../../src/api's/UseLoginClient";
+import { useUpdateEffect } from "../../useUpdateEffect";
 
+const images = [
+  { url: require("../../../assets/icon/google.png") },
+  { url: require("../../../assets/icon/facebook.png") },
+  { url: require( "../../../assets/icon/apple.png") },
+];
 const LoginController = () => {
   const { useLoginQuery } = UseLoginClient()
   const navigation = useNavigation();
@@ -16,6 +22,7 @@ const LoginController = () => {
   const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
   const { onGoogleLogin } = GoogleViewController()
   const { user, setUser } = useUserContext();
+  const { setLanguageCode } = useTranslationContext();
 
   useUpdateEffect(() => {
     if (data?.token) {
@@ -50,6 +57,7 @@ const LoginController = () => {
     }
   }
   return {
+    images,
     isChangeLanguage,
     onChangeLanguage,
     handleLogin,
@@ -58,5 +66,4 @@ const LoginController = () => {
     handleFacebookLogin
   };
 };
-
 export default LoginController;
