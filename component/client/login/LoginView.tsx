@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
 import { colors } from "../../../designToken/colors";
 import { dimens } from "../../../designToken/dimens";
@@ -19,7 +19,7 @@ const LoginView = () => {
   return (
     <>
       <View style={styles.inputContainer}>
-        <View style={{ gap: dimens.paddingLg }}>
+        <View style={styles.input }>
           <Input placeholder={signIn.email} />
           <Input placeholder={signIn.password} type="password" />
         </View>
@@ -35,7 +35,9 @@ const LoginView = () => {
         <View style={styles.footerContainer}>
           <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
           {images.map((item, index) => (
-            <Image key={index} source={item.url} style={styles.images} />
+            <TouchableOpacity key={index}>
+              <Image source={item.url} style={styles.images} />
+            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -75,4 +77,7 @@ const styles = StyleSheet.create({
     flex: 0.55,
     gap: getHeight(dimens.paddingLg),
   },
+  input:{ 
+    gap: dimens.paddingLg 
+  }
 });
