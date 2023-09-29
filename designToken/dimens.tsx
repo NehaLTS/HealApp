@@ -12,4 +12,7 @@ export const dimens = {
     borderWidthThin: 1,
     borderWidthMedium: 2,
     borderWidthThick: 3,
+
+    //Image Sizes
+    imageLg: 250
 } as const
