@@ -7,7 +7,7 @@ const IntroController = () => {
   const navigation = useNavigation();
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
   const { setLanguageCode } = useTranslationContext();
-  const continueAsClient = () => navigation.navigate("SignIn");
+  const continueAsClient = () => navigation.navigate("Login");
   const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
   const handleLanguageChange = (lng: string) => {
     setLanguageCode(lng);

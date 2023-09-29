@@ -1,16 +1,18 @@
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import React from "react";
 import { getHeight } from "../../libs/StyleHelper";
+import { colors } from "../../designToken/colors";
+import { fontSize } from "../../designToken/fontSizes";
 
 const TextButton = ({
   title,
   onPress,
   isActive,
-  fontSize,
+  fontSize: fs,
   style,
 }: {
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
   isActive?: boolean;
   fontSize?: number;
   style?: StyleProp<TextStyle>
@@ -20,7 +22,7 @@ const TextButton = ({
       style={[
         styles.text,
         style,
-        { fontSize: fontSize ?? getHeight(24) },
+        { fontSize: fs ?? getHeight(fontSize.heading) },
         isActive && { textDecorationLine: "underline" },
       ]}
       onPress={onPress}
@@ -34,6 +36,6 @@ export default TextButton;
 
 const styles = StyleSheet.create({
   text: {
-    color: "#000",
+    color: colors.black,
   },
 });

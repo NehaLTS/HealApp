@@ -8,6 +8,11 @@ import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider
 import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/AuthRespoonseType";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 
+const images = [
+  { url: require("../../../assets/icon/google.png") },
+  { url: require("../../../assets/icon/facebook.png") },
+  { url: require( "../../../assets/icon/apple.png") },
+];
 const LoginController = () => {
   const { useLoginQuery } = UseLoginClient()
   const navigation = useNavigation();
@@ -54,7 +59,8 @@ const LoginController = () => {
   const onHandleFacebookLogin = () => {
     onFacebookLogin().then((userData) => {
       try {
-        //todo under review with facebook
+        //TODO: under review with facebook 
+
         // const email = userData?.user?.email
         // const googleId = userData.user.providerData[0].uid
         // handleFacebookLogin({ email, googleId }).then((res) => {
@@ -67,14 +73,28 @@ const LoginController = () => {
     })
   }
 
+  const onSocialMediaLogin =(index:number)=>
+  {
+   switch(index)
+   {
+    case 0: onGoogleLogin
+    break;
+    case 1: onFacebookLogin
+    break;
+      
+   }
+  }
+
 
   return {
+    images,
     isChangeLanguage,
     onChangeLanguage,
     onHandleLogin,
     isFetching,
     onHandleGoogleLogin,
     onHandleFacebookLogin,
+    onSocialMediaLogin
   };
 };
 
