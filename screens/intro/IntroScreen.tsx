@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import Button from "../../component/common/Button";
+import Button from "../../components/common/Button";
 import { colors } from "../../designToken/colors";
 import { dimens } from "../../designToken/dimens";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
@@ -8,7 +8,7 @@ import logo from "../../assets/icon/logo.png";
 import IntroController from "./IntroController";
 import { getTexts } from "../../libs/OneSkyHelper";
 import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import Header from "../../component/common/Header";
+import Header from "../../components/common/Header";
 import { fontSize } from "../../designToken/fontSizes";
 
 const IntroScreen = () => {
@@ -18,12 +18,12 @@ const IntroScreen = () => {
 
   return (
     <>
-    <Header />
+      <Header />
       <View style={styles.container}>
         <View style={styles.logoContainer}>
           <Image source={logo} style={styles.logo} />
         </View>
-          <Text style={styles.welcomeText}>{intro.welcome_heal}</Text>
+        <Text style={styles.welcomeText}>{intro.welcome_heal}</Text>
         <View style={styles.buttonContainer}>
           <Button
             title={intro.continue_client}
@@ -46,17 +46,17 @@ const styles = StyleSheet.create({
   logoContainer: {
     alignSelf: "center",
     flex: 0.4,
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   logo: {
-  width: getWidth(dimens.imageLg),
-  height: getHeight(dimens.imageLg)
+    width: getWidth(dimens.imageLg),
+    height: getHeight(dimens.imageLg)
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingLg),
     color: colors.black,
     alignSelf: "center",
-    flex:0.4
+    flex: 0.4
   },
   buttonContainer: {
     gap: getHeight(fontSize.headingLg),
