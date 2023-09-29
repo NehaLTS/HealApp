@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import logo from "../../../assets/icon/logo.png";
 import { colors } from "../../../designToken/colors";
 import { dimens } from "../../../designToken/dimens";
@@ -10,31 +10,14 @@ import Button from "../../common/Button";
 import Input from "../../common/Input";
 import TextButton from "../../common/TextButton";
 import LoginController from "./LoginController";
-import { FacebookAuthProvider } from "../../../common/authprovider/FcebookAuthProvider";
-import { GoogleViewController } from "../../../common/authprovider/GoogleAuthProvider";
-import { UseLoginClient } from "../../../src/api's/UseLoginClient";
-
 
 const LoginView = () => {
-  const navigation = useNavigation();
-  const {onFacebookButtonPress} = FacebookAuthProvider()
-  const { isChangeLanguage, onChangeLanguage, handleGoogleLogin } = LoginController();
-  const { onGoogleLogin } = GoogleViewController()
-  const { useLoginQuery } = UseLoginClient()
+  const { isChangeLanguage, onChangeLanguage, onHandleLogin, isFetching, onHandleGoogleLogin, onHandleFacebookLogin } = LoginController();
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [apiData, setApiData] = useState<{ email: string, password: string }>()
-  const { data, error, isFetched, isFetching, isLoading } = useLoginQuery(apiData)
 
-  const handleLogin = async () => {
-    await setApiData({ email, password })
-    if (!error)
-      await navigation.navigate("HomeView")
-    else {
-      Alert.alert('something went wrong')
-    }
-  }
- return (
+
+  return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
@@ -63,26 +46,19 @@ const LoginView = () => {
         isActive
         style={styles.forgotText}
       />
-      {isFetching ? <ActivityIndicator style={{ top: getHeight(20) }} size='large' color={colors.primary} /> : <Button title={"Sign In"} isPrimary isSmall style={styles.signInButton} onPress={() => handleLogin(email, password)} />}
+      {isFetching ? <ActivityIndicator style={{ top: getHeight(20) }}
+        size='large' color={colors.primary} /> : <Button title={"Sign In"} isPrimary isSmall style={styles.signInButton}
+          onPress={() => onHandleLogin(email, password)} />}
       <View style={styles.footerContainer}>
         <View style={styles.signInViaContainer}>
           <Text style={styles.signInViaText}>Or sign in via</Text>
-          <TouchableOpacity onPress={handleGoogleLogin}>
+          <TouchableOpacity onPress={onHandleGoogleLogin}>
             <Image
               source={require("../../../assets/icon/google.png")}
               style={{ width: getWidth(40), height: getHeight(40) }}
             />
           </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => {
-            onFacebookButtonPress().then((userData)=>{
-              try {
-                console.log('Signed in with Facebook!', JSON.stringify(userData));
-              } catch (err) {
-                console.log('Error occurred!');
-              }
-            })
-          }}>
+          <TouchableOpacity onPress={onHandleFacebookLogin}>
 
             <Image
               source={require("../../../assets/icon/facebook.png")}
