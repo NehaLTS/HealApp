@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { Alert } from "react-native";
-import { GoogleViewController } from "../../../common/googleauth/GoogleButtonViewController";
-import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
-import { useUserContext } from "../../../contexts/useUserContext";
-import { getData, storeData } from "../../../src/DataStorage/DataStorage";
 import { UseLoginClient } from "../../../src/api's/UseLoginClient";
-import { useUpdateEffect } from "../../useUpdateEffect";
+import { storeData } from "../../../src/DataStorage/DataStorage";
+import { useUserContext } from "../../../contexts/useUserContext";
+import { AuthServicesProvider } from "../../../libs/authsevices/AuthSevices";
+import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
+import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/AuthRespoonseType";
+import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 
 const images = [
   { url: require("../../../assets/icon/google.png") },
@@ -17,53 +17,86 @@ const LoginController = () => {
   const { useLoginQuery } = UseLoginClient()
   const navigation = useNavigation();
   const [apiData, setApiData] = useState<{ email: string, password: string }>()
-  const { data, isFetching, isFetched } = useLoginQuery(apiData)
+  const { isFetching } = useLoginQuery(apiData)
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
   const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
-  const { onGoogleLogin } = GoogleViewController()
-  const { user, setUser } = useUserContext();
-  const { setLanguageCode } = useTranslationContext();
-
-  useUpdateEffect(() => {
-    if (data?.token) {
-      storeData('user', data);
-      setUser(data)
-      navigation.navigate("HomeView")
-    }
-    else if (data?.message) {
-      Alert.alert(data?.message)
-    }
-  }, [isFetched, apiData])
-  const handleLogin = (email: string, password: string) => {
-    setApiData({ email, password })
+  const { onGoogleLogin } = GoogleAuthProvider()
+  const { onFacebookLogin } = FacebookAuthProvider()
+  const { setUser } = useUserContext();
+  const { handleLogin, handleGoogleLogin, handleFacebookLogin, handleAppleLogin } = AuthServicesProvider();
+  const onLoginSuccessful = (data: any) => {
+    storeData('user', data);
+    setUser(data)
+    navigation.navigate("HomeView")
 
   }
-  const handleGoogleLogin = () => {
+  const onHandleLogin = (email: string, password: string) => {
+    handleLogin({ email, password }).then((res: LoginResponse | RequestUnSuccessful) => {
+      if (res?.token) {
+        onLoginSuccessful(res)
+      }
+      else {
+        //todo show error alert
+      }
+
+    })
+
+  }
+  const onHandleGoogleLogin = () => {
     onGoogleLogin().then((userData) => {
       try {
-        console.log('Signed in with Google!', JSON.stringify(userData));
+        const email = userData?.user?.email
+        const googleId = userData.user.providerData[0].uid
+        handleGoogleLogin({ email, googleId }).then((res) => {
+          onLoginSuccessful(res)
+        })
       } catch (err) {
         console.log('Error occurred!');
       }
     })
   }
-  const handleFacebookLogin = async () => {
-    const userData = await getData('user');
-    if (userData) {
-      console.log('User data:', user);
-      // You can use userData for further processing
-    } else {
-      console.log('User data not found.');
-    }
+
+  const onHandleFacebookLogin = () => {
+    onFacebookLogin().then((userData) => {
+      try {
+        //TODO: under review with facebook 
+
+        // const email = userData?.user?.email
+        // const googleId = userData.user.providerData[0].uid
+        // handleFacebookLogin({ email, googleId }).then((res) => {
+        //   console.log("facebook", res)
+        //   onLoginSuccessful(res)
+        // })
+      } catch (err) {
+        console.log('Error occurred!');
+      }
+    })
   }
+
+  const onSocialMediaLogin =(index:number)=>
+  {
+   switch(index)
+   {
+    case 0: onGoogleLogin
+    break;
+    case 1: onFacebookLogin
+    break;
+      
+   }
+  }
+
+
   return {
     images,
     isChangeLanguage,
     onChangeLanguage,
-    handleLogin,
+    onHandleLogin,
     isFetching,
-    handleGoogleLogin,
-    handleFacebookLogin
+    onHandleGoogleLogin,
+    onHandleFacebookLogin,
+    onSocialMediaLogin
   };
 };
+
 export default LoginController;
+

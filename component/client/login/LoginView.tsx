@@ -1,5 +1,7 @@
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import logo from "../../../assets/icon/logo.png";
 import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
 import { colors } from "../../../designToken/colors";
 import { dimens } from "../../../designToken/dimens";
@@ -14,14 +16,17 @@ import LoginController from "./LoginController";
 const LoginView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { images } = LoginController();
+  const { images } = LoginController()
+  const { isChangeLanguage, onChangeLanguage, onHandleLogin, isFetching,onSocialMediaLogin, onHandleGoogleLogin, onHandleFacebookLogin } = LoginController();
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
   return (
     <>
       <View style={styles.inputContainer}>
         <View style={styles.input }>
-          <Input placeholder={signIn.email} />
-          <Input placeholder={signIn.password} type="password" />
+        <Input placeholder={"Email*"} value={email} onChangeText={(e) => setEmail(e)} />
+        <Input placeholder="Password*" type="password" value={password} onChangeText={(e) => setPassword(e)} />
         </View>
         <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
       </View>
@@ -31,11 +36,14 @@ const LoginView = () => {
           isPrimary
           isSmall
           style={styles.signInButton}
+          onPress={() => onHandleLogin(email, password)}
         />
         <View style={styles.footerContainer}>
           <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
           {images.map((item, index) => (
-            <TouchableOpacity key={index}>
+            <TouchableOpacity key={index } 
+            onPress={()=>onSocialMediaLogin(index)}
+            >
               <Image source={item.url} style={styles.images} />
             </TouchableOpacity>
           ))}

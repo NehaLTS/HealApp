@@ -1,8 +1,8 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import auth from "@react-native-firebase/auth";
 
-export const GoogleViewController = () => {
-  async function onGoogleLogin() {
+export const GoogleAuthProvider = () => {
+  const onGoogleLogin = async () => {
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     // Get the users ID token
