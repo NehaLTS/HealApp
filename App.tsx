@@ -31,7 +31,7 @@ const App = () => {
           <Stack.Navigator initialRouteName="Intro" screenOptions={{ headerShown: false, }}>
             <Stack.Screen name="Intro" component={IntroScreen} />
             <Stack.Screen name="Login" component={lazy(() => import("./screens/AuthenticatorView"))} />
-            <Stack.Screen name="HomeView" component={lazy(() => import("./component/client/home/HomeView"))} />
+            <Stack.Screen name="HomeView" component={lazy(() => import("./components/client/home/HomeView"))} />
           </Stack.Navigator>
         </NavigationContainer>
       </TranslationContext.Provider>
