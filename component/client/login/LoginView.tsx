@@ -6,19 +6,19 @@ import { colors } from "../../../designToken/colors";
 import { dimens } from "../../../designToken/dimens";
 import { fontSize } from "../../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../../libs/StyleHelper";
-import { UseLoginClient } from "../../../src/api's/UseLoginClient";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
 import TextButton from "../../common/TextButton";
 import LoginController from "./LoginController";
 import { FacebookAuthProvider } from "../../../common/authprovider/FcebookAuthProvider";
 import { GoogleViewController } from "../../../common/authprovider/GoogleAuthProvider";
+import { UseLoginClient } from "../../../src/api's/UseLoginClient";
 
 
 const LoginView = () => {
   const navigation = useNavigation();
   const {onFacebookButtonPress} = FacebookAuthProvider()
-  const { isChangeLanguage, onChangeLanguage } = LoginController();
+  const { isChangeLanguage, onChangeLanguage, handleGoogleLogin } = LoginController();
   const { onGoogleLogin } = GoogleViewController()
   const { useLoginQuery } = UseLoginClient()
   const [email, setEmail] = useState<string>('')
@@ -34,8 +34,7 @@ const LoginView = () => {
       Alert.alert('something went wrong')
     }
   }
-  return (
-
+ return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
@@ -64,25 +63,17 @@ const LoginView = () => {
         isActive
         style={styles.forgotText}
       />
-      {isFetching ? <ActivityIndicator style={{ top: getHeight(20) }} size='large' color={colors.primary} /> : <Button title={"Sign In"} isPrimary isSmall style={styles.signInButton} onPress={handleLogin} />}
-
+      {isFetching ? <ActivityIndicator style={{ top: getHeight(20) }} size='large' color={colors.primary} /> : <Button title={"Sign In"} isPrimary isSmall style={styles.signInButton} onPress={() => handleLogin(email, password)} />}
       <View style={styles.footerContainer}>
         <View style={styles.signInViaContainer}>
           <Text style={styles.signInViaText}>Or sign in via</Text>
-          <TouchableOpacity onPress={() => {
-            onGoogleLogin().then((userData) => {
-              try {
-                console.log('Signed in with Google!', JSON.stringify(userData));
-              } catch (err) {
-                console.log('Error occurred!');
-              }
-            })
-          }}>
+          <TouchableOpacity onPress={handleGoogleLogin}>
             <Image
               source={require("../../../assets/icon/google.png")}
               style={{ width: getWidth(40), height: getHeight(40) }}
             />
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => {
             onFacebookButtonPress().then((userData)=>{
               try {
@@ -92,6 +83,7 @@ const LoginView = () => {
               }
             })
           }}>
+
             <Image
               source={require("../../../assets/icon/facebook.png")}
               style={{ width: getWidth(40), height: getHeight(40) }}

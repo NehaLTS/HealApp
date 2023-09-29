@@ -3,9 +3,7 @@ import React from 'react'
 
 const HomeView = () => {
     return (
-        <View style={{ justifyContent: "center", alignContent: 'center' }}>
-            <Text>Hello</Text>
-        </View>
+        <View style={{ flex: 1, backgroundColor: 'red' }}><Text style={{ color: 'black' }}>HELLO</Text></View>
     )
 }
 
