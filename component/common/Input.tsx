@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
   input: {
     fontSize: fontSize.textLg,
     padding: getHeight(10),
-    color: colors.black
+    color: colors.black,
+    flex:1
   },
   showImage: {
     width: getWidth(24),
