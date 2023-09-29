@@ -9,11 +9,10 @@ import IntroController from "./IntroController";
 import { getTexts } from "../../libs/OneSkyHelper";
 import { useTranslationContext } from "../../contexts/UseTranslationsContext";
 import Header from "../../component/common/Header";
+import { fontSize } from "../../designToken/fontSizes";
 
 const IntroScreen = () => {
-  const {
-    continueAsClient,
-  } = IntroController();
+  const { continueAsClient } = IntroController();
   const { languageCode } = useTranslationContext();
   const { intro } = getTexts(languageCode);
 
@@ -46,22 +45,21 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignSelf: "center",
-    flex: 0.45,
+    flex: 0.4,
     justifyContent:'center'
   },
   logo: {
-    width: getWidth(247),
-    height: getHeight(252)
+  width: getWidth(dimens.imageLg),
+  height: getHeight(dimens.imageLg)
   },
   welcomeText: {
-    fontSize: getHeight(26),
+    fontSize: getHeight(fontSize.headingLg),
     color: colors.black,
     alignSelf: "center",
-    flex:0.39
+    flex:0.4
   },
   buttonContainer: {
-    gap: getHeight(26),
-    flex: 0.26,
-    justifyContent: "center"
+    gap: getHeight(fontSize.headingLg),
+    flex: 0.2,
   },
 });

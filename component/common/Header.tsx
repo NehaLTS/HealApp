@@ -4,10 +4,12 @@ import IntroController from "../../screens/intro/IntroController";
 import { colors } from "../../designToken/colors";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { dimens } from "../../designToken/dimens";
+import { fontSize } from "../../designToken/fontSizes";
 
+// TODO: Need to change dropdown UI later
 const Header = () => {
-  const { isChangeLanguage, onChangeLanguage, handleLanguageChange } =
-    IntroController();
+  const { isChangeLanguage, onChangeLanguage, handleLanguageChange } =  IntroController();
+
   return (
     <>
     <View
@@ -19,10 +21,8 @@ const Header = () => {
       }}
     >
       <Text style={styles.language} onPress={onChangeLanguage}>
-        EN
+        {'EN'}
       </Text>
-
-      
     </View>
     {isChangeLanguage && (
         <View style={styles.languageContainer}>
@@ -62,21 +62,21 @@ const styles = StyleSheet.create({
   language: {
     color: colors.black,
     alignSelf: "flex-end",
-    padding: getHeight(5),
-    fontSize: getHeight(16),
+    padding: getHeight(dimens.borderWidthThick),
+    fontSize: getHeight(fontSize.textLg),
     paddingRight: 0,
   },
   languageContainer: {
     position: "absolute",
-    width: getWidth(125),
-    height: getHeight(140),
-    padding: getHeight(6),
-    borderWidth: getHeight(1),
+    width: getWidth(125), //TODO: should define sizes for every Width
+    height: getHeight(140), //TODO: should define sizes for every Height
+    padding: getHeight(dimens.paddingXs),
+    borderWidth: getHeight(dimens.borderWidthThin),
     borderColor: colors.primary,
     zIndex: 1,
-    borderRadius: getHeight(10),
-    right: getHeight(16),
+    borderRadius: getHeight(dimens.marginSm),
+    right: getHeight(dimens.paddingMd),
     backgroundColor: colors.offWhite,
-    top: "5%",
+    top: dimens.marginLg + dimens.marginSm,
   },
 });
