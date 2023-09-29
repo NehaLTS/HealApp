@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">HealApp</string>
+    <string name="facebook_app_id">1470766843714093</string>
+    <string name="facebook_client_token">41353e70e0596fa34ccb669f88f6b0cd</string>
+
 </resources>
