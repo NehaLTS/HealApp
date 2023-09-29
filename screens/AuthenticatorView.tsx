@@ -19,9 +19,7 @@ const AuthenticatorView = () => {
       <Header />
       <View style={styles.mainContainer}>
         <View style={styles.container}>
-          <View style={styles.imageContainer}>
             <Image source={logo} style={styles.logo} />
-          </View>
           <View style={styles.toggleContainer}>
             <TextButton title={signIn.sign_in} isActive />
             <TextButton title={signIn.sign_up}  />
@@ -56,12 +54,10 @@ const styles = StyleSheet.create({
     position: "relative",
     flex: 0.35,
   },
-  imageContainer: {
-    alignItems: "center",
-  },
   logo: {
     width: getWidth(dimens.imageMd),
     height: getHeight(dimens.imageMd),
+    alignSelf:'center'
   },
   toggleContainer: {
     flexDirection: "row",
