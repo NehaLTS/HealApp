@@ -1,13 +1,13 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../assets/icon/logo.png";
-import Header from "../component/common/Header";
-import TextButton from "../component/common/TextButton";
+import Header from "../components/common/Header";
+import TextButton from "../components/common/TextButton";
 import { colors } from "../designToken/colors";
 import { dimens } from "../designToken/dimens";
 import { fontSize } from "../designToken/fontSizes";
 import { getHeight, getWidth } from "../libs/StyleHelper";
-import LoginView from "../component/client/login/LoginView";
+import LoginView from "../components/client/login/LoginView";
 import { getTexts } from "../libs/OneSkyHelper";
 import { useTranslationContext } from "../contexts/UseTranslationsContext";
 
@@ -19,12 +19,10 @@ const AuthenticatorView = () => {
       <Header />
       <View style={styles.mainContainer}>
         <View style={styles.container}>
-          <View style={styles.imageContainer}>
-            <Image source={logo} style={styles.logo} />
-          </View>
+          <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
             <TextButton title={signIn.sign_in} isActive />
-            <TextButton title={signIn.sign_up}  />
+            <TextButton title={signIn.sign_up} />
           </View>
           <Text style={styles.loginText}>{signIn.client_login}</Text>
         </View>
@@ -56,12 +54,10 @@ const styles = StyleSheet.create({
     position: "relative",
     flex: 0.35,
   },
-  imageContainer: {
-    alignItems: "center",
-  },
   logo: {
     width: getWidth(dimens.imageMd),
     height: getHeight(dimens.imageMd),
+    alignSelf: 'center'
   },
   toggleContainer: {
     flexDirection: "row",
@@ -84,7 +80,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    flex:0.1
+    flex: 0.1
   },
   switchProvider: {
     color: colors.primary,
