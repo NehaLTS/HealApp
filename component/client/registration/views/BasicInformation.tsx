@@ -8,10 +8,17 @@ import Button from "../../../common/Button";
 import Tabs from "../../../common/Tabs";
 import Input from "../../../common/Input";
 import { fontWeight } from "../../../../designToken/fontWeights";
+import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
+import { getTexts } from "../../../../libs/OneSkyHelper";
+import BasicInformationController from "../controllers/BasicInformationController";
 
 const BasicInformation = () => {
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const [isChangeLanguage, setIsChangeLanguage, ] = useState(false);
+ const {handleLanguageChange}=BasicInformationController();
   const [currentStep, setCurrentStep] = useState(0);
+  const { languageCode } = useTranslationContext()
+  const { registration } = getTexts(languageCode)
+
   console.log(currentStep);
   const tab = [{ title: "1" }, { title: "2" }, { title: "3" }];
   const handleNext = () => {
@@ -30,30 +37,53 @@ const BasicInformation = () => {
   return (
     <>
       <View style={styles.container}>
-        <Image source={logo} style={styles.logo} />
-        <Text style={styles.header}>Registration</Text>
-        <View style={styles.languageContainer}>
-          <Text
-            style={styles.language}
-            onPress={() => setIsChangeLanguage(!isChangeLanguage)}
-          >
-            EN
-          </Text>
-          {isChangeLanguage && (
-            <View style={styles.languagePopUp}>
-              <Text style={styles.language}>English</Text>
-            </View>
-          )}
-        </View>
+    <Image source={logo} style={styles.logo} />
+    <Text style={styles.header}>{registration.registration}</Text>
+    {/* <View style={styles.languageContainer}>
+      <Text
+        style={styles.language}
+        onPress={() => setIsChangeLanguage(!isChangeLanguage)}
+      >
+        EN
+      </Text>
+      {isChangeLanguage && (
+      <View style={styles.languageContainer}>
+        <Text
+          style={styles.language}
+          onPress={() => handleLanguageChange('en')}
+        >
+          English
+        </Text>
+        <Text
+          style={styles.language}
+          onPress={() => handleLanguageChange('he')}
+        >
+          עִברִית
+        </Text>
+        <Text
+          style={styles.language}
+          onPress={() => handleLanguageChange('ar')}
+        >
+          العربي
+        </Text>
+        <Text
+          style={styles.language}
+          onPress={() => handleLanguageChange('ru')}
+        >
+          русский
+        </Text>
       </View>
+    )}
+    </View> */}
+  </View>
       <Tabs tab={tab} currentStep={currentStep} />
       {currentStep === 0 ? (
         <>
           <View style={{ rowGap: getHeight(26) }}>
-            <Input placeholder={"First Name*"} type={"name"} />
-            <Input placeholder={"Last Name*"} type={"nameSuffix"} />
+            <Input placeholder={registration.first_name} type={"name"} />
+            <Input placeholder={registration.last_name} type={"nameSuffix"} />
             <Input
-              placeholder={"ID Number*"}
+              placeholder={registration.id_number}
               type={"telephoneNumber"}
               keyboardType="number-pad"
             />
@@ -64,21 +94,20 @@ const BasicInformation = () => {
               color: colors.black,
               paddingTop: getHeight(5),
             }}
-          >
-            *It will help us to find a best doctor for you
+          >{registration.it_will_help_us_to_find_a_best_doctor_for_you}
           </Text>
         </>
       ) : currentStep === 1 ? (
         <>
           <View style={{ rowGap: getHeight(26) }}>
-            <Input placeholder={"Address*"} type={"fullStreetAddress"} />
+            <Input placeholder={registration.address} type={"fullStreetAddress"} />
             <Input
-              placeholder={"Date of Birth*"}
+              placeholder={registration.date_of_birth}
               type={"telephoneNumber"}
               keyboardType="numeric"
             />
             <Input
-              placeholder={"ID Number*"}
+              placeholder={registration.id_number}
               type={"telephoneNumber"}
               keyboardType="number-pad"
             />
@@ -89,11 +118,10 @@ const BasicInformation = () => {
               color: colors.black,
               paddingTop: getHeight(5),
             }}
-          >
-            *It will help us to find a best doctor for you
+          >{registration.it_will_help_us_to_find_a_best_doctor_for_you}
           </Text>
           <View style={styles.innerContainer}>
-            <Text style={styles.profileText}>Add a profile photo</Text>
+            <Text style={styles.profileText}>{registration.add_a_profile_photo}</Text>
             <TouchableOpacity>
               <Image
                 source={require("../../../../assets/icon/editprofile.png")}
@@ -115,13 +143,13 @@ const BasicInformation = () => {
               source={require("../../../../assets/icon/card.png")}
               style={styles.creditCard}
             />
-            <Text style={styles.profileText}>Add credit card</Text>
+            <Text style={styles.profileText}>{registration.add_credit_card}</Text>
           </View>
           <View style={styles.inputContainer}>
-            <Input placeholder={"Credit Card Number*"} keyboardType='numeric' type='creditCardNumber' />
+            <Input placeholder={registration.credit_card_number} keyboardType='numeric' type='creditCardNumber' />
             <View style={{ flexDirection: "row", columnGap: getHeight(20) }}>
-              <Input placeholder={"MM/YY*"} containerWidth={"100%"} />
-              <Input placeholder={"CVV*"} containerWidth={"100%"} />
+              <Input placeholder={registration.mm_yy} containerWidth={"100%"} />
+              <Input placeholder={registration.cvv} containerWidth={"100%"} />
             </View>
             <View style={styles.divider} />
           </View>
@@ -131,19 +159,19 @@ const BasicInformation = () => {
               style={styles.googlePay}
             />
             <TouchableOpacity>
-              <Text style={styles.profileText}>Add Google Pay</Text>
+              <Text style={styles.profileText}>{registration.add_google_pay}</Text>
             </TouchableOpacity>
           </View>
         </>
       )}
 
       <View style={styles.footerContainer}>
-        <Button title={"Back"} isSmall onPress={handleBack} />
-        <Button title={"Next"} isPrimary isSmall onPress={handleNext} />
+        <Button title={registration.back} isSmall onPress={handleBack} />
+        <Button title={registration.next} isPrimary isSmall onPress={handleNext} />
       </View>
       {currentStep === 2 && (
         <View style={styles.skipForLater}>
-          <Text style={styles.skipLaterText}>Skip for later</Text>
+          <Text style={styles.skipLaterText}>{registration.skip_for_later}</Text>
         </View>
       )}
     </>
@@ -154,7 +182,7 @@ export default BasicInformation;
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
+   
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -170,25 +198,35 @@ const styles = StyleSheet.create({
     fontSize: getHeight(16),
     paddingRight: 0,
   },
-  languagePopUp: {
-    position: "absolute",
-    width: getWidth(125),
-    maxWidth: getWidth(125),
-    height: getHeight(140),
-    maxHeight: getHeight(140),
-    padding: getHeight(6),
-    borderWidth: getHeight(1),
-    borderColor: colors.primary,
-    zIndex: 1,
-    borderRadius: getHeight(10),
-    alignItems: "flex-end",
-    right: 0,
-    backgroundColor: colors.white,
-    top: "40%",
-  },
+  // languagePopUp: {
+  //   position: "absolute",
+  //   width: getWidth(125),
+  //   maxWidth: getWidth(125),
+  //   height: getHeight(140),
+  //   maxHeight: getHeight(140),
+  //   padding: getHeight(6),
+  //   borderWidth: getHeight(1),
+  //   borderColor: colors.primary,
+  //   zIndex: 1,
+  //   borderRadius: getHeight(10),
+  //   alignItems: "flex-end",
+  //   right: 0,
+  //   backgroundColor: colors.white,
+  //   top: "40%",
+  // },
   logo: {
     width: getWidth(70),
     height: getHeight(55),
+
+
+
+
+
+
+
+
+
+    
   },
   languageContainer: {
     position: "relative",

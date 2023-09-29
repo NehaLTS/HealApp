@@ -12,11 +12,14 @@ import Button from "../../common/Button";
 import Input from "../../common/Input";
 import TextButton from "../../common/TextButton";
 import LoginController from "./LoginController";
+import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
+import { getTexts } from "../../../libs/OneSkyHelper";
 
 const LoginView = () => {
   const navigation = useNavigation();
-
-  const { isChangeLanguage, onChangeLanguage } = LoginController();
+  const { languageCode } = useTranslationContext()
+  const { sign } = getTexts(languageCode)
+  const { isChangeLanguage, onChangeLanguage , handleLanguageChange} = LoginController();
   const { onGoogleLogin } = GoogleViewController()
   const { useLoginQuery } = UseLoginClient()
   const [email, setEmail] = useState<string>('')
@@ -25,10 +28,13 @@ const LoginView = () => {
   console.log("78687687686868", JSON.stringify(apiData))
   const { data, error, isFetched, isFetching, isLoading } = useLoginQuery(apiData)
   console.log('data', apiData, data)
+
+
   const handleLogin = async () => {
+   
     await setApiData({ email, password })
     if (!error)
-      await navigation.navigate("HomeView")
+      await navigation.navigate("BasicInformation")
     else {
       Alert.alert('something went wrong')
     }
@@ -40,34 +46,57 @@ const LoginView = () => {
         <Image source={logo} style={styles.logo} />
         <View style={styles.languageContainer}>
           <Text style={styles.language} onPress={onChangeLanguage}>EN</Text>
-          {isChangeLanguage && (
-            <View style={styles.languagePopUp}>
-              <Text style={styles.language}>English</Text>
-            </View>
-          )}
+           {isChangeLanguage && (
+          <View style={styles.languageContainer}>
+            <Text
+              style={styles.language}
+              onPress={() => handleLanguageChange('en')}
+            >
+              English
+            </Text>
+            <Text
+              style={styles.language}
+              onPress={() => handleLanguageChange('he')}
+            >
+              עִברִית
+            </Text>
+            <Text
+              style={styles.language}
+              onPress={() => handleLanguageChange('ar')}
+            >
+              العربي
+            </Text>
+            <Text
+              style={styles.language}
+              onPress={() => handleLanguageChange('ru')}
+            >
+              русский
+            </Text>
+          </View>
+        )}
         </View>
       </View>
       <View style={styles.toggleContainer}>
-        <TextButton title={"SIGN IN"} onPress={() => { }} isActive={true} />
-        <TextButton title={"SIGN UP"} onPress={() => { }} />
+        <TextButton title={sign.sign_in} onPress={() => { }} isActive={true} />
+        <TextButton title={sign.sign_up} onPress={() => { }} />
       </View>
-      <Text style={styles.loginText}>Client Login</Text>
+      <Text style={styles.loginText}>{sign.client_login}</Text>
       <View style={styles.inputContainer}>
-        <Input placeholder={"Email*"} value={email} onChangeText={(e) => setEmail(e)} />
-        <Input placeholder="Password*" type="password" value={password} onChangeText={(e) => setPassword(e)} />
+        <Input placeholder={sign.email} value={email} onChangeText={(e) => setEmail(e)} />
+        <Input placeholder={sign.password} type="password" value={password} onChangeText={(e) => setPassword(e)} />
       </View>
       <TextButton
-        title="Forgot password?"
+        title={sign.forgot_password}
         onPress={() => { }}
         fontSize={getHeight(fontSize.textSm)}
         isActive
         style={styles.forgotText}
       />
-      {isFetching ? <ActivityIndicator style={{ top: getHeight(20) }} size='large' color={colors.primary} /> : <Button title={"Sign In"} isPrimary isSmall style={styles.signInButton} onPress={handleLogin} />}
+      {isFetching ? <ActivityIndicator style={{ top: getHeight(20) }} size='large' color={colors.primary} /> : <Button title={sign.sign_in} isPrimary isSmall style={styles.signInButton} onPress={handleLogin} />}
 
       <View style={styles.footerContainer}>
         <View style={styles.signInViaContainer}>
-          <Text style={styles.signInViaText}>Or sign in via</Text>
+          <Text style={styles.signInViaText}>{sign.or_sign_in_via}</Text>
           <TouchableOpacity onPress={() => {
             onGoogleLogin().then((userData) => {
               try {
@@ -92,9 +121,9 @@ const LoginView = () => {
           />
         </View>
         <View style={styles.footer}>
-          <Text style={styles.loginText}>Guest Entrance</Text>
+          <Text style={styles.loginText}>{sign.guest_entrance}</Text>
           <TextButton
-            title="Switch to Provider"
+            title={sign.switch_to_provider}
             onPress={() => { }}
             fontSize={getHeight(fontSize.textXl)}
             style={[styles.loginText, styles.switchProvider]}
