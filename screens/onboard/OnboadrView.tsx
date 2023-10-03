@@ -1,100 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native'; // Import FlatList
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Image, Text, StyleSheet } from 'react-native';
+import Swiper from 'react-native-swiper';
+
 import logo from '../../designToken/svg/logo.png';
+import { getHeight, getWidth } from '../../libs/StyleHelper';
 import { fontSize } from '../../designToken/fontSizes';
 import { colors } from '../../designToken/colors';
-import { fontWeight } from '../../designToken/fontWeights';
-import { getHeight, getWidth } from '../../libs/StyleHelper';
-import { startChangingText } from '../onboard/OnboardControl';
 
+const slides = [
+  { backgroundColor: colors.white, text: 'Welcome to Heal', circleText: '1' },
+  { backgroundColor: colors.white, text: 'Welcome to Heal', circleText: '2' },
+  { backgroundColor: colors.white, text: 'Welcome to Heal', circleText: '3' },
+];
 
 const OnboardView = () => {
-  const [circleText, setCircleText] = useState(1);
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const swiperRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    startChangingText(setCircleText);
-  }, []);
+    const interval = setInterval(() => {
+      if (swiperRef.current) {
+        const nextIndex = (currentIndex + 1) % slides.length;
+        swiperRef.current.scrollBy(nextIndex - currentIndex, true);
+        setCurrentIndex(nextIndex);
+      }
+    }, 3000); // 3 seconds
 
-  const indicators = [1, 2, 3];
+    return () => {
+      clearInterval(interval);
+    };
+  }, [currentIndex]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View style={{ position: "relative" }}>
-          <Text
-            style={styles.language}
-            onPress={() => setIsChangeLanguage(!isChangeLanguage)}
-          >
-            EN
-          </Text>
-          {isChangeLanguage && (
-            <View style={styles.languageContainer}>
-              <Text style={styles.language}>English</Text>
-            </View>
-          )}
-        </View>
-        <View style={styles.logoContainer}>
+    <Swiper
+      ref={swiperRef}
+      style={styles.wrapper}
+      autoplay={false}
+      loop={false}
+    >
+      {slides.map((slide, index) => (
+        <View key={index} style={[styles.slide, { backgroundColor: slide.backgroundColor }]}>
           <Image source={logo} style={styles.logo} />
-          <Text style={styles.welcomeText}>Welcome to Heal</Text>
+          <Text style={styles.text}>{slide.text}</Text>
           <View style={styles.circle}>
-            <Text style={styles.circleText}>{circleText}</Text>
+            <Text style={styles.circleText}>{slide.circleText}</Text>
           </View>
         </View>
-        <View style={styles.indicatorcontainer}>
-          <FlatList
-            data={indicators}
-            horizontal
-            keyExtractor={(item) => item.toString()}
-            renderItem={({ item }) => (
-              <View
-                style={[
-                  styles.indicator,
-                  item === circleText && styles.activeIndicator,
-                  { width: item === circleText ? 20 : 10, }
-                ]}
-              />
-            )}
-          />
-        </View>
-      </View>
-
-    </SafeAreaView>
-
+      ))}
+    </Swiper>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {},
+  slide: {
     flex: 1,
-    paddingHorizontal: getWidth(20),
-    backgroundColor: "#fff",
-    paddingTop: getHeight(25),
-
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  language: {
-    color: "#000",
-    alignSelf: "flex-end",
-    padding: getHeight(5),
-    fontSize: getHeight(16),
-    paddingRight: 0,
-  },
-  logoContainer: {
-    flex: 1,
-    alignItems:"center"
+  text: {
+    color: colors.black,
+    fontSize: fontSize.headingLg,
+    fontWeight: 'bold',
   },
   logo: {
     width: getWidth(247),
     height: getHeight(252),
-    alignSelf: "center",
+    alignSelf: 'center',
   },
-  welcomeText: {
-    fontSize: getHeight(26),
-    color: "#000",
-    alignSelf: "center",
-    paddingTop: getHeight(20),
-  },
-
   circle: {
     width: getWidth(60),
     height: getHeight(60),
@@ -102,45 +75,12 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(50),
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: "center",
-    marginTop: "30%"
-
+    alignSelf: 'center',
+    marginTop: '15%',
   },
   circleText: {
     fontSize: fontSize.headingLg,
     color: colors.white,
-    fontWeight: fontWeight.bold
-
-  },
-  indicatorcontainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: getHeight(40)
-  },
-  indicator: {
-    height: getHeight(10),
-    borderRadius: getHeight(20),
-    backgroundColor: colors.grey,
-    margin: 5,
-  },
-  activeIndicator: {
-    backgroundColor: colors.primary,
-  },
-  languageContainer: {
-    position: "absolute",
-    width: getWidth(125),
-    maxWidth: getWidth(125),
-    height: getHeight(140),
-    maxHeight: getHeight(142),
-    padding: getHeight(6),
-    borderWidth: getHeight(1),
-    borderColor: "rgba(12, 127, 187, 1)",
-    zIndex: 1,
-    borderRadius: getHeight(10),
-    alignItems: "flex-end",
-    right: 0,
-    backgroundColor: "#fff",
-    top: "88%",
   },
 });
 
