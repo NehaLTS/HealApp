@@ -6,6 +6,7 @@ import { fontWeight } from "../../../../designToken/fontWeights";
 import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Input from "../../../common/Input";
 import SelectImage from "../../../common/SelectImage";
+import { dimens } from "../../../../designToken/dimens";
 
 const UserAddress = () => {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -61,8 +62,8 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getHeight(20),
-    marginTop: getHeight(12),
+    gap: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.marginS),
   },
   profileText: {
     color: colors.black,
@@ -70,12 +71,12 @@ const styles = StyleSheet.create({
     fontWeight: fontWeight.normal,
   },
   editProfile: {
-    height: getHeight(60),
-    width: getWidth(60),
+    height: getHeight(dimens.imageS),
+    width: getWidth(dimens.imageS),
   },
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
-    paddingTop: getHeight(5),
+    paddingTop: getHeight(dimens.paddingXs),
   },
 });
