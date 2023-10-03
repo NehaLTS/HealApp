@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   language: {
     color: colors.black,
     alignSelf: "flex-end",
-    padding: getHeight(dimens.borderWidthThick),
+    padding: getHeight(dimens.borderThin),
     fontSize: getHeight(fontSize.textLg),
     paddingRight: 0,
   },

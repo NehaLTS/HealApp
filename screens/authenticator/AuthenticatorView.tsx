@@ -1,8 +1,8 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import logo from "../assets/icon/logo.png";
-import AuthenticatorController from "./AuthenticatorController";
+import logo from "../../assets/icon/logo.png";
 import LoginView from "../../components/client/login/LoginView";
+import Header from "../../components/common/Header";
 import TextButton from "../../components/common/TextButton";
 import { useTranslationContext } from "../../contexts/UseTranslationsContext";
 import { colors } from "../../designToken/colors";
@@ -10,7 +10,7 @@ import { dimens } from "../../designToken/dimens";
 import { fontSize } from "../../designToken/fontSizes";
 import { getTexts } from "../../libs/OneSkyHelper";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
-import Header from "../../components/common/Header";
+import AuthenticatorController from "./AuthenticatorController";
 
 const AuthenticatorView = () => {
   const { languageCode } = useTranslationContext();
