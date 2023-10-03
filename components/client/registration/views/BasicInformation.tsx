@@ -60,7 +60,7 @@ const BasicInformation = () => {
           </View>
           <Text
             style={{
-              fontSize: fontSize.textMd,
+              fontSize: fontSize.textM,
               color: colors.black,
               paddingTop: getHeight(5),
             }}
@@ -85,7 +85,7 @@ const BasicInformation = () => {
           </View>
           <Text
             style={{
-              fontSize: fontSize.textMd,
+              fontSize: fontSize.textM,
               color: colors.black,
               paddingTop: getHeight(5),
             }}
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   header: {
     color: colors.black,
-    fontSize: getWidth(fontSize.headingLg),
+    fontSize: getWidth(fontSize.headingL),
     lineHeight: getHeight(28),
   },
   language: {
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   profileText: {
     color: colors.black,
-    fontSize: getWidth(fontSize.textLg),
+    fontSize: getWidth(fontSize.textL),
     fontWeight: fontWeight.normal,
   },
   editProfile: {

@@ -1,8 +1,8 @@
 export const fontSize = {
-    textSm: 12,
-    textMd: 14,
-    textLg: 16,
+    textS: 12,
+    textM: 14,
+    textL: 16,
     textXl: 18,
     heading: 24,
-    headingLg: 26,
+    headingL: 26,
 } as const

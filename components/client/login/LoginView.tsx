@@ -11,19 +11,15 @@ import Button from "../../common/Button";
 import Input from "../../common/Input";
 import LoginController from "./LoginController";
 
-const LoginView = ({ isSignInButton }: { isSignInButton: boolean }) => {
+const LoginView = () => {
   const { languageCode } = useTranslationContext();
+  //TODO: Update according to new translation ie i18Next, once done.
   const { signIn } = getTexts(languageCode);
-  const { images, onHandleLogin, onSelectSocialAuth } = LoginController();
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-
-  const getSocialMediaLogin = () =>
-    images.map((item, index) => (
-      <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
-        <Image source={item.url} style={styles.images} />
-      </TouchableOpacity>
-    ));
+  const { onHandleLogin } = LoginController();
+   //TODO Use useRef
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  
   return (
     <>
       <View style={styles.inputContainer}>
@@ -31,6 +27,7 @@ const LoginView = ({ isSignInButton }: { isSignInButton: boolean }) => {
           placeholder={signIn.email}
           value={email}
           onChangeText={setEmail}
+          type="emailAddress"
         />
         <Input
           placeholder={signIn.password}
@@ -40,57 +37,67 @@ const LoginView = ({ isSignInButton }: { isSignInButton: boolean }) => {
           inputStyle={styles.password}
         />
         <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
-      </View >
-      <View style={styles.buttonContainer}>
         <Button
-          title={isSignInButton ? signIn.sign_in : signIn.sign_up}
+          title={signIn.sign_in}
           isPrimary
           isSmall
           style={styles.signInButton}
           onPress={() => onHandleLogin(email, password)}
         />
-        <View style={styles.footerContainer}>
-          <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-          {getSocialMediaLogin()}
-        </View >
-      </View >
+      </View>
+      <View style={styles.footerContainer}>
+        <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
+        {getSocialMediaLogin()}
+      </View>
     </>
   );
 };
 export default LoginView;
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.35,
+    flex: 0.8,
   },
   images: {
     width: getWidth(dimens.imageXs),
-    height: getHeight(dimens.imageXs),
+    height: getHeight(dimens.imageS),
+    resizeMode: "center",
   },
   forgotPassword: {
     color: colors.black,
     textAlign: "center",
-    paddingTop: getHeight(dimens.paddingXs),
+    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   footerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: getHeight(dimens.marginS),
+    flex: 0.2,
   },
   signInVia: {
     color: colors.black,
-    fontSize: fontSize.textLg,
+    fontSize: fontSize.textL,
     fontWeight: fontWeight.normal,
   },
   signInButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.marginS),
-  },
-  buttonContainer: {
-    flex: 0.55,
-    gap: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.paddingL),
   },
   password: {
     marginTop: dimens.paddingL,
-  }
+  },
 });
+
+//TODO: Better way to use it with Signin as well as Signup as footer
+export const getSocialMediaLogin = () => {
+  const images = [
+    { url: require("../../../assets/icon/google.png") },
+    { url: require("../../../assets/icon/facebook.png") },
+    { url: require("../../../assets/icon/apple.png") },
+  ];
+  const { onSelectSocialAuth } = LoginController();
+  return images.map((item, index) => (
+    <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
+      <Image source={item.url} style={styles.images} />
+    </TouchableOpacity>
+  ));
+};

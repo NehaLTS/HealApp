@@ -14,6 +14,7 @@ import {
 import { colors } from "../../designToken/colors";
 import { fontSize } from "../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
+import { dimens } from "../../designToken/dimens";
 
 const Input = ({
   placeholder,
@@ -25,40 +26,20 @@ const Input = ({
   ...props
 }: {
   placeholder: string;
-  type?: | 'none'
-  | 'URL'
-  | 'addressCity'
-  | 'addressCityAndState'
-  | 'addressState'
-  | 'countryName'
+  type?: 
   | 'creditCardNumber'
   | 'emailAddress'
-  | 'familyName'
   | 'fullStreetAddress'
-  | 'givenName'
-  | 'jobTitle'
-  | 'location'
-  | 'middleName'
   | 'name'
-  | 'namePrefix'
   | 'nameSuffix'
-  | 'nickname'
-  | 'organizationName'
-  | 'postalCode'
-  | 'streetAddressLine1'
-  | 'streetAddressLine2'
-  | 'sublocality'
   | 'telephoneNumber'
-  | 'username'
-  | 'password'
-  | 'newPassword'
-  | 'oneTimeCode';
+  | 'password';
   onShowPassword?: () => void;
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string
   containerWidth?: DimensionValue
 } & TextInputProps) => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const toggleShowPassword = () => setShowPassword(!showPassword);
   return (
     <View>
@@ -88,27 +69,27 @@ const Input = ({
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
-    borderWidth: getWidth(2),
+    borderWidth: getWidth(dimens.borderBold),
     borderColor: colors.primary,
-    borderRadius: getWidth(10),
+    borderRadius: getWidth(dimens.marginS),
     flexDirection: "row",
-    height: getHeight(50),
+    height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
   },
   input: {
-    fontSize: fontSize.textLg,
-    padding: getHeight(10),
+    fontSize: fontSize.textL,
+    padding: getHeight(dimens.marginS),
     color: colors.black,
     flex:1
   },
   showImage: {
-    width: getWidth(24),
-    height: getHeight(16),
-    marginRight: getHeight(10),
+    width: getWidth(dimens.imageS/ dimens.borderBold),
+    height: getHeight(dimens.sideMargin),
+    marginRight: getHeight(dimens.marginS),
   },
   errorMessage: {
     color: colors.invalid,
-    paddingTop: getHeight(4),
+    paddingTop: getHeight(dimens.paddingXs),
   },
 });
 

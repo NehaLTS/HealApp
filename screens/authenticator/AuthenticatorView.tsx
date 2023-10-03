@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import logo from "../../assets/icon/logo.png";
 import LoginView from "../../components/client/login/LoginView";
@@ -11,30 +11,45 @@ import { fontSize } from "../../designToken/fontSizes";
 import { getTexts } from "../../libs/OneSkyHelper";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import AuthenticatorController from "./AuthenticatorController";
+import RegistrationView from "../../components/client/registration/views/RegistrationView";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const AuthenticatorView = () => {
   const { languageCode } = useTranslationContext();
+  const navigation = useNavigation();
+  const route = useRoute();
   const { signIn } = getTexts(languageCode);
-  const { loginRegisterToggle, isSignInButton } = AuthenticatorController()
-
+  const { loginRegisterToggle, isSigninSelected } = AuthenticatorController();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => <Header isHideTitle />,
+    });
+  }, [navigation]);
   return (
     <>
-      <Header />
       <View style={styles.mainContainer}>
         <View style={styles.container}>
           <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
-            <TextButton title={signIn.sign_in} isActive={isSignInButton} onPress={loginRegisterToggle} />
-            <TextButton title={signIn.sign_up} isActive={!isSignInButton} onPress={loginRegisterToggle}  />
+            <TextButton
+              title={signIn.sign_in}
+              isActive={isSigninSelected}
+              onPress={loginRegisterToggle}
+            />
+            <TextButton
+              title={signIn.sign_up}
+              isActive={!isSigninSelected}
+              onPress={loginRegisterToggle}
+            />
           </View>
-          <Text style={styles.loginText}>{signIn.client_login}</Text>
+          <Text style={styles.loginText}>{isSigninSelected ? ( route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up) }</Text>
         </View>
         <View style={styles.inputContainer}>
-          <LoginView isSignInButton={isSignInButton} />
+          {isSigninSelected ? <LoginView /> : <RegistrationView />}
           <View style={styles.footer}>
             <Text style={styles.guestText}>{signIn.guest_entrance}</Text>
             <TextButton
-              title={signIn.switch_to_provider}
+              title={ route?.params?.isClient === true ? signIn.switch_to_provider :  signIn.switch_to_client}
               fontSize={getHeight(fontSize.textXl)}
               style={styles.switchToProviderText}
             />
@@ -60,7 +75,7 @@ const styles = StyleSheet.create({
   logo: {
     width: getWidth(dimens.imageM),
     height: getHeight(dimens.imageM),
-    alignSelf:'center'
+    alignSelf: "center",
   },
   toggleContainer: {
     flexDirection: "row",
@@ -83,7 +98,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    flex: 0.1
+    flex: 0.1,
   },
   switchToProviderText: {
     color: colors.primary,

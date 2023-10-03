@@ -7,11 +7,6 @@ import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider
 import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/AuthRespoonseType";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 
-const images = [
-  { url: require("../../../assets/icon/google.png") },
-  { url: require("../../../assets/icon/facebook.png") },
-  { url: require("../../../assets/icon/apple.png") },
-];
 const LoginController = () => {
   const navigation = useNavigation();
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
@@ -88,7 +83,6 @@ const LoginController = () => {
     }
   }
   return {
-    images,
     isChangeLanguage,
     onChangeLanguage,
     onHandleLogin,
