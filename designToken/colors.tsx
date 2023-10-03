@@ -3,7 +3,7 @@ export const colors = {
     secondary:" rgba(248, 143, 88, 1)",
     black:"rgba(0, 0, 0, 1)",
     white:"rgba(255,255,255,1)",
-    transparent:"transparent",
-    grey:"#D3D3D3"
-
+    invalid:"rgba(225, 19, 19, 1)",
+    disabled:"rgba(217, 217, 217, 1)",
+    offWhite :"rgba(249, 253, 255, 1)"
 } as const
