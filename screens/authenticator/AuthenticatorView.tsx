@@ -13,6 +13,7 @@ import { getHeight, getWidth } from "../../libs/StyleHelper";
 import AuthenticatorController from "./AuthenticatorController";
 import RegistrationView from "../../components/client/registration/views/RegistrationView";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import BasicInformation from "../../components/client/registration/views/BasicInformation";
 
 const AuthenticatorView = () => {
   const { languageCode } = useTranslationContext();
@@ -22,13 +23,13 @@ const AuthenticatorView = () => {
   const { loginRegisterToggle, isSigninSelected } = AuthenticatorController();
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header isHideTitle />,
+      header: () => <Header title="Registration" />,
     });
   }, [navigation]);
   return (
     <>
       <View style={styles.mainContainer}>
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
             <TextButton
@@ -54,8 +55,10 @@ const AuthenticatorView = () => {
               style={styles.switchToProviderText}
             />
           </View>
-        </View>
+        </View> */}
+        <BasicInformation />
       </View>
+      
     </>
   );
 };

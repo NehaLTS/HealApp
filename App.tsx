@@ -19,9 +19,9 @@ const queryClient = new QueryClient();
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>("en");
   /** To Initialize Google SDk */
-  GoogleSignin.configure({
-    webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
-  });
+  // GoogleSignin.configure({
+  //   webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
+  // });
   return (
     <QueryClientProvider client={queryClient}>
       <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
