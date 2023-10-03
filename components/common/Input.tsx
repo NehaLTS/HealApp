@@ -95,13 +95,13 @@ const Input = ({
   return (
     <View>
       <View
-        style={[styles.inputContainer, { width: containerWidth ?? "auto" }]}
+        style={[styles.inputContainer, inputStyle, { width: containerWidth ?? "auto" }]}
       >
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
         <TextInput
-          style={[styles.input, inputStyle]}
+          style={styles.input}
           placeholderTextColor={colors.black}
           textContentType={type ?? "password"}
           secureTextEntry={showPassword}

@@ -14,13 +14,13 @@ const BasicInformation = () => {
   const [currentStep, setCurrentStep] = useState(0);
   console.log(currentStep);
   const tab = [{ title: "1" }, { title: "2" }, { title: "3" }];
-  const handleNext = () => {
+  const onPressNext = () => {
     setCurrentStep((prev) => {
       const newStep = prev + 1;
       return newStep < tab.length ? newStep : prev;
     });
   };
-  const handleBack = () => {
+  const onPressBack = () => {
     setCurrentStep((prev) => {
       const newStep = prev - 1;
       return newStep >= 0 ? newStep : prev;
@@ -138,8 +138,8 @@ const BasicInformation = () => {
       )}
 
       <View style={styles.footerContainer}>
-        <Button title={"Back"} isSmall onPress={handleBack} />
-        <Button title={"Next"} isPrimary isSmall onPress={handleNext} />
+        <Button title={"Back"} isSmall onPress={onPressBack} />
+        <Button title={"Next"} isPrimary isSmall onPress={onPressNext} />
       </View>
       {currentStep === 2 && (
         <View style={styles.skipForLater}>

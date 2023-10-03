@@ -14,7 +14,7 @@ import UserPayment from "./UserPayment";
 
 const BasicInformation = () => {
   const { languageCode } = useTranslationContext();
-  const { currentStep, handleNext, handleBack } = BasicInformationController({
+  const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
   const { registration } = getTexts(languageCode);
@@ -32,12 +32,12 @@ const BasicInformation = () => {
         )}
       </View>
       <View style={styles.footerContainer}>
-        <Button title={registration.back} isSmall onPress={handleBack} />
+        <Button title={registration.back} isSmall onPress={onPressBack} />
         <Button
           title={registration.next}
           isPrimary
           isSmall
-          onPress={handleNext}
+          onPress={onPressNext}
         />
       </View>
       {currentStep === 2 && (
