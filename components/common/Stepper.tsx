@@ -5,7 +5,7 @@ import { fontSize } from "../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { dimens } from "../../designToken/dimens";
 
-const Tabs = ({ currentStep , totalStep }: { currentStep:any, totalStep: number }) => {
+const Stepper = ({ currentStep , totalStep }: { currentStep:number[], totalStep: number }) => {
   const step = Array(totalStep).fill(0);
   return (
     <View style={styles.container}>
@@ -16,7 +16,7 @@ const Tabs = ({ currentStep , totalStep }: { currentStep:any, totalStep: number 
             styles.activeButtonView,
             {
               backgroundColor:
-                index === currentStep ? colors.secondary : colors.disabled,
+              currentStep?.includes(index) ? colors.secondary : colors.disabled,
             },
           ]}
         >
@@ -27,7 +27,7 @@ const Tabs = ({ currentStep , totalStep }: { currentStep:any, totalStep: number 
   );
 };
 
-export default Tabs;
+export default Stepper;
 
 const styles = StyleSheet.create({
   container: {

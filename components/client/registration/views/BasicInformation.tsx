@@ -4,14 +4,15 @@ import { colors } from "../../../../designToken/colors";
 import { fontSize } from "../../../../designToken/fontSizes";
 import { getWidth } from "../../../../libs/StyleHelper";
 import Button from "../../../common/Button";
-import Tabs from "../../../common/Tabs";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
 import { getTexts } from "../../../../libs/OneSkyHelper";
 import UserDetail from "./UserDetail";
 import UserAddress from "./UserAddress";
 import UserPayment from "./UserPayment";
+import Stepper from "../../../common/Stepper";
 
+  //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const { languageCode } = useTranslationContext();
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
@@ -21,14 +22,13 @@ const BasicInformation = () => {
   const isLoadingCard = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
-  //TODO: static strings are changed after setup i18
   return (
     <>
-      <Tabs currentStep={currentStep} totalStep={3} />
+      <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {currentStep === 0 ? (
+        {currentStep[currentStep.length -1] === 0 ? (
           <UserDetail />
-        ) : currentStep === 1 ? (
+        ) : currentStep[currentStep.length -1] === 1 ? (
           <UserAddress />
         ) : (
           <UserPayment />
@@ -61,7 +61,7 @@ const BasicInformation = () => {
           />
         )}
       </View>
-      {currentStep === 2 && !isLoadingCard && !isCardDetails && (
+      {currentStep[currentStep.length -1] === 2 && !isLoadingCard && !isCardDetails && (
         <Text style={styles.skipLaterText}>{registration.skip_for_later}</Text>
       )}
     </>

@@ -1,23 +1,28 @@
 import { useState } from "react";
 
-const BasicInformationController = ({ totalSteps }: { totalSteps?: number }) => {
-  const [currentStep, setCurrentStep] = useState(0);
+const BasicInformationController = ({
+  totalSteps,
+}: {
+  totalSteps?: number;
+}) => {
+  const [currentStep, setCurrentStep] = useState([0]);
   const [isShowModal, setIsShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
-  const tab = Array(totalSteps).fill(0);
   const onPressNext = () => {
-    setCurrentStep((prev) => {
-      const newStep = prev + 1;
-      return newStep < tab.length ? newStep : prev;
-    });
+    if (currentStep.length !== totalSteps) {
+      setCurrentStep(() => {
+        const array = [...currentStep];
+        array.push(array[array.length - 1] + 1);
+        return array;
+      });
+    }
   };
   const onPressBack = () => {
-    setCurrentStep((prev) => {
-      const newStep = prev - 1;
-      return newStep >= 0 ? newStep : prev;
-    });
+    if (currentStep.length > 1) {
+      setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+    }
   };
-  
+
   return {
     currentStep,
     onPressNext,
@@ -25,7 +30,7 @@ const BasicInformationController = ({ totalSteps }: { totalSteps?: number }) => 
     selectedImage,
     setSelectedImage,
     isShowModal,
-    setIsShowModal
+    setIsShowModal,
   };
 };
 
