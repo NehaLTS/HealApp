@@ -1,45 +1,102 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Input from "../../../common/Input";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { getTexts } from "../../../../libs/OneSkyHelper";
 import { colors } from "../../../../designToken/colors";
+import { dimens } from "../../../../designToken/dimens";
 import { fontSize } from "../../../../designToken/fontSizes";
 import { fontWeight } from "../../../../designToken/fontWeights";
+import { getTexts } from "../../../../libs/OneSkyHelper";
+import { getHeight, getWidth } from "../../../../libs/StyleHelper";
+import Input from "../../../common/Input";
+import LoaderText from "../../../common/LoaderText";
 
 const UserPayment = () => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
+  const isLoading = false; //TODO: need to change after binding data
+  const isGetCardDetails = true; //TODO: need to change after binding data
+
   return (
     <>
       <View style={styles.container}>
-        <Image
-          source={require("../../../../assets/icon/card.png")}
-          style={styles.creditCard}
-        />
-        <Text style={styles.profileText}>{registration.add_credit_card}</Text>
+        {!isGetCardDetails && !isLoading && (
+          <>
+            <Image
+              source={require("../../../../assets/icon/card.png")}
+              style={styles.creditCard}
+            />
+            <Text style={styles.profileText}>
+              {isLoading
+                ? registration.add_credit_card
+                : registration.check_credit_card}
+            </Text>
+          </>
+        )}
       </View>
-      <Input
-        placeholder={registration.credit_card_number}
-        keyboardType="numeric"
-        type="creditCardNumber"
-        inputStyle={{ marginHorizontal: 10 }}
-      />
-      <View style={{ flexDirection: "row", columnGap: getHeight(20) }}>
-        <Input placeholder={registration.mm_yy} containerWidth={100} />
-        <Input placeholder={registration.cvv} containerWidth={80} />
-      </View>
-      <View style={styles.divider} />
-      <View style={styles.googlePayContainer}>
-        <Image
-          source={require("../../../../assets/icon/googlePay.png")}
-          style={styles.googlePay}
-        />
-        <TouchableOpacity>
-          <Text style={styles.profileText}>{registration.add_google_pay}</Text>
-        </TouchableOpacity>
-      </View>
+      {!isLoading ? (
+        isGetCardDetails ? (
+          <>
+            <View style={styles.innerContainer}>
+              <Image
+                source={require("../../../../assets/icon/masterCard.png")}
+                style={styles.googlePay}
+              />
+              <Text style={styles.profileText}>Master-card</Text>
+              <View style={styles.cardIcons}>
+                <Image
+                  source={require("../../../../assets/icon/edit.png")}
+                  style={styles.cardImages}
+                />
+                <Image
+                  source={require("../../../../assets/icon/cancel.png")}
+                  style={styles.cardImages}
+                />
+              </View>
+            </View>
+            <View style={styles.innerContainer}>
+              <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
+              <Text style={styles.cardDetail}>Expires 03/26</Text>
+            </View>
+          </>
+        ) : (
+          <>
+            <Input
+              placeholder={registration.credit_card_number}
+              keyboardType="numeric"
+              type="creditCardNumber"
+              inputStyle={styles.cardNumber}
+            />
+            <View style={[styles.container, styles.inputDateAndCvv]}>
+              <Input
+                placeholder={registration.mm_yy}
+                containerWidth={getWidth(dimens.imageS + dimens.imageS)}
+              />
+              <Input
+                placeholder={registration.cvv}
+                containerWidth={getWidth(dimens.imageXs + dimens.imageXs)}
+              />
+            </View>
+          </>
+        )
+      ) : (
+        <View style={styles.loader}>
+          <LoaderText />
+        </View>
+      )}
+      {!isLoading && (
+        <>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.googlePayContainer}>
+            <Image
+              source={require("../../../../assets/icon/googlePay.png")}
+              style={styles.googlePay}
+            />
+            <Text style={styles.profileText}>
+              {registration.add_google_pay}
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
     </>
   );
 };
@@ -48,27 +105,27 @@ export default UserPayment;
 
 const styles = StyleSheet.create({
   divider: {
-    height: getWidth(1),
-    backgroundColor: colors.black,
-    marginTop: getHeight(10),
+    height: getWidth(dimens.borderThin),
+    backgroundColor: colors.grey,
+    marginTop: getHeight(dimens.marginS),
   },
   googlePay: {
-    height: getHeight(32),
-    width: getWidth(32),
+    height: getHeight(dimens.marginL + dimens.borderBold),
+    width: getWidth(dimens.marginL + dimens.borderBold),
   },
   inputContainer: {
-    gap: getHeight(26),
-    marginTop: getHeight(18),
+    gap: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.marginM - dimens.borderBold),
   },
   creditCard: {
-    width: getWidth(25),
-    height: getHeight(20),
+    width: getWidth(dimens.paddingL),
+    height: getHeight(dimens.marginM),
   },
   googlePayContainer: {
     flexDirection: "row",
-    gap: getHeight(26),
+    gap: getHeight(dimens.sideMargin),
     alignItems: "center",
-    marginTop: getHeight(16),
+    marginTop: getHeight(dimens.sideMargin),
   },
   skipForLater: {
     flex: 1,
@@ -78,13 +135,13 @@ const styles = StyleSheet.create({
   skipLaterText: {
     color: colors.black,
     textAlign: "center",
-    fontSize: getWidth(18),
-    marginBottom: getHeight(30),
+    fontSize: getWidth(fontSize.textXl),
+    marginBottom: getHeight(dimens.marginL),
   },
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
-    paddingTop: getHeight(5),
+    paddingTop: getHeight(dimens.paddingXs),
   },
   profileText: {
     color: colors.black,
@@ -94,6 +151,39 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getWidth(20),
+    gap: getWidth(dimens.marginM),
+    marginTop: getHeight(dimens.marginS),
   },
+  cardDetail:{
+    color: colors.black,
+    fontSize: getWidth(fontSize.textL),
+    fontWeight: fontWeight.light,
+  },
+  cardNumber: {
+    marginVertical: getHeight(dimens.sideMargin),
+  },
+  inputDateAndCvv: {
+    marginBottom: getHeight(dimens.paddingL),
+  },
+  loader: {
+    flex: 0.4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardIcons: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    flex: 1,
+    gap: getHeight(dimens.marginM),
+  },
+  innerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: getHeight(dimens.marginM),
+    marginBottom: getHeight(dimens.paddingXs),
+  },
+  cardImages:{
+    height: getHeight(dimens.paddingL),
+    width: getWidth(dimens.paddingL),
+  }
 });

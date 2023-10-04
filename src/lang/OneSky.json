@@ -26,20 +26,24 @@
         "first_name": "First Name*",
         "last_name": "Last Name*",
         "phone_number": "Phone Number*",
-        "it_will_help_us_to_find_a_best_doctor_for_you": "*It will help us to find a best doctor for you",
+        "find_doctor_text": "*It will help us to find a best doctor for you",
         "back": "Back",
         "next": "Next",
         "address": "Address*",
         "date_of_birth": "Date of Birth*",
         "id_number": "ID Number*",
-        "add_a_profile_photo": "Add a profile photo",
+        "add_profile": "Add a profile photo",
         "skip_for_later": "Skip for later",
         "profile_photo": "Profile photo",
         "add_credit_card": "Add credit card",
+        "check_credit_card": "Checking your credit card",
         "credit_card_number": "Credit Card Number*",
         "add_google_pay": "Add Google Pay",
         "mm_yy":"MM/YY*",
         "cvv":"CVV*"
+      },
+      "common":{
+        "loader":"LOADER"
       }
     }
   },
@@ -67,13 +71,13 @@
         "first_name": "שם פרטי*",
         "last_name": "שם משפחה*",
         "phone_number": "מספר טלפון*",
-        "it_will_help_us_to_find_a_best_doctor_for_you": "*זה יעזור לנו למצוא את הרופא הטוב ביותר עבורך",
+        "find_doctor_text": "*זה יעזור לנו למצוא את הרופא הטוב ביותר עבורך",
         "back": "חזור",
         "next": "הַבָּא",
         "address": "כתובת*",
         "date_of_birth": "תאריך לידה*",
         "id_number": "מספר תעודת זהות*",
-        "add_a_profile_photo": "הוסף תמונת פרופיל",
+        "add_profile": "הוסף תמונת פרופיל",
         "skip_for_later": "דלג למועד מאוחר יותר",
         "profile_photo": "תמונת פרופיל",
         "add_credit_card": "הוסף כרטיס אשראי",
@@ -81,6 +85,9 @@
         "add_google_pay": "הוסף את Google Pay",
         "mm_yy":"חודש שנה*",
         "cvv":"CVV*"
+      },
+      "common":{
+        "loader":"LOADER"
       }
     }
   },
@@ -108,13 +115,13 @@
         "first_name": "الاسم الأول*",
         "last_name": "اسم العائلة*",
         "phone_number": "رقم التليفون*",
-        "it_will_help_us_to_find_a_best_doctor_for_you": "*سوف يساعدنا في العثور على أفضل طبيب لك",
+        "find_doctor_text": "*سوف يساعدنا في العثور على أفضل طبيب لك",
         "back": "خلف",
         "next": "التالي",
         "address": "عنوان*",
         "date_of_birth": "تاريخ الميلاد*",
         "id_number": "رقم الهوية*",
-        "add_a_profile_photo": "أضف صورة الملف الشخصي",
+        "add_profile": "أضف صورة الملف الشخصي",
         "skip_for_later": "تخطي في وقت لاحق",
         "profile_photo": "صورة الملف الشخصي",
         "add_credit_card": "إضافة بطاقة الائتمان",
@@ -122,6 +129,9 @@
         "add_google_pay": "أضف جوجل باي",
         "mm_yy":"مم/سنة*",
         "cvv":"CVV*"
+      },
+      "common":{
+        "loader":"LOADER"
       }
     }
   },
@@ -149,20 +159,23 @@
         "first_name": "Имя*",
         "last_name": "Фамилия*",
         "phone_number": " Номер телефона*",
-        "it_will_help_us_to_find_a_best_doctor_for_you": "*Это поможет нам найти для вас лучшего врача",
+        "find_doctor_text": "*Это поможет нам найти для вас лучшего врача",
         "back": "Назад",
         "next": "Следующий",
         "address": "Адрес*",
         "date_of_birth": "Дата рождения*",
         "id_number": "Идентификационный номер*",
-        "add_a_profile_photo": "Добавить фотографию профиля",
+        "add_profile": "Добавить фотографию профиля",
         "skip_for_later": "Пропустить на потом",
         "profile_photo": "Аватар",
         "add_credit_card": "Добавить кредитную карту",
         "credit_card_number": "Номер кредитной карты*",
         "add_google_pay": "Добавить Google Pay",
-        "mm_yy":"ММ/ГГ*",
+        "mm_yy":"MM/ГГ*",
         "cvv":"CVV*"
+      },
+      "common":{
+        "loader":"LOADER"
       }
     }
   }

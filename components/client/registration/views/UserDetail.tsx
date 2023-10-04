@@ -30,7 +30,7 @@ const UserDetail = () => {
         inputStyle={styles.inputId}
       />
       <Text style={styles.text}>
-        {registration.it_will_help_us_to_find_a_best_doctor_for_you}
+        {registration.find_doctor_text}
       </Text>
     </>
   );
@@ -42,12 +42,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
-    paddingTop: getHeight(dimens.paddingXs)
+    paddingTop: getHeight(dimens.paddingXs),
+    letterSpacing:getHeight(dimens.borderThin)
   },
   input:{
-    marginVertical: getHeight(dimens.marginS)
+    marginVertical: getHeight(dimens.paddingS)
   },
   inputId:{
-    marginTop: getHeight(dimens.marginS)
+    marginTop: getHeight(dimens.paddingS)
   }
 });

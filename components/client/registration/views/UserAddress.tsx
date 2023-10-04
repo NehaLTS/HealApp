@@ -1,45 +1,45 @@
+import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
 import { colors } from "../../../../designToken/colors";
+import { dimens } from "../../../../designToken/dimens";
 import { fontSize } from "../../../../designToken/fontSizes";
-import { fontWeight } from "../../../../designToken/fontWeights";
+import { getTexts } from "../../../../libs/OneSkyHelper";
 import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Input from "../../../common/Input";
 import SelectImage from "../../../common/SelectImage";
-import { dimens } from "../../../../designToken/dimens";
+import BasicInformationController from "../controllers/BasicInformationController";
 
 const UserAddress = () => {
-  const [isShowModal, setIsShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const { languageCode } = useTranslationContext();
+  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } = BasicInformationController({});
+  const { registration } = getTexts(languageCode);
+
   return (
     <>
       <Input
-        placeholder={"Address*"}
+        placeholder={registration.address}
         type={"fullStreetAddress"}
         inputStyle={styles.input}
       />
       <Input
-        placeholder={"Date of Birth*"}
+        placeholder={registration.date_of_birth}
         type={"telephoneNumber"}
         keyboardType="numeric"
         inputStyle={styles.input}
       />
       <Input
-        placeholder={"ID Number*"}
+        placeholder={registration.id_number}
         type={"telephoneNumber"}
         keyboardType="number-pad"
         inputStyle={styles.inputId}
       />
-      <Text style={styles.text}>
-        *It will help us to find a best doctor for you
-      </Text>
+      <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
-        <Text style={styles.profileText}>Add a profile photo</Text>
+        <Text style={styles.profileText}>{registration.add_profile}</Text>
         <TouchableOpacity
           activeOpacity={selectedImage ? 1 : 0.5}
-          onPress={() => {
-            !selectedImage && setIsShowModal(true);
-          }}
+          onPress={() => !selectedImage && setIsShowModal(true)}
         >
           <Image
             source={
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   profileText: {
     color: colors.black,
     fontSize: getWidth(fontSize.textL),
-    fontWeight: fontWeight.normal,
+    marginTop: getHeight(dimens.paddingXs),
   },
   editProfile: {
     height: getHeight(dimens.imageS),
@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
-    paddingTop: getHeight(dimens.paddingXs)
+    paddingTop: getHeight(dimens.paddingXs),
   },
   input: {
-    marginVertical: getHeight(dimens.marginS),
+    marginVertical: getHeight(dimens.paddingS),
   },
-  inputId:{
-    marginTop: getHeight(dimens.marginS)
-  }
+  inputId: {
+    marginTop: getHeight(dimens.paddingS),
+  },
 });

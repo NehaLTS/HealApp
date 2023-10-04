@@ -23,7 +23,7 @@ const Button = ({
         styles.button,
         style,
         {
-          width: isSmall ? '40%' : '100%',
+          width: isSmall ? '30%' : '100%',
           borderColor: isPrimary ? colors.primary : colors.black,
           backgroundColor: isPrimary ? colors.primary : colors.transparent,
           paddingHorizontal: getWidth(dimens.marginM)

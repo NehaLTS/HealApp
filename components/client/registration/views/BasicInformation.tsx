@@ -23,7 +23,7 @@ const BasicInformation = () => {
     <>
       <Tabs currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {currentStep === 0 ? (
+        {currentStep === 0 ? ( 
           <UserDetail />
         ) : currentStep === 1 ? (
           <UserAddress />
