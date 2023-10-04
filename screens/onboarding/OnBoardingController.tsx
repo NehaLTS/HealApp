@@ -1,12 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 
-
-const slides = [
-  { text: 'Welcome to Heal', numbers: '1' },
-  { text: 'Welcome to Heal', numbers: '2' },
-  { text: 'Welcome to Heal', numbers: '3' },
-];
-
 const OnBoardingController = () => {
   const swiperRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,7 +7,7 @@ const OnBoardingController = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (swiperRef.current) {
-        const nextIndex = (currentIndex + 1) % slides.length;
+        const nextIndex = (currentIndex + 1) % 3;
         swiperRef.current.scrollBy(nextIndex - currentIndex, true);
         setCurrentIndex(nextIndex);
       }
@@ -25,11 +18,7 @@ const OnBoardingController = () => {
     };
   }, [currentIndex]);
 
-  return {
-    swiperRef,
-
-   
-  };
+  return {swiperRef};
 }
 
 export default OnBoardingController;

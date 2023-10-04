@@ -12,7 +12,7 @@ import React, { lazy } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { TranslationContext } from "./contexts/UseTranslationsContext";
 import IntroScreen from "./screens/intro/IntroScreen";
-import OnboardView from './screens/onboard/OnboadrView';
+import OnboardView from './screens/onboarding/OnboadrView';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient()

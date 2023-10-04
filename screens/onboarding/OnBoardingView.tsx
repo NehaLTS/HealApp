@@ -1,24 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-
-import logo from '../../designToken/svg/logo.png';
-import { getHeight, getWidth } from '../../libs/StyleHelper';
-import { fontSize } from '../../designToken/fontSizes';
-import { colors } from '../../designToken/colors';
-import { fontWeight } from '../../designToken/fontWeights';
-import { dimens } from '../../designToken/dimens';
 import Button from '../../components/common/Button';
+import { colors } from '../../designToken/colors';
+import { dimens } from '../../designToken/dimens';
+import { fontSize } from '../../designToken/fontSizes';
+import { fontWeight } from '../../designToken/fontWeights';
+import logo from '../../assets/icon/logo.png';
+import { getHeight, getWidth } from '../../libs/StyleHelper';
 import OnBoardingController from './OnBoardingController';
 
-const slides = [
-  { text: 'Welcome to Heal', numbers: '1' },
-  { text: 'Welcome to Heal', numbers: '2' },
-  { text: 'Welcome to Heal', numbers: '3' },
-];
-
 const OnBoardingView = () => {
-  const {swiperRef, }=OnBoardingController()
+  const { swiperRef, } = OnBoardingController()
 
   return (
     <View style={styles.slide}>
@@ -27,24 +20,21 @@ const OnBoardingView = () => {
         autoplay={false}
         loop={false}
       >
-        {slides.map((innercontainer, index) => (
+        {[...Array(3)].map((_, index) => (
           <View key={index} style={styles.innercontainer}>
             <Image source={logo} style={styles.logo} />
-            <Text style={styles.text}>{innercontainer.text}</Text>
-
+            <Text style={styles.text}>{'Welcome to Heal'}</Text> {/* TODO: changed after make this dynamic */}
           </View>
         ))}
       </Swiper>
       <View style={styles.buttonContainer}>
         <Button title={'skip'} />
       </View>
-
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-
   slide: {
     flex: 1,
     justifyContent: 'center',
@@ -67,10 +57,10 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageL),
     alignSelf: 'center',
   },
-  buttonContainer:{
-     flex: 0.15,
-      justifyContent: "center", 
-      alignSelf: "center" 
+  buttonContainer: {
+    flex: 0.15,
+    justifyContent: "center",
+    alignSelf: "center"
   }
 
 });
