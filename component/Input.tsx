@@ -31,11 +31,11 @@ const Input = ({ placeholder, type, onShowPassword, ...props }: { placeholder: s
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
-    borderWidth: getWidth(2),
+    borderWidth: getWidth(dimens.borderBold),
     borderColor: colors.primary,
-    borderRadius: getWidth(10),
+    borderRadius: getWidth(dimens.marginS),
     flexDirection: 'row',
-    height: getHeight(48),
+    height: getHeight(dimens.imageS),
   },
   input: {
     fontSize: fontSize.textLg,
@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     color: colors.black
   },
   showImage: {
-    width: getWidth(25),
-    height: getHeight(25),
-    borderWidth: getWidth(2),
-    right: 12,
+    width: getWidth(dimens.paddingL+dimens.borderThin),
+    height: getHeight(dimens.paddingL+dimens.borderThin),
+    borderWidth: getWidth(dimens.borderBold),
+    right: dimens.paddingS,
   },
 
 });
