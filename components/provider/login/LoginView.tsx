@@ -9,13 +9,13 @@ import { getTexts } from "../../../libs/OneSkyHelper";
 import { getHeight, getWidth } from "../../../libs/StyleHelper";
 import Button from "../../common/Button";
 import Input from "../../common/Input";
-import LoginController from "./LoginController";
+import LoginViewController from "./LoginViewController";
 
 const LoginView = () => {
   const { languageCode } = useTranslationContext();
   //TODO: Update according to new translation ie i18Next, once done.
   const { signIn } = getTexts(languageCode);
-  const { onHandleLogin } = LoginController();
+  const { onPressLogin } = LoginViewController();
    //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -41,12 +41,12 @@ const LoginView = () => {
           isPrimary
           isSmall
           style={styles.signInButton}
-          onPress={() => onHandleLogin(email, password)}
+          onPress={() => onPressLogin(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-        {getSocialMediaLogin()}
+        {getSignInFooter()}
       </View>
     </>
   );
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer
-export const getSocialMediaLogin = () => {
+export const getSignInFooter = () => {
   const images = [
     { url: require("../../../assets/icon/google.png") },
     { url: require("../../../assets/icon/facebook.png") },

@@ -9,7 +9,7 @@ import logo from "../../assets/icon/logo.png";
 
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string;isHideTitle?: boolean }) => {
-  const { isChangeLanguage, onChangeLanguage, handleLanguageChange } = IntroController();
+  const { isLanguageChanged, onChangeLanguage, handleLanguageChange } = IntroController();
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between'}]}>
@@ -23,7 +23,7 @@ const Header = ({ title, isHideTitle }: { title?: string;isHideTitle?: boolean }
       <Text style={styles.headerRight} onPress={onChangeLanguage}>
         {"EN"}
       </Text>
-      {isChangeLanguage && (
+      {isLanguageChanged && (
       //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text

@@ -10,13 +10,13 @@ import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Button from "../../../common/Button";
 import Input from "../../../common/Input";
 import LoginController from "../../login/LoginController";
-import { getSocialMediaLogin } from "../../login/LoginView";
+import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onHandleLogin } = LoginController();
+  const { onPressLogin } = LoginController();
   const { email, setEmail, password, setPassword } = RegistrationViewController();
 
   return (
@@ -41,12 +41,12 @@ const RegistrationView = () => {
           isPrimary
           isSmall
           style={styles.signUpButton}
-          onPress={() => onHandleLogin(email, password)}
+          onPress={() => onPressLogin(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-        {getSocialMediaLogin()}
+        {getSignInFooter()}
       </View>
     </>
   );
