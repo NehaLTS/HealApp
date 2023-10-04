@@ -32,7 +32,7 @@ const UserAddress = () => {
         placeholder={registration.id_number}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.inputId}
+        inputStyle={styles.inputIdNumber}
       />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   input: {
     marginVertical: getHeight(dimens.paddingS),
   },
-  inputId: {
+  inputIdNumber: {
     marginTop: getHeight(dimens.paddingS),
   },
 });

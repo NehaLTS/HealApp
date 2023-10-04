@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
 import { colors } from "../../../../designToken/colors";
@@ -11,14 +11,13 @@ import Button from "../../../common/Button";
 import Input from "../../../common/Input";
 import LoginController from "../../login/LoginController";
 import { getSocialMediaLogin } from "../../login/LoginView";
+import RegistrationViewController from "../controllers/RegistrationViewController";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
   const { onHandleLogin } = LoginController();
-  //TODO Use useRef
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const { email, setEmail, password, setPassword } = RegistrationViewController();
 
   return (
     <>

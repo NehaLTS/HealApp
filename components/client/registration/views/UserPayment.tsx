@@ -20,7 +20,7 @@ const UserPayment = () => {
     <>
       <View style={styles.container}>
         {!isGetCardDetails && !isLoading && (
-          <>
+          <>mjnkl
             <Image
               source={require("../../../../assets/icon/card.png")}
               style={styles.creditCard}
@@ -41,7 +41,7 @@ const UserPayment = () => {
                 source={require("../../../../assets/icon/masterCard.png")}
                 style={styles.googlePay}
               />
-              <Text style={styles.profileText}>Master-card</Text>
+              <Text style={styles.profileText}>Master-card</Text> 
               <View style={styles.cardIcons}>
                 <Image
                   source={require("../../../../assets/icon/edit.png")}
@@ -54,8 +54,8 @@ const UserPayment = () => {
               </View>
             </View>
             <View style={styles.innerContainer}>
-              <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
-              <Text style={styles.cardDetail}>Expires 03/26</Text>
+              <Text style={styles.cardDetail}>**** **** ***** 1234</Text> 
+              <Text style={styles.cardDetail}>{registration.expires} 03/26</Text> 
             </View>
           </>
         ) : (
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     gap: getHeight(dimens.paddingL),
-    marginTop: getHeight(dimens.marginM - dimens.borderBold),
+    marginTop: getHeight(dimens.paddingS + dimens.paddingXs),
   },
   creditCard: {
     width: getWidth(dimens.paddingL),

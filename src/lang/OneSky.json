@@ -40,7 +40,9 @@
         "credit_card_number": "Credit Card Number*",
         "add_google_pay": "Add Google Pay",
         "mm_yy":"MM/YY*",
-        "cvv":"CVV*"
+        "cvv":"CVV*",
+        "expires":"Expires"
+
       },
       "common":{
         "loader":"LOADER"
