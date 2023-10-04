@@ -1,4 +1,4 @@
-export const dimens = {
+export const dimes = {
     // Margins and paddings
     marginS: 10,
     marginM: 20,

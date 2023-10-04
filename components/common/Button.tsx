@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
+import { dimes } from "../../designToken/dimes";
 import { fontSize } from "../../designToken/fontSizes";
 import { fontWeight } from "../../designToken/fontWeights";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
@@ -26,7 +26,7 @@ const Button = ({
           width: isSmall ? 'auto' : '100%',
           borderColor: isPrimary ? colors.primary : colors.black,
           backgroundColor: isPrimary ? colors.primary : "transparent",
-          paddingHorizontal: getWidth(dimens.marginM)
+          paddingHorizontal: getWidth(dimes.marginM)
         },
       ]}
       {...props}
@@ -35,7 +35,7 @@ const Button = ({
         style={{
           fontSize: getHeight(fontSize.heading),
           color: isPrimary ? colors.white : colors.black,
-          lineHeight: getHeight(dimens.marginL),
+          lineHeight: getHeight(dimes.marginL),
           fontWeight: (isSmall || !isPrimary) ? fontWeight.light : fontWeight.semiBold,
         }}
         adjustsFontSizeToFit
@@ -49,11 +49,11 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getHeight(dimes.borderThin),
     alignItems: "center",
     justifyContent: "center",
-    height: getHeight(dimens.imageS),
-    borderRadius: getHeight(dimens.marginS/dimens.borderBold),
+    height: getHeight(dimes.imageS),
+    borderRadius: getHeight(dimes.marginS/dimes.borderBold),
     zIndex: 1,
     minWidth: '38%'
   },

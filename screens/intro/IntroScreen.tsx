@@ -2,7 +2,7 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Button from "../../components/common/Button";
 import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
+import { dimes } from "../../designToken/dimes";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import logo from "../../assets/icon/logo.png";
 import IntroController from "./IntroController";
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: getWidth(dimens.marginM),
+    paddingHorizontal: getWidth(dimes.marginM),
   },
   logoContainer: {
     alignSelf: "center",
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-  width: getWidth(dimens.imageL),
-  height: getHeight(dimens.imageL)
+  width: getWidth(dimes.imageL),
+  height: getHeight(dimes.imageL)
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingLg),

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
 import { colors } from "../../../designToken/colors";
-import { dimens } from "../../../designToken/dimens";
+import { dimes } from "../../../designToken/dimes";
 import { fontSize } from "../../../designToken/fontSizes";
 import { fontWeight } from "../../../designToken/fontWeights";
 import { getTexts } from "../../../libs/OneSkyHelper";
@@ -63,19 +63,19 @@ const styles = StyleSheet.create({
     flex: 0.35,
   },
   images: {
-    width: getWidth(dimens.imageXs),
-    height: getHeight(dimens.imageXs),
+    width: getWidth(dimes.imageXs),
+    height: getHeight(dimes.imageXs),
   },
   forgotPassword: {
     color: colors.black,
     textAlign: "center",
-    paddingTop: getHeight(dimens.paddingXs),
+    paddingTop: getHeight(dimes.paddingXs),
   },
   footerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: getHeight(dimens.marginS),
+    paddingTop: getHeight(dimes.marginS),
   },
   signInVia: {
     color: colors.black,
@@ -84,13 +84,13 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.marginS),
+    marginTop: getHeight(dimes.marginS),
   },
   buttonContainer: {
     flex: 0.55,
-    gap: getHeight(dimens.paddingL),
+    gap: getHeight(dimes.paddingL),
   },
   password: {
-    marginTop: dimens.paddingL,
+    marginTop: dimes.paddingL,
   }
 });
