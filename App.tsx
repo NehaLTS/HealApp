@@ -12,12 +12,14 @@ import React, { lazy } from "react";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { TranslationContext } from "./contexts/UseTranslationsContext";
 import IntroScreen from "./screens/intro/IntroScreen";
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient()
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>('en')
   /** To Initialize Google SDk */
+  SplashScreen.hide();
   GoogleSignin.configure({
     webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
   });
