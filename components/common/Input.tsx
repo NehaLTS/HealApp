@@ -119,7 +119,7 @@ const Input = ({
         )}
       </View>
       {errorMessage && (
-        <Text style={styles.errorMessage}>{"errorMessage"}</Text>
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
       )}
     </View>
   );
