@@ -4,6 +4,7 @@ import { colors } from '../designToken/colors';
 import { fontSize } from '../designToken/fontSizes';
 import { getHeight, getWidth } from '../libs/StyleHelper';
 import show from '../designToken/svg/show.png'
+import { dimens } from '../designToken/dimens';
 const Input = ({ placeholder, type, onShowPassword, ...props }: { placeholder: string, type?: any, onShowPassword?: () => void } & TextInputProps) => {
 
   return (
@@ -33,20 +34,20 @@ const styles = StyleSheet.create({
     borderWidth: getWidth(2),
     borderColor: colors.primary,
     borderRadius: getWidth(10),
-    flexDirection:'row',
+    flexDirection: 'row',
     height: getHeight(48),
   },
   input: {
     fontSize: fontSize.textLg,
-    padding: 10,
-    flex:1,
-    color:"black"
+    padding: dimens.paddingXs,
+    flex: 1,
+    color: colors.black
   },
   showImage: {
     width: getWidth(25),
     height: getHeight(25),
     borderWidth: getWidth(2),
-    right:12,
+    right: 12,
   },
 
 });

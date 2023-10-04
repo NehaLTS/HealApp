@@ -11,6 +11,9 @@ import { fontWeight } from "../../../../designToken/fontWeights";
 
 const BasicInformation = () => {
   const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [isShowModal, setIsShowModal] = useState(false);
+
   const [currentStep, setCurrentStep] = useState(0);
   console.log(currentStep);
   const tab = [{ title: "1" }, { title: "2" }, { title: "3" }];
@@ -32,19 +35,6 @@ const BasicInformation = () => {
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.header}>Registration</Text>
-        <View style={styles.languageContainer}>
-          <Text
-            style={styles.language}
-            onPress={() => setIsChangeLanguage(!isChangeLanguage)}
-          >
-            EN
-          </Text>
-          {isChangeLanguage && (
-            <View style={styles.languagePopUp}>
-              <Text style={styles.language}>English</Text>
-            </View>
-          )}
-        </View>
       </View>
       <Tabs tab={tab} currentStep={currentStep} />
       {currentStep === 0 ? (
@@ -100,6 +90,11 @@ const BasicInformation = () => {
                 style={styles.editProfile}
               />
             </TouchableOpacity>
+            {selectedImage && (
+              <TouchableOpacity onPress={() => setIsShowModal(true)}>
+                <Image source={require('../../../../assets/icon/circumEdit.png')} style={styles.circumEdit}  />
+              </TouchableOpacity>
+            )}
           </View>
         </>
       ) : (
@@ -146,6 +141,14 @@ const BasicInformation = () => {
           <Text style={styles.skipLaterText}>Skip for later</Text>
         </View>
       )}
+      {isShowModal && (
+        <Modal visible={isShowModal} transparent animationType='fade'>
+          <View style={{ backgroundColor: "#00000070", height: "100%" }}>
+            <SelectImage imageUri={setSelectedImage} closeModal={setIsShowModal} />
+          </View>
+        </Modal>
+
+      )}
     </>
   );
 };
@@ -154,7 +157,7 @@ export default BasicInformation;
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
+
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -170,37 +173,17 @@ const styles = StyleSheet.create({
     fontSize: getHeight(16),
     paddingRight: 0,
   },
-  languagePopUp: {
-    position: "absolute",
-    width: getWidth(125),
-    maxWidth: getWidth(125),
-    height: getHeight(140),
-    maxHeight: getHeight(140),
-    padding: getHeight(6),
-    borderWidth: getHeight(1),
-    borderColor: colors.primary,
-    zIndex: 1,
-    borderRadius: getHeight(10),
-    alignItems: "flex-end",
-    right: 0,
-    backgroundColor: colors.white,
-    top: "40%",
-  },
   logo: {
     width: getWidth(70),
     height: getHeight(55),
   },
-  languageContainer: {
-    position: "relative",
-  },
+
   footerContainer: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    position: "absolute",
-    width: "100%",
-    alignSelf: "center",
-    bottom: getHeight(66),
+    alignItems: "flex-end",
+    justifyContent: "space-evenly",
+    flex: 0.90,
+
   },
   innerContainer: {
     flexDirection: "row",
@@ -251,4 +234,8 @@ const styles = StyleSheet.create({
     fontSize: getWidth(18),
     marginBottom: getHeight(30),
   },
+  circumEdit:{
+    height: getHeight(24),
+    width: getWidth(24),
+  }
 });
