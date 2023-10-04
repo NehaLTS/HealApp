@@ -1,7 +1,7 @@
 import React from 'react';
 import { ImageProps, ImageSourcePropType, Image as RNImage, ViewStyle } from 'react-native';
-import { getHeight, getWidth } from '../libs/StyleHelper';
-import { dimens } from '../designToken/dimens';
+import { getHeight, getWidth } from '../../libs/StyleHelper';
+import { dimens } from '../../designToken/dimens';
 
 const Image = ({ source, width, height, style, ...props }: { source: ImageSourcePropType; width?: number; height?: number; style?: ViewStyle } & ImageProps) => {
     const imageStyle: ViewStyle = {
