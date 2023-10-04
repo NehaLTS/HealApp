@@ -16,7 +16,7 @@ const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
   const { onHandleLogin } = LoginController();
-  //TODO Use useRef
+  //TODO: Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -27,7 +27,6 @@ const RegistrationView = () => {
           placeholder={signIn.email}
           value={email}
           onChangeText={setEmail}
-          type="emailAddress"
         />
         <Input
           placeholder={signIn.password}

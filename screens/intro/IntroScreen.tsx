@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Button from "../../components/common/Button";
 import { colors } from "../../designToken/colors";
@@ -10,15 +10,21 @@ import { getTexts } from "../../libs/OneSkyHelper";
 import { useTranslationContext } from "../../contexts/UseTranslationsContext";
 import Header from "../../components/common/Header";
 import { fontSize } from "../../designToken/fontSizes";
+import { useNavigation } from "@react-navigation/native";
 
 const IntroScreen = () => {
-  const { continueAsClient } = IntroController();
+  const navigation = useNavigation();
+  const { continueAsClient, continueAsProvider } = IntroController();
   const { languageCode } = useTranslationContext();
   const { intro } = getTexts(languageCode);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => <Header isHideTitle />,
+    });
+  }, [navigation]);
 
   return (
     <>
-      <Header />
       <View style={styles.container}>
         <View style={styles.logoContainer}>
           <Image source={logo} style={styles.logo} />
@@ -30,7 +36,7 @@ const IntroScreen = () => {
             isPrimary
             onPress={continueAsClient}
           />
-          <Button title={intro.continue_provider} onPress={continueAsClient} />
+          <Button title={intro.continue_provider} onPress={continueAsProvider} />
         </View>
       </View>
     </>
@@ -53,13 +59,13 @@ const styles = StyleSheet.create({
   height: getHeight(dimens.imageL)
   },
   welcomeText: {
-    fontSize: getHeight(fontSize.headingLg),
+    fontSize: getHeight(fontSize.headingL),
     color: colors.black,
     alignSelf: "center",
     flex: 0.4
   },
   buttonContainer: {
-    gap: getHeight(fontSize.headingLg),
+    gap: getHeight(fontSize.headingL),
     flex: 0.2,
   },
 });

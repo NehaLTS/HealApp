@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     paddingBottom: getHeight(32)
   },
   activeButtonText: {
-    fontSize: getWidth(fontSize.textMd),
+    fontSize: getWidth(fontSize.textM),
     color: colors.black,
   },
   activeButtonView: {

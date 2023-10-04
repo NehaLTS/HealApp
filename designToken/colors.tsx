@@ -5,5 +5,6 @@ export const colors = {
     white:"rgba(255,255,255,1)",
     invalid:"rgba(225, 19, 19, 1)",
     disabled:"rgba(217, 217, 217, 1)",
-    offWhite :"rgba(249, 253, 255, 1)"
+    offWhite :"rgba(249, 253, 255, 1)",
+    transparent :"transparent"
 } as const
