@@ -5,8 +5,8 @@ import { dimens } from '../designToken/dimens';
 
 const Image = ({ source, width, height, style, ...props }: { source: ImageSourcePropType; width?: number; height?: number; style?: ViewStyle } & ImageProps) => {
     const imageStyle: ViewStyle = {
-        width: width || getWidth(dimens.imageL), 
-        height: height || getHeight(dimens.imageL), 
+        width: width ?? getWidth(dimens.imageL), 
+        height: height ?? getHeight(dimens.imageL), 
         borderRadius: getHeight( dimens.sideMargin/2), 
     };
 
