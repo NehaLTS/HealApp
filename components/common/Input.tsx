@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Animated,
   DimensionValue,
@@ -13,9 +13,9 @@ import {
   View,
 } from "react-native";
 import { colors } from "../../designToken/colors";
+import { dimens } from "../../designToken/dimens";
 import { fontSize } from "../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
-import { dimens } from "../../designToken/dimens";
 
 const Input = ({
   placeholder,
@@ -41,7 +41,7 @@ const Input = ({
   const [showPassword, setShowPassword] = useState(false);
   const onShowPassword = () => setShowPassword(!showPassword);
   const moveText = useRef(new Animated.Value(0)).current;
-  const fontSizeAnim = useRef(new Animated.Value(getHeight(16))).current;
+  const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
 
   const onFocusHandler = () =>  moveTextTop();
   const onBlurHandler = () => moveTextBottom()
@@ -54,7 +54,7 @@ const Input = ({
         useNativeDriver: false,
       }),
       Animated.timing(fontSizeAnim, {
-        toValue: 12,
+        toValue: getHeight(fontSize.textS),
         duration: 200,
         useNativeDriver: false,
       }),
@@ -69,14 +69,14 @@ const Input = ({
         useNativeDriver: false,
       }),
       Animated.timing(fontSizeAnim, {
-        toValue: getHeight(16), 
+        toValue: getHeight(fontSize.textL), 
         duration: 200,
         useNativeDriver: false,
       }),
     ]).start();
   };
 
-  const yVal = moveText.interpolate({
+  const translateY = moveText.interpolate({
     inputRange: [0, 1],
     outputRange: [0, -20],
   });
@@ -84,14 +84,12 @@ const Input = ({
   const labelStyle = {
     transform: [
       {
-        translateY: yVal,
+        translateY: translateY,
       },
     ],
   };
 
-  const fontSizeStyle = {
-    fontSize: fontSizeAnim,
-  };
+  const fontSizeStyle = { fontSize: fontSizeAnim};
   return (
     <View>
       <View
@@ -132,9 +130,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: getWidth(dimens.borderBold),
     borderColor: colors.primary,
-    borderRadius: getWidth(10),
+    borderRadius: getWidth(dimens.marginS),
     flexDirection: "row",
-    height: getHeight(50),
+    height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
   },
   input: {
@@ -144,21 +142,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showImage: {
-    width: getWidth(24),
-    height: getHeight(16),
+    width: getWidth(dimens.paddingL),
+    height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.marginS),
   },
   errorMessage: {
     color: colors.invalid,
-    paddingTop: getHeight(4),
+    paddingTop: getHeight(dimens.paddingXs),
   },
   label: {
     position: "absolute",
-    top: getHeight(10),
-    left: getHeight(8),
+    top: getHeight(dimens.marginS),
+    left: getHeight(dimens.paddingXs + dimens.borderBold),
     backgroundColor: colors.offWhite,
     color: colors.black,
-    paddingHorizontal: getHeight(8)
+    paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold)
   },
 });
 

@@ -24,10 +24,10 @@ const UserDetail = () => {
         inputStyle={styles.input}
       />
       <Input
-        placeholder={registration.id_number}
+        placeholder={registration.phone_number}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.input}
+        inputStyle={styles.inputId}
       />
       <Text style={styles.text}>
         {registration.it_will_help_us_to_find_a_best_doctor_for_you}
@@ -42,9 +42,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
-    paddingTop: getHeight(dimens.paddingXs),
+    paddingTop: getHeight(dimens.paddingXs)
   },
   input:{
-    marginVertical: dimens.marginS
+    marginVertical: getHeight(dimens.marginS)
+  },
+  inputId:{
+    marginTop: getHeight(dimens.marginS)
   }
 });

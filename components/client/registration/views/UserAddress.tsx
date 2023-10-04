@@ -13,19 +13,23 @@ const UserAddress = () => {
   const [selectedImage, setSelectedImage] = useState<string>("");
   return (
     <>
-      <View style={{ rowGap: getHeight(26) }}>
-        <Input placeholder={"Address*"} type={"fullStreetAddress"} />
-        <Input
-          placeholder={"Date of Birth*"}
-          type={"telephoneNumber"}
-          keyboardType="numeric"
-        />
-        <Input
-          placeholder={"ID Number*"}
-          type={"telephoneNumber"}
-          keyboardType="number-pad"
-        />
-      </View>
+      <Input
+        placeholder={"Address*"}
+        type={"fullStreetAddress"}
+        inputStyle={styles.input}
+      />
+      <Input
+        placeholder={"Date of Birth*"}
+        type={"telephoneNumber"}
+        keyboardType="numeric"
+        inputStyle={styles.input}
+      />
+      <Input
+        placeholder={"ID Number*"}
+        type={"telephoneNumber"}
+        keyboardType="number-pad"
+        inputStyle={styles.inputId}
+      />
       <Text style={styles.text}>
         *It will help us to find a best doctor for you
       </Text>
@@ -77,6 +81,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
-    paddingTop: getHeight(dimens.paddingXs),
+    paddingTop: getHeight(dimens.paddingXs)
   },
+  input: {
+    marginVertical: getHeight(dimens.marginS),
+  },
+  inputId:{
+    marginTop: getHeight(dimens.marginS)
+  }
 });
