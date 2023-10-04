@@ -10,6 +10,7 @@ import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Input from "../../../common/Input";
 import LoaderText from "../../../common/LoaderText";
 
+//TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPayment = () => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
@@ -20,7 +21,7 @@ const UserPayment = () => {
     <>
       <View style={styles.container}>
         {!isGetCardDetails && !isLoading && (
-          <>mjnkl
+          <>
             <Image
               source={require("../../../../assets/icon/card.png")}
               style={styles.creditCard}
@@ -41,7 +42,7 @@ const UserPayment = () => {
                 source={require("../../../../assets/icon/masterCard.png")}
                 style={styles.googlePay}
               />
-              <Text style={styles.profileText}>Master-card</Text> 
+              <Text style={styles.profileText}>Master-card</Text>
               <View style={styles.cardIcons}>
                 <Image
                   source={require("../../../../assets/icon/edit.png")}
@@ -53,8 +54,8 @@ const UserPayment = () => {
                 />
               </View>
             </View>
-            <View style={styles.innerContainer}>
-              <Text style={styles.cardDetail}>**** **** ***** 1234</Text> 
+            <View style={styles.cardDetailContainer}>
+              <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
               <Text style={styles.cardDetail}>{registration.expires} 03/26</Text> 
             </View>
           </>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginS),
   },
   googlePay: {
-    height: getHeight(dimens.marginL + dimens.borderBold),
+    height: getHeight(dimens.paddingL + dimens.borderBold),
     width: getWidth(dimens.marginL + dimens.borderBold),
   },
   inputContainer: {
@@ -145,8 +146,7 @@ const styles = StyleSheet.create({
   },
   profileText: {
     color: colors.black,
-    fontSize: getWidth(fontSize.textL),
-    fontWeight: fontWeight.normal,
+    fontSize: getWidth(fontSize.textL)
   },
   container: {
     flexDirection: "row",
@@ -174,16 +174,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     flex: 1,
-    gap: getHeight(dimens.marginM),
+    gap: getHeight(dimens.paddingL),
+    alignItems:'center',
+    
   },
   innerContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: getHeight(dimens.marginM),
-    marginBottom: getHeight(dimens.paddingXs),
+    marginBottom: getHeight(dimens.paddingS),
   },
   cardImages:{
     height: getHeight(dimens.paddingL),
-    width: getWidth(dimens.paddingL),
+    width: getWidth(dimens.paddingL)
+  },
+  cardDetailContainer:{
+    flexDirection: "row",
+    alignItems: "center",
+    gap: getHeight(dimens.marginM),
+    marginBottom:getHeight(dimens.borderBold)
   }
 });

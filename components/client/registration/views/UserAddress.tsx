@@ -9,10 +9,12 @@ import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Input from "../../../common/Input";
 import SelectImage from "../../../common/SelectImage";
 import BasicInformationController from "../controllers/BasicInformationController";
+import { fontWeight } from "../../../../designToken/fontWeights";
 
 const UserAddress = () => {
   const { languageCode } = useTranslationContext();
-  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } = BasicInformationController({});
+  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
+    BasicInformationController({});
   const { registration } = getTexts(languageCode);
 
   return (
@@ -26,7 +28,7 @@ const UserAddress = () => {
         placeholder={registration.date_of_birth}
         type={"telephoneNumber"}
         keyboardType="numeric"
-        inputStyle={styles.input}
+        inputStyle={styles.inputDOB}
       />
       <Input
         placeholder={registration.id_number}
@@ -36,10 +38,11 @@ const UserAddress = () => {
       />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
-        <Text style={styles.profileText}>{registration.add_profile}</Text>
+        <Text style={[styles.profileText, selectedImage === "" && { marginTop: getHeight(dimens.marginS)}]}>{registration.add_profile}</Text>
         <TouchableOpacity
           activeOpacity={selectedImage ? 1 : 0.5}
           onPress={() => !selectedImage && setIsShowModal(true)}
+          style={styles.imageContainer}
         >
           <Image
             source={
@@ -47,8 +50,14 @@ const UserAddress = () => {
                 ? { uri: selectedImage }
                 : require("../../../../assets/icon/editprofile.png")
             }
-            style={styles.editProfile}
+            style={selectedImage ? styles.selectedImage : styles.editProfile}
           />
+          {selectedImage && (
+            <Image
+              source={require("../../../../assets/icon/edit.png")}
+              style={styles.editImage}
+            />
+          )}
         </TouchableOpacity>
         <SelectImage
           isShowModal={isShowModal}
@@ -67,26 +76,44 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: getHeight(dimens.marginM),
-    marginTop: getHeight(dimens.marginS),
+    marginTop: getHeight(dimens.marginM),
   },
   profileText: {
     color: colors.black,
-    fontSize: getWidth(fontSize.textL),
-    marginTop: getHeight(dimens.paddingXs),
+    fontSize: getWidth(fontSize.textL)
   },
   editProfile: {
+    height: getHeight(dimens.imageS + dimens.marginS),
+    width: getWidth(dimens.imageS + dimens.marginS),
+  },
+  selectedImage: {
     height: getHeight(dimens.imageS),
     width: getWidth(dimens.imageS),
+    borderRadius: getHeight(dimens.paddingS),
   },
   text: {
     fontSize: fontSize.textM,
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
+    fontWeight: fontWeight.light,
+    letterSpacing: getWidth( dimens.borderThin / dimens.borderBold)
   },
   input: {
-    marginVertical: getHeight(dimens.paddingS),
+    marginTop: getHeight(dimens.paddingS),
+  },
+  inputDOB: {
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
   },
   inputIdNumber: {
-    marginTop: getHeight(dimens.paddingS),
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
+  },
+  imageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: getWidth(dimens.marginS),
+  },
+  editImage: {
+    height: getHeight(dimens.paddingL),
+    width: getWidth(dimens.paddingL),
   },
 });

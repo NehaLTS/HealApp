@@ -4,9 +4,10 @@ import { useTranslationContext } from "../../../../contexts/UseTranslationsConte
 import { colors } from "../../../../designToken/colors";
 import { fontSize } from "../../../../designToken/fontSizes";
 import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight } from "../../../../libs/StyleHelper";
+import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Input from "../../../common/Input";
 import { dimens } from "../../../../designToken/dimens";
+import { fontWeight } from "../../../../designToken/fontWeights";
 
 const UserDetail = () => {
   const { languageCode } = useTranslationContext();
@@ -21,17 +22,15 @@ const UserDetail = () => {
       <Input
         placeholder={registration.last_name}
         type={"nameSuffix"}
-        inputStyle={styles.input}
+        inputStyle={styles.inputLastName}
       />
       <Input
         placeholder={registration.phone_number}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.inputId}
+        inputStyle={styles.inputPhone}
       />
-      <Text style={styles.text}>
-        {registration.find_doctor_text}
-      </Text>
+      <Text style={styles.text}>{registration.find_doctor_text}</Text>
     </>
   );
 };
@@ -43,12 +42,16 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textM,
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
-    letterSpacing:getHeight(dimens.borderThin)
+    letterSpacing:getHeight(dimens.borderThin),
+    fontWeight:fontWeight.light,
   },
   input:{
-    marginVertical: getHeight(dimens.paddingS)
-  },
-  inputId:{
     marginTop: getHeight(dimens.paddingS)
+  },
+  inputPhone:{
+    marginTop: getHeight(dimens.sideMargin+dimens.paddingS)
+  },
+  inputLastName:{
+    marginTop:getHeight(dimens.sideMargin+dimens.paddingS)
   }
 });

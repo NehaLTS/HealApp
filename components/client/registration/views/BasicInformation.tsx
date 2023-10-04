@@ -61,9 +61,9 @@ const styles = StyleSheet.create({
     color: colors.black,
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
-    flex: 0.06,
+    flex: 0.1,
   },
   inputContainer: {
-    flex: 0.8,
+    flex: 0.75,
   },
 });

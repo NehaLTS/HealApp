@@ -35,16 +35,17 @@ const styles = StyleSheet.create({
     columnGap: getHeight(dimens.sideMargin),
     alignSelf:'center',
     paddingVertical: getHeight(dimens.paddingXs),
-    paddingBottom: getHeight(dimens.marginM + dimens.paddingXs),
-    flex:0.03
+    flex:0.05,
+    alignItems:"center",
+    marginBottom:getHeight(dimens.paddingS)
   },
   activeButtonText: {
     fontSize: getWidth(fontSize.textM),
     color: colors.black,
   },
   activeButtonView: {
-    height: getHeight(30),
-    width: getWidth(30),
+    height: getHeight(dimens.marginL),
+    width: getWidth(dimens.marginL),
     borderRadius: getWidth(dimens.paddingXs),
     alignItems: "center",
     justifyContent: "center",
