@@ -41,11 +41,12 @@
         "add_google_pay": "Add Google Pay",
         "mm_yy":"MM/YY*",
         "cvv":"CVV*",
-        "expires":"Expires"
-
+        "expires":"Expires",
+        "start_using_heal":"Start using Heal"
       },
       "common":{
-        "loader":"LOADER"
+        "loader":"LOADER",
+        "cancel":"Cancel"
       }
     }
   },

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
+import { DimensionValue, StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 import { colors } from "../../designToken/colors";
 import { dimens } from "../../designToken/dimens";
 import { fontSize } from "../../designToken/fontSizes";
@@ -10,12 +10,14 @@ const Button = ({
   isPrimary,
   isSmall,
   style,
+  width,
   ...props
 }: {
   title: string;
   isPrimary?: boolean;
   isSmall?: boolean;
   style?: StyleProp<ViewStyle>
+  width?: DimensionValue
 } & TouchableOpacityProps) => {
   return (
     <TouchableOpacity
@@ -23,20 +25,19 @@ const Button = ({
         styles.button,
         style,
         {
-          width: isSmall ? '30%' : '100%',
+          width: width ?? isSmall ? '30%' :  '100%',
           borderColor: isPrimary ? colors.primary : colors.black,
           backgroundColor: isPrimary ? colors.primary : colors.transparent,
-          paddingHorizontal: getWidth(dimens.marginM)
         },
       ]}
       {...props}
     >
       <Text
         style={{
-          fontSize: getHeight(fontSize.heading),
+          fontSize: getWidth(fontSize.heading),
           color: isPrimary ? colors.white : colors.black,
           lineHeight: getHeight(dimens.marginL),
-          fontWeight: (isSmall || !isPrimary) ? fontWeight.light : fontWeight.semiBold,
+          fontWeight: (width || isSmall || !isPrimary) ? fontWeight.light : fontWeight.semiBold,
         }}
         adjustsFontSizeToFit
         numberOfLines={1}
@@ -55,7 +56,8 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageS),
     borderRadius: getHeight(dimens.marginS/dimens.borderBold),
     zIndex: 1,
-    minWidth: '38%'
+    minWidth: '30%',
+    paddingHorizontal: getWidth(dimens.marginM)
   },
 });
 

@@ -17,13 +17,16 @@ const BasicInformation = () => {
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
-  const { registration } = getTexts(languageCode);
+  const { registration, common } = getTexts(languageCode);
+  const isLoadingCard = false; //TODO: need to change after binding data
+  const isCardDetails = false; //TODO: need to change after binding data
 
+  //TODO: static strings are changed after setup i18
   return (
     <>
       <Tabs currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {currentStep === 0 ? ( 
+        {currentStep === 0 ? (
           <UserDetail />
         ) : currentStep === 1 ? (
           <UserAddress />
@@ -31,16 +34,34 @@ const BasicInformation = () => {
           <UserPayment />
         )}
       </View>
-      <View style={styles.footerContainer}>
-        <Button title={registration.back} isSmall onPress={onPressBack} />
-        <Button
-          title={registration.next}
-          isPrimary
-          isSmall
-          onPress={onPressNext}
-        />
+      <View
+        style={[
+          styles.footerContainer,
+          {
+            justifyContent:
+              (isLoadingCard || isCardDetails) ? "center" : "space-between",
+          },
+        ]}
+      >
+        {(!isLoadingCard && !isCardDetails) ? (
+          <>
+            <Button title={registration.back} isSmall onPress={onPressBack} />
+            <Button
+              title={registration.next}
+              isPrimary
+              onPress={onPressNext}
+              isSmall
+            />
+          </>
+        ) : (
+          <Button
+            title={isLoadingCard ? common.cancel : registration.start_using_heal}
+            isPrimary
+            width={isLoadingCard ? '35%' :'65%'}
+          />
+        )}
       </View>
-      {currentStep === 2 && (
+      {currentStep === 2 && !isLoadingCard && !isCardDetails && (
         <Text style={styles.skipLaterText}>{registration.skip_for_later}</Text>
       )}
     </>
@@ -53,7 +74,6 @@ const styles = StyleSheet.create({
   footerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     width: "100%",
     flex: 0.1,
   },
