@@ -1,25 +1,26 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
-import { colors } from "../../../designToken/colors";
-import { dimens } from "../../../designToken/dimens";
-import { fontSize } from "../../../designToken/fontSizes";
-import { fontWeight } from "../../../designToken/fontWeights";
-import { getTexts } from "../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../libs/StyleHelper";
-import Button from "../../common/Button";
-import Input from "../../common/Input";
-import LoginController from "./LoginController";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import Button from "common/Button";
+import Input from "common/Input";
+import LoginViewController from "LoginViewController";
+import TextButton from "components/common/TextButton";
 
 const LoginView = () => {
   const { languageCode } = useTranslationContext();
   //TODO: Update according to new translation ie i18Next, once done.
   const { signIn } = getTexts(languageCode);
-  const { onHandleLogin } = LoginController();
-   //TODO Use useRef
+  const { onPressLogin } = LoginViewController();
+  //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -36,18 +37,23 @@ const LoginView = () => {
           onChangeText={setPassword}
           inputStyle={styles.password}
         />
-        <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
+        <TextButton
+          fontSize={getWidth(fontSize.textS)}
+          isActive
+          style={styles.forgotPassword}
+          title={signIn.forgot_password}
+        />
         <Button
           title={signIn.sign_in}
           isPrimary
           isSmall
           style={styles.signInButton}
-          onPress={() => onHandleLogin(email, password)}
+          onPress={() => onPressLogin(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-        {getSocialMediaLogin()}
+        {getSignInFooter()}
       </View>
     </>
   );
@@ -55,7 +61,7 @@ const LoginView = () => {
 export default LoginView;
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.8,
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -63,9 +69,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    color: colors.black,
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
+    paddingVertical: getHeight(dimens.paddingS),
   },
   footerContainer: {
     flexDirection: "row",
@@ -88,13 +93,13 @@ const styles = StyleSheet.create({
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer
-export const getSocialMediaLogin = () => {
+export const getSignInFooter = () => {
   const images = [
-    { url: require("../../../assets/icon/google.png") },
-    { url: require("../../../assets/icon/facebook.png") },
-    { url: require("../../../assets/icon/apple.png") },
+    { url: require("assets/icon/google.png") },
+    { url: require("assets/icon/facebook.png") },
+    { url: require("assets/icon/apple.png") },
   ];
-  const { onSelectSocialAuth } = LoginController();
+  const { onSelectSocialAuth } = LoginViewController();
   return images.map((item, index) => (
     <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
       <Image source={item.url} style={styles.images} />

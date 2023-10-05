@@ -1,15 +1,15 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import IntroController from "../../screens/intro/IntroController";
-import { colors } from "../../designToken/colors";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import { dimens } from "../../designToken/dimens";
-import { fontSize } from "../../designToken/fontSizes";
-import logo from "../../assets/icon/logo.png";
+import { colors } from "designToken/colors";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import logo from "assets/icon/logo.png";
 
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string;isHideTitle?: boolean }) => {
-  const { isChangeLanguage, onChangeLanguage, handleLanguageChange } = IntroController();
+  const { isLanguageChanged, onChangeLanguage, handleLanguageChange } = IntroController();
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between'}]}>
@@ -23,7 +23,7 @@ const Header = ({ title, isHideTitle }: { title?: string;isHideTitle?: boolean }
       <Text style={styles.headerRight} onPress={onChangeLanguage}>
         {"EN"}
       </Text>
-      {isChangeLanguage && (
+      {isLanguageChanged && (
       //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text

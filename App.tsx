@@ -11,17 +11,17 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { lazy } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TranslationContext } from "./contexts/UseTranslationsContext";
-import IntroStackNavigator from "./navigator/IntroStackNavigator";
-import NavigationRoutes from "./navigator/NavigationRoutes";
+import IntroStackNavigator from "navigator/IntroStackNavigator";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>("en");
   /** To Initialize Google SDk */
-  GoogleSignin.configure({
-    webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
-  });
+  // GoogleSignin.configure({
+  //   webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
+  // });
   return (
     <QueryClientProvider client={queryClient}>
       <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
@@ -31,13 +31,13 @@ const App = () => {
             <Stack.Screen
               name={NavigationRoutes.ClientStack}
               component={lazy(
-                () => import("./navigator/ClientStackNavigator")
+                () => import("navigator/ClientStackNavigator")
               )}
             />
             <Stack.Screen
               name={NavigationRoutes.ProviderStack}
               component={lazy(
-                () => import("./navigator/ProviderStackNavigator")
+                () => import("navigator/ProviderStackNavigator")
               )}
             />
           </Stack.Navigator>
