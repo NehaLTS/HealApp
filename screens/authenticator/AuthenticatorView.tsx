@@ -14,8 +14,10 @@ import AuthenticatorController from "./AuthenticatorController";
 import RegistrationView from "components/client/registration/views/RegistrationView";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BasicInformation from "components/client/registration/views/BasicInformation";
+import { UserContext, UserType } from "contexts/useUserContext";
 
 const AuthenticatorView = () => {
+  const [userData, setUserData] = React.useState<Partial<UserType>>({})
   const { languageCode } = useTranslationContext();
   const navigation = useNavigation();
   const route = useRoute();
@@ -28,8 +30,9 @@ const AuthenticatorView = () => {
   }, [navigation]);
   return (
     <>
-      <View style={styles.mainContainer}>
-        <View style={styles.container}>
+    <UserContext.Provider value={{ userData, setUserData }}>
+       <View style={styles.mainContainer}>
+        {/*<View style={styles.container}>
           <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
             <TextButton
@@ -57,10 +60,10 @@ const AuthenticatorView = () => {
               style={styles.switchToProviderText}
             />
           </View>
-        </View>
-        {/* <BasicInformation /> */}
+        </View> */}
+        <BasicInformation />
       </View>
-      
+      </UserContext.Provider>
     </>
   );
 };

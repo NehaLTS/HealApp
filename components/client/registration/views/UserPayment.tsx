@@ -9,14 +9,18 @@ import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import Input from "common/Input";
 import Loader from "components/common/Loader";
+import { UseUserContext } from "contexts/useUserContext";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPayment = () => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const isLoading = false; //TODO: need to change after binding data
-  const isGetCardDetails = true; //TODO: need to change after binding data
-
+  const isGetCardDetails = false; //TODO: need to change after binding data
+  const cardNumberRef = React.useRef<any>("");
+  const expireDateRef = React.useRef<any>("");
+  const cvvRef = React.useRef<any>("");
+  const { userData, setUserData } = UseUserContext();
   return (
     <>
       <View style={styles.container}>
@@ -56,7 +60,7 @@ const UserPayment = () => {
             </View>
             <View style={styles.cardDetailContainer}>
               <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
-              <Text style={styles.cardDetail}>{registration.expires} 03/26</Text> 
+              <Text style={styles.cardDetail}>{registration.date_of_birth} 03/26</Text> 
             </View>
           </>
         ) : (
@@ -66,15 +70,32 @@ const UserPayment = () => {
               keyboardType="numeric"
               type="creditCardNumber"
               inputStyle={styles.cardNumber}
+              onBlur={() =>
+                setUserData({ ...userData, credit_card_number: cardNumberRef.current.value })
+              }
+              onChangeText={(value) => cardNumberRef.current.value = value}
+              ref={cardNumberRef}
+              value={userData.credit_card_number}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
                 placeholder={registration.mm_yy}
-                containerWidth={getWidth(dimens.imageS + dimens.imageS)}
+                inputStyle={styles.expireDate}
+                onBlur={() =>
+                  setUserData({ ...userData, expire_date: expireDateRef.current.value })
+                }
+                onChangeText={(value) => expireDateRef.current.value = value}
+                ref={expireDateRef}
+                value={userData.expire_date}
               />
               <Input
                 placeholder={registration.cvv}
-                containerWidth={getWidth(dimens.imageXs + dimens.imageXs)}
+                onBlur={() =>
+                  setUserData({ ...userData, cvv: cvvRef.current.value })
+                }
+                onChangeText={(value) => cvvRef.current.value = value}
+                ref={cvvRef}
+                value={userData.cvv}
               />
             </View>
           </>
@@ -176,7 +197,6 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: getHeight(dimens.paddingL),
     alignItems:'center',
-    
   },
   innerContainer: {
     flexDirection: "row",
@@ -193,5 +213,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: getHeight(dimens.marginM),
     marginBottom:getHeight(dimens.borderBold)
+  },
+  expireDate:{
+    minWidth:'30%'
   }
 });

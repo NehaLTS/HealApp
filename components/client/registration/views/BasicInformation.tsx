@@ -57,7 +57,7 @@ const BasicInformation = () => {
           <Button
             title={isLoadingCard ? common.cancel : registration.start_using_heal}
             isPrimary
-            width={isLoadingCard ? '35%' :'65%'}
+            isSmall
           />
         )}
       </View>
