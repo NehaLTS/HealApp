@@ -1,7 +1,11 @@
-import React from 'react'
+import { useState } from "react";
 
 const RegistrationViewController = () => {
-  return {}
-}
+  //TODO: add useRef pending
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-export default RegistrationViewController
+  return { email, setEmail, password, setPassword };
+};
+
+export default RegistrationViewController;

@@ -1,18 +1,24 @@
 import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import logo from "../../assets/icon/logo.png";
-import LoginView from "../../components/client/login/LoginView";
-import Header from "../../components/common/Header";
-import TextButton from "../../components/common/TextButton";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { fontSize } from "../../designToken/fontSizes";
-import { getTexts } from "../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
+import logo from "assets/icon/logo.png";
+import LoginView from "components/client/login/LoginView";
+import Header from "components/common/Header";
+import TextButton from "components/common/TextButton";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
 import AuthenticatorController from "./AuthenticatorController";
+<<<<<<< HEAD
 import RegistrationView from "../../components/client/registration/views/RegistrationView";
 import { useNavigation, useRoute } from "@react-navigation/native";
+=======
+import RegistrationView from "components/client/registration/views/RegistrationView";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import BasicInformation from "components/client/registration/views/BasicInformation";
+>>>>>>> 605cab5cef189b024337f114e542481e417be2cc
 
 const AuthenticatorView = () => {
   const { languageCode } = useTranslationContext();
@@ -35,11 +41,19 @@ const AuthenticatorView = () => {
               title={signIn.sign_in}
               isActive={isSigninSelected}
               onPress={loginRegisterToggle}
+<<<<<<< HEAD
+=======
+              isCapitalize
+>>>>>>> 605cab5cef189b024337f114e542481e417be2cc
             />
             <TextButton
               title={signIn.sign_up}
               isActive={!isSigninSelected}
               onPress={loginRegisterToggle}
+<<<<<<< HEAD
+=======
+              isCapitalize
+>>>>>>> 605cab5cef189b024337f114e542481e417be2cc
             />
           </View>
           <Text style={styles.loginText}>{isSigninSelected ? ( route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up) }</Text>
@@ -55,7 +69,9 @@ const AuthenticatorView = () => {
             />
           </View>
         </View>
+        {/* <BasicInformation /> */}
       </View>
+      
     </>
   );
 };
@@ -70,7 +86,7 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "relative",
-    flex: 0.35,
+    flex: 0.34,
   },
   logo: {
     width: getWidth(dimens.imageM),
@@ -85,14 +101,14 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
     color: colors.black,
     alignSelf: "center",
-    paddingTop: getHeight(dimens.marginS),
+    paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl),
     color: colors.black,
   },
   inputContainer: {
-    flex: 0.65,
+    flex: 0.66,
     justifyContent: "space-between",
   },
   footer: {

@@ -1,15 +1,15 @@
 import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import Button from "../../components/common/Button";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import logo from "../../assets/icon/logo.png";
+import Button from "components/common/Button";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import logo from "assets/icon/logo.png";
 import IntroController from "./IntroController";
-import { getTexts } from "../../libs/OneSkyHelper";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import Header from "../../components/common/Header";
-import { fontSize } from "../../designToken/fontSizes";
+import { getTexts } from "libs/OneSkyHelper";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import Header from "components/common/Header";
+import { fontSize } from "designToken/fontSizes";
 import { useNavigation } from "@react-navigation/native";
 
 const IntroScreen = () => {
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-  width: getWidth(dimens.imageL),
-  height: getHeight(dimens.imageL)
+    width: getWidth(dimens.imageL),
+    height: getHeight(dimens.imageL)
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingL),

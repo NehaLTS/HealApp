@@ -1,16 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { storeData } from "../../../src/DataStorage/DataStorage";
-import { useUserContext } from "../../../contexts/useUserContext";
-import { AuthServicesProvider } from "../../../libs/authsevices/AuthServiceProvider";
-import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
-import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/AuthRespoonseType";
-import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
+import { storeData } from "src/DataStorage/DataStorage";
+import { useUserContext } from "contexts/useUserContext";
+import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
+import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
+import { LoginResponse, RequestUnSuccessful } from "libs/types/AuthRespoonseType";
+import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
 
-const LoginController = () => {
+const LoginViewController = () => {
   const navigation = useNavigation();
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
-  const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
+  const [isLanguageChanged, setIsLanguageChanged] = useState(false);
+  const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
   const { setUser } = useUserContext();
@@ -23,7 +23,7 @@ const LoginController = () => {
     navigation.navigate("HomeView")
   }
   /** To handle User auth via email and password */
-  const onHandleLogin = (email: string, password: string) => {
+  const onPressLogin = (email: string, password: string) => {
     /** To Request api  */
     onSubmitAuthRequest({ email, password }).then((res: LoginResponse | RequestUnSuccessful) => {
       //TODO handle issuccess
@@ -83,14 +83,14 @@ const LoginController = () => {
     }
   }
   return {
-    isChangeLanguage,
+    isLanguageChanged,
     onChangeLanguage,
-    onHandleLogin,
+    onPressLogin,
     onHandleGoogleLogin,
     onHandleFacebookLogin,
     onSelectSocialAuth
   };
 };
 
-export default LoginController;
+export default LoginViewController;
 

@@ -19,19 +19,23 @@ const queryClient = new QueryClient();
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>("en");
   /** To Initialize Google SDk */
-  GoogleSignin.configure({
-    webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
-  });
+  // GoogleSignin.configure({
+  //   webClientId: process.env.GOOGLE_WEBVIEW_CLIENT_ID,
+  // });
   return (
     <QueryClientProvider client={queryClient}>
       <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
         <NavigationContainer >
-          <Stack.Navigator initialRouteName={NavigationRoutes.IntroStack}  screenOptions={{ headerShown: false }}>
+          <Stack.Navigator initialRouteName={NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
             <Stack.Screen name={NavigationRoutes.IntroStack} component={IntroStackNavigator} />
             <Stack.Screen
               name={NavigationRoutes.ClientStack}
               component={lazy(
+<<<<<<< HEAD
                 () => import("./navigator/ClientStackNavigator")
+=======
+                () => import("navigator/ClientStackNavigator")
+>>>>>>> 605cab5cef189b024337f114e542481e417be2cc
               )}
             />
             <Stack.Screen
