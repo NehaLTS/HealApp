@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
-import { colors } from "../../designToken/colors";
-import { fontWeight } from "../../designToken/fontWeights";
-import { getHeight } from "../../libs/StyleHelper";
+import { colors } from "designToken/colors";
+import { fontWeight } from "designToken/fontWeights";
+import { getHeight } from "libs/StyleHelper";
 
 const SelectImage = ({
   imageUri,

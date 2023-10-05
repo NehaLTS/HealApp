@@ -1,10 +1,10 @@
 import React from "react";
 import { DimensionValue, StyleProp, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { fontSize } from "../../designToken/fontSizes";
-import { fontWeight } from "../../designToken/fontWeights";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { getHeight, getWidth } from "libs/StyleHelper";
 const Button = ({
   title,
   isPrimary,

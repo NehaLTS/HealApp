@@ -12,10 +12,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { fontSize } from "../../designToken/fontSizes";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
 
 const Input = ({
   placeholder,
@@ -112,7 +112,7 @@ const Input = ({
         {type === "password" && (
           <TouchableOpacity onPress={onShowPassword}>
             <Image
-              source={require("../../assets/icon/eyeIcon.png")}
+              source={require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
             />
           </TouchableOpacity>

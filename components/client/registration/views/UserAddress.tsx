@@ -1,15 +1,15 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { colors } from "../../../../designToken/colors";
-import { dimens } from "../../../../designToken/dimens";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Input from "../../../common/Input";
-import SelectImage from "../../../common/SelectImage";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { dimens } from "designToken/dimens";
+import { colors } from "designToken/colors";
+import { fontSize } from "designToken/fontSizes";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import Input from "common/Input";
+import SelectImage from "common/SelectImage";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { fontWeight } from "../../../../designToken/fontWeights";
+import { fontWeight } from "designToken/fontWeights";
 
 const UserAddress = () => {
   const { languageCode } = useTranslationContext();
@@ -48,13 +48,13 @@ const UserAddress = () => {
             source={
               selectedImage
                 ? { uri: selectedImage }
-                : require("../../../../assets/icon/editprofile.png")
+                : require("assets/icon/editprofile.png")
             }
             style={selectedImage ? styles.selectedImage : styles.editProfile}
           />
           {selectedImage && (
             <Image
-              source={require("../../../../assets/icon/edit.png")}
+              source={require("assets/icon/edit.png")}
               style={styles.editImage}
             />
           )}

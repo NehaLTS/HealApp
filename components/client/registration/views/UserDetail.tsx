@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { colors } from "../../../../designToken/colors";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Input from "../../../common/Input";
-import { dimens } from "../../../../designToken/dimens";
-import { fontWeight } from "../../../../designToken/fontWeights";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { fontSize } from "designToken/fontSizes";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight } from "libs/StyleHelper";
+import Input from "common/Input";
+import { dimens } from "designToken/dimens";
+import { fontWeight } from "designToken/fontWeights";
 
 const UserDetail = () => {
   const { languageCode } = useTranslationContext();

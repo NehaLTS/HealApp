@@ -1,8 +1,8 @@
 import { StyleProp, StyleSheet, Text, TextStyle, View } from "react-native";
 import React from "react";
 import { getHeight } from "../../libs/StyleHelper";
-import { colors } from "../../designToken/colors";
-import { fontSize } from "../../designToken/fontSizes";
+import { colors } from "designToken/colors";
+import { fontSize } from "designToken/fontSizes";
 
 const TextButton = ({
   title,

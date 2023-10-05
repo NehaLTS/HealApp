@@ -1,14 +1,14 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { colors } from "../../../../designToken/colors";
-import { dimens } from "../../../../designToken/dimens";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { fontWeight } from "../../../../designToken/fontWeights";
-import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Input from "../../../common/Input";
-import LoaderText from "../../../common/LoaderText";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import Input from "common/Input";
+import Loader from "components/common/Loader";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPayment = () => {
@@ -23,7 +23,7 @@ const UserPayment = () => {
         {!isGetCardDetails && !isLoading && (
           <>
             <Image
-              source={require("../../../../assets/icon/card.png")}
+              source={require("assets/icon/card.png")}
               style={styles.creditCard}
             />
             <Text style={styles.profileText}>
@@ -39,17 +39,17 @@ const UserPayment = () => {
           <>
             <View style={styles.innerContainer}>
               <Image
-                source={require("../../../../assets/icon/masterCard.png")}
+                source={require("assets/icon/masterCard.png")}
                 style={styles.googlePay}
               />
               <Text style={styles.profileText}>Master-card</Text>
               <View style={styles.cardIcons}>
                 <Image
-                  source={require("../../../../assets/icon/edit.png")}
+                  source={require("assets/icon/edit.png")}
                   style={styles.cardImages}
                 />
                 <Image
-                  source={require("../../../../assets/icon/cancel.png")}
+                  source={require("assets/icon/cancel.png")}
                   style={styles.cardImages}
                 />
               </View>
@@ -81,7 +81,7 @@ const UserPayment = () => {
         )
       ) : (
         <View style={styles.loader}>
-          <LoaderText />
+          <Loader />
         </View>
       )}
       {!isLoading && (
@@ -89,7 +89,7 @@ const UserPayment = () => {
           <View style={styles.divider} />
           <TouchableOpacity style={styles.googlePayContainer}>
             <Image
-              source={require("../../../../assets/icon/googlePay.png")}
+              source={require("assets/icon/googlePay.png")}
               style={styles.googlePay}
             />
             <Text style={styles.profileText}>

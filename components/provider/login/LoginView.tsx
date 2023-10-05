@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "../../../contexts/UseTranslationsContext";
-import { colors } from "../../../designToken/colors";
-import { dimens } from "../../../designToken/dimens";
-import { fontSize } from "../../../designToken/fontSizes";
-import { fontWeight } from "../../../designToken/fontWeights";
-import { getTexts } from "../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../libs/StyleHelper";
-import Button from "../../common/Button";
-import Input from "../../common/Input";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import Button from "common/Button";
+import Input from "common/Input";
 import LoginViewController from "./LoginViewController";
 
 const LoginView = () => {
@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
 //TODO: Better way to use it with Signin as well as Signup as footer
 export const getSignInFooter = () => {
   const images = [
-    { url: require("../../../assets/icon/google.png") },
-    { url: require("../../../assets/icon/facebook.png") },
-    { url: require("../../../assets/icon/apple.png") },
+    { url: require("assets/icon/google.png") },
+    { url: require("assets/icon/facebook.png") },
+    { url: require("assets/icon/apple.png") },
   ];
   const { onSelectSocialAuth } = LoginController();
   return images.map((item, index) => (

@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import { storeData } from "../../src/DataStorage/DataStorage";
-import NavigationRoutes from "../../navigator/NavigationRoutes";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { storeData } from "src/DataStorage/DataStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 const IntroController = () => {
   const navigation = useNavigation();

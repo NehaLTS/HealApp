@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { colors } from "../../designToken/colors";
-import { fontSize } from "../../designToken/fontSizes";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import { dimens } from "../../designToken/dimens";
+import { colors } from "designToken/colors";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import { dimens } from "designToken/dimens";
 
 const Stepper = ({ currentStep , totalStep }: { currentStep:number[], totalStep: number }) => {
   const step = Array(totalStep).fill(0);

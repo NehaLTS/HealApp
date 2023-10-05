@@ -1,16 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { colors } from "../../../../designToken/colors";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { getWidth } from "../../../../libs/StyleHelper";
-import Button from "../../../common/Button";
+import { colors } from "designToken/colors";
+import { fontSize } from "designToken/fontSizes";
+import { getWidth } from "libs/StyleHelper";
+import Button from "common/Button";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { getTexts } from "../../../../libs/OneSkyHelper";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { getTexts } from "libs/OneSkyHelper";
 import UserDetail from "./UserDetail";
 import UserAddress from "./UserAddress";
 import UserPayment from "./UserPayment";
-import Stepper from "../../../common/Stepper";
+import Stepper from "common/Stepper";
 
   //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
