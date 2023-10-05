@@ -10,16 +10,17 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import Button from "common/Button";
 import Input from "common/Input";
 import LoginViewController from "LoginViewController";
+import TextButton from "components/common/TextButton";
 
 const LoginView = () => {
   const { languageCode } = useTranslationContext();
   //TODO: Update according to new translation ie i18Next, once done.
   const { signIn } = getTexts(languageCode);
   const { onPressLogin } = LoginViewController();
-   //TODO Use useRef
+  //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -36,7 +37,12 @@ const LoginView = () => {
           onChangeText={setPassword}
           inputStyle={styles.password}
         />
-        <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
+        <TextButton
+          fontSize={getWidth(fontSize.textS)}
+          isActive
+          style={styles.forgotPassword}
+          title={signIn.forgot_password}
+        />
         <Button
           title={signIn.sign_in}
           isPrimary
@@ -55,7 +61,7 @@ const LoginView = () => {
 export default LoginView;
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.8,
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -63,9 +69,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    color: colors.black,
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
+    paddingVertical: getHeight(dimens.paddingS),
   },
   footerContainer: {
     flexDirection: "row",

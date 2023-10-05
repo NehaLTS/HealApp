@@ -23,7 +23,7 @@ const AuthenticatorView = () => {
   const { loginRegisterToggle, isSigninSelected } = AuthenticatorController();
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header title="Registration" />,
+      header: () => <Header isHideTitle />,
     });
   }, [navigation]);
   return (
@@ -36,11 +36,13 @@ const AuthenticatorView = () => {
               title={signIn.sign_in}
               isActive={isSigninSelected}
               onPress={loginRegisterToggle}
+              isCapitalize
             />
             <TextButton
               title={signIn.sign_up}
               isActive={!isSigninSelected}
               onPress={loginRegisterToggle}
+              isCapitalize
             />
           </View>
           <Text style={styles.loginText}>{isSigninSelected ? ( route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up) }</Text>
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "relative",
-    flex: 0.35,
+    flex: 0.34,
   },
   logo: {
     width: getWidth(dimens.imageM),
@@ -88,20 +90,20 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
     color: colors.black,
     alignSelf: "center",
-    paddingTop: getHeight(dimens.marginS),
+    paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl),
     color: colors.black,
   },
   inputContainer: {
-    flex: 0.65,
+    flex: 0.66,
     justifyContent: "space-between",
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    flex: 0.1,
+    flex: 0.1
   },
   switchToProviderText: {
     color: colors.primary,

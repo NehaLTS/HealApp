@@ -137,14 +137,15 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: fontSize.textL,
-    padding: getHeight(dimens.paddingXs),
+    marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
   },
   showImage: {
-    width: getWidth(dimens.paddingL),
+    width: getWidth(dimens.marginM),
     height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.marginS),
+    resizeMode:'contain',
   },
   errorMessage: {
     color: colors.invalid,
@@ -152,8 +153,8 @@ const styles = StyleSheet.create({
   },
   label: {
     position: "absolute",
-    top: getHeight(dimens.marginS),
-    left: getHeight(dimens.paddingXs + dimens.borderBold),
+    top: getHeight(dimens.marginS+1),
+    left: getHeight(dimens.paddingXs + dimens.borderThin),
     backgroundColor: colors.offWhite,
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold)

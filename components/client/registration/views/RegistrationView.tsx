@@ -12,6 +12,7 @@ import Input from "common/Input";
 import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import LoginViewController from "components/client/login/LoginViewController";
+import TextButton from "components/common/TextButton";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
@@ -35,7 +36,12 @@ const RegistrationView = () => {
           onChangeText={setPassword}
           inputStyle={styles.password}
         />
-        <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
+         <TextButton
+          fontSize={getWidth(fontSize.textS)}
+          isActive
+          style={styles.forgotPassword}
+          title={signIn.forgot_password}
+        />
         <Button
           title={signIn.sign_up}
           isPrimary
@@ -55,7 +61,7 @@ export default RegistrationView;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.8,
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -63,9 +69,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    color: colors.black,
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
+    paddingVertical: getHeight(dimens.paddingS),
   },
   footerContainer: {
     flexDirection: "row",

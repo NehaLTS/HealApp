@@ -7,8 +7,8 @@
         "continue_provider": "Continue as a Provider"
       },
       "signIn": {
-        "sign_in": "SIGN IN",
-        "sign_up": "SIGN UP",
+        "sign_in": "Sign In",
+        "sign_up": "Sign Up",
         "client_login": "Client Login",
         "client_sign_up": "Client Sign Up",
         "provider_login": "Provider Login",

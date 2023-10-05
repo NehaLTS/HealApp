@@ -54,7 +54,7 @@ const LoginView = () => {
 export default LoginView;
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.8,
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -93,7 +93,7 @@ export const getSignInFooter = () => {
     { url: require("assets/icon/facebook.png") },
     { url: require("assets/icon/apple.png") },
   ];
-  const { onSelectSocialAuth } = LoginController();
+  const { onSelectSocialAuth } = LoginViewController();
   return images.map((item, index) => (
     <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
       <Image source={item.url} style={styles.images} />
