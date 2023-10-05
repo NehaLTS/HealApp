@@ -11,16 +11,13 @@ import { fontSize } from "designToken/fontSizes";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import AuthenticatorController from "./AuthenticatorController";
-<<<<<<< HEAD
-import RegistrationView from "../../components/client/registration/views/RegistrationView";
-import { useNavigation, useRoute } from "@react-navigation/native";
-=======
 import RegistrationView from "components/client/registration/views/RegistrationView";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BasicInformation from "components/client/registration/views/BasicInformation";
->>>>>>> 605cab5cef189b024337f114e542481e417be2cc
+import { UserContext, UserType } from "contexts/useUserContext";
 
 const AuthenticatorView = () => {
+  const [userData, setUserData] = React.useState<Partial<UserType>>({})
   const { languageCode } = useTranslationContext();
   const navigation = useNavigation();
   const route = useRoute();
@@ -33,27 +30,22 @@ const AuthenticatorView = () => {
   }, [navigation]);
   return (
     <>
-      <View style={styles.mainContainer}>
-        <View style={styles.container}>
+      <UserContext.Provider value={{ userData, setUserData }}>
+        <View style={styles.mainContainer}>
+          {/*<View style={styles.container}>
           <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
             <TextButton
               title={signIn.sign_in}
               isActive={isSigninSelected}
               onPress={loginRegisterToggle}
-<<<<<<< HEAD
-=======
               isCapitalize
->>>>>>> 605cab5cef189b024337f114e542481e417be2cc
             />
             <TextButton
               title={signIn.sign_up}
               isActive={!isSigninSelected}
               onPress={loginRegisterToggle}
-<<<<<<< HEAD
-=======
               isCapitalize
->>>>>>> 605cab5cef189b024337f114e542481e417be2cc
             />
           </View>
           <Text style={styles.loginText}>{isSigninSelected ? ( route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up) }</Text>
@@ -68,10 +60,10 @@ const AuthenticatorView = () => {
               style={styles.switchToProviderText}
             />
           </View>
+        </View> */}
+          <BasicInformation />
         </View>
-        {/* <BasicInformation /> */}
-      </View>
-      
+      </UserContext.Provider>
     </>
   );
 };

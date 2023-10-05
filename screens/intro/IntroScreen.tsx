@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import Button from "components/common/Button";
+import Button from "../../components/common/Button";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { getHeight, getWidth } from "libs/StyleHelper";

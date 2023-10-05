@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+
+import React, { forwardRef, useRef, useState } from "react";
 import {
   Animated,
   DimensionValue,
@@ -12,19 +13,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-<<<<<<< HEAD
 import { colors } from "../../designToken/colors";
 import { fontSize } from "../../designToken/fontSizes";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { dimens } from "../../designToken/dimens";
-=======
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
->>>>>>> 605cab5cef189b024337f114e542481e417be2cc
 
-const Input = ({
+
+const Input = forwardRef(({
   placeholder,
   type,
   inputStyle,
@@ -44,9 +39,8 @@ const Input = ({
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
-} & TextInputProps) => {
+} & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(false);
-  const onShowPassword = () => setShowPassword(!showPassword);
   const moveText = useRef(new Animated.Value(0)).current;
   const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
 
@@ -99,9 +93,7 @@ const Input = ({
   const fontSizeStyle = { fontSize: fontSizeAnim };
   return (
     <View>
-      <View
-        style={[styles.inputContainer, inputStyle, { width: containerWidth ?? "auto" }]}
-      >
+      <View style={[styles.inputContainer, inputStyle]}>
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
@@ -110,14 +102,13 @@ const Input = ({
           placeholderTextColor={colors.black}
           textContentType={type ?? "password"}
           secureTextEntry={showPassword}
-          editable={true}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
-          blurOnSubmit
+          ref={ref as React.LegacyRef<TextInput>}
           {...props}
         />
         {type === "password" && (
-          <TouchableOpacity onPress={onShowPassword}>
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
@@ -130,7 +121,7 @@ const Input = ({
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -141,14 +132,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
+    minWidth: '20%'
   },
   input: {
     fontSize: fontSize.textL,
-<<<<<<< HEAD
     padding: getHeight(dimens.marginS),
-=======
     marginLeft: getHeight(dimens.marginS),
->>>>>>> 605cab5cef189b024337f114e542481e417be2cc
     color: colors.black,
     flex: 1,
   },

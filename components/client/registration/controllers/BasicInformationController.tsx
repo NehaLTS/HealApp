@@ -7,7 +7,6 @@ const BasicInformationController = ({
 }) => {
   const [currentStep, setCurrentStep] = useState([0]);
   const [isShowModal, setIsShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string>("");
   const onPressNext = () => {
     if (currentStep.length !== totalSteps) {
       setCurrentStep(() => {
@@ -27,8 +26,6 @@ const BasicInformationController = ({
     currentStep,
     onPressNext,
     onPressBack,
-    selectedImage,
-    setSelectedImage,
     isShowModal,
     setIsShowModal,
   };

@@ -31,11 +31,7 @@ const App = () => {
             <Stack.Screen
               name={NavigationRoutes.ClientStack}
               component={lazy(
-<<<<<<< HEAD
-                () => import("./navigator/ClientStackNavigator")
-=======
                 () => import("navigator/ClientStackNavigator")
->>>>>>> 605cab5cef189b024337f114e542481e417be2cc
               )}
             />
             <Stack.Screen
