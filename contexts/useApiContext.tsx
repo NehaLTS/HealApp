@@ -87,17 +87,15 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
     };
     const onAuthUpdateUserProfile = async (firstname: string | null, lastname: string | null, address: string | null, city: string | null, state: string | null, country: string | null, profile_picture: string | null, date_of_birth: string | null, phone_number: string | null, client_id: string | null): Promise<any> => {
         try {
-            if (firstname && lastname && address && city && state && country && profile_picture && date_of_birth && phone_number && client_id) {
-                const response = await onUpdateUserProfile({ firstname, lastname, address, city, state, country, profile_picture, date_of_birth, phone_number, client_id });
-                console.log("bncvbcmnb", response)
-                let abc = user + response
-                setUser(response);
-                console.log('abc', abc)
-                setLocalData('USER', response)
-                return response;
-            } else {
-                throw new Error('Email and password are required');
-            }
+            // if (firstname && lastname && address && city && state && country && profile_picture && date_of_birth && phone_number && client_id) {
+            const response = await onUpdateUserProfile({ firstname, lastname, address, city, state, country, profile_picture, date_of_birth, phone_number, client_id });
+            console.log("bncvbcmnb", JSON.stringify(response))
+            setUser(response);
+            setLocalData('USER', response)
+            return response;
+            // } else {
+            //     throw new Error('Email and password are required');
+            // }
         } catch (error) {
             console.error('Error fetching publisher data:', error);
             return null;

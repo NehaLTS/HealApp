@@ -3,6 +3,7 @@ export const BASE_URL = 'https://heal-app.jocapps.com/api'
 export const LOGIN_API = '/users/loginByEmailID'
 export const GOOGLE_LOGIN_API = '/users/loginByGoogleId'
 export const FACEBOOK_LOGIN_API = '/users/loginByFacebookId'
+export const UPDATE_SIGNUP = '/users/createClientUserProfile'
 export const CREATE_SIGNUP = '/users/signUp'
 export const PROVIDER_SIGNIN = '/providers/loginByEmailID'
 

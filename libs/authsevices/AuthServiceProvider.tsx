@@ -2,10 +2,11 @@ import { sendRequest } from "../api/RequestHandler";
 import { CREATE_SIGNUP, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API, LOGIN_API, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 
-import { BodyInit } from "../api/ApiTypes";
+import { BodyInit, HeadersInit } from "../api/ApiTypes";
+import { useApiContext } from "contexts/useApiContext";
 
 export const AuthServicesProvider = () => {
-
+    const { user } = useApiContext()
     /** To provide auth data to server */
     const onSubmitAuthRequest = (body: {
         email: string;
@@ -61,6 +62,10 @@ export const AuthServicesProvider = () => {
         sendRequest(UPDATE_SIGNUP, {
             method: POST,
             body: body as unknown as BodyInit,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': user?.token
+            } as unknown as HeadersInit
         })
     const OnProviderSignIn = (body: {
         email: string;

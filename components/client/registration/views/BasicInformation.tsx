@@ -19,7 +19,7 @@ import { dimens } from "designToken/dimens";
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
-  const [userData, setUserData] = React.useState<Partial<UserType>>({});
+  // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
@@ -35,55 +35,55 @@ const BasicInformation = () => {
 
 
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
-      <View style={styles.container}>
-        <Stepper currentStep={currentStep} totalStep={3} />
-        <View style={styles.inputContainer}>
-          {currentStep[currentStep.length - 1] === 0 ? (
-            <UserDetail />
-          ) : currentStep[currentStep.length - 1] === 1 ? (
-            <UserAddress />
-          ) : (
-            <UserPayment />
-          )}
-        </View>
-        <View
-          style={[
-            styles.footerContainer,
-            {
-              justifyContent:
-                isLoadingCard || isCardDetails ? "center" : "space-between",
-            },
-          ]}>
-          {!isLoadingCard && !isCardDetails ? (
-            <>
-              <Button title={registration.back} isSmall onPress={onPressBack} />
-              <Button
-                title={registration.next}
-                isPrimary
-                onPress={onPressNext}
-                isSmall
-              />
-            </>
-          ) : (
+    // <UserContext.Provider value={{ userData, setUserData }}>
+    <View style={styles.container}>
+      <Stepper currentStep={currentStep} totalStep={3} />
+      <View style={styles.inputContainer}>
+        {currentStep[currentStep.length - 1] === 0 ? (
+          <UserDetail />
+        ) : currentStep[currentStep.length - 1] === 1 ? (
+          <UserAddress />
+        ) : (
+          <UserPayment />
+        )}
+      </View>
+      <View
+        style={[
+          styles.footerContainer,
+          {
+            justifyContent:
+              isLoadingCard || isCardDetails ? "center" : "space-between",
+          },
+        ]}>
+        {!isLoadingCard && !isCardDetails ? (
+          <>
+            <Button title={registration.back} isSmall onPress={onPressBack} />
             <Button
-              title={
-                isLoadingCard ? common.cancel : registration.start_using_heal
-              }
+              title={registration.next}
               isPrimary
+              onPress={onPressNext}
               isSmall
             />
-          )}
-        </View>
-        {currentStep[currentStep.length - 1] === 2 &&
-          !isLoadingCard &&
-          !isCardDetails && (
-            <Text style={styles.skipLaterText}>
-              {registration.skip_for_later}
-            </Text>
-          )}
+          </>
+        ) : (
+          <Button
+            title={
+              isLoadingCard ? common.cancel : registration.start_using_heal
+            }
+            isPrimary
+            isSmall
+          />
+        )}
       </View>
-    </UserContext.Provider>
+      {currentStep[currentStep.length - 1] === 2 &&
+        !isLoadingCard &&
+        !isCardDetails && (
+          <Text style={styles.skipLaterText}>
+            {registration.skip_for_later}
+          </Text>
+        )}
+    </View>
+    // </UserContext.Provider>
   );
 };
 
