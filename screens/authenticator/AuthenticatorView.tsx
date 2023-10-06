@@ -14,10 +14,7 @@ import AuthenticatorController from "./AuthenticatorController";
 import RegistrationView from "components/client/registration/views/RegistrationView";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BasicInformation from "components/client/registration/views/BasicInformation";
-<<<<<<< Updated upstream
 import { UserContext, UserType } from "contexts/useUserContext";
-=======
->>>>>>> Stashed changes
 
 const AuthenticatorView = () => {
   const [userData, setUserData] = React.useState<Partial<UserType>>({})
@@ -66,13 +63,7 @@ const AuthenticatorView = () => {
         </View> */}
           <BasicInformation />
         </View>
-<<<<<<< Updated upstream
       </UserContext.Provider>
-=======
-        {/* <BasicInformation /> */}
-      </View>
-
->>>>>>> Stashed changes
     </>
   );
 };
