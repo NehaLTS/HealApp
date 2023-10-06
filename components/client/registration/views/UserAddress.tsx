@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
 import { colors } from "../../../../designToken/colors";
@@ -17,28 +17,82 @@ const UserAddress = () => {
     BasicInformationController({});
   const { registration } = getTexts(languageCode);
 
+  const [address, setAddress] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [idNumberError, setIdNumberError] = useState("");
+  const [dateOfBirthError, setDateOfBirthError] = useState("");
+
+  const validateAddress = (text) => {
+    const regex = /^[A-Za-z0-9\s.,/-]+$/;
+
+    if (!regex.test(text)) {
+      setAddressError("Invalid address format");
+    } else {
+      setAddressError("");
+    }
+
+    setAddress(text);
+  };
+
+  // Function to validate the ID number
+  const validateIdNumber = (text) => {
+    const regex = /^[0-9]+$/;
+
+    if (!regex.test(text)) {
+      setIdNumberError("ID number must contain only numbers");
+    } else {
+      setIdNumberError("");
+    }
+
+    setIdNumber(text);
+  };
+
+  const validateDateOfBirth = (text) => {
+    // Define a regex pattern for the "DD/MM/YYYY" date format
+    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+    if (!regex.test(text)) {
+      setDateOfBirthError("Date of birth must be in DD/MM/YYYY format");
+    } else {
+      setDateOfBirthError("");
+    }
+
+    setDateOfBirth(text);
+  };
+
   return (
     <>
+
       <Input
         placeholder={registration.address}
-        type={"fullStreetAddress"}
+        value={address}
+        onChangeText={(text) => setAddress(text)}
+        errorMessage={addressError}
         inputStyle={styles.input}
+        onBlur={validateAddress}
       />
       <Input
         placeholder={registration.date_of_birth}
-        type={"telephoneNumber"}
-        keyboardType="numeric"
+        value={dateOfBirth}
+        onChangeText={(text) => setDateOfBirth(text)}
+        errorMessage={dateOfBirthError}
         inputStyle={styles.inputDOB}
+        onBlur={validateDateOfBirth}
       />
       <Input
         placeholder={registration.id_number}
-        type={"telephoneNumber"}
+        value={idNumber}
+        onChangeText={(text) => setIdNumber(text)}
+        errorMessage={idNumberError}
         keyboardType="number-pad"
         inputStyle={styles.inputIdNumber}
+        onBlur={validateIdNumber}
       />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
-        <Text style={[styles.profileText, selectedImage === "" && { marginTop: getHeight(dimens.marginS)}]}>{registration.add_profile}</Text>
+        <Text style={[styles.profileText, selectedImage === "" && { marginTop: getHeight(dimens.marginS) }]}>{registration.add_profile}</Text>
         <TouchableOpacity
           activeOpacity={selectedImage ? 1 : 0.5}
           onPress={() => !selectedImage && setIsShowModal(true)}
@@ -69,8 +123,6 @@ const UserAddress = () => {
   );
 };
 
-export default UserAddress;
-
 const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: "row",
@@ -96,7 +148,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     fontWeight: fontWeight.light,
-    letterSpacing: getWidth( dimens.borderThin / dimens.borderBold)
+    letterSpacing: getWidth(dimens.borderThin / dimens.borderBold)
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
@@ -117,3 +169,5 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.paddingL),
   },
 });
+
+export default UserAddress;
