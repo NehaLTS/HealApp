@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Animated,
   DimensionValue,
@@ -26,25 +26,25 @@ const Input = ({
   ...props
 }: {
   placeholder: string;
-  type?: 
-  | 'creditCardNumber'
-  | 'emailAddress'
-  | 'fullStreetAddress'
-  | 'name'
-  | 'nameSuffix'
-  | 'telephoneNumber'
-  | 'password';
+  type?:
+    | 'creditCardNumber'
+    | 'emailAddress'
+    | 'fullStreetAddress'
+    | 'name'
+    | 'nameSuffix'
+    | 'telephoneNumber'
+    | 'password';
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
 } & TextInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const onShowPassword = () => setShowPassword(!showPassword);
-  const moveText = useRef(new Animated.Value(0)).current;
+  const moveText = useRef(new Animated.Value(props.value ? 1 : 0)).current;
   const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
 
-  const onFocusHandler = () =>  moveTextTop();
-  const onBlurHandler = () => moveTextBottom()
+  const onFocusHandler = () => moveTextTop();
+  const onBlurHandler = () => moveTextBottom();
 
   const moveTextTop = () => {
     Animated.parallel([
@@ -69,7 +69,7 @@ const Input = ({
         useNativeDriver: false,
       }),
       Animated.timing(fontSizeAnim, {
-        toValue: getHeight(fontSize.textL), 
+        toValue: getHeight(fontSize.textL),
         duration: 200,
         useNativeDriver: false,
       }),
@@ -89,11 +89,23 @@ const Input = ({
     ],
   };
 
-  const fontSizeStyle = { fontSize: fontSizeAnim};
+  const fontSizeStyle = { fontSize: fontSizeAnim };
+
+  useEffect(() => {
+    if (props.value === undefined || props.value === "") {
+      moveTextBottom();
+    }
+  }, [props.value]);
+
   return (
     <View>
       <View
-        style={[styles.inputContainer, inputStyle, { width: containerWidth ?? "auto" }]}
+        style={[
+          styles.inputContainer,
+          inputStyle,
+          { width: containerWidth ?? "auto" },
+          errorMessage ? { borderColor: 'red' } : null,
+        ]}
       >
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
@@ -103,7 +115,6 @@ const Input = ({
           placeholderTextColor={colors.black}
           textContentType={type ?? "password"}
           secureTextEntry={showPassword}
-          editable={true}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           blurOnSubmit
@@ -117,10 +128,16 @@ const Input = ({
             />
           </TouchableOpacity>
         )}
+          {errorMessage && (
+          <TouchableOpacity >
+            <Image
+              source={require("../../assets/icon/error.png")}
+              style={styles.errorImage}
+            />
+          </TouchableOpacity>
+        )}
       </View>
-      {errorMessage && (
-        <Text style={styles.errorMessage}>{"errorMessage"}</Text>
-      )}
+      {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
     </View>
   );
 };
@@ -156,7 +173,12 @@ const styles = StyleSheet.create({
     left: getHeight(dimens.paddingXs + dimens.borderBold),
     backgroundColor: colors.offWhite,
     color: colors.black,
-    paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold)
+    paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
+  },
+  errorImage: {
+    width: getWidth(dimens.sideMargin),
+    height: getHeight(dimens.sideMargin),
+    marginRight: getHeight(dimens.marginS),
   },
 });
 
