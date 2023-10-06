@@ -21,7 +21,7 @@ const BasicInformationController = ({
         return array;
       });
     }
-    else {
+    else if (currentStep) {
       console.log("hvjkcbvjkcbngj", userData)
       const res = onAuthUpdateUserProfile?.(userData?.firstname ?? '', userData.lastname ?? '', userData.address ?? '', userData.city ?? '', userData.state ?? "", userData.country ?? '', userData.profile_picture ?? "", userData.date_of_birth ?? '', userData.phone_number ?? "", userData.client_id ?? "")
       console.log("res", res)
