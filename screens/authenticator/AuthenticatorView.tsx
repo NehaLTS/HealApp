@@ -5,8 +5,6 @@ import RegistrationView from "components/client/registration/views/RegistrationV
 import Header from "components/common/Header";
 import TextButton from "components/common/TextButton";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { useApiContext } from "contexts/useApiContext";
-import { UserType } from "contexts/useUserContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";

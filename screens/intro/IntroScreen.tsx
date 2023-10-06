@@ -37,7 +37,7 @@ const IntroScreen = () => {
             isPrimary
             onPress={continueAsClient}
           />
-          <Button title={t("continue_provider")} onPress={continueAsClient} />
+          <Button title={t("continue_provider")} onPress={continueAsProvider} />
         </View>
       </View>
     </>

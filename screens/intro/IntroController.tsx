@@ -18,7 +18,7 @@ const IntroController = () => {
   const continueAsProvider = () =>
     navigation.navigate(NavigationRoutes.ProviderStack);
 
-  const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
+  const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
 
   const handleLanguageChange = (lng: string) => {
     setLanguageCode(lng);
