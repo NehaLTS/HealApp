@@ -1,7 +1,7 @@
-import React, { useLayoutEffect } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import logo from "assets/icon/logo.png";
 import LoginView from "components/client/login/LoginView";
+import RegistrationView from "components/client/registration/views/RegistrationView";
 import Header from "components/common/Header";
 import TextButton from "components/common/TextButton";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
@@ -10,14 +10,11 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
+import React, { useLayoutEffect } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import AuthenticatorController from "./AuthenticatorController";
-import RegistrationView from "components/client/registration/views/RegistrationView";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import BasicInformation from "components/client/registration/views/BasicInformation";
-import { UserContext, UserType } from "contexts/useUserContext";
 
 const AuthenticatorView = () => {
-  const [userData, setUserData] = React.useState<Partial<UserType>>({})
   const { languageCode } = useTranslationContext();
   const navigation = useNavigation();
   const route = useRoute();
@@ -30,9 +27,8 @@ const AuthenticatorView = () => {
   }, [navigation]);
   return (
     <>
-    <UserContext.Provider value={{ userData, setUserData }}>
        <View style={styles.mainContainer}>
-        {/*<View style={styles.container}>
+        <View style={styles.container}>
           <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
             <TextButton
@@ -60,10 +56,8 @@ const AuthenticatorView = () => {
               style={styles.switchToProviderText}
             />
           </View>
-        </View> */}
-        <BasicInformation />
+        </View>
       </View>
-      </UserContext.Provider>
     </>
   );
 };

@@ -23,6 +23,7 @@ const Input = forwardRef(({
   inputStyle,
   errorMessage,
   containerWidth,
+  inputValue,
   ...props
 }: {
   placeholder: string;
@@ -37,6 +38,7 @@ const Input = forwardRef(({
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
+  inputValue: string 
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(false);
   const moveText = useRef(new Animated.Value(0)).current;
@@ -61,6 +63,7 @@ const Input = forwardRef(({
   };
 
   const moveTextBottom = () => {
+    if (inputValue === '' ){
     Animated.parallel([
       Animated.timing(moveText, {
         toValue: 0,
@@ -72,7 +75,7 @@ const Input = forwardRef(({
         duration: 200,
         useNativeDriver: false,
       }),
-    ]).start();
+    ]).start()};
   };
 
   const translateY = moveText.interpolate({

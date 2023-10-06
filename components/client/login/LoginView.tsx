@@ -29,6 +29,7 @@ const LoginView = () => {
           value={email}
           onChangeText={setEmail}
           type="emailAddress"
+          inputValue={email}
         />
         <Input
           placeholder={signIn.password}
@@ -36,6 +37,7 @@ const LoginView = () => {
           value={password}
           onChangeText={setPassword}
           inputStyle={styles.password}
+          inputValue={password}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
