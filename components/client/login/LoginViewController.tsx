@@ -43,7 +43,7 @@ const LoginViewController = () => {
         /** To handle Google auth request to API */
         const res = await onLoginWithGoogle?.(email, googleId);
         if (res?.isSuccessful === true) {
-          handleAuthResponse();
+          navigation.navigate('BasicInfo')
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
@@ -64,7 +64,7 @@ const LoginViewController = () => {
         let res = await onLoginWithFB?.(email, facebookId)
         console.log('bhjbhmb', res)
         if (res?.isSuccessful === true) {
-          handleAuthResponse();
+          navigation.navigate('BasicInfo')
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
