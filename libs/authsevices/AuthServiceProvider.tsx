@@ -1,5 +1,5 @@
 import { sendRequest } from "../api/RequestHandler";
-import { CREATE_SIGNUP, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API, LOGIN_API, POST } from "../constants/ApiConstants";
+import { CREATE_SIGNUP, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API, LOGIN_API, POST, UPDATE_SIGNUP } from "../constants/ApiConstants";
 import { UserType } from "../types/UserType";
 
 import { BodyInit } from "../api/ApiTypes";
@@ -45,7 +45,25 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
         })
 
-    return { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp }
+    const onUpdateUserProfile = (body: {                //client signup with user datawith whole data 
+        firstname: string,
+        lastname: string,
+        address: string,
+        city: string,
+        state: string,
+        country: string,
+        profile_picture: string,
+        date_of_birth: string,
+        phone_number: string,
+        client_id: string
+    }): Promise<any> =>
+        sendRequest(UPDATE_SIGNUP, {
+            method: POST,
+            body: body as unknown as BodyInit,
+        })
+    return {
+        onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp, onUpdateUserProfile
+    }
 }
 
 

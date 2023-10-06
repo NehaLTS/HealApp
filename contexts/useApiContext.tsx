@@ -8,25 +8,25 @@ interface UserInputProps {
 }
 
 interface UserReturnProps {
-    userData: UserType | null,
+    user: UserType | null,
     onLoginUser: (email: string | null, password: string | null) => Promise<UserType | null>;
     onLoginWithGoogle: (email: string | null, googleId: string | null) => Promise<UserType | null>;
     onLoginWithFB: (email: string | null, facebookId: string | null) => Promise<UserType | null>;
     onAuthSignUp: (email: string | null, password: string | null) => Promise<UserType | null>;
-
+    onAuthUpdateUserProfile: (firstname: string | null, lastname: string | null, address: string | null, city: string | null, state: string | null, country: string | null, profile_picture: string | null, date_of_birth: string | null, phone_number: string | null, client_id: string | null) => Promise<any | null>;
 }
 
 export const UserContext = createContext<Partial<UserReturnProps>>({});
 
 export const UserContextProvider = (props: UserInputProps): React.ReactElement => {
-    const [userData, setUserData] = useState<UserType | null>(null);
-    const { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp } = AuthServicesProvider();
+    const [user, setUser] = useState<UserType | null>(null);
+    const { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp, onUpdateUserProfile } = AuthServicesProvider();
 
     const onLoginUser = async (email: string | null, password: string | null): Promise<UserType | null> => {
         try {
             if (email != null && password != null) {
                 const response: UserType = await onSubmitAuthRequest({ email, password });
-                setUserData(response);
+                setUser(response);
                 setLocalData('USER', response)
                 return response;
             } else {
@@ -43,7 +43,7 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
         try {
             if (email != null && googleId != null) {
                 const response: UserType = await onSubmitGoogleAuthRequest({ email, googleId });
-                setUserData(response);
+                setUser(response);
                 setLocalData('USER', response)
                 return response;
             } else {
@@ -58,8 +58,7 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
         try {
             if (email != null && facebookId != null) {
                 const response: UserType = await onSubmitFBAuthRequest({ email, facebookId });
-                console.log("bncvbcmnb", response)
-                setUserData(response);
+                setUser(response);
                 setLocalData('USER', response)
                 return response;
             } else {
@@ -74,8 +73,25 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
         try {
             if (email != null && password != null) {
                 const response: UserType = await onCreateSignUp({ email, password });
+                setUser(response);
+                setLocalData('USER', response)
+                return response;
+            } else {
+                throw new Error('Email and password are required');
+            }
+        } catch (error) {
+            console.error('Error fetching publisher data:', error);
+            return null;
+        }
+    };
+    const onAuthUpdateUserProfile = async (firstname: string | null, lastname: string | null, address: string | null, city: string | null, state: string | null, country: string | null, profile_picture: string | null, date_of_birth: string | null, phone_number: string | null, client_id: string | null): Promise<any> => {
+        try {
+            if (firstname && lastname && address && city && state && country && profile_picture && date_of_birth && phone_number && client_id) {
+                const response = await onUpdateUserProfile({ firstname, lastname, address, city, state, country, profile_picture, date_of_birth, phone_number, client_id });
                 console.log("bncvbcmnb", response)
-                setUserData(response);
+                let abc = user + response
+                setUser(response);
+                console.log('abc', abc)
                 setLocalData('USER', response)
                 return response;
             } else {
@@ -87,11 +103,12 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
         }
     };
     const userContext: UserReturnProps = {
-        userData,
+        user,
         onLoginUser,
         onLoginWithGoogle,
         onLoginWithFB,
-        onAuthSignUp
+        onAuthSignUp,
+        onAuthUpdateUserProfile
     };
 
     return (

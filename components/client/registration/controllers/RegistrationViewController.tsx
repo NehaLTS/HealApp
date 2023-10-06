@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useApiContext } from "contexts/useApiContext";
-import BasicInformationController from "./BasicInformationController";
+import { Alert } from "react-native";
+import BasicInformation from "../views/BasicInformation";
 
 const RegistrationViewController = () => {
   const { onAuthSignUp } = useApiContext()
@@ -10,8 +11,11 @@ const RegistrationViewController = () => {
   // const [password, setPassword] = useState<string>("");
   const onPressSignUp = async (email: string, password: string) => {
     const res = await onAuthSignUp?.(email, password);
-    console.log('resdsts', res)
-    navigation.navigate('BasicInfo')
+    if (res?.isSuccessful) {
+      Alert.alert('User Already Exist.', "Please try SignIn")
+    }
+    else
+      navigation.navigate('BasicInfo')
   }
   return { onPressSignUp };
 };

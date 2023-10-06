@@ -1,4 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
+import { useApiContext } from "contexts/useApiContext";
+import { UseUserContext } from "contexts/useUserContext";
 import { useState } from "react";
 
 const BasicInformationController = ({
@@ -9,6 +11,8 @@ const BasicInformationController = ({
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState([0]);
   const [isShowModal, setIsShowModal] = useState(false);
+  const { onAuthUpdateUserProfile } = useApiContext()
+  const { userData } = UseUserContext()
   const onPressNext = () => {
     if (currentStep.length !== totalSteps) {
       setCurrentStep(() => {
@@ -16,6 +20,11 @@ const BasicInformationController = ({
         array.push(array[array.length - 1] + 1);
         return array;
       });
+    }
+    else {
+      console.log("hvjkcbvjkcbngj", userData)
+      const res = onAuthUpdateUserProfile?.(userData?.firstname ?? '', userData.lastname ?? '', userData.address ?? '', userData.city ?? '', userData.state ?? "", userData.country ?? '', userData.profile_picture ?? "", userData.date_of_birth ?? '', userData.phone_number ?? "", userData.client_id ?? "")
+      console.log("res", res)
     }
   };
   const onPressBack = () => {

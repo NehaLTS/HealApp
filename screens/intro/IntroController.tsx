@@ -15,15 +15,13 @@ const IntroController = () => {
       params: { isClient: true },
     });
 
-  const continueAsProvider = () =>
-    navigation.navigate(NavigationRoutes.ProviderStack);
+  const continueAsProvider = () => navigation.navigate(NavigationRoutes.ProviderStack)
+
 
   const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
 
   const handleLanguageChange = (lng: string) => {
     setLanguageCode(lng);
-    // setLocalData('USER', {  })
-    // setLocalData('USER', {  })
     setLocalData('USER', {
       ...getLocalData('USER')?.user,
       user: {
