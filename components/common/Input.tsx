@@ -13,10 +13,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors } from "../../designToken/colors";
-import { fontSize } from "../../designToken/fontSizes";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import { dimens } from "../../designToken/dimens";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
 
 
 const Input = forwardRef(({
@@ -136,7 +136,6 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: fontSize.textL,
-    padding: getHeight(dimens.marginS),
     marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,

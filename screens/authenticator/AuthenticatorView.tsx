@@ -14,7 +14,10 @@ import AuthenticatorController from "./AuthenticatorController";
 import RegistrationView from "components/client/registration/views/RegistrationView";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BasicInformation from "components/client/registration/views/BasicInformation";
+<<<<<<< Updated upstream
 import { UserContext, UserType } from "contexts/useUserContext";
+=======
+>>>>>>> Stashed changes
 
 const AuthenticatorView = () => {
   const [userData, setUserData] = React.useState<Partial<UserType>>({})
@@ -48,14 +51,14 @@ const AuthenticatorView = () => {
               isCapitalize
             />
           </View>
-          <Text style={styles.loginText}>{isSigninSelected ? ( route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up) }</Text>
+          <Text style={styles.loginText}>{isSigninSelected ? (route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up)}</Text>
         </View>
         <View style={styles.inputContainer}>
           {isSigninSelected ? <LoginView /> : <RegistrationView />}
           <View style={styles.footer}>
             <Text style={styles.guestText}>{signIn.guest_entrance}</Text>
             <TextButton
-              title={ route?.params?.isClient === true ? signIn.switch_to_provider :  signIn.switch_to_client}
+              title={route?.params?.isClient === true ? signIn.switch_to_provider : signIn.switch_to_client}
               fontSize={getHeight(fontSize.textXl)}
               style={styles.switchToProviderText}
             />
@@ -63,7 +66,13 @@ const AuthenticatorView = () => {
         </View> */}
           <BasicInformation />
         </View>
+<<<<<<< Updated upstream
       </UserContext.Provider>
+=======
+        {/* <BasicInformation /> */}
+      </View>
+
+>>>>>>> Stashed changes
     </>
   );
 };

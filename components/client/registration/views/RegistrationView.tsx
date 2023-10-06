@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
@@ -17,9 +17,10 @@ import TextButton from "components/common/TextButton";
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onPressLogin } = LoginViewController();
-  const { email, setEmail, password, setPassword } = RegistrationViewController();
-
+  const { onPressLoginButton } = LoginViewController();
+  const { onPressSignUp } = RegistrationViewController();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   return (
     <>
       <View style={styles.inputContainer}>
@@ -47,7 +48,7 @@ const RegistrationView = () => {
           isPrimary
           isSmall
           style={styles.signUpButton}
-          onPress={() => onPressLogin(email, password)}
+          onPress={() => onPressSignUp(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>

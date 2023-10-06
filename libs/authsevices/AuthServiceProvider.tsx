@@ -1,7 +1,7 @@
 import { sendRequest } from "../api/RequestHandler";
-import { POST } from "../constants/ApiConstants";
-import { GoogleLoginResponse, LoginResponse, RequestUnSuccessful } from "../types/AuthRespoonseType";
-import { GOOGLE_LOGIN_API, LOGIN_API } from "../utility/Utils";
+import { CREATE_SIGNUP, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API, LOGIN_API, POST } from "../constants/ApiConstants";
+import { UserType } from "../types/UserType";
+
 import { BodyInit } from "../api/ApiTypes";
 
 export const AuthServicesProvider = () => {
@@ -10,7 +10,7 @@ export const AuthServicesProvider = () => {
     const onSubmitAuthRequest = (body: {
         email: string;
         password: string;
-    }): Promise<LoginResponse | RequestUnSuccessful> =>
+    }): Promise<UserType> =>
         sendRequest(LOGIN_API, {
             method: POST,
             body: body as unknown as BodyInit,
@@ -20,7 +20,7 @@ export const AuthServicesProvider = () => {
     const onSubmitGoogleAuthRequest = (body: {
         email: string;
         googleId: string;
-    }): Promise<GoogleLoginResponse> =>
+    }): Promise<any> =>
         sendRequest(GOOGLE_LOGIN_API, {
             method: POST,
             body: body as unknown as BodyInit,
@@ -30,14 +30,22 @@ export const AuthServicesProvider = () => {
     const onSubmitFBAuthRequest = (body: {
         email: string;
         facebookId: string;
-    }): Promise<GoogleLoginResponse> =>
-        sendRequest(GOOGLE_LOGIN_API, {
+    }): Promise<UserType> =>
+        sendRequest(FACEBOOK_LOGIN_API, {
             method: POST,
             body: body as unknown as BodyInit,
         })
 
+    const onCreateSignUp = (body: {
+        email: string;
+        password: string;
+    }): Promise<UserType> =>
+        sendRequest(CREATE_SIGNUP, {
+            method: POST,
+            body: body as unknown as BodyInit,
+        })
 
-    return { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest }
+    return { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp }
 }
 
 

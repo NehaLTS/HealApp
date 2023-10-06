@@ -1,10 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { storeData } from "../../../src/DataStorage/DataStorage";
-import { useUserContext } from "../../../contexts/useUserContext";
+import { useApiContext } from "../../../contexts/useApiContext";
 import { AuthServicesProvider } from "../../../libs/authsevices/AuthServiceProvider";
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
-import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/AuthRespoonseType";
+import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/UserType";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 
 const LoginController = () => {
@@ -13,17 +12,15 @@ const LoginController = () => {
   const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
-  const { setUser } = useUserContext();
+  const { setUser } = useApiContext();
   const { onSubmitAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesProvider();
 
   /** To handle Response from API after authentication request */
   const handleAuthResponse = (data: any) => {
-    storeData('user', data);
-    setUser(data)
     navigation.navigate("HomeView")
   }
   /** To handle User auth via email and password */
-  const onHandleLogin = (email: string, password: string) => {
+  const onPressLoginButton = (email: string, password: string) => {
     /** To Request api  */
     onSubmitAuthRequest({ email, password }).then((res: LoginResponse | RequestUnSuccessful) => {
       //TODO handle issuccess
@@ -38,7 +35,7 @@ const LoginController = () => {
 
   }
   /** To handle Google login  button click*/
-  const onHandleGoogleLogin = () => {
+  const onPressGoogleButton = () => {
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then((userData) => {
       try {
@@ -75,7 +72,7 @@ const LoginController = () => {
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {
     switch (index) {
-      case 0: onHandleGoogleLogin()
+      case 0: onPressGoogleButton()
         break;
       case 1: onHandleFacebookLogin()
         break;
@@ -85,8 +82,8 @@ const LoginController = () => {
   return {
     isChangeLanguage,
     onChangeLanguage,
-    onHandleLogin,
-    onHandleGoogleLogin,
+    onPressLoginButton,
+    onPressGoogleButton,
     onHandleFacebookLogin,
     onSelectSocialAuth
   };

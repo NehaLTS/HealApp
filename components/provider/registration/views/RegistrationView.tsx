@@ -15,7 +15,7 @@ import { getSocialMediaLogin } from "../../login/LoginView";
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onHandleLogin } = LoginController();
+  const { onPressLoginButton } = LoginController();
   //TODO: Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -41,7 +41,7 @@ const RegistrationView = () => {
           isPrimary
           isSmall
           style={styles.signUpButton}
-          onPress={() => onHandleLogin(email, password)}
+          onPress={() => onPressLoginButton(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
