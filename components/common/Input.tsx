@@ -18,7 +18,6 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 
-
 const Input = forwardRef(({
   placeholder,
   type,
@@ -96,7 +95,7 @@ const Input = forwardRef(({
   const fontSizeStyle = { fontSize: fontSizeAnim };
   return (
     <View>
-      <View style={[styles.inputContainer, inputStyle]}>
+      <View style={[styles.inputContainer, inputStyle ,{ borderColor: errorMessage? colors.invalid : colors.primary }]}>
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
@@ -113,8 +112,16 @@ const Input = forwardRef(({
         {type === "password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
-              source={require("assets/icon/eyeIcon.png")}
+              source={ errorMessage ? require("../../assets/icon/error.png") :require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
+            />
+          </TouchableOpacity>
+        )}
+          {errorMessage && type !== "password" && (
+          <TouchableOpacity >
+            <Image
+              source={require("../../assets/icon/error.png")}
+              style={styles.errorImage}
             />
           </TouchableOpacity>
         )}
@@ -130,7 +137,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
     borderWidth: getWidth(dimens.borderBold),
-    borderColor: colors.primary,
     borderRadius: getWidth(dimens.marginS),
     flexDirection: "row",
     height: getHeight(dimens.imageS),
@@ -159,7 +165,12 @@ const styles = StyleSheet.create({
     left: getHeight(dimens.paddingXs + dimens.borderThin),
     backgroundColor: colors.offWhite,
     color: colors.black,
-    paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold)
+    paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
+  },
+  errorImage: {
+    width: getWidth(dimens.sideMargin),
+    height: getHeight(dimens.sideMargin),
+    marginRight: getHeight(dimens.marginS),
   },
 });
 

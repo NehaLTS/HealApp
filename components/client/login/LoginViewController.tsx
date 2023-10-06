@@ -1,11 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
-import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
-import { useApiContext } from "../../../contexts/useApiContext";
 import { Alert } from "react-native";
-// import { useUserContext } from "contexts/useUserContext";
-import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
+import { useApiContext } from "../../../contexts/useApiContext";
+import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
+import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
 
 const LoginViewController = () => {
   const navigation = useNavigation();

@@ -20,6 +20,44 @@ const LoginView = () => {
   //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const validateEmail = () => {
+    if (!email) {
+      setEmailError("Email is required");
+    } else if (!isValidEmail(email)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const isValidPassword = (password: string) => {
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordPattern.test(password);
+  };
+  
+  const validatePassword = () => {
+    if (!password) {
+      setPasswordError("Password is required");
+    } else if (password.length < 5) {
+      setPasswordError("Password must be at least 8 characters");
+    } else if (!isValidPassword(password)) {
+      setPasswordError("Password must contain special characters");
+    } else {
+      setPasswordError('');
+    }
+  };
+  
+  const handleSignIn = () => {
+    if (!emailError && !passwordError) onPressLoginButton(email, password)
+  };
+
+  const isValidEmail = (email: string) => {
+    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    return emailPattern.test(email);
+  };
 
   return (
     <>
@@ -27,17 +65,23 @@ const LoginView = () => {
         <Input
           placeholder={signIn.email}
           value={email}
+          errorMessage={emailError}
+          inputStyle={styles.email}
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
+          onBlur={validateEmail}
         />
+      
         <Input
           placeholder={signIn.password}
           type="password"
           value={password}
+          errorMessage={passwordError}
           onChangeText={setPassword}
           inputStyle={styles.password}
           inputValue={password}
+          onSubmitEditing={validatePassword}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
@@ -46,11 +90,11 @@ const LoginView = () => {
           title={signIn.forgot_password}
         />
         <Button
-          title={signIn.sign_in}
+          title={signIn.sign_up}
           isPrimary
           isSmall
           style={styles.signInButton}
-          onPress={() => onPressLoginButton(email, password)}
+          onPress={handleSignIn}
         />
       </View>
       <View style={styles.footerContainer}>
@@ -90,6 +134,9 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.paddingL),
   },
   password: {
+    marginTop: dimens.paddingL,
+  },
+  email:{
     marginTop: dimens.paddingL,
   },
 });
