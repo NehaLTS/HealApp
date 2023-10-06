@@ -18,12 +18,14 @@ const Button = ({
   isPrimary,
   isSmall,
   style,
+  width,
   ...props
 }: {
   title: string;
   isPrimary?: boolean;
   isSmall?: boolean;
   style?: StyleProp<ViewStyle>;
+  width?: DimensionValue
 } & TouchableOpacityProps) => {
   return (
     <TouchableOpacity
@@ -33,7 +35,8 @@ const Button = ({
         {
           width: isSmall ? "auto" : "100%",
           borderColor: isPrimary ? colors.primary : colors.black,
-          backgroundColor: isPrimary ? colors.primary : colors.transparent
+          backgroundColor: isPrimary ? colors.primary : colors.transparent,
+          minWidth: width ?? '38%'
         },
       ]}
       {...props}
@@ -65,8 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: getHeight(dimens.imageS),
     borderRadius: getHeight(dimens.marginS / dimens.borderBold),
-    zIndex: 1,
-    minWidth: '38%'
+    zIndex: 1
   },
   buttonTitle: {
     fontSize: getWidth(fontSize.heading),

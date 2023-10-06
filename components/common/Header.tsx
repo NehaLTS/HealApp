@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: getWidth(125), //TODO: should define sizes for every Width
     height: getHeight(140), //TODO: should define sizes for every Height
-    padding: getHeight(dimens.paddingXs),
+    padding: getHeight(dimens.marginS),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.primary,
     zIndex: 1,
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     right: getHeight(dimens.sideMargin),
     backgroundColor: colors.offWhite,
     top: dimens.marginL + dimens.marginS,
+    justifyContent:'space-between'
   },
   logo: {
     width: getWidth(dimens.imageS),
