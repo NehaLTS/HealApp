@@ -7,6 +7,7 @@ export interface UserType {
     googleId?: string;
     email?: string
     facebookId?: string
+    msg?: string
 }
 
 export interface User {

@@ -1,69 +1,71 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { useApiContext } from "../../../contexts/useApiContext";
-import { AuthServicesProvider } from "../../../libs/authsevices/AuthServiceProvider";
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
-import { LoginResponse, RequestUnSuccessful } from "../../../libs/types/UserType";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
+import { useApiContext } from "../../../contexts/useApiContext";
+import { Alert } from "react-native";
 
-const LoginController = () => {
+const LoginViewController = () => {
   const navigation = useNavigation();
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
-  const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
+  const [isLanguageChanged, setIsLanguageChanged] = useState(false);
+  const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
-  const { setUser } = useApiContext();
-  const { onSubmitAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesProvider();
-
+  const { onLoginUser, onLoginWithGoogle, onLoginWithFB } = useApiContext();
   /** To handle Response from API after authentication request */
-  const handleAuthResponse = (data: any) => {
+  const handleAuthResponse = () => {
     navigation.navigate("HomeView")
   }
   /** To handle User auth via email and password */
-  const onPressLoginButton = (email: string, password: string) => {
-    /** To Request api  */
-    onSubmitAuthRequest({ email, password }).then((res: LoginResponse | RequestUnSuccessful) => {
-      //TODO handle issuccess
-      if (res?.token) {
-        handleAuthResponse(res)
-      }
-      else {
-        //todo show error alert
+  const onPressLoginButton = async (email: string, password: string) => {
+    try {
+      const res = await onLoginUser?.(email, password);
+      if (res?.isSuccessful === true) {
+        handleAuthResponse();
+      } else {
+        Alert.alert("Login Failed", "Please check your email and password and try again.");
       }
 
-    })
-
+    } catch (error) {
+      console.error("Error during login:", error);
+      Alert.alert("An error occurred during login.");
+    }
   }
   /** To handle Google login  button click*/
-  const onPressGoogleButton = () => {
+  const onPressGoogleButton = async () => {
     /** To process Google login from firestore */
-    onGoogleAuthProcessing().then((userData) => {
+    onGoogleAuthProcessing().then(async (userData) => {
       try {
         const email = userData?.user?.email
         const googleId = userData.user.providerData[0].uid
         /** To handle Google auth request to API */
-        onSubmitGoogleAuthRequest({ email, googleId }).then((res) => {
-          handleAuthResponse(res)
-        })
+        const res = await onLoginWithGoogle?.(email, googleId);
+        if (res?.isSuccessful === true) {
+          handleAuthResponse();
+        } else {
+          Alert.alert("Login Failed", "Please check your email and password and try again.");
+        }
       } catch (err) {
         console.log('Error occurred!');
       }
     })
   }
   /** To handle Facebook login  button click*/
-  const onHandleFacebookLogin = () => {
+  const onPressFBButton = () => {
     /** To process Facebook login from firestore */
 
-    onFBAuthProcessing().then((userData) => {
+    onFBAuthProcessing().then(async (userData) => {
       try {
         //TODO: under review with facebook 
-
-        // const email = userData?.user?.email
-        // const googleId = userData.user.providerData[0].uid
-        // handleFacebookLogin({ email, googleId }).then((res) => {
-        //   console.log("facebook", res)
-        //   onLoginSuccessful(res)
-        // })
+        const email = "amanshar@gmail.com"
+        const facebookId = "sharm@hmail.com"
+        let res = await onLoginWithFB?.(email, facebookId)
+        console.log('bhjbhmb', res)
+        if (res?.isSuccessful === true) {
+          handleAuthResponse();
+        } else {
+          Alert.alert("Login Failed", "Please check your email and password and try again.");
+        }
       } catch (err) {
         console.log('Error occurred!');
       }
@@ -74,20 +76,18 @@ const LoginController = () => {
     switch (index) {
       case 0: onPressGoogleButton()
         break;
-      case 1: onHandleFacebookLogin()
+      case 1: onPressFBButton()
         break;
 
     }
   }
   return {
-    isChangeLanguage,
+    isLanguageChanged,
     onChangeLanguage,
     onPressLoginButton,
-    onPressGoogleButton,
-    onHandleFacebookLogin,
     onSelectSocialAuth
   };
 };
 
-export default LoginController;
+export default LoginViewController;
 
