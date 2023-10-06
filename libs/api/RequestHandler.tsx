@@ -1,6 +1,5 @@
 import { DEFAULT_HEADERS, OptType } from "./ApiTypes";
-import { BASE_URL } from "../utility/Utils";
-import { TIME_OUT } from "../constants/ApiConstants";
+import { BASE_URL, TIME_OUT } from "../constants/ApiConstants";
 
 
 const httpTimeout = (ms: number, promise: Promise<Response>) => {
@@ -21,5 +20,7 @@ export const sendRequest = (url: RequestInfo, opts: OptType) => {
     ).then((res: any) => {
         return res.json();
     })
-        .catch(res => res.message);
-};
+        .catch((error) => {
+            console.error('Request error:', error);
+        })
+}

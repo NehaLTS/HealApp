@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  DimensionValue,
   StyleProp,
   StyleSheet,
   Text,
@@ -47,7 +46,7 @@ const Button = ({
           {
             color: isPrimary ? colors.white : colors.black,
             fontWeight:
-               isSmall || !isPrimary
+              isSmall || !isPrimary
                 ? fontWeight.light
                 : fontWeight.semiBold,
           },

@@ -15,11 +15,11 @@ const LoginView = () => {
   const { languageCode } = useTranslationContext();
   //TODO: Update according to new translation ie i18Next, once done.
   const { signIn } = getTexts(languageCode);
-  const { onPressLogin } = LoginViewController();
-   //TODO Use useRef
+  const { onPressLoginButton } = LoginViewController();
+  //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -41,7 +41,7 @@ const LoginView = () => {
           isPrimary
           isSmall
           style={styles.signInButton}
-          onPress={() => onPressLogin(email, password)}
+          onPress={() => onPressLoginButton(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>

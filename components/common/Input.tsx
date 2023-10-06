@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+
+import React, { forwardRef, useRef, useState } from "react";
 import {
   Animated,
   DimensionValue,
@@ -17,16 +18,18 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 
-const Input = ({
+
+const Input = forwardRef(({
   placeholder,
   type,
   inputStyle,
   errorMessage,
   containerWidth,
+  inputValue,
   ...props
 }: {
   placeholder: string;
-  type?: 
+  type?:
   | 'creditCardNumber'
   | 'emailAddress'
   | 'fullStreetAddress'
@@ -37,13 +40,13 @@ const Input = ({
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
-} & TextInputProps) => {
+  inputValue: string 
+} & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(false);
-  const onShowPassword = () => setShowPassword(!showPassword);
   const moveText = useRef(new Animated.Value(0)).current;
   const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
 
-  const onFocusHandler = () =>  moveTextTop();
+  const onFocusHandler = () => moveTextTop();
   const onBlurHandler = () => moveTextBottom()
 
   const moveTextTop = () => {
@@ -62,6 +65,7 @@ const Input = ({
   };
 
   const moveTextBottom = () => {
+    if (inputValue === '' ){
     Animated.parallel([
       Animated.timing(moveText, {
         toValue: 0,
@@ -69,11 +73,11 @@ const Input = ({
         useNativeDriver: false,
       }),
       Animated.timing(fontSizeAnim, {
-        toValue: getHeight(fontSize.textL), 
+        toValue: getHeight(fontSize.textL),
         duration: 200,
         useNativeDriver: false,
       }),
-    ]).start();
+    ]).start()};
   };
 
   const translateY = moveText.interpolate({
@@ -89,12 +93,10 @@ const Input = ({
     ],
   };
 
-  const fontSizeStyle = { fontSize: fontSizeAnim};
+  const fontSizeStyle = { fontSize: fontSizeAnim };
   return (
     <View>
-      <View
-        style={[styles.inputContainer, inputStyle, { width: containerWidth ?? "auto" }]}
-      >
+      <View style={[styles.inputContainer, inputStyle]}>
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
@@ -103,14 +105,13 @@ const Input = ({
           placeholderTextColor={colors.black}
           textContentType={type ?? "password"}
           secureTextEntry={showPassword}
-          editable={true}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
-          blurOnSubmit
+          ref={ref as React.LegacyRef<TextInput>}
           {...props}
         />
         {type === "password" && (
-          <TouchableOpacity onPress={onShowPassword}>
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
@@ -123,7 +124,7 @@ const Input = ({
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
+    minWidth: '20%'
   },
   input: {
     fontSize: fontSize.textL,
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.marginS),
-    resizeMode:'contain',
+    resizeMode: 'contain',
   },
   errorMessage: {
     color: colors.invalid,
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
   },
   label: {
     position: "absolute",
-    top: getHeight(dimens.marginS+1),
+    top: getHeight(dimens.marginS + 1),
     left: getHeight(dimens.paddingXs + dimens.borderThin),
     backgroundColor: colors.offWhite,
     color: colors.black,

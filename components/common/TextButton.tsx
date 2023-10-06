@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { colors } from "designToken/colors";
-import { fontSize } from "designToken/fontSizes";
+import { fontSize } from "../../designToken/fontSizes";
 
 const TextButton = ({
   title,
@@ -34,7 +34,7 @@ const TextButton = ({
           style,
           { fontSize: fs ?? getHeight(fontSize.heading) },
           isActive && { textDecorationLine: "underline" },
-        ]}  
+        ]}
       >
         {isCapitalize ? title?.toLocaleUpperCase() : title}
       </Text>

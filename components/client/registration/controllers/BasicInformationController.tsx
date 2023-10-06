@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
 const BasicInformationController = ({
@@ -5,9 +6,9 @@ const BasicInformationController = ({
 }: {
   totalSteps?: number;
 }) => {
+  const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState([0]);
   const [isShowModal, setIsShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string>("");
   const onPressNext = () => {
     if (currentStep.length !== totalSteps) {
       setCurrentStep(() => {
@@ -21,14 +22,15 @@ const BasicInformationController = ({
     if (currentStep.length > 1) {
       setCurrentStep((prev) => prev.slice(0, prev.length - 1));
     }
+    if (currentStep.length === 1) {
+      navigation.goBack()
+    }
   };
 
   return {
     currentStep,
     onPressNext,
     onPressBack,
-    selectedImage,
-    setSelectedImage,
     isShowModal,
     setIsShowModal,
   };

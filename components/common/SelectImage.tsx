@@ -18,7 +18,7 @@ const SelectImage = ({
   const [height, setHeight] = useState(250);
 
   const handleImagePicker = () => {
-    ImagePicker?.openPicker({
+    ImagePicker?.openPicker?.({
       width,
       height,
       cropping: true,
@@ -35,7 +35,7 @@ const SelectImage = ({
   };
 
   const handleCameraPicker = () => {
-    ImagePicker?.openCamera({
+    ImagePicker?.openCamera?.({
       width,
       height,
       cropping: true,

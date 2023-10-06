@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { storeData } from "src/DataStorage/DataStorage";
-import { useUserContext } from "contexts/useUserContext";
+import { useApiContext } from "contexts/useApiContext";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
 import { LoginResponse, RequestUnSuccessful } from "libs/types/AuthRespoonseType";
@@ -13,7 +13,7 @@ const LoginViewController = () => {
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
-  const { setUser } = useUserContext();
+  const { setUser } = useApiContext();
   const { onSubmitAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesProvider();
 
   /** To handle Response from API after authentication request */
@@ -23,7 +23,7 @@ const LoginViewController = () => {
     navigation.navigate("HomeView")
   }
   /** To handle User auth via email and password */
-  const onPressLogin = (email: string, password: string) => {
+  const onPressLoginButton = (email: string, password: string) => {
     /** To Request api  */
     onSubmitAuthRequest({ email, password }).then((res: LoginResponse | RequestUnSuccessful) => {
       //TODO handle issuccess
@@ -85,7 +85,7 @@ const LoginViewController = () => {
   return {
     isLanguageChanged,
     onChangeLanguage,
-    onPressLogin,
+    onPressLoginButton,
     onHandleGoogleLogin,
     onHandleFacebookLogin,
     onSelectSocialAuth

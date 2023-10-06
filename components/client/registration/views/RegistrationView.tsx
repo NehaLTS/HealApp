@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
@@ -13,12 +13,14 @@ import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import LoginViewController from "components/client/login/LoginViewController";
 import TextButton from "components/common/TextButton";
+import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onPressLogin } = LoginViewController();
-  const { email, setEmail, password, setPassword } = RegistrationViewController();
+  const { onPressSignUp } = RegistrationViewController();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   return (
     <>
@@ -28,6 +30,7 @@ const RegistrationView = () => {
           value={email}
           onChangeText={setEmail}
           type="emailAddress"
+          inputValue={email}
         />
         <Input
           placeholder={signIn.password}
@@ -35,8 +38,9 @@ const RegistrationView = () => {
           value={password}
           onChangeText={setPassword}
           inputStyle={styles.password}
+          inputValue={password}
         />
-         <TextButton
+        <TextButton
           fontSize={getWidth(fontSize.textS)}
           isActive
           style={styles.forgotPassword}
@@ -47,7 +51,7 @@ const RegistrationView = () => {
           isPrimary
           isSmall
           style={styles.signUpButton}
-          onPress={() => onPressLogin(email, password)}
+          onPress={() => onPressSignUp(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
