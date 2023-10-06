@@ -15,6 +15,7 @@ import RegistrationView from "components/client/registration/views/RegistrationV
 import { useNavigation, useRoute } from "@react-navigation/native";
 import BasicInformation from "components/client/registration/views/BasicInformation";
 import { UserContext, UserType } from "contexts/useUserContext";
+import { useApiContext } from "contexts/useApiContext";
 
 const AuthenticatorView = () => {
   const [userData, setUserData] = React.useState<Partial<UserType>>({})
@@ -22,6 +23,7 @@ const AuthenticatorView = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { signIn } = getTexts(languageCode);
+  const { user } = useApiContext();
   const { loginRegisterToggle, isSigninSelected } = AuthenticatorController();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,36 +34,37 @@ const AuthenticatorView = () => {
     <>
       <UserContext.Provider value={{ userData, setUserData }}>
         <View style={styles.mainContainer}>
-          {/*<View style={styles.container}>
-          <Image source={logo} style={styles.logo} />
-          <View style={styles.toggleContainer}>
-            <TextButton
-              title={signIn.sign_in}
-              isActive={isSigninSelected}
-              onPress={loginRegisterToggle}
-              isCapitalize
-            />
-            <TextButton
-              title={signIn.sign_up}
-              isActive={!isSigninSelected}
-              onPress={loginRegisterToggle}
-              isCapitalize
-            />
-          </View>
-          <Text style={styles.loginText}>{isSigninSelected ? (route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up)}</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          {isSigninSelected ? <LoginView /> : <RegistrationView />}
-          <View style={styles.footer}>
-            <Text style={styles.guestText}>{signIn.guest_entrance}</Text>
-            <TextButton
-              title={route?.params?.isClient === true ? signIn.switch_to_provider : signIn.switch_to_client}
-              fontSize={getHeight(fontSize.textXl)}
-              style={styles.switchToProviderText}
-            />
-          </View>
-        </View> */}
-          <BasicInformation />
+          {route?.params?.isClient === true &&
+            <><View style={styles.container}>
+              <Image source={logo} style={styles.logo} />
+              <View style={styles.toggleContainer}>
+                <TextButton
+                  title={signIn.sign_in}
+                  isActive={isSigninSelected}
+                  onPress={loginRegisterToggle}
+                  isCapitalize
+                />
+                <TextButton
+                  title={signIn.sign_up}
+                  isActive={!isSigninSelected}
+                  onPress={loginRegisterToggle}
+                  isCapitalize
+                />
+              </View>
+              <Text style={styles.loginText}>{isSigninSelected ? (route?.params?.isClient === true ? signIn.client_login : signIn.provider_login) : (route?.params?.isClient === true ? signIn.client_sign_up : signIn.provider_sign_up)}</Text>
+            </View>
+              <View style={styles.inputContainer}>
+                {isSigninSelected ? <LoginView /> : <RegistrationView />}
+                <View style={styles.footer}>
+                  <Text style={styles.guestText}>{signIn.guest_entrance}</Text>
+                  <TextButton
+                    title={route?.params?.isClient === true ? signIn.switch_to_provider : signIn.switch_to_client}
+                    fontSize={getHeight(fontSize.textXl)}
+                    style={styles.switchToProviderText}
+                  />
+                </View>
+              </View></>}
+          {/* {<BasicInformation />} */}
         </View>
       </UserContext.Provider>
     </>

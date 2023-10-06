@@ -14,6 +14,10 @@ const ClientStackNavigator = () => {
         name={NavigationRoutes.ClientHome}
         component={lazy(() => import("../components/client/home/HomeView"))}
       />
+      <Stack.Screen
+        name={'BasicInfo'}
+        component={lazy(() => import("../components/client/registration/views/BasicInformation"))}
+      />
     </Stack.Navigator>
   )
 }

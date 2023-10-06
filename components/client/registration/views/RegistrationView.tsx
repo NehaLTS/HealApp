@@ -13,14 +13,15 @@ import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import LoginViewController from "components/client/login/LoginViewController";
 import TextButton from "components/common/TextButton";
+import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onPressLoginButton } = LoginViewController();
   const { onPressSignUp } = RegistrationViewController();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -29,6 +30,7 @@ const RegistrationView = () => {
           value={email}
           onChangeText={setEmail}
           type="emailAddress"
+          inputValue={email}
         />
         <Input
           placeholder={signIn.password}
@@ -36,6 +38,7 @@ const RegistrationView = () => {
           value={password}
           onChangeText={setPassword}
           inputStyle={styles.password}
+          inputValue={password}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}

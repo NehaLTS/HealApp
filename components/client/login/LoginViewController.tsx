@@ -4,6 +4,8 @@ import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 import { useApiContext } from "../../../contexts/useApiContext";
 import { Alert } from "react-native";
+// import { useUserContext } from "contexts/useUserContext";
+import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
