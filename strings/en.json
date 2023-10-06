@@ -4,6 +4,7 @@
         "sign_in": "SIGN IN",
         "sign_up": "SIGN UP",
         "client_login": "Client Login",
+        "client_sign_up":"Client Sign Up",
         "email": "E-mail*",
         "password": "Password*",
         "forgot_password": "Forgot password?",
@@ -28,5 +29,10 @@
         "add_google_pay": "Add Google Pay",
         "mm_yy":"MM/YY*",
         "cvv":"CVV*",
-        "Skip": "Skip"
+        "skip":"Skip",
+        "provider_login":"Provider Login",
+        "provider_sign_up":"Provider Sign Up",
+        "switch_to_client":"Switch to Client"
+
+
 }

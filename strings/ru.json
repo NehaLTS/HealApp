@@ -5,6 +5,7 @@
           "sign_in": "ВОЙТИ",
         "sign_up": "ЗАРЕГИСТРИРОВАТЬСЯ",
         "client_login": "Вход для клиентов",
+        "client_sign_up": "Регистрация клиента",
         "email": "Электронная почта*",
         "password": "Пароль*",
         "forgot_password": "Забыли пароль?",
@@ -28,5 +29,9 @@
         "credit_card_number": "Номер кредитной карты*",
         "add_google_pay": "Добавить Google Pay",
         "mm_yy":"ММ/ГГ*",
-        "cvv":"CVV*"
+        "cvv":"CVV*",
+        "provider_login":"Вход провайдера",
+        "provider_sign_up":"Регистрация провайдера",
+        "switch_to_client":"Переключиться на клиента",
+        "skip":"пропускать"
 }

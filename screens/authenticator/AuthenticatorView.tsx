@@ -4,22 +4,20 @@ import LoginView from "components/client/login/LoginView";
 import RegistrationView from "components/client/registration/views/RegistrationView";
 import Header from "components/common/Header";
 import TextButton from "components/common/TextButton";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import AuthenticatorController from "./AuthenticatorController";
+import { useTranslation } from "react-i18next";
 
 const AuthenticatorView = () => {
-  const { languageCode } = useTranslationContext();
   const navigation = useNavigation();
   const route = useRoute();
-  const { signIn } = getTexts(languageCode);
+  const { t } = useTranslation();
   const { loginRegisterToggle, isSigninSelected } = AuthenticatorController();
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -33,13 +31,13 @@ const AuthenticatorView = () => {
           <Image source={logo} style={styles.logo} />
           <View style={styles.toggleContainer}>
             <TextButton
-              title={signIn.sign_in}
+              title={t("sign_in")}
               isActive={isSigninSelected}
               onPress={loginRegisterToggle}
               isCapitalize
             />
             <TextButton
-              title={signIn.sign_up}
+              title={t("sign_up")}
               isActive={!isSigninSelected}
               onPress={loginRegisterToggle}
               isCapitalize
@@ -48,22 +46,22 @@ const AuthenticatorView = () => {
           <Text style={styles.loginText}>
             {isSigninSelected
               ? route?.params?.isClient === true
-                ? signIn.client_login
-                : signIn.provider_login
+                ? t("client_login")
+                : t("provider_login")
               : route?.params?.isClient === true
-              ? signIn.client_sign_up
-              : signIn.provider_sign_up}
+              ? t("client_sign_up")
+              : t("provider_sign_up")}
           </Text>
         </View>
         <View style={styles.inputContainer}>
           {isSigninSelected ? <LoginView isSigninSelected={isSigninSelected} /> : <RegistrationView />}
           <View style={styles.footer}>
-            <Text style={styles.guestText}>{signIn.guest_entrance}</Text>
+            <Text style={styles.guestText}>{t("guest_entrance")}</Text>
             <TextButton
               title={
                 route?.params?.isClient === true
-                  ? signIn.switch_to_provider
-                  : signIn.switch_to_client
+                  ? t("switch_to_provider")
+                  : t("switch_to_client")
               }
               fontSize={getHeight(fontSize.textXl)}
               style={styles.switchToProviderText}

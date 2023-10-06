@@ -6,6 +6,7 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
+import { t } from "i18next";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
@@ -62,7 +63,7 @@ const RegistrationView = () => {
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={signIn.email}
+          placeholder={t("email")}
           value={email}
           errorMessage={emailError}
           inputStyle={styles.email}
@@ -73,7 +74,7 @@ const RegistrationView = () => {
         />
       
         <Input
-          placeholder={signIn.password}
+          placeholder={t("password")}
           type="password"
           value={password}
           errorMessage={passwordError}
@@ -86,10 +87,10 @@ const RegistrationView = () => {
           fontSize={getWidth(fontSize.textS)}
           isActive
           style={styles.forgotPassword}
-          title={signIn.forgot_password}
+          title={t("forgot_password")}
         />
         <Button
-          title={signIn.sign_up}
+          title={t("sign_up")}
           isPrimary
           isSmall
           style={styles.signUpButton}
@@ -97,7 +98,7 @@ const RegistrationView = () => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
+        <Text style={styles.signInVia}>{t('or_sign_in_via')}</Text>
         {getSignInFooter()}
       </View>
     </>

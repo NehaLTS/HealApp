@@ -4,7 +4,7 @@
          "sign_in": "تسجيل الدخول",
         "sign_up": "اشتراك",
         "client_login": "تسجيل دخول العميل",
-        "client_sign_up": "Client Sign Up",
+        "client_sign_up": "تسجيل العميل",
         "email": "بريد إلكتروني*",
         "password": "كلمة المرور*",
         "forgot_password": "هل نسيت كلمة السر؟",
@@ -28,5 +28,9 @@
         "credit_card_number": "رقم البطاقة الائتمانية*",
         "add_google_pay": "أضف جوجل باي",
         "mm_yy":"مم/سنة*",
-        "cvv":"CVV*"
-    }
+        "cvv":"CVV*",
+        "provider_login":"تسجيل الدخول للمزود",
+        "provider_sign_up":"تسجيل المزود",
+        "switch_to_client":"التبديل إلى العميل",
+        "skip":"يتخطى"
+    } 

@@ -4,6 +4,8 @@ import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 import { useApiContext } from "../../../contexts/useApiContext";
 import { Alert } from "react-native";
+import { useTranslation } from "react-i18next";
+import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -12,6 +14,9 @@ const LoginViewController = () => {
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
   const { onLoginUser, onLoginWithGoogle, onLoginWithFB } = useApiContext();
+  const { setUser } = useApiContext();
+  const { onSubmitAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesProvider();
+  const { t, i18n } = useTranslation();
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
     navigation.navigate("HomeView")
@@ -31,6 +36,17 @@ const LoginViewController = () => {
       Alert.alert("An error occurred during login.");
     }
   }
+  const handleLanguageChange = (lng: string) => {
+    i18n.changeLanguage(lng)
+    // setLocalData('USER', {  })
+    // setLocalData('USER', {  })
+    setLocalData('USER', {
+      ...getLocalData('USER')?.user,
+      user: {
+        language: lng
+      }
+    }) as unknown as UserType
+  };
   /** To handle Google login  button click*/
   const onPressGoogleButton = async () => {
     /** To process Google login from firestore */

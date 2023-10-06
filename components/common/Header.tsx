@@ -1,16 +1,16 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
-import IntroController from "../../screens/intro/IntroController";
+import logo from "assets/icon/logo.png";
 import { colors } from "designToken/colors";
-import { getHeight, getWidth } from "libs/StyleHelper";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
-import logo from "assets/icon/logo.png";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import LocalizationController from "./LocalizationController";
 
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
-  const { isLanguageChanged, onChangeLanguage, handleLanguageChange } = IntroController();
   const [currentLanguage, setCurrentLanguage ] = useState('EN')
+  const { isLanguageChanged, onChangeLanguage, handleLanguageChange } = LocalizationController();
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between' }]}>

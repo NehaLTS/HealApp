@@ -5,7 +5,7 @@
           "sign_in": "להתחבר",
         "sign_up": "הירשם",
         "client_login": "כניסה ללקוח",
-        "client_sign_up": "Client Sign Up",
+        "client_sign_up": "הרשמה ללקוח",
         "email": "אימייל*",
         "password": "סיסמה*",
         "forgot_password": "שכחת את הסיסמא?",
@@ -29,5 +29,9 @@
         "credit_card_number": "מספר כרטיס אשראי*",
         "add_google_pay": "הוסף את Google Pay",
         "mm_yy":"חודש שנה*",
-        "cvv":"CVV*"
+        "cvv":"CVV*",
+        "provider_login":"התחברות לספק",
+        "provider_sign_up":"הרשמה לספק",
+        "switch_to_client":"עבור ללקוח",
+        "skip":"לדלג"
 }

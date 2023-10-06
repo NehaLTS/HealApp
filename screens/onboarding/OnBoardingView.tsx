@@ -1,21 +1,22 @@
-import React, { useLayoutEffect } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import Swiper from "react-native-swiper";
-import Button from "../../components/common/Button";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { fontSize } from "../../designToken/fontSizes";
-import { fontWeight } from "../../designToken/fontWeights";
-import logo from "../../assets/icon/logo.png";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import { useNavigation } from "@react-navigation/native";
-import OnBoardingViewController from "./OnBoardingViewController";
-import Header from "components/common/Header";
-import { t } from "i18next";
+import React, { useLayoutEffect } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import Swiper from 'react-native-swiper';
+import Button from '../../components/common/Button';
+import { colors } from '../../designToken/colors';
+import { dimens } from '../../designToken/dimens';
+import { fontSize } from '../../designToken/fontSizes';
+import { fontWeight } from '../../designToken/fontWeights';
+import logo from '../../assets/icon/logo.png';
+import { getHeight, getWidth } from '../../libs/StyleHelper';
+import { useNavigation } from '@react-navigation/native';
+import OnBoardingViewController from './OnBoardingViewController';
+import Header from 'components/common/Header';
+import { useTranslation } from 'react-i18next';
 
 const OnBoardingView = () => {
-  const { swiperRef, onPressSkip } = OnBoardingViewController();
-  const navigation = useNavigation();
+  const { swiperRef, onPressSkip} = OnBoardingViewController()
+  const navigation = useNavigation()
+  const { t } = useTranslation()
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,
@@ -34,13 +35,13 @@ const OnBoardingView = () => {
         containerStyle={styles.containerStyle}>
         {[...Array(3)].map((_, index) => (
           <Text key={index} style={styles.text}>
-            {"Welcome to Heal"}
+            {t('welcome_heal')}
           </Text>
         ))}
       </Swiper>
       <View style={styles.buttonContainer}>
         <Button
-          title={t('Skip')}
+          title={t('skip')}
           width={"25%"}
           onPress={onPressSkip}
         />

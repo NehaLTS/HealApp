@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
@@ -11,6 +10,8 @@ import Button from "common/Button";
 import Input from "common/Input";
 import LoginViewController from "LoginViewController";
 import TextButton from "components/common/TextButton";
+import { useTranslation } from "react-i18next";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
 
 const LoginView = ({isSigninSelected}) => {
   const { languageCode } = useTranslationContext();
@@ -59,11 +60,12 @@ const LoginView = ({isSigninSelected}) => {
     return emailPattern.test(email);
   };
 
+  const {t} = useTranslation()
   return (
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={signIn.email}
+          placeholder={t("email")}
           value={email}
           errorMessage={emailError}
           inputStyle={styles.email}
@@ -74,7 +76,7 @@ const LoginView = ({isSigninSelected}) => {
         />
       
         <Input
-          placeholder={signIn.password}
+          placeholder={t("password")}
           type="password"
           value={password}
           errorMessage={passwordError}
@@ -87,10 +89,10 @@ const LoginView = ({isSigninSelected}) => {
           fontSize={getWidth(fontSize.textS)}
           isActive
           style={styles.forgotPassword}
-          title={signIn.forgot_password}
+          title={t("forgot_password")}
         />
         <Button
-          title={isSigninSelected? signIn.sign_in  :signIn.sign_up}
+          title={isSigninSelected? t("sign_in")  : t("sign_up")}
           isPrimary
           isSmall
           style={styles.signInButton}
@@ -98,7 +100,7 @@ const LoginView = ({isSigninSelected}) => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
+        <Text style={styles.signInVia}>{t("or_sign_in_via")}</Text>
         {getSignInFooter()}
       </View>
     </>
