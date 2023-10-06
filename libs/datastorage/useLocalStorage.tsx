@@ -1,8 +1,8 @@
-import { UserType } from '../types/UserType';
+import { UserType, UserTypeProvider } from '../types/UserType';
 import { dataStorage } from './LocalStorage'
 
 type StorageKeys = 'USER'
-type StorageObject = { USER: UserType }
+type StorageObject = { USER: UserType | UserTypeProvider }
 
 export const setLocalData = <K extends StorageKeys>(key: K, object: Partial<StorageObject[K]>) => {
   const data = getLocalData(key) || {}

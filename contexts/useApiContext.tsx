@@ -1,26 +1,27 @@
 import React, { createContext, useContext, useState } from 'react';
 import { AuthServicesProvider } from '../libs/authsevices/AuthServiceProvider';
 import { setLocalData } from '../libs/datastorage/useLocalStorage';
-import { UserType } from '../libs/types/UserType';
+import { UserType, UserTypeProvider } from '../libs/types/UserType';
 
 interface UserInputProps {
     children: React.ReactNode;
 }
 
 interface UserReturnProps {
-    user: UserType | null,
+    user: UserType | UserTypeProvider | null,
     onLoginUser: (email: string | null, password: string | null) => Promise<UserType | null>;
     onLoginWithGoogle: (email: string | null, googleId: string | null) => Promise<UserType | null>;
     onLoginWithFB: (email: string | null, facebookId: string | null) => Promise<UserType | null>;
     onAuthSignUp: (email: string | null, password: string | null) => Promise<UserType | null>;
     onAuthUpdateUserProfile: (firstname: string | null, lastname: string | null, address: string | null, city: string | null, state: string | null, country: string | null, profile_picture: string | null, date_of_birth: string | null, phone_number: string | null, client_id: string | null) => Promise<any | null>;
+    onAuthSignInProvider: (email: string | null, password: string | null) => Promise<UserTypeProvider | null>;
 }
 
 export const UserContext = createContext<Partial<UserReturnProps>>({});
 
 export const UserContextProvider = (props: UserInputProps): React.ReactElement => {
-    const [user, setUser] = useState<UserType | null>(null);
-    const { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp, onUpdateUserProfile } = AuthServicesProvider();
+    const [user, setUser] = useState<UserType | UserTypeProvider | null>(null);
+    const { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp, onUpdateUserProfile, OnProviderSignIn } = AuthServicesProvider();
 
     const onLoginUser = async (email: string | null, password: string | null): Promise<UserType | null> => {
         try {
@@ -102,13 +103,29 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
             return null;
         }
     };
+    const onAuthSignInProvider = async (email: string | null, password: string | null): Promise<UserTypeProvider | null> => {
+        try {
+            if (email != null && password != null) {
+                const response = await OnProviderSignIn({ email, password });
+                setUser(response);
+                setLocalData('USER', response)
+                return response;
+            } else {
+                throw new Error('Email and password are required');
+            }
+        } catch (error) {
+            console.error('Error fetching publisher data:', error);
+            return null;
+        }
+    };
     const userContext: UserReturnProps = {
         user,
         onLoginUser,
         onLoginWithGoogle,
         onLoginWithFB,
         onAuthSignUp,
-        onAuthUpdateUserProfile
+        onAuthUpdateUserProfile,
+        onAuthSignInProvider
     };
 
     return (

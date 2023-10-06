@@ -24,6 +24,13 @@ export interface User {
 
 
 
+export interface UserTypeProvider {
+    id?: string | null;
+    isSuccessful: boolean;
+    existing: string;
+    token: string;
+    user: { [key: string]: null | string };
+}
 
 export interface GoogleLoginResponse {
     additionalUserInfo: AdditionalUserInfo;
