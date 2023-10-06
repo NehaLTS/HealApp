@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
 import { colors } from "../../../../designToken/colors";
 import { dimens } from "../../../../designToken/dimens";
@@ -10,7 +10,8 @@ import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Button from "../../../common/Button";
 import Input from "../../../common/Input";
 import LoginController from "../../login/LoginController";
-import { getSocialMediaLogin } from "../../login/LoginView";
+import LoginViewController from "../../login/LoginController";
+import { getSignInFooter } from "components/provider/login/LoginView";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
@@ -46,7 +47,7 @@ const RegistrationView = () => {
       </View>
       <View style={styles.footerContainer}>
         <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-        {getSocialMediaLogin()}
+        {getSignInFooter()}
       </View>
     </>
   );

@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import IntroController from "../../screens/intro/IntroController";
 import { colors } from "designToken/colors";
 import { getHeight, getWidth } from "libs/StyleHelper";
@@ -10,6 +10,7 @@ import logo from "assets/icon/logo.png";
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
   const { isLanguageChanged, onChangeLanguage, handleLanguageChange } = IntroController();
+  const [currentLanguage, setCurrentLanguage ] = useState('EN')
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between' }]}>
@@ -21,32 +22,32 @@ const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean 
       )}
       {  /** TODO: Update the title according to selected language  */}
       <Text style={styles.headerRight} onPress={onChangeLanguage}>
-        {"EN"}
+        {currentLanguage}
       </Text>
       {isLanguageChanged && (
         //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text
-            style={styles.language}
-            onPress={() => handleLanguageChange("en")}
+            style={[styles.language,{color: currentLanguage ==="EN" ? colors.primary : colors.black}]}
+            onPress={() => {setCurrentLanguage('EN') ;handleLanguageChange("en")}}
           >
             English
           </Text>
           <Text
-            style={styles.language}
-            onPress={() => handleLanguageChange("he")}
+             style={[styles.language,{color: currentLanguage ==="HE" ? colors.primary : colors.black}]}
+            onPress={() => {setCurrentLanguage('HE') ;handleLanguageChange("he")}}
           >
             עִברִית
           </Text>
           <Text
-            style={styles.language}
-            onPress={() => handleLanguageChange("ar")}
+             style={[styles.language,{color: currentLanguage ==="AR" ? colors.primary : colors.black}]}
+            onPress={() => {setCurrentLanguage('AR') ;handleLanguageChange("ar")}}
           >
             العربي
           </Text>
           <Text
-            style={styles.language}
-            onPress={() => handleLanguageChange("ru")}
+             style={[styles.language,{color: currentLanguage ==="RU" ? colors.primary : colors.black}]}
+            onPress={() => {setCurrentLanguage('RU') ;handleLanguageChange("ru")}}
           >
             русский
           </Text>
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   language: {
-    color: colors.black,
     alignSelf: "flex-end",
     padding: getHeight(dimens.borderThin),
     fontSize: getHeight(fontSize.textL),

@@ -41,7 +41,7 @@ const Input = forwardRef(({
   containerWidth?: DimensionValue;
   inputValue: string 
 } & TextInputProps, ref) => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(0)).current;
   const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
 

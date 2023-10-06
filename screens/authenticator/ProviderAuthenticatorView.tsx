@@ -1,7 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import logo from "assets/icon/logo.png";
-import LoginView from "components/client/login/LoginView";
-import RegistrationView from "components/client/registration/views/RegistrationView";
 import Header from "components/common/Header";
 import TextButton from "components/common/TextButton";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
@@ -13,14 +11,16 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import AuthenticatorController from "./AuthenticatorController";
+import ProviderAuthenticatorViewController from "./ProviderAuthenticatorViewController";
+import LoginView from "components/provider/login/LoginView";
+import RegistrationView from "components/provider/registration/views/RegistrationView";
 
-const AuthenticatorView = () => {
+const ProviderAuthenticatorView = () => {
   const { languageCode } = useTranslationContext();
   const navigation = useNavigation();
   const route = useRoute();
   const { signIn } = getTexts(languageCode);
-  const { loginRegisterToggle, isSigninSelected } = AuthenticatorController();
+  const { loginRegisterToggle, isSigninSelected } = ProviderAuthenticatorViewController();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />
@@ -83,7 +83,7 @@ const AuthenticatorView = () => {
   );
 };
 
-export default AuthenticatorView;
+export default ProviderAuthenticatorView;
 
 const styles = StyleSheet.create({
   mainContainer: {

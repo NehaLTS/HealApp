@@ -57,8 +57,10 @@ const LoginViewController = () => {
     onFBAuthProcessing().then(async (userData) => {
       try {
         //TODO: under review with facebook 
-        const email = "amanshar@gmail.com"
-        const facebookId = "sharm@hmail.com"
+        // const email = "amanshar@gmail.com"
+        // const facebookId = "sharm@hmail.com"
+        const email=userData.user.email
+        const facebookId = userData.additionalUserInfo?.profile?.id
         let res = await onLoginWithFB?.(email, facebookId)
         console.log('bhjbhmb', res)
         if (res?.isSuccessful === true) {

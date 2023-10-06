@@ -33,6 +33,7 @@ const BasicInformation = () => {
   const isLoadingCard = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
+
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
       <View style={styles.container}>

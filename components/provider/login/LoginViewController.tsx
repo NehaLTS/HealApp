@@ -1,11 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { storeData } from "src/DataStorage/DataStorage";
 import { useApiContext } from "contexts/useApiContext";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
-import { LoginResponse, RequestUnSuccessful } from "libs/types/AuthRespoonseType";
 import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
+import { Alert } from "react-native";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -13,41 +12,39 @@ const LoginViewController = () => {
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
-  const { setUser } = useApiContext();
-  const { onSubmitAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesProvider();
-
+  const { onAuthSignInProvider,onLoginWithGoogle,onLoginWithFB } = useApiContext();
   /** To handle Response from API after authentication request */
-  const handleAuthResponse = (data: any) => {
-    storeData('user', data);
-    setUser(data)
+  const handleAuthResponse = () => {
     navigation.navigate("HomeView")
   }
   /** To handle User auth via email and password */
-  const onPressLoginButton = (email: string, password: string) => {
-    /** To Request api  */
-    onSubmitAuthRequest({ email, password }).then((res: LoginResponse | RequestUnSuccessful) => {
-      //TODO handle issuccess
-      if (res?.token) {
-        handleAuthResponse(res)
-      }
-      else {
-        //todo show error alert
-      }
-
-    })
+  const onPressLoginButton = async (email: string, password: string) => {
+    try{
+    const res = await onAuthSignInProvider?.(email, password);
+    if (res?.isSuccessful === true) {
+      handleAuthResponse();
+    } else {
+      Alert.alert("Login Failed", "Please check your email and password and try again.");
+    }
+  } catch (error) {
+    console.error("Error during login:", error);
+  }
 
   }
   /** To handle Google login  button click*/
   const onHandleGoogleLogin = () => {
     /** To process Google login from firestore */
-    onGoogleAuthProcessing().then((userData) => {
+    onGoogleAuthProcessing().then(async (userData) => {
       try {
         const email = userData?.user?.email
         const googleId = userData.user.providerData[0].uid
         /** To handle Google auth request to API */
-        onSubmitGoogleAuthRequest({ email, googleId }).then((res) => {
-          handleAuthResponse(res)
-        })
+        const res = await onLoginWithGoogle?.(email, googleId);
+        if (res?.isSuccessful === true) {
+          navigation.navigate('BasicInfo')
+        } else {
+          Alert.alert("Login Failed", "Please check your email and password and try again.");
+        }
       } catch (err) {
         console.log('Error occurred!');
       }
@@ -57,16 +54,20 @@ const LoginViewController = () => {
   const onHandleFacebookLogin = () => {
     /** To process Facebook login from firestore */
 
-    onFBAuthProcessing().then((userData) => {
+    onFBAuthProcessing().then(async (userData) => {
       try {
         //TODO: under review with facebook 
-
-        // const email = userData?.user?.email
-        // const googleId = userData.user.providerData[0].uid
-        // handleFacebookLogin({ email, googleId }).then((res) => {
-        //   console.log("facebook", res)
-        //   onLoginSuccessful(res)
-        // })
+        // const email = "amanshar@gmail.com"
+        // const facebookId = "sharm@hmail.com"
+        const email=userData.user.email
+        const facebookId = userData.additionalUserInfo?.profile?.id
+        let res = await onLoginWithFB?.(email, facebookId)
+        console.log('bhjbhmb', res)
+        if (res?.isSuccessful === true) {
+          navigation.navigate('BasicInfo')
+        } else {
+          Alert.alert("Login Failed", "Please check your email and password and try again.");
+        }
       } catch (err) {
         console.log('Error occurred!');
       }

@@ -12,7 +12,7 @@ import Input from "common/Input";
 import LoginViewController from "LoginViewController";
 import TextButton from "components/common/TextButton";
 
-const LoginView = () => {
+const LoginView = ({isSigninSelected}) => {
   const { languageCode } = useTranslationContext();
   //TODO: Update according to new translation ie i18Next, once done.
   const { signIn } = getTexts(languageCode);
@@ -90,7 +90,7 @@ const LoginView = () => {
           title={signIn.forgot_password}
         />
         <Button
-          title={signIn.sign_up}
+          title={isSigninSelected? signIn.sign_in  :signIn.sign_up}
           isPrimary
           isSmall
           style={styles.signInButton}
