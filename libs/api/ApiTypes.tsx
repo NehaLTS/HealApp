@@ -10,5 +10,5 @@ export type OptType = {
 }
 export const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
-  'x-access-token': 'Logicease123',
+  'x-access-token': DEFAULT_ACCESS_TOKEN,
 };
