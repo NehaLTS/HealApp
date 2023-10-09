@@ -1,18 +1,17 @@
-import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Button from "common/Button";
+import Stepper from "common/Stepper";
+import Header from "components/common/Header";
 import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
-import Button from "common/Button";
+import React, { useLayoutEffect } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
-import UserDetail from "./UserDetail";
 import UserAddress from "./UserAddress";
+import UserDetail from "./UserDetail";
 import UserPayment from "./UserPayment";
-import Stepper from "common/Stepper";
-import { useNavigation } from "@react-navigation/native";
-import Header from "components/common/Header";
-import { dimens } from "designToken/dimens";
 import { useTranslation } from "react-i18next";
 
 //TODO: static strings are changed after setup i18
@@ -28,12 +27,11 @@ const BasicInformation = () => {
       header: () => <Header title="Registration" />,
     });
   }, [navigation]);
+
   const isLoadingCard = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
-
   return (
-    // <UserContext.Provider value={{ userData, setUserData }}>
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
@@ -81,7 +79,6 @@ const BasicInformation = () => {
           </Text>
         )}
     </View>
-    // </UserContext.Provider>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  DimensionValue,
   StyleProp,
   StyleSheet,
   Text,
@@ -45,11 +46,8 @@ const Button = ({
           styles.buttonTitle,
           {
             color: isPrimary ? colors.white : colors.black,
-            fontWeight:
-              isSmall || !isPrimary
-                ? fontWeight.light
-                : fontWeight.semiBold,
-          },
+            fontWeight: isSmall || !isPrimary ? fontWeight.light : fontWeight.semiBold
+          }
         ]}
         adjustsFontSizeToFit
         numberOfLines={1}
@@ -72,6 +70,7 @@ const styles = StyleSheet.create({
   buttonTitle: {
     fontSize: getWidth(fontSize.heading),
     lineHeight: getHeight(dimens.marginL),
+    letterSpacing: getWidth(1.5)
   },
 });
 

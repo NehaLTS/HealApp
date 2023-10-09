@@ -9,42 +9,38 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
+import { useTranslation } from "react-i18next";
 
 const UserAddress = () => {
-  const {isShowModal, setIsShowModal } = BasicInformationController({});
-  const addressRef = React.useRef<any>("");
-  const dobRef = React.useRef<any>("");
-  const idNumberRef = React.useRef<any>("");
+  const {isShowModal, setIsShowModal, addressRef, birthDateRef, idNumberRef } = BasicInformationController({});
   const { userData, setUserData } = UseUserContext();
   const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
-
+  const { t } = useTranslation();
   return (
     <>
       <Input
-        placeholder={registration.address}
+        placeholder={t("address")}
         type={"fullStreetAddress"}
         inputStyle={styles.input}
-        onBlur={() =>
-          setUserData({ ...userData, address: addressRef.current.value })
-        }
-        onChangeText={(value) => {
-          addressRef.current.value = value;
-        }}
+        onBlur={() => setUserData({ ...userData, address: addressRef.current.value })}
+        onChangeText={(value) => addressRef.current.value = value}
         ref={addressRef}
         value={userData.address}
+        inputValue={addressRef.current.value}
       />
       <Input
-        placeholder={registration.date_of_birth}
+        placeholder={t("date_of_birth")}
         type={"telephoneNumber"}
         keyboardType="numeric"
         inputStyle={styles.inputDOB}
-        onBlur={() =>setUserData({ ...userData, date_of_birth: dobRef.current.value })}
-        onChangeText={(value) => dobRef.current.value = value}
-        ref={dobRef}
+        onBlur={() =>setUserData({ ...userData, date_of_birth: birthDateRef.current.value })}
+        onChangeText={(value) => birthDateRef.current.value = value}
+        ref={birthDateRef}
         value={userData.date_of_birth}
+        inputValue={birthDateRef.current.value}
       />
       <Input
-        placeholder={registration.id_number}
+        placeholder={t("id_number")}
         type={"telephoneNumber"}
         keyboardType="number-pad"
         inputStyle={styles.inputIdNumber}
@@ -52,8 +48,9 @@ const UserAddress = () => {
         onChangeText={(value) => idNumberRef.current.value = value}
         ref={idNumberRef}
         value={userData.id_number}
+        inputValue={idNumberRef.current.value}
       />
-      <Text style={styles.text}>{registration.find_doctor_text}</Text>
+      <Text style={styles.text}>{t("find_doctor_text")}</Text>
       <View style={styles.innerContainer}>
         <Text
           style={[
@@ -62,7 +59,7 @@ const UserAddress = () => {
               marginTop: getHeight(dimens.marginS),
             },
           ]}>
-          {registration.add_profile}
+          {t("add_profile")}
         </Text>
         <TouchableOpacity
           activeOpacity={userData.profile_picture ? 1 : 0.5}

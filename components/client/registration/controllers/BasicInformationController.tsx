@@ -3,6 +3,7 @@ import { useApiContext } from "contexts/useApiContext";
 import { UseUserContext } from "contexts/useUserContext";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
+import React from "react";
 import { useState } from "react";
 
 const BasicInformationController = ({
@@ -14,9 +15,16 @@ const BasicInformationController = ({
   const [currentStep, setCurrentStep] = useState([0]);
   const [isShowModal, setIsShowModal] = useState(false);
   const { onAuthUpdateUserProfile } = useApiContext()
-  const { onUpdateUserProfile
-  } = AuthServicesProvider()
+  const { onUpdateUserProfile } = AuthServicesProvider()
   const { userData } = UseUserContext()
+
+  const firstNameRef = React.useRef<any>("");
+  const lastNameRef = React.useRef<any>("");
+  const phoneNumberRef = React.useRef<any>("");
+  const addressRef = React.useRef<any>("");
+  const birthDateRef = React.useRef<any>("");
+  const idNumberRef = React.useRef<any>("");
+
   const onPressNext = async () => {
 
     if (currentStep.length !== totalSteps) {
@@ -59,6 +67,12 @@ const BasicInformationController = ({
     onPressBack,
     isShowModal,
     setIsShowModal,
+    firstNameRef,
+    lastNameRef,
+    phoneNumberRef,
+    addressRef,
+    birthDateRef,
+    idNumberRef
   };
 };
 
