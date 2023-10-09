@@ -177,11 +177,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     fontWeight: fontWeight.light,
-<<<<<<< HEAD
-    letterSpacing: getWidth(dimens.borderThin / dimens.borderBold)
-=======
     letterSpacing: getWidth(dimens.borderThin / dimens.borderBold),
->>>>>>> f62bfbedb5237233021cff5437f064e4d99a3884
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
