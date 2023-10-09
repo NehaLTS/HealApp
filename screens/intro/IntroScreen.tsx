@@ -10,15 +10,11 @@ import Header from "../../components/common/Header";
 import { fontSize } from "../../designToken/fontSizes";
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import { getTexts } from "../../libs/OneSkyHelper";
 
 const IntroScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { continueAsClient, continueAsProvider } = IntroController();
-  const { languageCode } = useTranslationContext();
-  const { intro } = getTexts(languageCode);
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,

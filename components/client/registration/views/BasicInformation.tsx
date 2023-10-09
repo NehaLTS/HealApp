@@ -6,21 +6,20 @@ import { getWidth } from "libs/StyleHelper";
 import Button from "common/Button";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { getTexts } from "libs/OneSkyHelper";
 import UserDetail from "./UserDetail";
 import UserAddress from "./UserAddress";
 import UserPayment from "./UserPayment";
 import Stepper from "common/Stepper";
-import { UserContext, UserType } from "contexts/useUserContext";
 import { useNavigation } from "@react-navigation/native";
 import Header from "components/common/Header";
 import { dimens } from "designToken/dimens";
+import { useTranslation } from "react-i18next";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   // const [userData, setUserData] = React.useState<Partial<UserType>>({});
-  const { languageCode } = useTranslationContext();
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
@@ -29,7 +28,6 @@ const BasicInformation = () => {
       header: () => <Header title="Registration" />,
     });
   }, [navigation]);
-  const { registration, common } = getTexts(languageCode);
   const isLoadingCard = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
@@ -57,9 +55,9 @@ const BasicInformation = () => {
         ]}>
         {!isLoadingCard && !isCardDetails ? (
           <>
-            <Button title={registration.back} isSmall onPress={onPressBack} />
+            <Button title={t("back")} isSmall onPress={onPressBack} />
             <Button
-              title={registration.next}
+              title={t("next")}
               isPrimary
               onPress={onPressNext}
               isSmall
@@ -68,7 +66,7 @@ const BasicInformation = () => {
         ) : (
           <Button
             title={
-              isLoadingCard ? common.cancel : registration.start_using_heal
+              isLoadingCard ? t("cancel") : t("start_using_heal")
             }
             isPrimary
             isSmall
@@ -79,7 +77,7 @@ const BasicInformation = () => {
         !isLoadingCard &&
         !isCardDetails && (
           <Text style={styles.skipLaterText}>
-            {registration.skip_for_later}
+            {t("skip_for_later")}
           </Text>
         )}
     </View>

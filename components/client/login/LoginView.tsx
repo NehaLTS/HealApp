@@ -4,26 +4,22 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import Button from "common/Button";
 import Input from "common/Input";
 import LoginViewController from "LoginViewController";
 import TextButton from "components/common/TextButton";
 import { useTranslation } from "react-i18next";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
 
 const LoginView = ({isSigninSelected}) => {
-  const { languageCode } = useTranslationContext();
-  //TODO: Update according to new translation ie i18Next, once done.
-  const { signIn } = getTexts(languageCode);
   const { onPressLoginButton } = LoginViewController();
   //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
+  const {t} = useTranslation()
+  
   const validateEmail = () => {
     if (!email) {
       setEmailError("Email is required");
@@ -60,7 +56,6 @@ const LoginView = ({isSigninSelected}) => {
     return emailPattern.test(email);
   };
 
-  const {t} = useTranslation()
   return (
     <>
       <View style={styles.inputContainer}>

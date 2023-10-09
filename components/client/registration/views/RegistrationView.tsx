@@ -1,13 +1,11 @@
 import Button from "common/Button";
 import Input from "common/Input";
 import TextButton from "components/common/TextButton";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
 import { t } from "i18next";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -15,8 +13,6 @@ import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 
 const RegistrationView = () => {
-  const { languageCode } = useTranslationContext();
-  const { signIn } = getTexts(languageCode);
   const { onPressSignUp } = RegistrationViewController();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

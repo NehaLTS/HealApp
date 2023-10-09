@@ -1,27 +1,25 @@
 import Input from "common/Input";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { UseUserContext } from "contexts/useUserContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight } from "libs/StyleHelper";
 import React from "react";
 import { StyleSheet, Text } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const UserDetail = () => {
-  const { languageCode } = useTranslationContext();
-  const { registration } = getTexts(languageCode);
   const firstNameRef = React.useRef<any>("");
   const lastNameRef = React.useRef<any>("");
   const phoneNumberRef = React.useRef<any>("");
   const { userData, setUserData } = UseUserContext();
-  
+  const {t} = useTranslation();
+
   return (
     <>
       <Input
-        placeholder={registration.first_name}
+        placeholder={t("first_name")}
         inputStyle={styles.input}
         onBlur={() =>
           setUserData({ ...userData, firstname: firstNameRef.current.value })
@@ -31,7 +29,7 @@ const UserDetail = () => {
         value={userData.firstname}
       />
       <Input
-        placeholder={registration.last_name}
+        placeholder={t("last_name")}
         type={"nameSuffix"}
         inputStyle={styles.inputLastName}
         onChangeText={(value) => lastNameRef.current.value = value}
@@ -42,7 +40,7 @@ const UserDetail = () => {
         ref={lastNameRef}
       />
       <Input
-        placeholder={registration.phone_number}
+        placeholder={t("phone_number")}
         type={"telephoneNumber"}
         keyboardType="number-pad"
         inputStyle={styles.inputPhone}
@@ -56,7 +54,7 @@ const UserDetail = () => {
         }
         ref={phoneNumberRef}
       />
-      <Text style={styles.text}>{registration.find_doctor_text}</Text>
+      <Text style={styles.text}>{t("find_doctor_text")}</Text>
     </>
   );
 };
