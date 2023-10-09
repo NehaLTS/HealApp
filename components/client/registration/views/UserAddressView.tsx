@@ -1,32 +1,40 @@
 import Input from "common/Input";
 import SelectImage from "common/SelectImage";
 import Text from "components/common/Text";
-import { UseUserContext } from "contexts/useUserContext";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { getTexts } from "libs/OneSkyHelper";
+import UserAddressViewController from "../controllers/UserAddressViewController";
 
-const UserAddress = () => {
-  const {isShowModal, setIsShowModal, addressRef, birthDateRef, idNumberRef } = BasicInformationController({});
-  const { userData, setUserData } = UseUserContext();
-  const { languageCode } = useTranslationContext();
-  const { registration } = getTexts(languageCode);
-  const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
+const UserAddressView = () => {
   const { t } = useTranslation();
+  const {
+    userData,
+    isShowModal,
+    setIsShowModal,
+    addressRef,
+    birthDateRef,
+    idNumberRef,
+    onBlurAddress,
+    onBlurBirthDate,
+    onBlurIdNumber,
+    onChangeAddress,
+    onChangeBirthDate,
+    onChangeIdNumber,
+    getImageUrl
+  } = UserAddressViewController();
+
   return (
     <>
       <Input
         placeholder={t("address")}
         type={"fullStreetAddress"}
         inputStyle={styles.input}
-        onBlur={() => setUserData({ ...userData, address: addressRef.current.value })}
-        onChangeText={(value) => addressRef.current.value = value}
+        onBlur={onBlurAddress}
+        onChangeText={onChangeAddress}
         ref={addressRef}
         value={userData.address}
         inputValue={addressRef.current.value}
@@ -36,8 +44,8 @@ const UserAddress = () => {
         type={"telephoneNumber"}
         keyboardType="numeric"
         inputStyle={styles.inputDOB}
-        onBlur={() => setUserData({ ...userData, date_of_birth: birthDateRef.current.value })}
-        onChangeText={(value) => birthDateRef.current.value = value}
+        onBlur={onBlurBirthDate}
+        onChangeText={onChangeBirthDate}
         ref={birthDateRef}
         value={userData.date_of_birth}
         inputValue={birthDateRef.current.value}
@@ -47,22 +55,18 @@ const UserAddress = () => {
         type={"telephoneNumber"}
         keyboardType="number-pad"
         inputStyle={styles.inputIdNumber}
-        onBlur={() => setUserData({ ...userData, id_number: idNumberRef.current.value })}
-        onChangeText={(value) => idNumberRef.current.value = value}
+        onBlur={onBlurIdNumber}
+        onChangeText={onChangeIdNumber}
         ref={idNumberRef}
         value={userData.id_number}
         inputValue={idNumberRef.current.value}
       />
-      <Text style={styles.text} title={registration.find_doctor_text} />
+      <Text style={styles.text} title={t("find_doctor_text")} />
       <View style={styles.innerContainer}>
         <Text
-          style={[
-            !userData.profile_picture && {
-              marginTop: getHeight(dimens.marginS),
-            },
-          ]} 
-          title={registration.add_profile}
-          />
+          style={[!userData.profile_picture && {marginTop: getHeight(dimens.marginS)}]}
+          title={t("add_profile")}
+        />
         <TouchableOpacity
           activeOpacity={userData.profile_picture ? 1 : 0.5}
           onPress={() => !userData.profile_picture && setIsShowModal(true)}
@@ -101,7 +105,7 @@ const UserAddress = () => {
   );
 };
 
-export default UserAddress;
+export default UserAddressView;
 
 const styles = StyleSheet.create({
   innerContainer: {

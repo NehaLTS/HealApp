@@ -2,8 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { UseUserContext } from "contexts/useUserContext";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Alert } from "react-native";
 
 const BasicInformationController = ({
@@ -13,15 +12,10 @@ const BasicInformationController = ({
 }) => {
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState([0]);
-  const [isShowModal, setIsShowModal] = useState(false);
   const { onUpdateUserProfile, onCreateCreditCardDetails } = AuthServicesClient()
   const { userData, setUserData } = UseUserContext()
-  const firstNameRef = React.useRef<any>("");
-  const lastNameRef = React.useRef<any>("");
-  const phoneNumberRef = React.useRef<any>("");
-  const addressRef = React.useRef<any>("");
-  const birthDateRef = React.useRef<any>("");
-  const idNumberRef = React.useRef<any>(""); const onPressNext = async () => {
+
+  const onPressNext = async () => {
     if (currentStep.length !== totalSteps) {
       if (currentStep[currentStep.length - 1] === 0) {
         setCurrentStep(() => {
@@ -93,15 +87,7 @@ const BasicInformationController = ({
   return {
     currentStep,
     onPressNext,
-    onPressBack,
-    isShowModal,
-    setIsShowModal,
-    firstNameRef,
-    lastNameRef,
-    phoneNumberRef,
-    addressRef,
-    birthDateRef,
-    idNumberRef
+    onPressBack
   };
 };
 
