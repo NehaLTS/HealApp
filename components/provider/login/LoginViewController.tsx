@@ -1,9 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
 import { useApiContext } from "contexts/useApiContext";
-import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
 import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
+import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
+import { useState } from "react";
 import { Alert } from "react-native";
 
 const LoginViewController = () => {
@@ -13,6 +12,46 @@ const LoginViewController = () => {
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
   const { onAuthSignInProvider,onLoginWithGoogle,onLoginWithFB } = useApiContext();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  
+  const validateEmail = () => {
+    if (!email) {
+      setEmailError("Email is required");
+    } else if (!isValidEmail(email)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const isValidPassword = (password: string) => {
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordPattern.test(password);
+  };
+  
+  const validatePassword = () => {
+    if (!password) {
+      setPasswordError("Password is required");
+    } else if (password.length < 5) {
+      setPasswordError("Password must be at least 8 characters");
+    } else if (!isValidPassword(password)) {
+      setPasswordError("Password must contain special characters");
+    } else {
+      setPasswordError('');
+    }
+  };
+  
+  const handleSignIn = () => {
+    if (!emailError && !passwordError) onPressLoginButton(email, password)
+  };
+
+  const isValidEmail = (email: string) => {
+    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    return emailPattern.test(email);
+  };
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
     navigation.navigate("HomeView")
@@ -89,7 +128,16 @@ const LoginViewController = () => {
     onPressLoginButton,
     onHandleGoogleLogin,
     onHandleFacebookLogin,
-    onSelectSocialAuth
+    onSelectSocialAuth,
+    validateEmail,
+    setEmail,
+    setPassword,
+    handleSignIn,
+    validatePassword,
+    email,
+    password,
+    emailError,
+    passwordError,
   };
 };
 

@@ -10,9 +10,10 @@ import { t } from "i18next";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
+import Text from "components/common/Text";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
@@ -97,7 +98,7 @@ const RegistrationView = () => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{t('or_sign_in_via')}</Text>
+      <Text style={styles.signInVia} title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -118,6 +119,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     textAlign: "center",
     paddingVertical: getHeight(dimens.paddingS),
+    letterSpacing:getWidth(0.5)
   },
   footerContainer: {
     flexDirection: "row",
@@ -126,9 +128,7 @@ const styles = StyleSheet.create({
     flex: 0.18,
   },
   signInVia: {
-    color: colors.black,
-    fontSize: fontSize.textL,
-    fontWeight: fontWeight.normal,
+    letterSpacing:getWidth(0.5)
   },
   signUpButton: {
     alignSelf: "center",

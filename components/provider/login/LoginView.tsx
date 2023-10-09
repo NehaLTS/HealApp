@@ -1,63 +1,29 @@
-import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { fontWeight } from "designToken/fontWeights";
-import { getTexts } from "libs/OneSkyHelper";
-import { getHeight, getWidth } from "libs/StyleHelper";
 import Button from "common/Button";
 import Input from "common/Input";
-import LoginViewController from "LoginViewController";
+import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import LoginViewController from "./LoginViewController";
 
-const LoginView = ({isSigninSelected}) => {
-  const { onPressLoginButton } = LoginViewController();
-  //TODO Use useRef
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
+  const { t } = useTranslation();
+  const {
+    validateEmail,
+    setEmail,
+    setPassword,
+    handleSignIn,
+    validatePassword,
+    email,
+    password,
+    emailError,
+    passwordError,
+  } = LoginViewController();
 
-  const validateEmail = () => {
-    if (!email) {
-      setEmailError("Email is required");
-    } else if (!isValidEmail(email)) {
-      setEmailError("Invalid email address");
-    } else {
-      setEmailError('');
-    }
-  };
-
-  const isValidPassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
-  
-  const validatePassword = () => {
-    if (!password) {
-      setPasswordError("Password is required");
-    } else if (password.length < 5) {
-      setPasswordError("Password must be at least 8 characters");
-    } else if (!isValidPassword(password)) {
-      setPasswordError("Password must contain special characters");
-    } else {
-      setPasswordError('');
-    }
-  };
-  
-  const handleSignIn = () => {
-    if (!emailError && !passwordError) onPressLoginButton(email, password)
-  };
-
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
-
-  const {t} = useTranslation()
   return (
     <>
       <View style={styles.inputContainer}>
@@ -65,13 +31,11 @@ const LoginView = ({isSigninSelected}) => {
           placeholder={t("email")}
           value={email}
           errorMessage={emailError}
-          inputStyle={styles.email}
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
         />
-      
         <Input
           placeholder={t("password")}
           type="password"
@@ -89,7 +53,7 @@ const LoginView = ({isSigninSelected}) => {
           title={t("forgot_password")}
         />
         <Button
-          title={isSigninSelected? t("sign_in")  : t("sign_up")}
+          title={isSigninSelected ? t("sign_in") : t("sign_up")}
           isPrimary
           isSmall
           style={styles.signInButton}
@@ -97,7 +61,7 @@ const LoginView = ({isSigninSelected}) => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{t("or_sign_in_via")}</Text>
+        <Text style={styles.signInVia} title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -116,26 +80,22 @@ const styles = StyleSheet.create({
   forgotPassword: {
     textAlign: "center",
     paddingVertical: getHeight(dimens.paddingS),
+    letterSpacing: getWidth(0.5),
   },
   footerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flex: 0.2,
+    flex: 0.18,
   },
   signInVia: {
-    color: colors.black,
-    fontSize: fontSize.textL,
-    fontWeight: fontWeight.normal,
+    letterSpacing: getWidth(0.5),
   },
   signInButton: {
     alignSelf: "center",
     marginTop: getHeight(dimens.paddingL),
   },
   password: {
-    marginTop: dimens.paddingL,
-  },
-  email:{
     marginTop: dimens.paddingL,
   },
 });

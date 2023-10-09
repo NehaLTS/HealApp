@@ -1,21 +1,22 @@
 import Input from "common/Input";
 import SelectImage from "common/SelectImage";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
+import Text from "components/common/Text";
 import { UseUserContext } from "contexts/useUserContext";
-import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
-import { fontWeight } from "designToken/fontWeights";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import BasicInformationController from "../controllers/BasicInformationController";
 import { useTranslation } from "react-i18next";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import BasicInformationController from "../controllers/BasicInformationController";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { getTexts } from "libs/OneSkyHelper";
 
 const UserAddress = () => {
   const {isShowModal, setIsShowModal, addressRef, birthDateRef, idNumberRef } = BasicInformationController({});
   const { userData, setUserData } = UseUserContext();
+  const { languageCode } = useTranslationContext();
+  const { registration } = getTexts(languageCode);
   const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
   const { t } = useTranslation();
   return (
@@ -35,7 +36,7 @@ const UserAddress = () => {
         type={"telephoneNumber"}
         keyboardType="numeric"
         inputStyle={styles.inputDOB}
-        onBlur={() =>setUserData({ ...userData, date_of_birth: birthDateRef.current.value })}
+        onBlur={() => setUserData({ ...userData, date_of_birth: birthDateRef.current.value })}
         onChangeText={(value) => birthDateRef.current.value = value}
         ref={birthDateRef}
         value={userData.date_of_birth}
@@ -46,23 +47,22 @@ const UserAddress = () => {
         type={"telephoneNumber"}
         keyboardType="number-pad"
         inputStyle={styles.inputIdNumber}
-        onBlur={() =>setUserData({ ...userData, id_number: idNumberRef.current.value })}
+        onBlur={() => setUserData({ ...userData, id_number: idNumberRef.current.value })}
         onChangeText={(value) => idNumberRef.current.value = value}
         ref={idNumberRef}
         value={userData.id_number}
         inputValue={idNumberRef.current.value}
       />
-      <Text style={styles.text}>{t("find_doctor_text")}</Text>
+      <Text style={styles.text} title={registration.find_doctor_text} />
       <View style={styles.innerContainer}>
         <Text
           style={[
-            styles.profileText,
             !userData.profile_picture && {
               marginTop: getHeight(dimens.marginS),
             },
-          ]}>
-          {t("add_profile")}
-        </Text>
+          ]} 
+          title={registration.add_profile}
+          />
         <TouchableOpacity
           activeOpacity={userData.profile_picture ? 1 : 0.5}
           onPress={() => !userData.profile_picture && setIsShowModal(true)}
@@ -108,11 +108,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: getHeight(dimens.marginM),
-    marginTop: getHeight(dimens.marginM),
-  },
-  profileText: {
-    color: colors.black,
-    fontSize: getWidth(fontSize.textL),
+    marginTop: getHeight(dimens.marginS),
   },
   editProfile: {
     height: getHeight(dimens.imageS + dimens.marginS),
@@ -125,10 +121,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: fontSize.textM,
-    color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
-    fontWeight: fontWeight.light,
-    letterSpacing: getWidth(dimens.borderThin / dimens.borderBold),
+    letterSpacing: getWidth(0.5),
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

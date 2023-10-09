@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   logo: {
     width: getWidth(dimens.imageS),
     height: getHeight(dimens.imageS),
-    marginLeft: getWidth(dimens.sideMargin)
+    marginLeft: getWidth(dimens.sideMargin),
   },
   title: {
     fontSize: fontSize.headingL,

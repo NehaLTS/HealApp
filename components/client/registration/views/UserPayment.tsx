@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
@@ -10,6 +10,7 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import Input from "common/Input";
 import Loader from "components/common/Loader";
 import { UseUserContext } from "contexts/useUserContext";
+import Text from "components/common/Text";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPayment = () => {
@@ -24,17 +25,15 @@ const UserPayment = () => {
   return (
     <>
       <View style={styles.container}>
-        {!isGetCardDetails && !isLoading && (
+        {!isGetCardDetails && (
           <>
             <Image
               source={require("assets/icon/card.png")}
               style={styles.creditCard}
             />
-            <Text style={styles.profileText}>
-              {isLoading
+            <Text style={styles.profileText} title={!isLoading
                 ? registration.add_credit_card
-                : registration.check_credit_card}
-            </Text>
+                : registration.check_credit_card} />
           </>
         )}
       </View>
@@ -46,7 +45,7 @@ const UserPayment = () => {
                 source={require("assets/icon/masterCard.png")}
                 style={styles.googlePay}
               />
-              <Text style={styles.profileText}>Master-card</Text>
+              <Text style={styles.profileText} title="Master-card" />
               <View style={styles.cardIcons}>
                 <Image
                   source={require("assets/icon/edit.png")}
@@ -59,8 +58,8 @@ const UserPayment = () => {
               </View>
             </View>
             <View style={styles.cardDetailContainer}>
-              <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
-              <Text style={styles.cardDetail}>{registration.date_of_birth} 03/26</Text> 
+              <Text style={styles.cardDetail} title="**** **** ***** 1234" />
+              <Text style={styles.cardDetail} title={`${registration.expires} 03/26`} />
             </View>
           </>
         ) : (
@@ -70,9 +69,7 @@ const UserPayment = () => {
               keyboardType="numeric"
               type="creditCardNumber"
               inputStyle={styles.cardNumber}
-              onBlur={() =>
-                setUserData({ ...userData, credit_card_number: cardNumberRef.current.value })
-              }
+              onBlur={() => setUserData({ ...userData, credit_card_number: cardNumberRef.current.value })}
               onChangeText={(value) => cardNumberRef.current.value = value}
               ref={cardNumberRef}
               value={userData.credit_card_number}
@@ -81,9 +78,7 @@ const UserPayment = () => {
               <Input
                 placeholder={registration.mm_yy}
                 inputStyle={styles.expireDate}
-                onBlur={() =>
-                  setUserData({ ...userData, expire_date: expireDateRef.current.value })
-                }
+                onBlur={() => setUserData({ ...userData, expire_date: expireDateRef.current.value })}
                 onChangeText={(value) => expireDateRef.current.value = value}
                 ref={expireDateRef}
                 value={userData.expire_date}
@@ -101,9 +96,7 @@ const UserPayment = () => {
           </>
         )
       ) : (
-        <View style={styles.loader}>
-          <Loader />
-        </View>
+        <View style={styles.loader}><Loader /></View>
       )}
       {!isLoading && (
         <>
@@ -113,9 +106,7 @@ const UserPayment = () => {
               source={require("assets/icon/googlePay.png")}
               style={styles.googlePay}
             />
-            <Text style={styles.profileText}>
-              {registration.add_google_pay}
-            </Text>
+            <Text style={styles.profileText} title={registration.add_google_pay} />
           </TouchableOpacity>
         </>
       )}
@@ -130,6 +121,7 @@ const styles = StyleSheet.create({
     height: getWidth(dimens.borderThin),
     backgroundColor: colors.grey,
     marginTop: getHeight(dimens.marginS),
+    marginBottom: getHeight(dimens.paddingXs),
   },
   googlePay: {
     height: getHeight(dimens.paddingL + dimens.borderBold),
@@ -179,9 +171,10 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontSize: getWidth(fontSize.textL),
     fontWeight: fontWeight.light,
+    letterSpacing: getWidth(0.5)
   },
   cardNumber: {
-    marginVertical: getHeight(dimens.sideMargin),
+    marginVertical: getHeight(dimens.sideMargin + dimens.borderBold),
   },
   inputDateAndCvv: {
     marginBottom: getHeight(dimens.paddingL),

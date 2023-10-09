@@ -2,30 +2,29 @@ import { useNavigation } from "@react-navigation/native";
 import Button from "common/Button";
 import Stepper from "common/Stepper";
 import Header from "components/common/Header";
+import Text from "components/common/Text";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { getTexts } from "libs/OneSkyHelper";
 import UserAddress from "./UserAddress";
 import UserDetail from "./UserDetail";
 import UserPayment from "./UserPayment";
-import { useTranslation } from "react-i18next";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
-  const { t } = useTranslation();
+  const {t} = useTranslation()
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header title="Registration" />,
+      header: () => <Header title={t('registration')} />,
     });
   }, [navigation]);
   const isLoadingCard = false; //TODO: need to change after binding data
@@ -53,12 +52,13 @@ const BasicInformation = () => {
         ]}>
         {!isLoadingCard && !isCardDetails ? (
           <>
-            <Button title={t("back")} isSmall onPress={onPressBack} />
+            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
               title={t("next")}
               isPrimary
               onPress={onPressNext}
               isSmall
+              width={'30%'}
             />
           </>
         ) : (
@@ -71,13 +71,9 @@ const BasicInformation = () => {
           />
         )}
       </View>
-      {currentStep[currentStep.length - 1] === 2 &&
-        !isLoadingCard &&
-        !isCardDetails && (
-          <Text style={styles.skipLaterText}>
-            {t("skip_for_later")}
-          </Text>
-        )}
+      {currentStep[currentStep.length - 1] === 2 && !isLoadingCard && !isCardDetails && (
+      <Text style={styles.skipLaterText} title={t('skip_for_later')} />
+      )}
     </View>
   );
 };
@@ -87,15 +83,15 @@ export default BasicInformation;
 const styles = StyleSheet.create({
   footerContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
     width: "100%",
-    flex: 0.1,
+    flex: 0.12
   },
   skipLaterText: {
-    color: colors.black,
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
-    flex: 0.1,
+    flex: 0.08,
+    alignSelf:'center'
   },
   inputContainer: {
     flex: 0.75,

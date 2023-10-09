@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 
-const AuthenticatorController = () => {
+const ClientAuthenticatorView = () => {
   const navigation = useNavigation();
   const [isSigninSelected, setIsSigninSelected] = useState(true);
   
@@ -22,4 +22,4 @@ const AuthenticatorController = () => {
   };
 };
 
-export default AuthenticatorController;
+export default ClientAuthenticatorView;

@@ -150,9 +150,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showImage: {
-    width: getWidth(dimens.marginM),
+    width: getWidth(dimens.marginM+dimens.borderThin),
     height: getHeight(dimens.sideMargin),
-    marginRight: getHeight(dimens.marginS),
+    marginRight: getHeight(dimens.sideMargin),
     resizeMode: 'contain',
   },
   errorMessage: {

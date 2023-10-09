@@ -1,5 +1,6 @@
 import { colors } from "designToken/colors";
-import { getWidth } from "libs/StyleHelper";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { Text as RNText, StyleProp, StyleSheet, TextStyle } from "react-native";
 
@@ -13,5 +14,6 @@ const styles = StyleSheet.create({
   text: {
     color: colors.black,
     letterSpacing: getWidth(1),
+    fontSize: getHeight(fontSize.textL)
   },
 });
