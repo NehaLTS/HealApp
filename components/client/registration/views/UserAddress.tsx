@@ -1,21 +1,26 @@
+import Input from "common/Input";
+import SelectImage from "common/SelectImage";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { UseUserContext } from "contexts/useUserContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { colors } from "../../../../designToken/colors";
-import { dimens } from "../../../../designToken/dimens";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Input from "../../../common/Input";
-import SelectImage from "../../../common/SelectImage";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { fontWeight } from "../../../../designToken/fontWeights";
 
 const UserAddress = () => {
   const { languageCode } = useTranslationContext();
-  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
-    BasicInformationController({});
+  const {isShowModal, setIsShowModal } = BasicInformationController({});
   const { registration } = getTexts(languageCode);
+  const addressRef = React.useRef<any>("");
+  const dobRef = React.useRef<any>("");
+  const idNumberRef = React.useRef<any>("");
+  const { userData, setUserData } = UseUserContext();
+  const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
 
   const [address, setAddress] = useState("");
   const [idNumber, setIdNumber] = useState("");
@@ -71,16 +76,22 @@ const UserAddress = () => {
         onChangeText={(text) => setAddress(text)}
         errorMessage={addressError}
         inputStyle={styles.input}
-        onBlur={validateAddress}
-      />
+        onBlur={() => setUserData({ ...userData, address: addressRef.current.value })}
+        onChangeText={(value) => {
+          addressRef.current.value = value;
+        } }
+        ref={addressRef}
+        value={userData.address} inputValue={""}      />
       <Input
         placeholder={registration.date_of_birth}
         value={dateOfBirth}
         onChangeText={(text) => setDateOfBirth(text)}
         errorMessage={dateOfBirthError}
         inputStyle={styles.inputDOB}
-        onBlur={validateDateOfBirth}
-      />
+        onBlur={() => setUserData({ ...userData, date_of_birth: dobRef.current.value })}
+        onChangeText={(value) => dobRef.current.value = value}
+        ref={dobRef}
+        value={userData.date_of_birth} inputValue={""}      />
       <Input
         placeholder={registration.id_number}
         value={idNumber}
@@ -88,35 +99,53 @@ const UserAddress = () => {
         errorMessage={idNumberError}
         keyboardType="number-pad"
         inputStyle={styles.inputIdNumber}
-        onBlur={validateIdNumber}
-      />
+        onBlur={() => setUserData({ ...userData, id_number: idNumberRef.current.value })}
+        onChangeText={(value) => idNumberRef.current.value = value}
+        ref={idNumberRef}
+        value={userData.id_number} inputValue={""}      />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
-        <Text style={[styles.profileText, selectedImage === "" && { marginTop: getHeight(dimens.marginS) }]}>{registration.add_profile}</Text>
+        <Text
+          style={[
+            styles.profileText,
+            !userData.profile_picture && {
+              marginTop: getHeight(dimens.marginS),
+            },
+          ]}>
+          {registration.add_profile}
+        </Text>
         <TouchableOpacity
-          activeOpacity={selectedImage ? 1 : 0.5}
-          onPress={() => !selectedImage && setIsShowModal(true)}
-          style={styles.imageContainer}
-        >
+          activeOpacity={userData.profile_picture ? 1 : 0.5}
+          onPress={() => !userData.profile_picture && setIsShowModal(true)}
+          style={styles.imageContainer}>
           <Image
             source={
-              selectedImage
-                ? { uri: selectedImage }
-                : require("../../../../assets/icon/editprofile.png")
+              userData.profile_picture
+                ? { uri: userData.profile_picture }
+                : require("assets/icon/editprofile.png")
             }
-            style={selectedImage ? styles.selectedImage : styles.editProfile}
+            style={
+              userData.profile_picture
+                ? styles.selectedImage
+                : styles.editProfile
+            }
           />
-          {selectedImage && (
+        </TouchableOpacity>
+        {userData.profile_picture && (
+          <TouchableOpacity
+            activeOpacity={userData.profile_picture ? 1 : 0.5}
+            onPress={() => setIsShowModal(true)}
+            style={styles.imageContainer}>
             <Image
-              source={require("../../../../assets/icon/edit.png")}
+              source={require("assets/icon/edit.png")}
               style={styles.editImage}
             />
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
-          imageUri={setSelectedImage}
+          imageUri={getImageUrl}
         />
       </View>
     </>
@@ -132,7 +161,7 @@ const styles = StyleSheet.create({
   },
   profileText: {
     color: colors.black,
-    fontSize: getWidth(fontSize.textL)
+    fontSize: getWidth(fontSize.textL),
   },
   editProfile: {
     height: getHeight(dimens.imageS + dimens.marginS),
@@ -148,7 +177,11 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     fontWeight: fontWeight.light,
+<<<<<<< HEAD
     letterSpacing: getWidth(dimens.borderThin / dimens.borderBold)
+=======
+    letterSpacing: getWidth(dimens.borderThin / dimens.borderBold),
+>>>>>>> f62bfbedb5237233021cff5437f064e4d99a3884
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

@@ -1,49 +1,89 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { colors } from "../../../../designToken/colors";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { getWidth } from "../../../../libs/StyleHelper";
-import Button from "../../../common/Button";
-import Tabs from "../../../common/Tabs";
+import { colors } from "designToken/colors";
+import { fontSize } from "designToken/fontSizes";
+import { getWidth } from "libs/StyleHelper";
+import Button from "common/Button";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { getTexts } from "../../../../libs/OneSkyHelper";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { getTexts } from "libs/OneSkyHelper";
 import UserDetail from "./UserDetail";
 import UserAddress from "./UserAddress";
 import UserPayment from "./UserPayment";
+import Stepper from "common/Stepper";
+import { UserContext, UserType } from "contexts/useUserContext";
+import { useNavigation } from "@react-navigation/native";
+import Header from "components/common/Header";
+import { dimens } from "designToken/dimens";
 
+//TODO: static strings are changed after setup i18
 const BasicInformation = () => {
+  const navigation = useNavigation();
+  // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
-  const { registration } = getTexts(languageCode);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => <Header title="Registration" />,
+    });
+  }, [navigation]);
+  const { registration, common } = getTexts(languageCode);
+  const isLoadingCard = false; //TODO: need to change after binding data
+  const isCardDetails = false; //TODO: need to change after binding data
+
 
   return (
-    <>
-      <Tabs currentStep={currentStep} totalStep={3} />
+    // <UserContext.Provider value={{ userData, setUserData }}>
+    <View style={styles.container}>
+      <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {currentStep === 0 ? ( 
+        {currentStep[currentStep.length - 1] === 0 ? (
           <UserDetail />
-        ) : currentStep === 1 ? (
+        ) : currentStep[currentStep.length - 1] === 1 ? (
           <UserAddress />
         ) : (
           <UserPayment />
         )}
       </View>
-      <View style={styles.footerContainer}>
-        <Button title={registration.back} isSmall onPress={onPressBack} />
-        <Button
-          title={registration.next}
-          isPrimary
-          isSmall
-          onPress={onPressNext}
-        />
+      <View
+        style={[
+          styles.footerContainer,
+          {
+            justifyContent:
+              isLoadingCard || isCardDetails ? "center" : "space-between",
+          },
+        ]}>
+        {!isLoadingCard && !isCardDetails ? (
+          <>
+            <Button title={registration.back} isSmall onPress={onPressBack} />
+            <Button
+              title={registration.next}
+              isPrimary
+              onPress={onPressNext}
+              isSmall
+            />
+          </>
+        ) : (
+          <Button
+            title={
+              isLoadingCard ? common.cancel : registration.start_using_heal
+            }
+            isPrimary
+            isSmall
+          />
+        )}
       </View>
-      {currentStep === 2 && (
-        <Text style={styles.skipLaterText}>{registration.skip_for_later}</Text>
-      )}
-    </>
+      {currentStep[currentStep.length - 1] === 2 &&
+        !isLoadingCard &&
+        !isCardDetails && (
+          <Text style={styles.skipLaterText}>
+            {registration.skip_for_later}
+          </Text>
+        )}
+    </View>
+    // </UserContext.Provider>
   );
 };
 
@@ -53,7 +93,6 @@ const styles = StyleSheet.create({
   footerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     width: "100%",
     flex: 0.1,
   },
@@ -65,5 +104,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 0.75,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: getWidth(dimens.marginM),
   },
 });

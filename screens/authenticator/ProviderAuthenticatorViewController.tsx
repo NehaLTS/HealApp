@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AuthenticatorController = () => {
+const ProviderAuthenticatorViewController = () => {
   const [isSigninSelected, setIsSigninSelected] = useState(true);
   const loginRegisterToggle = () => setIsSigninSelected(!isSigninSelected);
   return {
@@ -9,4 +9,4 @@ const AuthenticatorController = () => {
   };
 };
 
-export default AuthenticatorController;
+export default ProviderAuthenticatorViewController;

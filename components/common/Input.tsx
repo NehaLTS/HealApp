@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+
+import React, { forwardRef, useRef, useState } from "react";
 import {
   Animated,
   DimensionValue,
@@ -12,39 +13,40 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { fontSize } from "../../designToken/fontSizes";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
 
-const Input = ({
+const Input = forwardRef(({
   placeholder,
   type,
   inputStyle,
   errorMessage,
   containerWidth,
+  inputValue,
   ...props
 }: {
   placeholder: string;
   type?:
-    | 'creditCardNumber'
-    | 'emailAddress'
-    | 'fullStreetAddress'
-    | 'name'
-    | 'nameSuffix'
-    | 'telephoneNumber'
-    | 'password';
+  | 'creditCardNumber'
+  | 'emailAddress'
+  | 'fullStreetAddress'
+  | 'name'
+  | 'nameSuffix'
+  | 'telephoneNumber'
+  | 'password';
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
-} & TextInputProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const onShowPassword = () => setShowPassword(!showPassword);
-  const moveText = useRef(new Animated.Value(props.value ? 1 : 0)).current;
+  inputValue: string 
+} & TextInputProps, ref) => {
+  const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
+  const moveText = useRef(new Animated.Value(0)).current;
   const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
 
   const onFocusHandler = () => moveTextTop();
-  const onBlurHandler = () => moveTextBottom();
+  const onBlurHandler = () => moveTextBottom()
 
   const moveTextTop = () => {
     Animated.parallel([
@@ -62,6 +64,7 @@ const Input = ({
   };
 
   const moveTextBottom = () => {
+    if (inputValue === '' ){
     Animated.parallel([
       Animated.timing(moveText, {
         toValue: 0,
@@ -73,7 +76,7 @@ const Input = ({
         duration: 200,
         useNativeDriver: false,
       }),
-    ]).start();
+    ]).start()};
   };
 
   const translateY = moveText.interpolate({
@@ -90,23 +93,9 @@ const Input = ({
   };
 
   const fontSizeStyle = { fontSize: fontSizeAnim };
-
-  useEffect(() => {
-    if (props.value === undefined || props.value === "") {
-      moveTextBottom();
-    }
-  }, [props.value]);
-
   return (
     <View>
-      <View
-        style={[
-          styles.inputContainer,
-          inputStyle,
-          { width: containerWidth ?? "auto" },
-          errorMessage ? { borderColor: 'red' } : null,
-        ]}
-      >
+      <View style={[styles.inputContainer, inputStyle ,{ borderColor: errorMessage? colors.invalid : colors.primary }]}>
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
@@ -117,18 +106,18 @@ const Input = ({
           secureTextEntry={showPassword}
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
-          blurOnSubmit
+          ref={ref as React.LegacyRef<TextInput>}
           {...props}
         />
         {type === "password" && (
-          <TouchableOpacity onPress={onShowPassword}>
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
-              source={require("../../assets/icon/eyeIcon.png")}
+              source={ errorMessage ? require("../../assets/icon/error.png") :require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
             />
           </TouchableOpacity>
         )}
-          {errorMessage && (
+          {errorMessage && type !== "password" && (
           <TouchableOpacity >
             <Image
               source={require("../../assets/icon/error.png")}
@@ -137,31 +126,34 @@ const Input = ({
           </TouchableOpacity>
         )}
       </View>
-      {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
+      {errorMessage && (
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
+      )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
     borderWidth: getWidth(dimens.borderBold),
-    borderColor: colors.primary,
     borderRadius: getWidth(dimens.marginS),
     flexDirection: "row",
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
+    minWidth: '20%'
   },
   input: {
     fontSize: fontSize.textL,
-    padding: getHeight(dimens.paddingXs),
+    marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
   },
   showImage: {
-    width: getWidth(dimens.paddingL),
+    width: getWidth(dimens.marginM),
     height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.marginS),
+    resizeMode: 'contain',
   },
   errorMessage: {
     color: colors.invalid,
@@ -169,8 +161,8 @@ const styles = StyleSheet.create({
   },
   label: {
     position: "absolute",
-    top: getHeight(dimens.marginS),
-    left: getHeight(dimens.paddingXs + dimens.borderBold),
+    top: getHeight(dimens.marginS + 1),
+    left: getHeight(dimens.paddingXs + dimens.borderThin),
     backgroundColor: colors.offWhite,
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
