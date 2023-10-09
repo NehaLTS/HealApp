@@ -5,21 +5,22 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import Input from "common/Input";
 import Loader from "components/common/Loader";
 import { UseUserContext } from "contexts/useUserContext";
-import { useTranslation } from "react-i18next";
 
+//TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPayment = () => {
+  const { languageCode } = useTranslationContext();
+  const { registration } = getTexts(languageCode);
   const isLoading = false; //TODO: need to change after binding data
   const isGetCardDetails = false; //TODO: need to change after binding data
   const cardNumberRef = React.useRef<any>("");
   const expireDateRef = React.useRef<any>("");
   const cvvRef = React.useRef<any>("");
   const { userData, setUserData } = UseUserContext();
-  const {t} = useTranslation()
-
   return (
     <>
       <View style={styles.container}>
@@ -31,8 +32,8 @@ const UserPayment = () => {
             />
             <Text style={styles.profileText}>
               {isLoading
-                ? t("add_credit_card")
-                : t("check_credit_card")}
+                ? registration.add_credit_card
+                : registration.check_credit_card}
             </Text>
           </>
         )}
@@ -59,13 +60,13 @@ const UserPayment = () => {
             </View>
             <View style={styles.cardDetailContainer}>
               <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
-              <Text style={styles.cardDetail}>{t("date_of_birth")} 03/26</Text> 
+              <Text style={styles.cardDetail}>{registration.date_of_birth} 03/26</Text> 
             </View>
           </>
         ) : (
           <>
             <Input
-              placeholder={t("credit_card_number")}
+              placeholder={registration.credit_card_number}
               keyboardType="numeric"
               type="creditCardNumber"
               inputStyle={styles.cardNumber}
@@ -78,7 +79,7 @@ const UserPayment = () => {
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
-                placeholder={t("mm_yy")}
+                placeholder={registration.mm_yy}
                 inputStyle={styles.expireDate}
                 onBlur={() =>
                   setUserData({ ...userData, expire_date: expireDateRef.current.value })
@@ -88,7 +89,7 @@ const UserPayment = () => {
                 value={userData.expire_date}
               />
               <Input
-                placeholder={t("cvv")}
+                placeholder={registration.cvv}
                 onBlur={() =>
                   setUserData({ ...userData, cvv: cvvRef.current.value })
                 }
@@ -113,7 +114,7 @@ const UserPayment = () => {
               style={styles.googlePay}
             />
             <Text style={styles.profileText}>
-              {t("add_google_pay")}
+              {registration.add_google_pay}
             </Text>
           </TouchableOpacity>
         </>

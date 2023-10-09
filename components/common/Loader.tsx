@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
+import { useTranslationContext } from 'contexts/UseTranslationsContext';
 import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
+import { getTexts } from 'libs/OneSkyHelper';
 import { getWidth } from 'libs/StyleHelper';
-import { useTranslation } from "react-i18next";
 
 const LoaderText = () => {
-  const {t} = useTranslation();
+    const { languageCode } = useTranslationContext();
+    const { common } = getTexts(languageCode);
   return (
-    <Text style={styles.loaderText}>{t("loader")}</Text>
+    <Text style={styles.loaderText}>{common.loader}</Text>
   )
 }
 

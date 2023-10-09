@@ -1,10 +1,12 @@
 import Input from "common/Input";
 import SelectImage from "common/SelectImage";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { UseUserContext } from "contexts/useUserContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";

@@ -16,6 +16,7 @@ const IntroScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { continueAsClient, continueAsProvider } = IntroController();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,

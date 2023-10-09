@@ -9,6 +9,8 @@ import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { getTexts } from "libs/OneSkyHelper";
 import UserAddress from "./UserAddress";
 import UserDetail from "./UserDetail";
 import UserPayment from "./UserPayment";
@@ -18,7 +20,6 @@ import { useTranslation } from "react-i18next";
 const BasicInformation = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
@@ -27,7 +28,6 @@ const BasicInformation = () => {
       header: () => <Header title="Registration" />,
     });
   }, [navigation]);
-
   const isLoadingCard = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
