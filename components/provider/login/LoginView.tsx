@@ -14,9 +14,6 @@ import { useTranslation } from "react-i18next";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 
 const LoginView = ({isSigninSelected}) => {
-  const { languageCode } = useTranslationContext();
-  //TODO: Update according to new translation ie i18Next, once done.
-  const { signIn } = getTexts(languageCode);
   const { onPressLoginButton } = LoginViewController();
   //TODO Use useRef
   const [email, setEmail] = useState<string>("");

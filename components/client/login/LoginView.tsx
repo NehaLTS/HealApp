@@ -11,6 +11,7 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const LoginView = ({isSigninSelected}) => {
   const { languageCode } = useTranslationContext();
