@@ -1,22 +1,18 @@
-import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import LoginViewController from "LoginViewController";
+import Button from "common/Button";
+import Input from "common/Input";
+import TextButton from "components/common/TextButton";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import Button from "common/Button";
-import Input from "common/Input";
-import LoginViewController from "LoginViewController";
-import TextButton from "components/common/TextButton";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const LoginView = ({isSigninSelected}) => {
-  const { languageCode } = useTranslationContext();
-  //TODO: Update according to new translation ie i18Next, once done.
-  const { signIn } = getTexts(languageCode);
+const LoginView = ({isSigninSelected}:{isSigninSelected: boolean}) => {
+  const {t} = useTranslation()
   const { onPressLoginButton } = LoginViewController();
   //TODO Use useRef
   const [email, setEmail] = useState<string>("");
@@ -60,7 +56,7 @@ const LoginView = ({isSigninSelected}) => {
     return emailPattern.test(email);
   };
 
-  const {t} = useTranslation()
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -68,13 +64,11 @@ const LoginView = ({isSigninSelected}) => {
           placeholder={t("email")}
           value={email}
           errorMessage={emailError}
-          inputStyle={styles.email}
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
         />
-      
         <Input
           placeholder={t("password")}
           type="password"
@@ -109,7 +103,7 @@ const LoginView = ({isSigninSelected}) => {
 export default LoginView;
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.7,
+    flex: 0.7
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -119,12 +113,13 @@ const styles = StyleSheet.create({
   forgotPassword: {
     textAlign: "center",
     paddingVertical: getHeight(dimens.paddingS),
+    letterSpacing:getWidth(0.5)
   },
   footerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flex: 0.2,
+    flex: 0.18,
   },
   signInVia: {
     color: colors.black,
@@ -137,10 +132,7 @@ const styles = StyleSheet.create({
   },
   password: {
     marginTop: dimens.paddingL,
-  },
-  email:{
-    marginTop: dimens.paddingL,
-  },
+  }
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer

@@ -47,6 +47,6 @@ export default TextButton;
 const styles = StyleSheet.create({
   text: {
     color: colors.black,
-    letterSpacing: getWidth(0.5)
+    letterSpacing: getWidth(1)
   },
 });

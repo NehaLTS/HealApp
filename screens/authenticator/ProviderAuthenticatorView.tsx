@@ -16,7 +16,6 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import AuthenticatorController from "./AuthenticatorController";
 
 const ProviderAuthenticatorView = () => {
-const { languageCode } = useTranslationContext();
   const navigation = useNavigation();
   const route = useRoute();
   const { t } = useTranslation();

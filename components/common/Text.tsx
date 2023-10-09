@@ -12,6 +12,6 @@ export default Text;
 const styles = StyleSheet.create({
   text: {
     color: colors.black,
-    letterSpacing: getWidth(1.5),
+    letterSpacing: getWidth(1),
   },
 });

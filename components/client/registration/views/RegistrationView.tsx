@@ -1,13 +1,11 @@
 import Button from "common/Button";
 import Input from "common/Input";
 import TextButton from "components/common/TextButton";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
 import { t } from "i18next";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -15,9 +13,8 @@ import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 
 const RegistrationView = () => {
-  const { languageCode } = useTranslationContext();
-  const { signIn } = getTexts(languageCode);
   const { onPressSignUp } = RegistrationViewController();
+    //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState('');
@@ -66,13 +63,11 @@ const RegistrationView = () => {
           placeholder={t("email")}
           value={email}
           errorMessage={emailError}
-          inputStyle={styles.email}
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
         />
-      
         <Input
           placeholder={t("password")}
           type="password"
@@ -124,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flex: 0.2,
+    flex: 0.18,
   },
   signInVia: {
     color: colors.black,
@@ -136,9 +131,6 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.paddingL),
   },
   password: {
-    marginTop: dimens.paddingL,
-  },
-  email:{
     marginTop: dimens.paddingL,
   },
   errorText: {
