@@ -11,9 +11,9 @@ import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
-import UserAddress from "./UserAddress";
-import UserDetail from "./UserDetail";
-import UserPayment from "./UserPayment";
+import UserAddressView from "./UserAddressView";
+import UserDetailView from "./UserDetailView";
+import UserPaymentView from "./UserPaymentView";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
@@ -27,30 +27,22 @@ const BasicInformation = () => {
       header: () => <Header title={t('registration')} />,
     });
   }, [navigation]);
-  const isLoadingCard = false; //TODO: need to change after binding data
+  const isCurrentStep = currentStep[currentStep.length - 1]
+  const isLoading = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
   return (
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {currentStep[currentStep.length - 1] === 0 ? (
-          <UserDetail />
-        ) : currentStep[currentStep.length - 1] === 1 ? (
-          <UserAddress />
-        ) : (
-          <UserPayment />
-        )}
+        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView />}
       </View>
       <View
         style={[
           styles.footerContainer,
-          {
-            justifyContent:
-              isLoadingCard || isCardDetails ? "center" : "space-between",
-          },
+          {justifyContent: isLoading || isCardDetails ? "center" : "space-between"}
         ]}>
-        {!isLoadingCard && !isCardDetails ? (
+        {!isLoading && !isCardDetails ? (
           <>
             <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
@@ -63,16 +55,14 @@ const BasicInformation = () => {
           </>
         ) : (
           <Button
-            title={
-              isLoadingCard ? t("cancel") : t("start_using_heal")
-            }
+            title={isLoading ? t("cancel") : t("start_using_heal")}
             isPrimary
             isSmall
           />
         )}
       </View>
-      {currentStep[currentStep.length - 1] === 2 && !isLoadingCard && !isCardDetails && (
-      <Text style={styles.skipLaterText} title={t('skip_for_later')} />
+      {currentStep[currentStep.length - 1] === 2 && !isLoading && !isCardDetails && (
+         <Text style={styles.skipLaterText} title={t('skip_for_later')} />
       )}
     </View>
   );

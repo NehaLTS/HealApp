@@ -32,7 +32,9 @@
         "skip":"Skip",
         "provider_login":"Provider Login",
         "provider_sign_up":"Provider Sign Up",
-        "switch_to_client":"Switch to Client"
+        "switch_to_client":"Switch to Client",
+        "add_profile": "Add a profile photo",
+        "find_doctor_text": "*It will help us to find a best doctor for you"
 
 
 }
