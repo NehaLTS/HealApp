@@ -1,10 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
 import { UseUserContext } from 'contexts/useUserContext';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const UserAddressViewController = () => {
-    const navigation = useNavigation();
     const [isShowModal, setIsShowModal] = useState(false);
     const { userData, setUserData } = UseUserContext()
     const addressRef = React.useRef<any>("");
@@ -18,7 +15,6 @@ const UserAddressViewController = () => {
     const onChangeAddress = (value:string) => addressRef.current.value = value
     const onChangeBirthDate = (value:string) => birthDateRef.current.value = value
     const onChangeIdNumber = (value:string) => idNumberRef.current.value = value
-    
 
     const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
 

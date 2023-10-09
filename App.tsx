@@ -8,7 +8,6 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { UserContext, UseUserContext } from "contexts/useUserContext";
 import React, { lazy } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TranslationContext } from "./contexts/UseTranslationsContext";
@@ -19,14 +18,13 @@ const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>("en");
-  const { userData, setUserData } = UseUserContext()
+
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId: "843919956986-js10nj0llot1b7r4ileqhkurco4tqo75.apps.googleusercontent.com",
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <UserContext.Provider value={{ userData, setUserData }}>
         <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
           <NavigationContainer >
             <Stack.Navigator initialRouteName={NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
@@ -52,7 +50,6 @@ const App = () => {
             </Stack.Navigator>
           </NavigationContainer>
         </TranslationContext.Provider>
-      </UserContext.Provider>
     </QueryClientProvider>
   );
 };

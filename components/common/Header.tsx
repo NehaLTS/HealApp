@@ -73,9 +73,10 @@ const styles = StyleSheet.create({
   },
   languageContainer: {
     position: "absolute",
-    width: getWidth(125), //TODO: should define sizes for every Width
-    height: getHeight(140), //TODO: should define sizes for every Height
-    padding: getHeight(dimens.marginS),
+    width: getWidth(120), //TODO: should define sizes for every Width
+    height: getWidth(142), //TODO: should define sizes for every Height
+    padding: getWidth(dimens.marginS),
+    maxWidth: getWidth(120),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.primary,
     zIndex: 1,

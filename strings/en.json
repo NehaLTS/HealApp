@@ -8,7 +8,7 @@
         "email": "E-mail*",
         "password": "Password*",
         "forgot_password": "Forgot password?",
-        "or_sign_in_via": "Or signIn in via",
+        "or_sign_in_via": "Or sign in via",
         "guest_entrance": "Guest Entrance",
         "switch_to_provider": "Switch to Provider",
         "registration": "Registration",

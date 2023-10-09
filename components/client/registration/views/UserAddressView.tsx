@@ -26,6 +26,7 @@ const UserAddressView = () => {
     onChangeIdNumber,
     getImageUrl
   } = UserAddressViewController();
+  console.log('first',userData )
 
   return (
     <>
