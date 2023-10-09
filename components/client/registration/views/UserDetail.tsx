@@ -9,37 +9,37 @@ import { getTexts } from "libs/OneSkyHelper";
 import { getHeight } from "libs/StyleHelper";
 import React from "react";
 import { StyleSheet, Text } from "react-native";
+import BasicInformationController from "../controllers/BasicInformationController";
 
 const UserDetail = () => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
-  const firstNameRef = React.useRef<any>("");
-  const lastNameRef = React.useRef<any>("");
-  const phoneNumberRef = React.useRef<any>("");
   const { userData, setUserData } = UseUserContext();
-  
+  const { firstNameRef, lastNameRef, phoneNumberRef } = BasicInformationController({});
+  // const firstNameRef = React.useRef<any>("");
+  // const lastNameRef = React.useRef<any>("");
+  // const phoneNumberRef = React.useRef<any>("");
+
   return (
     <>
       <Input
         placeholder={registration.first_name}
         inputStyle={styles.input}
-        onBlur={() =>
-          setUserData({ ...userData, firstname: firstNameRef.current.value })
-        }
+        onBlur={() => setUserData({ ...userData, firstname: firstNameRef.current.value })}
         onChangeText={(value) => firstNameRef.current.value = value}
         ref={firstNameRef}
-        value={userData.firstname}
-      />
+        value={userData.firstname} 
+        inputValue={userData?.firstname ??''}      
+        />
       <Input
         placeholder={registration.last_name}
         type={"nameSuffix"}
         inputStyle={styles.inputLastName}
         onChangeText={(value) => lastNameRef.current.value = value}
-        onBlur={() =>
-          setUserData({ ...userData, lastname: lastNameRef.current.value })
-        }
+        onBlur={() => setUserData({ ...userData, lastname: lastNameRef.current.value })}
         value={userData.lastname}
         ref={lastNameRef}
+        inputValue={userData?.lastname ??''}
       />
       <Input
         placeholder={registration.phone_number}
@@ -48,13 +48,9 @@ const UserDetail = () => {
         inputStyle={styles.inputPhone}
         onChangeText={(value) => phoneNumberRef.current.value = value}
         value={userData.phone_number}
-        onBlur={() =>
-          setUserData({
-            ...userData,
-            phone_number: phoneNumberRef.current.value,
-          })
-        }
+        onBlur={() => setUserData({...userData,phone_number: phoneNumberRef.current.value})}
         ref={phoneNumberRef}
+        inputValue={userData?.phone_number ??''}
       />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
     </>

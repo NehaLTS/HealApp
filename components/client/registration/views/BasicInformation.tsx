@@ -1,25 +1,23 @@
+import { useNavigation } from "@react-navigation/native";
+import Button from "common/Button";
+import Stepper from "common/Stepper";
+import Header from "components/common/Header";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { getTexts } from "libs/OneSkyHelper";
+import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { colors } from "designToken/colors";
-import { fontSize } from "designToken/fontSizes";
-import { getWidth } from "libs/StyleHelper";
-import Button from "common/Button";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { getTexts } from "libs/OneSkyHelper";
-import UserDetail from "./UserDetail";
 import UserAddress from "./UserAddress";
+import UserDetail from "./UserDetail";
 import UserPayment from "./UserPayment";
-import Stepper from "common/Stepper";
-import { UserContext, UserType } from "contexts/useUserContext";
-import { useNavigation } from "@react-navigation/native";
-import Header from "components/common/Header";
-import { dimens } from "designToken/dimens";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
-  // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
@@ -29,13 +27,12 @@ const BasicInformation = () => {
       header: () => <Header title="Registration" />,
     });
   }, [navigation]);
+
   const { registration, common } = getTexts(languageCode);
   const isLoadingCard = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
-
   return (
-    // <UserContext.Provider value={{ userData, setUserData }}>
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
@@ -75,15 +72,10 @@ const BasicInformation = () => {
           />
         )}
       </View>
-      {currentStep[currentStep.length - 1] === 2 &&
-        !isLoadingCard &&
-        !isCardDetails && (
-          <Text style={styles.skipLaterText}>
-            {registration.skip_for_later}
-          </Text>
-        )}
+      {currentStep[currentStep.length - 1] === 2 && !isLoadingCard && !isCardDetails && (
+      <Text style={styles.skipLaterText}>{registration.skip_for_later}</Text>
+      )}
     </View>
-    // </UserContext.Provider>
   );
 };
 

@@ -14,11 +14,8 @@ import BasicInformationController from "../controllers/BasicInformationControlle
 
 const UserAddress = () => {
   const { languageCode } = useTranslationContext();
-  const {isShowModal, setIsShowModal } = BasicInformationController({});
+  const {isShowModal, setIsShowModal, addressRef, birthDateRef, idNumberRef } = BasicInformationController({});
   const { registration } = getTexts(languageCode);
-  const addressRef = React.useRef<any>("");
-  const dobRef = React.useRef<any>("");
-  const idNumberRef = React.useRef<any>("");
   const { userData, setUserData } = UseUserContext();
   const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
 
@@ -28,24 +25,22 @@ const UserAddress = () => {
         placeholder={registration.address}
         type={"fullStreetAddress"}
         inputStyle={styles.input}
-        onBlur={() =>
-          setUserData({ ...userData, address: addressRef.current.value })
-        }
-        onChangeText={(value) => {
-          addressRef.current.value = value;
-        }}
+        onBlur={() => setUserData({ ...userData, address: addressRef.current.value })}
+        onChangeText={(value) => addressRef.current.value = value}
         ref={addressRef}
         value={userData.address}
+        inputValue={addressRef.current.value}
       />
       <Input
         placeholder={registration.date_of_birth}
         type={"telephoneNumber"}
         keyboardType="numeric"
         inputStyle={styles.inputDOB}
-        onBlur={() =>setUserData({ ...userData, date_of_birth: dobRef.current.value })}
-        onChangeText={(value) => dobRef.current.value = value}
-        ref={dobRef}
+        onBlur={() =>setUserData({ ...userData, date_of_birth: birthDateRef.current.value })}
+        onChangeText={(value) => birthDateRef.current.value = value}
+        ref={birthDateRef}
         value={userData.date_of_birth}
+        inputValue={birthDateRef.current.value}
       />
       <Input
         placeholder={registration.id_number}
@@ -56,6 +51,7 @@ const UserAddress = () => {
         onChangeText={(value) => idNumberRef.current.value = value}
         ref={idNumberRef}
         value={userData.id_number}
+        inputValue={idNumberRef.current.value}
       />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
