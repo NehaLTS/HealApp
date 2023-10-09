@@ -30,8 +30,9 @@ const OnBoardingView = () => {
       </View>
       <Swiper
         ref={swiperRef}
-        autoplayDirection
         activeDotStyle={styles.activeDotStyle}
+        activeDotColor={colors.primary}
+        autoplayTimeout={10}
         containerStyle={styles.containerStyle}>
         {[...Array(3)].map((_, index) => (
           <Text key={index} style={styles.text}>

@@ -12,7 +12,7 @@ const ClientStackNavigator = () => {
         <Stack.Screen
           name={NavigationRoutes.ClientLogin}
           component={lazy(
-            () => import("../components/client/registration/views/BasicInformation")
+            () => import("../screens/authenticator/ClientAuthenticatorView")
           )}
         />
         <Stack.Screen

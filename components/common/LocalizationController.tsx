@@ -38,6 +38,7 @@ const LocalizationController = () => {
     continueAsClient,
     handleLanguageChange,
     continueAsProvider,
+    setIsLanguageChanged
   };
 };
 

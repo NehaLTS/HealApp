@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
+    zIndex:9
   },
   container: {
     position: "relative",
