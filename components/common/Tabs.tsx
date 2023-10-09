@@ -1,15 +1,16 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
 import { colors } from "../../designToken/colors";
-import { fontSize } from "../../designToken/fontSizes";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
 import { dimens } from "../../designToken/dimens";
+import { fontSize } from "../../designToken/fontSizes";
+import { getWidth, getHeight } from "../../libs/StyleHelper";
 
-const Tabs = ({ currentStep , totalStep }: { currentStep:any, totalStep: number }) => {
-  const step = Array(totalStep).fill(0);
+const Tabs = ({ tab,currentStep }: { tab: any, currentStep:any }) => {
+
+
   return (
     <View style={styles.container}>
-      {step?.map((_, index: number) => (
+      {tab?.map((item: { title: string }, index: number) => (
         <View
           key={index}
           style={[
@@ -20,7 +21,7 @@ const Tabs = ({ currentStep , totalStep }: { currentStep:any, totalStep: number 
             },
           ]}
         >
-          <Text style={styles.activeButtonText}>{index+1}</Text>
+          <Text style={styles.activeButtonText}>{item?.title}</Text>
         </View>
       ))}
     </View>
@@ -32,21 +33,19 @@ export default Tabs;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    columnGap: getHeight(dimens.sideMargin),
+    columnGap: getHeight(16),
     alignSelf:'center',
-    paddingVertical: getHeight(dimens.paddingXs),
-    flex:0.05,
-    alignItems:"center",
-    marginBottom:getHeight(dimens.paddingS)
+    paddingVertical: getHeight(10),
+    paddingBottom: getHeight(32)
   },
   activeButtonText: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getWidth(fontSize.textMd),
     color: colors.black,
   },
   activeButtonView: {
-    height: getHeight(dimens.marginL),
-    width: getWidth(dimens.marginL),
-    borderRadius: getWidth(dimens.paddingXs),
+    height: getHeight(30),
+    width: getWidth(30),
+    borderRadius: getWidth(dimens.marginSm),
     alignItems: "center",
     justifyContent: "center",
   },

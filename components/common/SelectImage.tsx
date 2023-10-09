@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Text, TouchableOpacity, View } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
-import { colors } from "../../designToken/colors";
-import { fontWeight } from "../../designToken/fontWeights";
-import { getHeight } from "../../libs/StyleHelper";
+import { colors } from "designToken/colors";
+import { fontWeight } from "designToken/fontWeights";
+import { getHeight } from "libs/StyleHelper";
 
 const SelectImage = ({
   imageUri,
@@ -18,7 +18,7 @@ const SelectImage = ({
   const [height, setHeight] = useState(250);
 
   const handleImagePicker = () => {
-    ImagePicker?.openPicker({
+    ImagePicker?.openPicker?.({
       width,
       height,
       cropping: true,
@@ -35,7 +35,7 @@ const SelectImage = ({
   };
 
   const handleCameraPicker = () => {
-    ImagePicker?.openCamera({
+    ImagePicker?.openCamera?.({
       width,
       height,
       cropping: true,

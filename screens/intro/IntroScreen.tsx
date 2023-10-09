@@ -1,18 +1,20 @@
 import React, { useLayoutEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import Button from "../../components/common/Button";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import logo from "../../assets/icon/logo.png";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import logo from "assets/icon/logo.png";
 import IntroController from "./IntroController";
-import { getTexts } from "../../libs/OneSkyHelper";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
 import Header from "../../components/common/Header";
 import { fontSize } from "../../designToken/fontSizes";
+import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslationContext } from "../../contexts/UseTranslationsContext";
+import { getTexts } from "../../libs/OneSkyHelper";
 
 const IntroScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const { continueAsClient, continueAsProvider } = IntroController();
   const { languageCode } = useTranslationContext();
@@ -22,21 +24,20 @@ const IntroScreen = () => {
       header: () => <Header isHideTitle />,
     });
   }, [navigation]);
-
   return (
     <>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
           <Image source={logo} style={styles.logo} />
         </View>
-        <Text style={styles.welcomeText}>{intro.welcome_heal}</Text>
+        <Text style={styles.welcomeText}>{t("welcome_heal")}</Text>
         <View style={styles.buttonContainer}>
           <Button
-            title={intro.continue_client}
+            title={t("continue_client")}
             isPrimary
             onPress={continueAsClient}
           />
-          <Button title={intro.continue_provider} onPress={continueAsProvider} />
+          <Button title={t("continue_provider")} onPress={continueAsProvider} />
         </View>
       </View>
     </>
@@ -55,8 +56,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logo: {
-  width: getWidth(dimens.imageL),
-  height: getHeight(dimens.imageL)
+    width: getWidth(dimens.imageL),
+    height: getHeight(dimens.imageL)
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingL),

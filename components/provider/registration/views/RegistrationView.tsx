@@ -1,3 +1,5 @@
+import { getSignInFooter } from "components/provider/login/LoginView";
+import { t } from "i18next";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
@@ -10,12 +12,11 @@ import { getHeight, getWidth } from "../../../../libs/StyleHelper";
 import Button from "../../../common/Button";
 import Input from "../../../common/Input";
 import LoginController from "../../login/LoginController";
-import { getSocialMediaLogin } from "../../login/LoginView";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onHandleLogin } = LoginController();
+  const { onPressLoginButton } = LoginController();
   //TODO: Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -24,12 +25,12 @@ const RegistrationView = () => {
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={signIn.email}
+          placeholder={t("email")}
           value={email}
           onChangeText={setEmail}
         />
         <Input
-          placeholder={signIn.password}
+          placeholder={t("password")}
           type="password"
           value={password}
           onChangeText={setPassword}
@@ -37,16 +38,16 @@ const RegistrationView = () => {
         />
         <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
         <Button
-          title={signIn.sign_up}
+          title={t("sign_up")}
           isPrimary
           isSmall
           style={styles.signUpButton}
-          onPress={() => onHandleLogin(email, password)}
+          onPress={() => onPressLoginButton(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-        {getSocialMediaLogin()}
+        <Text style={styles.signInVia}>{t('or_sign_in_via')}</Text>
+        {getSignInFooter()}
       </View>
     </>
   );
@@ -55,7 +56,7 @@ export default RegistrationView;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.8,
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -63,9 +64,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    color: colors.black,
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
+    paddingVertical: getHeight(dimens.paddingS),
   },
   footerContainer: {
     flexDirection: "row",
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
   password: {
     marginTop: dimens.paddingL,
   },
-});
+  });

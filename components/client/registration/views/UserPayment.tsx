@@ -1,29 +1,33 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { colors } from "../../../../designToken/colors";
-import { dimens } from "../../../../designToken/dimens";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { fontWeight } from "../../../../designToken/fontWeights";
-import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Input from "../../../common/Input";
-import LoaderText from "../../../common/LoaderText";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
+import Input from "common/Input";
+import Loader from "components/common/Loader";
+import { UseUserContext } from "contexts/useUserContext";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPayment = () => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const isLoading = false; //TODO: need to change after binding data
-  const isGetCardDetails = true; //TODO: need to change after binding data
-
+  const isGetCardDetails = false; //TODO: need to change after binding data
+  const cardNumberRef = React.useRef<any>("");
+  const expireDateRef = React.useRef<any>("");
+  const cvvRef = React.useRef<any>("");
+  const { userData, setUserData } = UseUserContext();
   return (
     <>
       <View style={styles.container}>
         {!isGetCardDetails && !isLoading && (
           <>
             <Image
-              source={require("../../../../assets/icon/card.png")}
+              source={require("assets/icon/card.png")}
               style={styles.creditCard}
             />
             <Text style={styles.profileText}>
@@ -39,24 +43,24 @@ const UserPayment = () => {
           <>
             <View style={styles.innerContainer}>
               <Image
-                source={require("../../../../assets/icon/masterCard.png")}
+                source={require("assets/icon/masterCard.png")}
                 style={styles.googlePay}
               />
               <Text style={styles.profileText}>Master-card</Text>
               <View style={styles.cardIcons}>
                 <Image
-                  source={require("../../../../assets/icon/edit.png")}
+                  source={require("assets/icon/edit.png")}
                   style={styles.cardImages}
                 />
                 <Image
-                  source={require("../../../../assets/icon/cancel.png")}
+                  source={require("assets/icon/cancel.png")}
                   style={styles.cardImages}
                 />
               </View>
             </View>
             <View style={styles.cardDetailContainer}>
               <Text style={styles.cardDetail}>**** **** ***** 1234</Text>
-              <Text style={styles.cardDetail}>{registration.expires} 03/26</Text> 
+              <Text style={styles.cardDetail}>{registration.date_of_birth} 03/26</Text> 
             </View>
           </>
         ) : (
@@ -66,22 +70,39 @@ const UserPayment = () => {
               keyboardType="numeric"
               type="creditCardNumber"
               inputStyle={styles.cardNumber}
+              onBlur={() =>
+                setUserData({ ...userData, credit_card_number: cardNumberRef.current.value })
+              }
+              onChangeText={(value) => cardNumberRef.current.value = value}
+              ref={cardNumberRef}
+              value={userData.credit_card_number}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
                 placeholder={registration.mm_yy}
-                containerWidth={getWidth(dimens.imageS + dimens.imageS)}
+                inputStyle={styles.expireDate}
+                onBlur={() =>
+                  setUserData({ ...userData, expire_date: expireDateRef.current.value })
+                }
+                onChangeText={(value) => expireDateRef.current.value = value}
+                ref={expireDateRef}
+                value={userData.expire_date}
               />
               <Input
                 placeholder={registration.cvv}
-                containerWidth={getWidth(dimens.imageXs + dimens.imageXs)}
+                onBlur={() =>
+                  setUserData({ ...userData, cvv: cvvRef.current.value })
+                }
+                onChangeText={(value) => cvvRef.current.value = value}
+                ref={cvvRef}
+                value={userData.cvv}
               />
             </View>
           </>
         )
       ) : (
         <View style={styles.loader}>
-          <LoaderText />
+          <Loader />
         </View>
       )}
       {!isLoading && (
@@ -89,7 +110,7 @@ const UserPayment = () => {
           <View style={styles.divider} />
           <TouchableOpacity style={styles.googlePayContainer}>
             <Image
-              source={require("../../../../assets/icon/googlePay.png")}
+              source={require("assets/icon/googlePay.png")}
               style={styles.googlePay}
             />
             <Text style={styles.profileText}>
@@ -176,7 +197,6 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: getHeight(dimens.paddingL),
     alignItems:'center',
-    
   },
   innerContainer: {
     flexDirection: "row",
@@ -193,5 +213,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: getHeight(dimens.marginM),
     marginBottom:getHeight(dimens.borderBold)
+  },
+  expireDate:{
+    minWidth:'30%'
   }
 });

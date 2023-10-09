@@ -1,25 +1,28 @@
+import Button from "common/Button";
+import Input from "common/Input";
+import TextButton from "components/common/TextButton";
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontSize } from "designToken/fontSizes";
+import { fontWeight } from "designToken/fontWeights";
+import { t } from "i18next";
+import { getTexts } from "libs/OneSkyHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useTranslationContext } from "../../../../contexts/UseTranslationsContext";
-import { colors } from "../../../../designToken/colors";
-import { dimens } from "../../../../designToken/dimens";
-import { fontSize } from "../../../../designToken/fontSizes";
-import { fontWeight } from "../../../../designToken/fontWeights";
-import { getTexts } from "../../../../libs/OneSkyHelper";
-import { getHeight, getWidth } from "../../../../libs/StyleHelper";
-import Button from "../../../common/Button";
-import Input from "../../../common/Input";
-import LoginController from "../../login/LoginController";
+import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import { getSocialMediaLogin } from "../../login/LoginView";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onHandleLogin } = LoginController();
-  const { email, setEmail, password, setPassword } = RegistrationViewController();
-  const [emailError, setEmailError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
+  const { onPressSignUp } = RegistrationViewController();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const validateEmail = () => {
     if (!email) {
@@ -27,7 +30,7 @@ const RegistrationView = () => {
     } else if (!isValidEmail(email)) {
       setEmailError("Invalid email address");
     } else {
-      setEmailError(null); // Clear the error if it's valid
+      setEmailError('');
     }
   };
 
@@ -39,29 +42,20 @@ const RegistrationView = () => {
   const validatePassword = () => {
     if (!password) {
       setPasswordError("Password is required");
-    } else if (password.length < 8) {
+    } else if (password.length < 5) {
       setPasswordError("Password must be at least 8 characters");
     } else if (!isValidPassword(password)) {
-      setPasswordError("Password must contain at least one uppercase letter, one digit, and one special character");
+      setPasswordError("Password must contain special characters");
     } else {
-      setPasswordError(null); // Clear the error if it's valid
+      setPasswordError('');
     }
   };
   
   const handleSignUp = () => {
-    setEmailError(null);
-    setPasswordError(null);
-
-    validateEmail();
-    validatePassword();
-
-    if (!emailError && !passwordError) {
-      // Perform registration logic here
-      onHandleLogin(email, password);
-    }
+    if (!emailError && !passwordError) onPressSignUp(email, password)
   };
 
-  const isValidEmail = (email) => {
+  const isValidEmail = (email: string) => {
     const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
     return emailPattern.test(email);
   };
@@ -70,27 +64,34 @@ const RegistrationView = () => {
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={signIn.email}
+          placeholder={t("email")}
           value={email}
           errorMessage={emailError}
           inputStyle={styles.email}
           onChangeText={setEmail}
           type="emailAddress"
-          onBlur={validateEmail} // Trigger validation on blur
+          inputValue={email}
+          onBlur={validateEmail}
         />
       
         <Input
-          placeholder={signIn.password}
+          placeholder={t("password")}
           type="password"
           value={password}
           errorMessage={passwordError}
           onChangeText={setPassword}
           inputStyle={styles.password}
-          onBlur={validatePassword} // Trigger validation on blur
+          inputValue={password}
+          onSubmitEditing={validatePassword}
         />
-        <Text style={styles.forgotPassword}>{signIn.forgot_password}</Text>
+        <TextButton
+          fontSize={getWidth(fontSize.textS)}
+          isActive
+          style={styles.forgotPassword}
+          title={t("forgot_password")}
+        />
         <Button
-          title={signIn.sign_up}
+          title={t("sign_up")}
           isPrimary
           isSmall
           style={styles.signUpButton}
@@ -98,8 +99,8 @@ const RegistrationView = () => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{signIn.or_sign_in_via}</Text>
-        {getSocialMediaLogin()}
+        <Text style={styles.signInVia}>{t('or_sign_in_via')}</Text>
+        {getSignInFooter()}
       </View>
     </>
   );
@@ -109,7 +110,7 @@ export default RegistrationView;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.8,
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -117,9 +118,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    color: colors.black,
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
+    paddingVertical: getHeight(dimens.paddingS),
   },
   footerContainer: {
     flexDirection: "row",

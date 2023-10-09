@@ -1,16 +1,17 @@
 import { sendRequest } from "../api/RequestHandler";
-import { POST } from "../constants/ApiConstants";
-import { GoogleLoginResponse, LoginResponse, RequestUnSuccessful } from "../types/AuthRespoonseType";
-import { GOOGLE_LOGIN_API, LOGIN_API } from "../utility/Utils";
-import { BodyInit } from "../api/ApiTypes";
+import { CREATE_SIGNUP, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API, LOGIN_API, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP } from "../constants/ApiConstants";
+import { UserType, UserTypeProvider } from "../types/UserType";
+
+import { BodyInit, HeadersInit } from "../api/ApiTypes";
+import { useApiContext } from "contexts/useApiContext";
 
 export const AuthServicesProvider = () => {
-
+    const { user } = useApiContext()
     /** To provide auth data to server */
     const onSubmitAuthRequest = (body: {
         email: string;
         password: string;
-    }): Promise<LoginResponse | RequestUnSuccessful> =>
+    }): Promise<UserType> =>
         sendRequest(LOGIN_API, {
             method: POST,
             body: body as unknown as BodyInit,
@@ -20,7 +21,7 @@ export const AuthServicesProvider = () => {
     const onSubmitGoogleAuthRequest = (body: {
         email: string;
         googleId: string;
-    }): Promise<GoogleLoginResponse> =>
+    }): Promise<any> =>
         sendRequest(GOOGLE_LOGIN_API, {
             method: POST,
             body: body as unknown as BodyInit,
@@ -30,14 +31,54 @@ export const AuthServicesProvider = () => {
     const onSubmitFBAuthRequest = (body: {
         email: string;
         facebookId: string;
-    }): Promise<GoogleLoginResponse> =>
-        sendRequest(GOOGLE_LOGIN_API, {
+    }): Promise<UserType> =>
+        sendRequest(FACEBOOK_LOGIN_API, {
+            method: POST,
+            body: body as unknown as BodyInit,
+        })
+
+    const onCreateSignUp = (body: {
+        email: string;
+        password: string;
+    }): Promise<UserType> =>
+        sendRequest(CREATE_SIGNUP, {
             method: POST,
             body: body as unknown as BodyInit,
         })
 
 
-    return { onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest }
+    const onUpdateUserProfile = (body: {                //client signup with user datawith whole data 
+        firstname: string,
+        lastname: string,
+        address: string,
+        city: string,
+        state: string,
+        country: string,
+        profile_picture: string,
+        date_of_birth: string,
+        phone_number: string,
+        client_id: string
+    }): Promise<any> =>
+        sendRequest(UPDATE_SIGNUP, {
+            method: POST,
+            body: body as unknown as BodyInit,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': user?.token
+            } as unknown as HeadersInit
+        })
+    const OnProviderSignIn = (body: {
+        email: string;
+        password: string;
+    }): Promise<UserTypeProvider> =>
+        sendRequest(PROVIDER_SIGNIN, {
+            method: POST,
+            body: body as unknown as BodyInit,
+        })
+    return {
+        onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest, onCreateSignUp, onUpdateUserProfile,
+        OnProviderSignIn
+    }
 }
 
 
