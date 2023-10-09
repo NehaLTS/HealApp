@@ -23,7 +23,6 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     emailError,
     passwordError,
   } = LoginViewController();
-  
   return (
     <>
       <View style={styles.inputContainer}>

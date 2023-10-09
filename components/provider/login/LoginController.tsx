@@ -1,12 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import { useApiContext } from "contexts/useApiContext";
-import { UseUserContextProvider } from "contexts/useUserContextProvider";
-import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
-import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
-import { setLocalData } from "libs/datastorage/useLocalStorage";
 import { useState } from "react";
+import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
+import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 import { Alert } from "react-native";
+import { useTranslation } from "react-i18next";
+import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
+import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
+import { UserType } from "libs/types/UserType";
+import { UseUserContextProvider } from "contexts/useUserContextProvider";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -14,55 +15,15 @@ const LoginViewController = () => {
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const { OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider } = AuthServicesProvider();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
-
-  const validateEmail = () => {
-    if (!email) {
-      setEmailError("Email is required");
-    } else if (!isValidEmail(email)) {
-      setEmailError("Invalid email address");
-    } else {
-      setEmailError('');
-    }
-  };
-
-  const isValidPassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
-
-  const validatePassword = () => {
-    if (!password) {
-      setPasswordError("Password is required");
-    } else if (password.length < 5) {
-      setPasswordError("Password must be at least 8 characters");
-    } else if (!isValidPassword(password)) {
-      setPasswordError("Password must contain special characters");
-    } else {
-      setPasswordError('');
-    }
-  };
-
-  const handleSignIn = () => {
-    if (!emailError && !passwordError) onPressLoginButton(email, password)
-  };
-
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
+  const { t, i18n } = useTranslation();
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
     navigation.navigate("HomeView")
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
-    console.log("yegfjusdfj", email, password)
     try {
       const res = await OnProviderSignIn({ email, password });
       setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
@@ -77,10 +38,20 @@ const LoginViewController = () => {
       console.error("Error during login:", error);
       Alert.alert("An error occurred during login.");
     }
-
   }
+  const handleLanguageChange = (lng: string) => {
+    i18n.changeLanguage(lng)
+    // setLocalData('USER', {  })
+    // setLocalData('USER', {  })
+    setLocalData('USER', {
+      ...getLocalData('USER')?.user,
+      user: {
+        language: lng
+      }
+    }) as unknown as UserType
+  };
   /** To handle Google login  button click*/
-  const onHandleGoogleLogin = () => {
+  const onPressGoogleButton = async () => {
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
@@ -102,11 +73,15 @@ const LoginViewController = () => {
     })
   }
   /** To handle Facebook login  button click*/
-  const onHandleFacebookLogin = () => {
+  const onPressFBButton = () => {
     /** To process Facebook login from firestore */
 
     onFBAuthProcessing().then(async (userData) => {
       try {
+        console.log("vhxjvchxbv", userData)
+        //TODO: under review with facebook 
+        // const email = "amanshar@gmail.com"
+        // const facebookId = "sharm@hmail.com"
         const email = userData?.user?.email
         const facebookId = userData?.user?.providerData[0]?.uid
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
@@ -125,9 +100,9 @@ const LoginViewController = () => {
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {
     switch (index) {
-      case 0: onHandleGoogleLogin()
+      case 0: onPressGoogleButton()
         break;
-      case 1: onHandleFacebookLogin()
+      case 1: onPressFBButton()
         break;
 
     }
@@ -136,18 +111,7 @@ const LoginViewController = () => {
     isLanguageChanged,
     onChangeLanguage,
     onPressLoginButton,
-    onHandleGoogleLogin,
-    onHandleFacebookLogin,
-    onSelectSocialAuth,
-    validateEmail,
-    setEmail,
-    setPassword,
-    handleSignIn,
-    validatePassword,
-    email,
-    password,
-    emailError,
-    passwordError,
+    onSelectSocialAuth
   };
 };
 
