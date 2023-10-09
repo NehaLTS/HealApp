@@ -7,10 +7,7 @@ import BasicInformationController from '../controllers/BasicInformationControlle
 import SelectImage from '../../../common/SelectImage';
 import { fontSize } from '../../../../designToken/fontSizes';
 import { colors } from '../../../../designToken/colors';
-import { Dropdown } from 'react-native-element-dropdown';
-
-// Import your custom Dropdown component
-// Replace with the correct path
+import { SelectList } from 'react-native-dropdown-select-list';
 
 const ProviderPayment = () => {
   const {
@@ -20,20 +17,17 @@ const ProviderPayment = () => {
     setIsShowModal,
   } = BasicInformationController({});
 
-  const [selectedBank, setSelectedBank] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState('');
 
-  const bankItems = [
-    { label: 'Bank 1', value: 'bank1' },
-    { label: 'Bank 2', value: 'bank2' },
-    { label: 'Bank 3', value: 'bank3' },
-  ];
-
-  const branchItems = [
-    { label: 'Branch 1', value: 'branch1' },
-    { label: 'Branch 2', value: 'branch2' },
-    { label: 'Branch 3', value: 'branch3' },
-  ];
+  const [selected, setSelected] = React.useState("");
+  const data = [
+    { key: '1', value: 'Mobiles', disabled: true },
+    { key: '2', value: 'Appliances' },
+    { key: '3', value: 'Cameras' },
+    { key: '4', value: 'Computers', disabled: true },
+    { key: '5', value: 'Vegetables' },
+    { key: '6', value: 'Diary Products' },
+    { key: '7', value: 'Drinks' },
+  ]
 
   return (
     <>
@@ -41,33 +35,41 @@ const ProviderPayment = () => {
         placeholder="Business registration number"
         keyboardType="numeric"
         type="creditCardNumber"
-        inputStyle={styles.cardNumber}
-      />
+        inputStyle={styles.cardNumber} inputValue={''} />
       <View style={[styles.container, styles.inputBankDetails]}>
-        <Dropdown
-          label="Select Bank"
-          data={bankItems}
-          value={selectedBank}
-          onChange={(value) => setSelectedBank(value)}
-      
-          containerStyle={styles.dropdownContainer} // Style for the dropdown container
-          labelStyle={styles.dropdownLabel} // Style for the label
-          dropdownStyle={styles.dropdownMenu} // Style for the dropdown menu
-          itemStyle={styles.dropdownItem} // Style for each dropdown item
+        <SelectList
+          setSelected={(val: React.SetStateAction<string>) => setSelected(val)}
+          data={data}
+          save="value"
+          placeholder='bank'
+          boxStyles={styles.box}
+          dropdownStyles={styles.dropdown}
         />
-       
+        <SelectList
+          setSelected={(val: React.SetStateAction<string>) => setSelected(val)}
+          data={data}
+          save="value"
+          placeholder='branch'
+          boxStyles={styles.box}
+          dropdownStyles={styles.dropdown}
+          inputStyles={styles.text}
+        />
+
       </View>
-      <Input
-        placeholder="Bank account"
-        keyboardType="numeric"
-        type="creditCardNumber"
-        inputStyle={styles.cardNumber}
+      <SelectList
+        setSelected={(val: React.SetStateAction<string>) => setSelected(val)}
+        data={data}
+        save="value"
+        boxStyles={styles.box}
+        dropdownStyles={styles.dropdown}
+        inputStyles={styles.text}
       />
       <View style={styles.iconContainer}>
         <Text style={styles.text}>Add a profile photo</Text>
         <TouchableOpacity
           activeOpacity={selectedImage ? 1 : 0.5}
           onPress={() => !selectedImage && setIsShowModal(true)}
+
         >
           <Image
             source={
@@ -75,7 +77,7 @@ const ProviderPayment = () => {
                 ? { uri: selectedImage }
                 : require("../../../../assets/icon/editprofile.png")
             }
-            style={selectedImage ? styles.selectedImage : styles.editImage}
+            style={styles.selectedImage}
           />
         </TouchableOpacity>
         <SelectImage
@@ -122,37 +124,15 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
   },
-  arrowImage: {
-    // Specify your arrow image style here
-    height: 20, // Adjust the height as needed
-    width: 20, // Adjust the width as needed
-  },
-  dropdownContainer: {
-    // Style for the dropdown container
-    flex: 0.7,
-    height: 40, // Adjust the height as needed
-  },
-  dropdown: {
-    // Style for the dropdown (if needed)
+  box: {
     borderWidth: getWidth(dimens.borderBold),
-    borderColor: colors.primary,
     borderRadius: getWidth(dimens.marginS),
     backgroundColor: colors.offWhite,
+    borderColor: colors.primary
   },
-  dropdownItem: {
-    // Style for each dropdown item (if needed)
-    justifyContent: 'flex-start',
-  },
-  dropdownLabel: {
-    // Style for the label (if needed)
-    fontSize: fontSize.textM,
-    color: colors.black,
-  },
-  dropdownMenu: {
-    // Style for the dropdown menu (if needed)
-    // borderWidth: getWidth(dimens.borderBold),
-    // borderColor: colors.primary,
-    // borderRadius: getWidth(dimens.marginS),
-    // backgroundColor: colors.offWhite,
-  },
+  dropdown: {
+    borderWidth: getWidth(dimens.borderBold),
+    borderRadius: getWidth(dimens.marginS),
+    backgroundColor: colors.offWhite,
+  }
 });

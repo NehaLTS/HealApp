@@ -49,7 +49,7 @@ const App = () => {
                 <Stack.Screen
                   name={'HomeView'}
                   component={lazy(
-                    () => import("./components/client/home/HomeView")
+                    () => import("./components/provider/registration/views/BasicInformation")
                   )}
                 />
               </Stack.Navigator>

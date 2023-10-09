@@ -16,47 +16,8 @@ const ProviderAddress = () => {
     BasicInformationController({});
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneNumberError, setPhoneNumberError] = useState("");
-  const [address, setAddress] = useState("");
-  const [addressError, setAddressError] = useState("");
-  const [licenseNumber, setLicenseNumber] = useState("");
-  const [licenseNumberError, setLicenseNumberError] = useState("");
 
 
-
-
-  const validateAddress = (text) => {
-    const regex = /^[A-Za-z0-9\s.,/-]+$/;
-
-    if (!regex.test(text)) {
-      setAddressError("Invalid address format");
-    } else {
-      setAddressError("");
-    }
-
-    setAddress(text);
-  };
-
-  const validatePhoneNumber = () => {
-
-    if (!phoneNumber.trim()) {
-      setPhoneNumberError("Phone number is required");
-    } else {
-      setPhoneNumberError("");
-    }
-  };
-  const validateLicenseNumber = (text) => {
-    const regex = /^\d+$/;
-
-    if (!regex.test(text)) {
-      setLicenseNumberError("Invalid license number format");
-    } else {
-      setLicenseNumberError("");
-    }
-
-    setLicenseNumber(text);
-  };
 
 
   return (
@@ -65,29 +26,17 @@ const ProviderAddress = () => {
         placeholder={registration.phone_number}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.inputPhone}
-        value={phoneNumber}
-        errorMessage={phoneNumberError}
-        onChangeText={(text) => setPhoneNumber(text)}
-        onBlur={validatePhoneNumber}
+        inputStyle={styles.inputPhone} inputValue={''}
       />
 
       <Input
         placeholder="License number (for those who have)"
         type={"nameSuffix"}
-        inputStyle={styles.inputLastName}
-        value={licenseNumber}
-        errorMessage={licenseNumberError}
-        onChangeText={(text) => validateLicenseNumber(text)}
-        onBlur={() => validateLicenseNumber(licenseNumber)}
+        inputStyle={styles.inputLastName} inputValue={''}
       />
       <Input
         placeholder={registration.address}
-        value={address}
-        onChangeText={(text) => setAddress(text)}
-        errorMessage={addressError}
-        inputStyle={styles.inputAddress}
-        onBlur={validateAddress}
+        inputStyle={styles.inputAddress} inputValue={''}
       />
 
       <View style={styles.iconContainer}>
@@ -103,7 +52,7 @@ const ProviderAddress = () => {
                 ? { uri: selectedImage }
                 : require("../../../../assets/icon/licencesIcon.png")
             }
-            style={selectedImage ? styles.selectedImage : styles.editImage}
+            style={ styles.selectedImage }
           />
         </TouchableOpacity>
         <SelectImage

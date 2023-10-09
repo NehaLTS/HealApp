@@ -10,102 +10,57 @@ import { useTranslationContext } from '../../../../contexts/UseTranslationsConte
 import { getTexts } from '../../../../libs/OneSkyHelper';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 const ProviderDetail = () => {
     const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
         BasicInformationController({});
     const { languageCode } = useTranslationContext();
     const { registration } = getTexts(languageCode);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [firstNameError, setFirstNameError] = useState("");
-    const [lastNameError, setLastNameError] = useState("");
-    const [providerType, setProviderType] = useState("");
-    const [providerTypeError, setProviderTypeError] = useState("");
-
-    const [specialty, setSpecialty] = useState("");
-    const [specialtyError, setSpecialtyError] = useState("");
-
-
-
-    const validateFirstName = () => {
-        if (!firstName.trim()) {
-            setFirstNameError("First name is required");
-        } else if (!/^[A-Z][a-z]*$/.test(firstName)) {
-            setFirstNameError("First letter should start with an uppercase , followed by lowercase ");
-        } else {
-            setFirstNameError("");
-        }
-    };
-
-    const validateLastName = () => {
-        if (!lastName.trim()) {
-            setLastNameError("Last name is required");
-        } else if (!/^[A-Z][a-z]*$/.test(lastName)) {
-            setLastNameError("First letter should start with an uppercase , followed by lowercase ");
-        } else {
-            setLastNameError("");
-        }
-    };
-    const validateProviderType = () => {
-        if (!providerType.trim()) {
-            setProviderTypeError("Type of provider is required");
-        } else {
-            setProviderTypeError("");
-        }
-    };
-
-    const validateSpecialty = () => {
-        if (!specialty.trim()) {
-            setSpecialtyError("Specialty is required");
-        } else {
-            setSpecialtyError("");
-        }
-    };
-
+    const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
+    const [selected, setSelected] = React.useState("");
+    const data = [
+        { key: '1', value: 'Mobiles', disabled: true },
+        { key: '2', value: 'Appliances' },
+        { key: '3', value: 'Cameras' },
+        { key: '4', value: 'Computers', disabled: true },
+        { key: '5', value: 'Vegetables' },
+        { key: '6', value: 'Diary Products' },
+        { key: '7', value: 'Drinks' },
+    ]
 
     return (
         <>
             <Input
                 placeholder={registration.first_name}
                 type={"name"}
-                inputStyle={styles.input}
-                value={firstName}
-                errorMessage={firstNameError}
-                onChangeText={(text) => setFirstName(text)}
-                onBlur={validateFirstName}
+                inputStyle={styles.input} inputValue={''}
             />
 
             <Input
                 placeholder={registration.last_name}
                 type={"nameSuffix"}
-                inputStyle={styles.inputLastName}
-                value={lastName}
-                errorMessage={lastNameError}
-                onChangeText={(text) => setLastName(text)}
-                onBlur={validateLastName}
+                inputStyle={styles.inputLastName} inputValue={''}
             />
-
-            <Input
-                placeholder="Type of provider"
-                type={"name"}
-                inputStyle={styles.inputPhone}
-                value={providerType}
-                errorMessage={providerTypeError}
-                onChangeText={(text) => setProviderType(text)}
-                onBlur={validateProviderType}
-            />
-
-            <Input
-                placeholder="Specialty"
-                type={"name"}
-                inputStyle={styles.inputPhone}
-                value={specialty}
-                errorMessage={specialtyError}
-                onChangeText={(text) => setSpecialty(text)}
-                onBlur={validateSpecialty}
-            />
-
+            <View style={{ gap: 20, marginTop: 20 }}>
+                <SelectList
+                    setSelected={(val: React.SetStateAction<string>) => setSelected(val)}
+                    data={data}
+                    save="value"
+                    placeholder='Type of provider'
+                    boxStyles= {styles.box}
+                    dropdownStyles={styles.dropdown}
+                />
+                <SelectList
+                    setSelected={(val) => setSelected(val)}
+                    data={data}
+                    save="value"
+                    placeholder='Specialty'
+                  boxStyles= {styles.box}
+                 dropdownStyles={styles.dropdown}
+                 inputStyles={styles.text}
+                />
+            </View>
             <View style={styles.iconContainer}>
                 <Text style={styles.text}>Upload ID photo</Text>
                 <TouchableOpacity
@@ -119,13 +74,13 @@ const ProviderDetail = () => {
                                 ? { uri: selectedImage }
                                 : require("../../../../assets/icon/uploadProfile.png")
                         }
-                        style={selectedImage ? styles.selectedImage : styles.editImage}
+                        style={styles.selectedImage}
                     />
                 </TouchableOpacity>
                 <SelectImage
                     isShowModal={isShowModal}
                     closeModal={setIsShowModal}
-                    imageUri={setSelectedImage}
+                    imageUri={getImageUrl}
                 />
             </View>
         </>
@@ -173,4 +128,17 @@ const styles = StyleSheet.create({
         borderRadius: getHeight(dimens.paddingS),
 
     },
+    box: {
+        borderWidth: getWidth(dimens.borderBold),
+        borderRadius: getWidth(dimens.marginS),
+        backgroundColor: colors.offWhite,
+        borderColor:colors.primary
+    },
+    dropdown: {
+        borderWidth: getWidth(dimens.borderBold),
+        borderRadius: getWidth(dimens.marginS),
+        backgroundColor: colors.offWhite,
+    },
 });
+
+

@@ -1,32 +1,53 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-// import DropDown from 'react-native-element-dropdown';
-import { Dropdown } from 'react-native-element-dropdown';
+import { colors } from 'designToken/colors';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { dimens } from 'designToken/dimens';
+
 const ProviderServices = () => {
-  const [selectedValue, setSelectedValue] = useState('');
 
   const data = [
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' },
-  ];
+    { key: '1', service: 'Service 1', price: 'Price ' },
+    { key: '2', service: 'Service 1', price: 'Price' },
+    { key: '3', service: 'Service 1', price: 'Price' },
+    { key: '4', service: 'Service 1', price: 'Price' },
+    { key: '5', service: 'Service 1', price: 'Price' },
+    { key: '6', service: 'Service 1', price: 'Price' },
+    { key: '7', service: 'Service 1', price: 'Price' },
+    { key: '1', service: 'Service 1', price: 'Price ' },
+    { key: '2', service: 'Service 1', price: 'Price' },
+    { key: '3', service: 'Service 1', price: 'Price' },
+    { key: '4', service: 'Service 1', price: 'Price' },
+  
+  ]
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Selected Value: {selectedValue}</Text>
-      <Dropdown
-       style={[styles.dropdown,   { borderColor: 'blue' }]}
-        containerStyle={styles.dropdownContainer}
-        labelField="label"
-        data={data}
-        value={selectedValue}
-        onChange={(value) => setSelectedValue(value)}
-        itemStyle={styles.dropdownItem}
-        labelStyle={styles.dropdownLabel}
-        placeholderStyle={styles.placeholderStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-      />
-    </View>
+    <>
+
+      <Text style={styles.text}>Authority to add a prescription</Text>
+      <View style={styles.container}>
+        <Text style={styles.text}>Yes</Text>
+        <Image source={require("../../../../assets/icon/selecter.png")} style={styles.select} />
+        <Text style={styles.text}>No</Text>
+        <Image source={require("../../../../assets/icon/selecter.png")} style={styles.select} />
+
+      </View>
+      <Text style={styles.textS}>Services you provide</Text>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.servicesContainer}>
+          {data.map((item) => (
+
+            <View key={item.key} style={styles.serviceRow}>
+              <Text style={styles.serviceText}>{item.service}</Text>
+              <Text style={styles.serviceText}>{item.price}</Text>
+              <View style={styles.checkbox} />
+            </View>
+          ))}
+      
+        </View>
+      </ScrollView>
+    </>
   );
 };
 
@@ -35,43 +56,54 @@ export default ProviderServices
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: "row",
+    gap: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.marginL),
+    flex: 0.3,
+  },
+  text: {
+    color: colors.black,
+    fontSize: fontSize.textL,
+  },
+
+  select: {
+    height: getHeight(dimens.marginL),
+    width: getWidth(dimens.marginL),
+  },
+  textS: {
+    color: colors.black,
+    fontSize: fontSize.textXl,
+  },
+
+  scrollView: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: getHeight(dimens.marginL),
+
   },
-  label: {
-    fontSize: 18,
-    marginBottom: 10,
+  serviceText: {
+    color: colors.black,
+    fontSize: fontSize.textL,
+    marginBottom: getHeight(dimens.marginM),
   },
-  dropdownContainer: {
-    width: 200,
+  servicesContainer: {
+    borderWidth: getWidth(dimens.borderBold),
+    borderRadius: getWidth(dimens.marginS),
+
+    backgroundColor: colors.offWhite,
+    borderColor: colors.primary,
+
+  },
+  serviceRow: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    paddingHorizontal: getHeight(dimens.marginM)
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: colors.primary,
     borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  dropdownItem: {
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  dropdownLabel: {
-    fontSize: 16,
-    color: '#333',
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
-  dropdown: {
-    height: 50,
-    borderColor: 'gray',
-    borderWidth: 0.5,
-    borderRadius: 8,
-    paddingHorizontal: 8,
+    backgroundColor: colors.offWhite, // You can change the color here
   },
 });
-
