@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Input from "common/Input";
 import SelectImage from "common/SelectImage";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
@@ -9,7 +8,7 @@ import { fontSize } from "designToken/fontSizes";
 import { fontWeight } from "designToken/fontWeights";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
 
@@ -77,7 +76,6 @@ const UserAddress = () => {
         onChangeText={(text) => setAddress(text)}
         errorMessage={addressError}
         inputStyle={styles.input}
-        onBlur={validateAddress}
         onBlur={() => setUserData({ ...userData, address: addressRef.current.value })}
         onChangeText={(value) => {
           addressRef.current.value = value;
@@ -90,7 +88,6 @@ const UserAddress = () => {
         onChangeText={(text) => setDateOfBirth(text)}
         errorMessage={dateOfBirthError}
         inputStyle={styles.inputDOB}
-        onBlur={validateDateOfBirth}
         onBlur={() => setUserData({ ...userData, date_of_birth: dobRef.current.value })}
         onChangeText={(value) => dobRef.current.value = value}
         ref={dobRef}
@@ -102,16 +99,10 @@ const UserAddress = () => {
         errorMessage={idNumberError}
         keyboardType="number-pad"
         inputStyle={styles.inputIdNumber}
-        onBlur={validateIdNumber} inputValue={""}      />
-      <Text style={styles.text}>{registration.find_doctor_text}</Text>
-      <View style={styles.innerContainer}>
-        <Text style={[styles.profileText, selectedImage === "" && { marginTop: getHeight(dimens.marginS) }]}>{registration.add_profile}</Text>
-        onBlur={() =>setUserData({ ...userData, id_number: idNumberRef.current.value })}
+        onBlur={() => setUserData({ ...userData, id_number: idNumberRef.current.value })}
         onChangeText={(value) => idNumberRef.current.value = value}
         ref={idNumberRef}
-        value={userData.id_number}
-      
-      </View>
+        value={userData.id_number} inputValue={""}      />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
         <Text
@@ -186,7 +177,11 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     fontWeight: fontWeight.light,
+<<<<<<< HEAD
+    letterSpacing: getWidth(dimens.borderThin / dimens.borderBold)
+=======
     letterSpacing: getWidth(dimens.borderThin / dimens.borderBold),
+>>>>>>> f62bfbedb5237233021cff5437f064e4d99a3884
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
