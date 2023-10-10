@@ -9,6 +9,7 @@ import { fontWeight } from "designToken/fontWeights";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight } from "libs/StyleHelper";
 import { StyleSheet, Text } from "react-native";
+import { fontFamily } from "designToken/fontFamily";
 
 const UserDetail = () => {
   const { languageCode } = useTranslationContext();
@@ -64,7 +65,8 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     letterSpacing: getHeight(dimens.borderThin),
-    fontWeight: fontWeight.light,
+    fontFamily: fontFamily.light,
+
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

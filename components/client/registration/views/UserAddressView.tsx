@@ -8,6 +8,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
+import { fontFamily } from "designToken/fontFamily";
 
 const UserAddressView = () => {
   const { t } = useTranslation();
@@ -128,6 +129,8 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textM,
     paddingTop: getHeight(dimens.paddingXs),
     letterSpacing: getWidth(0.5),
+    fontFamily: fontFamily.regular,
+
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

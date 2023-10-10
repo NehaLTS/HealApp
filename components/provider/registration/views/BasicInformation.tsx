@@ -7,9 +7,7 @@ import Button from "common/Button";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { getTexts } from "libs/OneSkyHelper";
-import UserDetail from "./UserDetail";
-import UserAddress from "./UserAddress";
-import UserPayment from "./UserPayment";
+
 import Stepper from "common/Stepper";
 import { UserContext, UserType } from "contexts/useUserContext";
 import { useNavigation } from "@react-navigation/native";

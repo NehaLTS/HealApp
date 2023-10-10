@@ -206,11 +206,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     flex: 1,
     gap: getHeight(dimens.paddingL),
-<<<<<<< HEAD:components/client/registration/views/UserPayment.tsx
-    alignItems:'center',
-=======
     alignItems: "center",
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402:components/client/registration/views/UserPaymentView.tsx
   },
   innerContainer: {
     flexDirection: "row",
@@ -226,17 +222,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: getHeight(dimens.marginM),
-<<<<<<< HEAD:components/client/registration/views/UserPayment.tsx
-    marginBottom:getHeight(dimens.borderBold)
-  },
-  expireDate:{
-    minWidth:'30%'
-  }
-=======
     marginBottom: getHeight(dimens.borderBold),
   },
   expireDate: {
     minWidth: "30%",
   },
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402:components/client/registration/views/UserPaymentView.tsx
 });

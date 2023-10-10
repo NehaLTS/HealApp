@@ -20,10 +20,6 @@ const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>("en");
-<<<<<<< HEAD
-  const [userData, setUserData] = React.useState<Partial<UserType>>({});
-=======
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
 
   /** To Initialize Google SDk */
   GoogleSignin.configure({
@@ -31,37 +27,6 @@ const App = () => {
   });
   return (
     <QueryClientProvider client={queryClient}>
-<<<<<<< HEAD
-      <UserContext.Provider value={{ userData, setUserData }}>
-        <UserContextProvider>
-          <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
-            <NavigationContainer >
-              <Stack.Navigator initialRouteName={NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
-                <Stack.Screen name={NavigationRoutes.IntroStack} component={IntroStackNavigator} />
-                <Stack.Screen
-                  name={NavigationRoutes.ClientStack}
-                  component={lazy(
-                    () => import("navigator/ClientStackNavigator")
-                  )}
-                />
-                <Stack.Screen
-                  name={NavigationRoutes.ProviderStack}
-                  component={lazy(
-                    () => import("./navigator/ProviderStackNavigator")
-                  )}
-                />
-                <Stack.Screen
-                  name={'HomeView'}
-                  component={lazy(
-                    () => import("./components/provider/registration/views/BasicInformation")
-                  )}
-                />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </TranslationContext.Provider>
-        </UserContextProvider>
-      </UserContext.Provider>
-=======
         <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
           <NavigationContainer >
             <Stack.Navigator initialRouteName={NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
@@ -87,7 +52,6 @@ const App = () => {
             </Stack.Navigator>
           </NavigationContainer>
         </TranslationContext.Provider>
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
     </QueryClientProvider>
   );
 };

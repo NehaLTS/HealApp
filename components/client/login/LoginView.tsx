@@ -49,19 +49,11 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
         <TextButton
           fontSize={getWidth(fontSize.textS)}
           isActive
-<<<<<<< HEAD
-          style={styles.forgotPassword}
-          title={t("forgot_password")}
-        />
-        <Button
-          title={isSigninSelected? t("sign_in")  : t("sign_up")}
-=======
           title={t("forgot_password")}
           containerStyle={styles.forgotPassword}
         />
         <Button
           title={isSigninSelected ? t("sign_in") : t("sign_up")}
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
           isPrimary
           isSmall
           style={styles.signInButton}
@@ -69,11 +61,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
         />
       </View>
       <View style={styles.footerContainer}>
-<<<<<<< HEAD
-        <Text style={styles.signInVia}>{t("or_sign_in_via")}</Text>
-=======
         <Text style={styles.signInVia} title={t("or_sign_in_via")} />
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
         {getSignInFooter()}
       </View>
     </>
@@ -90,13 +78,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-<<<<<<< HEAD
-    textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS),
-=======
     paddingVertical: getHeight(dimens.paddingS),
     alignSelf:'center'
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   footerContainer: {
     flexDirection: "row",

@@ -78,11 +78,7 @@ const styles = StyleSheet.create({
   logo: {
     width: getWidth(dimens.imageM),
     height: getHeight(dimens.imageM),
-<<<<<<< HEAD
-    alignSelf: "center",
-=======
     alignSelf: "center"
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   toggleContainer: {
     flexDirection: "row",
@@ -90,20 +86,11 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: getHeight(fontSize.textXl),
-<<<<<<< HEAD
-    color: colors.black,
-=======
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
     alignSelf: "center",
     paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   guestText: {
-<<<<<<< HEAD
-    fontSize: getHeight(fontSize.textXl),
-    color: colors.black,
-=======
     fontSize: getHeight(fontSize.textXl)
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   inputContainer: {
     flex: 0.66,
@@ -112,11 +99,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-<<<<<<< HEAD
-    flex: 0.1,
-=======
     flex: 0.12
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   switchToProviderText: {
     color: colors.primary,
