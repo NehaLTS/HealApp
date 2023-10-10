@@ -1,89 +1,70 @@
-import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Button from "common/Button";
+import Stepper from "common/Stepper";
+import Header from "components/common/Header";
+import Text from "components/common/Text";
 import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
-import Button from "common/Button";
+import React, { useLayoutEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
-import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { getTexts } from "libs/OneSkyHelper";
-import UserDetail from "./UserDetail";
-import UserAddress from "./UserAddress";
-import UserPayment from "./UserPayment";
-import Stepper from "common/Stepper";
-import { UserContext, UserType } from "contexts/useUserContext";
-import { useNavigation } from "@react-navigation/native";
-import Header from "components/common/Header";
-import { dimens } from "designToken/dimens";
+import UserAddressView from "./UserAddressView";
+import UserDetailView from "./UserDetailView";
+import UserPaymentView from "./UserPaymentView";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
-  // const [userData, setUserData] = React.useState<Partial<UserType>>({});
-  const { languageCode } = useTranslationContext();
+  const {t} = useTranslation()
   const { currentStep, onPressNext, onPressBack } = BasicInformationController({
     totalSteps: 3,
   });
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header title="Registration" />,
+      header: () => <Header title={t('registration')} />,
     });
   }, [navigation]);
-  const { registration, common } = getTexts(languageCode);
-  const isLoadingCard = false; //TODO: need to change after binding data
+  const isCurrentStep = currentStep[currentStep.length - 1]
+  const isLoading = false; //TODO: need to change after binding data
   const isCardDetails = false; //TODO: need to change after binding data
 
-
   return (
-    // <UserContext.Provider value={{ userData, setUserData }}>
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {currentStep[currentStep.length - 1] === 0 ? (
-          <UserDetail />
-        ) : currentStep[currentStep.length - 1] === 1 ? (
-          <UserAddress />
-        ) : (
-          <UserPayment />
-        )}
+        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView />}
       </View>
       <View
         style={[
           styles.footerContainer,
-          {
-            justifyContent:
-              isLoadingCard || isCardDetails ? "center" : "space-between",
-          },
+          {justifyContent: isLoading || isCardDetails ? "center" : "space-between"}
         ]}>
-        {!isLoadingCard && !isCardDetails ? (
+        {!isLoading && !isCardDetails ? (
           <>
-            <Button title={registration.back} isSmall onPress={onPressBack} />
+            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
-              title={registration.next}
+              title={t("next")}
               isPrimary
               onPress={onPressNext}
               isSmall
+              width={'30%'}
             />
           </>
         ) : (
           <Button
-            title={
-              isLoadingCard ? common.cancel : registration.start_using_heal
-            }
+            title={isLoading ? t("cancel") : t("start_using_heal")}
             isPrimary
             isSmall
           />
         )}
       </View>
-      {currentStep[currentStep.length - 1] === 2 &&
-        !isLoadingCard &&
-        !isCardDetails && (
-          <Text style={styles.skipLaterText}>
-            {registration.skip_for_later}
-          </Text>
-        )}
+      {currentStep[currentStep.length - 1] === 2 && !isLoading && !isCardDetails && (
+         <Text style={styles.skipLaterText} title={t('skip_for_later')} />
+      )}
     </View>
-    // </UserContext.Provider>
   );
 };
 
@@ -92,15 +73,15 @@ export default BasicInformation;
 const styles = StyleSheet.create({
   footerContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
     width: "100%",
-    flex: 0.1,
+    flex: 0.12
   },
   skipLaterText: {
-    color: colors.black,
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
-    flex: 0.1,
+    flex: 0.08,
+    alignSelf:'center'
   },
   inputContainer: {
     flex: 0.75,

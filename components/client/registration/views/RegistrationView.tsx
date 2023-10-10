@@ -10,15 +10,16 @@ import { t } from "i18next";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
-import { getSocialMediaLogin } from "../../login/LoginView";
+import Text from "components/common/Text";
 
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
   const { onPressSignUp } = RegistrationViewController();
+    //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState('');
@@ -67,7 +68,6 @@ const RegistrationView = () => {
           placeholder={t("email")}
           value={email}
           errorMessage={emailError}
-          inputStyle={styles.email}
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
@@ -99,7 +99,7 @@ const RegistrationView = () => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia}>{t('or_sign_in_via')}</Text>
+      <Text style={styles.signInVia} title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -119,27 +119,22 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS),
+    paddingVertical: getHeight(dimens.paddingS)
   },
   footerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flex: 0.2,
+    flex: 0.18,
   },
   signInVia: {
-    color: colors.black,
-    fontSize: fontSize.textL,
-    fontWeight: fontWeight.normal,
+    letterSpacing:getWidth(0.5)
   },
   signUpButton: {
     alignSelf: "center",
     marginTop: getHeight(dimens.paddingL),
   },
   password: {
-    marginTop: dimens.paddingL,
-  },
-  email:{
     marginTop: dimens.paddingL,
   },
   errorText: {

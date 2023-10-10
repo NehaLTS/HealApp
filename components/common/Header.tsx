@@ -4,53 +4,48 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import LocalizationController from "./LocalizationController";
+import Text from "./Text";
 
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
   const [currentLanguage, setCurrentLanguage ] = useState('EN')
-  const { isLanguageChanged, onChangeLanguage, handleLanguageChange } = LocalizationController();
+  const { isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between' }]}>
       {title?.length && (
         <>
           <Image source={logo} style={styles.logo} />
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} title={title} />
         </>
       )}
       {  /** TODO: Update the title according to selected language  */}
-      <Text style={styles.headerRight} onPress={onChangeLanguage}>
-        {currentLanguage}
-      </Text>
+      <Text style={styles.headerRight} onPress={onChangeLanguage} title={currentLanguage} />
       {isLanguageChanged && (
         //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text
             style={[styles.language,{color: currentLanguage ==="EN" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('EN') ;handleLanguageChange("en")}}
-          >
-            English
-          </Text>
+            onPress={() => {setCurrentLanguage('EN') ;handleLanguageChange("en"); setIsLanguageChanged(false)}}
+            title={'English'}
+          />
           <Text
              style={[styles.language,{color: currentLanguage ==="HE" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('HE') ;handleLanguageChange("he")}}
-          >
-            עִברִית
-          </Text>
+            onPress={() => {setCurrentLanguage('HE') ;handleLanguageChange("he"); setIsLanguageChanged(false)}}
+            title={'עִברִית'}
+          />
           <Text
              style={[styles.language,{color: currentLanguage ==="AR" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('AR') ;handleLanguageChange("ar")}}
-          >
-            العربي
-          </Text>
+            onPress={() => {setCurrentLanguage('AR') ;handleLanguageChange("ar"); setIsLanguageChanged(false)}}
+            title={'العربي'}
+          />
           <Text
              style={[styles.language,{color: currentLanguage ==="RU" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('RU') ;handleLanguageChange("ru")}}
-          >
-            русский
-          </Text>
+            onPress={() => {setCurrentLanguage('RU') ;handleLanguageChange("ru"); setIsLanguageChanged(false)}}
+            title={'русский'}
+          />
         </View>
       )}
     </View>
@@ -73,9 +68,10 @@ const styles = StyleSheet.create({
   },
   languageContainer: {
     position: "absolute",
-    width: getWidth(125), //TODO: should define sizes for every Width
-    height: getHeight(140), //TODO: should define sizes for every Height
-    padding: getHeight(dimens.marginS),
+    width: getWidth(120), //TODO: should define sizes for every Width
+    height: getWidth(142), //TODO: should define sizes for every Height
+    padding: getWidth(dimens.marginS),
+    maxWidth: getWidth(120),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.primary,
     zIndex: 1,
@@ -88,14 +84,12 @@ const styles = StyleSheet.create({
   logo: {
     width: getWidth(dimens.imageS),
     height: getHeight(dimens.imageS),
-    marginLeft: getWidth(dimens.sideMargin)
+    marginLeft: getWidth(dimens.sideMargin),
   },
   title: {
     fontSize: fontSize.headingL,
-    color: colors.black,
   },
   headerRight: {
-    color: colors.black,
     padding: getHeight(dimens.sideMargin),
     fontSize: getHeight(fontSize.textL),
   },

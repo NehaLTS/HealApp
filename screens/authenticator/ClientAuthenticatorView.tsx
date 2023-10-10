@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import logo from "assets/icon/logo.png";
+import LoginView from "components/client/login/LoginView";
+import RegistrationView from "components/client/registration/views/RegistrationView";
 import Header from "components/common/Header";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
-import LoginView from "components/provider/login/LoginView";
-import RegistrationView from "components/provider/registration/views/RegistrationView";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
@@ -12,17 +12,18 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, View } from "react-native";
-import ProviderAuthenticatorViewController from "./ProviderAuthenticatorViewController";
+import ClientAuthenticatorViewController from "./ClientAuthenticatorViewController";
 
-const ProviderAuthenticatorView = () => {
+const ClientAuthenticatorView = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const { loginRegisterToggle, isSigninSelected, OnSwitchToClient } = ProviderAuthenticatorViewController();
+  const { loginRegisterToggle, isSigninSelected, OnSwitchToProvider } = ClientAuthenticatorViewController();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />
     });
   }, [navigation]);
+  
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
@@ -41,7 +42,7 @@ const ProviderAuthenticatorView = () => {
             isCapitalize
           />
         </View>
-        <Text style={styles.loginText} title={isSigninSelected ? t("provider_login") : t("provider_sign_up")} />
+        <Text style={styles.loginText} title={isSigninSelected ? t("client_login") : t("client_sign_up")} />
       </View>
       <View style={styles.inputContainer}>
         {isSigninSelected ? (
@@ -52,10 +53,10 @@ const ProviderAuthenticatorView = () => {
         <View style={styles.footer}>
           <Text style={styles.guestText} title={t("guest_entrance")} />
           <TextButton
-            title={t("switch_to_client")}
+            title={t("switch_to_provider")}
             fontSize={getHeight(fontSize.textXl)}
             style={styles.switchToProviderText}
-            onPress={OnSwitchToClient}
+            onPress={OnSwitchToProvider}
           />
         </View>
       </View>
@@ -63,13 +64,14 @@ const ProviderAuthenticatorView = () => {
   );
 };
 
-export default ProviderAuthenticatorView;
+export default ClientAuthenticatorView;
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
+    zIndex:9
   },
   container: {
     position: "relative",
@@ -78,11 +80,7 @@ const styles = StyleSheet.create({
   logo: {
     width: getWidth(dimens.imageM),
     height: getHeight(dimens.imageM),
-<<<<<<< HEAD
-    alignSelf: "center",
-=======
     alignSelf: "center"
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   toggleContainer: {
     flexDirection: "row",
@@ -90,20 +88,11 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: getHeight(fontSize.textXl),
-<<<<<<< HEAD
-    color: colors.black,
-=======
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
     alignSelf: "center",
     paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   guestText: {
-<<<<<<< HEAD
-    fontSize: getHeight(fontSize.textXl),
-    color: colors.black,
-=======
     fontSize: getHeight(fontSize.textXl)
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   inputContainer: {
     flex: 0.66,
@@ -112,11 +101,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
-<<<<<<< HEAD
-    flex: 0.1,
-=======
     flex: 0.12
->>>>>>> 0039df2dce422dab31fa8c3206da02b6e8164402
   },
   switchToProviderText: {
     color: colors.primary,

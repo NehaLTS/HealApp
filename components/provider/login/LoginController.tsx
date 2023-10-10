@@ -2,10 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
-import { useApiContext } from "../../../contexts/useApiContext";
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
+import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
+import { UserType } from "libs/types/UserType";
+import { UseUserContextProvider } from "contexts/useUserContextProvider";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -13,9 +15,8 @@ const LoginViewController = () => {
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider()
   const { onFBAuthProcessing } = FacebookAuthProvider()
-  const { onLoginUser, onLoginWithGoogle, onLoginWithFB } = useApiContext();
-  const { setUser } = useApiContext();
-  const { onSubmitAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesProvider();
+  const { OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider } = AuthServicesProvider();
+  const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const { t, i18n } = useTranslation();
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
@@ -24,7 +25,9 @@ const LoginViewController = () => {
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
     try {
-      const res = await onLoginUser?.(email, password);
+      const res = await OnProviderSignIn({ email, password });
+      setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
+      setLocalData('USER', res)
       if (res?.isSuccessful === true) {
         handleAuthResponse();
       } else {
@@ -52,12 +55,15 @@ const LoginViewController = () => {
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
+        console.log("vbxcvbnxvb", userData)
         const email = userData?.user?.email
         const googleId = userData.user.providerData[0].uid
         /** To handle Google auth request to API */
-        const res = await onLoginWithGoogle?.(email, googleId);
+        const res = await onSubmitGoogleAuthRequestProvider({ email, googleId });
+        setUserDataProvider?.({ ...userDataProvider, token: res.token });
+        setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          handleAuthResponse();
+          handleAuthResponse()
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
@@ -72,13 +78,17 @@ const LoginViewController = () => {
 
     onFBAuthProcessing().then(async (userData) => {
       try {
+        console.log("vhxjvchxbv", userData)
         //TODO: under review with facebook 
-        const email = "amanshar@gmail.com"
-        const facebookId = "sharm@hmail.com"
-        let res = await onLoginWithFB?.(email, facebookId)
-        console.log('bhjbhmb', res)
+        // const email = "amanshar@gmail.com"
+        // const facebookId = "sharm@hmail.com"
+        const email = userData?.user?.email
+        const facebookId = userData?.user?.providerData[0]?.uid
+        const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
+        setUserDataProvider({ ...userDataProvider, token: res.token });
+        setLocalData('USER', res)
         if (res?.isSuccessful === true) {
-          handleAuthResponse();
+          handleAuthResponse()
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }

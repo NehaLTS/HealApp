@@ -17,6 +17,7 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
+import { fontFamily } from "designToken/fontFamily";
 
 const Input = forwardRef(({
   placeholder,
@@ -150,9 +151,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showImage: {
-    width: getWidth(dimens.marginM),
+    width: getWidth(dimens.marginM+dimens.borderThin),
     height: getHeight(dimens.sideMargin),
-    marginRight: getHeight(dimens.marginS),
+    marginRight: getHeight(dimens.sideMargin),
     resizeMode: 'contain',
   },
   errorMessage: {
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
+    fontFamily: fontFamily.regular
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),

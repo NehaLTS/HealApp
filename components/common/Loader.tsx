@@ -1,25 +1,20 @@
-import React from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { useTranslationContext } from 'contexts/UseTranslationsContext';
-import { colors } from 'designToken/colors';
-import { fontSize } from 'designToken/fontSizes';
-import { getTexts } from 'libs/OneSkyHelper';
-import { getWidth } from 'libs/StyleHelper';
+import { useTranslationContext } from "contexts/UseTranslationsContext";
+import { getTexts } from "libs/OneSkyHelper";
+import { getWidth } from "libs/StyleHelper";
+import React from "react";
+import { StyleSheet } from "react-native";
+import Text from "./Text";
 
 const LoaderText = () => {
-    const { languageCode } = useTranslationContext();
-    const { common } = getTexts(languageCode);
-  return (
-    <Text style={styles.loaderText}>{common.loader}</Text>
-  )
-}
+  const { languageCode } = useTranslationContext();
+  const { common } = getTexts(languageCode);
+  return <Text style={styles.loaderText} title={common.loader} />;
+};
 
-export default LoaderText
+export default LoaderText;
 
 const styles = StyleSheet.create({
-    loaderText: {
-        fontSize: fontSize.textL,
-        color: colors.black,
-        letterSpacing: getWidth(0.5),
-      },
-})
+  loaderText: {
+    letterSpacing: getWidth(0.5),
+  },
+});

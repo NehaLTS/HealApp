@@ -5,9 +5,10 @@ export interface UserType {
     user?: User | User[];
     message?: string;
     googleId?: string;
-    email?: string
-    facebookId?: string
-    msg?: string
+    email?: string;
+    facebookId?: string;
+    client_id?: string;
+    msg?: string;
 }
 
 export interface User {
@@ -22,15 +23,35 @@ export interface User {
 }
 
 
-
-
 export interface UserTypeProvider {
     id?: string | null;
-    isSuccessful: boolean;
+    isSuccessful?: boolean;
     existing: string;
-    token: string;
-    user: { [key: string]: null | string };
+    token?: string;
+    user?: UserProvider;
+    msg?: string
 }
+type UserProvider = {
+    provider_id: string | null;
+    email: string;
+    googleId: string | null;
+    appleId: string | null;
+    facebookId: string | null;
+    provider_type_id: string | null;
+    created_at: string;
+    id: number | null;
+    firstname: string | null;
+    lastname: string | null;
+    address: string | null;
+    city: string | null;
+    state: string | null;
+    country: string | null;
+    phone_number: string | null;
+    profile_picture: string | null;
+    license_number: string | null;
+    upload_license_picture: string | null;
+    status: string | null;
+};
 
 export interface GoogleLoginResponse {
     additionalUserInfo: AdditionalUserInfo;

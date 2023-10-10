@@ -14,6 +14,9 @@ export interface UserType {
   expire_date: string; //yyyy-mm-dd
   cvv: string;
   id_number: string;
+  token: string;
+  email: string;
+  isSuccessful: boolean
 }
 export interface UserContextFields {
   userData: Partial<UserType>;
