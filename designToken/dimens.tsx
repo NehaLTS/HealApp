@@ -12,6 +12,9 @@ export const dimens = {
     borderThin: 1,
     borderBold: 2,
 
+    // Border widths
+    buttonHeight: 48,
+
     //Image Sizes
     imageL: 250,
     imageM: 150,

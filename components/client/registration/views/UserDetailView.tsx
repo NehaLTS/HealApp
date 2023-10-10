@@ -65,8 +65,7 @@ export default UserDetailView;
 const styles = StyleSheet.create({
   text: {
     fontSize: getHeight(fontSize.textM),
-    paddingTop: getHeight(dimens.paddingXs),
-    letterSpacing: getHeight(0.5),
+    paddingTop: getHeight(dimens.paddingXs)
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

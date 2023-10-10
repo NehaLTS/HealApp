@@ -1,11 +1,12 @@
 import { colors } from "designToken/colors";
+import { fontFamily } from "designToken/fontFamily";
 import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
+import { getHeight } from "libs/StyleHelper";
 import React from "react";
 import { Text as RNText, StyleProp, StyleSheet, TextStyle } from "react-native";
 
-const Text = ( {title, style}:{title: string, style?: StyleProp<TextStyle>}) => {
-  return <RNText style={[styles.text, style]}>{title}</RNText>;
+const Text = ( {title, style, ...props}:{title: any, style?: StyleProp<TextStyle>}&any) => {
+  return <RNText {...props} style={[styles.text, style]}>{title}</RNText>
 };
 
 export default Text;
@@ -13,7 +14,7 @@ export default Text;
 const styles = StyleSheet.create({
   text: {
     color: colors.black,
-    letterSpacing: getWidth(1),
-    fontSize: getHeight(fontSize.textL)
+    fontSize: getHeight(fontSize.textL),
+    fontFamily: fontFamily.regular
   },
 });

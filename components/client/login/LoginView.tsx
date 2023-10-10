@@ -48,8 +48,8 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
         <TextButton
           fontSize={getWidth(fontSize.textS)}
           isActive
-          style={styles.forgotPassword}
           title={t("forgot_password")}
+          containerStyle={styles.forgotPassword}
         />
         <Button
           title={isSigninSelected ? t("sign_in") : t("sign_up")}
@@ -77,9 +77,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    textAlign: "center",
     paddingVertical: getHeight(dimens.paddingS),
-    letterSpacing: getWidth(0.5),
+    alignSelf:'center'
   },
   footerContainer: {
     flexDirection: "row",

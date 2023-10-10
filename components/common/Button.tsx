@@ -1,3 +1,8 @@
+import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
+import { fontFamily } from "designToken/fontFamily";
+import { fontSize } from "designToken/fontSizes";
+import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import {
   DimensionValue,
@@ -8,11 +13,6 @@ import {
   TouchableOpacityProps,
   ViewStyle,
 } from "react-native";
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { fontWeight } from "designToken/fontWeights";
-import { getHeight, getWidth } from "libs/StyleHelper";
 const Button = ({
   title,
   isPrimary,
@@ -46,7 +46,7 @@ const Button = ({
           styles.buttonTitle,
           {
             color: isPrimary ? colors.white : colors.black,
-            fontWeight: isSmall || !isPrimary ? fontWeight.light : fontWeight.semiBold
+            fontFamily: isSmall || !isPrimary ? fontFamily.regular : fontFamily.semiBold
           }
         ]}
         adjustsFontSizeToFit
@@ -63,14 +63,13 @@ const styles = StyleSheet.create({
     borderWidth: getHeight(dimens.borderThin),
     alignItems: "center",
     justifyContent: "center",
-    height: getHeight(dimens.imageS),
-    borderRadius: getHeight(dimens.marginS / dimens.borderBold),
+    height: getHeight(dimens.buttonHeight),
+    borderRadius: getHeight(dimens.marginS/dimens.borderBold),
     zIndex: 1
   },
   buttonTitle: {
     fontSize: getWidth(fontSize.heading),
-    lineHeight: getHeight(dimens.marginL),
-    letterSpacing: getWidth(1.5)
+    lineHeight: getHeight(dimens.marginL),   
   },
 });
 

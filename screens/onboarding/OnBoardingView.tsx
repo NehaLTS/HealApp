@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Swiper from 'react-native-swiper';
 import Button from '../../components/common/Button';
@@ -14,25 +14,25 @@ import Header from 'components/common/Header';
 import { useTranslation } from 'react-i18next';
 
 const OnBoardingView = () => {
-  const { swiperRef, onPressSkip} = OnBoardingViewController()
+  const {  onPressSkip} = OnBoardingViewController()
   const navigation = useNavigation()
+  const swiperRef = useRef(null);
   const { t } = useTranslation()
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,
     });
   }, [navigation]);
-  //TODO: static strings changed after make this dynamic
+
   return (
     <View style={styles.slide}>
-      <View style={styles.innerContainer}>
-        <Image source={logo} style={styles.logo} />
-      </View>
+      <Image source={logo} style={styles.logo} />
       <Swiper
         ref={swiperRef}
         activeDotStyle={styles.activeDotStyle}
         activeDotColor={colors.primary}
-        autoplayTimeout={10}
+        autoplayTimeout={5}
+        autoplay
         containerStyle={styles.containerStyle}>
         {[...Array(3)].map((_, index) => (
           <Text key={index} style={styles.text}>
@@ -58,22 +58,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.white,
   },
-  innerContainer: {
-    backgroundColor: colors.white,
-    flex: 0.4,
-    justifyContent: "center",
-    alignItems: "center"
-  },
   text: {
     color: colors.black,
     fontSize: fontSize.headingL,
     fontWeight: fontWeight.normal,
     alignSelf: "center",
+    fontFamily: "Montserrat-Regular",
+    letterSpacing: getWidth(0.5)
   },
   logo: {
     width: getWidth(dimens.imageL),
     height: getHeight(dimens.imageL),
     alignSelf: "center",
+    flex: 0.4,
   },
   buttonContainer: {
     flex: 0.12

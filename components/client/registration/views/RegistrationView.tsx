@@ -118,8 +118,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS),
-    letterSpacing:getWidth(0.5)
+    paddingVertical: getHeight(dimens.paddingS)
   },
   footerContainer: {
     flexDirection: "row",
