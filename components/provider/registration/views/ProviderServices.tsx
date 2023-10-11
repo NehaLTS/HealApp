@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   text: {
     color: colors.black,
     fontSize: fontSize.textL,
+    textAlign:"center"
   },
 
   select: {
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
   textS: {
     color: colors.black,
     fontSize: fontSize.textXl,
+    marginBottom:getHeight(dimens.marginS)
   },
 
   scrollView: {
@@ -88,7 +90,6 @@ const styles = StyleSheet.create({
   servicesContainer: {
     borderWidth: getWidth(dimens.borderBold),
     borderRadius: getWidth(dimens.marginS),
-
     backgroundColor: colors.offWhite,
     borderColor: colors.primary,
 
@@ -99,11 +100,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: getHeight(dimens.marginM)
   },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: colors.primary,
+    width: getWidth(dimens.marginM),
+    height: getHeight(dimens.marginM),
+    borderWidth: getHeight(dimens.borderThin),
+    borderColor: colors.black,
     borderRadius: 5,
-    backgroundColor: colors.offWhite, // You can change the color here
+    backgroundColor: colors.offWhite, 
   },
 });

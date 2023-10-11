@@ -34,6 +34,7 @@ const ProviderAddress = () => {
         type={"nameSuffix"}
         inputStyle={styles.inputLastName} inputValue={''}
       />
+      
       <Input
         placeholder={registration.address}
         inputStyle={styles.inputAddress} inputValue={''}

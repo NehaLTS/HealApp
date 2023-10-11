@@ -14,7 +14,7 @@ import BasicInformationController from "../controllers/BasicInformationControlle
 
 const UserAddress = () => {
   const { languageCode } = useTranslationContext();
-  const {isShowModal, setIsShowModal } = BasicInformationController({});
+  const { isShowModal, setIsShowModal } = BasicInformationController({});
   const { registration } = getTexts(languageCode);
   const addressRef = React.useRef<any>("");
   const dobRef = React.useRef<any>("");
@@ -79,9 +79,9 @@ const UserAddress = () => {
         onBlur={() => setUserData({ ...userData, address: addressRef.current.value })}
         onChangeText={(value) => {
           addressRef.current.value = value;
-        } }
+        }}
         ref={addressRef}
-        value={userData.address} inputValue={""}      />
+        value={userData.address} inputValue={""} />
       <Input
         placeholder={registration.date_of_birth}
         value={dateOfBirth}
@@ -91,7 +91,7 @@ const UserAddress = () => {
         onBlur={() => setUserData({ ...userData, date_of_birth: dobRef.current.value })}
         onChangeText={(value) => dobRef.current.value = value}
         ref={dobRef}
-        value={userData.date_of_birth} inputValue={""}      />
+        value={userData.date_of_birth} inputValue={""} />
       <Input
         placeholder={registration.id_number}
         value={idNumber}
@@ -102,7 +102,7 @@ const UserAddress = () => {
         onBlur={() => setUserData({ ...userData, id_number: idNumberRef.current.value })}
         onChangeText={(value) => idNumberRef.current.value = value}
         ref={idNumberRef}
-        value={userData.id_number} inputValue={""}      />
+        value={userData.id_number} inputValue={""} />
       <Text style={styles.text}>{registration.find_doctor_text}</Text>
       <View style={styles.innerContainer}>
         <Text
