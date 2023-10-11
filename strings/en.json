@@ -3,7 +3,7 @@
         "continue_provider": "Continue as a Provider",
         "sign_in": "Sign In",
         "sign_up": "Sign Up",
-        "client_login": "Client Login",
+        "client_login": "Client Log In",
         "client_sign_up":"Client Sign Up",
         "email": "E-mail*",
         "password": "Password*",
@@ -34,7 +34,9 @@
         "provider_sign_up":"Provider Sign Up",
         "switch_to_client":"Switch to Client",
         "add_profile": "Add a profile photo",
-        "find_doctor_text": "*It will help us to find a best doctor for you"
+        "find_doctor_text": "*It will help us to find a best doctor for you",
+        "cancel": "Cancel",
+        "start_using_heal": "Start using Heal"
 
 
 }

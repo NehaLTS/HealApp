@@ -8,7 +8,13 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   const { t } = useTranslation();
@@ -22,10 +28,13 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     password,
     emailError,
     passwordError,
+    isLoading,
   } = LoginViewController();
+  
   return (
     <>
       <View style={styles.inputContainer}>
+        {isLoading && <ActivityIndicator style={styles.loading} size={"large"} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -60,7 +69,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia} title={t("or_sign_in_via")} />
+        <Text title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -78,7 +87,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     paddingVertical: getHeight(dimens.paddingS),
-    alignSelf:'center'
+    alignSelf: "center",
   },
   footerContainer: {
     flexDirection: "row",
@@ -91,10 +100,16 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.marginM),
   },
   password: {
-    marginTop: dimens.paddingL,
+    marginTop: dimens.paddingL + dimens.borderBold,
+  },
+  loading: {
+    left: '44%',
+    top: '13%',
+    position:'absolute',
+    zIndex:1
   },
 });
 

@@ -35,7 +35,7 @@ const BasicInformation = () => {
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView />}
+        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserPaymentView /> : <UserPaymentView />}
       </View>
       <View
         style={[
@@ -58,6 +58,7 @@ const BasicInformation = () => {
             title={isLoading ? t("cancel") : t("start_using_heal")}
             isPrimary
             isSmall
+            style={{paddingHorizontal: !isLoading ? getWidth(20) : 0}}
           />
         )}
       </View>

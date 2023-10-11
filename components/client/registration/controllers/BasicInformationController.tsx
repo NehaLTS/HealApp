@@ -25,7 +25,6 @@ const BasicInformationController = ({
         });
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        console.log('userData', userData);
         const res = await onUpdateUserProfile?.({
           firstname: userData?.firstname ?? '',
           lastname: userData?.lastname ?? '',

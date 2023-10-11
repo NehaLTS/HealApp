@@ -36,7 +36,7 @@ const Button = ({
           width: isSmall ? "auto" : "100%",
           borderColor: isPrimary ? colors.primary : colors.black,
           backgroundColor: isPrimary ? colors.primary : colors.transparent,
-          minWidth: width ?? '38%'
+          minWidth: width ?? '40%'
         },
       ]}
       {...props}
@@ -60,11 +60,11 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getWidth(dimens.borderThin),
     alignItems: "center",
     justifyContent: "center",
-    height: getHeight(dimens.buttonHeight),
-    borderRadius: getHeight(dimens.marginS/dimens.borderBold),
+    height: getWidth(dimens.buttonHeight),
+    borderRadius: getWidth(dimens.marginS/dimens.borderBold),
     zIndex: 1
   },
   buttonTitle: {

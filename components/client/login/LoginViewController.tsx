@@ -3,6 +3,7 @@ import { UserType, UseUserContext } from "contexts/useUserContext";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
@@ -20,7 +21,7 @@ const LoginViewController = () => {
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const validateEmail = () => {
     if (!email) {
       setEmailError("Email is required");
@@ -58,22 +59,27 @@ const LoginViewController = () => {
     return emailPattern.test(email);
   };  /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
-    navigation.navigate("HomeView")
+    navigation.navigate(NavigationRoutes.ClientHome)
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
     try {
-
-      // const res = await onLoginUser?.(email, password);
-      const res = await onSubmitAuthRequest({ email, password });
-      setUserData({ ...userData, token: res?.token, isSuccessful: res?.isSuccessful });
-      setLocalData('USER', res)
-      if (res?.isSuccessful === true) {
-        handleAuthResponse();
-      } else {
-        Alert.alert("Login Failed", "Please check your email and password and try again.");
+      setIsLoading(true)
+      if (email != '') {
+        const res = await onSubmitAuthRequest({ email, password });
+        setUserData({ ...userData, token: res?.token, isSuccessful: res?.isSuccessful });
+        setLocalData('USER', res)
+        setIsLoading(false)
+        if (res?.isSuccessful === true) {
+          handleAuthResponse();
+        } else {
+          Alert.alert("Login Failed", "Please check your email and password and try again.");
+        }
       }
-
+      else {
+        setIsLoading(false)
+        Alert.alert("Please enter email or password");
+      }
     } catch (error) {
       console.error("Error during login:", error);
       Alert.alert("An error occurred during login.");
@@ -87,9 +93,12 @@ const LoginViewController = () => {
         const email = userData?.user?.email
         const googleId = userData.user.providerData[0].uid
         /** To handle Google auth request to API */
+        setIsLoading(true)
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
+        setIsLoading(false)
+
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
         } else {
@@ -106,15 +115,16 @@ const LoginViewController = () => {
 
     onFBAuthProcessing().then(async (userData) => {
       try {
-        //TODO: under review with facebook 
+        //TODO: under review with facebook
         // const email = "amanshar@gmail.com"
         // const facebookId = "sharm@hmail.com"
+        setIsLoading(true)
         const email = userData.user.email
         const facebookId = userData.additionalUserInfo?.profile?.id
         const res = await onSubmitFBAuthRequest({ email, facebookId });
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
-        console.log('bhjbhmb', res)
+        setIsLoading(false)
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
         } else {
@@ -149,6 +159,7 @@ const LoginViewController = () => {
     password,
     emailError,
     passwordError,
+    isLoading
   };
 };
 

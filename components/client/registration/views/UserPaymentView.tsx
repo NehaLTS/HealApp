@@ -4,8 +4,8 @@ import Text from "components/common/Text";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
+import { fontFamily } from "designToken/fontFamily";
 import { fontSize } from "designToken/fontSizes";
-import { fontWeight } from "designToken/fontWeights";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
@@ -30,7 +30,7 @@ const UserPaymentView = () => {
   } = UserPaymentViewController();
 
   const isLoading = false; //TODO: need to change after binding data
-  const isGetCardDetails = false; //TODO: need to change after binding data
+  const isGetCardDetails = true; //TODO: need to change after binding data
 
   return (
     <>
@@ -42,7 +42,6 @@ const UserPaymentView = () => {
               style={styles.creditCard}
             />
             <Text
-              style={styles.profileText}
               title={
                 !isLoading
                   ? registration.add_credit_card
@@ -60,7 +59,7 @@ const UserPaymentView = () => {
                 source={require("assets/icon/masterCard.png")}
                 style={styles.googlePay}
               />
-              <Text style={styles.profileText} title="Master-card" />
+              <Text title="Master-card" />
               <View style={styles.cardIcons}>
                 <Image
                   source={require("assets/icon/edit.png")}
@@ -124,10 +123,7 @@ const UserPaymentView = () => {
               source={require("assets/icon/googlePay.png")}
               style={styles.googlePay}
             />
-            <Text
-              style={styles.profileText}
-              title={registration.add_google_pay}
-            />
+            <Text title={registration.add_google_pay} />
           </TouchableOpacity>
         </>
       )}
@@ -158,7 +154,7 @@ const styles = StyleSheet.create({
   },
   googlePayContainer: {
     flexDirection: "row",
-    gap: getHeight(dimens.sideMargin),
+    gap: getWidth(dimens.sideMargin),
     alignItems: "center",
     marginTop: getHeight(dimens.sideMargin),
   },
@@ -178,10 +174,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
   },
-  profileText: {
-    color: colors.black,
-    fontSize: getWidth(fontSize.textL),
-  },
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -189,10 +181,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginS),
   },
   cardDetail: {
-    color: colors.black,
-    fontSize: getWidth(fontSize.textL),
-    fontWeight: fontWeight.light,
-    letterSpacing: getWidth(0.5),
+    fontFamily: fontFamily.light
   },
   cardNumber: {
     marginVertical: getHeight(dimens.sideMargin + dimens.borderBold),
@@ -225,7 +214,7 @@ const styles = StyleSheet.create({
   cardDetailContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getHeight(dimens.marginM),
+    gap: getHeight(dimens.marginM + dimens.borderBold),
     marginBottom: getHeight(dimens.borderBold),
   },
   expireDate: {

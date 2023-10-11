@@ -71,7 +71,7 @@ const UserAddressView = () => {
         <TouchableOpacity
           activeOpacity={userData.profile_picture ? 1 : 0.5}
           onPress={() => !userData.profile_picture && setIsShowModal(true)}
-          style={styles.imageContainer}>
+          style={[styles.imageContainer,{marginLeft: getWidth(dimens.paddingXs)}]}>
           <Image
             source={
               userData.profile_picture
@@ -91,7 +91,7 @@ const UserAddressView = () => {
             onPress={() => setIsShowModal(true)}
             style={styles.imageContainer}>
             <Image
-              source={require("assets/icon/edit.png")}
+              source={require("assets/icon/circumEditBlue.png")}
               style={styles.editImage}
             />
           </TouchableOpacity>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getHeight(dimens.marginM),
+    gap: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.marginS),
   },
   editProfile: {
@@ -126,8 +126,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: fontSize.textM,
-    paddingTop: getHeight(dimens.paddingXs),
-    letterSpacing: getWidth(0.5),
+    paddingTop: getHeight(dimens.paddingXs)
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getWidth(dimens.marginS),
+    gap: getWidth(dimens.marginS)
   },
   editImage: {
     height: getHeight(dimens.paddingL),

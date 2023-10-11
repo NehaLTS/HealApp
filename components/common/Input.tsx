@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
-    minWidth: '20%'
+    minWidth: '24%'
   },
   input: {
     fontSize: fontSize.textL,

@@ -10,7 +10,7 @@ import { t } from "i18next";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import Text from "components/common/Text";
@@ -18,8 +18,8 @@ import Text from "components/common/Text";
 const RegistrationView = () => {
   const { languageCode } = useTranslationContext();
   const { signIn } = getTexts(languageCode);
-  const { onPressSignUp } = RegistrationViewController();
-    //TODO Use useRef
+  const { onPressSignUp, isLoading } = RegistrationViewController();
+  //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState('');
@@ -39,7 +39,7 @@ const RegistrationView = () => {
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     return passwordPattern.test(password);
   };
-  
+
   const validatePassword = () => {
     if (!password) {
       setPasswordError("Password is required");
@@ -51,7 +51,7 @@ const RegistrationView = () => {
       setPasswordError('');
     }
   };
-  
+
   const handleSignUp = () => {
     if (!emailError && !passwordError) onPressSignUp(email, password)
   };
@@ -64,6 +64,7 @@ const RegistrationView = () => {
   return (
     <>
       <View style={styles.inputContainer}>
+      {isLoading && <ActivityIndicator size={'large'} style={styles.loading} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -86,7 +87,7 @@ const RegistrationView = () => {
         <TextButton
           fontSize={getWidth(fontSize.textS)}
           isActive
-          style={styles.forgotPassword}
+          containerStyle={styles.forgotPassword}
           title={t("forgot_password")}
         />
         <Button
@@ -98,7 +99,7 @@ const RegistrationView = () => {
         />
       </View>
       <View style={styles.footerContainer}>
-      <Text style={styles.signInVia} title={t("or_sign_in_via")} />
+        <Text title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    textAlign: "center",
+    alignSelf: "center",
     paddingVertical: getHeight(dimens.paddingS)
   },
   footerContainer: {
@@ -126,18 +127,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 0.18,
   },
-  signInVia: {
-    letterSpacing:getWidth(0.5)
-  },
   signUpButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.marginM),
   },
   password: {
-    marginTop: dimens.paddingL,
+    marginTop: dimens.paddingL+dimens.borderBold,
   },
   errorText: {
     color: colors.invalid, 
     fontSize: fontSize.textM, 
+  },
+  loading: {
+    left: '44%',
+    top: '13%',
+    position:'absolute',
+    zIndex:1
   },
 });
