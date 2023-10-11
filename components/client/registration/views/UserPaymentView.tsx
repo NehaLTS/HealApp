@@ -30,7 +30,7 @@ const UserPaymentView = () => {
   } = UserPaymentViewController();
 
   const isLoading = false; //TODO: need to change after binding data
-  const isGetCardDetails = true; //TODO: need to change after binding data
+  const isGetCardDetails = false; //TODO: need to change after binding data
 
   return (
     <>

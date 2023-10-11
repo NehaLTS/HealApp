@@ -35,7 +35,7 @@ const BasicInformation = () => {
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserPaymentView /> : <UserPaymentView />}
+        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView />}
       </View>
       <View
         style={[
