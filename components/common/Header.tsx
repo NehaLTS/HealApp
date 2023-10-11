@@ -10,8 +10,7 @@ import Text from "./Text";
 
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
-  const [currentLanguage, setCurrentLanguage ] = useState('EN')
-  const { isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();
+  const {currentLanguage, isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between' }]}>
@@ -28,22 +27,22 @@ const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean 
         <View style={styles.languageContainer}>
           <Text
             style={[styles.language,{color: currentLanguage ==="EN" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('EN') ;handleLanguageChange("en"); setIsLanguageChanged(false)}}
+            onPress={() => {handleLanguageChange("en"); setIsLanguageChanged(false)}}
             title={'English'}
           />
           <Text
              style={[styles.language,{color: currentLanguage ==="HE" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('HE') ;handleLanguageChange("he"); setIsLanguageChanged(false)}}
+            onPress={() => {handleLanguageChange("he"); setIsLanguageChanged(false)}}
             title={'עִברִית'}
           />
           <Text
              style={[styles.language,{color: currentLanguage ==="AR" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('AR') ;handleLanguageChange("ar"); setIsLanguageChanged(false)}}
+            onPress={() => {handleLanguageChange("ar"); setIsLanguageChanged(false)}}
             title={'العربي'}
           />
           <Text
              style={[styles.language,{color: currentLanguage ==="RU" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('RU') ;handleLanguageChange("ru"); setIsLanguageChanged(false)}}
+            onPress={() => {handleLanguageChange("ru"); setIsLanguageChanged(false)}}
             title={'русский'}
           />
         </View>
