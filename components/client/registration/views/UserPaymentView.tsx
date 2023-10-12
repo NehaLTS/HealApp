@@ -13,7 +13,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
-const UserPaymentView = () => {
+const UserPaymentView = ({isLoading,isGetCardDetails}:{isLoading:boolean,isGetCardDetails:boolean}) => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const {
@@ -28,10 +28,10 @@ const UserPaymentView = () => {
     onChangeExpireDate,
     onChangeCvv,
   } = UserPaymentViewController();
-
-  const isLoading = false; //TODO: need to change after binding data
-  const isGetCardDetails = false; //TODO: need to change after binding data
-
+ 
+  // const isLoading = false; //TODO: need to change after binding data
+  // const isGetCardDetails = false; //TODO: need to change after binding data
+console.log("isloading",isLoading,isGetCardDetails)
   return (
     <>
       <View style={styles.container}>

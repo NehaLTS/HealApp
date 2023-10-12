@@ -14,28 +14,30 @@ import BasicInformationController from "../controllers/BasicInformationControlle
 import UserAddressView from "./UserAddressView";
 import UserDetailView from "./UserDetailView";
 import UserPaymentView from "./UserPaymentView";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
   const {t} = useTranslation()
-  const { currentStep, onPressNext, onPressBack } = BasicInformationController({
+  const { currentStep, onPressNext, onPressBack ,isLoading,isCardDetails,isGetCardDetails} = BasicInformationController({
     totalSteps: 3,
   });
+  // const isGetCardDetails = false
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header title={t('registration')} />,
     });
   }, [navigation]);
   const isCurrentStep = currentStep[currentStep.length - 1]
-  const isLoading = false; //TODO: need to change after binding data
-  const isCardDetails = false; //TODO: need to change after binding data
+  // const isLoading = false; //TODO: need to change after binding data
+  // const isCardDetails = false; //TODO: need to change after binding data
 
   return (
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView />}
+        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView isLoading={isLoading} isGetCardDetails={isGetCardDetails} />}
       </View>
       <View
         style={[
@@ -59,6 +61,8 @@ const BasicInformation = () => {
             isPrimary
             isSmall
             style={{paddingHorizontal: !isLoading ? getWidth(20) : 0}}
+            onPress={()=>(isLoading ?console.log('goback'):    navigation.navigate(NavigationRoutes.ClientHome)
+            )}
           />
         )}
       </View>

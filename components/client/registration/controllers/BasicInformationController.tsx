@@ -2,19 +2,29 @@ import { useNavigation } from "@react-navigation/native";
 import { UseUserContext } from "contexts/useUserContext";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert } from "react-native";
 
-const BasicInformationController = ({
+const BasicInformationController =  ({
   totalSteps,
 }: {
   totalSteps?: number;
 }) => {
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState([0]);
-  const { onUpdateUserProfile, onCreateCreditCardDetails } = AuthServicesClient()
+  const { onUpdateUserProfile, onCreateCreditCardDetails,onGetCreditCard } = AuthServicesClient()
   const { userData, setUserData } = UseUserContext()
+  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isGetCardDetails, setIsGetCardDetails] = useState(false);
+  const [isCardDetails, setIsCardDetails] = useState(false);
+  const [a, setA] = useState('');
 
+  // useEffect(()=>{
+ 
+
+  // },[isSuccessful])
+
+  console.log('isGetCardDetailss',isGetCardDetails)
   const onPressNext = async () => {
     if (currentStep.length !== totalSteps) {
       if (currentStep[currentStep.length - 1] === 0) {
@@ -24,7 +34,8 @@ const BasicInformationController = ({
           return array;
         });
       }
-      if (currentStep[currentStep.length - 1] === 1) {
+      else if (currentStep[currentStep.length - 1] === 1) {
+        console.log("first step")
         const res = await onUpdateUserProfile?.({
           firstname: userData?.firstname ?? '',
           lastname: userData?.lastname ?? '',
@@ -53,26 +64,33 @@ const BasicInformationController = ({
       }
     }
     if (currentStep[currentStep.length - 1] === 2) {
-      const res = await onCreateCreditCardDetails({
-        credit_card_number: userData?.credit_card_number ?? '',
-        expire_date: userData?.expire_date ?? '',
-        cvv: userData?.cvv ?? '',
-        client_id: userData?.client_id ?? ''
-      })
-      setUserData({ ...userData, token: res?.token },)
-      setLocalData('USER', res)
-      console.log('kamal', res)
-      if (res?.isSuccessful) {
-        setCurrentStep(() => {
-          const array = [...currentStep];
-          array.push(array[array.length - 1] + 1);
-          return array;
-        });
+      console.log("ncjkxnvjkn",userData.client_id,userData.token)
+      setisLoading(true)
+        const res = await onCreateCreditCardDetails({
+          credit_card_number: userData?.credit_card_number ?? '',
+          expire_date: userData?.expire_date ?? '',
+          cvv: userData?.cvv ?? '',
+          client_id: userData?.client_id ?? ''
+        })
+        setUserData({ ...userData, token: res?.token },)
+        setLocalData('USER', res)
+        console.log('kamal+++++++++++++', res)
+        if (res?.isSuccessful) {
+          const getCredit= onGetCreditCard({client_id: a?.toString()}).then((ur)=>{return ur})
+          console.log('getCredit',a?.toString())
+          setIsGetCardDetails(true)
+          setIsCardDetails(true)
+          setisLoading(false)
+        }
+        else {
+          Alert.alert('some error occured+++');
+        }
       }
       else {
-        Alert.alert('some error occured');
+        console.log('cvhjckvhbno data')
       }
-    }
+    
+  
   };
   const onPressBack = () => {
     if (currentStep.length > 1) {
@@ -86,8 +104,12 @@ const BasicInformationController = ({
   return {
     currentStep,
     onPressNext,
-    onPressBack
+    onPressBack,
+    isLoading,
+    isCardDetails,
+    isGetCardDetails
   };
 };
 
-export default BasicInformationController;
+
+export default BasicInformationController

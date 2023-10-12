@@ -1,5 +1,5 @@
 import { sendRequest } from "../api/RequestHandler";
-import { CREATE_SIGNUP, CREDITED_CARD_DETAILS, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API, LOGIN_API, POST, UPDATE_SIGNUP } from "../constants/ApiConstants";
+import { CREATE_SIGNUP, CREDITED_CARD_DETAILS, FACEBOOK_LOGIN_API, GET_CREATE_CARD_DETAILS, GOOGLE_LOGIN_API, LOGIN_API, PATCH, POST, UPDATE_SIGNUP } from "../constants/ApiConstants";
 import { UserType } from "../types/UserType";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseUserContext } from "contexts/useUserContext";
@@ -60,7 +60,7 @@ export const AuthServicesClient = () => {
         client_id: string
     }): Promise<any> =>
         sendRequest(UPDATE_SIGNUP, {
-            method: POST,
+            method: PATCH,
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
@@ -74,13 +74,24 @@ export const AuthServicesClient = () => {
         client_id: string
     }): Promise<UserType> =>
         sendRequest(CREDITED_CARD_DETAILS, {
-            method: POST,
+            method: PATCH,
             body: body as unknown as BodyInit,
         })
-
+        const onGetCreditCard = (body: {
+            client_id:string
+        }): Promise<UserType> =>
+            sendRequest(GET_CREATE_CARD_DETAILS, {
+                method: POST,
+                body: body as unknown as BodyInit,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token': userData?.token
+                } as unknown as HeadersInit
+            })
+    
     return {
         onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest,
-        onCreateSignUp, onUpdateUserProfile, onCreateCreditCardDetails,
+        onCreateSignUp, onUpdateUserProfile, onCreateCreditCardDetails,onGetCreditCard
     }
 }
 
