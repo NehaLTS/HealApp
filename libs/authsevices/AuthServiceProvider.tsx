@@ -1,6 +1,6 @@
 import { sendRequest } from "../api/RequestHandler";
-import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
-import { UserType, UserTypeProvider } from "../types/UserType";
+import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_TYPES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
+import { ProviderTypes, UserType, UserTypeProvider } from "../types/UserType";
 
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
@@ -53,6 +53,10 @@ export const AuthServicesProvider = () => {
         provider_type_id: string;
         license_number: string;
         upload_license_picture: string;
+        bank_name: string;
+        branch: string;
+        business_registration_number: string;
+        account: string
     }): Promise<UserTypeProvider> =>
         sendRequest(UPDATE_SIGNUP_PROVIDER, {
             method: PATCH,
@@ -78,9 +82,19 @@ export const AuthServicesProvider = () => {
                 'x-access-token': userDataProvider?.token
             } as unknown as HeadersInit
         })
+    const onGetProviderTypes = (): Promise<any> =>
+        sendRequest(GET_PROVIDER_TYPES, {
+            method: GET,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6bnVsbCwiaWF0IjoxNjk3MDA0MjE1LCJleHAiOjE2OTcwMzY2MTV9.TVgWbGUjbe57Z0yvOawL8ba9eZgqmblcoPN_gnJnLEE"
+            } as unknown as HeadersInit
+        }).then((res) => {
+            console.error("RESPONSE>> ", res)
+        })
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,
-        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices
+        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes
     }
 }
 

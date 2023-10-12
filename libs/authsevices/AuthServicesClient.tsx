@@ -57,7 +57,8 @@ export const AuthServicesClient = () => {
         profile_picture: string,
         date_of_birth: string,
         phone_number: string,
-        client_id: string
+        client_id: string,
+        id_number: string
     }): Promise<any> =>
         sendRequest(UPDATE_SIGNUP, {
             method: PATCH,
@@ -79,24 +80,24 @@ export const AuthServicesClient = () => {
         })
 
 
-        
-        const onGetCreditCard = (body: {
-            client_id:string
-        }): Promise<any> =>
-            sendRequest(GET_CREATE_CARD_DETAILS, {
-                method: POST,
-                body: body as unknown as BodyInit,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': userData?.token
-                } as unknown as HeadersInit
-            }).then((res) => {
-                console.error("RESPONSE CARd /..>> ", res)
-            })
-    
+
+    const onGetCreditCard = (body: {
+        client_id: string
+    }): Promise<any> =>
+        sendRequest(GET_CREATE_CARD_DETAILS, {
+            method: POST,
+            body: body as unknown as BodyInit,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': userData?.token
+            } as unknown as HeadersInit
+        }).then((res) => {
+            console.error("RESPONSE CARd /..>> ", res)
+        })
+
     return {
         onSubmitAuthRequest, onSubmitGoogleAuthRequest, onSubmitFBAuthRequest,
-        onCreateSignUp, onUpdateUserProfile, onCreateCreditCardDetails,onGetCreditCard
+        onCreateSignUp, onUpdateUserProfile, onCreateCreditCardDetails, onGetCreditCard
     }
 }
 

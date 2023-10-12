@@ -27,33 +27,33 @@ const App = () => {
   });
   return (
     <QueryClientProvider client={queryClient}>
-        <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
-          <NavigationContainer >
-            <Stack.Navigator initialRouteName={ getLocalData('USER')?.token? NavigationRoutes.ClientStack :  NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
-              <Stack.Screen name={NavigationRoutes.IntroStack} component={IntroStackNavigator} />
-          
-              <Stack.Screen
-                name={NavigationRoutes.ClientStack}
-                // component={lazy(
-                //   () => import("navigator/ClientStackNavigator")
-                // )}
-                component = {ClientStackNavigator}
-              />
-              <Stack.Screen
-                name={NavigationRoutes.ProviderStack}
-                component={lazy(
-                  () => import("./navigator/ProviderStackNavigator")
-                )}
-              />
-              <Stack.Screen
-                name={'HomeView'}
-                component={lazy(
-                  () => import("./components/client/home/HomeView")
-                )}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </TranslationContext.Provider>
+      <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
+        <NavigationContainer >
+          <Stack.Navigator initialRouteName={getLocalData('USER')?.token ? NavigationRoutes.ClientStack : NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={NavigationRoutes.IntroStack} component={IntroStackNavigator} />
+
+            <Stack.Screen
+              name={NavigationRoutes.ClientStack}
+              // component={lazy(
+              //   () => import("navigator/ClientStackNavigator")
+              // )}
+              component={ClientStackNavigator}
+            />
+            <Stack.Screen
+              name={NavigationRoutes.ProviderStack}
+              component={lazy(
+                () => import("./navigator/ProviderStackNavigator")
+              )}
+            />
+            <Stack.Screen
+              name={'HomeView'}
+              component={lazy(
+                () => import("./components/client/home/HomeView")
+              )}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </TranslationContext.Provider>
     </QueryClientProvider>
   );
 };

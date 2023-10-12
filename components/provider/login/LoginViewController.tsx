@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
-import { useApiContext } from "contexts/useApiContext";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
 import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -58,16 +58,15 @@ const LoginViewController = () => {
   };
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
-    navigation.navigate("HomeView")
+    navigation.navigate(NavigationRoutes.ProviderHome)
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
-    console.log("yegfjusdfj", email, password)
     try {
       const res = await OnProviderSignIn({ email, password });
-      setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
-      setLocalData('USER', res)
-      if (res?.isSuccessful === true) {
+      if (res?.isSuccessful === true && email != '') {
+        setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
+        setLocalData('USER', res)
         handleAuthResponse();
       } else {
         Alert.alert("Login Failed", "Please check your email and password and try again.");

@@ -4,10 +4,11 @@ import Text from "components/common/Text";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
+import DatePicker from 'react-native-date-picker'
 
 const UserAddressView = () => {
   const { t } = useTranslation();
@@ -24,10 +25,17 @@ const UserAddressView = () => {
     onChangeAddress,
     onChangeBirthDate,
     onChangeIdNumber,
-    getImageUrl
+    getImageUrl,
+    addressError,
+    dateOfBirthError,
+    idNumberError
   } = UserAddressViewController();
-  console.log('first',userData )
-
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const handleDateChange = (newDate) => {
+    setSelectedDate(newDate);
+  };
   return (
     <>
       <Input
@@ -35,21 +43,26 @@ const UserAddressView = () => {
         type={"fullStreetAddress"}
         inputStyle={styles.input}
         onBlur={onBlurAddress}
+        onClearInputText={() => addressRef.current.clear()}
         onChangeText={onChangeAddress}
         ref={addressRef}
-        value={userData.address}
+        defaultValue={userData.address}
+        errorMessage={addressError}
         inputValue={addressRef.current.value}
       />
       <Input
         placeholder={t("date_of_birth")}
         type={"telephoneNumber"}
         keyboardType="numeric"
+        errorMessage={dateOfBirthError}
         inputStyle={styles.inputDOB}
         onBlur={onBlurBirthDate}
         onChangeText={onChangeBirthDate}
         ref={birthDateRef}
-        value={userData.date_of_birth}
+        defaultValue={userData.date_of_birth}
         inputValue={birthDateRef.current.value}
+        dateOfBirth={true}
+        onPressCalender={() => setOpen(true)}
       />
       <Input
         placeholder={t("id_number")}
@@ -59,19 +72,26 @@ const UserAddressView = () => {
         onBlur={onBlurIdNumber}
         onChangeText={onChangeIdNumber}
         ref={idNumberRef}
-        value={userData.id_number}
+        onClearInputText={() => idNumberRef.current.clear()}
+        defaultValue={userData.id_number}
+        errorMessage={idNumberError}
         inputValue={idNumberRef.current.value}
       />
+      {/* {open &&
+        <DatePicker
+          date={selectedDate}
+          onDateChange={handleDateChange}
+        />} */}
       <Text style={styles.text} title={t("find_doctor_text")} />
       <View style={styles.innerContainer}>
         <Text
-          style={[!userData.profile_picture && {marginTop: getHeight(dimens.marginS)}]}
+          style={[!userData.profile_picture && { marginTop: getHeight(dimens.marginS) }]}
           title={t("add_profile")}
         />
         <TouchableOpacity
           activeOpacity={userData.profile_picture ? 1 : 0.5}
           onPress={() => !userData.profile_picture && setIsShowModal(true)}
-          style={[styles.imageContainer,{marginLeft: getWidth(dimens.paddingXs)}]}>
+          style={[styles.imageContainer, { marginLeft: getWidth(dimens.paddingXs) }]}>
           <Image
             source={
               userData.profile_picture

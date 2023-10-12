@@ -23,7 +23,7 @@ const LocalizationController = () => {
   };
   useEffect(() => {
     const data = getLocalData?.("USER");
-    const userLanguage = data?.user?.language;
+    const userLanguage = data?.user?.language ?? "EN";
     setCurrentLanguage(userLanguage)
   }, [getLocalData?.("USER")]);
 

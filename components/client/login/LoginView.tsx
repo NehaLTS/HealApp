@@ -8,13 +8,8 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   const { t } = useTranslation();
@@ -30,7 +25,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     passwordError,
     isLoading,
   } = LoginViewController();
-  
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -87,7 +82,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     paddingVertical: getHeight(dimens.paddingS),
-    alignSelf: "center",
+    alignSelf: 'center'
   },
   footerContainer: {
     flexDirection: "row",
@@ -108,8 +103,8 @@ const styles = StyleSheet.create({
   loading: {
     left: '44%',
     top: '13%',
-    position:'absolute',
-    zIndex:1
+    position: 'absolute',
+    zIndex: 1
   },
 });
 

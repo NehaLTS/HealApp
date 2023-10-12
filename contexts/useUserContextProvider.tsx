@@ -16,7 +16,9 @@ export interface UserTypeProvider {
     id_number: string;
     token: string;
     email: string;
-    isSuccessful: boolean
+    isSuccessful: boolean;
+    type_Provider: string;
+    speciality: string;
 }
 export interface UserContextFields {
     userDataProvider: Partial<UserTypeProvider>;

@@ -27,6 +27,9 @@ const UserPaymentView = ({isLoading,isGetCardDetails}:{isLoading:boolean,isGetCa
     onChangeCardNumber,
     onChangeExpireDate,
     onChangeCvv,
+    cardNumberError,
+    cvvError,
+    cardExpiry
   } = UserPaymentViewController();
  
   // const isLoading = false; //TODO: need to change after binding data
@@ -97,25 +100,39 @@ const cardNumber = "**** **** ***** " +last4Digits;
               type="creditCardNumber"
               inputStyle={styles.cardNumber}
               onBlur={onBlurCardNumber}
+              onClearInputText={() => cardNumberRef.current.clear()}
               onChangeText={onChangeCardNumber}
               ref={cardNumberRef}
-              value={userData.credit_card_number}
+              defaultValue={userData.credit_card_number}
+              errorMessage={cardNumberError}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
+                keyboardType="numeric"
+                type="creditCardNumber"
                 placeholder={registration.mm_yy}
                 inputStyle={styles.expireDate}
                 onBlur={onBlurExpireDate}
+                onClearInputText={() => expireDateRef.current.clear()}
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
-                value={userData.expire_date}
+                errorMessage={cardExpiry}
+                defaultValue={userData.expire_date}
               />
               <Input
+                keyboardType="numeric"
+                type="creditCardNumber"
                 placeholder={registration.cvv}
                 onBlur={onBlueCvv}
-                onChangeText={onChangeCvv}
+                errorMessage={cvvError}
+                onClearInputText={() => cvvRef.current.clear()}
+                onChangeText={(val) => {
+                  if (val.length == 2) {
+                    val = val + '/'
+                  } onChangeCvv
+                }}
                 ref={cvvRef}
-                value={userData.cvv}
+                defaultValue={userData.cvv}
               />
             </View>
           </>

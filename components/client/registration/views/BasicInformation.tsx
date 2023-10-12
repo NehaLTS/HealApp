@@ -19,8 +19,8 @@ import NavigationRoutes from "navigator/NavigationRoutes";
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
-  const {t} = useTranslation()
-  const { currentStep, onPressNext, onPressBack ,isLoading,isCardDetails,isGetCardDetails} = BasicInformationController({
+  const { t } = useTranslation()
+  const { currentStep, onPressNext, onPressBack, isLoading, isCardDetails, isGetCardDetails } = BasicInformationController({
     totalSteps: 3,
   });
   // const isGetCardDetails = false
@@ -42,7 +42,7 @@ const BasicInformation = () => {
       <View
         style={[
           styles.footerContainer,
-          {justifyContent: isLoading || isCardDetails ? "center" : "space-between"}
+          { justifyContent: isLoading || isCardDetails ? "center" : "space-between" }
         ]}>
         {!isLoading && !isCardDetails ? (
           <>
@@ -60,14 +60,14 @@ const BasicInformation = () => {
             title={isLoading ? t("cancel") : t("start_using_heal")}
             isPrimary
             isSmall
-            style={{paddingHorizontal: !isLoading ? getWidth(20) : 0}}
-            onPress={()=>(isLoading ?console.log('goback'):    navigation.navigate(NavigationRoutes.ClientHome)
+            style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
+            onPress={() => (isLoading ? console.log('goback') : navigation.navigate(NavigationRoutes.ClientHome)
             )}
           />
         )}
       </View>
       {currentStep[currentStep.length - 1] === 2 && !isLoading && !isCardDetails && (
-         <Text style={styles.skipLaterText} title={t('skip_for_later')} />
+        <Text style={styles.skipLaterText} title={t('skip_for_later')} />
       )}
     </View>
   );
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
     flex: 0.08,
-    alignSelf:'center'
+    alignSelf: 'center'
   },
   inputContainer: {
     flex: 0.75,

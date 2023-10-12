@@ -1,6 +1,7 @@
 
 import React, { forwardRef, useRef, useState } from "react";
 import {
+  Alert,
   Animated,
   DimensionValue,
   Image,
@@ -26,6 +27,10 @@ const Input = forwardRef(({
   errorMessage,
   containerWidth,
   inputValue,
+  onClearInputText,
+  onPressCalender,
+  isToHideCross,
+  dateOfBirth,
   ...props
 }: {
   placeholder: string;
@@ -36,19 +41,23 @@ const Input = forwardRef(({
   | 'name'
   | 'nameSuffix'
   | 'telephoneNumber'
-  | 'password';
+  | 'password'
+  | 'numeric';
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
-  inputValue: string 
+  inputValue: string,
+  isToHideCross: boolean,
+  onClearInputText(): void
+  onPressCalender(): void
+  dateOfBirth?: boolean
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
-  const moveText = useRef(new Animated.Value(0)).current;
-  const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
+  const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
+  const fontSizeAnim = useRef(new Animated.Value(inputValue ? getHeight(fontSize.textS) : getHeight(fontSize.textL))).current;
 
   const onFocusHandler = () => moveTextTop();
   const onBlurHandler = () => moveTextBottom()
-
   const moveTextTop = () => {
     Animated.parallel([
       Animated.timing(moveText, {
@@ -63,21 +72,21 @@ const Input = forwardRef(({
       }),
     ]).start();
   };
-
   const moveTextBottom = () => {
-    if (inputValue === '' ){
-    Animated.parallel([
-      Animated.timing(moveText, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: false,
-      }),
-      Animated.timing(fontSizeAnim, {
-        toValue: getHeight(fontSize.textL),
-        duration: 200,
-        useNativeDriver: false,
-      }),
-    ]).start()};
+    if (inputValue === '') {
+      Animated.parallel([
+        Animated.timing(moveText, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(fontSizeAnim, {
+          toValue: getHeight(fontSize.textL),
+          duration: 200,
+          useNativeDriver: false,
+        }),
+      ]).start()
+    };
   };
 
   const translateY = moveText.interpolate({
@@ -96,7 +105,7 @@ const Input = forwardRef(({
   const fontSizeStyle = { fontSize: fontSizeAnim };
   return (
     <View>
-      <View style={[styles.inputContainer, inputStyle ,{ borderColor: errorMessage? colors.invalid : colors.primary }]}>
+      <View style={[styles.inputContainer, inputStyle, { borderColor: errorMessage ? colors.invalid : colors.primary }]}>
         <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
@@ -113,13 +122,21 @@ const Input = forwardRef(({
         {type === "password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
-              source={ errorMessage ? require("../../assets/icon/error.png") :require("assets/icon/eyeIcon.png")}
+              source={errorMessage ? require("../../assets/icon/error.png") : require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
             />
           </TouchableOpacity>
         )}
-          {errorMessage && type !== "password" && (
-          <TouchableOpacity >
+        {errorMessage && type !== "password" && (
+          <TouchableOpacity onPress={onClearInputText}>
+            <Image
+              source={require("../../assets/icon/error.png")}
+              style={styles.errorImage}
+            />
+          </TouchableOpacity>
+        )}
+        {dateOfBirth && (
+          <TouchableOpacity onPress={onPressCalender}>
             <Image
               source={require("../../assets/icon/error.png")}
               style={styles.errorImage}
@@ -151,7 +168,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   showImage: {
-    width: getWidth(dimens.marginM+dimens.borderThin),
+    width: getWidth(dimens.marginM + dimens.borderThin),
     height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.sideMargin),
     resizeMode: 'contain',
