@@ -1,5 +1,6 @@
 import { UseUserContext } from 'contexts/useUserContext';
-import React, { useState } from 'react';
+import useUpdateEffect from 'libs/UseUpdateEffect';
+import React, { useEffect, useState } from 'react';
 
 const UserDetailViewController = () => {
   const { userData, setUserData } = UseUserContext()
@@ -9,8 +10,37 @@ const UserDetailViewController = () => {
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [isNext, setIsNexts] = useState(false);
+
+  // console.log('isNext', isNext);
+  useUpdateEffect(() => {
+    console.log('isNext111');
+    if (isNext) {
+      console.log('isNext2222');
+      validatePhoneNumber()
+      setFirstNameError("First name is required")
+    }
+
+  }, [isNext])
+  useEffect(() => {
+    console.log('isNext', isNext);
+    if (isNext) validateFirstName()
+  }, [])
+
+  userData.onbuttonClick = () => {
+    setIsNexts(true)
+    console.log('gurpreet************');
+    validatePhoneNumber()
+  }
+
+  const setIsNext = () => {
+    console.log('object************');
+    setIsNexts(true)
+    // validateFirstName()
+  }
+
   const validateFirstName = () => {
-    if (!firstNameRef.current.value) {
+    if (!firstNameRef.current.value || firstNameRef.current.value === undefined) {
       setFirstNameError("First name is required");
     } else if (!/^[A-Z][a-z]*$/.test(firstNameRef.current.value)) {
       setFirstNameError("First letter should start with an uppercase , followed by lowercase ");
@@ -42,10 +72,12 @@ const UserDetailViewController = () => {
     setUserData({ ...userData, firstname: firstNameRef.current.value })
   }
   const onChangeFirstName = (value: string) => {
+
     firstNameRef.current.value = value
     onBlurFirstName();
   }
   const onBlurLastName = () => {
+
     validateLastName()
     setUserData({ ...userData, lastname: lastNameRef.current.value })
   }
@@ -78,6 +110,8 @@ const UserDetailViewController = () => {
     onChangeLastName,
     onBlurPhoneNumber,
     onChangePhoneNumber,
+    validateFirstName,
+    setIsNext
   };
 }
 

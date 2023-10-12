@@ -30,7 +30,6 @@ const Input = forwardRef(({
   onClearInputText,
   onPressCalender,
   isToHideCross,
-  dateOfBirth,
   ...props
 }: {
   placeholder: string;
@@ -42,7 +41,8 @@ const Input = forwardRef(({
   | 'nameSuffix'
   | 'telephoneNumber'
   | 'password'
-  | 'numeric';
+  | 'numeric' |
+  'dateOfBirth';
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
@@ -50,7 +50,6 @@ const Input = forwardRef(({
   isToHideCross: boolean,
   onClearInputText(): void
   onPressCalender(): void
-  dateOfBirth?: boolean
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
@@ -127,7 +126,7 @@ const Input = forwardRef(({
             />
           </TouchableOpacity>
         )}
-        {errorMessage && type !== "password" && (
+        {inputValue?.length > 1 && errorMessage && type !== ("password" && 'dateOfBirth') && (
           <TouchableOpacity onPress={onClearInputText}>
             <Image
               source={require("../../assets/icon/error.png")}
@@ -135,19 +134,21 @@ const Input = forwardRef(({
             />
           </TouchableOpacity>
         )}
-        {dateOfBirth && (
-          <TouchableOpacity onPress={onPressCalender}>
+        {type === "dateOfBirth" && (
+          <TouchableOpacity onPress={() => { onPressCalender() }}>
             <Image
-              source={require("../../assets/icon/error.png")}
-              style={styles.errorImage}
+              source={errorMessage ? require("../../assets/icon/calender_icon.png") : require("assets/icon/calender_icon.png")}
+              style={styles.showImage}
             />
           </TouchableOpacity>
         )}
       </View>
-      {errorMessage && (
-        <Text style={styles.errorMessage}>{errorMessage}</Text>
-      )}
-    </View>
+      {
+        errorMessage && (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        )
+      }
+    </View >
   );
 });
 
@@ -192,5 +193,6 @@ const styles = StyleSheet.create({
     marginRight: getHeight(dimens.marginS),
   },
 });
+
 
 export default Input;

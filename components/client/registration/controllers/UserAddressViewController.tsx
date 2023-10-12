@@ -1,4 +1,5 @@
 import { UseUserContext } from 'contexts/useUserContext';
+import useUpdateEffect from 'libs/UseUpdateEffect';
 import React, { useState } from 'react';
 
 const UserAddressViewController = () => {
@@ -10,10 +11,23 @@ const UserAddressViewController = () => {
   const [addressError, setAddressError] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
   const [dateOfBirthError, setDateOfBirthError] = useState("");
+  const [isNext, setIsNexts] = useState(false);
 
+  useUpdateEffect(() => {
+    if (isNext) {
+      validateAddress()
+      validateIdNumber()
+    }
+
+  }, [isNext])
+
+  userData.onbuttonClick = () => {
+    setIsNexts(true)
+    validateAddress()
+  }
   const validateAddress = () => {
     const regex = /^[A-Za-z0-9\s.,/-]+$/;
-
+    setAddressError("Invalid address format");
     if (!regex.test(addressRef.current.value)) {
       setAddressError("Invalid address format");
     } else {

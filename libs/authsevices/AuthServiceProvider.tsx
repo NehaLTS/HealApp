@@ -90,7 +90,6 @@ export const AuthServicesProvider = () => {
                 'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6bnVsbCwiaWF0IjoxNjk3MDA0MjE1LCJleHAiOjE2OTcwMzY2MTV9.TVgWbGUjbe57Z0yvOawL8ba9eZgqmblcoPN_gnJnLEE"
             } as unknown as HeadersInit
         }).then((res) => {
-            console.error("RESPONSE>> ", res)
         })
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,

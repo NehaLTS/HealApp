@@ -91,14 +91,15 @@ const LoginViewController = () => {
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
-        const email = userData?.user?.email??""
-        const googleId = userData.user?.uid??""
+        console.log("nb m, m,", userData)
+        const email = userData?.user?.email ?? ""
+        const googleId = userData.user?.uid ?? ""
         /** To handle Google auth request to API */
         setIsLoading(true)
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
-        console.error(JSON.stringify(res))
 
         setIsLoading(false)
+        console.error(res)
 
         if (res?.isSuccessful === true) {
           setUserData?.({ ...userData, token: res.token });
@@ -107,7 +108,7 @@ const LoginViewController = () => {
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
-      } 
+      }
       catch (err) {
         console.log('Error occurred!');
       }
@@ -129,6 +130,7 @@ const LoginViewController = () => {
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
         setIsLoading(false)
+        console.error(res)
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
         } else {

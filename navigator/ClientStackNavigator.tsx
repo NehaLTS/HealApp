@@ -10,7 +10,7 @@ const ClientStackNavigator = () => {
   const [userData, setUserData] = React.useState<Partial<UserType>>({});
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
-      <Stack.Navigator initialRouteName={getLocalData('USER')?.token?NavigationRoutes.ClientHome : NavigationRoutes.ClientLogin}>
+      <Stack.Navigator initialRouteName={getLocalData('USER')?.token ? NavigationRoutes.ClientHome : NavigationRoutes.ClientLogin}>
         <Stack.Screen
           name={NavigationRoutes.ClientLogin}
           component={lazy(

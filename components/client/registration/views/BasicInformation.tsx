@@ -9,20 +9,29 @@ import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
 import UserAddressView from "./UserAddressView";
 import UserDetailView from "./UserDetailView";
 import UserPaymentView from "./UserPaymentView";
 import NavigationRoutes from "navigator/NavigationRoutes";
+import { UseUserContext } from "contexts/useUserContext";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
   const { t } = useTranslation()
-  const { currentStep, onPressNext, onPressBack, isLoading, isCardDetails, isGetCardDetails } = BasicInformationController({
-    totalSteps: 3,
-  });
+  const { userData
+  } = UseUserContext()
+  const { currentStep, onPressNext, onPressBack, isLoading, isCardDetails, isGetCardDetails, firstNameError, isLoader,
+    lastNameError,
+    phoneNumberError, addressError,
+    idNumberError,
+    dateOfBirthError, cardNumberError,
+    cvvError,
+    cardExpiry } = BasicInformationController({
+      totalSteps: 3,
+    });
   // const isGetCardDetails = false
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,7 +46,11 @@ const BasicInformation = () => {
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
-        {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView isLoading={isLoading} isGetCardDetails={isGetCardDetails} />}
+        {isLoader && <ActivityIndicator style={styles.loader} size={'large'} />}
+        {isCurrentStep === 0 ? <UserDetailView error={firstNameError} nameError={lastNameError} phoneError={phoneNumberError} /> : isCurrentStep === 1 ?
+          <UserAddressView address={addressError} dateOfBirth={dateOfBirthError} idNumber={idNumberError} /> :
+          <UserPaymentView isLoading={isLoading} isGetCardDetails={isGetCardDetails}
+            cardError={cardNumberError} expireDateError={cardExpiry} evvError={cvvError} />}
       </View>
       <View
         style={[
@@ -96,4 +109,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
   },
+  loader: {
+    position: 'absolute',
+    zIndex: 1,
+    top: "20%",
+    left: "45%"
+  }
 });

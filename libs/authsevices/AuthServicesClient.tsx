@@ -92,7 +92,7 @@ export const AuthServicesClient = () => {
                 'x-access-token': userData?.token
             } as unknown as HeadersInit
         }).then((res) => {
-            console.error("RESPONSE CARd /..>> ", res)
+            return res
         })
 
     return {

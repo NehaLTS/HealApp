@@ -10,7 +10,9 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
 import DatePicker from 'react-native-date-picker'
 
-const UserAddressView = () => {
+const UserAddressView = ({
+  address, dateOfBirth, idNumber
+}) => {
   const { t } = useTranslation();
   const {
     userData,
@@ -37,23 +39,21 @@ const UserAddressView = () => {
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
   };
-const formatDigit = (digit:string) =>
-{
-  if(digit.length===1)
-  return "0"+digit;
-else
-return digit;
-}
-  const formatBirthDate=()=>
-  {
-    return formatDigit(date.getDate().toString())+"-"+formatDigit((date.getMonth()+1).toString())
-    +"-"+formatDigit(date.getFullYear().toString() ?? "")
+  const formatDigit = (digit: string) => {
+    if (digit.length === 1)
+      return "0" + digit;
+    else
+      return digit;
+  }
+  const formatBirthDate = () => {
+    return formatDigit(date.getDate().toString()) + "-" + formatDigit((date.getMonth() + 1).toString())
+      + "-" + formatDigit(date.getFullYear().toString() ?? "")
   }
   return (
     <>
-    {open &&<DatePicker
-         modal
-         mode="date"
+      {open && <DatePicker
+        modal
+        mode="date"
         open={open}
         date={date}
         onConfirm={(date) => {
@@ -65,7 +65,7 @@ return digit;
           setOpen(false)
         }}
         onDateChange={setDate}
-         />}
+      />}
       <Input
         placeholder={t("address")}
         type={"fullStreetAddress"}
@@ -75,22 +75,22 @@ return digit;
         onChangeText={onChangeAddress}
         ref={addressRef}
         defaultValue={userData.address}
-        errorMessage={addressError}
-        inputValue={addressRef.current.value}
+        errorMessage={address.length ? address : addressError}
+        inputValue={userData.address ?? ''}
       />
-      <TouchableOpacity onPress={()=>{setFirstOpenDialog(false); setOpen(true);}}>
       <Input
         placeholder={t("date_of_birth")}
         keyboardType="numeric"
-        errorMessage={dateOfBirthError}
+        errorMessage={dateOfBirth.length ? dateOfBirth : dateOfBirthError}
         inputStyle={styles.inputDOB}
         onBlur={onBlurBirthDate}
         onChangeText={onChangeBirthDate}
         ref={birthDateRef}
-        defaultValue={firstOpenDialog ?"":formatBirthDate()}
+        defaultValue={firstOpenDialog ? "" : formatBirthDate()}
         inputValue={birthDateRef.current.value}
+        onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
+        type="dateOfBirth"
       />
-      </TouchableOpacity>
       <Input
         placeholder={t("id_number")}
         type={"telephoneNumber"}
@@ -101,14 +101,9 @@ return digit;
         ref={idNumberRef}
         onClearInputText={() => idNumberRef.current.clear()}
         defaultValue={userData.id_number}
-        errorMessage={idNumberError}
-        inputValue={idNumberRef.current.value}
+        errorMessage={idNumber.length ? idNumber : idNumberError}
+        inputValue={userData.id_number ?? ''}
       />
-      {/* {open &&
-        <DatePicker
-          date={selectedDate}
-          onDateChange={handleDateChange}
-        />} */}
       <Text style={styles.text} title={t("find_doctor_text")} />
       <View style={styles.innerContainer}>
         <Text

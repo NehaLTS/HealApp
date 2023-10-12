@@ -3,18 +3,17 @@ import axios from 'axios';
 
 
 // To get the current location
-export const onGetLocationCoordinates = () =>
-{
-Geolocation.getCurrentPosition(
-  (position) => {
-    const { latitude, longitude } = position.coords;
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-  },
-  (error) => {
-    console.error(`Error getting location: ${error}`);
-  },
-  { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-);
+export const onGetLocationCoordinates = () => {
+  Geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    },
+    (error) => {
+      // console.error(`Error getting location: ${error}`);
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  );
 }
 const API_KEY = 'YOUR_API_KEY';
 

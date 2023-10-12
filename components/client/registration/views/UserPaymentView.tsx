@@ -13,7 +13,17 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
-const UserPaymentView = ({isLoading,isGetCardDetails}:{isLoading:boolean,isGetCardDetails:boolean}) => {
+const UserPaymentView = ({ isLoading, isGetCardDetails,
+  cardError,
+  expireDateError,
+  evvError: cvvErrormessage,
+
+}: {
+  isLoading: boolean, isGetCardDetails: boolean,
+  cardError: string,
+  expireDateError: string,
+  evvError: string,
+}) => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const {
@@ -31,12 +41,12 @@ const UserPaymentView = ({isLoading,isGetCardDetails}:{isLoading:boolean,isGetCa
     cvvError,
     cardExpiry
   } = UserPaymentViewController();
- 
+
   // const isLoading = false; //TODO: need to change after binding data
   // const isGetCardDetails = false; //TODO: need to change after binding data
-console.log("isloading",isLoading,isGetCardDetails)
-const last4Digits = !userData?.credit_card_number?'':userData?.credit_card_number.slice(-4);
-const cardNumber = "**** **** ***** " +last4Digits;
+  console.log("isloading", isLoading, isGetCardDetails)
+  const last4Digits = !userData?.credit_card_number ? '' : userData?.credit_card_number.slice(-4);
+  const cardNumber = "**** **** ***** " + last4Digits;
   return (
     <>
       <View style={styles.container}>
@@ -84,11 +94,11 @@ const cardNumber = "**** **** ***** " +last4Digits;
               />
             </View> */}
 
-<View style={styles.cardDetailContainer}>
-              <Text style={styles.cardDetail} title= {cardNumber} />
+            <View style={styles.cardDetailContainer}>
+              <Text style={styles.cardDetail} title={cardNumber} />
               <Text
                 style={styles.cardDetail}
-                title={`${registration.expires} `+ userData.expire_date}
+                title={`${registration.expires} ` + userData.expire_date}
               />
             </View>
           </>
@@ -104,7 +114,8 @@ const cardNumber = "**** **** ***** " +last4Digits;
               onChangeText={onChangeCardNumber}
               ref={cardNumberRef}
               defaultValue={userData.credit_card_number}
-              errorMessage={cardNumberError}
+              errorMessage={cardError.length ? cardError : cardNumberError}
+              inputValue={userData?.credit_card_number ?? ""}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
@@ -116,23 +127,21 @@ const cardNumber = "**** **** ***** " +last4Digits;
                 onClearInputText={() => expireDateRef.current.clear()}
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
-                errorMessage={cardExpiry}
+                errorMessage={expireDateError.length ? expireDateError : cardExpiry}
                 defaultValue={userData.expire_date}
+                inputValue={userData?.expire_date ?? ""}
               />
               <Input
                 keyboardType="numeric"
                 type="creditCardNumber"
                 placeholder={registration.cvv}
                 onBlur={onBlueCvv}
-                errorMessage={cvvError}
+                errorMessage={cvvErrormessage.length ? cvvErrormessage : cvvError}
                 onClearInputText={() => cvvRef.current.clear()}
-                onChangeText={(val) => {
-                  if (val.length == 2) {
-                    val = val + '/'
-                  } onChangeCvv
-                }}
+                onChangeText={onChangeCvv}
                 ref={cvvRef}
                 defaultValue={userData.cvv}
+                inputValue={userData?.cvv ?? ""}
               />
             </View>
           </>
@@ -211,10 +220,11 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.light
   },
   cardNumber: {
-    marginVertical: getHeight(dimens.sideMargin + dimens.borderBold),
+    marginTop: getHeight(dimens.sideMargin + dimens.borderBold),
   },
   inputDateAndCvv: {
     marginBottom: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.paddingL + 2),
   },
   loader: {
     flex: 0.4,
@@ -246,5 +256,6 @@ const styles = StyleSheet.create({
   },
   expireDate: {
     minWidth: "30%",
+
   },
 });
