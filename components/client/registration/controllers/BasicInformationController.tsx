@@ -74,10 +74,12 @@ const BasicInformationController =  ({
         })
         setUserData({ ...userData, token: res?.token },)
         setLocalData('USER', res)
-        console.log('kamal+++++++++++++', res)
+        console.log('kamal+++++++++++++', userData?.token)
         if (res?.isSuccessful) {
-          const getCredit= onGetCreditCard({client_id: a?.toString()}).then((ur)=>{return ur})
-          console.log('getCredit',a?.toString())
+          // const getCredit= onGetCreditCard({client_id: userData?.client_id ?? ''}).then((ur)=>{return ur})
+          // console.log('getCredit',userData?.client_id +'' +getCredit?.toString())
+          
+          
           setIsGetCardDetails(true)
           setIsCardDetails(true)
           setisLoading(false)

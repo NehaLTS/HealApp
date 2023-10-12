@@ -32,6 +32,8 @@ const UserPaymentView = ({isLoading,isGetCardDetails}:{isLoading:boolean,isGetCa
   // const isLoading = false; //TODO: need to change after binding data
   // const isGetCardDetails = false; //TODO: need to change after binding data
 console.log("isloading",isLoading,isGetCardDetails)
+const last4Digits = !userData?.credit_card_number?'':userData?.credit_card_number.slice(-4);
+const cardNumber = "**** **** ***** " +last4Digits;
   return (
     <>
       <View style={styles.container}>
@@ -71,11 +73,19 @@ console.log("isloading",isLoading,isGetCardDetails)
                 />
               </View>
             </View>
-            <View style={styles.cardDetailContainer}>
+            {/* <View style={styles.cardDetailContainer}>
               <Text style={styles.cardDetail} title="**** **** ***** 1234" />
               <Text
                 style={styles.cardDetail}
                 title={`${registration.expires} 03/26`}
+              />
+            </View> */}
+
+<View style={styles.cardDetailContainer}>
+              <Text style={styles.cardDetail} title= {cardNumber} />
+              <Text
+                style={styles.cardDetail}
+                title={`${registration.expires} `+ userData.expire_date}
               />
             </View>
           </>

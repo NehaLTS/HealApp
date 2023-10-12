@@ -72,14 +72,17 @@ export const AuthServicesClient = () => {
         expire_date: string,
         cvv: string,
         client_id: string
-    }): Promise<UserType> =>
+    }): Promise<any> =>
         sendRequest(CREDITED_CARD_DETAILS, {
             method: PATCH,
             body: body as unknown as BodyInit,
         })
+
+
+        
         const onGetCreditCard = (body: {
             client_id:string
-        }): Promise<UserType> =>
+        }): Promise<any> =>
             sendRequest(GET_CREATE_CARD_DETAILS, {
                 method: POST,
                 body: body as unknown as BodyInit,
@@ -87,6 +90,8 @@ export const AuthServicesClient = () => {
                     'Content-Type': 'application/json',
                     'x-access-token': userData?.token
                 } as unknown as HeadersInit
+            }).then((res) => {
+                console.error("RESPONSE CARd /..>> ", res)
             })
     
     return {
