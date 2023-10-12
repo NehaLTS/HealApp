@@ -6,7 +6,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
 import DatePicker from 'react-native-date-picker'
 
@@ -32,12 +32,40 @@ const UserAddressView = () => {
   } = UserAddressViewController();
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
+  const [firstOpenDialog, setFirstOpenDialog] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
   };
+const formatDigit = (digit:string) =>
+{
+  if(digit.length===1)
+  return "0"+digit;
+else
+return digit;
+}
+  const formatBirthDate=()=>
+  {
+    return formatDigit(date.getDate().toString())+"-"+formatDigit((date.getMonth()+1).toString())
+    +"-"+formatDigit(date.getFullYear().toString() ?? "")
+  }
   return (
     <>
+    {open &&<DatePicker
+         modal
+         mode="date"
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          setDate(date)
+          setOpen(false)
+
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+        onDateChange={setDate}
+         />}
       <Input
         placeholder={t("address")}
         type={"fullStreetAddress"}
@@ -50,20 +78,19 @@ const UserAddressView = () => {
         errorMessage={addressError}
         inputValue={addressRef.current.value}
       />
+      <TouchableOpacity onPress={()=>{setFirstOpenDialog(false); setOpen(true);}}>
       <Input
         placeholder={t("date_of_birth")}
-        type={"telephoneNumber"}
         keyboardType="numeric"
         errorMessage={dateOfBirthError}
         inputStyle={styles.inputDOB}
         onBlur={onBlurBirthDate}
         onChangeText={onChangeBirthDate}
         ref={birthDateRef}
-        defaultValue={userData.date_of_birth}
+        defaultValue={firstOpenDialog ?"":formatBirthDate()}
         inputValue={birthDateRef.current.value}
-        dateOfBirth={true}
-        onPressCalender={() => setOpen(true)}
       />
+      </TouchableOpacity>
       <Input
         placeholder={t("id_number")}
         type={"telephoneNumber"}

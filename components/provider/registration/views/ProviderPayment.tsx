@@ -7,7 +7,6 @@ import BasicInformationController from '../controllers/BasicInformationControlle
 import SelectImage from '../../../common/SelectImage';
 import { fontSize } from '../../../../designToken/fontSizes';
 import { colors } from '../../../../designToken/colors';
-import { SelectList } from 'react-native-dropdown-select-list';
 import { Dropdown } from 'react-native-element-dropdown';
 const ProviderPayment = () => {
   const {
