@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { UserType, UseUserContext } from "contexts/useUserContext";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
-import { setLocalData } from "libs/datastorage/useLocalStorage";
+import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
@@ -59,6 +59,7 @@ const LoginViewController = () => {
     return emailPattern.test(email);
   };  /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
+    console.log(getLocalData('USER')?.user)
     navigation.navigate(NavigationRoutes.ClientHome)
   }
   /** To handle User auth via email and password */

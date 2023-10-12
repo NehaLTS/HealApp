@@ -13,6 +13,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { TranslationContext } from "./contexts/UseTranslationsContext";
 import IntroStackNavigator from "./navigator/IntroStackNavigator";
 import NavigationRoutes from "./navigator/NavigationRoutes";
+import { getLocalData } from "libs/datastorage/useLocalStorage";
+import ClientStackNavigator from "navigator/ClientStackNavigator";
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
@@ -27,13 +29,15 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
         <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
           <NavigationContainer >
-            <Stack.Navigator initialRouteName={NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName={ getLocalData('USER')?.token? NavigationRoutes.ClientStack :  NavigationRoutes.IntroStack} screenOptions={{ headerShown: false }}>
               <Stack.Screen name={NavigationRoutes.IntroStack} component={IntroStackNavigator} />
+          
               <Stack.Screen
                 name={NavigationRoutes.ClientStack}
-                component={lazy(
-                  () => import("navigator/ClientStackNavigator")
-                )}
+                // component={lazy(
+                //   () => import("navigator/ClientStackNavigator")
+                // )}
+                component = {ClientStackNavigator}
               />
               <Stack.Screen
                 name={NavigationRoutes.ProviderStack}
