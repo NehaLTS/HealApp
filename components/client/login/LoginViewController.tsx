@@ -91,21 +91,24 @@ const LoginViewController = () => {
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
-        const email = userData?.user?.email
-        const googleId = userData.user.providerData[0].uid
+        const email = userData?.user?.email??""
+        const googleId = userData.user?.uid??""
         /** To handle Google auth request to API */
         setIsLoading(true)
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
-        setUserData?.({ ...userData, token: res.token });
-        setLocalData('USER', res)
+        console.error(JSON.stringify(res))
+
         setIsLoading(false)
 
         if (res?.isSuccessful === true) {
+          setUserData?.({ ...userData, token: res.token });
+          setLocalData('USER', res)
           navigation.navigate('BasicInfo')
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
-      } catch (err) {
+      } 
+      catch (err) {
         console.log('Error occurred!');
       }
     })
