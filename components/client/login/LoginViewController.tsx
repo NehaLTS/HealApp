@@ -119,14 +119,18 @@ const LoginViewController = () => {
         //TODO: under review with facebook
         // const email = "amanshar@gmail.com"
         // const facebookId = "sharm@hmail.com"
+
         setIsLoading(true)
-        const email = userData.user.email
-        const facebookId = userData.additionalUserInfo?.profile?.id
-        const res = await onSubmitFBAuthRequest({ email, facebookId });
-        setUserData?.({ ...userData, token: res.token });
-        setLocalData('USER', res)
+        const email = userData.additionalUserInfo?.profile?.email
+        const facebookId = userData.user.uid??""
+
+        const res = await onSubmitFBAuthRequest({ email, facebookId })
+        
         setIsLoading(false)
+
         if (res?.isSuccessful === true) {
+          setUserData?.({ ...userData, token: res.token });
+        setLocalData('USER', res)
           navigation.navigate('BasicInfo')
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
