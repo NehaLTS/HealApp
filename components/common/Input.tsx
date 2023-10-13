@@ -48,8 +48,8 @@ const Input = forwardRef(({
   containerWidth?: DimensionValue;
   inputValue: string,
   isToHideCross: boolean,
-  onClearInputText(): void
-  onPressCalender(): void
+  onClearInputText: () => void
+  onPressCalender: () => void
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
@@ -58,7 +58,7 @@ const Input = forwardRef(({
   const onFocusHandler = () => moveTextTop();
   const onBlurHandler = () => moveTextBottom()
   const moveTextTop = () => {
-    
+
     Animated.parallel([
       Animated.timing(moveText, {
         toValue: 1,
@@ -127,7 +127,7 @@ const Input = forwardRef(({
             />
           </TouchableOpacity>
         )}
-        {inputValue?.length > 1 && errorMessage && type !== ("password" && 'dateOfBirth') && (
+        {errorMessage && type !== ("password" && 'dateOfBirth') && (
           <TouchableOpacity onPress={onClearInputText}>
             <Image
               source={require("../../assets/icon/error.png")}
@@ -140,14 +140,6 @@ const Input = forwardRef(({
             <Image
               source={errorMessage ? require("../../assets/icon/calender_icon.png") : require("assets/icon/calender_icon.png")}
               style={styles.showImage}
-            />
-          </TouchableOpacity>
-        )}
-          {errorMessage && type !== "password" && (
-          <TouchableOpacity >
-            <Image
-              source={require("../../assets/icon/error.png")}
-              style={styles.errorImage}
             />
           </TouchableOpacity>
         )}

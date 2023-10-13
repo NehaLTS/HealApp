@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Alert, StyleSheet } from "react-native";
 import UserDetailViewController from "../controllers/UserDetailViewController";
 
-const UserDetailView = ({ error, nameError, phoneError
+const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
 }
 ) => {
   const { t } = useTranslation();
@@ -36,7 +36,7 @@ const UserDetailView = ({ error, nameError, phoneError
         inputStyle={styles.input}
         onBlur={onBlurFirstName}
         onClearInputText={() => firstNameRef.current.clear()}
-        errorMessage={nameError.length ? nameError : firstNameError}
+        errorMessage={firstNameEmptyError.length ? firstNameEmptyError : firstNameError}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
         defaultValue={userData.firstname}
@@ -51,7 +51,7 @@ const UserDetailView = ({ error, nameError, phoneError
         onBlur={onBlurLastName}
         defaultValue={userData.lastname}
         ref={lastNameRef}
-        errorMessage={error.length ? error : lastNameError}
+        errorMessage={lastNameEmptyError.length ? lastNameEmptyError : lastNameError}
         inputValue={userData?.lastname ?? ""}
       />
       <Input

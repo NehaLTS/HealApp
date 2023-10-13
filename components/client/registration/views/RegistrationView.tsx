@@ -58,7 +58,7 @@ const RegistrationView = () => {
     <>
 
       <View style={styles.inputContainer}>
-        {isLoading && <ActivityIndicator size={'large'} style={styles.loading} />}
+        {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -66,10 +66,9 @@ const RegistrationView = () => {
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
-          onClearInputText={() => setEmail("")}
           onBlur={validateEmail}
         />
-      
+
         <Input
           placeholder={t("password")}
           type="password"
@@ -77,16 +76,14 @@ const RegistrationView = () => {
           errorMessage={passwordError}
           onChangeText={setPassword}
           inputStyle={styles.password}
-          onClearInputText={() => setPassword("")}
           inputValue={password}
           onSubmitEditing={validatePassword}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
           isActive
-          style={styles.forgotPassword}
-          containerStyle={styles.forgotPassword}
           title={t("forgot_password")}
+          containerStyle={styles.forgotPassword}
         />
         <Button
           title={t("sign_up")}
@@ -116,8 +113,8 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   forgotPassword: {
-    textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS)
+    paddingVertical: getHeight(dimens.paddingS),
+    alignSelf: 'center'
   },
   footerContainer: {
     flexDirection: "row",
@@ -132,14 +129,13 @@ const styles = StyleSheet.create({
   password: {
     marginTop: dimens.paddingL + dimens.borderBold,
   },
-  errorText: {
-    color: colors.invalid,
-    fontSize: fontSize.textM,
-  },
   loading: {
     left: '44%',
     top: '13%',
     position: 'absolute',
     zIndex: 1
+  },
+  email: {
+    marginTop: dimens.paddingL,
   },
 });

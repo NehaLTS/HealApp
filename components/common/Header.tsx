@@ -26,22 +26,22 @@ const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean 
         //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text
-            style={[styles.language, { color: currentLanguage === "EN" ? colors.primary : colors.black }]}
+            style={[styles.language, { color: currentLanguage === "en" ? colors.primary : colors.black }]}
             onPress={() => { handleLanguageChange("en"); setIsLanguageChanged(false) }}
             title={'English'}
           />
           <Text
-            style={[styles.language, { color: currentLanguage === "HE" ? colors.primary : colors.black }]}
+            style={[styles.language, { color: currentLanguage === "he" ? colors.primary : colors.black }]}
             onPress={() => { handleLanguageChange("he"); setIsLanguageChanged(false) }}
             title={'עִברִית'}
           />
           <Text
-            style={[styles.language, { color: currentLanguage === "AR" ? colors.primary : colors.black }]}
+            style={[styles.language, { color: currentLanguage === "ar" ? colors.primary : colors.black }]}
             onPress={() => { handleLanguageChange("ar"); setIsLanguageChanged(false) }}
             title={'العربي'}
           />
           <Text
-            style={[styles.language, { color: currentLanguage === "RU" ? colors.primary : colors.black }]}
+            style={[styles.language, { color: currentLanguage === "ru" ? colors.primary : colors.black }]}
             onPress={() => { handleLanguageChange("ru"); setIsLanguageChanged(false) }}
             title={'русский'}
           />

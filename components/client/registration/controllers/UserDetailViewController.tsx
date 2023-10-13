@@ -42,9 +42,14 @@ const UserDetailViewController = () => {
   const validateFirstName = () => {
     if (!firstNameRef.current.value || firstNameRef.current.value === undefined) {
       setFirstNameError("First name is required");
-    } else if (!/^[A-Z][a-z]*$/.test(firstNameRef.current.value)) {
-      setFirstNameError("First letter should start with an uppercase , followed by lowercase ");
-    } else {
+    } 
+    
+    // else if (!/^[A-Z][a-z]*$/.test(firstNameRef.current.value)) {
+    //   setFirstNameError("First letter should start with an uppercase , followed by lowercase ");
+    // } 
+    
+    
+    else {
       setFirstNameError("");
     }
   };
@@ -52,9 +57,14 @@ const UserDetailViewController = () => {
   const validateLastName = () => {
     if (!lastNameRef.current.value) {
       setLastNameError("Last name is required");
-    } else if (!/^[A-Z][a-z]*$/.test(lastNameRef.current.value)) {
-      setLastNameError("First letter should start with an uppercase , followed by lowercase ");
-    } else {
+    } 
+    
+    // else if (!/^[A-Z][a-z]*$/.test(lastNameRef.current.value)) {
+    //   setLastNameError("First letter should start with an uppercase , followed by lowercase ");
+    // } 
+    
+    
+    else {
       setLastNameError("");
     }
   };

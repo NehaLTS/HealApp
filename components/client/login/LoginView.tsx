@@ -27,7 +27,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   return (
     <>
       <View style={styles.inputContainer}>
-      {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -37,7 +37,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           inputValue={email}
           onBlur={validateEmail}
         />
-      
+
         <Input
           placeholder={t("password")}
           type="password"
@@ -55,7 +55,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           containerStyle={styles.forgotPassword}
         />
         <Button
-          title={isSigninSelected ? t("sign_in") : t("sign_up")}
+          title={t("sign_in")}
           isPrimary
           isSmall
           style={styles.signInButton}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     paddingVertical: getHeight(dimens.paddingS),
-    alignSelf:'center'
+    alignSelf: 'center'
   },
   footerContainer: {
     flexDirection: "row",
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1
   },
-  email:{
+  email: {
     marginTop: dimens.paddingL,
   },
 });
