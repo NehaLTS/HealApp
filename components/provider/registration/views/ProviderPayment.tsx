@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { colors } from "../../../../designToken/colors";
 import { dimens } from "../../../../designToken/dimens";
 import { fontSize } from "../../../../designToken/fontSizes";
@@ -9,6 +9,7 @@ import SelectImage from "../../../common/SelectImage";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { t } from "i18next";
+import Text from "components/common/Text";
 const ProviderPayment = () => {
   
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
