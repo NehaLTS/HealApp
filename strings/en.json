@@ -34,7 +34,20 @@
         "provider_sign_up":"Provider Sign Up",
         "switch_to_client":"Switch to Client",
         "add_profile": "Add a profile photo",
-        "find_doctor_text": "*It will help us to find a best doctor for you"
+        "find_doctor_text": "*It will help us to find a best doctor for you",
+        "type_provider":"Type of provider",
+        "specialty":"Specialty",
+        "upload_id":"Upload ID photo",
+        "license_number":"License number (for those who have)",
+      "upload_license":"Upload license photo",
+      "business_registration":"Business registration number",
+      "bank":"Bank",
+      "branch":"Branch",
+      "bank_account":"Bank account",
+     "authority":"Authority to add a prescription",
+     "yes":"Yes",
+     "no":"No",
+     "services_you":"Services you provide"
 
 
 }

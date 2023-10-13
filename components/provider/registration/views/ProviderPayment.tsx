@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { colors } from "../../../../designToken/colors";
 import { dimens } from "../../../../designToken/dimens";
 import { fontSize } from "../../../../designToken/fontSizes";
@@ -8,7 +8,10 @@ import Input from "../../../common/Input";
 import SelectImage from "../../../common/SelectImage";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import { t } from "i18next";
+import Text from "components/common/Text";
 const ProviderPayment = () => {
+  
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
@@ -74,7 +77,7 @@ console.log('userDataProvider',userDataProvider)
   return (
     <>
       <Input
-        placeholder="Business registration number"
+        placeholder={t("Business registration number")}
         keyboardType="numeric"
         type="creditCardNumber"
         onBlur={onBlurRegistrationNumber}
@@ -119,8 +122,29 @@ console.log('userDataProvider',userDataProvider)
         inputValue={userDataProvider?.account ?? ""}
         errorMessage={accountError}
       />
+      <View style={styles.container}>
+        <Input
+          placeholder={t("Bank")}
+          inputStyle={styles.inputBank}
+          type={"nameSuffix"}
+          inputValue={""}
+        />
+        <Input
+          placeholder={t("Branch")}
+          type={"nameSuffix"}
+          inputStyle={styles.inputBranch}
+          inputValue={""}
+        />
+      </View>
+      <Input
+        placeholder={t("Bank account")}
+        inputStyle={styles.input}
+        type={"nameSuffix"}
+        inputValue={""}
+      />
+
       <View style={styles.iconContainer}>
-        <Text style={styles.text}>Add a profile photo</Text>
+        <Text style={styles.text}>{t("Add a profile photo")}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.profile_picture ? 1 : 0.5}
           onPress={() => !userDataProvider.profile_picture && setIsShowModal(true)}>
@@ -146,14 +170,13 @@ export default ProviderPayment;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent:"space-between"
+    justifyContent:"space-between",
+    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
   inputBank: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),
     minWidth:"35%"
   },
   inputBranch: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),
   minWidth:"60%"
   },
   input:{
@@ -166,8 +189,8 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin),
   },
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.marginS),
-    width: getWidth(dimens.imageS + dimens.paddingS),
+    height: getHeight(dimens.imageS + dimens.paddingS),
+    width: getWidth(dimens.imageS + dimens.paddingS+2),
     resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
   },

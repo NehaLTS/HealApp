@@ -62,7 +62,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia} title={t("or_sign_in_via")} />
+        <Text title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -80,8 +80,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS),
-    letterSpacing: getWidth(0.5),
+    paddingVertical: getHeight(dimens.paddingS)
   },
   footerContainer: {
     flexDirection: "row",
@@ -89,12 +88,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 0.18,
   },
-  signInVia: {
-    letterSpacing: getWidth(0.5),
-  },
   signInButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.marginM),
   },
   password: {
     marginTop: dimens.paddingL,

@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from "react";
 import { StyleSheet, Text, View,ActivityIndicator } from "react-native";
 import { colors } from "designToken/colors";
 import { fontSize } from "designToken/fontSizes";
-import { getWidth } from "libs/StyleHelper";
+import { getHeight, getWidth } from "libs/StyleHelper";
 import Button from "common/Button";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
@@ -17,6 +17,9 @@ import ProviderDetail from "./ProviderDetail";
 import ProviderAddress from "./ProviderAddress";
 import ProviderPayment from "./ProviderPayment";
 import ProviderServices from "./ProviderServices";
+import { t } from "i18next";
+import ProviderAddServies from "./ProviderAddServices";
+import { UseUserContextProvider } from "contexts/useUserContextProvider";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
@@ -26,6 +29,7 @@ const BasicInformation = () => {
   const { currentStep, onPressNext, onPressBack,isLoading,setIsLoading } = BasicInformationController({
     totalSteps: 5,
   });
+  const { userDataProvider } = UseUserContextProvider()
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header title="Registration" />,
@@ -48,8 +52,10 @@ const BasicInformation = () => {
           <ProviderAddress />
         ) : currentStep[currentStep.length - 1] === 2 ? ( 
           <ProviderPayment />
+        ):currentStep[currentStep.length - 1] === 3 ?(
+         (userDataProvider.provider_type_id== "1" || userDataProvider.provider_type_id== "2")? <ProviderServices/>:<ProviderAddServies/>
         ):(
-          <ProviderServices/>
+          <ProviderAddServies/>
         )}
       </View>
       <View
@@ -62,12 +68,13 @@ const BasicInformation = () => {
         ]}>
         {!isLoadingCard && !isCardDetails ? (
           <>
-            <Button title={registration.back} isSmall onPress={onPressBack} />
+           <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
-              title={registration.next}
+              title={t("next")}
               isPrimary
               onPress={onPressNext}
               isSmall
+              width={'30%'}
             />
           </>
         ) : (
@@ -80,7 +87,7 @@ const BasicInformation = () => {
           />
         )}
       </View>
-      {currentStep[currentStep.length - 1] === 2 &&
+    {currentStep[currentStep.length - 1] === 5 &&
         !isLoadingCard &&
         !isCardDetails && (
           <Text style={styles.skipLaterText}>
@@ -107,11 +114,12 @@ const styles = StyleSheet.create({
     flex: 0.1,
   },
   inputContainer: {
-    flex: 0.75,
+    flex: 0.79,
   },
   container: {
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
+    paddingTop:getHeight(dimens.marginS)
   },
 });

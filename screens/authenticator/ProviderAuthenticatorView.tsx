@@ -23,6 +23,7 @@ const ProviderAuthenticatorView = () => {
       header: () => <Header isHideTitle />
     });
   }, [navigation]);
+  
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
@@ -69,15 +70,15 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: getWidth(dimens.marginM),
+    paddingHorizontal: getWidth(dimens.marginM)
   },
   container: {
     position: "relative",
-    flex: 0.34,
+    flex: 0.34
   },
   logo: {
     width: getWidth(dimens.imageM),
-    height: getHeight(dimens.imageM),
+    height: getHeight(dimens.imageM-10),
     alignSelf: "center"
   },
   toggleContainer: {
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   loginText: {
     fontSize: getHeight(fontSize.textXl),
     alignSelf: "center",
-    paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
+    paddingTop: getHeight(dimens.paddingS),
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl)

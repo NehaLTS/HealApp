@@ -33,5 +33,18 @@
         "provider_login":"התחברות לספק",
         "provider_sign_up":"הרשמה לספק",
         "switch_to_client":"עבור ללקוח",
-        "skip":"לדלג"
+        "skip":"לדלג",
+        "type_provider":"סוג הספק",
+        "specialty":"תחום התמחות",
+        "upload_id":"Upload ID photo",
+        "license_number":"מספר רישיון (למי שיש)",
+      "upload_license":"העלה תמונת רישיון",
+      "business_registration":"מספר רישום העסק",
+      "bank":"בַּנק",
+      "branch":"ענף",
+      "bank_account":"חשבון בנק",
+      "authority":"סמכות להוסיף מרשם",
+      "yes":"כן",
+      "no":"לא",
+      "services_you":"שירותים שאתה מספק"
 }

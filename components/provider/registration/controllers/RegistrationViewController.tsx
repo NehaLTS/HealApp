@@ -1,9 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
+import { useApiContext } from "contexts/useApiContext"
 import { UseUserContextProvider } from 'contexts/useUserContextProvider'
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider'
 import NavigationRoutes from 'navigator/NavigationRoutes'
 import { Alert } from 'react-native'
+
 const RegistrationViewController = () => {
+  const { onAuthSignInProvider } = useApiContext();
+
   const navigation = useNavigation()
   const { OnProviderCreateSignUp } = AuthServicesProvider()
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()

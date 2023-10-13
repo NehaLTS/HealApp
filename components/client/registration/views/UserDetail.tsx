@@ -26,7 +26,8 @@ const UserDetail = () => {
         onBlur={() => setUserData({ ...userData, firstname: firstNameRef.current.value })}
         onChangeText={(value) => firstNameRef.current.value = value}
         ref={firstNameRef}
-        value={userData.firstname} inputValue={""}      />
+        value={userData.firstname} inputValue={""}   
+           />
 
       <Input
         placeholder={registration.last_name}
