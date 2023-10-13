@@ -72,18 +72,27 @@ export const AuthServicesProvider = () => {
         description: string,
         price: string,
         provider_id: string,
-        currency: string,
+      
         specialty_id: string
-    }): Promise<UserTypeProvider> =>
-        sendRequest(CREATE_PROVIDER_SEVICES, {
+    }): Promise<UserTypeProvider> =>{
+
+        console.log("body is ",body);
+
+       return sendRequest(CREATE_PROVIDER_SEVICES, {
             method: POST,
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
                 // 'x-access-token': userDataProvider?.token
-                'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6bnVsbCwiaWF0IjoxNjk3MTE3NzY5LCJleHAiOjE2OTcxNTAxNjl9.ExisiXL9L2KkSCkTqhvSzRp3_Ftdic34RNeDAgFyY8k"
+                'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
             } as unknown as HeadersInit
         })
+    }
+
+
+      
+
+        
     const onGetProviderTypes = (): Promise<any> =>(
         sendRequest(GET_PROVIDER_TYPES, {
             method: GET,

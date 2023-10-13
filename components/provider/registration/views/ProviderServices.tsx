@@ -16,6 +16,9 @@ const { userDataProvider } = UseUserContextProvider()
 const  [services, setServices] = useState([])
 const  [isLoading, setIsLoading] = useState(false)
 
+const [isSigninSelected, setIsSigninSelected] = useState(true);
+  
+const loginRegisterToggle = (val: number) => setIsSigninSelected(val === 1)
   
 
 
@@ -60,8 +63,11 @@ const  [isLoading, setIsLoading] = useState(false)
         />
         <Text style={styles.text} title={t("No")} />
         <Image
-          source={require("../../../../assets/icon/selecter.png")}
-          style={styles.select}
+          source={require("../../../../assets/icon/spectorOn.png")}
+          style={{  height: dimens.marginL+6,
+            width: dimens.marginL+6,
+            resizeMode: "cover",
+            borderRadius: getHeight(dimens.paddingS),}}
         />
       </View>
       <Text style={styles.textS} title={t("Services you provide")} />

@@ -4,6 +4,7 @@ import { UseUserContext } from "contexts/useUserContext";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -88,8 +89,9 @@ const BasicInformationController = ({
       });
       // }
     }
-    if (currentStep[currentStep.length - 1] === 2) {
+    if (currentStep[currentStep.length - 1] === 3) {
       setIsLoading(false)
+      navigation.navigate(NavigationRoutes.ProviderConfirmation)
     }
   }
 
