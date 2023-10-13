@@ -2,7 +2,7 @@ import TextButton from "components/common/TextButton";
 import { getSignInFooter } from "components/provider/login/LoginView";
 import { t } from "i18next";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator,StyleSheet, View } from "react-native";
 import { colors } from "../../../../designToken/colors";
 import { dimens } from "../../../../designToken/dimens";
 import { fontSize } from "../../../../designToken/fontSizes";
@@ -16,7 +16,7 @@ import NavigationRoutes from "navigator/NavigationRoutes";
 import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
-  const { onPressSignUpProvider } = RegistrationViewController();
+  const { onPressSignUpProvider,isLoading } = RegistrationViewController();
   const navigation = useNavigation()
   // const { onPressSignUp } = RegistrationViewController();
     //TODO Use useRef
@@ -53,8 +53,7 @@ const RegistrationView = () => {
   };
   
   const handleSignUp = () => {
-    // if (!emailError && !passwordError) onPressSignUpProvider(email, password)
-    navigation.navigate(NavigationRoutes.ProviderRegistration)
+    if (!emailError && !passwordError) onPressSignUpProvider(email, password)
   };
 
   const isValidEmail = (email: string) => {
@@ -65,6 +64,7 @@ const RegistrationView = () => {
   return (
     <>
       <View style={styles.inputContainer}>
+      {isLoading && <ActivityIndicator size={'large'} style={styles.loading} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -139,4 +139,10 @@ const styles = StyleSheet.create({
     color: colors.invalid, 
     fontSize: fontSize.textM, 
   },
+  loading: {
+    left: '44%',
+    top: '13%',
+    position: 'absolute',
+    zIndex: 1
+  }
 });
