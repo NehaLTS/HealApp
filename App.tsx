@@ -17,7 +17,6 @@ import { getLocalData } from "libs/datastorage/useLocalStorage";
 import ClientStackNavigator from "navigator/ClientStackNavigator";
 import { Platform } from 'react-native';
 import { check, request, PERMISSIONS } from 'react-native-permissions';
-import { onGetLocationCoordinates } from "libs/geolocation/GeoLocationProvider";
 
 
 
@@ -26,27 +25,26 @@ const queryClient = new QueryClient();
 const App = () => {
   const [languageCode, setLanguageCode] = React.useState<string>("en");
   //TO Check Current Latlng 
-  onGetLocationCoordinates()
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId: "843919956986-js10nj0llot1b7r4ileqhkurco4tqo75.apps.googleusercontent.com",
   });
 
   // Check and request location permissions
-if (Platform.OS === 'android') {
-  check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
-    .then((result) => {
-      if (result === 'granted') {
-        // You have permission
-      } else {
-        request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((requestResult) => {
-          if (requestResult === 'granted') {
-            // You now have permission
-          }
-        });
-      }
-    });
-}
+  if (Platform.OS === 'android') {
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then((result) => {
+        if (result === 'granted') {
+          // You have permission
+        } else {
+          request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((requestResult) => {
+            if (requestResult === 'granted') {
+              // You now have permission
+            }
+          });
+        }
+      });
+  }
   return (
     <QueryClientProvider client={queryClient}>
       <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>

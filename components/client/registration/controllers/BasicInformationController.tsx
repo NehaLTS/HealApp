@@ -122,7 +122,7 @@ const BasicInformationController = ({
         }
       }
       else {
-        Alert.alert('nklcvnbkc')
+        console.log("Data is incorrect")
         //   setCardNumberError("Card number is required")
         //   setCvvError("Cvv is required")
         //   setCardExpiry("Expiry date is required")

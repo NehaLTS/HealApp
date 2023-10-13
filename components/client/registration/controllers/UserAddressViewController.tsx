@@ -1,6 +1,6 @@
 import { UseUserContext } from 'contexts/useUserContext';
 import useUpdateEffect from 'libs/UseUpdateEffect';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const UserAddressViewController = () => {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -12,7 +12,11 @@ const UserAddressViewController = () => {
   const [idNumberError, setIdNumberError] = useState("");
   const [dateOfBirthError, setDateOfBirthError] = useState("");
   const [isNext, setIsNexts] = useState(false);
+  // const [date, setDate] = useState(new Date())
+  const date = useRef<Date>(new Date()); // Use a useRef instead of useState
 
+  const [open, setOpen] = useState(false)
+  const [firstOpenDialog, setFirstOpenDialog] = useState(true)
   useUpdateEffect(() => {
     if (isNext) {
       validateAddress()
@@ -48,10 +52,11 @@ const UserAddressViewController = () => {
 
   const validateDateOfBirth = () => {
     // Define a regex pattern for the "DD/MM/YYYY" date format
-    const regex = /^(\d{2})\-(\d{2})\-(\d{4})$/;
+    // const regex = /^(\d{2})\-(\d{2})\-(\d{4})$/;
 
-    if (!regex.test(birthDateRef.current.value)) {
-      setDateOfBirthError("Date of birth must be in DD-MM-YYYY format");
+    // if (!regex.test(birthDateRef.current.value)) {
+    if (!birthDateRef.current.value) {
+      setDateOfBirthError("Date of birth must be reqiured in  DD-MM-YYYY ");
     } else {
       setDateOfBirthError("");
     }
@@ -83,8 +88,29 @@ const UserAddressViewController = () => {
   }
 
   const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
+  const formatDigit = (digit: string) => {
+    if (digit.length === 1)
+      return "0" + digit;
+    else
+      return digit;
+  }
+  const formatBirthDate = () => {
+    return formatDigit(date.current.getDate().toString()) + "-" + formatDigit((date.current.getMonth() + 1).toString())
+      + "-" + formatDigit(date.current.getFullYear().toString() ?? "")
+  }
+  const onPressCalender = () => {
+    setFirstOpenDialog(false); setOpen(true); setUserData({ ...userData, date_of_birth: formatBirthDate.toString() })
+  }
+  const onConfirmDate = (dateConfirm: Date) => {
+    // setDate(dateConfirm)
+    date.current = dateConfirm; // Update the date using the ref
+    setUserData({ ...userData, date_of_birth: formatBirthDate.toString() })
+    setOpen(false)
+  }
+  const onCancelDate = () => {
+    setOpen(false)
 
-
+  }
   return {
     userData,
     isShowModal,
@@ -101,8 +127,14 @@ const UserAddressViewController = () => {
     getImageUrl,
     addressError,
     dateOfBirthError,
-    idNumberError
+    idNumberError,
+    formatBirthDate,
+    date,
+    onPressCalender, open, onConfirmDate, onCancelDate, firstOpenDialog
   }
 }
-
+//(dateConfirm) => onConfirmDate(dateConfirm)
+// setDate(date)
+// setUserData({ ...userData, date_of_birth: formatBirthDate.toString() })
+// setOpen(false)
 export default UserAddressViewController

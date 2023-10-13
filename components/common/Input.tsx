@@ -126,7 +126,7 @@ const Input = forwardRef(({
             />
           </TouchableOpacity>
         )}
-        {inputValue?.length > 1 && errorMessage && type !== ("password" && 'dateOfBirth') && (
+        {inputValue?.length > 1 && errorMessage && type !== "password" && (
           <TouchableOpacity onPress={onClearInputText}>
             <Image
               source={require("../../assets/icon/error.png")}
@@ -135,7 +135,7 @@ const Input = forwardRef(({
           </TouchableOpacity>
         )}
         {type === "dateOfBirth" && (
-          <TouchableOpacity onPress={() => { onPressCalender() }}>
+          <TouchableOpacity onPress={onPressCalender}>
             <Image
               source={errorMessage ? require("../../assets/icon/calender_icon.png") : require("assets/icon/calender_icon.png")}
               style={styles.showImage}

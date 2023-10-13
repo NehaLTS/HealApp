@@ -82,7 +82,6 @@ const LoginViewController = () => {
         Alert.alert("Please enter email or password");
       }
     } catch (error) {
-      console.error("Error during login:", error);
       Alert.alert("An error occurred during login.");
     }
   }
@@ -99,7 +98,6 @@ const LoginViewController = () => {
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
 
         setIsLoading(false)
-        console.error(res)
 
         if (res?.isSuccessful === true) {
           setUserData?.({ ...userData, token: res.token });
@@ -130,7 +128,6 @@ const LoginViewController = () => {
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
         setIsLoading(false)
-        console.error(res)
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
         } else {

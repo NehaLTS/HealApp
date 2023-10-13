@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
 import DatePicker from 'react-native-date-picker'
+import { UseUserContext } from "contexts/useUserContext";
 
 const UserAddressView = ({
   address, dateOfBirth, idNumber
@@ -30,41 +31,22 @@ const UserAddressView = ({
     getImageUrl,
     addressError,
     dateOfBirthError,
-    idNumberError
+    idNumberError,
+    formatBirthDate, firstOpenDialog,
+    date, onPressCalender, open, onConfirmDate, onCancelDate
   } = UserAddressViewController();
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
-  const [firstOpenDialog, setFirstOpenDialog] = useState(true)
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const handleDateChange = (newDate) => {
-    setSelectedDate(newDate);
-  };
-  const formatDigit = (digit: string) => {
-    if (digit.length === 1)
-      return "0" + digit;
-    else
-      return digit;
-  }
-  const formatBirthDate = () => {
-    return formatDigit(date.getDate().toString()) + "-" + formatDigit((date.getMonth() + 1).toString())
-      + "-" + formatDigit(date.getFullYear().toString() ?? "")
-  }
+
+
   return (
     <>
       {open && <DatePicker
         modal
         mode="date"
         open={open}
-        date={date}
-        onConfirm={(date) => {
-          setDate(date)
-          setOpen(false)
-
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
-        onDateChange={setDate}
+        date={date.current}
+        onConfirm={(dateConfirm) => onConfirmDate(dateConfirm)}
+        onCancel={onCancelDate}
+        onDateChange={(dateConfirm) => date.current = dateConfirm}
       />}
       <Input
         placeholder={t("address")}
@@ -88,7 +70,8 @@ const UserAddressView = ({
         ref={birthDateRef}
         defaultValue={firstOpenDialog ? "" : formatBirthDate()}
         inputValue={birthDateRef.current.value}
-        onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
+        onPressCalender={onPressCalender}
+        // onPressCalender={() => { setFirstOpenDialog(false); setOpen(true); setUserData({ ...userData, date_of_birth: formatBirthDate.toString() }) }}
         type="dateOfBirth"
       />
       <Input
