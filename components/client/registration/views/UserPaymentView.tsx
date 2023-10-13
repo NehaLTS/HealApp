@@ -116,6 +116,8 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
               defaultValue={userData.credit_card_number}
               errorMessage={cardError.length ? cardError : cardNumberError}
               inputValue={userData?.credit_card_number ?? ""}
+              returnKeyType = {"next"}
+              onSubmitEditing={() => expireDateRef.current.focus()}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
@@ -130,6 +132,8 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 errorMessage={expireDateError.length ? expireDateError : cardExpiry}
                 defaultValue={userData.expire_date}
                 inputValue={userData?.expire_date ?? ""}
+                returnKeyType = {"next"}
+                onSubmitEditing={() => cvvRef.current.focus()}
               />
               <Input
                 keyboardType="numeric"

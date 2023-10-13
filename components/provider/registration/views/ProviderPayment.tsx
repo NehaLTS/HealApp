@@ -86,6 +86,8 @@ console.log('userDataProvider',userDataProvider)
         value={userDataProvider.registration}
         inputValue={userDataProvider?.registration ?? ""}
         errorMessage={registrationError}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => bankNameRef.current.focus()}
       />
       <View style={styles.container}>
         <Input
@@ -98,6 +100,8 @@ console.log('userDataProvider',userDataProvider)
         value={userDataProvider.bank_name}
         inputValue={userDataProvider?.bank_name ?? ""}
         errorMessage={bankNameError}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => branchRef.current.focus()}
         />
         <Input
           placeholder={"Branch"}
@@ -109,6 +113,8 @@ console.log('userDataProvider',userDataProvider)
         value={userDataProvider.branch}
         inputValue={userDataProvider?.branch ?? ""}
         errorMessage={branchError}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => accountRef.current.focus()}
         />
       </View>
       <Input

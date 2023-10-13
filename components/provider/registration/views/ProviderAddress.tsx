@@ -68,6 +68,8 @@ const ProviderAddress = () => {
         value={userDataProvider.phone_number}
         inputValue={userDataProvider?.phone_number ?? ""}
         errorMessage={phoneError}
+        returnKeyType = {"next"}
+                onSubmitEditing={() => licenseRef.current.focus()}
       />
 
       <Input
@@ -79,6 +81,9 @@ const ProviderAddress = () => {
         ref={licenseRef}
         value={userDataProvider.license}
         inputValue={userDataProvider?.license ?? ""}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => addressRef.current.focus()}
+        
       />
 
       <Input
@@ -90,6 +95,7 @@ const ProviderAddress = () => {
         value={userDataProvider.address}
         inputValue={userDataProvider?.address ?? ""}
         errorMessage={addressError}
+      
       />
 
       <View style={styles.iconContainer}>

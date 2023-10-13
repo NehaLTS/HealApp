@@ -80,7 +80,7 @@ const BasicInformationController = ({
       })
 
       console.log('response++++++', res)
-
+      setIsLoading(false)
       // if (res?.isSuccessful) {
       setCurrentStep(() => {
         const array = [...currentStep];

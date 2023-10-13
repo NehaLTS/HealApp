@@ -77,6 +77,8 @@ const UserAddressView = ({
         defaultValue={userData.address}
         errorMessage={address.length ? address : addressError}
         inputValue={userData.address ?? ''}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => birthDateRef.current.focus()}
       />
       <Input
         placeholder={t("date_of_birth")}
@@ -90,6 +92,8 @@ const UserAddressView = ({
         inputValue={birthDateRef.current.value}
         onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
         type="dateOfBirth"
+        returnKeyType = {"next"}
+        onSubmitEditing={() => idNumberRef.current.focus()}
       />
       <Input
         placeholder={t("id_number")}
@@ -103,6 +107,7 @@ const UserAddressView = ({
         defaultValue={userData.id_number}
         errorMessage={idNumber.length ? idNumber : idNumberError}
         inputValue={userData.id_number ?? ''}
+     
       />
       <Text style={styles.text} title={t("find_doctor_text")} />
       <View style={styles.innerContainer}>

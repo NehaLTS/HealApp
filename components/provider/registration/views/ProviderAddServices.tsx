@@ -206,6 +206,8 @@ const ProviderAddServices = () => {
                 value={service?.name?.en}
                 inputValue={""}
                 errorMessage={serviceError}
+                returnKeyType = {"next"}
+                onSubmitEditing={() => priceRef.current.focus()}
               />
               <Input
                 placeholder={"Price*"}
@@ -217,6 +219,8 @@ const ProviderAddServices = () => {
                 inputValue={""}
                 errorMessage={priceError}
                 keyboardType="numeric"
+                returnKeyType = {"next"}
+                onSubmitEditing={() => descriptionRef.current.focus()}
               />
               <Input
                 placeholder={"Description"}
