@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View,TouchableOpacity } from 'react-native'
 import React, { SetStateAction, useEffect, useState } from 'react'
 import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
@@ -8,6 +8,7 @@ import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { t } from "i18next";
 import Text from 'components/common/Text';
+
 
 const ProviderServices = () => {
 const {onGetProviderService} = AuthServicesProvider()
@@ -21,8 +22,9 @@ const  [isLoading, setIsLoading] = useState(false)
   const getProviderServices = async() =>{
 
     setIsLoading(true);
-    let response= await onGetProviderService({provider_id: userDataProvider.provider_id ?? '1', specialty_id: userDataProvider.speciality_id ?? '1'});
+    let response= await onGetProviderService({provider_id: '1' ?? '1', specialty_id:'1' ?? '1'});
     
+    console.log("resp is ",response)
     if(response && response.services){
       setServices(response.services);
     }
@@ -35,7 +37,15 @@ const  [isLoading, setIsLoading] = useState(false)
     getProviderServices();
   }, [])
 
-
+  const onCheckedPress = (index:number) =>{
+    if(services[index] && services[index].isChecked){
+      services[index].isChecked=false
+      setServices(services)
+    }else{
+      services[index].isChecked=true
+      setServices(services)
+    }
+  }
 
 
 
@@ -56,18 +66,28 @@ const  [isLoading, setIsLoading] = useState(false)
       </View>
       <Text style={styles.textS} title={t("Services you provide")} />
       <View style={styles.servicesContainer}>
-       {services.length>0? (<ScrollView  contentContainerStyle={{paddingBottom: getHeight(dimens.marginM)}} style={{ height: "100%",  }}>
+       {services.length>0? (
+       <ScrollView  contentContainerStyle={{paddingBottom: getHeight(dimens.marginM)}} style={{ height: "100%",  }}>
     
           {services.map((item, index) => (
             <View key={index} style={styles.serviceRow}>
               <Text style={styles.serviceText} title={item.name.en} />
               <View style={styles.serviceRight}>
                 <Text style={styles.serviceText} title={item.price} />
-                <View style={styles.checkbox} />
+
+                <TouchableOpacity onPress={()=>onCheckedPress(index)}>
+                {!item.isChecked ?<View style={styles.checkbox} />:
+                <View style={styles.checkbox}>
+                  <Image source={require('assets/icon/check.png')} style={{width: getWidth(12), height: getHeight(10)}} />
+                </View>
+                }
+                </TouchableOpacity>
               </View>
             </View>
+
           ))}
-        </ScrollView>):<Text style={styles.textS} title={t("No Services")} />}
+        </ScrollView>)
+        :<Text style={[styles.textS, {alignSelf:'center' }]} title={t("No Services")} />}
       </View>
     </>
   );

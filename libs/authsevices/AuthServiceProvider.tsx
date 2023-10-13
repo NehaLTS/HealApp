@@ -1,5 +1,5 @@
 import { sendRequest } from "../api/RequestHandler";
-import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
+import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GET_USER_SERVICES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
@@ -105,12 +105,28 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': userDataProvider?.token
-              //  'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6bnVsbCwiaWF0IjoxNjk3MTE3NzY5LCJleHAiOjE2OTcxNTAxNjl9.ExisiXL9L2KkSCkTqhvSzRp3_Ftdic34RNeDAgFyY8k"
+              //  'x-access-token': userDataProvider?.token
+                'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
             } as unknown as HeadersInit
         })
+
+
+    const onGetUserAllServices = (body: {
+            provider_id: string,
+        }): Promise<any> =>
+            sendRequest(GET_USER_SERVICES, {
+                method: POST,
+                body: body as unknown as BodyInit,
+                headers: {
+                    'Content-Type': 'application/json',
+                  //  'x-access-token': userDataProvider?.token
+                    'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
+                } as unknown as HeadersInit
+            })
+
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,
-        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes,onGetProviderService
+        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes,onGetProviderService,
+        onGetUserAllServices
     }
 }
