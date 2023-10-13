@@ -48,8 +48,8 @@ const Input = forwardRef(({
   containerWidth?: DimensionValue;
   inputValue: string,
   isToHideCross: boolean,
-  onClearInputText(): void
-  onPressCalender(): void
+  onClearInputText: () => void
+  onPressCalender: () => void
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
