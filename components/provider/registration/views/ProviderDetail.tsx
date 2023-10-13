@@ -1,7 +1,7 @@
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
 import { colors } from '../../../../designToken/colors';
@@ -13,6 +13,8 @@ import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
+import { t } from 'i18next';
+import Text from 'components/common/Text';
 
 const ProviderDetail = () => {
     const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
@@ -297,7 +299,7 @@ const ProviderDetail = () => {
                 ]}
                 labelField={'name'}
                 valueField="name"
-                placeholder="Type of provider"
+                placeholder={t("Type of provider")}
                 value={userDataProvider.type_Provider}
                 onChange={onChangeProviderTypes}
                 renderItem={renderItems}
@@ -316,7 +318,7 @@ const ProviderDetail = () => {
                 data={data.find((item) => item.name.en === selectedProvider?.name)?.specialties || []}
                 labelField="name.en"
                 valueField="name.en"
-                placeholder="Specialty"
+                placeholder={t("Specialty")}
                 value={userDataProvider.speciality}
                 onChange={onChangeSpecialtys}
                 renderItem={renderItem}
@@ -367,7 +369,7 @@ const ProviderDetail = () => {
                 <Text style={styles.errorMessage}>{specialtyError}</Text>
             )} */}
             <View style={styles.iconContainer}>
-                <Text style={styles.text}>Upload ID photo</Text>
+                <Text style={styles.text}>{t("Upload ID photo")}</Text>
                 <TouchableOpacity
                     activeOpacity={userDataProvider.id_photo ? 1 : 0.5}
                     onPress={() => !userDataProvider.id_photo && setIsShowModal(true)}

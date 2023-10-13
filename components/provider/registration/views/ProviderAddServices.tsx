@@ -49,8 +49,6 @@ const ProviderAddServices = () => {
     // priceError,
     // descriptionError,
   } = ProviderAddServicesController();
-  // const [isService, setIsService] = useState(false);
-
   const [isServiceAdded, setIsServiceAdded] = useState(false);
   console.log(isServiceAdded);
 
@@ -233,7 +231,7 @@ const ProviderAddServices = () => {
                   marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
                 }}
                 onPress={saveService}
-                fontSized={getWidth(15)}
+                fontSized={getHeight(15)}
                 height={getHeight(34)}
               />
               <TextButton

@@ -88,8 +88,23 @@ const BasicInformationController = ({
       });
       // }
     }
-    if (currentStep[currentStep.length - 1] === 2) {
+    if (currentStep[currentStep.length - 1] === 3) {
       setIsLoading(false)
+      setCurrentStep(() => {
+        const array = [...currentStep];
+        array.push(array[array.length - 1] + 1);
+        return array;
+      });
+
+    }
+    if (currentStep[currentStep.length - 1] === 4) {
+      setIsLoading(false)
+      setCurrentStep(() => {
+        const array = [...currentStep];
+        array.push(array[array.length - 1] + 1);
+        return array;
+      });
+
     }
   }
 

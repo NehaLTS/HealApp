@@ -1,6 +1,6 @@
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { t } from "i18next";
-import React, { useState } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
 import { colors } from '../../../../designToken/colors';
@@ -11,50 +11,30 @@ import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
+import ProviderLicenseDetailController from '../controllers/ProviderLicenseDetailController';
 
-const ProviderAddress = () => {
+const ProviderLicenseDetail = () => {
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
-  const { languageCode } = useTranslationContext();
+  const { languageCode } = useTranslationContext(); 
   const { registration } = getTexts(languageCode);
-  const [phoneError, setPhoneError] = useState("");
-  const [addressError, setAddressError] = useState("");
-
-
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
-  const phoneRef = React.useRef<any>("");
-  const licenseRef = React.useRef<any>("");
-  const addressRef = React.useRef<any>("");
+  const { t } = useTranslation();
 
-  const onBlurPhoneNumber = () => { validatePhoneNumber(); setUserDataProvider({ ...userDataProvider, phone_number: phoneRef.current.value }) }
-  const onChangePhoneNumber = (value: string) => phoneRef.current.value = value
-
-  const onBlurLastName = () => setUserDataProvider({ ...userDataProvider, license: licenseRef.current.value })
-  const onChangeLastName = (value: string) => licenseRef.current.value = value
-
-  const onBlurAddress = () => { validateAddress(); setUserDataProvider({ ...userDataProvider, address: addressRef.current.value }) }
-  const onChangeAddress = (value: string) => addressRef.current.value = value
-
+  const {
+    addressRef,
+    licenseRef,
+    phoneRef,
+    onBlurPhoneNumber,
+    onChangePhoneNumber,
+    onBlurLastName,
+    onChangeLastName,
+    onBlurAddress,
+    onChangeAddress,
+    phoneError,
+    addressError
+  } = ProviderLicenseDetailController()
   const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, license_photo: url });
-  console.log('userDataProvider',userDataProvider)
-
-  const validatePhoneNumber = () => {
-    if (!phoneRef.current.value) {
-      setPhoneError("Phone number is required");
-    } else {
-      setPhoneError("");
-    }
-  };
-
-  const validateAddress = () => {
-    if (!addressRef.current.value) {
-      setAddressError("Address is required");
-    } else {
-      setAddressError("");
-    }
-  };
-
-
   return (
     <>
       <Input
@@ -118,7 +98,7 @@ const ProviderAddress = () => {
   );
 };
 
-export default ProviderAddress;
+export default ProviderLicenseDetail;
 
 const styles = StyleSheet.create({
   text: {
@@ -140,7 +120,7 @@ const styles = StyleSheet.create({
 
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS+2),
+    width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
   },

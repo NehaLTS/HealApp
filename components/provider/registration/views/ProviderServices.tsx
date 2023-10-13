@@ -1,13 +1,13 @@
-import { Image, ScrollView, StyleSheet, View,TouchableOpacity } from 'react-native'
-import React, { SetStateAction, useEffect, useState } from 'react'
+import Text from 'components/common/Text';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import { dimens } from 'designToken/dimens';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { t } from "i18next";
-import Text from 'components/common/Text';
+import React,{  useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 
 const ProviderServices = () => {
@@ -15,7 +15,7 @@ const {onGetProviderService} = AuthServicesProvider()
 const { userDataProvider } = UseUserContextProvider()
 const  [services, setServices] = useState([])
 const  [isLoading, setIsLoading] = useState(false)
-
+const { t } = useTranslation();
   
 
 

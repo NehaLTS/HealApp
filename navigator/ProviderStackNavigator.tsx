@@ -11,7 +11,7 @@ const ProviderStackNavigator = () => {
       <Stack.Navigator initialRouteName={NavigationRoutes.ProviderLogin}>
       <Stack.Screen
           name={NavigationRoutes.ProviderLogin}
-          component={lazy(() => import("../screens/authenticator/ProviderAuthenticatorView"))}
+          component={lazy(() => import("../components/provider/registration/views/BasicInformation"))}
 
 /> 
         <Stack.Screen

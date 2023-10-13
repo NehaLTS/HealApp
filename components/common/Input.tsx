@@ -165,10 +165,10 @@ const styles = StyleSheet.create({
     minWidth: '24%'
   },
   input: {
-    fontSize: fontSize.textL,
-    marginLeft: getHeight(dimens.marginS),
-    color: colors.black,
-    flex: 1,
+     fontSize:getWidth (fontSize.textL),
+     marginLeft: getHeight(dimens.marginS),
+     color: colors.black,
+     flex: 1,
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),

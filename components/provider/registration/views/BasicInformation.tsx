@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View,ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { colors } from "designToken/colors";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
@@ -14,19 +14,23 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "components/common/Header";
 import { dimens } from "designToken/dimens";
 import ProviderDetail from "./ProviderDetail";
-import ProviderAddress from "./ProviderAddress";
-import ProviderPayment from "./ProviderPayment";
+import ProviderAddress from "./ProviderLicenseDetail";
+import ProviderPayment from "./ProviderBankDetail";
 import ProviderServices from "./ProviderServices";
 import { t } from "i18next";
 import ProviderAddServies from "./ProviderAddServices";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import ProviderBankDetail from "./ProviderBankDetail";
+import ProviderLicenseDetail from "./ProviderLicenseDetail";
+import ProviderFinal from "./ProviderConform";
+import ProviderConform from "./ProviderConform";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
   // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
-  const { currentStep, onPressNext, onPressBack,isLoading,setIsLoading } = BasicInformationController({
+  const { currentStep, onPressNext, onPressBack, isLoading, setIsLoading } = BasicInformationController({
     totalSteps: 5,
   });
   const { userDataProvider } = UseUserContextProvider()
@@ -42,20 +46,22 @@ const BasicInformation = () => {
 
   return (
     <View style={styles.container}>
-      {isLoading &&<ActivityIndicator style={{position:'absolute', top:'50%', left:'50%', zIndex:1}} color={colors.primary} size={'large'} />}
+      {isLoading && <ActivityIndicator style={{ position: 'absolute', top: '50%', left: '50%', zIndex: 1 }} color={colors.primary} size={'large'} />}
       <Stepper currentStep={currentStep} totalStep={5} />
       <View style={styles.inputContainer}>
         {currentStep[currentStep.length - 1] === 0 ? (
           <ProviderDetail />
-         
         ) : currentStep[currentStep.length - 1] === 1 ? (
-          <ProviderAddress />
-        ) : currentStep[currentStep.length - 1] === 2 ? ( 
-          <ProviderPayment />
-        ):currentStep[currentStep.length - 1] === 3 ?(
-          (userDataProvider.type_Provider== "Doctor" || userDataProvider.type_Provider== "Nurse")? <ProviderServices/>:<ProviderAddServies/>        ):(
-          <ProviderAddServies/>
-        )}
+          <ProviderLicenseDetail />
+        ) : currentStep[currentStep.length - 1] === 2 ? (
+          <ProviderBankDetail />
+        ) : currentStep[currentStep.length - 1] === 3 ? (
+          (userDataProvider.type_Provider == "Doctor" || userDataProvider.type_Provider == "Nurse")
+            ? <ProviderServices />
+            : <ProviderAddServies />
+        )
+          : currentStep[currentStep.length - 1] === 4 ? <ProviderConform /> : (<ProviderAddServies />)
+        }
       </View>
       <View
         style={[
@@ -67,7 +73,7 @@ const BasicInformation = () => {
         ]}>
         {!isLoadingCard && !isCardDetails ? (
           <>
-           <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
               title={t("next")}
               isPrimary
@@ -86,7 +92,7 @@ const BasicInformation = () => {
           />
         )}
       </View>
-    {currentStep[currentStep.length - 1] === 5 &&
+      {currentStep[currentStep.length - 1] === 5 &&
         !isLoadingCard &&
         !isCardDetails && (
           <Text style={styles.skipLaterText}>
@@ -119,6 +125,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
-    paddingTop:getHeight(dimens.marginS)
+    paddingTop: getHeight(dimens.marginS)
   },
 });
