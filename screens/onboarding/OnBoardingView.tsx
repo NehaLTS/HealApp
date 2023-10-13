@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import Header from 'components/common/Header';
-import React, {  useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, Image, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
@@ -12,20 +12,18 @@ import { fontSize } from '../../designToken/fontSizes';
 import { fontWeight } from '../../designToken/fontWeights';
 import { getHeight, getWidth } from '../../libs/StyleHelper';
 import OnBoardingViewController from './OnBoardingViewController';
-import SplashScreen from 'react-native-splash-screen';
 
 const OnBoardingView = () => {
-  const {swiperRef, onPressSkip} = OnBoardingViewController()
+  const { swiperRef, onPressSkip } = OnBoardingViewController()
   const navigation = useNavigation()
   const { t } = useTranslation()
   useLayoutEffect(() => {
-    SplashScreen?.hide();
     navigation.setOptions({
       header: () => <Header isHideTitle />,
     });
   }, [navigation]);
 
-    //TODO: need to  create separate component
+  //TODO: need to  create separate component
   const FadeInText = (props) => {
     const [fadeAnim] = useState(new Animated.Value(0));
     useEffect(() => {
@@ -40,8 +38,8 @@ const OnBoardingView = () => {
     }, [fadeAnim]);
     return (
       <Animated.Text
-        style={[styles.text,{
-          
+        style={[styles.text, {
+
           ...props.style,
           opacity: fadeAnim,
         }]}
@@ -61,9 +59,9 @@ const OnBoardingView = () => {
         // autoplay
         containerStyle={styles.containerStyle}>
         {[...Array(3)].map((_, index) => (
-          <FadeInText key={index} style={{flex: 0.48 }}>
+          <FadeInText key={index} style={{ flex: 0.48 }}>
             {t("welcome_heal")}
-           </FadeInText>
+          </FadeInText>
         ))}
       </Swiper>
       <View style={styles.buttonContainer}>
@@ -101,10 +99,10 @@ const styles = StyleSheet.create({
     flex: 0.12,
     paddingTop: getHeight(dimens.paddingXs)
   },
-  activeDotStyle:{
-    width: getWidth(dimens.sideMargin) 
+  activeDotStyle: {
+    width: getWidth(dimens.sideMargin)
   },
-  containerStyle:{
+  containerStyle: {
     flex: 0.48
   }
 });

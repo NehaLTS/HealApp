@@ -101,7 +101,8 @@ const UserAddressViewController = () => {
     getImageUrl,
     addressError,
     dateOfBirthError,
-    idNumberError
+    idNumberError,
+    setUserData
   }
 }
 

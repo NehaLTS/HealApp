@@ -30,7 +30,8 @@ const UserAddressView = ({
     getImageUrl,
     addressError,
     dateOfBirthError,
-    idNumberError
+    idNumberError,
+    setUserData
   } = UserAddressViewController();
   const [date, setDate] = useState(new Date())
   const [open, setOpen] = useState(false)
@@ -39,12 +40,20 @@ const UserAddressView = ({
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
   };
+  const originalDate = new Date(userData?.date_of_birth ?? "");
+  const formattedDate = originalDate.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).replace(/ /g, '-');
+  console.log('first', formattedDate)
   const formatDigit = (digit: string) => {
     if (digit.length === 1)
       return "0" + digit;
     else
       return digit;
   }
+
   const formatBirthDate = () => {
     return formatDigit(date.getDate().toString()) + "-" + formatDigit((date.getMonth() + 1).toString())
       + "-" + formatDigit(date.getFullYear().toString() ?? "")
@@ -57,6 +66,7 @@ const UserAddressView = ({
         open={open}
         date={date}
         onConfirm={(date) => {
+          setUserData({ ...userData, date_of_birth: date?.toString() })
           setDate(date)
           setOpen(false)
 
@@ -64,7 +74,8 @@ const UserAddressView = ({
         onCancel={() => {
           setOpen(false)
         }}
-        onDateChange={setDate}
+      // onDateChange={(e) => setUserData({ ...userData, date_of_birth: birthDateRef.current.value }) }
+      // onDateChange={(e) => console.log('first', e)}
       />}
       <Input
         placeholder={t("address")}
@@ -88,8 +99,8 @@ const UserAddressView = ({
         onBlur={onBlurBirthDate}
         onChangeText={onChangeBirthDate}
         ref={birthDateRef}
-        defaultValue={firstOpenDialog ? "" : formatBirthDate()}
-        inputValue={birthDateRef.current.value}
+        defaultValue={formattedDate === 'Invalid-Date' ? '' : formattedDate}
+        inputValue={userData.date_of_birth?.toString() ?? ''}
         onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
         type="dateOfBirth"
         returnKeyType = {"next"}
