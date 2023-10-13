@@ -53,8 +53,7 @@ const BasicInformation = () => {
         ) : currentStep[currentStep.length - 1] === 2 ? ( 
           <ProviderPayment />
         ):currentStep[currentStep.length - 1] === 3 ?(
-         (userDataProvider.provider_type_id== "1" || userDataProvider.provider_type_id== "2")? <ProviderServices/>:<ProviderAddServies/>
-        ):(
+          (userDataProvider.type_Provider== "Doctor" || userDataProvider.type_Provider== "Nurse")? <ProviderServices/>:<ProviderAddServies/>        ):(
           <ProviderAddServies/>
         )}
       </View>

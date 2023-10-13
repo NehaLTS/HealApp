@@ -13,3 +13,9 @@ export interface Providers {
     name:   Name;
     " id"?: number;
   }
+
+  export interface Service {
+     name:   Name;
+    description:   Name;
+    price: string
+  }

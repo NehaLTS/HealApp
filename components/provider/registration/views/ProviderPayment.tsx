@@ -114,7 +114,8 @@ console.log('userDataProvider',userDataProvider)
       <Input
         placeholder={"Bank account"}
         inputStyle={styles.input}
-        type={"nameSuffix"}
+        type="creditCardNumber"
+        keyboardType="numeric"
         onBlur={onBlurAccount}
         onChangeText={onChangeAccount}
         ref={accountRef}
@@ -122,7 +123,7 @@ console.log('userDataProvider',userDataProvider)
         inputValue={userDataProvider?.account ?? ""}
         errorMessage={accountError}
       />
-      <View style={styles.container}>
+      {/* <View style={styles.container}>
         <Input
           placeholder={t("Bank")}
           inputStyle={styles.inputBank}
@@ -141,7 +142,7 @@ console.log('userDataProvider',userDataProvider)
         inputStyle={styles.input}
         type={"nameSuffix"}
         inputValue={""}
-      />
+      /> */}
 
       <View style={styles.iconContainer}>
         <Text style={styles.text}>{t("Add a profile photo")}</Text>
