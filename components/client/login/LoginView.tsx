@@ -63,7 +63,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia} title={t("or_sign_in_via")} />
+        <Text title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -89,23 +89,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 0.18,
   },
-  signInVia: {
-    letterSpacing: getWidth(0.5),
-  },
   signInButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.marginM),
   },
   password: {
-    marginTop: dimens.paddingL,
+    marginTop: dimens.paddingL + dimens.borderBold,
+  },
+  loading: {
+    left: '44%',
+    top: '13%',
+    position: 'absolute',
+    zIndex: 1
   },
   email:{
     marginTop: dimens.paddingL,
   },
-  loading:{
-    position:'absolute',
-    zIndex:1
-  }
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer

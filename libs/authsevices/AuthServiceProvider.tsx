@@ -2,8 +2,8 @@ import { sendRequest } from "../api/RequestHandler";
 import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 
-import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import { BodyInit, HeadersInit } from "../api/ApiTypes";
 
 export const AuthServicesProvider = () => {
     const { userDataProvider } = UseUserContextProvider()

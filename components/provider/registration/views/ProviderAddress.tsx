@@ -61,7 +61,7 @@ const ProviderAddress = () => {
         placeholder={t("Phone Number*")}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.input}
+        // inputStyle={styles.input}
         onBlur={onBlurPhoneNumber}
         onChangeText={onChangePhoneNumber}
         ref={phoneRef}

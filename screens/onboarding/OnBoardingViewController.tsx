@@ -14,7 +14,7 @@ const OnBoardingViewController = () => {
         swiperRef?.current?.scrollBy?.(nextIndex - currentIndex, true);
         setCurrentIndex(nextIndex);
       }
-    }, 3000); // 3 seconds
+    }, 5000); // 5 seconds
     return () => {
       clearInterval(interval);
     };

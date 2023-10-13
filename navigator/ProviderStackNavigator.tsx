@@ -22,6 +22,10 @@ const ProviderStackNavigator = () => {
           name={NavigationRoutes.ProviderHome}
           component={lazy(() => import("../components/provider/home/HomeView"))}
         />
+        {/* <Stack.Screen
+          name={NavigationRoutes.ProviderBasicInfo}
+          component={lazy(() => import("../components/provider/registration/views/BasicInformation"))}
+        /> */}
       </Stack.Navigator>
     </UserContextProvider.Provider>
   )

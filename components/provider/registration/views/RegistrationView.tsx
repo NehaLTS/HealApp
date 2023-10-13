@@ -96,6 +96,7 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
+          // onPress={() => onPressSignUpProvider(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>

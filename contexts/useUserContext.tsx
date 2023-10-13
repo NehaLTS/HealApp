@@ -17,6 +17,7 @@ export interface UserType {
   token: string;
   email: string;
   isSuccessful: boolean
+  onbuttonClick: () => void
 }
 export interface UserContextFields {
   userData: Partial<UserType>;
