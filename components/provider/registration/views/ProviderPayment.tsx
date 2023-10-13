@@ -83,7 +83,7 @@ console.log('userDataProvider',userDataProvider)
         onBlur={onBlurRegistrationNumber}
         onChangeText={onChangeRegistrationNumber}
         ref={registrationNumberRef}
-        value={userDataProvider.registration}
+        defaultValue={userDataProvider.registration}
         inputValue={userDataProvider?.registration ?? ""}
         errorMessage={registrationError}
         returnKeyType = {"next"}
@@ -97,7 +97,7 @@ console.log('userDataProvider',userDataProvider)
           onBlur={onBlurBankName}
         onChangeText={onChangeBankName}
         ref={bankNameRef}
-        value={userDataProvider.bank_name}
+        defaultValue={userDataProvider.bank_name}
         inputValue={userDataProvider?.bank_name ?? ""}
         errorMessage={bankNameError}
         returnKeyType = {"next"}
@@ -110,7 +110,7 @@ console.log('userDataProvider',userDataProvider)
           onBlur={onBlurBranchType}
         onChangeText={onChangeBranchType}
         ref={branchRef}
-        value={userDataProvider.branch}
+        defaultValue={userDataProvider.branch}
         inputValue={userDataProvider?.branch ?? ""}
         errorMessage={branchError}
         returnKeyType = {"next"}
@@ -125,7 +125,7 @@ console.log('userDataProvider',userDataProvider)
         onBlur={onBlurAccount}
         onChangeText={onChangeAccount}
         ref={accountRef}
-        value={userDataProvider.account}
+        defaultValue={userDataProvider.account}
         inputValue={userDataProvider?.account ?? ""}
         errorMessage={accountError}
       />

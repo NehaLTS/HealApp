@@ -15,6 +15,7 @@ import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
 import { t } from 'i18next';
 import Text from 'components/common/Text';
+import { fontFamily } from 'designToken/fontFamily';
 
 const ProviderDetail = () => {
     const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
@@ -267,7 +268,7 @@ const ProviderDetail = () => {
                 onBlur={onBlurFirstName}
                 onChangeText={onChangeFirstName}
                 ref={firstNameRef}
-                value={userDataProvider.firstname}
+                defaultValue={userDataProvider.firstname}
                 inputValue={userDataProvider?.firstname ?? ""}
                 errorMessage={firstNameError}
                 returnKeyType = {"next"}
@@ -280,7 +281,7 @@ const ProviderDetail = () => {
                 inputStyle={styles.inputLastName}
                 onChangeText={onChangeLastName}
                 onBlur={onBlurLastName}
-                value={userDataProvider.lastname}
+                defaultValue={userDataProvider.lastname}
                 ref={lastNameRef}
                 inputValue={userDataProvider?.lastname ?? ""}
                 errorMessage={lastNameError}
@@ -438,6 +439,7 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: fontSize.textL,
     color: colors.black,
+    fontFamily:fontFamily.regular
   },
   dropdown: {
     borderWidth: getHeight(dimens.borderBold),
@@ -463,6 +465,7 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize:fontSize.textL,
     color: colors.black,
+    fontFamily:fontFamily.regular
   },
   iconStyle: {
     width: getWidth(dimens.marginM),

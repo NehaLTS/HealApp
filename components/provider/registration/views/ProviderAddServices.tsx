@@ -203,7 +203,7 @@ const ProviderAddServices = () => {
                 onBlur={onBlurServiceName}
                 onChangeText={onChangeServiceName}
                 ref={serviceNameRef}
-                value={service?.name?.en}
+                defaultValue={service?.name?.en}
                 inputValue={""}
                 errorMessage={serviceError}
                 returnKeyType = {"next"}
@@ -215,7 +215,7 @@ const ProviderAddServices = () => {
                 onBlur={onBlurPriceName}
                 onChangeText={onChangePriceName}
                 ref={priceRef}
-                value={service?.price}
+                defaultValue={service?.price}
                 inputValue={""}
                 errorMessage={priceError}
                 keyboardType="numeric"
@@ -228,7 +228,7 @@ const ProviderAddServices = () => {
                 onBlur={onBlurDescription}
                 onChangeText={onChangeDescription}
                 ref={descriptionRef}
-                value={service?.description?.en}
+                defaultValue={service?.description?.en}
                 inputValue={""}
                 errorMessage={descriptionError}
               />

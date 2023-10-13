@@ -48,7 +48,7 @@ const ProviderBankDetail = () => {
         onBlur={onBlurRegistrationNumber}
         onChangeText={onChangeRegistrationNumber}
         ref={registrationNumberRef}
-        value={userDataProvider.registration}
+        defaultValue={userDataProvider.registration}
         inputValue={userDataProvider?.registration ?? ""}
         errorMessage={registrationError}
       />
@@ -60,7 +60,7 @@ const ProviderBankDetail = () => {
           onBlur={onBlurBankName}
           onChangeText={onChangeBankName}
           ref={bankNameRef}
-          value={userDataProvider.bank_name}
+          defaultValue={userDataProvider.bank_name}
           inputValue={userDataProvider?.bank_name ?? ""}
           errorMessage={bankNameError}
         />
@@ -71,7 +71,7 @@ const ProviderBankDetail = () => {
           onBlur={onBlurBranchType}
           onChangeText={onChangeBranchType}
           ref={branchRef}
-          value={userDataProvider.branch}
+          defaultValue={userDataProvider.branch}
           inputValue={userDataProvider?.branch ?? ""}
           errorMessage={branchError}
         />
@@ -84,7 +84,7 @@ const ProviderBankDetail = () => {
         onBlur={onBlurAccount}
         onChangeText={onChangeAccount}
         ref={accountRef}
-        value={userDataProvider.account}
+        defaultValue={userDataProvider.account}
         inputValue={userDataProvider?.account ?? ""}
         errorMessage={accountError}
       />
