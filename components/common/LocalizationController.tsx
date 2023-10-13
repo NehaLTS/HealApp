@@ -1,44 +1,51 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getLocalData, setLocalData } from "../../libs/datastorage/useLocalStorage";
 import { UserType } from "../../libs/types/UserType";
 import NavigationRoutes from "../../navigator/NavigationRoutes";
-import { useTranslation } from "react-i18next";
 
 const LocalizationController = () => {
   const navigation = useNavigation();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState("EN");
+
   const { t, i18n } = useTranslation();
-  const continueAsClient = () =>
+  const continueAsClient = () => {
     navigation.navigate(NavigationRoutes.ClientStack, {
       screen: NavigationRoutes.ClientLogin,
       params: { isClient: true },
     });
+  };
+  useEffect(() => {
+    const data = getLocalData?.("USER");
+    const userLanguage = data?.user?.language ?? "EN";
+    setCurrentLanguage(userLanguage)
+  }, [getLocalData?.("USER")]);
 
   const continueAsProvider = () =>
     navigation.navigate(NavigationRoutes.ProviderStack);
 
-  const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged)
+  const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
 
   const handleLanguageChange = (lng: string) => {
-    i18n.changeLanguage(lng)
-    // setLocalData('USER', {  })
-    // setLocalData('USER', {  })
-    setLocalData('USER', {
-      ...getLocalData('USER')?.user,
+    i18n.changeLanguage(lng);
+    setLocalData("USER", {
+      ...getLocalData("USER")?.user,
       user: {
-        language: lng
-      }
-    }) as unknown as UserType
+        language: lng,
+      },
+    }) as unknown as UserType;
   };
 
   return {
+    currentLanguage,
     isLanguageChanged,
     onChangeLanguage,
     continueAsClient,
     handleLanguageChange,
     continueAsProvider,
-    setIsLanguageChanged
+    setIsLanguageChanged,
   };
 };
 

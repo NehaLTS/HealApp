@@ -5,23 +5,29 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import UserDetailViewController from "../controllers/UserDetailViewController";
 
-const UserDetailView = () => {
+const UserDetailView = ({ error, nameError, phoneError
+}
+) => {
   const { t } = useTranslation();
   const {
     userData,
     firstNameRef,
     lastNameRef,
     phoneNumberRef,
+    lastNameError,
+    phoneNumberError,
     onBlurFirstName,
     onChangeFirstName,
     onBlurLastName,
     onChangeLastName,
     onBlurPhoneNumber,
+    firstNameError,
     onChangePhoneNumber,
   } = UserDetailViewController();
+
 
   return (
     <>
@@ -29,19 +35,23 @@ const UserDetailView = () => {
         placeholder={t('first_name')}
         inputStyle={styles.input}
         onBlur={onBlurFirstName}
+        onClearInputText={() => firstNameRef.current.clear()}
+        errorMessage={nameError.length ? nameError : firstNameError}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
-        value={userData.firstname}
-        inputValue={userData?.firstname ?? ""}
+        defaultValue={userData.firstname}
+        inputValue={userData.firstname ?? ""}
       />
       <Input
         placeholder={t('last_name')}
         type={"nameSuffix"}
         inputStyle={styles.inputLastName}
         onChangeText={onChangeLastName}
+        onClearInputText={() => lastNameRef.current.clear()}
         onBlur={onBlurLastName}
-        value={userData.lastname}
+        defaultValue={userData.lastname}
         ref={lastNameRef}
+        errorMessage={error.length ? error : lastNameError}
         inputValue={userData?.lastname ?? ""}
       />
       <Input
@@ -50,9 +60,11 @@ const UserDetailView = () => {
         keyboardType="number-pad"
         inputStyle={styles.inputPhone}
         onChangeText={onChangePhoneNumber}
-        value={userData.phone_number}
+        defaultValue={userData.phone_number}
+        onClearInputText={() => phoneNumberRef.current.clear()}
         onBlur={onBlurPhoneNumber}
         ref={phoneNumberRef}
+        errorMessage={phoneError.length ? phoneError : phoneNumberError}
         inputValue={userData?.phone_number ?? ""}
       />
       <Text style={styles.text} title={t('find_doctor_text')} />

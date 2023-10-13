@@ -10,8 +10,7 @@ import Text from "./Text";
 
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
-  const [currentLanguage, setCurrentLanguage ] = useState('EN')
-  const { isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();
+  const { currentLanguage, isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between' }]}>
@@ -22,28 +21,28 @@ const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean 
         </>
       )}
       {  /** TODO: Update the title according to selected language  */}
-      <Text style={styles.headerRight} onPress={onChangeLanguage} title={currentLanguage} />
+      <Text style={styles.headerRight} onPress={onChangeLanguage} title={currentLanguage.toUpperCase()} />
       {isLanguageChanged && (
         //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text
-            style={[styles.language,{color: currentLanguage ==="EN" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('EN') ;handleLanguageChange("en"); setIsLanguageChanged(false)}}
+            style={[styles.language, { color: currentLanguage === "EN" ? colors.primary : colors.black }]}
+            onPress={() => { handleLanguageChange("en"); setIsLanguageChanged(false) }}
             title={'English'}
           />
           <Text
-             style={[styles.language,{color: currentLanguage ==="HE" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('HE') ;handleLanguageChange("he"); setIsLanguageChanged(false)}}
+            style={[styles.language, { color: currentLanguage === "HE" ? colors.primary : colors.black }]}
+            onPress={() => { handleLanguageChange("he"); setIsLanguageChanged(false) }}
             title={'עִברִית'}
           />
           <Text
-             style={[styles.language,{color: currentLanguage ==="AR" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('AR') ;handleLanguageChange("ar"); setIsLanguageChanged(false)}}
+            style={[styles.language, { color: currentLanguage === "AR" ? colors.primary : colors.black }]}
+            onPress={() => { handleLanguageChange("ar"); setIsLanguageChanged(false) }}
             title={'العربي'}
           />
           <Text
-             style={[styles.language,{color: currentLanguage ==="RU" ? colors.primary : colors.black}]}
-            onPress={() => {setCurrentLanguage('RU') ;handleLanguageChange("ru"); setIsLanguageChanged(false)}}
+            style={[styles.language, { color: currentLanguage === "RU" ? colors.primary : colors.black }]}
+            onPress={() => { handleLanguageChange("ru"); setIsLanguageChanged(false) }}
             title={'русский'}
           />
         </View>
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     right: getHeight(dimens.sideMargin),
     backgroundColor: colors.offWhite,
     top: dimens.marginL + dimens.marginS,
-    justifyContent:'space-between'
+    justifyContent: 'space-between'
   },
   logo: {
     width: getWidth(dimens.imageS),

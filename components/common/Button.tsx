@@ -5,6 +5,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import {
+  Animated,
   DimensionValue,
   StyleProp,
   StyleSheet,
@@ -27,14 +28,39 @@ const Button = ({
   isPrimary?: boolean;
   isSmall?: boolean;
   style?: StyleProp<ViewStyle>;
-  width?: DimensionValue
   fontSized?:number
   height?:number
+  width?: DimensionValue;
 } & TouchableOpacityProps) => {
+  const scaleInAnimated = new Animated.Value(1);
+
+  const handlePressIn = () => {
+    Animated.timing(scaleInAnimated, {
+      toValue: 1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.timing(scaleInAnimated, {
+      toValue: 0.9,
+      duration: 150,
+      useNativeDriver: true,
+    }).start(() => handlePressIn());
+  };
+
+  const scaleTransformationStyle = {
+    transform: [{ scale: scaleInAnimated }],
+  };
+
   return (
     <TouchableOpacity
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       style={[
         styles.button,
+        scaleTransformationStyle,
         style,
         {
           width: isSmall ? "auto" : "100%",
@@ -44,8 +70,7 @@ const Button = ({
           height: height ?? getHeight(dimens.buttonHeight)
         },
       ]}
-      {...props}
-    >
+      {...props}>
       <Text
         style={[
           styles.buttonTitle,
@@ -57,8 +82,7 @@ const Button = ({
           }
         ]}
         adjustsFontSizeToFit
-        numberOfLines={1}
-      >
+        numberOfLines={1}>
         {title}
       </Text>
     </TouchableOpacity>
@@ -67,16 +91,16 @@ const Button = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getWidth(dimens.borderThin),
     alignItems: "center",
     justifyContent: "center",
-    height: getHeight(dimens.buttonHeight),
-    borderRadius: getHeight(dimens.marginS/dimens.borderBold),
-    zIndex: 1
+    height: getWidth(dimens.buttonHeight),
+    borderRadius: getWidth(dimens.marginS / dimens.borderBold),
+    zIndex: 1,
   },
   buttonTitle: {
     fontSize: getWidth(fontSize.heading),
-    lineHeight: getHeight(dimens.marginL),   
+    lineHeight: getHeight(dimens.marginL),
   },
 });
 

@@ -47,7 +47,9 @@
      "authority":"Authority to add a prescription",
      "yes":"Yes",
      "no":"No",
-     "services_you":"Services you provide"
+     "services_you":"Services you provide",
+        "cancel": "Cancel",
+        "start_using_heal": "Start using Heal"
 
 
 }

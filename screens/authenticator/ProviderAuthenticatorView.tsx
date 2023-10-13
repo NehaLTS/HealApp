@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
     alignSelf: "center",
     paddingTop: getHeight(dimens.paddingS),
+    // paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl)
