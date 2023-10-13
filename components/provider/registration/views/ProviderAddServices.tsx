@@ -62,18 +62,18 @@ const ProviderAddServices = () => {
 
   const onBlurServiceName = () => {
     validateServiceName();
-  
+
   };
   const onChangeServiceName = (value: string) =>
     (serviceNameRef.current.value = value);
   const onBlurPriceName = () => {
     validatePrice();
-   
+
   };
   const onChangePriceName = (value: string) => (priceRef.current.value = value);
   const onBlurDescription = () => {
     validateDescription();
-  
+
   };
   const onChangeDescription = (value: string) =>
     (descriptionRef.current.value = value);
@@ -119,34 +119,34 @@ const ProviderAddServices = () => {
   }, []);
 
   const saveService = async () => {
-    if(serviceNameRef.current.value && descriptionRef.current.value && priceRef.current.value){
-  
-    let data={
-      name:{en:serviceNameRef.current.value,hi:"",he:""},
-      description:{en:descriptionRef.current.value,hi:"",he:""},
-      price:priceRef.current.value
-    }
+    if (serviceNameRef.current.value && descriptionRef.current.value && priceRef.current.value) {
 
-    setService({...service as Service,...data})
+      let data = {
+        name: { en: serviceNameRef.current.value, hi: "", he: "" },
+        description: { en: descriptionRef.current.value, hi: "", he: "" },
+        price: priceRef.current.value
+      }
 
-    // if(userDataProvider.provider_id && userDataProvider.speciality_id){
+      setService({ ...service as Service, ...data })
+
+      // if(userDataProvider.provider_id && userDataProvider.speciality_id){
       setIsLoading(true);
-    //  let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,currency:"USD",provider_id:userDataProvider.provider_id, specialty_id: userDataProvider.speciality_id});
-      
+      //  let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,currency:"USD",provider_id:userDataProvider.provider_id, specialty_id: userDataProvider.speciality_id});
 
-      let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,provider_id:'1', specialty_id: '1'});
 
-      console.log("response is ",response)
+      let response = await onCreateProviderServices({ name: serviceNameRef.current.value, description: descriptionRef.current.value, price: priceRef.current.value, provider_id: '1', specialty_id: '1' });
+
+      console.log("response is ", response)
 
       //Need to check for success and then append
       getUserAllServices();
-       setIsLoading(false);
-        toggleModal();
-    // }
-  }else{
-    Alert.alert("Please fill all the details");
-  }
-   
+      setIsLoading(false);
+      toggleModal();
+      // }
+    } else {
+      Alert.alert("Please fill all the details");
+    }
+
   };
 
   const getAllServices = () => {
@@ -165,9 +165,9 @@ const ProviderAddServices = () => {
 
   return (
     <>
-      
-        <ScrollView>
-        {services && services.length>0 ? (
+
+      <ScrollView>
+        {services && services.length > 0 ? (
           <>{getAllServices()}</>
         ) : (
           <>
@@ -188,9 +188,9 @@ const ProviderAddServices = () => {
           </TouchableOpacity>
           <Text style={styles.textAdd}>Add another service</Text>
         </View>
-        </ScrollView>
+      </ScrollView>
 
-        <KeyboardAvoidingView>
+      <KeyboardAvoidingView>
         {!isServiceAdded && (
           <Modal
             isVisible={isModalVisible}
@@ -203,11 +203,13 @@ const ProviderAddServices = () => {
                 onBlur={onBlurServiceName}
                 onChangeText={onChangeServiceName}
                 ref={serviceNameRef}
-                value={service?.name?.en}
+                defaultValue={service?.name?.en}
                 inputValue={""}
                 errorMessage={serviceError}
-                returnKeyType = {"next"}
+                returnKeyType={"next"}
                 onSubmitEditing={() => priceRef.current.focus()}
+                onClearInputText={() => serviceNameRef.current.clear()}
+
               />
               <Input
                 placeholder={"Price*"}
@@ -215,12 +217,14 @@ const ProviderAddServices = () => {
                 onBlur={onBlurPriceName}
                 onChangeText={onChangePriceName}
                 ref={priceRef}
-                value={service?.price}
+                defaultValue={service?.price}
                 inputValue={""}
                 errorMessage={priceError}
                 keyboardType="numeric"
-                returnKeyType = {"next"}
+                returnKeyType={"next"}
                 onSubmitEditing={() => descriptionRef.current.focus()}
+                onClearInputText={() => priceRef.current.clear()}
+
               />
               <Input
                 placeholder={"Description"}
@@ -228,9 +232,11 @@ const ProviderAddServices = () => {
                 onBlur={onBlurDescription}
                 onChangeText={onChangeDescription}
                 ref={descriptionRef}
-                value={service?.description?.en}
+                defaultValue={service?.description?.en}
                 inputValue={""}
                 errorMessage={descriptionError}
+                onClearInputText={() => descriptionRef.current.clear()}
+
               />
               <Button
                 title={"Save"}
@@ -254,8 +260,8 @@ const ProviderAddServices = () => {
             </View>
           </Modal>
         )}
-        </KeyboardAvoidingView>
-        {/* {isServiceAdded && (
+      </KeyboardAvoidingView>
+      {/* {isServiceAdded && (
         <View style={[styles.serviceContainer, styles.elevation]}>
           <Text style={styles.textView}>{userDataProvider.services ?? ""}</Text>
           <Text style={styles.textView}>
@@ -264,7 +270,7 @@ const ProviderAddServices = () => {
           <Text style={styles.textView}> {userDataProvider.price ?? ""}</Text>
         </View>
       )} */}
-      
+
     </>
   );
 };

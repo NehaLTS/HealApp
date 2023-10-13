@@ -36,7 +36,7 @@ const ProviderAddress = () => {
   const onChangeAddress = (value: string) => addressRef.current.value = value
 
   const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, license_photo: url });
-  console.log('userDataProvider',userDataProvider)
+  console.log('userDataProvider', userDataProvider)
 
   const validatePhoneNumber = () => {
     if (!phoneRef.current.value) {
@@ -65,11 +65,13 @@ const ProviderAddress = () => {
         onBlur={onBlurPhoneNumber}
         onChangeText={onChangePhoneNumber}
         ref={phoneRef}
-        value={userDataProvider.phone_number}
+        defaultValue={userDataProvider.phone_number}
         inputValue={userDataProvider?.phone_number ?? ""}
         errorMessage={phoneError}
-        returnKeyType = {"next"}
-                onSubmitEditing={() => licenseRef.current.focus()}
+        returnKeyType={"next"}
+        onSubmitEditing={() => licenseRef.current.focus()}
+        onClearInputText={() => phoneRef.current.clear()}
+
       />
 
       <Input
@@ -79,11 +81,12 @@ const ProviderAddress = () => {
         onBlur={onBlurLastName}
         onChangeText={onChangeLastName}
         ref={licenseRef}
-        value={userDataProvider.license}
+        defaultValue={userDataProvider.license}
         inputValue={userDataProvider?.license ?? ""}
-        returnKeyType = {"next"}
+        returnKeyType={"next"}
         onSubmitEditing={() => addressRef.current.focus()}
-        
+        onClearInputText={() => licenseRef.current.clear()}
+
       />
 
       <Input
@@ -92,10 +95,11 @@ const ProviderAddress = () => {
         onBlur={onBlurAddress}
         onChangeText={onChangeAddress}
         ref={addressRef}
-        value={userDataProvider.address}
+        defaultValue={userDataProvider.address}
         inputValue={userDataProvider?.address ?? ""}
         errorMessage={addressError}
-      
+        onClearInputText={() => addressRef.current.clear()}
+
       />
 
       <View style={styles.iconContainer}>
@@ -146,7 +150,7 @@ const styles = StyleSheet.create({
 
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS+2),
+    width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
   },

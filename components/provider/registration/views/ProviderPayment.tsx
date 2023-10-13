@@ -11,67 +11,67 @@ import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { t } from "i18next";
 import Text from "components/common/Text";
 const ProviderPayment = () => {
-  
+
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
-    const [registrationError, setRegistrationError] = useState("");
-    const [bankNameError, setBankNameError] = useState("");
-    const [branchError, setBranchError] = useState("");
-    const [accountError, setAccountError] = useState("");
+  const [registrationError, setRegistrationError] = useState("");
+  const [bankNameError, setBankNameError] = useState("");
+  const [branchError, setBranchError] = useState("");
+  const [accountError, setAccountError] = useState("");
 
-console.log('userDataProvider',userDataProvider)
+  console.log('userDataProvider', userDataProvider)
 
-    const registrationNumberRef = React.useRef<any>("");
-    const bankNameRef = React.useRef<any>("");
-    const branchRef = React.useRef<any>("");
-    const accountRef = React.useRef<any>("");
+  const registrationNumberRef = React.useRef<any>("");
+  const bankNameRef = React.useRef<any>("");
+  const branchRef = React.useRef<any>("");
+  const accountRef = React.useRef<any>("");
 
-    const onBlurRegistrationNumber= () => { validateRegistrationNumber(); setUserDataProvider({ ...userDataProvider, registration: registrationNumberRef.current.value }) }
-    const onChangeRegistrationNumber= (value: string) => registrationNumberRef.current.value = value
+  const onBlurRegistrationNumber = () => { validateRegistrationNumber(); setUserDataProvider({ ...userDataProvider, registration: registrationNumberRef.current.value }) }
+  const onChangeRegistrationNumber = (value: string) => registrationNumberRef.current.value = value
 
-    const onBlurBankName = () => { validateBankName(); setUserDataProvider({ ...userDataProvider, bank_name: bankNameRef.current.value }) }
-    const onChangeBankName = (value: string) => bankNameRef.current.value = value
+  const onBlurBankName = () => { validateBankName(); setUserDataProvider({ ...userDataProvider, bank_name: bankNameRef.current.value }) }
+  const onChangeBankName = (value: string) => bankNameRef.current.value = value
 
-    const onBlurBranchType = () => { validateBranch(); setUserDataProvider({ ...userDataProvider, branch: branchRef?.current?.value }) }
-    const onChangeBranchType = (value: string) => branchRef.current.value = value
+  const onBlurBranchType = () => { validateBranch(); setUserDataProvider({ ...userDataProvider, branch: branchRef?.current?.value }) }
+  const onChangeBranchType = (value: string) => branchRef.current.value = value
 
-    const onBlurAccount = () => { validateAccount(); setUserDataProvider({ ...userDataProvider, account: accountRef?.current?.value }) }
-    const onChangeAccount = (value: string) => accountRef.current.value = value
+  const onBlurAccount = () => { validateAccount(); setUserDataProvider({ ...userDataProvider, account: accountRef?.current?.value }) }
+  const onChangeAccount = (value: string) => accountRef.current.value = value
 
-    const getImageUrl = (url: string) =>
+  const getImageUrl = (url: string) =>
     setUserDataProvider({ ...userDataProvider, profile_picture: url });
 
 
-    const validateRegistrationNumber = () => {
-      if (!registrationNumberRef.current.value) {
-        setRegistrationError("Registration is required");
-      } else {
-        setRegistrationError("");
-      }
-    };
-  
-    const validateBankName = () => {
-      if (!bankNameRef.current.value) {
-        setBankNameError("Bank is required");
-      } else {
-        setBankNameError("");
-      }
-    };
-    const validateBranch = () => {
-      if (!bankNameRef.current.value) {
-        setBranchError("Branch is required");
-      } else {
-        setBranchError("");
-      }
-    };
-    const validateAccount = () => {
-      if (!bankNameRef.current.value) {
-        setAccountError("Bank Account is required");
-      } else {
-        setAccountError("");
-      }
-    };
+  const validateRegistrationNumber = () => {
+    if (!registrationNumberRef.current.value) {
+      setRegistrationError("Registration is required");
+    } else {
+      setRegistrationError("");
+    }
+  };
+
+  const validateBankName = () => {
+    if (!bankNameRef.current.value) {
+      setBankNameError("Bank is required");
+    } else {
+      setBankNameError("");
+    }
+  };
+  const validateBranch = () => {
+    if (!bankNameRef.current.value) {
+      setBranchError("Branch is required");
+    } else {
+      setBranchError("");
+    }
+  };
+  const validateAccount = () => {
+    if (!bankNameRef.current.value) {
+      setAccountError("Bank Account is required");
+    } else {
+      setAccountError("");
+    }
+  };
 
 
   return (
@@ -83,11 +83,13 @@ console.log('userDataProvider',userDataProvider)
         onBlur={onBlurRegistrationNumber}
         onChangeText={onChangeRegistrationNumber}
         ref={registrationNumberRef}
-        value={userDataProvider.registration}
+        defaultValue={userDataProvider.registration}
         inputValue={userDataProvider?.registration ?? ""}
         errorMessage={registrationError}
-        returnKeyType = {"next"}
+        returnKeyType={"next"}
         onSubmitEditing={() => bankNameRef.current.focus()}
+        onClearInputText={() => registrationNumberRef.current.clear()}
+
       />
       <View style={styles.container}>
         <Input
@@ -95,26 +97,29 @@ console.log('userDataProvider',userDataProvider)
           inputStyle={styles.inputBank}
           type={"nameSuffix"}
           onBlur={onBlurBankName}
-        onChangeText={onChangeBankName}
-        ref={bankNameRef}
-        value={userDataProvider.bank_name}
-        inputValue={userDataProvider?.bank_name ?? ""}
-        errorMessage={bankNameError}
-        returnKeyType = {"next"}
-        onSubmitEditing={() => branchRef.current.focus()}
+          onChangeText={onChangeBankName}
+          ref={bankNameRef}
+          defaultValue={userDataProvider.bank_name}
+          inputValue={userDataProvider?.bank_name ?? ""}
+          errorMessage={bankNameError}
+          returnKeyType={"next"}
+          onSubmitEditing={() => branchRef.current.focus()}
+          onClearInputText={() => bankNameRef.current.clear()}
+
         />
         <Input
           placeholder={"Branch"}
           type={"nameSuffix"}
           inputStyle={styles.inputBranch}
           onBlur={onBlurBranchType}
-        onChangeText={onChangeBranchType}
-        ref={branchRef}
-        value={userDataProvider.branch}
-        inputValue={userDataProvider?.branch ?? ""}
-        errorMessage={branchError}
-        returnKeyType = {"next"}
-        onSubmitEditing={() => accountRef.current.focus()}
+          onChangeText={onChangeBranchType}
+          ref={branchRef}
+          value={userDataProvider.branch}
+          inputValue={userDataProvider?.branch ?? ""}
+          errorMessage={branchError}
+          returnKeyType={"next"}
+          onSubmitEditing={() => accountRef.current.focus()}
+          onClearInputText={() => branchRef.current.clear()}
         />
       </View>
       <Input
@@ -128,6 +133,8 @@ console.log('userDataProvider',userDataProvider)
         value={userDataProvider.account}
         inputValue={userDataProvider?.account ?? ""}
         errorMessage={accountError}
+        onClearInputText={() => accountRef.current.clear()}
+
       />
       {/* <View style={styles.container}>
         <Input
@@ -177,16 +184,16 @@ export default ProviderPayment;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent:"space-between",
+    justifyContent: "space-between",
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
   inputBank: {
-    minWidth:"35%"
+    minWidth: "35%"
   },
   inputBranch: {
-  minWidth:"60%"
+    minWidth: "60%"
   },
-  input:{
+  input: {
     marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),
   },
   iconContainer: {
@@ -197,14 +204,14 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS+2),
+    width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
   },
   text: {
     fontSize: fontSize.textL,
     color: colors.black,
-    marginTop:getHeight(dimens.marginS)
+    marginTop: getHeight(dimens.marginS)
   },
 });
 
