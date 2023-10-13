@@ -45,7 +45,7 @@ const BasicInformation = () => {
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
         {isLoader && <ActivityIndicator style={styles.loader} size={'large'} />}
-        {isCurrentStep === 0 ? <UserDetailView error={firstNameError} nameError={lastNameError} phoneError={phoneNumberError} /> : isCurrentStep === 1 ?
+        {isCurrentStep === 0 ? <UserDetailView firstNameEmptyError={firstNameError} lastNameEmptyError={lastNameError} phoneError={phoneNumberError} /> : isCurrentStep === 1 ?
           <UserAddressView address={addressError} dateOfBirth={dateOfBirthError} idNumber={idNumberError} /> :
           <UserPaymentView isLoading={isLoading} isGetCardDetails={isGetCardDetails}
             cardError={cardNumberError} expireDateError={cardExpiry} evvError={cvvError} />}
