@@ -42,14 +42,17 @@ const Input = forwardRef(({
   containerWidth?: DimensionValue;
   inputValue: string 
 } & TextInputProps, ref) => {
+  // const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
+  // const moveText = useRef(new Animated.Value(0)).current;
+  // const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
-  const moveText = useRef(new Animated.Value(0)).current;
-  const fontSizeAnim = useRef(new Animated.Value(getHeight(fontSize.textL))).current;
-
+  const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
+  const fontSizeAnim = useRef(new Animated.Value(inputValue ? getHeight(fontSize.textS) : getHeight(fontSize.textL))).current;
   const onFocusHandler = () => moveTextTop();
   const onBlurHandler = () => moveTextBottom()
 
   const moveTextTop = () => {
+    
     Animated.parallel([
       Animated.timing(moveText, {
         toValue: 1,

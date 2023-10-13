@@ -1,16 +1,16 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { getHeight, getWidth } from '../../../../libs/StyleHelper';
-import { fontSize } from '../../../../designToken/fontSizes';
-import { dimens } from '../../../../designToken/dimens';
-import { fontWeight } from '../../../../designToken/fontWeights';
-import { colors } from '../../../../designToken/colors';
-import Input from '../../../common/Input';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
+import { t } from "i18next";
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
+import { colors } from '../../../../designToken/colors';
+import { dimens } from '../../../../designToken/dimens';
+import { fontSize } from '../../../../designToken/fontSizes';
 import { getTexts } from '../../../../libs/OneSkyHelper';
+import { getHeight, getWidth } from '../../../../libs/StyleHelper';
+import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 
 const ProviderAddress = () => {
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
@@ -58,10 +58,10 @@ const ProviderAddress = () => {
   return (
     <>
       <Input
-        placeholder={registration.phone_number}
+        placeholder={t("Phone Number*")}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.inputPhone}
+        inputStyle={styles.input}
         onBlur={onBlurPhoneNumber}
         onChangeText={onChangePhoneNumber}
         ref={phoneRef}
@@ -71,9 +71,9 @@ const ProviderAddress = () => {
       />
 
       <Input
-        placeholder="License number (for those who have)"
+        placeholder={t("License number (for those who have)")}
         type={"nameSuffix"}
-        inputStyle={styles.inputLastName}
+        inputStyle={styles.input}
         onBlur={onBlurLastName}
         onChangeText={onChangeLastName}
         ref={licenseRef}
@@ -83,7 +83,7 @@ const ProviderAddress = () => {
 
       <Input
         placeholder={registration.address}
-        inputStyle={styles.inputAddress}
+        inputStyle={styles.input}
         onBlur={onBlurAddress}
         onChangeText={onChangeAddress}
         ref={addressRef}
@@ -93,7 +93,7 @@ const ProviderAddress = () => {
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text}>Upload license photo</Text>
+        <Text style={styles.text}>{t("Upload license photo")}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.license_photo ? 1 : 0.5}
           onPress={() => !userDataProvider.license_photo && setIsShowModal(true)}
@@ -122,42 +122,26 @@ export default ProviderAddress;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSize.textM,
+    fontSize: fontSize.textL,
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
-    textAlign: "center"
+    textAlign: "center",
+  },
+  input: {
+    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+  },
 
-  },
-  inputAddress: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-  },
-  inputPhone: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-  },
-  inputLastName: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-  },
-  errorText: {
-    color: "red",
-    fontSize: fontSize.textS,
-    marginTop: getHeight(dimens.paddingXs),
-  },
-  editImage: {
-    height: getHeight(dimens.imageS),
-    width: getWidth(dimens.imageS),
-    // marginTop: getHeight(dimens.marginM),
-  },
   iconContainer: {
     flexDirection: "row",
-    gap: getHeight(dimens.marginM),
+    gap: getHeight(dimens.marginS),
     alignItems: "center",
-    marginTop: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.sideMargin),
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS),
-    width: getWidth(dimens.imageS),
+    height: getHeight(dimens.imageS + dimens.paddingS),
+    width: getWidth(dimens.imageS + dimens.paddingS+2),
+    resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
-
   },
 });

@@ -12,9 +12,13 @@ import Button from "../../../common/Button";
 import Input from "../../../common/Input";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import Text from "components/common/Text";
+import NavigationRoutes from "navigator/NavigationRoutes";
+import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
   const { onPressSignUpProvider } = RegistrationViewController();
+  const navigation = useNavigation()
+  // const { onPressSignUp } = RegistrationViewController();
     //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -49,7 +53,8 @@ const RegistrationView = () => {
   };
   
   const handleSignUp = () => {
-    if (!emailError && !passwordError) onPressSignUpProvider(email, password)
+    // if (!emailError && !passwordError) onPressSignUpProvider(email, password)
+    navigation.navigate(NavigationRoutes.ProviderRegistration)
   };
 
   const isValidEmail = (email: string) => {
@@ -94,7 +99,7 @@ const RegistrationView = () => {
         />
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.signInVia} title={t('or_sign_in_via')} />
+      <Text title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -114,8 +119,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS),
-    letterSpacing:getWidth(0.5)
+    paddingVertical: getHeight(dimens.paddingS)
   },
   footerContainer: {
     flexDirection: "row",
@@ -123,12 +127,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 0.18,
   },
-  signInVia: {
-    letterSpacing: getWidth(0.5)
-  },
   signUpButton: {
     alignSelf: "center",
-    marginTop: getHeight(dimens.paddingL),
+    marginTop: getHeight(dimens.marginM),
   },
   password: {
     marginTop: dimens.paddingL,

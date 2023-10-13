@@ -2,11 +2,11 @@ import { colors } from "designToken/colors";
 import { fontFamily } from "designToken/fontFamily";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight } from "libs/StyleHelper";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Text as RNText, StyleProp, StyleSheet, TextStyle } from "react-native";
 
-const Text = ( {title, style, ...props}:{title: any, style?: StyleProp<TextStyle>}&any) => {
-  return <RNText {...props} style={[styles.text, style]}>{title}</RNText>
+const Text = ( {title, style, children,...props}:{title: any, style?: StyleProp<TextStyle>, children?: ReactNode}&any) => {
+  return <RNText {...props} style={[styles.text, style]}>{title}{children}</RNText>
 };
 
 export default Text;

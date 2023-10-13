@@ -285,8 +285,9 @@ const ProviderDetail = () => {
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
-                iconStyle={{ marginRight: 10, height: 25, width: 25 }}
-                iconColor={colors.black}
+                iconStyle={{ marginRight: 10, height: 25, width: 25 ,marginTop:4}}
+                iconColor={colors.black }
+                selectedStyle={styles.box}
                 data={[
                     { name: 'Doctor' },
                     { name: 'Nurse' },
@@ -309,8 +310,9 @@ const ProviderDetail = () => {
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
-                iconStyle={{ marginRight: 10, height: 25, width: 25 }}
-                iconColor={colors.black}
+                iconStyle={{ marginRight: 10, height: 25, width: 25,marginTop:4 }}
+                iconColor={colors.black }
+                selectedStyle={styles.box}
                 data={data.find((item) => item.name.en === selectedProvider?.name)?.specialties || []}
                 labelField="name.en"
                 valueField="name.en"
@@ -393,77 +395,72 @@ const ProviderDetail = () => {
 export default ProviderDetail;
 
 const styles = StyleSheet.create({
-    text: {
-        fontSize: fontSize.textL,
-        color: colors.black,
-        fontWeight: fontWeight.normal,
-        textAlign: "center"
-    },
+  text: {
+    fontSize: fontSize.textL,
+    color: colors.black,
+    textAlign: "center",
+  },
 
-    inputLastName: {
-        marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-    },
+  inputLastName: {
+    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+  },
 
-    editImage: {
-        height: getHeight(dimens.imageS),
-        width: getWidth(dimens.imageS),
-    },
-    iconContainer: {
-        flexDirection: "row",
-        gap: getHeight(dimens.marginM),
-        alignItems: "center",
-        marginTop: getHeight(dimens.marginM),
-    },
+  editImage: {
+    height: getHeight(dimens.imageS),
+    width: getWidth(dimens.imageS),
+  },
+  iconContainer: {
+    flexDirection: "row",
+    gap: getHeight(dimens.marginS),
+    alignItems: "center",
+    marginTop: getHeight(dimens.sideMargin),
+  },
 
-    selectedImage: {
-        height: getHeight(dimens.imageS),
-        width: getWidth(dimens.imageS),
-        borderRadius: getHeight(dimens.paddingS),
+  selectedImage: {
+    height: getHeight(dimens.imageS + dimens.marginS),
+    width: getWidth(dimens.imageS + dimens.paddingS+2),
+    resizeMode: "cover",
+    borderRadius: getHeight(dimens.paddingS),
+  },
+  box: {
+    borderWidth: getHeight(dimens.borderBold),
+    borderRadius: getHeight(dimens.marginS),
+    backgroundColor: colors.offWhite,
+    height: getHeight(dimens.imageS),
+    borderColor: colors.primary,
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
+  },
+  placeholderStyle: {
+    fontSize: fontSize.textL,
+    color: colors.black,
+  },
+  dropdown: {
+    borderWidth: getHeight(dimens.borderBold),
+    borderRadius: getHeight(dimens.marginS),
+    backgroundColor: colors.offWhite,
+    height: getHeight(50),
+    borderColor: colors.primary,
+    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    paddingLeft: getHeight(dimens.paddingS+dimens.borderBold),
+    
+  },
+  icon: {
+    marginRight: 5,
+  },
+  textItem: {
+    flex: 1,
+    fontSize:fontSize.textL,
+    color: colors.black,
+    padding: getHeight(dimens.marginS),
+    paddingLeft: getHeight(dimens.paddingS+dimens.borderBold),
 
-    },
-    box: {
-        borderWidth: getHeight(dimens.borderBold),
-        borderRadius: getHeight(dimens.marginS),
-        backgroundColor: colors.offWhite,
-        height: getHeight(dimens.imageS),
-        borderColor: colors.primary,
-        marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-    },
-    placeholderStyle: {
-        fontSize: 16,
-        color: colors.black,
-    },
-    dropdown: {
-        borderWidth: getHeight(dimens.borderBold),
-        borderRadius: getHeight(dimens.marginS),
-        backgroundColor: colors.offWhite,
-        height: 50,
-        borderColor: colors.primary,
-        marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-        paddingLeft: getHeight(dimens.marginM),
-
-    },
-    icon: {
-        marginRight: 5,
-    },
-    textItem: {
-        flex: 1,
-        fontSize: 16,
-        color: colors.black,
-        paddingLeft: getHeight(dimens.marginM),
-    },
-    selectedTextStyle: {
-        fontSize: 16,
-        color: colors.black
-    },
-    iconStyle: {
-        width: getWidth(dimens.marginM),
-        height: getHeight(dimens.marginM),
-    },
-    errorMessage: {
-        color: colors.invalid,
-        paddingTop: getHeight(dimens.paddingXs),
-    },
+  },
+  selectedTextStyle: {
+    fontSize:fontSize.textL,
+    color: colors.black,
+  },
+  iconStyle: {
+    width: getWidth(dimens.marginM),
+    height: getHeight(dimens.marginM),
+  },
 });
-
-

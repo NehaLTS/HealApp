@@ -32,5 +32,18 @@
         "provider_login":"تسجيل الدخول للمزود",
         "provider_sign_up":"تسجيل المزود",
         "switch_to_client":"التبديل إلى العميل",
-        "skip":"يتخطى"
+        "skip":"يتخطى",
+        "type_provider":"نوع المزود",
+        "specialty":"تخصص",
+        "upload_id":"تحميل صورة الهوية",
+        "license_number":"رقم الترخيص (لمن لديه)",
+      "upload_license":"تحميل صورة الترخيص",
+      "business_registration":"رقم السجل التجاري",
+      "bank":"بنك",
+      "branch":"فرع",
+      "bank_account":"حساب البنك",
+      "authority":"سلطة إضافة وصفة طبية",
+      "yes":"نعم",
+      "no":"لا",
+      "services_you":"الخدمات التي تقدمها"
     } 

@@ -7,5 +7,6 @@ export const colors = {
     disabled: "rgba(217, 217, 217, 1)",
     offWhite: "rgba(249, 253, 255, 1)",
     grey: "rgba(129, 127, 127, 1)",
+    modal:"rgba(249, 247, 247, 1)",
     transparent: "transparent"
 } as const

@@ -28,6 +28,9 @@ export interface UserTypeProvider {
     registration: string;
     provider_type_id: string;
     license: string;
+    services:string;
+    price:string;
+    description:string
 }
 export interface UserContextFields {
     userDataProvider: Partial<UserTypeProvider>;
