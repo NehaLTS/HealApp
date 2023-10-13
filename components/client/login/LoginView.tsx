@@ -36,6 +36,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
+          onClearInputText={() => setEmail('')}
         />
 
         <Input
@@ -47,6 +48,8 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           inputStyle={styles.password}
           inputValue={password}
           onSubmitEditing={validatePassword}
+          onClearInputText={() => setPassword('')}
+
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}

@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { colors } from "designToken/colors";
 import { fontFamily } from "designToken/fontFamily";
@@ -60,24 +61,18 @@ const ProviderAddServices = () => {
 
   const onBlurServiceName = () => {
     validateServiceName();
-    setService({
-      ...(service as Service),
-      name: { en: serviceNameRef.current.value, hi: "", he: "" },
-    });
+  
   };
   const onChangeServiceName = (value: string) =>
     (serviceNameRef.current.value = value);
   const onBlurPriceName = () => {
     validatePrice();
-    setService({ ...(service as Service), price: priceRef.current.value });
+   
   };
   const onChangePriceName = (value: string) => (priceRef.current.value = value);
   const onBlurDescription = () => {
     validateDescription();
-    setService({
-      ...(service as Service),
-      description: { en: descriptionRef.current.value, hi: "", he: "" },
-    });
+  
   };
   const onChangeDescription = (value: string) =>
     (descriptionRef.current.value = value);
@@ -123,24 +118,34 @@ const ProviderAddServices = () => {
   }, []);
 
   const saveService = async () => {
-    setIsLoading(true);
+    if(serviceNameRef.current.value && descriptionRef.current.value && priceRef.current.value){
+  
+    let data={
+      name:{en:serviceNameRef.current.value,hi:"",he:""},
+      description:{en:descriptionRef.current.value,hi:"",he:""},
+      price:priceRef.current.value
+    }
 
-    // setService({...service as Service,
+    setService({...service as Service,...data})
 
-    //   name:{en:serviceNameRef.current.value,hi:"",he:""},
-    //   description:{en:descriptionRef.current.value,hi:"",he:""},
-    //   price:priceRef.current.value
+    // if(userDataProvider.provider_id && userDataProvider.speciality_id){
+      setIsLoading(true);
+    //  let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,currency:"USD",provider_id:userDataProvider.provider_id, specialty_id: userDataProvider.speciality_id});
+      
 
+      let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,provider_id:'1', specialty_id: '1'});
+
+      console.log("response is ",response)
+
+      //Need to check for success and then append
+      getUserAllServices();
+       setIsLoading(false);
+        toggleModal();
     // }
-
-    //   )
-
-    // setService({...service as Service,description:{en:descriptionRef.current.value,hi:"",he:""}})
-
-    // let response= await onCreateProviderServices({name:"",description:"",price:"",currency:"",provider_id: '1' ?? '', specialty_id: '1' ?? ''});
-
-    // setIsLoading(false);
-    // toggleModal();
+  }else{
+    Alert.alert("Please fill all the details");
+  }
+   
   };
 
   const getAllServices = () => {
@@ -201,6 +206,8 @@ const ProviderAddServices = () => {
                 value={service?.name?.en}
                 inputValue={""}
                 errorMessage={serviceError}
+                returnKeyType = {"next"}
+                onSubmitEditing={() => priceRef.current.focus()}
               />
               <Input
                 placeholder={"Price*"}
@@ -212,6 +219,8 @@ const ProviderAddServices = () => {
                 inputValue={""}
                 errorMessage={priceError}
                 keyboardType="numeric"
+                returnKeyType = {"next"}
+                onSubmitEditing={() => descriptionRef.current.focus()}
               />
               <Input
                 placeholder={"Description"}

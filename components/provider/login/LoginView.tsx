@@ -35,6 +35,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
+          onClearInputText={()=> setEmail('')}
         />
       
         <Input

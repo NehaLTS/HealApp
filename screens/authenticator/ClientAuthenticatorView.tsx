@@ -23,7 +23,7 @@ const ClientAuthenticatorView = () => {
       header: () => <Header isHideTitle />
     });
   }, [navigation]);
-  
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
@@ -32,13 +32,13 @@ const ClientAuthenticatorView = () => {
           <TextButton
             title={t("sign_in")}
             isActive={isSigninSelected}
-            onPress={()=> loginRegisterToggle(1) }
+            onPress={() => loginRegisterToggle(1)}
             isCapitalize
           />
           <TextButton
             title={t("sign_up")}
             isActive={!isSigninSelected}
-            onPress={()=> loginRegisterToggle(2) }
+            onPress={() => loginRegisterToggle(2)}
             isCapitalize
           />
         </View>
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
-    zIndex:9
+    zIndex: 9
   },
   container: {
     position: "relative",

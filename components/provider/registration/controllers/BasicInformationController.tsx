@@ -4,6 +4,7 @@ import { UseUserContext } from "contexts/useUserContext";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -79,7 +80,7 @@ const BasicInformationController = ({
       })
 
       console.log('response++++++', res)
-
+      setIsLoading(false)
       // if (res?.isSuccessful) {
       setCurrentStep(() => {
         const array = [...currentStep];
@@ -90,21 +91,7 @@ const BasicInformationController = ({
     }
     if (currentStep[currentStep.length - 1] === 3) {
       setIsLoading(false)
-      setCurrentStep(() => {
-        const array = [...currentStep];
-        array.push(array[array.length - 1] + 1);
-        return array;
-      });
-
-    }
-    if (currentStep[currentStep.length - 1] === 4) {
-      setIsLoading(false)
-      setCurrentStep(() => {
-        const array = [...currentStep];
-        array.push(array[array.length - 1] + 1);
-        return array;
-      });
-
+      navigation.navigate(NavigationRoutes.ProviderConfirmation)
     }
   }
 

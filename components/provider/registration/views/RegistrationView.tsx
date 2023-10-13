@@ -73,6 +73,8 @@ const RegistrationView = () => {
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
+          returnKeyType = {"next"}
+         
         />
         <Input
           placeholder={t("password")}

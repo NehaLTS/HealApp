@@ -248,8 +248,9 @@ const ProviderDetail = () => {
 
 
     const onChangeProviderTypes = (value) => {
+        // setUserDataProvider({ ...userDataProvider,  }) 
         console.log('selectedProvider', value?.name)
-        setUserDataProvider({ ...userDataProvider, type_Provider: value?.name })
+        setUserDataProvider({ ...userDataProvider, type_Provider: value?.name,lastname: lastNameRef.current.value })
         setSelectedProvider(value);
     };
 
@@ -269,6 +270,8 @@ const ProviderDetail = () => {
                 value={userDataProvider.firstname}
                 inputValue={userDataProvider?.firstname ?? ""}
                 errorMessage={firstNameError}
+                returnKeyType = {"next"}
+                onSubmitEditing={() => lastNameRef.current.focus()}
             />
 
             <Input

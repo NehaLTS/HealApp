@@ -16,6 +16,10 @@ const { userDataProvider } = UseUserContextProvider()
 const  [services, setServices] = useState([])
 const  [isLoading, setIsLoading] = useState(false)
 const { t } = useTranslation();
+const  [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false)
+const [isSigninSelected, setIsSigninSelected] = useState(true);
+  
+const loginRegisterToggle = (val: number) => setIsSigninSelected(val === 1)
   
 
 
@@ -38,13 +42,22 @@ const { t } = useTranslation();
   }, [])
 
   const onCheckedPress = (index:number) =>{
-    if(services[index] && services[index].isChecked){
-      services[index].isChecked=false
-      setServices(services)
-    }else{
-      services[index].isChecked=true
-      setServices(services)
-    }
+  
+    //TODO: Can Refactor this
+      let data=[...services];
+      if(data[index] && data[index].isChecked){
+        data[index].isChecked=false
+      }else{
+        data[index].isChecked=true
+      }
+  
+      setServices(data)
+  
+  }
+
+  const onPrescriptionSelected = (isSelected:boolean) =>{
+    setIsPrescriptionSelected(isSelected)
+  
   }
 
 
@@ -54,15 +67,25 @@ const { t } = useTranslation();
       <Text style={styles.text} title={t("Authority to add a prescription")} />
       <View style={styles.container}>
         <Text style={styles.text} title={t("Yes")} />
+        <TouchableOpacity onPress={()=>onPrescriptionSelected(true)}>
         <Image
-          source={require("../../../../assets/icon/selecter.png")}
-          style={styles.select}
+         source={isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
+        style={[!isPrescriptionSelected? styles.select : {  height: dimens.marginL+6,
+          width: dimens.marginL+6,
+          resizeMode: "cover",
+          borderRadius: getHeight(dimens.paddingS)}]}
         />
+        </TouchableOpacity>
         <Text style={styles.text} title={t("No")} />
+        <TouchableOpacity onPress={()=>onPrescriptionSelected(false)}>
         <Image
-          source={require("../../../../assets/icon/selecter.png")}
-          style={styles.select}
+          source={!isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
+          style={[isPrescriptionSelected? styles.select : {  height: dimens.marginL+6,
+            width: dimens.marginL+6,
+            resizeMode: "cover",
+            borderRadius: getHeight(dimens.paddingS)}]}
         />
+        </TouchableOpacity>
       </View>
       <Text style={styles.textS} title={t("Services you provide")} />
       <View style={styles.servicesContainer}>
@@ -73,12 +96,12 @@ const { t } = useTranslation();
             <View key={index} style={styles.serviceRow}>
               <Text style={styles.serviceText} title={item.name.en} />
               <View style={styles.serviceRight}>
-                <Text style={styles.serviceText} title={item.price} />
+                <Text style={styles.serviceText} title={"$ " +item.price} />
 
                 <TouchableOpacity onPress={()=>onCheckedPress(index)}>
                 {!item.isChecked ?<View style={styles.checkbox} />:
-                <View style={styles.checkbox}>
-                  <Image source={require('assets/icon/check.png')} style={{width: getWidth(12), height: getHeight(10)}} />
+                <View style={[styles.checkbox,{alignItems:'center', justifyContent:'center'}]}>
+                  <Image source={require('assets/icon/check.png')} style={{width: getWidth(16), height: getHeight(10)}} />
                 </View>
                 }
                 </TouchableOpacity>
@@ -104,8 +127,8 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textM,
   },
   select: {
-    height: dimens.marginL,
-    width: dimens.marginL,
+    height: dimens.marginL+2,
+    width: dimens.marginL+2,
     resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
   },

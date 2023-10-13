@@ -122,7 +122,7 @@ const Input = forwardRef(({
         {type === "password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
-              source={errorMessage ? require("../../assets/icon/error.png") : require("assets/icon/eyeIcon.png")}
+              source={require("assets/icon/eyeIcon.png")}
               style={styles.showImage}
             />
           </TouchableOpacity>
@@ -136,10 +136,10 @@ const Input = forwardRef(({
           </TouchableOpacity>
         )}
         {type === "dateOfBirth" && (
-          <TouchableOpacity onPress={() => { onPressCalender() }}>
+          <TouchableOpacity onPress={() => { onPressCalender(); onFocusHandler() }}>
             <Image
-              source={errorMessage ? require("../../assets/icon/calender_icon.png") : require("assets/icon/calender_icon.png")}
-              style={styles.showImage}
+              source={require("assets/icon/calender_icon.png")}
+              style={styles.datePicker}
             />
           </TouchableOpacity>
         )}
@@ -174,6 +174,12 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.marginM + dimens.borderThin),
     height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.sideMargin),
+    resizeMode: 'contain',
+  },
+  datePicker: {
+    width: getWidth(30),
+    height: getHeight(30),
+    marginRight: getHeight(dimens.paddingXs),
     resizeMode: 'contain',
   },
   errorMessage: {
