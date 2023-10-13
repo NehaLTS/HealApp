@@ -21,8 +21,12 @@ const  [isLoading, setIsLoading] = useState(false)
   const getProviderServices = async() =>{
 
     setIsLoading(true);
-    let response= await onGetProviderService({provider_id: '1' ?? '', specialty_id: '1' ?? ''});
-    setServices(response.services);
+    let response= await onGetProviderService({provider_id: userDataProvider.provider_id ?? '1', specialty_id: userDataProvider.speciality_id ?? '1'});
+    
+    if(response && response.services){
+      setServices(response.services);
+    }
+    
     setIsLoading(false);
 
   }
@@ -30,6 +34,11 @@ const  [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
     getProviderServices();
   }, [])
+
+
+
+
+
   return (
     <>
       <Text style={styles.text} title={t("Authority to add a prescription")} />
@@ -47,7 +56,8 @@ const  [isLoading, setIsLoading] = useState(false)
       </View>
       <Text style={styles.textS} title={t("Services you provide")} />
       <View style={styles.servicesContainer}>
-        <ScrollView  contentContainerStyle={{paddingBottom: getHeight(dimens.marginM)}} style={{ height: "100%",  }}>
+       {services.length>0? (<ScrollView  contentContainerStyle={{paddingBottom: getHeight(dimens.marginM)}} style={{ height: "100%",  }}>
+    
           {services.map((item, index) => (
             <View key={index} style={styles.serviceRow}>
               <Text style={styles.serviceText} title={item.name.en} />
@@ -57,7 +67,7 @@ const  [isLoading, setIsLoading] = useState(false)
               </View>
             </View>
           ))}
-        </ScrollView>
+        </ScrollView>):<Text style={styles.textS} title={t("No Services")} />}
       </View>
     </>
   );
