@@ -8,7 +8,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   const { t } = useTranslation();
@@ -22,10 +22,12 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     password,
     emailError,
     passwordError,
+    isLoading
   } = LoginViewController();
   return (
     <>
       <View style={styles.inputContainer}>
+      {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -100,6 +102,10 @@ const styles = StyleSheet.create({
   email:{
     marginTop: dimens.paddingL,
   },
+  loading:{
+    position:'absolute',
+    zIndex:1
+  }
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer

@@ -12,6 +12,7 @@ enum NavigationRoutes {
     ProviderStack = "ProviderStack",
     ProviderLogin = "ProviderLogin",
     ProviderHome = "ProviderHome",
+    ProviderRegistration = "ProviderRegistration",
   }
   
   export default NavigationRoutes

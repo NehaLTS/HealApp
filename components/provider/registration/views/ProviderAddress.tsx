@@ -10,14 +10,49 @@ import { useTranslationContext } from '../../../../contexts/UseTranslationsConte
 import { getTexts } from '../../../../libs/OneSkyHelper';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 
 const ProviderAddress = () => {
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
+  const [phoneError, setPhoneError] = useState("");
+  const [addressError, setAddressError] = useState("");
 
 
+  const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
+  const phoneRef = React.useRef<any>("");
+  const licenseRef = React.useRef<any>("");
+  const addressRef = React.useRef<any>("");
+
+  const onBlurPhoneNumber = () => { validatePhoneNumber(); setUserDataProvider({ ...userDataProvider, phone_number: phoneRef.current.value }) }
+  const onChangePhoneNumber = (value: string) => phoneRef.current.value = value
+
+  const onBlurLastName = () => setUserDataProvider({ ...userDataProvider, license: licenseRef.current.value })
+  const onChangeLastName = (value: string) => licenseRef.current.value = value
+
+  const onBlurAddress = () => { validateAddress(); setUserDataProvider({ ...userDataProvider, address: addressRef.current.value }) }
+  const onChangeAddress = (value: string) => addressRef.current.value = value
+
+  const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, license_photo: url });
+  console.log('userDataProvider',userDataProvider)
+
+  const validatePhoneNumber = () => {
+    if (!phoneRef.current.value) {
+      setPhoneError("Phone number is required");
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  const validateAddress = () => {
+    if (!addressRef.current.value) {
+      setAddressError("Address is required");
+    } else {
+      setAddressError("");
+    }
+  };
 
 
   return (
@@ -26,40 +61,57 @@ const ProviderAddress = () => {
         placeholder={registration.phone_number}
         type={"telephoneNumber"}
         keyboardType="number-pad"
-        inputStyle={styles.inputPhone} inputValue={''}
+        inputStyle={styles.inputPhone}
+        onBlur={onBlurPhoneNumber}
+        onChangeText={onChangePhoneNumber}
+        ref={phoneRef}
+        value={userDataProvider.phone_number}
+        inputValue={userDataProvider?.phone_number ?? ""}
+        errorMessage={phoneError}
       />
 
       <Input
         placeholder="License number (for those who have)"
         type={"nameSuffix"}
-        inputStyle={styles.inputLastName} inputValue={''}
+        inputStyle={styles.inputLastName}
+        onBlur={onBlurLastName}
+        onChangeText={onChangeLastName}
+        ref={licenseRef}
+        value={userDataProvider.license}
+        inputValue={userDataProvider?.license ?? ""}
       />
-      
+
       <Input
         placeholder={registration.address}
-        inputStyle={styles.inputAddress} inputValue={''}
+        inputStyle={styles.inputAddress}
+        onBlur={onBlurAddress}
+        onChangeText={onChangeAddress}
+        ref={addressRef}
+        value={userDataProvider.address}
+        inputValue={userDataProvider?.address ?? ""}
+        errorMessage={addressError}
       />
 
       <View style={styles.iconContainer}>
         <Text style={styles.text}>Upload license photo</Text>
         <TouchableOpacity
-          activeOpacity={selectedImage ? 1 : 0.5}
-          onPress={() => !selectedImage && setIsShowModal(true)}
+          activeOpacity={userDataProvider.license_photo ? 1 : 0.5}
+          onPress={() => !userDataProvider.license_photo && setIsShowModal(true)}
 
         >
           <Image
             source={
-              selectedImage
-                ? { uri: selectedImage }
+              userDataProvider.license_photo
+                ? { uri: userDataProvider.license_photo }
                 : require("../../../../assets/icon/licencesIcon.png")
             }
-            style={ styles.selectedImage }
+            style={styles.selectedImage}
           />
         </TouchableOpacity>
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
-          imageUri={setSelectedImage}
+          imageUri={getImageUrl}
         />
       </View>
     </>

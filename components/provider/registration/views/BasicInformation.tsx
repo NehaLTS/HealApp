@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View,ActivityIndicator } from "react-native";
 import { colors } from "designToken/colors";
 import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
@@ -23,7 +23,7 @@ const BasicInformation = () => {
   const navigation = useNavigation();
   // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
-  const { currentStep, onPressNext, onPressBack } = BasicInformationController({
+  const { currentStep, onPressNext, onPressBack,isLoading,setIsLoading } = BasicInformationController({
     totalSteps: 5,
   });
   useLayoutEffect(() => {
@@ -37,12 +37,13 @@ const BasicInformation = () => {
 
 
   return (
-    // <UserContext.Provider value={{ userData, setUserData }}>
     <View style={styles.container}>
+      {isLoading &&<ActivityIndicator style={{position:'absolute', top:'50%', left:'50%', zIndex:1}} color={colors.primary} size={'large'} />}
       <Stepper currentStep={currentStep} totalStep={5} />
       <View style={styles.inputContainer}>
         {currentStep[currentStep.length - 1] === 0 ? (
           <ProviderDetail />
+         
         ) : currentStep[currentStep.length - 1] === 1 ? (
           <ProviderAddress />
         ) : currentStep[currentStep.length - 1] === 2 ? ( 
@@ -87,7 +88,6 @@ const BasicInformation = () => {
           </Text>
         )}
     </View>
-    // </UserContext.Provider>
   );
 };
 

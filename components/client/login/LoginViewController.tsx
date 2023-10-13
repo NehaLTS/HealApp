@@ -20,6 +20,7 @@ const LoginViewController = () => {
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = () => {
     if (!email) {
@@ -84,12 +85,14 @@ const LoginViewController = () => {
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
+        setIsLoading(true)
         const email = userData?.user?.email
         const googleId = userData.user.providerData[0].uid
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
+        setIsLoading(false)
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
         } else {
@@ -107,6 +110,7 @@ const LoginViewController = () => {
     onFBAuthProcessing().then(async (userData) => {
       try {
         //TODO: under review with facebook 
+        setIsLoading(true)
         // const email = "amanshar@gmail.com"
         // const facebookId = "sharm@hmail.com"
         const email = userData.user.email
@@ -115,6 +119,7 @@ const LoginViewController = () => {
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
         console.log('bhjbhmb', res)
+        setIsLoading(false)
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
         } else {
@@ -149,6 +154,7 @@ const LoginViewController = () => {
     password,
     emailError,
     passwordError,
+    isLoading
   };
 };
 

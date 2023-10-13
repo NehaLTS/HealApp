@@ -14,7 +14,7 @@ const BasicInformationController = ({
   const [currentStep, setCurrentStep] = useState([0]);
   const { onUpdateUserProfile, onCreateCreditCardDetails } = AuthServicesClient()
   const { userData, setUserData } = UseUserContext()
-
+const [loader,setLoader]=useState(false)
   const onPressNext = async () => {
     if (currentStep.length !== totalSteps) {
       if (currentStep[currentStep.length - 1] === 0) {
@@ -25,6 +25,7 @@ const BasicInformationController = ({
         });
       }
       if (currentStep[currentStep.length - 1] === 1) {
+        setLoader(true)
         console.log('userData', userData);
         const res = await onUpdateUserProfile?.({
           firstname: userData?.firstname ?? '',
@@ -41,6 +42,7 @@ const BasicInformationController = ({
         setUserData({ ...userData, isSuccessful: res?.isSuccessful },)
         setLocalData('USER', res)
         console.log("res", res)
+        setLoader(false)
         if (res?.isSuccessful) {
           setCurrentStep(() => {
             const array = [...currentStep];
@@ -87,7 +89,8 @@ const BasicInformationController = ({
   return {
     currentStep,
     onPressNext,
-    onPressBack
+    onPressBack,
+    loader
   };
 };
 

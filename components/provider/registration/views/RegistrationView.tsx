@@ -14,7 +14,7 @@ import RegistrationViewController from "../controllers/RegistrationViewControlle
 import Text from "components/common/Text";
 
 const RegistrationView = () => {
-  const { onPressSignUp } = RegistrationViewController();
+  const { onPressSignUpProvider } = RegistrationViewController();
     //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -49,7 +49,7 @@ const RegistrationView = () => {
   };
   
   const handleSignUp = () => {
-    if (!emailError && !passwordError) onPressSignUp(email, password)
+    if (!emailError && !passwordError) onPressSignUpProvider(email, password)
   };
 
   const isValidEmail = (email: string) => {

@@ -7,6 +7,8 @@ export interface UserTypeProvider {
     state: string;
     country: string;
     profile_picture: string;
+    license_photo: string;
+    id_photo: string;
     date_of_birth: string; //yyyy-mm-dd
     phone_number: string;
     provider_id: string;
@@ -16,7 +18,16 @@ export interface UserTypeProvider {
     id_number: string;
     token: string;
     email: string;
-    isSuccessful: boolean
+    isSuccessful: boolean;
+    type_Provider: string;
+    speciality: string;
+    speciality_id: string;
+    bank_name: string;
+    branch: string;
+    account: string;
+    registration: string;
+    provider_type_id: string;
+    license: string;
 }
 export interface UserContextFields {
     userDataProvider: Partial<UserTypeProvider>;

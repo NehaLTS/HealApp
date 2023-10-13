@@ -1,5 +1,5 @@
 import { sendRequest } from "../api/RequestHandler";
-import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
+import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
@@ -53,6 +53,11 @@ export const AuthServicesProvider = () => {
         provider_type_id: string;
         license_number: string;
         upload_license_picture: string;
+        bank_name: string;
+        branch: string;
+        business_registration_number: string;
+        account: string;
+        
     }): Promise<UserTypeProvider> =>
         sendRequest(UPDATE_SIGNUP_PROVIDER, {
             method: PATCH,
@@ -78,10 +83,33 @@ export const AuthServicesProvider = () => {
                 'x-access-token': userDataProvider?.token
             } as unknown as HeadersInit
         })
+    const onGetProviderTypes = (): Promise<any> =>(
+        sendRequest(GET_PROVIDER_TYPES, {
+            method: GET,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': userDataProvider?.token
+            } as unknown as HeadersInit
+        }).then((res) => {
+          return  JSON.stringify(res)
+        })
+    )
+
+    const onGetProviderService = (body: {
+        provider_id: string,
+        specialty_id: string
+    }): Promise<any> =>
+        sendRequest(GET_PROVIDER_SERVICE, {
+            method: POST,
+            body: body as unknown as BodyInit,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': userDataProvider?.token
+              //  'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6bnVsbCwiaWF0IjoxNjk3MTE3NzY5LCJleHAiOjE2OTcxNTAxNjl9.ExisiXL9L2KkSCkTqhvSzRp3_Ftdic34RNeDAgFyY8k"
+            } as unknown as HeadersInit
+        })
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,
-        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices
+        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes,onGetProviderService
     }
 }
-
-

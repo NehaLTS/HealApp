@@ -5,7 +5,6 @@ import { UseUserContext } from "contexts/useUserContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
-import { fontWeight } from "designToken/fontWeights";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight } from "libs/StyleHelper";
 import { StyleSheet, Text } from "react-native";

@@ -5,9 +5,7 @@ import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
-import { fontWeight } from "designToken/fontWeights";
 import { t } from "i18next";
-import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -16,8 +14,6 @@ import RegistrationViewController from "../controllers/RegistrationViewControlle
 import Text from "components/common/Text";
 
 const RegistrationView = () => {
-  const { languageCode } = useTranslationContext();
-  const { signIn } = getTexts(languageCode);
   const { onPressSignUp } = RegistrationViewController();
     //TODO Use useRef
   const [email, setEmail] = useState<string>("");

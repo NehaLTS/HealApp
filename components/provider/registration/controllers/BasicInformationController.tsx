@@ -1,9 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { useApiContext } from "contexts/useApiContext";
 import { UseUserContext } from "contexts/useUserContext";
+import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
 import { useState } from "react";
+import { Alert } from "react-native";
 
 const BasicInformationController = ({
   totalSteps,
@@ -13,39 +15,85 @@ const BasicInformationController = ({
   const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState([0]);
   const [isShowModal, setIsShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
+  const { userDataProvider } = UseUserContextProvider()
+  const { OnUpdateProviderUserDetails } = AuthServicesProvider()
 
-  const { onAuthUpdateUserProfile } = useApiContext()
-  const { onUpdateUserProfile
-  } = AuthServicesProvider()
-  const { userData } = UseUserContext()
+  console.log('userDataProvider********', userDataProvider)
+
   const onPressNext = async () => {
-
     if (currentStep.length !== totalSteps) {
+      if (currentStep[currentStep.length - 1] === 0) {
+        if (
+        (userDataProvider?.firstname?.length ??0) > 0 && 
+        (userDataProvider.lastname?.length ??0) > 0 && 
+        (userDataProvider.speciality?.length ??0) > 0 && 
+        (userDataProvider.type_Provider?.length  ??0) > 0 && 
+       ( userDataProvider.id_photo?.length ??0) > 0
+        ) {
+          setCurrentStep(() => {
+            const array = [...currentStep];
+            array.push(array[array.length - 1] + 1);
+            return array;
+          });
+        }
+        else {
+          Alert.alert('Please fill all the fields')
+        }
+      }
+      if (currentStep[currentStep.length - 1] === 1) {
+        // if (userDataProvider.address && userDataProvider.phone_number&&userDataProvider.license_photo ) {
+        setCurrentStep(() => {
+          const array = [...currentStep];
+          array.push(array[array.length - 1] + 1);
+          return array;
+        });
+        // }
+        // else {
+        //   Alert.alert('Please fill all the fields')
+        // }
+      }
+    }
+    if (currentStep[currentStep.length - 1] === 2) {
+      setIsLoading(true)
+
+      // if (userDataProvider.bank_name && userDataProvider.branch&& userDataProvider.registration && userDataProvider.account && userDataProvider.profile_picture) {
+      const res = await OnUpdateProviderUserDetails?.({
+        firstname: userDataProvider.firstname ?? '',
+        lastname: 'saini' ?? '',
+        address: userDataProvider.address ?? '',
+        city: 'ambala',
+        state: 'haryana',
+        country: 'India',
+        phone_number: userDataProvider.phone_number ?? '',
+        profile_picture: userDataProvider.profile_picture ?? '',
+        provider_id: userDataProvider.provider_id?.toString() ?? '',
+        provider_type_id: userDataProvider.type_Provider ?? '',
+        license_number: userDataProvider.license ?? '',
+        upload_license_picture: userDataProvider.license_photo ?? '',
+        bank_name: userDataProvider.bank_name ?? '',
+        branch: userDataProvider.branch ?? '',
+        business_registration_number: userDataProvider.registration ?? '',
+        account: userDataProvider.account ?? ''
+      })
+
+      console.log('response++++++', res)
+
+      // if (res?.isSuccessful) {
       setCurrentStep(() => {
         const array = [...currentStep];
         array.push(array[array.length - 1] + 1);
         return array;
       });
-      if (currentStep[currentStep.length - 1] === 1) {
-        const res = await onUpdateUserProfile?.({
-          firstname: userData?.firstname ?? '',
-          lastname: userData?.lastname ?? '',
-          address: userData?.address ?? "",
-          city: userData?.city ?? '',
-          state: userData.state ?? '',
-          country: userData?.country ?? '',
-          profile_picture: userData.profile_picture ?? "https://firebasestorage.googleapis.com/v0/b/heal-app-ccd03.appspot.com/o/pexels-pixabay-220453.jpg?alt=media&token=109a02dd-bb7e-45f9-913c-980cf161b7e7&_gl=1*17m1xy4*_ga*ODA1NTM0NzYzLjE2OTYzMTY0OTk.*_ga_CW55HF8NVT*MTY5NjMxNjQ5OC4xLjEuMTY5NjMxNzY5My4zOC4wLjA.",
-          date_of_birth: userData?.date_of_birth ?? "",
-          phone_number: userData?.phone_number ?? "",
-          client_id: userData?.client_id ?? ""
-        });
-        setLocalData('USER', res)
-        // const res = await onAuthUpdateUserProfile?.(userData?.firstname ?? '', userData.lastname ?? '', userData.address ?? '', userData.city ?? '', userData.state ?? "", userData.country ?? '', userData.profile_picture ?? "", userData.date_of_birth ?? '', userData.phone_number ?? "", userData.client_id ?? "")
-        console.log("res", res)
-      }
+      // }
     }
-  };
+    if (currentStep[currentStep.length - 1] === 2) {
+      setIsLoading(false)
+    }
+  }
+
+
   const onPressBack = () => {
     if (currentStep.length > 1) {
       setCurrentStep((prev) => prev.slice(0, prev.length - 1));
@@ -55,6 +103,7 @@ const BasicInformationController = ({
     }
   };
 
+
   return {
     currentStep,
     onPressNext,
@@ -62,7 +111,9 @@ const BasicInformationController = ({
     isShowModal,
     setIsShowModal,
     setSelectedImage,
-    selectedImage
+    selectedImage,
+    isLoading,
+    setIsLoading
   };
 };
 

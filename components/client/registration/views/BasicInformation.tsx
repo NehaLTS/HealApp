@@ -9,7 +9,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
 import UserAddressView from "./UserAddressView";
 import UserDetailView from "./UserDetailView";
@@ -19,7 +19,7 @@ import UserPaymentView from "./UserPaymentView";
 const BasicInformation = () => {
   const navigation = useNavigation();
   const {t} = useTranslation()
-  const { currentStep, onPressNext, onPressBack } = BasicInformationController({
+  const { currentStep, onPressNext, onPressBack,loader } = BasicInformationController({
     totalSteps: 3,
   });
   useLayoutEffect(() => {
@@ -35,6 +35,7 @@ const BasicInformation = () => {
     <View style={styles.container}>
       <Stepper currentStep={currentStep} totalStep={3} />
       <View style={styles.inputContainer}>
+        {loader && <ActivityIndicator style={styles.loader} size={'large'}/>}
         {isCurrentStep === 0 ? <UserDetailView /> : isCurrentStep === 1 ? <UserAddressView /> : <UserPaymentView />}
       </View>
       <View
@@ -91,4 +92,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
   },
+  loader:{
+    position:'absolute',
+    zIndex:1,
+    top:"20%",
+    left:"45%"
+  }
 });
