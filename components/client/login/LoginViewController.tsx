@@ -88,34 +88,34 @@ const LoginViewController = () => {
   }
   /** To handle Google login  button click*/
   const onPressGoogleButton = async () => {
+    setIsLoading(true)
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
-        console.log("nb m, m,", userData)
         const email = userData?.user?.email ?? ""
         const googleId = userData.user?.uid ?? ""
         /** To handle Google auth request to API */
-        setIsLoading(true)
+       
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
-
-        setIsLoading(false)
-        console.error(res)
 
         if (res?.isSuccessful === true) {
           setUserData?.({ ...userData, token: res.token });
-          setLocalData('USER', res)
+          setLocalData('USER', res) 
           navigation.navigate('BasicInfo')
+          setIsLoading(false)
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
       }
       catch (err) {
         console.log('Error occurred!');
+        setIsLoading(false)
       }
     })
   }
   /** To handle Facebook login  button click*/
   const onPressFBButton = () => {
+    setIsLoading(true)
     /** To process Facebook login from firestore */
 
     onFBAuthProcessing().then(async (userData) => {
@@ -123,23 +123,27 @@ const LoginViewController = () => {
         //TODO: under review with facebook
         // const email = "amanshar@gmail.com"
         // const facebookId = "sharm@hmail.com"
-        setIsLoading(true)
+        
         const email = userData.user.email
         const facebookId = userData.additionalUserInfo?.profile?.id
         const res = await onSubmitFBAuthRequest({ email, facebookId });
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
-        setIsLoading(false)
-        console.error(res)
         if (res?.isSuccessful === true) {
           navigation.navigate('BasicInfo')
+          setIsLoading(false)
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
+          setIsLoading(false)
         }
       } catch (err) {
         console.log('Error occurred!');
+        
       }
     })
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000);
   }
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {

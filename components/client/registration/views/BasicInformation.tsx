@@ -73,7 +73,11 @@ const BasicInformation = () => {
             isPrimary
             isSmall
             style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
-            onPress={() => (isLoading ? console.log('goback') : navigation.navigate(NavigationRoutes.ClientHome)
+            onPress={() => (isLoading ? console.log('goback') :
+            navigation.reset({
+              index: -1,
+              routes: [{name: NavigationRoutes.ClientHome}],
+            })
             )}
           />
         )}

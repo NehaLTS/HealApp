@@ -4,7 +4,7 @@ import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
 import useUpdateEffect from "libs/UseUpdateEffect";
 import React, { useEffect, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, BackHandler } from "react-native";
 import UserDetailViewController from "./UserDetailViewController";
 
 const BasicInformationController = ({
@@ -136,6 +136,9 @@ const BasicInformationController = ({
     }
     if (currentStep.length === 1) {
       navigation.goBack()
+    }
+    if(currentStep.length === 2){
+      BackHandler.exitApp()
     }
   };
 
