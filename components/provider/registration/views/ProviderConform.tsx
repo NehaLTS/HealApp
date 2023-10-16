@@ -1,15 +1,25 @@
+import { useNavigation } from '@react-navigation/native'
+import Header from 'components/common/Header'
 import Text from 'components/common/Text'
 import { colors } from 'designToken/colors'
 import { dimens } from 'designToken/dimens'
+import { fontFamily } from 'designToken/fontFamily'
 import { fontSize } from 'designToken/fontSizes'
 import { getHeight, getWidth } from 'libs/StyleHelper'
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 
 const ProviderConform = () => {
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => <Header title="Registration" />,
+    });
+  }, [navigation]);
   return (
-    <>
-      <View style={{ alignItems: "center" }}>
+    <View style={{flex:1, backgroundColor: colors.white}}>
+      <View style={{ alignItems: "center", paddingTop: getHeight(50) }}>
         <Image
           source={require("../../../../assets/icon/provider.png")}
           style={styles.finalicon}
@@ -18,13 +28,13 @@ const ProviderConform = () => {
       <View style={styles.textContainer}>
         <Text style={styles.text}>Your form was successfully
           submitted and now waiting{"\n"} for the approval.{"\n"}
-          We’ll get back to you{"\n"}
+          We'll get back to you{"\n"}
           within 7 days.</Text>
         <Text style={styles.querytext}>If you have any questions{"\n"}
           feel free to call us</Text>
           <Text style={styles.number}>+972-555-00-11</Text>
       </View>
-    </>
+    </View>
   )
 }
 
@@ -34,8 +44,8 @@ const styles = StyleSheet.create({
   textContainer: {
     backgroundColor:colors.modal,
     padding: getHeight(dimens.marginM + 2),
-    marginHorizontal: getHeight(dimens.paddingS),
-    marginTop: getHeight(dimens.marginL),
+    marginHorizontal: getHeight(30),
+    marginTop: getHeight(50),
 
 
   },

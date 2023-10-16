@@ -67,6 +67,7 @@ const RegistrationView = () => {
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
+          onClearInputText={() => setEmail('')}
         />
 
         <Input
@@ -78,6 +79,7 @@ const RegistrationView = () => {
           inputStyle={styles.password}
           inputValue={password}
           onSubmitEditing={validatePassword}
+          onClearInputText={() => setPassword('')}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}

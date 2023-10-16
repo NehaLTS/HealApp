@@ -14,7 +14,8 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "HealApp";
-  } 
+  }
+
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link

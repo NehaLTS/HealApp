@@ -53,6 +53,8 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
         ref={lastNameRef}
         errorMessage={lastNameEmptyError.length ? lastNameEmptyError : lastNameError}
         inputValue={userData?.lastname ?? ""}
+        returnKeyType = {"next"}
+        onSubmitEditing={() => phoneNumberRef.current.focus()}
       />
       <Input
         placeholder={t('phone_number')}
@@ -66,6 +68,7 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
         ref={phoneNumberRef}
         errorMessage={phoneError.length ? phoneError : phoneNumberError}
         inputValue={userData?.phone_number ?? ""}
+      
       />
       <Text style={styles.text} title={t('find_doctor_text')} />
     </>

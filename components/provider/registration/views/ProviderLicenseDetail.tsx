@@ -45,9 +45,13 @@ const ProviderLicenseDetail = () => {
         onBlur={onBlurPhoneNumber}
         onChangeText={onChangePhoneNumber}
         ref={phoneRef}
-        value={userDataProvider.phone_number}
+        defaultValue={userDataProvider.phone_number}
         inputValue={userDataProvider?.phone_number ?? ""}
         errorMessage={phoneError}
+        returnKeyType={"next"}
+        onSubmitEditing={() => licenseRef.current.focus()}
+        onClearInputText={() => phoneRef.current.clear()}
+
       />
 
       <Input
@@ -57,8 +61,12 @@ const ProviderLicenseDetail = () => {
         onBlur={onBlurLastName}
         onChangeText={onChangeLastName}
         ref={licenseRef}
-        value={userDataProvider.license}
+        defaultValue={userDataProvider.license}
         inputValue={userDataProvider?.license ?? ""}
+        returnKeyType={"next"}
+        onSubmitEditing={() => addressRef.current.focus()}
+        onClearInputText={() => licenseRef.current.clear()}
+
       />
 
       <Input
@@ -67,9 +75,11 @@ const ProviderLicenseDetail = () => {
         onBlur={onBlurAddress}
         onChangeText={onChangeAddress}
         ref={addressRef}
-        value={userDataProvider.address}
+        defaultValue={userDataProvider.address}
         inputValue={userDataProvider?.address ?? ""}
         errorMessage={addressError}
+        onClearInputText={() => addressRef.current.clear()}
+
       />
 
       <View style={styles.iconContainer}>

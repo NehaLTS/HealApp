@@ -13,7 +13,7 @@ enum NavigationRoutes {
   ProviderLogin = "ProviderLogin",
   ProviderHome = "ProviderHome",
   ProviderRegistration = "ProviderRegistration",
-  // ProviderBasicInfo = 'ProviderBasicInfo'
+  ProviderConfirmation = 'ProviderConfirmation'
 }
 
 export default NavigationRoutes

@@ -5,6 +5,7 @@ import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
 import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -92,7 +93,7 @@ const LoginViewController = () => {
         setUserDataProvider?.({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          handleAuthResponse()
+          navigation.navigate(NavigationRoutes.ProviderRegistration)
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
@@ -113,7 +114,7 @@ const LoginViewController = () => {
         setUserDataProvider({ ...userDataProvider, token: res.token });
         setLocalData('USER', res)
         if (res?.isSuccessful === true) {
-          handleAuthResponse()
+          navigation.navigate(NavigationRoutes.ProviderRegistration)
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }

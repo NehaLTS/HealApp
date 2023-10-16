@@ -2,7 +2,7 @@ import TextButton from "components/common/TextButton";
 import { getSignInFooter } from "components/provider/login/LoginView";
 import { t } from "i18next";
 import React, { useState } from "react";
-import { ActivityIndicator,StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { colors } from "../../../../designToken/colors";
 import { dimens } from "../../../../designToken/dimens";
 import { fontSize } from "../../../../designToken/fontSizes";
@@ -16,10 +16,10 @@ import NavigationRoutes from "navigator/NavigationRoutes";
 import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
-  const { onPressSignUpProvider,isLoading } = RegistrationViewController();
+  const { onPressSignUpProvider, isLoading } = RegistrationViewController();
   const navigation = useNavigation()
   // const { onPressSignUp } = RegistrationViewController();
-    //TODO Use useRef
+  //TODO Use useRef
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState('');
@@ -39,7 +39,7 @@ const RegistrationView = () => {
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     return passwordPattern.test(password);
   };
-  
+
   const validatePassword = () => {
     if (!password) {
       setPasswordError("Password is required");
@@ -51,7 +51,7 @@ const RegistrationView = () => {
       setPasswordError('');
     }
   };
-  
+
   const handleSignUp = () => {
     if (!emailError && !passwordError) onPressSignUpProvider(email, password)
   };
@@ -64,25 +64,29 @@ const RegistrationView = () => {
   return (
     <>
       <View style={styles.inputContainer}>
-      {isLoading && <ActivityIndicator size={'large'} style={styles.loading} />}
+        {isLoading && <ActivityIndicator size={'large'} style={styles.loading} />}
         <Input
           placeholder={t("email")}
-          value={email}
+          defaultValue={email}
           errorMessage={emailError}
           onChangeText={setEmail}
           type="emailAddress"
           inputValue={email}
           onBlur={validateEmail}
+          returnKeyType={"next"}
+          onClearInputText={() => setEmail('')}
         />
         <Input
           placeholder={t("password")}
           type="password"
-          value={password}
+          defaultValue={password}
           errorMessage={passwordError}
           onChangeText={setPassword}
           inputStyle={styles.password}
           inputValue={password}
           onSubmitEditing={validatePassword}
+          onClearInputText={() => setPassword('')}
+
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
@@ -96,11 +100,11 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          // onPress={() => onPressSignUpProvider(email, password)}
+        // onPress={() => onPressSignUpProvider(email, password)}
         />
       </View>
       <View style={styles.footerContainer}>
-      <Text title={t("or_sign_in_via")} />
+        <Text title={t("or_sign_in_via")} />
         {getSignInFooter()}
       </View>
     </>
@@ -136,8 +140,8 @@ const styles = StyleSheet.create({
     marginTop: dimens.paddingL,
   },
   errorText: {
-    color: colors.invalid, 
-    fontSize: fontSize.textM, 
+    color: colors.invalid,
+    fontSize: fontSize.textM,
   },
   loading: {
     left: '44%',

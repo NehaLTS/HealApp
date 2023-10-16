@@ -1,4 +1,5 @@
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
+import { fontFamily } from 'designToken/fontFamily';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import React, { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -34,7 +35,7 @@ const ProviderDetail = () => {
     const lastNameRef = React.useRef<any>("");
     const providerTypeRef = React.useRef<any>("");
     const specialtyRef = React.useRef<any>("");
-    console.log('userDataProvider',userDataProvider)
+    console.log('userDataProvider', userDataProvider)
     const onBlurFirstName = () => { validateFirstName(); setUserDataProvider({ ...userDataProvider, firstname: firstNameRef.current.value }) }
     const onChangeFirstName = (value: string) => firstNameRef.current.value = value
 
@@ -248,8 +249,9 @@ const ProviderDetail = () => {
 
 
     const onChangeProviderTypes = (value) => {
+        // setUserDataProvider({ ...userDataProvider,  }) 
         console.log('selectedProvider', value?.name)
-        setUserDataProvider({ ...userDataProvider, type_Provider: value?.name })
+        setUserDataProvider({ ...userDataProvider, type_Provider: value?.name, lastname: lastNameRef.current.value })
         setSelectedProvider(value);
     };
 
@@ -266,9 +268,12 @@ const ProviderDetail = () => {
                 onBlur={onBlurFirstName}
                 onChangeText={onChangeFirstName}
                 ref={firstNameRef}
-                value={userDataProvider.firstname}
+                defaultValue={userDataProvider.firstname}
                 inputValue={userDataProvider?.firstname ?? ""}
                 errorMessage={firstNameError}
+                returnKeyType={"next"}
+                onSubmitEditing={() => lastNameRef.current.focus()}
+                onClearInputText={() => firstNameRef.current.clear()}
             />
 
             <Input
@@ -277,18 +282,19 @@ const ProviderDetail = () => {
                 inputStyle={styles.inputLastName}
                 onChangeText={onChangeLastName}
                 onBlur={onBlurLastName}
-                value={userDataProvider.lastname}
+                defaultValue={userDataProvider.lastname}
                 ref={lastNameRef}
                 inputValue={userDataProvider?.lastname ?? ""}
                 errorMessage={lastNameError}
+                onClearInputText={() => lastNameRef.current.clear()}
             />
 
             <Dropdown
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
-                iconStyle={{ marginRight: 10, height: 25, width: 25 ,marginTop:4}}
-                iconColor={colors.black }
+                iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
+                iconColor={colors.black}
                 selectedStyle={styles.box}
                 data={[
                     { name: 'Doctor' },
@@ -312,8 +318,8 @@ const ProviderDetail = () => {
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
-                iconStyle={{ marginRight: 10, height: 25, width: 25,marginTop:4 }}
-                iconColor={colors.black }
+                iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
+                iconColor={colors.black}
                 selectedStyle={styles.box}
                 data={data.find((item) => item.name.en === selectedProvider?.name)?.specialties || []}
                 labelField="name.en"
@@ -326,7 +332,7 @@ const ProviderDetail = () => {
             />
             {specialtyError && (
                 <Text style={styles.errorMessage}>{specialtyError}</Text>
-            )} 
+            )}
 
             {/* <Dropdown
                 style={styles.dropdown}
@@ -397,72 +403,74 @@ const ProviderDetail = () => {
 export default ProviderDetail;
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: fontSize.textL,
-    color: colors.black,
-    textAlign: "center",
-  },
+    text: {
+        fontSize: fontSize.textL,
+        color: colors.black,
+        textAlign: "center",
+    },
 
-  inputLastName: {
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-  },
+    inputLastName: {
+        marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    },
 
-  editImage: {
-    height: getHeight(dimens.imageS),
-    width: getWidth(dimens.imageS),
-  },
-  iconContainer: {
-    flexDirection: "row",
-    gap: getHeight(dimens.marginS),
-    alignItems: "center",
-    marginTop: getHeight(dimens.sideMargin),
-  },
+    editImage: {
+        height: getHeight(dimens.imageS),
+        width: getWidth(dimens.imageS),
+    },
+    iconContainer: {
+        flexDirection: "row",
+        gap: getHeight(dimens.marginS),
+        alignItems: "center",
+        marginTop: getHeight(dimens.sideMargin),
+    },
 
-  selectedImage: {
-    height: getHeight(dimens.imageS + dimens.marginS),
-    width: getWidth(dimens.imageS + dimens.paddingS+2),
-    resizeMode: "cover",
-    borderRadius: getHeight(dimens.paddingS),
-  },
-  box: {
-    borderWidth: getHeight(dimens.borderBold),
-    borderRadius: getHeight(dimens.marginS),
-    backgroundColor: colors.offWhite,
-    height: getHeight(dimens.imageS),
-    borderColor: colors.primary,
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-  },
-  placeholderStyle: {
-    fontSize: fontSize.textL,
-    color: colors.black,
-  },
-  dropdown: {
-    borderWidth: getHeight(dimens.borderBold),
-    borderRadius: getHeight(dimens.marginS),
-    backgroundColor: colors.offWhite,
-    height: getHeight(50),
-    borderColor: colors.primary,
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    paddingLeft: getHeight(dimens.paddingS+dimens.borderBold),
-    
-  },
-  icon: {
-    marginRight: 5,
-  },
-  textItem: {
-    flex: 1,
-    fontSize:fontSize.textL,
-    color: colors.black,
-    padding: getHeight(dimens.marginS),
-    paddingLeft: getHeight(dimens.paddingS+dimens.borderBold),
+    selectedImage: {
+        height: getHeight(dimens.imageS + dimens.marginS),
+        width: getWidth(dimens.imageS + dimens.paddingS + 2),
+        resizeMode: "cover",
+        borderRadius: getHeight(dimens.paddingS),
+    },
+    box: {
+        borderWidth: getHeight(dimens.borderBold),
+        borderRadius: getHeight(dimens.marginS),
+        backgroundColor: colors.offWhite,
+        height: getHeight(dimens.imageS),
+        borderColor: colors.primary,
+        marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
+    },
+    placeholderStyle: {
+        fontSize: fontSize.textL,
+        color: colors.black,
+        fontFamily: fontFamily.regular
+    },
+    dropdown: {
+        borderWidth: getHeight(dimens.borderBold),
+        borderRadius: getHeight(dimens.marginS),
+        backgroundColor: colors.offWhite,
+        height: getHeight(50),
+        borderColor: colors.primary,
+        marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+        paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
 
-  },
-  selectedTextStyle: {
-    fontSize:fontSize.textL,
-    color: colors.black,
-  },
-  iconStyle: {
-    width: getWidth(dimens.marginM),
-    height: getHeight(dimens.marginM),
-  },
+    },
+    icon: {
+        marginRight: 5,
+    },
+    textItem: {
+        flex: 1,
+        fontSize: fontSize.textL,
+        color: colors.black,
+        padding: getHeight(dimens.marginS),
+        paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
+
+    },
+    selectedTextStyle: {
+        fontSize: fontSize.textL,
+        color: colors.black,
+        fontFamily: fontFamily.regular
+    },
+    iconStyle: {
+        width: getWidth(dimens.marginM),
+        height: getHeight(dimens.marginM),
+    },
 });

@@ -51,7 +51,7 @@ const BasicInformation = () => {
       <View style={styles.inputContainer}>
         {currentStep[currentStep.length - 1] === 0 ? (
           <ProviderDetail />
-         
+          // <ProviderAddServies/>
         ) : currentStep[currentStep.length - 1] === 1 ? (
           <ProviderLicenseDetail />
         ) : currentStep[currentStep.length - 1] === 2 ? ( 
