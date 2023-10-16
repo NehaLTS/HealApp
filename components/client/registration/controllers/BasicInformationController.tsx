@@ -138,6 +138,9 @@ const BasicInformationController = ({
     }
     if(currentStep.length === 3){
       BackHandler.exitApp()
+      setCurrentStep(() => {
+        return [2];
+      });
     }
   };
 

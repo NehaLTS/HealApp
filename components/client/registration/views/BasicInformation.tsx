@@ -57,7 +57,7 @@ const BasicInformation = () => {
         ]}>
         {!isLoading && !isCardDetails ? (
           <>
-            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+            <Button disabled={isCurrentStep === 0} title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
               title={t("next")}
               isPrimary

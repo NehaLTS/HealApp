@@ -112,6 +112,9 @@ const LoginViewController = () => {
         setIsLoading(false)
       }
     })
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000);
   }
   /** To handle Facebook login  button click*/
   const onPressFBButton = () => {

@@ -33,7 +33,7 @@ const OnBoardingView = () => {
         fadeAnim,
         {
           toValue: 1,
-          duration: 1500,
+          duration: 2000,
           useNativeDriver: false
         }
       ).start();
