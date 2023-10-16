@@ -20,6 +20,7 @@ import ProviderServices from "./ProviderServices";
 import { t } from "i18next";
 import ProviderAddServies from "./ProviderAddServices";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
@@ -42,12 +43,11 @@ const BasicInformation = () => {
 
   return (
     <View style={styles.container}>
-      {isLoading &&<ActivityIndicator style={{position:'absolute', top:'50%', left:'50%', zIndex:1}} color={colors.primary} size={'large'} />}
+      {isLoading && <ActivityIndicator style={{position:'absolute', top:'50%', left:'50%', zIndex:1}} color={colors.primary} size={'large'} />}
       <Stepper currentStep={currentStep} totalStep={5} />
       <View style={styles.inputContainer}>
         {currentStep[currentStep.length - 1] === 0 ? (
           <ProviderDetail />
-          // <ProviderAddServies/>
         ) : currentStep[currentStep.length - 1] === 1 ? (
           <ProviderAddress />
         ) : currentStep[currentStep.length - 1] === 2 ? ( 
@@ -83,6 +83,12 @@ const BasicInformation = () => {
             }
             isPrimary
             isSmall
+            onPress={() => (isLoadingCard ? console.log('goback') :
+            navigation.reset({
+              index: -1,
+              routes: [{name: NavigationRoutes.ProviderHome}],
+            })
+            )}
           />
         )}
       </View>

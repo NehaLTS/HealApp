@@ -77,7 +77,7 @@ const ProviderServices = () => {
             }]}
           />
         </TouchableOpacity>
-        <Text style={styles.text} title={t("No")} />
+        <Text style={ styles.textServices} title={t("No Services")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
           <Image
             source={!isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
@@ -113,7 +113,7 @@ const ProviderServices = () => {
 
             ))}
           </ScrollView>)
-          : <Text style={[styles.textS, { alignSelf: 'center' }]} title={t("No Services")} />}
+          : <Text style={ styles.textServices} title={t("No Services")} />}
       </View>
     </>
   );
@@ -122,12 +122,16 @@ const ProviderServices = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    gap: getHeight(dimens.sideMargin),
+    gap: 10,
     marginTop: getHeight(dimens.sideMargin),
     alignItems: "center",
   },
   text: {
     fontSize: fontSize.textM,
+  },
+  textNo: {
+    fontSize: fontSize.textM,
+    marginLeft: 16
   },
   select: {
     height: dimens.marginL + 2,
@@ -148,6 +152,8 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.primary,
     height: "70%",
+   justifyContent:"center",
+  //  alignItems:"center"
   },
   serviceRow: {
     flexDirection: "row",
@@ -166,6 +172,10 @@ const styles = StyleSheet.create({
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.black,
   },
+  textServices:{
+    fontSize: getWidth(fontSize.textXl),
+  textAlign:"center"
+  }
 });
 
 export default ProviderServices;

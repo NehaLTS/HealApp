@@ -6,16 +6,24 @@ import { UserType } from "../../libs/types/UserType";
 import NavigationRoutes from "../../navigator/NavigationRoutes";
 
 const IntroController = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
   const { setLanguageCode } = useTranslationContext();
   const continueAsClient = () =>
-    navigation.navigate(NavigationRoutes.ClientStack, {
-      screen: NavigationRoutes.ClientLogin,
-      params: { isClient: true },
-    });
+  navigation.reset({
+    index: 0,
+    routes: [
+      {
+        name: NavigationRoutes.ClientStack,
+        params: { isClient: true },
+      },
+    ],
+  });
 
-  const continueAsProvider = () => navigation.navigate(NavigationRoutes.ProviderStack)
+  const continueAsProvider = () => navigation.reset({
+    index: 0,
+    routes: [{name: NavigationRoutes.ProviderStack}],
+  })
 
 
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);

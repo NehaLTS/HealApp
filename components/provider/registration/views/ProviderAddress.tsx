@@ -118,6 +118,12 @@ const ProviderAddress = () => {
             style={styles.selectedImage}
           />
         </TouchableOpacity>
+        {userDataProvider.license_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
+           <Image
+              source={require("assets/icon/circumEditBlue.png")}
+              style={styles.editImage}
+            />
+        </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
@@ -153,5 +159,10 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: "cover",
     borderRadius: getHeight(dimens.paddingS),
+  },
+  editImage: {
+    height: getHeight(dimens.paddingL +2),
+    width: getWidth(dimens.paddingL),
+marginTop:getHeight(dimens.paddingS)
   },
 });
