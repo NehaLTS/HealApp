@@ -93,6 +93,7 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
+          disabled={ (email && password) ==="" || (passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>

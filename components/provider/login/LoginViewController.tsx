@@ -21,6 +21,7 @@ const LoginViewController = () => {
   const [passwordError, setPasswordError] = useState('');
   const { OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider } = AuthServicesProvider();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const validateEmail = () => {
     if (!email) {
@@ -65,18 +66,21 @@ const LoginViewController = () => {
   const onPressLoginButton = async (email: string, password: string) => {
     console.log("yegfjusdfj", email, password)
     try {
+      setIsLoading(true)
       const res = await OnProviderSignIn({ email, password });
       setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
       setLocalData('USER', res)
       if (res?.isSuccessful === true) {
         handleAuthResponse();
+        setIsLoading(false)
       } else {
         Alert.alert("Login Failed", "Please check your email and password and try again.");
+        setIsLoading(false)
       }
 
     } catch (error) {
-      console.error("Error during login:", error);
       Alert.alert("An error occurred during login.");
+      setIsLoading(false)
     }
 
   }
@@ -149,6 +153,7 @@ const LoginViewController = () => {
     password,
     emailError,
     passwordError,
+    isLoading
   };
 };
 

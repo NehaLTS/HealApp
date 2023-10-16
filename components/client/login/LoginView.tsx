@@ -68,7 +68,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={email.length !== '' && !emailError && password.length !== '' && !passwordError}
+          disabled={ (email && password) ==="" || (passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>

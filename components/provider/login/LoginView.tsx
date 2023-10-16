@@ -7,7 +7,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import LoginViewController from "./LoginViewController";
 
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
@@ -22,11 +22,13 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     password,
     emailError,
     passwordError,
+    isLoading
   } = LoginViewController();
 
   return (
     <>
       <View style={styles.inputContainer}>
+      {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -60,6 +62,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
+          disabled={ (email && password) ==="" || (passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>
@@ -98,6 +101,12 @@ const styles = StyleSheet.create({
   },
   email:{
     marginTop: dimens.paddingL,
+  },
+  loading: {
+    left: '44%',
+    top: '13%',
+    position: 'absolute',
+    zIndex: 1
   },
 });
 

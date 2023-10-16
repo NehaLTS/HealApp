@@ -22,6 +22,7 @@ const Button = ({
   width,
   fontSized,
   height,
+  disabled,
   ...props
 }: {
   title: string;
@@ -31,6 +32,7 @@ const Button = ({
   fontSized?:number
   height?:number
   width?: DimensionValue;
+  disabled?: boolean
 } & TouchableOpacityProps) => {
   const scaleInAnimated = new Animated.Value(1);
 
@@ -64,18 +66,19 @@ const Button = ({
         style,
         {
           width: isSmall ? "auto" : "100%",
-          borderColor: isPrimary ? colors.primary : colors.black,
-          backgroundColor: isPrimary ? colors.primary : colors.transparent,
+          borderColor: disabled ? colors.grey :isPrimary ? colors.primary : colors.black,
+          backgroundColor: disabled ? colors.disabled :  isPrimary ? colors.primary :  colors.transparent,
           minWidth: width ?? '38%',
           height: height ?? getHeight(dimens.buttonHeight)
         },
       ]}
+      disabled={disabled}
       {...props}>
       <Text
         style={[
           styles.buttonTitle,
           {
-            color: isPrimary ? colors.white : colors.black,
+            color: disabled ? colors.grey : isPrimary ? colors.white : colors.black,
             fontFamily: isSmall || !isPrimary ? fontFamily.regular : fontFamily.semiBold,
             fontSize: fontSized ? fontSized : getHeight(24),
          
