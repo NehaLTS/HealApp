@@ -9,7 +9,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
@@ -140,7 +140,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 type="creditCardNumber"
                 placeholder={registration.cvv}
                 onBlur={onBlueCvv}
-                errorMessage={cvvErrormessage.length ? cvvErrormessage : cvvError}
+                // errorMessage={cvvErrormessage.length ? cvvErrormessage : cvvError}
                 onClearInputText={() => cvvRef.current.clear()}
                 onChangeText={onChangeCvv}
                 ref={cvvRef}
@@ -151,9 +151,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
           </>
         )
       ) : (
-        <View style={styles.loader}>
-          <Loader />
-        </View>
+           <ActivityIndicator style={styles.loading} size={'large'} />
       )}
       {!isLoading && (
         <>
@@ -261,5 +259,11 @@ const styles = StyleSheet.create({
   expireDate: {
     minWidth: "30%",
 
+  },
+  loading: {
+    left: '44%',
+    top: '50%',
+    position: 'absolute',
+    zIndex: 1
   },
 });

@@ -42,15 +42,15 @@ const UserPaymentViewController = () => {
       setCardExpiry("");
     }
   };
-  // const validateCvv = () => {
-  //   if (!cvvRef.current.value) {
-  //     setCvvError("Cvv is required1+");
-  //     // } else if (!cvv4Regex.test(cvvRef.current.value)) {
-  //     //   setCvvError("Invalid cvv format !");
-  //   } else {
-  //     setCvvError("");
-  //   }
-  // };
+  const validateCvv = () => {
+    if (!cvvRef.current.value) {
+      setCvvError("Cvv is required");
+      // } else if (!cvv4Regex.test(cvvRef.current.value)) {
+      //   setCvvError("Invalid cvv format !");
+    } else {
+      setCvvError("");
+    }
+  };
 
 
   const onChangeCardNumber = (value: string) => cardNumberRef.current.value = value
@@ -69,8 +69,7 @@ const UserPaymentViewController = () => {
     setUserData({ ...userData, expire_date: expireDateRef.current.value })
   }
   const onBlueCvv = () => {
-    console.log('cvvRef.current.value', cvvRef.current.value)
-    // validateCvv()
+    validateCvv()
     setUserData({ ...userData, cvv: cvvRef.current.value })
   }
   return {

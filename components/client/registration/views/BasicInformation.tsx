@@ -54,7 +54,6 @@ const BasicInformation = () => {
         style={[
           styles.footerContainer,
           {justifyContent: isLoading || isCardDetails ? "center" : "space-between"}
-          // { justifyContent: isLoading || isCardDetails ? "center" : "space-between" }
         ]}>
         {!isLoading && !isCardDetails ? (
           <>

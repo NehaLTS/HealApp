@@ -21,14 +21,12 @@ const BasicInformationController = ({
   const { userDataProvider } = UseUserContextProvider()
   const { OnUpdateProviderUserDetails } = AuthServicesProvider()
 
-  console.log('userDataProvider********', userDataProvider)
-
   const onPressNext = async () => {
     if (currentStep.length !== totalSteps) {
       if (currentStep[currentStep.length - 1] === 0) {
         if (
         (userDataProvider?.firstname?.length ??0) > 0 && 
-        (userDataProvider.lastname?.length ??0) > 0 && 
+        (userDataProvider.lastname?.length ?? 0) > 0 && 
         (userDataProvider.speciality?.length ??0) > 0 && 
         (userDataProvider.type_Provider?.length  ??0) > 0 && 
        ( userDataProvider.id_photo?.length ??0) > 0
@@ -91,7 +89,10 @@ const BasicInformationController = ({
     }
     if (currentStep[currentStep.length - 1] === 3) {
       setIsLoading(false)
-      navigation.navigate(NavigationRoutes.ProviderConfirmation)
+      navigation.reset({
+        index: 0,
+        routes: [{name: NavigationRoutes.ProviderConfirmation}],
+      })
     }
   }
 

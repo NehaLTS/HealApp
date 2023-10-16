@@ -33,7 +33,6 @@ const ProviderDetail = () => {
     const lastNameRef = React.useRef<any>("");
     const providerTypeRef = React.useRef<any>("");
     const specialtyRef = React.useRef<any>("");
-    console.log('userDataProvider', userDataProvider)
     const onBlurFirstName = () => { validateFirstName(); setUserDataProvider({ ...userDataProvider, firstname: firstNameRef.current.value }) }
     const onChangeFirstName = (value: string) => firstNameRef.current.value = value
 
@@ -247,8 +246,7 @@ const ProviderDetail = () => {
 
 
     const onChangeProviderTypes = (value) => {
-        // setUserDataProvider({ ...userDataProvider,  }) 
-        console.log('selectedProvider', value?.name)
+        validateLastName();
         setUserDataProvider({ ...userDataProvider, type_Provider: value?.name, lastname: lastNameRef.current.value })
         setSelectedProvider(value);
     };

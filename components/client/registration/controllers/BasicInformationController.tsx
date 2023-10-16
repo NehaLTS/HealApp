@@ -57,13 +57,13 @@ const BasicInformationController = ({
             return array;
           });
         } else {
-          setFirstNameError("First name is required");
-          setLastNameError("Last name is required");
-          setPhoneNumberError("Phone number is required");
+          if (!userData.firstname?.length) setFirstNameError("First name is required");
+          if (!userData.lastname?.length) setLastNameError("Last name is required");
+          if (!userData.phone_number?.length) setPhoneNumberError("Phone number is required");
         }
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        if (userData.address && userData.date_of_birth && userData.id_number) {
+        if (userData.address  && userData.id_number) {
           setIsLoader(true)
           const res = await onUpdateUserProfile?.({
             firstname: userData?.firstname ?? '',
@@ -93,9 +93,9 @@ const BasicInformationController = ({
             Alert.alert('some error occurred');
           }
         } else {
-          setAddressError("Address is required")
-          setIdNumberError("ID number is required")
-          setDateOfBirthError("Birth date is required")
+          if(!userData.address?.length) setAddressError("Address is required")
+          if(!userData.id_number?.length) setIdNumberError("ID number is required")
+          if(!userData.date_of_birth?.length) setDateOfBirthError("Birth date is required")
         }
       }
     }
@@ -122,22 +122,21 @@ const BasicInformationController = ({
         }
       }
       else {
-        Alert.alert('nklcvnbkc')
-        //   setCardNumberError("Card number is required")
-        //   setCvvError("Cvv is required")
-        //   setCardExpiry("Expiry date is required")
+        if(!userData.credit_card_number?.length) setCardNumberError("Card number is required")
+        if(!userData.cvv?.length) setCvvError("Cvv is required")
+        if(!userData.expire_date?.length) setCardExpiry("Expiry date is required")
       }
     }
 
   };
   const onPressBack = () => {
-    if (currentStep.length > 1) {
+    if (currentStep.length >= 1) {
       setCurrentStep((prev) => prev.slice(0, prev.length - 1));
     }
     if (currentStep.length === 1) {
       navigation.goBack()
     }
-    if(currentStep.length === 2){
+    if(currentStep.length === 3){
       BackHandler.exitApp()
     }
   };
