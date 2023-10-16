@@ -12,11 +12,13 @@ import { fontSize } from '../../designToken/fontSizes';
 import { fontWeight } from '../../designToken/fontWeights';
 import { getHeight, getWidth } from '../../libs/StyleHelper';
 import OnBoardingViewController from './OnBoardingViewController';
+import SplashScreen from "react-native-splash-screen"
 
 const OnBoardingView = () => {
   const { swiperRef, onPressSkip } = OnBoardingViewController()
   const navigation = useNavigation()
   const { t } = useTranslation()
+  SplashScreen.hide();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,
