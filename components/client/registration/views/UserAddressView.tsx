@@ -147,7 +147,7 @@ const UserAddressView = ({
           <TouchableOpacity
             activeOpacity={userData.profile_picture ? 1 : 0.5}
             onPress={() => setIsShowModal(true)}
-            style={styles.imageContainer}>
+            style={[styles.imageContainer,{paddingLeft: getWidth(5)}]}>
             <Image
               source={require("assets/icon/circumEditBlue.png")}
               style={styles.editImage}
@@ -176,11 +176,12 @@ const styles = StyleSheet.create({
   editProfile: {
     height: getHeight(dimens.imageS + dimens.marginS),
     width: getWidth(dimens.imageS + dimens.marginS),
+    resizeMode:'contain'
   },
   selectedImage: {
     height: getHeight(dimens.imageS),
     width: getWidth(dimens.imageS),
-    borderRadius: getHeight(dimens.paddingS),
+    borderRadius: getHeight(dimens.paddingS)
   },
   text: {
     fontSize: fontSize.textM,
@@ -198,10 +199,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: getWidth(dimens.marginS)
+    gap: getWidth(dimens.marginS),
   },
   editImage: {
-    height: getHeight(dimens.paddingL),
+    height: getHeight(dimens.paddingL +2),
     width: getWidth(dimens.paddingL),
+    // paddingLeft: getWidth(5)
   },
 });

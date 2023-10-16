@@ -18,7 +18,7 @@ const OnBoardingView = () => {
   const { swiperRef, onPressSkip } = OnBoardingViewController()
   const navigation = useNavigation()
   const { t } = useTranslation()
-  SplashScreen.hide();
+  SplashScreen?.hide();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,

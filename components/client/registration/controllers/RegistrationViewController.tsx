@@ -26,7 +26,7 @@ const RegistrationViewController = () => {
     }
     else {
       setIsLoading(false)
-      Alert.alert("please enter email or password");
+      Alert.alert("Please enter email or password");
     }
   }
 
