@@ -12,7 +12,10 @@ import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
 
-const ProviderAddress = () => {
+const ProviderAddress = ({
+  phoneError:phError,
+  addressError:adError,
+}:any) => {
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
   const { languageCode } = useTranslationContext();
@@ -67,7 +70,7 @@ const ProviderAddress = () => {
         ref={phoneRef}
         defaultValue={userDataProvider.phone_number}
         inputValue={userDataProvider?.phone_number ?? ""}
-        errorMessage={phoneError}
+        errorMessage={phError.length?phError: phoneError}
         returnKeyType={"next"}
         onSubmitEditing={() => licenseRef.current.focus()}
         onClearInputText={() => phoneRef.current.clear()}
@@ -97,7 +100,7 @@ const ProviderAddress = () => {
         ref={addressRef}
         defaultValue={userDataProvider.address}
         inputValue={userDataProvider?.address ?? ""}
-        errorMessage={addressError}
+        errorMessage={adError.length ? adError :  addressError}
         onClearInputText={() => addressRef.current.clear()}
 
       />

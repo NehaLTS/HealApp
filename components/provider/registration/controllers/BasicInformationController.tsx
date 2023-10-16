@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useApiContext } from "contexts/useApiContext";
 import { UseUserContext } from "contexts/useUserContext";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import useUpdateEffect from "libs/UseUpdateEffect";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
 import NavigationRoutes from "navigator/NavigationRoutes";
@@ -20,6 +21,34 @@ const BasicInformationController = ({
   const [selectedImage, setSelectedImage] = useState();
   const { userDataProvider } = UseUserContextProvider()
   const { OnUpdateProviderUserDetails } = AuthServicesProvider()
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [specialityError, setSpecialityError] = useState("");
+  const [providerTypeError, setProviderTypeError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [registrationError, setRegistrationError] = useState("");
+  const [bankNameError, setBankNameError] = useState("");
+  const [branchError, setBranchError] = useState("");
+  const [accountError, setAccountError] = useState("");
+
+  useUpdateEffect(() => {
+    if (userDataProvider.firstname?.length) setFirstNameError("");
+    if (userDataProvider.lastname?.length) setLastNameError("");
+    if (userDataProvider.speciality?.length) setSpecialityError("");
+    if (userDataProvider.type_Provider?.length) setProviderTypeError("");
+
+    if (userDataProvider.phone_number?.length) setPhoneError("");
+    if (userDataProvider.address?.length) setAddressError("");
+
+    if (!userDataProvider.registration?.length) setRegistrationError("");
+    if (userDataProvider.bank_name?.length) setBankNameError("");
+    if (userDataProvider.branch?.length) setBranchError("");
+    if (userDataProvider.account?.length) setAccountError("");
+
+  }, [userDataProvider])
+
+
 
   const onPressNext = async () => {
     if (currentStep.length !== totalSteps) {
@@ -38,27 +67,34 @@ const BasicInformationController = ({
           });
         }
         else {
-          Alert.alert('Please fill all the fields')
+          if (!userDataProvider.firstname?.length) setFirstNameError("First name is required");
+          if (!userDataProvider.lastname?.length) setLastNameError("Last name is required");
+          if (!userDataProvider.speciality?.length) setSpecialityError("Specialty is required");
+          if (!userDataProvider.type_Provider?.length) setProviderTypeError("Type of provider is required");
+          if (!userDataProvider.id_photo?.length) Alert.alert("Please Upload ID photo")
         }
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        // if (userDataProvider.address && userDataProvider.phone_number&&userDataProvider.license_photo ) {
+        if (userDataProvider.address && userDataProvider.phone_number && userDataProvider.license_photo ) {
         setCurrentStep(() => {
           const array = [...currentStep];
           array.push(array[array.length - 1] + 1);
           return array;
         });
-        // }
-        // else {
-        //   Alert.alert('Please fill all the fields')
-        // }
+        }
+        else {
+          if (!userDataProvider.phone_number?.length) setPhoneError("Phone number is required");
+          if (!userDataProvider.address?.length) setAddressError("Address is required");
+          if (!userDataProvider.license_photo?.length) Alert.alert("Please upload License photo")
+        }
       }
     }
     if (currentStep[currentStep.length - 1] === 2) {
-      setIsLoading(true)
+      
 
-      // if (userDataProvider.bank_name && userDataProvider.branch&& userDataProvider.registration && userDataProvider.account && userDataProvider.profile_picture) {
-      const res = await OnUpdateProviderUserDetails?.({
+      if (userDataProvider.bank_name && userDataProvider.branch&& userDataProvider.registration && userDataProvider.account && userDataProvider.profile_picture) {
+        setIsLoading(true)
+        const res = await OnUpdateProviderUserDetails?.({
         firstname: userDataProvider.firstname ?? '',
         lastname: 'saini' ?? '',
         address: userDataProvider.address ?? '',
@@ -77,15 +113,21 @@ const BasicInformationController = ({
         account: userDataProvider.account ?? ''
       })
 
-      console.log('response++++++', res)
       setIsLoading(false)
       // if (res?.isSuccessful) {
       setCurrentStep(() => {
         const array = [...currentStep];
         array.push(array[array.length - 1] + 1);
         return array;
-      });
-      // }
+      })
+    // }
+      }else{
+        if (!userDataProvider.registration?.length) setRegistrationError("Registration is required");
+        if (!userDataProvider.bank_name?.length) setBankNameError("Bank name is required");
+        if (!userDataProvider.branch?.length) setBranchError("Branch name is required");
+        if (!userDataProvider.account?.length) setAccountError("Account number is required");
+        if (!userDataProvider.profile_picture?.length) Alert.alert("Please upload Profile photo")
+      }
     }
     if (currentStep[currentStep.length - 1] === 3) {
       setIsLoading(false)
@@ -116,7 +158,20 @@ const BasicInformationController = ({
     setSelectedImage,
     selectedImage,
     isLoading,
-    setIsLoading
+    setIsLoading,
+    firstNameError,
+    lastNameError,
+    specialityError,
+    providerTypeError,
+
+    phoneError,
+    addressError,
+
+    registrationError,
+    bankNameError,
+    branchError,
+    accountError,
+
   };
 };
 

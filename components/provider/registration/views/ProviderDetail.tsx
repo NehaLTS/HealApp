@@ -14,7 +14,11 @@ import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
 
-const ProviderDetail = () => {
+const ProviderDetail = ({
+    firstNameError:fnError,
+    lastNameError: lnError,
+    specialityError: spError,
+    providerTypeError: prvError,}:any) => {
     const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
         BasicInformationController({});
     const [firstNameError, setFirstNameError] = useState("");
@@ -265,7 +269,7 @@ const ProviderDetail = () => {
                 ref={firstNameRef}
                 defaultValue={userDataProvider.firstname}
                 inputValue={userDataProvider?.firstname ?? ""}
-                errorMessage={firstNameError}
+                errorMessage={fnError.length?fnError: firstNameError}
                 returnKeyType={"next"}
                 onSubmitEditing={() => lastNameRef.current.focus()}
                 onClearInputText={() => firstNameRef.current.clear()}
@@ -280,7 +284,7 @@ const ProviderDetail = () => {
                 defaultValue={userDataProvider.lastname}
                 ref={lastNameRef}
                 inputValue={userDataProvider?.lastname ?? ""}
-                errorMessage={lastNameError}
+                errorMessage={lnError.length ?lnError:lastNameError}
                 onClearInputText={() => lastNameRef.current.clear()}
             />
 
@@ -306,8 +310,8 @@ const ProviderDetail = () => {
                 renderItem={renderItems}
             // onBlur={onBlurProviderType}
             />
-            {providerTypeError && (
-                <Text style={styles.errorMessage}>{providerTypeError}</Text>
+            {providerTypeError|| prvError && (
+            <Text style={styles.errorMessage}>{prvError.length?prvError: providerTypeError}</Text>
             )}
             <Dropdown
                 style={styles.dropdown}
@@ -325,8 +329,8 @@ const ProviderDetail = () => {
                 renderItem={renderItem}
             // onBlur={onBlurSpecialty}
             />
-            {specialtyError && (
-                <Text style={styles.errorMessage}>{specialtyError}</Text>
+            {specialtyError || spError && (
+                <Text style={styles.errorMessage}>{ spError.length?spError: specialtyError}</Text>
             )}
 
 
@@ -386,8 +390,8 @@ const styles = StyleSheet.create({
 
     selectedImage: {
         height: getHeight(dimens.imageS + dimens.marginS),
-        width: getWidth(dimens.imageS + dimens.paddingS),
-        resizeMode: "cover",
+        width: getWidth(dimens.imageS + dimens.paddingS + 2),
+        resizeMode: "contain",
         borderRadius: getHeight(dimens.paddingS),
     },
     box: {
@@ -435,5 +439,9 @@ const styles = StyleSheet.create({
         height: getHeight(dimens.paddingL ),
         width: getWidth(dimens.paddingL),
         marginBottom: getHeight(dimens.paddingXs)
-    }
+    },
+    errorMessage: {
+        color: colors.invalid,
+        paddingTop: getHeight(dimens.paddingXs),
+      },
 });

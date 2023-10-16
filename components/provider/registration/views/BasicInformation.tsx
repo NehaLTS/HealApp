@@ -27,7 +27,21 @@ const BasicInformation = () => {
   const navigation = useNavigation();
   // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
-  const { currentStep, onPressNext, onPressBack,isLoading,setIsLoading } = BasicInformationController({
+  const { currentStep, onPressNext, onPressBack,isLoading,setIsLoading,
+    firstNameError,
+    lastNameError,
+    specialityError,
+    providerTypeError,
+    phoneError,
+addressError,
+
+registrationError,
+bankNameError,
+branchError,
+accountError,
+  
+  
+  } = BasicInformationController({
     totalSteps: 5,
   });
   const { userDataProvider } = UseUserContextProvider()
@@ -47,11 +61,11 @@ const BasicInformation = () => {
       <Stepper currentStep={currentStep} totalStep={5} />
       <View style={styles.inputContainer}>
         {currentStep[currentStep.length - 1] === 0 ? (
-          <ProviderDetail />
+          <ProviderDetail firstNameError={firstNameError} lastNameError={lastNameError} specialityError={specialityError} providerTypeError={providerTypeError}   />
         ) : currentStep[currentStep.length - 1] === 1 ? (
-          <ProviderAddress />
+          <ProviderAddress  phoneError={phoneError} addressError={addressError} />
         ) : currentStep[currentStep.length - 1] === 2 ? ( 
-          <ProviderPayment />
+          <ProviderPayment registrationError={registrationError} bankNameError={bankNameError} branchError={branchError} accountError={accountError} />
         ):currentStep[currentStep.length - 1] === 3 ?(
           (userDataProvider.type_Provider== "Doctor" || userDataProvider.type_Provider== "Nurse")? <ProviderServices/>:<ProviderAddServies/>        ):(
           <ProviderAddServies/>

@@ -10,7 +10,13 @@ import BasicInformationController from "../controllers/BasicInformationControlle
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { t } from "i18next";
 import Text from "components/common/Text";
-const ProviderPayment = () => {
+const ProviderPayment = ({
+
+registrationError: regError,
+bankNameError: bankError ,
+branchError: brError,
+accountError :acError,
+}:any) => {
 
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
@@ -19,8 +25,6 @@ const ProviderPayment = () => {
   const [bankNameError, setBankNameError] = useState("");
   const [branchError, setBranchError] = useState("");
   const [accountError, setAccountError] = useState("");
-
-  console.log('userDataProvider', userDataProvider)
 
   const registrationNumberRef = React.useRef<any>("");
   const bankNameRef = React.useRef<any>("");
@@ -58,6 +62,7 @@ const ProviderPayment = () => {
       setBankNameError("");
     }
   };
+
   const validateBranch = () => {
     if (!bankNameRef.current.value) {
       setBranchError("Branch is required");
@@ -85,7 +90,7 @@ const ProviderPayment = () => {
         ref={registrationNumberRef}
         defaultValue={userDataProvider.registration}
         inputValue={userDataProvider?.registration ?? ""}
-        errorMessage={registrationError}
+        errorMessage={regError.length ? regError : registrationError}
         returnKeyType={"next"}
         onSubmitEditing={() => bankNameRef.current.focus()}
         onClearInputText={() => registrationNumberRef.current.clear()}
@@ -101,7 +106,7 @@ const ProviderPayment = () => {
           ref={bankNameRef}
           defaultValue={userDataProvider.bank_name}
           inputValue={userDataProvider?.bank_name ?? ""}
-          errorMessage={bankNameError}
+          errorMessage={bankError.length ? bankError : bankNameError}
           returnKeyType={"next"}
           onSubmitEditing={() => branchRef.current.focus()}
           onClearInputText={() => bankNameRef.current.clear()}
@@ -116,7 +121,7 @@ const ProviderPayment = () => {
           ref={branchRef}
           value={userDataProvider.branch}
           inputValue={userDataProvider?.branch ?? ""}
-          errorMessage={branchError}
+          errorMessage={brError.length ? brError : branchError}
           returnKeyType={"next"}
           onSubmitEditing={() => accountRef.current.focus()}
           onClearInputText={() => branchRef.current.clear()}
@@ -132,31 +137,10 @@ const ProviderPayment = () => {
         ref={accountRef}
         value={userDataProvider.account}
         inputValue={userDataProvider?.account ?? ""}
-        errorMessage={accountError}
+        errorMessage={acError.length?acError:  accountError}
         onClearInputText={() => accountRef.current.clear()}
 
       />
-      {/* <View style={styles.container}>
-        <Input
-          placeholder={t("Bank")}
-          inputStyle={styles.inputBank}
-          type={"nameSuffix"}
-          inputValue={""}
-        />
-        <Input
-          placeholder={t("Branch")}
-          type={"nameSuffix"}
-          inputStyle={styles.inputBranch}
-          inputValue={""}
-        />
-      </View>
-      <Input
-        placeholder={t("Bank account")}
-        inputStyle={styles.input}
-        type={"nameSuffix"}
-        inputValue={""}
-      /> */}
-
       <View style={styles.iconContainer}>
         <Text style={styles.text}>{t("Add a profile photo")}</Text>
         <TouchableOpacity
