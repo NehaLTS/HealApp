@@ -163,6 +163,5 @@ const styles = StyleSheet.create({
   editImage: {
     height: getHeight(dimens.paddingL +2),
     width: getWidth(dimens.paddingL),
-marginTop:getHeight(dimens.paddingS)
   },
 });

@@ -1,14 +1,13 @@
+import Text from 'components/common/Text';
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { fontFamily } from 'designToken/fontFamily';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
-import { fontWeight } from '../../../../designToken/fontWeights';
 import { getTexts } from '../../../../libs/OneSkyHelper';
 import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
@@ -330,46 +329,7 @@ const ProviderDetail = () => {
                 <Text style={styles.errorMessage}>{specialtyError}</Text>
             )}
 
-            {/* <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                iconStyle={{ marginRight: 10, height: 25, width: 25 }}
-                iconColor={colors.black}
-                ref={providerTypeRef}
-                data={data}
-                maxHeight={300}
-                labelField={(i)=> i.name.en }
-                valueField={'name'}
-                placeholder="Type of provider"
-                value={userDataProvider.provider_type_id}
-                onChange={(e) => onChangeProviderType(e)}
-                renderItem={renderItem}
-                onBlur={onBlurProviderType}
-            />
-            {providerTypeError && (
-                <Text style={styles.errorMessage}>{providerTypeError}</Text>
-            )}
-            <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                iconStyle={{ marginRight: 10, height: 25, width: 25 }}
-                iconColor={colors.black}
-                data={[userDataProvider.provider_type_id]}
-                ref={specialtyRef}
-                maxHeight={300}
-                labelField={(i)=> i.name }
-                valueField={'name'}
-                placeholder="Specialty"
-                value={userDataProvider.speciality}
-                onChange={(e) => onChangeSpecialty(e)}
-                renderItem={renderItem}
-                onBlur={onBlurSpecialty}
-            />
-            {specialtyError && (
-                <Text style={styles.errorMessage}>{specialtyError}</Text>
-            )} */}
+
             <View style={styles.iconContainer}>
                 <Text style={styles.text}>Upload ID photo</Text>
                 <TouchableOpacity
@@ -386,6 +346,12 @@ const ProviderDetail = () => {
                         style={styles.selectedImage}
                     />
                 </TouchableOpacity>
+                {userDataProvider.id_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
+                    <Image
+                        source={require("assets/icon/circumEditBlue.png")}
+                        style={styles.editBlueImage}
+                    />
+                </TouchableOpacity>}
                 <SelectImage
                     isShowModal={isShowModal}
                     closeModal={setIsShowModal}
@@ -407,12 +373,10 @@ const styles = StyleSheet.create({
 
     inputLastName: {
         marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+
     },
 
-    editImage: {
-        height: getHeight(dimens.imageS),
-        width: getWidth(dimens.imageS),
-    },
+
     iconContainer: {
         flexDirection: "row",
         gap: getHeight(dimens.marginS),
@@ -422,7 +386,7 @@ const styles = StyleSheet.create({
 
     selectedImage: {
         height: getHeight(dimens.imageS + dimens.marginS),
-        width: getWidth(dimens.imageS + dimens.paddingS + 2),
+        width: getWidth(dimens.imageS + dimens.paddingS),
         resizeMode: "cover",
         borderRadius: getHeight(dimens.paddingS),
     },
@@ -437,7 +401,6 @@ const styles = StyleSheet.create({
     placeholderStyle: {
         fontSize: fontSize.textL,
         color: colors.black,
-        fontFamily: fontFamily.regular
     },
     dropdown: {
         borderWidth: getHeight(dimens.borderBold),
@@ -463,10 +426,14 @@ const styles = StyleSheet.create({
     selectedTextStyle: {
         fontSize: fontSize.textL,
         color: colors.black,
-        fontFamily: fontFamily.regular
     },
     iconStyle: {
         width: getWidth(dimens.marginM),
         height: getHeight(dimens.marginM),
     },
+    editBlueImage: {
+        height: getHeight(dimens.paddingL ),
+        width: getWidth(dimens.paddingL),
+        marginBottom: getHeight(dimens.paddingXs)
+    }
 });

@@ -171,6 +171,12 @@ const ProviderPayment = () => {
             style={styles.selectedImage}
           />
         </TouchableOpacity>
+        {userDataProvider.profile_picture && <TouchableOpacity onPress={() => setIsShowModal(true)}>
+          <Image
+            source={require("assets/icon/circumEditBlue.png")}
+            style={styles.editImage}
+          />
+        </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
@@ -213,6 +219,11 @@ const styles = StyleSheet.create({
     color: colors.black,
     marginTop: getHeight(dimens.marginS)
   },
+  editImage: {
+    height: getHeight(dimens.paddingL + 2),
+    width: getWidth(dimens.paddingL),
+     marginTop: getHeight(dimens.paddingS)
+  }
 });
 
 
