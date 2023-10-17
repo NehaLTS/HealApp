@@ -13,7 +13,7 @@ const ProviderStackNavigator = () => {
         <Stack.Screen
           name={NavigationRoutes.ProviderLogin}
           component={lazy(() => import("../screens/authenticator/ProviderAuthenticatorView"))}
-
+          options={defaultHeaderStyle}
         />
         <Stack.Screen
           name={NavigationRoutes.ProviderRegistration}
@@ -23,6 +23,7 @@ const ProviderStackNavigator = () => {
         <Stack.Screen
           name={NavigationRoutes.ProviderHome}
           component={lazy(() => import("../components/provider/home/HomeView"))}
+          options={defaultHeaderStyle}
         />
         <Stack.Screen
           name={NavigationRoutes.ProviderConfirmation}

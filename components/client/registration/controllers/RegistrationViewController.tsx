@@ -12,7 +12,7 @@ const RegistrationViewController = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const onPressSignUp = async (email: string, password: string) => {
-    if (email != '') {
+    if (email !== undefined && password !== undefined) {
       setIsLoading(true)
       const res = await onCreateSignUp({ email, password });
       setUserData({ ...userData, token: res?.token, client_id: res?.client_id });

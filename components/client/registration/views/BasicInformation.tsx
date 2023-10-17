@@ -9,7 +9,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Alert, StyleSheet, View, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, View, TouchableOpacity } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
 import UserAddressView from "./UserAddressView";
 import UserDetailView from "./UserDetailView";

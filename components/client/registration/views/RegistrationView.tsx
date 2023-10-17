@@ -66,9 +66,8 @@ const RegistrationView = () => {
 
   return (
     <>
-
       <View style={styles.inputContainer}>
-        {isLoading || isLoadingGoogle && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
           ref={emailRef}
           placeholder={t("email")}

@@ -14,22 +14,24 @@ const RegistrationViewController = () => {
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const onPressSignUpProvider = async (email: string, password: string) => {
     setIsLoading(true)
-    const response = await OnProviderCreateSignUp({ email, password })
-    
-    setUserDataProvider({ ...userDataProvider, isSuccessful: response?.isSuccessful, provider_id: response.provider_id ?? '', token: response?.token ?? '' })
-    console.log('response', response)
-   
-    if (response.isSuccessful){
-      navigation.reset({
-        index: 0,
-        routes: [{ name: NavigationRoutes.ProviderRegistration }],
-      })
+    if (email !== undefined && password != undefined) {
+      const response = await OnProviderCreateSignUp({ email, password })
+
+      setUserDataProvider({ ...userDataProvider, isSuccessful: response?.isSuccessful, provider_id: response.provider_id ?? '', token: response?.token ?? '' })
+      if (response.isSuccessful)
+        navigation.reset({
+          index: 0,
+          routes: [{ name: NavigationRoutes.ProviderRegistration }],
+        })
+      else {
+        Alert.alert('Email and Password is not correct')
+      }
     }
     else {
-      Alert.alert('Email and Password is not correct')
+      Alert.alert('Please enter email and password')
     }
     setIsLoading(false)
   }
-  return { onPressSignUpProvider,isLoading }
+  return { onPressSignUpProvider, isLoading }
 }
 export default RegistrationViewController
