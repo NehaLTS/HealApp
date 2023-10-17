@@ -61,6 +61,7 @@ const UserPaymentViewController = () => {
     formattedText = formattedText.trim();
     cardNumberRef.current.setNativeProps({ text: formattedText });
     cardNumberRef.current.value = formattedText
+    validateCardNumber()
   }
   const onChangeExpireDate = (value: string) => {
     const cleanedText = value.replace(/[^0-9]/g, '');
@@ -71,6 +72,7 @@ const UserPaymentViewController = () => {
     formattedText = formattedText.replace(/\/$/, '');
     expireDateRef.current.setNativeProps({ text: formattedText });
     expireDateRef.current.value = formattedText
+    validateCardExpiry()
   }
 
   const onChangeCvv = (value: string) => cvvRef.current.value = value
