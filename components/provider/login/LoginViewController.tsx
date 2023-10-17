@@ -60,7 +60,7 @@ const LoginViewController = () => {
   };
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
-    navigation.navigate("HomeView")
+    navigation.navigate(NavigationRoutes.ProviderHome)
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, Text, View,ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { colors } from "designToken/colors";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
@@ -27,20 +27,20 @@ const BasicInformation = () => {
   const navigation = useNavigation();
   // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
-  const { currentStep, onPressNext, onPressBack,isLoading,setIsLoading,
+  const { currentStep, onPressNext, onPressBack, isLoading, setIsLoading,
     firstNameError,
     lastNameError,
     specialityError,
     providerTypeError,
     phoneError,
-addressError,
+    addressError,
 
-registrationError,
-bankNameError,
-branchError,
-accountError,
-  
-  
+    registrationError,
+    bankNameError,
+    branchError,
+    accountError,
+
+
   } = BasicInformationController({
     totalSteps: 5,
   });
@@ -57,18 +57,18 @@ accountError,
 
   return (
     <View style={styles.container}>
-      {isLoading && <ActivityIndicator style={{position:'absolute', top:'50%', left:'50%', zIndex:1}} color={colors.primary} size={'large'} />}
+      {isLoading && <ActivityIndicator style={{ position: 'absolute', top: '50%', left: '50%', zIndex: 1 }} color={colors.primary} size={'large'} />}
       <Stepper currentStep={currentStep} totalStep={5} />
       <View style={styles.inputContainer}>
         {currentStep[currentStep.length - 1] === 0 ? (
-          <ProviderDetail firstNameError={firstNameError} lastNameError={lastNameError} specialityError={specialityError} providerTypeError={providerTypeError}   />
+          <ProviderDetail firstNameError={firstNameError} lastNameError={lastNameError} specialityError={specialityError} providerTypeError={providerTypeError} />
         ) : currentStep[currentStep.length - 1] === 1 ? (
-          <ProviderAddress  phoneError={phoneError} addressError={addressError} />
-        ) : currentStep[currentStep.length - 1] === 2 ? ( 
+          <ProviderAddress phoneError={phoneError} addressError={addressError} />
+        ) : currentStep[currentStep.length - 1] === 2 ? (
           <ProviderPayment registrationError={registrationError} bankNameError={bankNameError} branchError={branchError} accountError={accountError} />
-        ):currentStep[currentStep.length - 1] === 3 ?(
-          (userDataProvider.type_Provider== "Doctor" || userDataProvider.type_Provider== "Nurse")? <ProviderServices/>:<ProviderAddServies/>        ):(
-          <ProviderAddServies/>
+        ) : currentStep[currentStep.length - 1] === 3 ? (
+          (userDataProvider.type_Provider == "Doctor" || userDataProvider.type_Provider == "Nurse") ? <ProviderServices /> : <ProviderAddServies />) : (
+          <ProviderAddServies />
         )}
       </View>
       <View
@@ -81,7 +81,7 @@ accountError,
         ]}>
         {!isLoadingCard && !isCardDetails ? (
           <>
-           <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
               title={t("next")}
               isPrimary
@@ -98,15 +98,15 @@ accountError,
             isPrimary
             isSmall
             onPress={() => (isLoadingCard ? console.log('goback') :
-            navigation.reset({
-              index: -1,
-              routes: [{name: NavigationRoutes.ProviderHome}],
-            })
+              navigation.reset({
+                index: -1,
+                routes: [{ name: NavigationRoutes.ProviderHome }],
+              })
             )}
           />
         )}
       </View>
-    {currentStep[currentStep.length - 1] === 5 &&
+      {currentStep[currentStep.length - 1] === 5 &&
         !isLoadingCard &&
         !isCardDetails && (
           <Text style={styles.skipLaterText}>
@@ -139,6 +139,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
-    paddingTop:getHeight(dimens.marginS)
+    paddingTop: getHeight(dimens.marginS)
   },
 });

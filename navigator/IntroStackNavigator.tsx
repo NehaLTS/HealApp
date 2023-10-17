@@ -4,7 +4,8 @@ import OnBoardingView from "../screens/onboarding/OnBoardingView";
 const Stack = createStackNavigator();
 
 const IntroStackNavigator = () => (
-  <Stack.Navigator initialRouteName="OnBoarding">
+
+  <Stack.Navigator initialRouteName="OnBoarding" screenOptions={{ headerShown: false }}>
     <Stack.Screen name="OnBoarding" component={OnBoardingView} />
     <Stack.Screen
       name="Intro"

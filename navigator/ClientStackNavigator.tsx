@@ -12,6 +12,7 @@ const ClientStackNavigator = () => {
     <UserContext.Provider value={{ userData, setUserData }}>
       <Stack.Navigator initialRouteName={getLocalData('USER')?.user ? NavigationRoutes.ClientHome : NavigationRoutes.ClientLogin}>
         <Stack.Screen
+          options={{ headerShown: false }}
           name={NavigationRoutes.ClientLogin}
           component={lazy(
             () => import("../screens/authenticator/ClientAuthenticatorView")

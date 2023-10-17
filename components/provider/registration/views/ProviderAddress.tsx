@@ -13,9 +13,9 @@ import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
 
 const ProviderAddress = ({
-  phoneError:phError,
-  addressError:adError,
-}:any) => {
+  phoneError: phError,
+  addressError: adError,
+}: any) => {
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
   const { languageCode } = useTranslationContext();
@@ -70,7 +70,7 @@ const ProviderAddress = ({
         ref={phoneRef}
         defaultValue={userDataProvider.phone_number}
         inputValue={userDataProvider?.phone_number ?? ""}
-        errorMessage={phError.length?phError: phoneError}
+        errorMessage={phError.length ? phError : phoneError}
         returnKeyType={"next"}
         onSubmitEditing={() => licenseRef.current.focus()}
         onClearInputText={() => phoneRef.current.clear()}
@@ -100,7 +100,7 @@ const ProviderAddress = ({
         ref={addressRef}
         defaultValue={userDataProvider.address}
         inputValue={userDataProvider?.address ?? ""}
-        errorMessage={adError.length ? adError :  addressError}
+        errorMessage={adError.length ? adError : addressError}
         onClearInputText={() => addressRef.current.clear()}
 
       />
@@ -122,10 +122,10 @@ const ProviderAddress = ({
           />
         </TouchableOpacity>
         {userDataProvider.license_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
-           <Image
-              source={require("assets/icon/circumEditBlue.png")}
-              style={styles.editImage}
-            />
+          <Image
+            source={require("assets/icon/circumEditBlue.png")}
+            style={styles.editImage}
+          />
         </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.paddingS),
   },
   editImage: {
-    height: getHeight(dimens.paddingL +2),
+    height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
   },
 });

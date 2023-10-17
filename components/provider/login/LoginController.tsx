@@ -8,6 +8,7 @@ import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
 import { UserType } from "libs/types/UserType";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ const LoginViewController = () => {
   const { t, i18n } = useTranslation();
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
-    navigation.navigate("HomeView")
+    navigation.navigate(NavigationRoutes.ClientHome)
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {

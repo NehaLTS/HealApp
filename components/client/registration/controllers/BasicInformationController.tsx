@@ -3,6 +3,7 @@ import { UseUserContext } from "contexts/useUserContext";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
 import useUpdateEffect from "libs/UseUpdateEffect";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useEffect, useState } from "react";
 import { Alert, BackHandler } from "react-native";
 import UserDetailViewController from "./UserDetailViewController";
@@ -63,7 +64,7 @@ const BasicInformationController = ({
         }
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        if (userData.address  && userData.id_number) {
+        if (userData.address && userData.id_number) {
           setIsLoader(true)
           const res = await onUpdateUserProfile?.({
             firstname: userData?.firstname ?? '',
@@ -93,9 +94,9 @@ const BasicInformationController = ({
             Alert.alert('some error occurred');
           }
         } else {
-          if(!userData.address?.length) setAddressError("Address is required")
-          if(!userData.id_number?.length) setIdNumberError("ID number is required")
-          if(!userData.date_of_birth?.length) setDateOfBirthError("Birth date is required")
+          if (!userData.address?.length) setAddressError("Address is required")
+          if (!userData.id_number?.length) setIdNumberError("ID number is required")
+          if (!userData.date_of_birth?.length) setDateOfBirthError("Birth date is required")
         }
       }
     }
@@ -122,9 +123,9 @@ const BasicInformationController = ({
         }
       }
       else {
-        if(!userData.credit_card_number?.length) setCardNumberError("Card number is required")
-        if(!userData.cvv?.length) setCvvError("Cvv is required")
-        if(!userData.expire_date?.length) setCardExpiry("Expiry date is required")
+        if (!userData.credit_card_number?.length) setCardNumberError("Card number is required")
+        if (!userData.cvv?.length) setCvvError("Cvv is required")
+        if (!userData.expire_date?.length) setCardExpiry("Expiry date is required")
       }
     }
 
@@ -136,13 +137,16 @@ const BasicInformationController = ({
     if (currentStep.length === 1) {
       navigation.goBack()
     }
-    if(currentStep.length === 3){
+    if (currentStep.length === 3) {
       BackHandler.exitApp()
       setCurrentStep(() => {
         return [2];
       });
     }
   };
+  const onPressNavigateHome = () => {
+    navigation.navigate(NavigationRoutes.ClientHome)
+  }
 
   return {
     currentStep,
@@ -160,7 +164,10 @@ const BasicInformationController = ({
     dateOfBirthError,
     cardNumberError,
     cvvError,
-    cardExpiry, isLoader
+    cardExpiry, isLoader,
+    setIsGetCardDetails,
+    setIsCardDetails,
+    onPressNavigateHome
   };
 };
 

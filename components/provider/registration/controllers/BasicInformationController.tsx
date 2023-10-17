@@ -54,11 +54,11 @@ const BasicInformationController = ({
     if (currentStep.length !== totalSteps) {
       if (currentStep[currentStep.length - 1] === 0) {
         if (
-        (userDataProvider?.firstname?.length ??0) > 0 && 
-        (userDataProvider.lastname?.length ?? 0) > 0 && 
-        (userDataProvider.speciality?.length ??0) > 0 && 
-        (userDataProvider.type_Provider?.length  ??0) > 0 && 
-       ( userDataProvider.id_photo?.length ??0) > 0
+          (userDataProvider?.firstname?.length ?? 0) > 0 &&
+          (userDataProvider.lastname?.length ?? 0) > 0 &&
+          (userDataProvider.speciality?.length ?? 0) > 0 &&
+          (userDataProvider.type_Provider?.length ?? 0) > 0 &&
+          (userDataProvider.id_photo?.length ?? 0) > 0
         ) {
           setCurrentStep(() => {
             const array = [...currentStep];
@@ -75,12 +75,12 @@ const BasicInformationController = ({
         }
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        if (userDataProvider.address && userDataProvider.phone_number && userDataProvider.license_photo ) {
-        setCurrentStep(() => {
-          const array = [...currentStep];
-          array.push(array[array.length - 1] + 1);
-          return array;
-        });
+        if (userDataProvider.address && userDataProvider.phone_number && userDataProvider.license_photo) {
+          setCurrentStep(() => {
+            const array = [...currentStep];
+            array.push(array[array.length - 1] + 1);
+            return array;
+          });
         }
         else {
           if (!userDataProvider.phone_number?.length) setPhoneError("Phone number is required");
@@ -90,38 +90,38 @@ const BasicInformationController = ({
       }
     }
     if (currentStep[currentStep.length - 1] === 2) {
-      
 
-      if (userDataProvider.bank_name && userDataProvider.branch&& userDataProvider.registration && userDataProvider.account && userDataProvider.profile_picture) {
+
+      if (userDataProvider.bank_name && userDataProvider.branch && userDataProvider.registration && userDataProvider.account && userDataProvider.profile_picture) {
         setIsLoading(true)
         const res = await OnUpdateProviderUserDetails?.({
-        firstname: userDataProvider.firstname ?? '',
-        lastname: 'saini' ?? '',
-        address: userDataProvider.address ?? '',
-        city: 'ambala',
-        state: 'haryana',
-        country: 'India',
-        phone_number: userDataProvider.phone_number ?? '',
-        profile_picture: userDataProvider.profile_picture ?? '',
-        provider_id: userDataProvider.provider_id?.toString() ?? '',
-        provider_type_id: userDataProvider.type_Provider ?? '',
-        license_number: userDataProvider.license ?? '',
-        upload_license_picture: userDataProvider.license_photo ?? '',
-        bank_name: userDataProvider.bank_name ?? '',
-        branch: userDataProvider.branch ?? '',
-        business_registration_number: userDataProvider.registration ?? '',
-        account: userDataProvider.account ?? ''
-      })
+          firstname: userDataProvider.firstname ?? '',
+          lastname: 'saini' ?? '',
+          address: userDataProvider.address ?? '',
+          city: 'ambala',
+          state: 'haryana',
+          country: 'India',
+          phone_number: userDataProvider.phone_number ?? '',
+          profile_picture: userDataProvider.profile_picture ?? '',
+          provider_id: userDataProvider.provider_id?.toString() ?? '',
+          provider_type_id: userDataProvider.type_Provider ?? '',
+          license_number: userDataProvider.license ?? '',
+          upload_license_picture: userDataProvider.license_photo ?? '',
+          bank_name: userDataProvider.bank_name ?? '',
+          branch: userDataProvider.branch ?? '',
+          business_registration_number: userDataProvider.registration ?? '',
+          account: userDataProvider.account ?? ''
+        })
 
-      setIsLoading(false)
-      // if (res?.isSuccessful) {
-      setCurrentStep(() => {
-        const array = [...currentStep];
-        array.push(array[array.length - 1] + 1);
-        return array;
-      })
-    // }
-      }else{
+        setIsLoading(false)
+        // if (res?.isSuccessful) {
+        setCurrentStep(() => {
+          const array = [...currentStep];
+          array.push(array[array.length - 1] + 1);
+          return array;
+        })
+        // }
+      } else {
         if (!userDataProvider.registration?.length) setRegistrationError("Registration is required");
         if (!userDataProvider.bank_name?.length) setBankNameError("Bank name is required");
         if (!userDataProvider.branch?.length) setBranchError("Branch name is required");
@@ -133,7 +133,7 @@ const BasicInformationController = ({
       setIsLoading(false)
       navigation.reset({
         index: 0,
-        routes: [{name: NavigationRoutes.ProviderConfirmation}],
+        routes: [{ name: NavigationRoutes.ProviderConfirmation }],
       })
     }
   }

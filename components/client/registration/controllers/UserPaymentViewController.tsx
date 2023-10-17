@@ -37,7 +37,7 @@ const UserPaymentViewController = () => {
     if (!expireDateRef.current.value) {
       setCardExpiry("Expiry date is required");
       // } else if (!expiryDateRegex.test(expireDateRef.current.value)) {
-      //   setCardExpiry("Invalid date format !");
+      //   setCardExpiry("Invalid date format! ");
     } else {
       setCardExpiry("");
     }

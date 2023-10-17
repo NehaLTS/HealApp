@@ -37,27 +37,29 @@ const UserAddressView = ({
   const [open, setOpen] = useState(false)
   const [firstOpenDialog, setFirstOpenDialog] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const handleDateChange = (newDate) => {
-    setSelectedDate(newDate);
-  };
+  // const handleDateChange = (newDate) => {
+  //   setSelectedDate(newDate);
+  // };
   const originalDate = new Date(userData?.date_of_birth ?? "");
-  const formattedDate = originalDate.toLocaleDateString('en-GB', {
+  const formattedDate = originalDate.toLocaleDateString('es-CL', {
     day: '2-digit',
-    month: 'short',
+    month: 'numeric',
     year: 'numeric',
   }).replace(/ /g, '-');
   console.log('first', formattedDate)
-  const formatDigit = (digit: string) => {
-    if (digit.length === 1)
-      return "0" + digit;
-    else
-      return digit;
-  }
+  // const formatDigit = (digit: string) => {
+  //   if (digit.length === 1)
+  //     return "0" + digit;
+  //   else
+  //     return digit;
+  // }
+  const currentDate = new Date();
+  const maxDate = new Date(currentDate.getFullYear() - 15, currentDate.getMonth(), currentDate.getDate());
 
-  const formatBirthDate = () => {
-    return formatDigit(date.getDate().toString()) + "-" + formatDigit((date.getMonth() + 1).toString())
-      + "-" + formatDigit(date.getFullYear().toString() ?? "")
-  }
+  // const formatBirthDate = () => {
+  //   return formatDigit(date.getDate().toString()) + "-" + formatDigit((date.getMonth() + 1).toString())
+  //     + "-" + formatDigit(date.getFullYear().toString() ?? "")
+  // }
   return (
     <>
       {open && <DatePicker
@@ -74,6 +76,8 @@ const UserAddressView = ({
         onCancel={() => {
           setOpen(false)
         }}
+        maximumDate={maxDate}
+
       // onDateChange={(e) => setUserData({ ...userData, date_of_birth: birthDateRef.current.value }) }
       // onDateChange={(e) => console.log('first', e)}
       />}
@@ -88,7 +92,7 @@ const UserAddressView = ({
         defaultValue={userData.address}
         errorMessage={address.length ? address : addressError}
         inputValue={userData.address ?? ''}
-        returnKeyType = {"next"}
+        returnKeyType={"next"}
         onSubmitEditing={() => birthDateRef.current.focus()}
       />
       <Input
@@ -103,7 +107,8 @@ const UserAddressView = ({
         inputValue={userData.date_of_birth?.toString() ?? ''}
         onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
         type="dateOfBirth"
-        returnKeyType = {"next"}
+        returnKeyType={"next"}
+        editable={false}
         onSubmitEditing={() => idNumberRef.current.focus()}
       />
       <Input
@@ -118,7 +123,6 @@ const UserAddressView = ({
         defaultValue={userData.id_number}
         errorMessage={idNumber.length ? idNumber : idNumberError}
         inputValue={userData.id_number ?? ''}
-     
       />
       <Text style={styles.text} title={t("find_doctor_text")} />
       <View style={styles.innerContainer}>
@@ -147,7 +151,7 @@ const UserAddressView = ({
           <TouchableOpacity
             activeOpacity={userData.profile_picture ? 1 : 0.5}
             onPress={() => setIsShowModal(true)}
-            style={[styles.imageContainer,{paddingLeft: getWidth(5)}]}>
+            style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}>
             <Image
               source={require("assets/icon/circumEditBlue.png")}
               style={styles.editImage}
@@ -176,7 +180,7 @@ const styles = StyleSheet.create({
   editProfile: {
     height: getHeight(dimens.imageS + dimens.marginS),
     width: getWidth(dimens.imageS + dimens.marginS),
-    resizeMode:'contain'
+    resizeMode: 'contain'
   },
   selectedImage: {
     height: getHeight(dimens.imageS),
@@ -202,7 +206,7 @@ const styles = StyleSheet.create({
     gap: getWidth(dimens.marginS),
   },
   editImage: {
-    height: getHeight(dimens.paddingL +2),
+    height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
     // paddingLeft: getWidth(5)
   },

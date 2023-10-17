@@ -10,6 +10,7 @@ import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
@@ -17,12 +18,15 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
   cardError,
   expireDateError,
   evvError: cvvErrormessage,
-
+  setIsGetCardDetails,
+  setIsCardDetails
 }: {
   isLoading: boolean, isGetCardDetails: boolean,
   cardError: string,
   expireDateError: string,
   evvError: string,
+  setIsGetCardDetails: React.Dispatch<React.SetStateAction<boolean>>
+  setIsCardDetails: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
@@ -76,10 +80,12 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
               />
               <Text title="Master-card" />
               <View style={styles.cardIcons}>
-                <Image
-                  source={require("assets/icon/edit.png")}
-                  style={styles.cardImages}
-                />
+                <TouchableOpacity onPress={() => { setIsGetCardDetails(false), setIsCardDetails(false) }}>
+                  <Image
+                    source={require("assets/icon/edit.png")}
+                    style={styles.cardImages}
+                  />
+                </TouchableOpacity>
                 <Image
                   source={require("assets/icon/cancel.png")}
                   style={styles.cardImages}
@@ -116,7 +122,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
               defaultValue={userData.credit_card_number}
               errorMessage={cardError.length ? cardError : cardNumberError}
               inputValue={userData?.credit_card_number ?? ""}
-              returnKeyType = {"next"}
+              returnKeyType={"next"}
               onSubmitEditing={() => expireDateRef.current.focus()}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
@@ -132,7 +138,8 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 errorMessage={expireDateError.length ? expireDateError : cardExpiry}
                 defaultValue={userData.expire_date}
                 inputValue={userData?.expire_date ?? ""}
-                returnKeyType = {"next"}
+                returnKeyType={"next"}
+                maxLength={4}
                 onSubmitEditing={() => cvvRef.current.focus()}
               />
               <Input
@@ -151,7 +158,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
           </>
         )
       ) : (
-           <ActivityIndicator style={styles.loading} size={'large'} />
+        <ActivityIndicator style={styles.loading} size={'large'} />
       )}
       {!isLoading && (
         <>

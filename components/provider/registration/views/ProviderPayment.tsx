@@ -12,11 +12,11 @@ import { t } from "i18next";
 import Text from "components/common/Text";
 const ProviderPayment = ({
 
-registrationError: regError,
-bankNameError: bankError ,
-branchError: brError,
-accountError :acError,
-}:any) => {
+  registrationError: regError,
+  bankNameError: bankError,
+  branchError: brError,
+  accountError: acError,
+}: any) => {
 
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
@@ -119,7 +119,7 @@ accountError :acError,
           onBlur={onBlurBranchType}
           onChangeText={onChangeBranchType}
           ref={branchRef}
-          value={userDataProvider.branch}
+          defaultValue={userDataProvider.branch}
           inputValue={userDataProvider?.branch ?? ""}
           errorMessage={brError.length ? brError : branchError}
           returnKeyType={"next"}
@@ -135,9 +135,9 @@ accountError :acError,
         onBlur={onBlurAccount}
         onChangeText={onChangeAccount}
         ref={accountRef}
-        value={userDataProvider.account}
+        defaultValue={userDataProvider.account}
         inputValue={userDataProvider?.account ?? ""}
-        errorMessage={acError.length?acError:  accountError}
+        errorMessage={acError.length ? acError : accountError}
         onClearInputText={() => accountRef.current.clear()}
 
       />
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   editImage: {
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
-     marginTop: getHeight(dimens.paddingS)
+    marginTop: getHeight(dimens.paddingS)
   }
 });
 

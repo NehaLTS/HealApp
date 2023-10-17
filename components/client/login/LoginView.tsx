@@ -33,7 +33,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   return (
     <>
       <View style={styles.inputContainer}>
-        {isLoading && (<ActivityIndicator style={styles.loading} size={"large"} /> )}
+        {isLoading && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
           placeholder={t("email")}
           value={email}
@@ -68,7 +68,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={ (email && password) ==="" || (passwordError.length > 0 || emailError.length > 0)}
+          disabled={(email && password) === "" || (passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   loading: {
     left: "44%",
-    top: "13%",
+    top: "10%",
     position: "absolute",
     zIndex: 1,
   },
@@ -123,15 +123,15 @@ export const getSignInFooter = () => {
     { url: require("assets/icon/facebook.png") },
     { url: require("assets/icon/apple.png") },
   ];
-  const { onSelectSocialAuth, isLoading: socialAuthLoading } = LoginViewController();
+  const { onSelectSocialAuth, isLoading } = LoginViewController();
   return (
     <>
-      {socialAuthLoading && (<ActivityIndicator style={{
-    left: "44%",
-    top: "-335%",
-    position: "absolute",
-    zIndex: 1,
-  }} size={"large"} />)}
+      {/* {isLoading && (<ActivityIndicator style={{
+        left: "44%",
+        top: "-335%",
+        position: "absolute",
+        zIndex: 1,
+      }} size={"large"} />)} */}
       {images.map((item, index) => (
         <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
           <Image source={item.url} style={styles.images} />

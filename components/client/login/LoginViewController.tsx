@@ -95,17 +95,17 @@ const LoginViewController = () => {
         const email = userData?.user?.email ?? ""
         const googleId = userData.user?.uid ?? ""
         /** To handle Google auth request to API */
-       
+
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
 
         if (res?.isSuccessful === true) {
           setUserData?.({ ...userData, token: res.token });
-          setLocalData('USER', res) 
+          setLocalData('USER', res)
           navigation.navigate('BasicInfo')
-          setIsLoading(false)
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
+        setIsLoading(false)
       }
       catch (err) {
         console.log('Error occurred!');
@@ -126,7 +126,7 @@ const LoginViewController = () => {
         //TODO: under review with facebook
         // const email = "amanshar@gmail.com"
         // const facebookId = "sharm@hmail.com"
-        
+
         const email = userData.user.email
         const facebookId = userData.additionalUserInfo?.profile?.id
         const res = await onSubmitFBAuthRequest({ email, facebookId });
@@ -141,7 +141,7 @@ const LoginViewController = () => {
         }
       } catch (err) {
         console.log('Error occurred!');
-        
+
       }
     })
     setTimeout(() => {

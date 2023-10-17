@@ -9,7 +9,7 @@ import { fontSize } from "designToken/fontSizes";
 import { getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, View, TouchableOpacity } from "react-native";
 import BasicInformationController from "../controllers/BasicInformationController";
 import UserAddressView from "./UserAddressView";
 import UserDetailView from "./UserDetailView";
@@ -29,7 +29,8 @@ const BasicInformation = () => {
     idNumberError,
     dateOfBirthError, cardNumberError,
     cvvError,
-    cardExpiry } = BasicInformationController({
+    cardExpiry,
+    setIsGetCardDetails, setIsCardDetails, onPressNavigateHome } = BasicInformationController({
       totalSteps: 3,
     });
   // const isGetCardDetails = false
@@ -48,12 +49,12 @@ const BasicInformation = () => {
         {isCurrentStep === 0 ? <UserDetailView firstNameEmptyError={firstNameError} lastNameEmptyError={lastNameError} phoneError={phoneNumberError} /> : isCurrentStep === 1 ?
           <UserAddressView address={addressError} dateOfBirth={dateOfBirthError} idNumber={idNumberError} /> :
           <UserPaymentView isLoading={isLoading} isGetCardDetails={isGetCardDetails}
-            cardError={cardNumberError} expireDateError={cardExpiry} evvError={cvvError} />}
+            cardError={cardNumberError} expireDateError={cardExpiry} evvError={cvvError} setIsGetCardDetails={setIsGetCardDetails} setIsCardDetails={setIsCardDetails} />}
       </View>
       <View
         style={[
           styles.footerContainer,
-          {justifyContent: isLoading || isCardDetails ? "center" : "space-between"}
+          { justifyContent: isLoading || isCardDetails ? "center" : "space-between" }
         ]}>
         {!isLoading && !isCardDetails ? (
           <>
@@ -73,17 +74,18 @@ const BasicInformation = () => {
             isSmall
             style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
             onPress={() => (isLoading ? console.log('goback') :
-            navigation.reset({
-              index: -1,
-              routes: [{name: NavigationRoutes.ClientHome}],
-            })
+              navigation.reset({
+                index: -1,
+                routes: [{ name: NavigationRoutes.ClientHome }],
+              })
             )}
           />
         )}
       </View>
       {currentStep[currentStep.length - 1] === 2 && !isLoading && !isCardDetails && (
-        <Text style={styles.skipLaterText} title={t('skip_for_later')} />
-      )}
+        <Text style={styles.skipLaterText} title={t('skip_for_later')} onPress={onPressNavigateHome} />
+      )
+      }
     </View>
   );
 };
