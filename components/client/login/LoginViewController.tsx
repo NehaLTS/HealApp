@@ -99,6 +99,7 @@ const LoginViewController = () => {
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
 
         if (res?.isSuccessful === true) {
+          setIsLoading(true)
           setUserData?.({ ...userData, token: res.token });
           setLocalData('USER', res)
           navigation.navigate('BasicInfo')
@@ -122,6 +123,7 @@ const LoginViewController = () => {
     /** To process Facebook login from firestore */
 
     onFBAuthProcessing().then(async (userData) => {
+
       try {
         //TODO: under review with facebook
         // const email = "amanshar@gmail.com"
@@ -133,8 +135,9 @@ const LoginViewController = () => {
         setUserData?.({ ...userData, token: res.token });
         setLocalData('USER', res)
         if (res?.isSuccessful === true) {
+          setIsLoading(true)
           navigation.navigate('BasicInfo')
-          setIsLoading(false)
+          
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
           setIsLoading(false)

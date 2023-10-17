@@ -5,7 +5,7 @@ import TextButton from "components/common/TextButton";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import LoginViewController from "./LoginViewController";
@@ -24,11 +24,12 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     passwordError,
     isLoading
   } = LoginViewController();
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
       <View style={styles.inputContainer}>
-      {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
+      {isLoading|| isLoadingGoogle && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
           placeholder={t("email")}
           value={email}
@@ -67,7 +68,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
       </View>
       <View style={styles.footerContainer}>
         <Text title={t("or_sign_in_via")} />
-        {getSignInFooter()}
+        <GetSignInFooter loading={setIsLoadingGoogle} />
       </View>
     </>
   );
@@ -111,16 +112,21 @@ const styles = StyleSheet.create({
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer
-export const getSignInFooter = () => {
+export const GetSignInFooter = ({loading}:any) => {
   const images = [
     { url: require("assets/icon/google.png") },
     { url: require("assets/icon/facebook.png") },
     { url: require("assets/icon/apple.png") },
   ];
-  const { onSelectSocialAuth } = LoginViewController();
-  return images.map((item, index) => (
-    <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
-      <Image source={item.url} style={styles.images} />
-    </TouchableOpacity>
-  ));
+  const { onSelectSocialAuth, isLoading } = LoginViewController();
+  loading(isLoading)
+  return (
+    <>
+      {images.map((item, index) => (
+        <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
+          <Image source={item.url} style={styles.images} />
+        </TouchableOpacity>
+      ))}
+    </>
+  );
 };

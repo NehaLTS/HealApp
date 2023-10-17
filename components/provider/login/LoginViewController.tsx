@@ -86,6 +86,7 @@ const LoginViewController = () => {
   }
   /** To handle Google login  button click*/
   const onHandleGoogleLogin = () => {
+    setIsLoading(true)
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
@@ -97,17 +98,24 @@ const LoginViewController = () => {
         setUserDataProvider?.({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
+          setIsLoading(true)
           navigation.navigate(NavigationRoutes.ProviderRegistration)
         } else {
+          setIsLoading(false)
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
       } catch (err) {
+        setIsLoading(false)
         console.log('Error occurred!');
       }
     })
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000);
   }
   /** To handle Facebook login  button click*/
   const onHandleFacebookLogin = () => {
+    setIsLoading(true)
     /** To process Facebook login from firestore */
 
     onFBAuthProcessing().then(async (userData) => {
@@ -118,14 +126,20 @@ const LoginViewController = () => {
         setUserDataProvider({ ...userDataProvider, token: res.token });
         setLocalData('USER', res)
         if (res?.isSuccessful === true) {
+          setIsLoading(true)
           navigation.navigate(NavigationRoutes.ProviderRegistration)
         } else {
+          setIsLoading(false)
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
       } catch (err) {
+        setIsLoading(false)
         console.log('Error occurred!');
       }
     })
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 2000);
   }
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {
