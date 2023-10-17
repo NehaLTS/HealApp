@@ -9,21 +9,30 @@ import { t } from "i18next";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { getSignInFooter } from "../../login/LoginView";
 import RegistrationViewController from "../controllers/RegistrationViewController";
+import { GetSignInFooter } from "components/client/login/LoginView";
 
 const RegistrationView = () => {
   const { onPressSignUp, isLoading } = RegistrationViewController();
-  //TODO Use useRef
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const emailRef = React.useRef<any>("");
+  const passwordRef = React.useRef<any>("");
+
+console.log('emailRef.current.value',(emailRef.current.value || passwordRef.current.value) === undefined  )
+
+  const onChangeEmail = (value: string) => emailRef.current.value = value
+  const onBlurEmail = () => { validateEmail() }
+
+  const onChangePassword = (value: string) => passwordRef.current.value = value
+  const onBlurPassword = () => { validatePassword() }
+
   const validateEmail = () => {
-    if (!email) {
+    if (!emailRef.current.value) {
       setEmailError("Email is required");
-    } else if (!isValidEmail(email)) {
+    } else if (!isValidEmail(emailRef.current.value)) {
       setEmailError("Invalid email address");
     } else {
       setEmailError('');
@@ -35,18 +44,19 @@ const RegistrationView = () => {
     return passwordPattern.test(password);
   };
   const validatePassword = () => {
-    if (!password) {
+    if (!passwordRef.current.value) {
       setPasswordError("Password is required");
-    } else if (password.length < 5) {
+    } else if (passwordRef.current.value.length < 5) {
       setPasswordError("Password must be at least 8 characters");
-    } else if (!isValidPassword(password)) {
+    } else if (!isValidPassword(passwordRef.current.value)) {
       setPasswordError("Password must contain special characters");
     } else {
       setPasswordError('');
     }
   };
   const handleSignUp = () => {
-    if (!emailError && !passwordError) onPressSignUp(email, password)
+    setIsLoadingGoogle(true)
+    if (!emailError && !passwordError) onPressSignUp(emailRef.current.value, passwordRef.current.value)
   };
 
   const isValidEmail = (email: string) => {
@@ -58,28 +68,33 @@ const RegistrationView = () => {
     <>
 
       <View style={styles.inputContainer}>
-        {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {isLoading|| isLoadingGoogle && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
+         ref={emailRef}
           placeholder={t("email")}
-          value={email}
+          defaultValue={emailRef.current.value}
           errorMessage={emailError}
-          onChangeText={setEmail}
+          onChangeText={onChangeEmail}
           type="emailAddress"
-          inputValue={email}
-          onBlur={validateEmail}
-          onClearInputText={() => setEmail('')}
+          inputValue={emailRef.current.value}
+          onBlur={onBlurEmail}
+          returnKeyType={"next"}
+          onSubmitEditing={() => passwordRef.current.focus()}
+          onClearInputText={() => emailRef.current.clear()}
         />
 
         <Input
+          ref={passwordRef}
           placeholder={t("password")}
           type="password"
-          value={password}
+          defaultValue={passwordRef.current.value}
           errorMessage={passwordError}
-          onChangeText={setPassword}
+          onChangeText={onChangePassword}
           inputStyle={styles.password}
-          inputValue={password}
-          onSubmitEditing={validatePassword}
-          onClearInputText={() => setPassword('')}
+          inputValue={passwordRef.current.value}
+          onSubmitEditing={onBlurPassword}
+          returnKeyType={"done"}
+          onClearInputText={() => passwordRef.current.clear()}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
@@ -93,12 +108,12 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={ (email && password) ==="" || (passwordError.length > 0 || emailError.length > 0)}
+          disabled={ (emailRef.current.value && passwordRef.current.value) === undefined || (passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>
         <Text title={t("or_sign_in_via")} />
-        {getSignInFooter()}
+        <GetSignInFooter loading={setIsLoadingGoogle} />
       </View>
     </>
   );

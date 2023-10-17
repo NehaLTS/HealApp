@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Alert } from "react-native";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
+import React from "react";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -22,6 +23,20 @@ const LoginViewController = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const emailRef = React.useRef<any>("");
+  const passwordRef = React.useRef<any>("");
+
+
+
+  const onChangeEmail = (value: string) => emailRef.current.value = value
+  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value ) }
+
+  const onChangePassword = (value: string) => passwordRef.current.value = value
+  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value ) }
+  
+
+
+
   const validateEmail = () => {
     if (!email) {
       setEmailError("Email is required");
@@ -175,7 +190,13 @@ const LoginViewController = () => {
     password,
     emailError,
     passwordError,
-    isLoading
+    isLoading,
+    onChangeEmail,
+    onBlurEmail,
+    emailRef,
+    passwordRef,
+    onChangePassword,
+    onBlurPassword
   };
 };
 

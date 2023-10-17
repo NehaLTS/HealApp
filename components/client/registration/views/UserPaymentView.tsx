@@ -113,22 +113,20 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
             <Input
               placeholder={registration.credit_card_number}
               keyboardType="numeric"
-              type="creditCardNumber"
               inputStyle={styles.cardNumber}
-              onBlur={onBlurCardNumber}
-              onClearInputText={() => cardNumberRef.current.clear()}
+              onBlur={onBlurCardNumber} 
               onChangeText={onChangeCardNumber}
               ref={cardNumberRef}
-              defaultValue={userData.credit_card_number}
+              defaultValue={cardNumberRef.current.value}
               errorMessage={cardError.length ? cardError : cardNumberError}
-              inputValue={userData?.credit_card_number ?? ""}
+              inputValue={cardNumberRef.current.value}
               returnKeyType={"next"}
               onSubmitEditing={() => expireDateRef.current.focus()}
+              onClearInputText={() => cardNumberRef.current.clear()}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
                 keyboardType="numeric"
-                type="creditCardNumber"
                 placeholder={registration.mm_yy}
                 inputStyle={styles.expireDate}
                 onBlur={onBlurExpireDate}

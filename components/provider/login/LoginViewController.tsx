@@ -6,6 +6,7 @@ import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
 import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
 import NavigationRoutes from "navigator/NavigationRoutes";
+import React from "react";
 import { useState } from "react";
 import { Alert } from "react-native";
 
@@ -22,6 +23,18 @@ const LoginViewController = () => {
   const { OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider } = AuthServicesProvider();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+
+  const emailRef = React.useRef<any>("");
+  const passwordRef = React.useRef<any>("");
+
+
+
+  const onChangeEmail = (value: string) => emailRef.current.value = value
+  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value ) }
+
+  const onChangePassword = (value: string) => passwordRef.current.value = value
+  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value ) }
 
   const validateEmail = () => {
     if (!email) {
@@ -167,7 +180,13 @@ const LoginViewController = () => {
     password,
     emailError,
     passwordError,
-    isLoading
+    isLoading,
+    onChangeEmail,
+    onBlurEmail,
+    emailRef,
+    passwordRef,
+    onChangePassword,
+    onBlurPassword
   };
 };
 

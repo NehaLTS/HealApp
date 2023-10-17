@@ -15,7 +15,7 @@ const ProviderStackNavigator = () => {
 
 /> 
         <Stack.Screen
-          name={'BasicInfo'}
+          name={NavigationRoutes.ProviderRegistration}
           component={lazy(() => import("../components/provider/registration/views/BasicInformation"))}
         />
         <Stack.Screen

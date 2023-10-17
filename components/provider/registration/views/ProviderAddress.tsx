@@ -109,7 +109,7 @@ const ProviderAddress = ({
         <Text style={styles.text}>{t("Upload license photo")}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.license_photo ? 1 : 0.5}
-          onPress={() => !userDataProvider.license_photo && setIsShowModal(true)}
+          onPress={() => setIsShowModal(true)}
 
         >
           <Image
@@ -121,12 +121,6 @@ const ProviderAddress = ({
             style={styles.selectedImage}
           />
         </TouchableOpacity>
-        {userDataProvider.license_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
-          <Image
-            source={require("assets/icon/circumEditBlue.png")}
-            style={styles.editImage}
-          />
-        </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}

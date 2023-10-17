@@ -47,9 +47,9 @@ const Input = forwardRef(({
   errorMessage?: string;
   containerWidth?: DimensionValue;
   inputValue: string,
-  isToHideCross: boolean,
+  isToHideCross?: boolean,
   onClearInputText: () => void
-  onPressCalender: () => void
+  onPressCalender?: () => void
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
@@ -136,7 +136,7 @@ const Input = forwardRef(({
           </TouchableOpacity>
         )}
         {type === "dateOfBirth" && (
-          <TouchableOpacity onPress={() => { onPressCalender(); onFocusHandler() }}>
+          <TouchableOpacity onPress={() => { onPressCalender?.(); onFocusHandler() }}>
             <Image
               source={require("assets/icon/calender_icon.png")}
               style={styles.datePicker}

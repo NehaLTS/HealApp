@@ -308,7 +308,6 @@ const ProviderDetail = ({
                 value={userDataProvider.type_Provider}
                 onChange={onChangeProviderTypes}
                 renderItem={renderItems}
-            // onBlur={onBlurProviderType}
             />
             {providerTypeError|| prvError && (
             <Text style={styles.errorMessage}>{prvError.length?prvError: providerTypeError}</Text>
@@ -327,7 +326,6 @@ const ProviderDetail = ({
                 value={userDataProvider.speciality}
                 onChange={onChangeSpecialtys}
                 renderItem={renderItem}
-            // onBlur={onBlurSpecialty}
             />
             {specialtyError || spError && (
                 <Text style={styles.errorMessage}>{ spError.length?spError: specialtyError}</Text>
@@ -338,7 +336,7 @@ const ProviderDetail = ({
                 <Text style={styles.text}>Upload ID photo</Text>
                 <TouchableOpacity
                     activeOpacity={userDataProvider.id_photo ? 1 : 0.5}
-                    onPress={() => !userDataProvider.id_photo && setIsShowModal(true)}
+                    onPress={() => setIsShowModal(true)}
 
                 >
                     <Image
@@ -350,12 +348,6 @@ const ProviderDetail = ({
                         style={styles.selectedImage}
                     />
                 </TouchableOpacity>
-                {userDataProvider.id_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
-                    <Image
-                        source={require("assets/icon/circumEditBlue.png")}
-                        style={styles.editBlueImage}
-                    />
-                </TouchableOpacity>}
                 <SelectImage
                     isShowModal={isShowModal}
                     closeModal={setIsShowModal}

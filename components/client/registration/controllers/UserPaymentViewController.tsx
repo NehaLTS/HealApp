@@ -57,7 +57,7 @@ const UserPaymentViewController = () => {
 
   const onChangeExpireDate = (value: string) => expireDateRef.current.value = value
 
-  const onChangeCvv = () => (value: string) => console.log('++++++++', value);
+  const onChangeCvv = () => (value: string) => cvvRef.current.value = value
 
 
   const onBlurCardNumber = () => {

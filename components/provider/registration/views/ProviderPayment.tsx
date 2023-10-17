@@ -145,7 +145,7 @@ const ProviderPayment = ({
         <Text style={styles.text}>{t("Add a profile photo")}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.profile_picture ? 1 : 0.5}
-          onPress={() => !userDataProvider.profile_picture && setIsShowModal(true)}>
+          onPress={() => setIsShowModal(true)}>
           <Image
             source={
               userDataProvider.profile_picture
@@ -155,12 +155,6 @@ const ProviderPayment = ({
             style={styles.selectedImage}
           />
         </TouchableOpacity>
-        {userDataProvider.profile_picture && <TouchableOpacity onPress={() => setIsShowModal(true)}>
-          <Image
-            source={require("assets/icon/circumEditBlue.png")}
-            style={styles.editImage}
-          />
-        </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}

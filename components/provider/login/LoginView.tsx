@@ -13,43 +13,51 @@ import LoginViewController from "./LoginViewController";
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   const { t } = useTranslation();
   const {
-    validateEmail,
-    setEmail,
-    setPassword,
     handleSignIn,
-    validatePassword,
     email,
     password,
     emailError,
     passwordError,
-    isLoading
+    isLoading,
+    onChangeEmail,
+    onBlurEmail,
+    emailRef,
+    passwordRef,
+    onChangePassword,
+    onBlurPassword
   } = LoginViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
       <View style={styles.inputContainer}>
-      {isLoading|| isLoadingGoogle && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {isLoading|| isLoadingGoogle && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
+         ref={emailRef}
           placeholder={t("email")}
-          value={email}
+          defaultValue={emailRef.current.value}
           errorMessage={emailError}
-          onChangeText={setEmail}
+          onChangeText={onChangeEmail}
           type="emailAddress"
-          inputValue={email}
-          onBlur={validateEmail}
-          onClearInputText={()=> setEmail('')}
+          inputValue={emailRef.current.value}
+          onBlur={onBlurEmail}
+          returnKeyType={"next"}
+          onSubmitEditing={() => passwordRef.current.focus()}
+          onClearInputText={() => emailRef.current.clear()}
         />
-      
+
         <Input
+          ref={passwordRef}
           placeholder={t("password")}
           type="password"
-          value={password}
+          defaultValue={passwordRef.current.value}
           errorMessage={passwordError}
-          onChangeText={setPassword}
+          onChangeText={onChangePassword}
           inputStyle={styles.password}
-          inputValue={password}
-          onSubmitEditing={validatePassword}
+          inputValue={passwordRef.current.value}
+          onSubmitEditing={onBlurPassword}
+          returnKeyType={"done"}
+          onClearInputText={() => passwordRef.current.clear()}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
@@ -63,7 +71,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={ (email && password) ==="" || (passwordError.length > 0 || emailError.length > 0)}
+          disabled={(emailRef.current.value && passwordRef.current.value) === undefined || (passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>
