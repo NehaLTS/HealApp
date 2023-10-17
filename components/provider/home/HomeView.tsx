@@ -10,7 +10,7 @@ const HomeView = () => {
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header title="Home Screen" />,
+      header: () => <Header title="Provider Screen" />,
     });
   }, [navigation]);
   return (

@@ -33,7 +33,8 @@ const UserAddressView = ({
     idNumberError,
     setUserData
   } = UserAddressViewController();
-  const [date, setDate] = useState(new Date())
+  const currentDate = new Date();
+  const [date, setDate] = useState(new Date(currentDate.getFullYear() - 15, 0, 1))
   const [open, setOpen] = useState(false)
   const [firstOpenDialog, setFirstOpenDialog] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -53,7 +54,6 @@ const UserAddressView = ({
   //   else
   //     return digit;
   // }
-  const currentDate = new Date();
   const maxDate = new Date(currentDate.getFullYear() - 15, currentDate.getMonth(), currentDate.getDate());
 
   // const formatBirthDate = () => {

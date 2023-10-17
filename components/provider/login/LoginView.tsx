@@ -31,9 +31,9 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   return (
     <>
       <View style={styles.inputContainer}>
-        {isLoading|| isLoadingGoogle && (<ActivityIndicator style={styles.loading} size={"large"} />)}
+        {isLoading || isLoadingGoogle && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
-         ref={emailRef}
+          ref={emailRef}
           placeholder={t("email")}
           defaultValue={emailRef.current.value}
           errorMessage={emailError}
@@ -71,7 +71,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={(emailRef.current.value && passwordRef.current.value) === undefined || (passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   password: {
     marginTop: dimens.paddingL,
   },
-  email:{
+  email: {
     marginTop: dimens.paddingL,
   },
   loading: {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer
-export const GetSignInFooter = ({loading}:any) => {
+export const GetSignInFooter = ({ loading }: any) => {
   const images = [
     { url: require("assets/icon/google.png") },
     { url: require("assets/icon/facebook.png") },

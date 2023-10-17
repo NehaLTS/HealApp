@@ -21,7 +21,7 @@ const RegistrationView = () => {
   const emailRef = React.useRef<any>("");
   const passwordRef = React.useRef<any>("");
 
-console.log('emailRef.current.value',(emailRef.current.value || passwordRef.current.value) === undefined  )
+  console.log('emailRef.current.value', (emailRef.current.value || passwordRef.current.value) === undefined)
 
   const onChangeEmail = (value: string) => emailRef.current.value = value
   const onBlurEmail = () => { validateEmail() }
@@ -68,9 +68,9 @@ console.log('emailRef.current.value',(emailRef.current.value || passwordRef.curr
     <>
 
       <View style={styles.inputContainer}>
-        {isLoading|| isLoadingGoogle && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {isLoading || isLoadingGoogle && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
-         ref={emailRef}
+          ref={emailRef}
           placeholder={t("email")}
           defaultValue={emailRef.current.value}
           errorMessage={emailError}
@@ -108,7 +108,7 @@ console.log('emailRef.current.value',(emailRef.current.value || passwordRef.curr
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={ (emailRef.current.value && passwordRef.current.value) === undefined || (passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>

@@ -31,10 +31,10 @@ const LoginViewController = () => {
 
 
   const onChangeEmail = (value: string) => emailRef.current.value = value
-  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value ) }
+  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value) }
 
   const onChangePassword = (value: string) => passwordRef.current.value = value
-  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value ) }
+  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value) }
 
   const validateEmail = () => {
     if (!email) {
@@ -111,7 +111,7 @@ const LoginViewController = () => {
         setUserDataProvider?.({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          setIsLoading(true)
+          setIsLoading(false)
           navigation.navigate(NavigationRoutes.ProviderRegistration)
         } else {
           setIsLoading(false)

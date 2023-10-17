@@ -29,10 +29,10 @@ const RegistrationView = () => {
 
 
   const onChangeEmail = (value: string) => emailRef.current.value = value
-  const onBlurEmail = () => { validateEmail()}
+  const onBlurEmail = () => { validateEmail() }
 
   const onChangePassword = (value: string) => passwordRef.current.value = value
-  const onBlurPassword = () => { validatePassword()}
+  const onBlurPassword = () => { validatePassword() }
 
   const validateEmail = () => {
     if (!emailRef.current.value) {
@@ -73,9 +73,9 @@ const RegistrationView = () => {
     <>
 
       <View style={styles.inputContainer}>
-        {(isLoading|| isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
-         ref={emailRef}
+          ref={emailRef}
           placeholder={t("email")}
           defaultValue={emailRef.current.value}
           errorMessage={emailError}
@@ -113,7 +113,7 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={ (emailRef.current.value === undefined && passwordRef.current.value === undefined) || (passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>

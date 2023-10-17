@@ -2,15 +2,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { lazy } from "react";
 import NavigationRoutes from "./NavigationRoutes";
 import { UserContext, UserType } from "contexts/useUserContext";
-import HomeView from "components/client/home/HomeView";
 import { getLocalData } from "libs/datastorage/useLocalStorage";
+import { defaultHeaderStyle } from "components/common/Header";
 const Stack = createNativeStackNavigator();
 
 const ClientStackNavigator = () => {
+
   const [userData, setUserData] = React.useState<Partial<UserType>>({});
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
-      <Stack.Navigator initialRouteName={getLocalData('USER')?.user ? NavigationRoutes.ClientHome : NavigationRoutes.ClientLogin}>
+      <Stack.Navigator initialRouteName={NavigationRoutes.ClientLogin}>
         <Stack.Screen
           options={{ headerShown: false }}
           name={NavigationRoutes.ClientLogin}
@@ -19,11 +20,13 @@ const ClientStackNavigator = () => {
           )}
         />
         <Stack.Screen
+          options={defaultHeaderStyle}
           name={NavigationRoutes.ClientHome}
           component={lazy(() => import("../components/client/home/HomeView"))}
         />
         <Stack.Screen
           name={"BasicInfo"}
+          options={defaultHeaderStyle}
           component={lazy(
             () =>
               import("../components/client/registration/views/BasicInformation")

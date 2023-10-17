@@ -9,6 +9,7 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, View } from "react-native";
@@ -51,7 +52,13 @@ const ClientAuthenticatorView = () => {
           <RegistrationView />
         )}
         <View style={styles.footer}>
-          <Text style={styles.guestText} title={t("guest_entrance")} />
+          <TextButton
+            title={t("guest_entrance")}
+            // style={styles.guestText}
+            fontSize={getHeight(fontSize.textXl)}
+            onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
+          />
+          {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton
             title={t("switch_to_provider")}
             fontSize={getHeight(fontSize.textXl)}

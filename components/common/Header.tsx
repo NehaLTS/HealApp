@@ -8,6 +8,14 @@ import { Image, StyleSheet, View } from "react-native";
 import LocalizationController from "./LocalizationController";
 import Text from "./Text";
 
+export const defaultHeaderStyle = {
+  headerShadowVisible: false,
+  title: '', headerStyle: {
+    backgroundColor: 'transparent',
+  },
+  headerTintColor: 'transparent',
+  headerBackVisible: false
+}
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
   const { currentLanguage, isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();

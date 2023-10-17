@@ -9,6 +9,7 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, View } from "react-native";
@@ -23,7 +24,7 @@ const ProviderAuthenticatorView = () => {
       header: () => <Header isHideTitle />
     });
   }, [navigation]);
-  
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
@@ -32,13 +33,13 @@ const ProviderAuthenticatorView = () => {
           <TextButton
             title={t("sign_in")}
             isActive={isSigninSelected}
-            onPress={()=> loginRegisterToggle(1) }
+            onPress={() => loginRegisterToggle(1)}
             isCapitalize
           />
           <TextButton
             title={t("sign_up")}
             isActive={!isSigninSelected}
-            onPress={()=> loginRegisterToggle(2) }
+            onPress={() => loginRegisterToggle(2)}
             isCapitalize
           />
         </View>
@@ -51,7 +52,13 @@ const ProviderAuthenticatorView = () => {
           <RegistrationView />
         )}
         <View style={styles.footer}>
-          <Text style={styles.guestText} title={t("guest_entrance")} />
+          <TextButton
+            title={t("guest_entrance")}
+            // style={styles.guestText}
+            fontSize={getHeight(fontSize.textXl)}
+            onPress={() => navigation.navigate(NavigationRoutes.ProviderHome)}
+          />
+          {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton
             title={t("switch_to_client")}
             fontSize={getHeight(fontSize.textXl)}
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 0.34
   },
   logo: {
-    width: getWidth(dimens.imageM +80),
+    width: getWidth(dimens.imageM + 80),
     height: getHeight(dimens.imageM),
     alignSelf: "center"
   },
