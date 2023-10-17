@@ -43,7 +43,8 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
     onChangeCvv,
     cardNumberError,
     cvvError,
-    cardExpiry
+    cardExpiry,
+    onClearCard
   } = UserPaymentViewController();
 
   // const isLoading = false; //TODO: need to change after binding data
@@ -122,7 +123,9 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
               inputValue={cardNumberRef.current.value}
               returnKeyType={"next"}
               onSubmitEditing={() => expireDateRef.current.focus()}
-              onClearInputText={() => cardNumberRef.current.clear()}
+              // onClearInputText={() => cardNumberRef?.current?.clear()}
+              onClearInputText={onClearCard}
+              maxLength={19}
             />
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
@@ -137,8 +140,8 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 defaultValue={userData.expire_date}
                 inputValue={userData?.expire_date ?? ""}
                 returnKeyType={"next"}
-                maxLength={4}
                 onSubmitEditing={() => cvvRef.current.focus()}
+                maxLength={5}
               />
               <Input
                 keyboardType="numeric"

@@ -12,13 +12,11 @@ const UserPaymentViewController = () => {
   const [cardExpiry, setCardExpiry] = useState("");
 
   useUpdateEffect(() => {
-    if (userData.cvv) { setCvvError("") }
-    else {
-      setCvvError("Cvv is required1+");
-    }
-  }, [userData.cvv])
+    if (cardNumberRef.current.value) setCardNumberError("")
+    if (userData.cvv) setCvvError("")
+    if (userData.expire_date) setCardExpiry("")
+  }, [userData])
 
-  console.log('userData', userData)
   // const creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9][0-9])[0-9]{12})$/;
   // const cvv4Regex = /^[0-9]{3}$/;
   // const expiryDateRegex = /^(0[1-9]|1[0-2])\/[0-9]{2}$/;
@@ -52,12 +50,30 @@ const UserPaymentViewController = () => {
     }
   };
 
+  const onChangeCardNumber = (value: string) => {
+    const cleanedText = value.replace(/[^0-9]/g, '');
+    let formattedText = '';
 
-  const onChangeCardNumber = (value: string) => cardNumberRef.current.value = value
+    for (let i = 0; i < cleanedText.length; i += 4) {
+      formattedText += cleanedText.slice(i, i + 4) + ' ';
+    }
 
-  const onChangeExpireDate = (value: string) => expireDateRef.current.value = value
+    formattedText = formattedText.trim();
+    cardNumberRef.current.setNativeProps({ text: formattedText });
+    cardNumberRef.current.value = formattedText
+  }
+  const onChangeExpireDate = (value: string) => {
+    const cleanedText = value.replace(/[^0-9]/g, '');
+    let formattedText = '';
+    for (let i = 0; i < cleanedText.length; i += 2) {
+      formattedText += cleanedText.slice(i, i + 2) + '/';
+    }
+    formattedText = formattedText.replace(/\/$/, '');
+    expireDateRef.current.setNativeProps({ text: formattedText });
+    expireDateRef.current.value = formattedText
+  }
 
-  const onChangeCvv = () => (value: string) => cvvRef.current.value = value
+  const onChangeCvv = (value: string) => cvvRef.current.value = value
 
 
   const onBlurCardNumber = () => {
@@ -72,6 +88,8 @@ const UserPaymentViewController = () => {
     validateCvv()
     setUserData({ ...userData, cvv: cvvRef.current.value })
   }
+
+  const onClearCard = () => cardNumberRef.current.clear()
   return {
     userData,
     cardNumberRef,
@@ -85,7 +103,8 @@ const UserPaymentViewController = () => {
     onChangeCardNumber,
     onChangeExpireDate,
     onChangeCvv,
-    cvvError
+    cvvError,
+    onClearCard
   }
 }
 

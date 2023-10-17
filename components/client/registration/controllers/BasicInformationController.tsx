@@ -30,9 +30,9 @@ const BasicInformationController = ({
   const [cardNumberError, setCardNumberError] = useState("");
   const [cvvError, setCvvError] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
-  const [a, setA] = useState('');
   const { userData, setUserData } = UseUserContext()
   const [isLoader, setIsLoader] = useState<boolean>(false)
+
   useUpdateEffect(() => {
     if (userData.firstname?.length) setFirstNameError("");
     if (userData.lastname?.length) setLastNameError("");
