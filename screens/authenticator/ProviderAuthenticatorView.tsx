@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     flex: 0.34
   },
   logo: {
-    width: getWidth(dimens.imageM),
-    height: getHeight(dimens.imageM-10),
+    width: getWidth(dimens.imageM +80),
+    height: getHeight(dimens.imageM),
     alignSelf: "center"
   },
   toggleContainer: {

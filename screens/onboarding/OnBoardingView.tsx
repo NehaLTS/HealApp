@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-Regular"
   },
   logo: {
-    width: getWidth(dimens.imageL),
-    height: getHeight(dimens.imageL),
+    width: getWidth(330),
+    height: getHeight(380),
     alignSelf: "center",
     flex: 0.4,
   },
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     paddingTop: getHeight(dimens.paddingXs)
   },
   activeDotStyle: {
-    width: getWidth(dimens.sideMargin)
+    width: getWidth(dimens.marginM)
   },
   containerStyle: {
     flex: 0.48

@@ -81,9 +81,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   logo: {
-    width: getWidth(dimens.imageS),
-    height: getHeight(dimens.imageS),
-    marginLeft: getWidth(dimens.sideMargin),
+    width: getWidth(dimens.imageS+30),
+    height: getHeight(dimens.imageS+20),
+    marginLeft: getWidth(dimens.marginS),
   },
   title: {
     fontSize: fontSize.headingL,

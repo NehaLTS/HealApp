@@ -45,12 +45,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginM),
   },
   logo: {
-    width: getWidth(dimens.imageL),
-    height: getHeight(dimens.imageL),
+    width: getWidth(dimens.imageL+dimens.imageS),
+    height: getHeight(dimens.imageL+dimens.imageS + dimens.imageS),
     alignSelf: "center",
     flex: 0.4,
     justifyContent: "center",
-    resizeMode: "contain",
+    // resizeMode: "contain",
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingL),
