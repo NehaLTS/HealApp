@@ -154,6 +154,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 ref={cvvRef}
                 defaultValue={userData.cvv}
                 inputValue={userData?.cvv ?? ""}
+                maxLength={3}
               />
             </View>
           </>

@@ -9,7 +9,7 @@ const IntroController = () => {
   const navigation = useNavigation<any>();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
   const { setLanguageCode } = useTranslationContext();
-  const continueAsClient = () =>
+  const continueAsClient = () =>{
   navigation.reset({
     index: 0,
     routes: [
@@ -19,13 +19,14 @@ const IntroController = () => {
       },
     ],
   });
-
-  const continueAsProvider = () => navigation.reset({
+}
+  const continueAsProvider = () => {
+     navigation.reset({
     index: 0,
     routes: [{name: NavigationRoutes.ProviderStack}],
   })
 
-
+}
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
 
   const handleLanguageChange = (lng: string) => {

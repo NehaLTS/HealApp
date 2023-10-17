@@ -73,7 +73,10 @@ const LoginViewController = () => {
   };
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
-    navigation.navigate(NavigationRoutes.ProviderHome)
+    navigation.reset({
+      index: 0,
+      routes: [{ name: NavigationRoutes.ProviderHome }],
+    })
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
@@ -112,7 +115,10 @@ const LoginViewController = () => {
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           setIsLoading(false)
-          navigation.navigate(NavigationRoutes.ProviderRegistration)
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderRegistration }],
+          })
         } else {
           setIsLoading(false)
           Alert.alert("Login Failed", "Please check your email and password and try again.");
@@ -140,7 +146,10 @@ const LoginViewController = () => {
         setLocalData('USER', res)
         if (res?.isSuccessful === true) {
           setIsLoading(true)
-          navigation.navigate(NavigationRoutes.ProviderRegistration)
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderRegistration }],
+          })
         } else {
           setIsLoading(false)
           Alert.alert("Login Failed", "Please check your email and password and try again.");

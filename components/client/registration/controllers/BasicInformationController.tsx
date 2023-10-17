@@ -145,7 +145,10 @@ const BasicInformationController = ({
     }
   };
   const onPressNavigateHome = () => {
-    navigation.navigate(NavigationRoutes.ClientHome)
+    navigation.reset({
+      index: 0,
+      routes: [{name: NavigationRoutes.ClientHome}],
+    })
   }
 
   return {

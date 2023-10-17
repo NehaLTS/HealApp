@@ -32,7 +32,7 @@ const ProviderPayment = ({
   const accountRef = React.useRef<any>("");
 
   const onBlurRegistrationNumber = () => { validateRegistrationNumber(); setUserDataProvider({ ...userDataProvider, registration: registrationNumberRef.current.value }) }
-  const onChangeRegistrationNumber = (value: string) => registrationNumberRef.current.value = value
+  const onChangeRegistrationNumber = (value: string) => {registrationNumberRef.current.value = value; validateRegistrationNumber()}
 
   const onBlurBankName = () => { validateBankName(); setUserDataProvider({ ...userDataProvider, bank_name: bankNameRef.current.value }) }
   const onChangeBankName = (value: string) => bankNameRef.current.value = value
@@ -90,7 +90,7 @@ const ProviderPayment = ({
         ref={registrationNumberRef}
         defaultValue={userDataProvider.registration}
         inputValue={userDataProvider?.registration ?? ""}
-        errorMessage={regError.length ? regError : registrationError}
+        errorMessage={regError?.length ? regError : registrationError}
         returnKeyType={"next"}
         onSubmitEditing={() => bankNameRef.current.focus()}
         onClearInputText={() => registrationNumberRef.current.clear()}

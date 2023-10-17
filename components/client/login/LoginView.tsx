@@ -63,7 +63,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           inputValue={passwordRef.current.value}
           onSubmitEditing={onBlurPassword}
           returnKeyType={"done"}
-          onClearInputText={() => emailRef.current.clear()}
+          onClearInputText={() => passwordRef.current.clear()}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}

@@ -21,6 +21,7 @@ import { t } from "i18next";
 import ProviderAddServies from "./ProviderAddServices";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import NavigationRoutes from "navigator/NavigationRoutes";
+import TextButton from "components/common/TextButton";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
@@ -67,7 +68,7 @@ const BasicInformation = () => {
         ) : currentStep[currentStep.length - 1] === 2 ? (
           <ProviderPayment registrationError={registrationError} bankNameError={bankNameError} branchError={branchError} accountError={accountError} />
         ) : currentStep[currentStep.length - 1] === 3 ? (
-          (userDataProvider.type_Provider == "Doctor" || userDataProvider.type_Provider == "Nurse") ? <ProviderServices /> : <ProviderAddServies />) : (
+          (userDataProvider.type_Provider === "Doctor" || userDataProvider.type_Provider === "Nurse") ? <ProviderServices /> : <ProviderAddServies />) : (
           <ProviderAddServies />
         )}
       </View>
@@ -76,35 +77,49 @@ const BasicInformation = () => {
           styles.footerContainer,
           {
             justifyContent:
-              isLoadingCard || isCardDetails ? "center" : "space-between",
+              isLoadingCard || isCardDetails || ( currentStep[currentStep.length - 1] === 3 && userDataProvider.type_Provider == "Physio") ? "center" : "space-between",
           },
         ]}>
-        {!isLoadingCard && !isCardDetails ? (
-          <>
-            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
-            <Button
-              title={t("next")}
-              isPrimary
-              onPress={onPressNext}
-              isSmall
-              width={'30%'}
-            />
-          </>
-        ) : (
+
+        {
+          ((currentStep[currentStep.length - 1] === 0  ||currentStep[currentStep.length - 1] ===  1 || currentStep[currentStep.length - 1] ===  2) ||  userDataProvider.type_Provider === "Doctor"|| userDataProvider.type_Provider === "Nurse"  )
+          && 
+            <>
+              <Button disabled={currentStep[currentStep.length - 1] === 0} title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+              <Button
+                title={t("next")}
+                isPrimary
+                onPress={onPressNext}
+                isSmall
+                width={'30%'}
+              />
+            </>
+          }
+
+        {((currentStep[currentStep.length - 1] === 3) && userDataProvider.type_Provider === "Physio" ) &&(
+          userDataProvider.providerServices ?
           <Button
-            title={
-              isLoadingCard ? common.cancel : registration.start_using_heal
-            }
+            title={t("Approve")}
             isPrimary
-            isSmall
-            onPress={() => (isLoadingCard ? console.log('goback') :
+            onPress={() => {
               navigation.reset({
-                index: -1,
-                routes: [{ name: NavigationRoutes.ProviderHome }],
+                index: 0,
+                routes: [{ name: NavigationRoutes.ProviderConfirmation }],
               })
-            )}
-          />
-        )}
+            }}
+            isSmall
+            width={'40%'}
+            style={{ alignSelf: 'center', width: '100%' }}
+          /> : (
+            <TextButton title="Skip" style={{ alignSelf: 'center' }} containerStyle={{ width: '100%' }} onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+              })
+            }} />
+
+          ))
+        }
       </View>
       {currentStep[currentStep.length - 1] === 5 &&
         !isLoadingCard &&

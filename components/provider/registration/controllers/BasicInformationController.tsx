@@ -7,7 +7,7 @@ import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, BackHandler } from "react-native";
 
 const BasicInformationController = ({
   totalSteps,
@@ -115,11 +115,9 @@ const BasicInformationController = ({
 
         setIsLoading(false)
         // if (res?.isSuccessful) {
-        setCurrentStep(() => {
-          const array = [...currentStep];
-          array.push(array[array.length - 1] + 1);
-          return array;
-        })
+          setCurrentStep(() => {
+            return [0,1,2,3];
+          });
         // }
       } else {
         if (!userDataProvider.registration?.length) setRegistrationError("Registration is required");
@@ -145,6 +143,16 @@ const BasicInformationController = ({
     }
     if (currentStep.length === 1) {
       navigation.goBack()
+    }
+    if (currentStep.length === 2) {
+      Alert.alert('hello')
+      BackHandler.exitApp()
+      setCurrentStep(() => {
+        return [2];
+      });
+    }
+    if (currentStep.length === 3) {
+      BackHandler.exitApp()
     }
   };
 

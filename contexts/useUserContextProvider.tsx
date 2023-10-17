@@ -1,3 +1,4 @@
+import { Service } from "libs/types/ProvierTypes";
 import React, { createContext } from "react";
 export interface UserTypeProvider {
     firstname: string;
@@ -30,7 +31,9 @@ export interface UserTypeProvider {
     license: string;
     services:string;
     price:string;
-    description:string
+    description:string;
+    currentScreen: string
+    providerServices: boolean
 }
 export interface UserContextFields {
     userDataProvider: Partial<UserTypeProvider>;

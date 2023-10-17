@@ -25,9 +25,8 @@ const ProviderServices = () => {
   const getProviderServices = async () => {
 
     setIsLoading(true);
-    let response = await onGetProviderService({ provider_id: '1' ?? '1', specialty_id: '1' ?? '1' });
+    let response = await onGetProviderService({ provider_id: '2', specialty_id: '1' });
 
-    console.log("resp is ", response)
     if (response && response.services) {
       setServices(response.services);
     }
@@ -39,7 +38,6 @@ const ProviderServices = () => {
   useEffect(() => {
     getProviderServices();
   }, [])
-
   const onCheckedPress = (index: number) => {
 
     //TODO: Can Refactor this
@@ -77,7 +75,7 @@ const ProviderServices = () => {
             }]}
           />
         </TouchableOpacity>
-        <Text style={ styles.textServices} title={t("No Services")} />
+        <Text style={ styles.textServices} title={t("No")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
           <Image
             source={!isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}

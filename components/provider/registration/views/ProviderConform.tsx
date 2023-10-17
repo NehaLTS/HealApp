@@ -64,6 +64,7 @@ marginTop:getHeight(dimens.marginS)
   finalicon: {
     height: dimens.imageM,
     width: dimens.imageM,
+    borderRadius: getWidth(dimens.imageM)
 
   },
   querytext:{

@@ -22,11 +22,13 @@ import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { Name, Service } from "libs/types/ProvierTypes";
+import { UseUserContextProvider } from "contexts/useUserContextProvider";
 
 const ProviderAddServices = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { onCreateProviderServices, onGetUserAllServices } =
     AuthServicesProvider();
+  const {  setUserDataProvider } = UseUserContextProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isServiceLoading, setIsServiceLoading] = useState(false);
   const [services, setServices] = useState([]);
@@ -109,6 +111,7 @@ const ProviderAddServices = () => {
     console.log("resp is ", response);
     if (response) {
       setServices(response);
+      setUserDataProvider({...userDataProvider, providerServices:true })
     }
 
     setIsServiceLoading(false);
@@ -345,7 +348,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   elevation: {
-    elevation: getHeight(25),
+    elevation: getHeight(12),
     shadowColor: colors.black,
   },
   serviceText: {

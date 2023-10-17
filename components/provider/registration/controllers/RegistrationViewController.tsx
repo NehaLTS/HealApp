@@ -19,10 +19,12 @@ const RegistrationViewController = () => {
     setUserDataProvider({ ...userDataProvider, isSuccessful: response?.isSuccessful, provider_id: response.provider_id ?? '', token: response?.token ?? '' })
     console.log('response', response)
    
-    if (response.isSuccessful)
-      navigation.navigate(
-        NavigationRoutes.ProviderRegistration
-      )
+    if (response.isSuccessful){
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ProviderRegistration }],
+      })
+    }
     else {
       Alert.alert('Email and Password is not correct')
     }
