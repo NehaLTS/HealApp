@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Modal, Text, TouchableOpacity, View } from "react-native";
+import {Text, TouchableOpacity, View } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import { colors } from "designToken/colors";
 import { fontWeight } from "designToken/fontWeights";
 import { getHeight } from "libs/StyleHelper";
+import Modal from "react-native-modal/dist/modal";
 
 const SelectImage = ({
   imageUri,
@@ -24,7 +25,7 @@ const SelectImage = ({
       cropping: true,
     })
       .then((image) => {
-        imageUri(image.path);
+        imageUri(image?.path ?? '');
         setHeight(height);
         setWidth(width);
         closeModal(false);
@@ -41,7 +42,7 @@ const SelectImage = ({
       cropping: true,
     })
       .then((image) => {
-        imageUri(image.path);
+        image.path.length &&  imageUri(image?.path ?? '');
         setHeight(height);
         setWidth(width);
         closeModal(false);
@@ -52,17 +53,11 @@ const SelectImage = ({
   };
 
   return (
-    <Modal visible={isShowModal} transparent animationType="fade">
-      <View style={{ backgroundColor: "#00000070", height: "100%" }}>
+    <Modal isVisible={isShowModal} style={{justifyContent:'flex-end'}} >
         <View
           style={{
-            flex: 1,
-            marginBottom: getHeight(20),
-            width: "90%",
-            alignSelf: "center",
+            width: "100%",
             position: "absolute",
-            bottom: 0,
-            zIndex: 99,
             rowGap: getHeight(10),
           }}
         >
@@ -87,7 +82,7 @@ const SelectImage = ({
                   fontWeight: fontWeight.semiBold,
                 }}
               >
-                {"Choose from Gallery"}{" "}
+                {"Choose from Gallery"}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -128,7 +123,6 @@ const SelectImage = ({
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
     </Modal>
   );
 };
