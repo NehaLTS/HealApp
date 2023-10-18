@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
 
     selectedImage: {
         height: getHeight(dimens.imageS + dimens.marginS),
-        width: getWidth(dimens.imageS + dimens.paddingS + 2),
+        width: getWidth(dimens.imageS + dimens.marginS),
         resizeMode: "contain",
         borderRadius: getHeight(dimens.paddingS),
     },

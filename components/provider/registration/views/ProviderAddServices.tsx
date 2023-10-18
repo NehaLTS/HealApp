@@ -334,7 +334,6 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
     height: getHeight(dimens.imageM + dimens.paddingL + 10),
     alignItems: "flex-start",
-    paddingTop: getHeight(dimens.marginM),
     justifyContent: "center",
   },
   buttonContainer: {

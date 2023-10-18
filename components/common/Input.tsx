@@ -106,7 +106,7 @@ const Input = forwardRef(({
   return (
     <View>
       <View style={[styles.inputContainer, inputStyle, { borderColor: errorMessage ? colors.invalid : colors.primary }]}>
-        <Animated.Text style={[styles.label, labelStyle, fontSizeStyle]}>
+        <Animated.Text adjustsFontSizeToFit style={[styles.label, labelStyle, fontSizeStyle]}>
           {placeholder}
         </Animated.Text>
         <TextInput
@@ -117,6 +117,9 @@ const Input = forwardRef(({
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           ref={ref as React.LegacyRef<TextInput>}
+          multiline={placeholder === "Description"?true : false}
+          numberOfLines={placeholder === "Description" ? 5 :  1}
+          editable
           {...props}
         />
         {type === "password" && (
@@ -161,14 +164,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
-    // minWidth: '20%'
-    minWidth: '24%'
+    minWidth: '24%',
   },
   input: {
     fontSize: fontSize.textL,
     marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
+    textAlignVertical:'top',
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
