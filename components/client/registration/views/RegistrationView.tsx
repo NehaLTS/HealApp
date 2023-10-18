@@ -13,64 +13,31 @@ import RegistrationViewController from "../controllers/RegistrationViewControlle
 import { GetSignInFooter } from "components/client/login/LoginView";
 
 const RegistrationView = () => {
-  const { onPressSignUp, isLoading, renderToast } = RegistrationViewController();
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-
-  const emailRef = React.useRef<any>("");
-  const passwordRef = React.useRef<any>("");
-
-  console.log('emailRef.current.value', (emailRef.current.value || passwordRef.current.value) === undefined)
-
-  const onChangeEmail = (value: string) => emailRef.current.value = value
-  const onBlurEmail = () => { validateEmail() }
-
-  const onChangePassword = (value: string) => passwordRef.current.value = value
-  const onBlurPassword = () => { validatePassword() }
-
-  const validateEmail = () => {
-    if (!emailRef.current.value) {
-      setEmailError("Email is required");
-    } else if (!isValidEmail(emailRef.current.value)) {
-      setEmailError("Invalid email address");
-    } else {
-      setEmailError('');
-    }
-  };
-
-  const isValidPassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
-  const validatePassword = () => {
-    if (!passwordRef.current.value) {
-      setPasswordError("Password is required");
-    } else if (passwordRef.current.value.length < 5) {
-      setPasswordError("Password must be at least 8 characters");
-    } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError("Password must contain special characters");
-    } else {
-      setPasswordError('');
-    }
-  };
-  const handleSignUp = () => {
-    setIsLoadingGoogle(true)
-    if (!emailError && !passwordError) onPressSignUp(emailRef.current.value, passwordRef.current.value)
-    setIsLoadingGoogle(false)
-
-  };
-
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
+  const {
+    handleSignUp,
+    isLoading,
+    renderToast,
+    onBlurEmail,
+    onBlurPassword,
+    onChangeEmail,
+    onChangePassword,
+    emailError,
+    emailRef,
+    passwordRef,
+    passwordError,
+    
+  } = RegistrationViewController();
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
+  
 
   return (
+
     <>
-    {renderToast()}
+      {renderToast()}
       <View style={styles.inputContainer}>
-        {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
+        {(isLoading || isLoadingGoogle) && (
+          <ActivityIndicator style={styles.loading} size={"large"} />
+        )}
         <Input
           ref={emailRef}
           placeholder={t("email")}
@@ -110,11 +77,14 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={(passwordError.length > 0 || emailError.length > 0)}
+         disabled={(passwordError.length > 0 || emailError.length > 0 || emailRef.current.value==null || passwordRef.current.value==null)}
+
         />
       </View>
       <View style={styles.footerContainer}>
         <Text title={t("or_sign_in_via")} />
+
+        {/* TODO: Gurpreet to change this controller */}
         <GetSignInFooter loading={setIsLoadingGoogle} />
       </View>
     </>
@@ -134,7 +104,7 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     paddingVertical: getHeight(dimens.paddingS),
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   footerContainer: {
     flexDirection: "row",
@@ -150,10 +120,10 @@ const styles = StyleSheet.create({
     marginTop: dimens.paddingL + dimens.borderBold,
   },
   loading: {
-    left: '44%',
-    top: '13%',
-    position: 'absolute',
-    zIndex: 1
+    left: "44%",
+    top: "13%",
+    position: "absolute",
+    zIndex: 1,
   },
   email: {
     marginTop: dimens.paddingL,

@@ -21,7 +21,7 @@ const LoginViewController = () => {
   const { userData, setUserData } = UseUserContext()
   const { onSubmitAuthRequest, onSubmitFBAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesClient()
 
-  //TODO: KAMAL toi change the error to useRef
+  //TODO: KAMAL to change the error to useRef
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false)
