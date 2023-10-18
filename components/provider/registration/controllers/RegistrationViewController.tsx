@@ -5,6 +5,7 @@ import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider'
 import NavigationRoutes from 'navigator/NavigationRoutes'
 import { Alert } from 'react-native'
 import { useState } from "react";
+import useToast from 'components/common/useToast'
 
 const RegistrationViewController = () => {
   const { onAuthSignInProvider } = useApiContext();
@@ -12,6 +13,8 @@ const RegistrationViewController = () => {
   const navigation = useNavigation()
   const { OnProviderCreateSignUp } = AuthServicesProvider()
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
+  const { showToast, renderToast } = useToast();
+
   const onPressSignUpProvider = async (email: string, password: string) => {
     setIsLoading(true)
     if (email !== undefined && password != undefined) {
@@ -24,14 +27,14 @@ const RegistrationViewController = () => {
           routes: [{ name: NavigationRoutes.ProviderRegistration }],
         })
       else {
-        Alert.alert('Email and Password is not correct')
+        showToast("User already exist","Please try SignIn", "error")
       }
     }
     else {
-      Alert.alert('Please enter email and password')
+      showToast("","Please enter email or password", "warning")
     }
     setIsLoading(false)
   }
-  return { onPressSignUpProvider, isLoading }
+  return { onPressSignUpProvider, isLoading,renderToast }
 }
 export default RegistrationViewController

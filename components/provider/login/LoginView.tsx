@@ -24,12 +24,14 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     emailRef,
     passwordRef,
     onChangePassword,
-    onBlurPassword
+    onBlurPassword,
+    renderToast
   } = LoginViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
+    {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input

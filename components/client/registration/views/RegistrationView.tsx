@@ -13,7 +13,7 @@ import RegistrationViewController from "../controllers/RegistrationViewControlle
 import { GetSignInFooter } from "components/client/login/LoginView";
 
 const RegistrationView = () => {
-  const { onPressSignUp, isLoading } = RegistrationViewController();
+  const { onPressSignUp, isLoading, renderToast } = RegistrationViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -68,6 +68,7 @@ const RegistrationView = () => {
 
   return (
     <>
+    {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input

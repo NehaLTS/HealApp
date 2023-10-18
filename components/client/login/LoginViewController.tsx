@@ -9,6 +9,7 @@ import { Alert } from "react-native";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
 import React from "react";
+import useToast from "components/common/useToast";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const LoginViewController = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const emailRef = React.useRef<any>("");
   const passwordRef = React.useRef<any>("");
-
+  const { showToast, renderToast } = useToast();
 
 
   const onChangeEmail = (value: string) => {
@@ -102,7 +103,9 @@ const LoginViewController = () => {
       }
       else {
         setIsLoading(false)
-        Alert.alert("Please enter email or password");
+        showToast("Please enter email or password", "warning")
+
+        // Alert.alert("Please enter email or password");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -204,7 +207,8 @@ const LoginViewController = () => {
     emailRef,
     passwordRef,
     onChangePassword,
-    onBlurPassword
+    onBlurPassword,
+    renderToast
   };
 };
 

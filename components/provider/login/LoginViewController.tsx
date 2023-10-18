@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import useToast from "components/common/useToast";
 import { useApiContext } from "contexts/useApiContext";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
@@ -23,7 +24,7 @@ const LoginViewController = () => {
   const { OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider } = AuthServicesProvider();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+  const { showToast, renderToast } = useToast();
 
   const emailRef = React.useRef<any>("");
   const passwordRef = React.useRef<any>("");
@@ -93,13 +94,13 @@ const LoginViewController = () => {
           handleAuthResponse();
           setIsLoading(false)
         } else {
-          Alert.alert("Login Failed", "Please check your email and password and try again.");
+          showToast("Login Failed" ,"Please check your email and password and try again.", "warning")
           setIsLoading(false)
         }
       }
       else {
         setIsLoading(false)
-        Alert.alert("Please enter email or password");
+        showToast( "","Please enter email or password", "warning")
       }
     } catch (error) {
       Alert.alert("An error occurred during login.");
@@ -202,7 +203,8 @@ const LoginViewController = () => {
     emailRef,
     passwordRef,
     onChangePassword,
-    onBlurPassword
+    onBlurPassword,
+    renderToast
   };
 };
 

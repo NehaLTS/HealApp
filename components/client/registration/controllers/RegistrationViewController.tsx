@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import useToast from "components/common/useToast";
 import { UseUserContext } from "contexts/useUserContext";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { setLocalData } from "libs/datastorage/useLocalStorage";
@@ -10,6 +11,7 @@ const RegistrationViewController = () => {
   const { userData, setUserData } = UseUserContext()
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { showToast, renderToast } = useToast();
 
   const onPressSignUp = async (email: string, password: string) => {
     if (email !== undefined && password !== undefined) {
@@ -21,16 +23,17 @@ const RegistrationViewController = () => {
       if (res?.isSuccessful) {
         navigation.navigate('BasicInfo')
       }
-      else
-        Alert.alert('User Already Exist.', "Please try SignIn")
+      else{
+        showToast("User already exist","Please try SignIn", "error")
+      }
     }
     else {
       setIsLoading(false)
-      Alert.alert("Please enter email or password");
+      showToast("","Please enter email or password", "warning")
     }
   }
 
-  return { onPressSignUp, isLoading };
+  return { onPressSignUp, isLoading,renderToast };
 };
 
 export default RegistrationViewController;
