@@ -13,14 +13,17 @@ import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
+import { useTranslation } from "react-i18next";
+
 
 const ProviderDetail = ({
-    firstNameError:fnError,
+    firstNameError: fnError,
     lastNameError: lnError,
     specialityError: spError,
-    providerTypeError: prvError,}:any) => {
+    providerTypeError: prvError, }: any) => {
     const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
         BasicInformationController({});
+        const { t } = useTranslation();
     const [firstNameError, setFirstNameError] = useState("");
     const [lastNameError, setLastNameError] = useState("");
     const [providerTypeError, setProviderTypeError] = useState("");
@@ -263,20 +266,20 @@ const ProviderDetail = ({
     return (
         <>
             <Input
-                placeholder={registration.first_name}
+                placeholder={t("first_name")}
                 onBlur={onBlurFirstName}
                 onChangeText={onChangeFirstName}
                 ref={firstNameRef}
                 defaultValue={userDataProvider.firstname}
                 inputValue={userDataProvider?.firstname ?? ""}
-                errorMessage={fnError.length?fnError: firstNameError}
+                errorMessage={fnError.length ? fnError : firstNameError}
                 returnKeyType={"next"}
                 onSubmitEditing={() => lastNameRef.current.focus()}
                 onClearInputText={() => firstNameRef.current.clear()}
             />
 
             <Input
-                placeholder={registration.last_name}
+                placeholder={t("last_name")}
                 type={"nameSuffix"}
                 inputStyle={styles.inputLastName}
                 onChangeText={onChangeLastName}
@@ -284,7 +287,7 @@ const ProviderDetail = ({
                 defaultValue={userDataProvider.lastname}
                 ref={lastNameRef}
                 inputValue={userDataProvider?.lastname ?? ""}
-                errorMessage={lnError.length ?lnError:lastNameError}
+                errorMessage={lnError.length ? lnError : lastNameError}
                 onClearInputText={() => lastNameRef.current.clear()}
             />
 
@@ -304,13 +307,13 @@ const ProviderDetail = ({
                 ]}
                 labelField={'name'}
                 valueField="name"
-                placeholder="Type of provider"
+                placeholder={t("type_provider")}
                 value={userDataProvider.type_Provider}
                 onChange={onChangeProviderTypes}
                 renderItem={renderItems}
             />
-            {providerTypeError|| prvError && (
-            <Text style={styles.errorMessage}>{prvError.length?prvError: providerTypeError}</Text>
+            {providerTypeError || prvError && (
+                <Text style={styles.errorMessage}>{prvError.length ? prvError : providerTypeError}</Text>
             )}
             <Dropdown
                 style={styles.dropdown}
@@ -322,18 +325,18 @@ const ProviderDetail = ({
                 data={data.find((item) => item.name.en === selectedProvider?.name)?.specialties || []}
                 labelField="name.en"
                 valueField="name.en"
-                placeholder="Specialty"
+                placeholder={t("specialty")}
                 value={userDataProvider.speciality}
                 onChange={onChangeSpecialtys}
                 renderItem={renderItem}
             />
             {specialtyError || spError && (
-                <Text style={styles.errorMessage}>{ spError.length?spError: specialtyError}</Text>
+                <Text style={styles.errorMessage}>{spError.length ? spError : specialtyError}</Text>
             )}
 
 
             <View style={styles.iconContainer}>
-                <Text style={styles.text}>Upload ID photo</Text>
+                <Text style={styles.text}>{t("upload_id")}</Text>
                 <TouchableOpacity
                     activeOpacity={userDataProvider.id_photo ? 1 : 0.5}
                     onPress={() => setIsShowModal(true)}
@@ -348,6 +351,12 @@ const ProviderDetail = ({
                         style={styles.selectedImage}
                     />
                 </TouchableOpacity>
+                {userDataProvider.id_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
+                    <Image
+                        source={require("assets/icon/circumEditBlue.png")}
+                        style={styles.editImage}
+                    />
+                </TouchableOpacity>}
                 <SelectImage
                     isShowModal={isShowModal}
                     closeModal={setIsShowModal}
@@ -428,12 +437,16 @@ const styles = StyleSheet.create({
         height: getHeight(dimens.marginM),
     },
     editBlueImage: {
-        height: getHeight(dimens.paddingL ),
+        height: getHeight(dimens.paddingL),
         width: getWidth(dimens.paddingL),
         marginBottom: getHeight(dimens.paddingXs)
     },
     errorMessage: {
         color: colors.invalid,
         paddingTop: getHeight(dimens.paddingXs),
-      },
+    },
+    editImage: {
+        height: getHeight(dimens.paddingL + 2),
+        width: getWidth(dimens.paddingL),
+    }
 });

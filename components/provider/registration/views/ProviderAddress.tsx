@@ -1,6 +1,6 @@
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { t } from "i18next";
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
 import { colors } from '../../../../designToken/colors';
@@ -22,8 +22,7 @@ const ProviderAddress = ({
   const { registration } = getTexts(languageCode);
   const [phoneError, setPhoneError] = useState("");
   const [addressError, setAddressError] = useState("");
-
-
+  const { t } = useTranslation();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const phoneRef = React.useRef<any>("");
   const licenseRef = React.useRef<any>("");
@@ -64,7 +63,7 @@ const ProviderAddress = ({
   return (
     <>
       <Input
-        placeholder={t("Phone Number*")}
+        placeholder={t("phone_number")}
         type={"telephoneNumber"}
         keyboardType="number-pad"
         // inputStyle={styles.input}
@@ -81,7 +80,7 @@ const ProviderAddress = ({
       />
 
       <Input
-        placeholder={t("License number (for those who have)")}
+        placeholder={t("license_number")}
         type={"nameSuffix"}
         inputStyle={styles.input}
         onBlur={onBlurLastName}
@@ -97,7 +96,7 @@ const ProviderAddress = ({
       />
 
       <Input
-        placeholder={registration.address}
+        placeholder={t("address")}
         inputStyle={styles.input}
         onBlur={onBlurAddress}
         onChangeText={onChangeAddress}
@@ -109,7 +108,7 @@ const ProviderAddress = ({
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text}>{t("Upload license photo")}</Text>
+        <Text style={styles.text}>{t("upload_license")}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.license_photo ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
@@ -124,6 +123,12 @@ const ProviderAddress = ({
             style={styles.selectedImage}
           />
         </TouchableOpacity>
+        {userDataProvider.license_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
+           <Image
+              source={require("assets/icon/circumEditBlue.png")}
+              style={styles.editImage}
+            />
+        </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
@@ -163,5 +168,6 @@ const styles = StyleSheet.create({
   editImage: {
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
+    marginTop:getHeight(dimens.paddingS)
   },
 });

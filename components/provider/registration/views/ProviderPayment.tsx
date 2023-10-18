@@ -8,8 +8,9 @@ import Input from "../../../common/Input";
 import SelectImage from "../../../common/SelectImage";
 import BasicInformationController from "../controllers/BasicInformationController";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
-import { t } from "i18next";
+
 import Text from "components/common/Text";
+import { useTranslation } from "react-i18next";
 const ProviderPayment = ({
 
   registrationError: regError,
@@ -25,7 +26,7 @@ const ProviderPayment = ({
   const [bankNameError, setBankNameError] = useState("");
   const [branchError, setBranchError] = useState("");
   const [accountError, setAccountError] = useState("");
-
+  const { t } = useTranslation();
   const registrationNumberRef = React.useRef<any>("");
   const bankNameRef = React.useRef<any>("");
   const branchRef = React.useRef<any>("");
@@ -82,7 +83,7 @@ const ProviderPayment = ({
   return (
     <>
       <Input
-        placeholder={t("Business registration number")}
+        placeholder={t("business_registration")}
         keyboardType="numeric"
         type="creditCardNumber"
         onBlur={onBlurRegistrationNumber}
@@ -98,7 +99,7 @@ const ProviderPayment = ({
       />
       <View style={styles.container}>
         <Input
-          placeholder={"Bank"}
+          placeholder={t("bank")}
           inputStyle={styles.inputBank}
           type={"nameSuffix"}
           onBlur={onBlurBankName}
@@ -113,7 +114,7 @@ const ProviderPayment = ({
 
         />
         <Input
-          placeholder={"Branch"}
+          placeholder={t("branch")}
           type={"nameSuffix"}
           inputStyle={styles.inputBranch}
           onBlur={onBlurBranchType}
@@ -128,7 +129,7 @@ const ProviderPayment = ({
         />
       </View>
       <Input
-        placeholder={"Bank account"}
+        placeholder={t("bank_account")}
         inputStyle={styles.input}
         type="creditCardNumber"
         keyboardType="numeric"
@@ -142,7 +143,7 @@ const ProviderPayment = ({
 
       />
       <View style={styles.iconContainer}>
-        <Text style={styles.text}>{t("Add a profile photo")}</Text>
+        <Text style={styles.text}>{t("add_profile")}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.profile_picture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}>
@@ -155,6 +156,12 @@ const ProviderPayment = ({
             style={styles.selectedImage}
           />
         </TouchableOpacity>
+        {userDataProvider.profile_picture && <TouchableOpacity onPress={() => setIsShowModal(true)}>
+           <Image
+              source={require("assets/icon/circumEditBlue.png")}
+              style={styles.editImage}
+            />
+        </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}

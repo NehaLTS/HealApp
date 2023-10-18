@@ -1,55 +1,117 @@
-{       "welcome_heal": "Welcome to Heal",
-        "continue_client": "Continue as a Client",
-        "continue_provider": "Continue as a Provider",
-        "sign_in": "Sign In",
-        "sign_up": "Sign Up",
-        "client_login": "Client Login",
-        "client_sign_up":"Client Sign Up",
-        "email": "E-mail*",
-        "password": "Password*",
-        "forgot_password": "Forgot password?",
-        "or_sign_in_via": "Or sign in via",
-        "guest_entrance": "Guest Entrance",
-        "switch_to_provider": "Switch to Provider",
-        "registration": "Registration",
-        "first_name": "First Name*",
-        "last_name": "Last Name*",
-        "phone_number": "Phone Number*",
-        "it_will_help_us_to_find_a_best_doctor_for_you": "*It will help us to find a best doctor for you",
-        "back": "Back",
-        "next": "Next",
-        "address": "Address*",
-        "date_of_birth": "Date of Birth*",
-        "id_number": "ID Number*",
-        "add_a_profile_photo": "Add a profile photo",
-        "skip_for_later": "Skip for later",
-        "profile_photo": "Profile photo",
-        "add_credit_card": "Add credit card",
-        "credit_card_number": "Credit Card Number*",
-        "add_google_pay": "Add Google Pay",
-        "mm_yy":"MM/YY*",
-        "cvv":"CVV*",
-        "skip":"Skip",
-        "provider_login":"Provider Login",
-        "provider_sign_up":"Provider Sign Up",
-        "switch_to_client":"Switch to Client",
-        "add_profile": "Add a profile photo",
-        "find_doctor_text": "*It will help us to find a best doctor for you",
-        "type_provider":"Type of provider",
-        "specialty":"Specialty",
-        "upload_id":"Upload ID photo",
-        "license_number":"License number (for those who have)",
-      "upload_license":"Upload license photo",
-      "business_registration":"Business registration number",
-      "bank":"Bank",
-      "branch":"Branch",
-      "bank_account":"Bank account",
-     "authority":"Authority to add a prescription",
-     "yes":"Yes",
-     "no":"No",
-     "services_you":"Services you provide",
-        "cancel": "Cancel",
-        "start_using_heal": "Start using Heal"
+{
+    "welcome_heal": "Welcome to Heal",
+    "continue_client": "Continue as a Client",
+    "continue_provider": "Continue as a Provider",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "client_login": "Client Login",
+    "client_sign_up": "Client Sign Up",
+    "email": "E-mail*",
+    "password": "Password*",
+    "forgot_password": "Forgot password?",
+    "or_sign_in_via": "Or sign in via",
+    "guest_entrance": "Guest Entrance",
+    "switch_to_provider": "Switch to Provider",
+    "registration": "Registration",
+    "first_name": "First Name*",
+    "last_name": "Last Name*",
+    "phone_number": "Phone Number*",
+    "it_will_help_us_to_find_a_best_doctor_for_you": "*It will help us to find a best doctor for you",
+    "back": "Back",
+    "next": "Next",
+    "address": "Address*",
+    "date_of_birth": "Date of Birth*",
+    "id_number": "ID Number*",
+    "add_a_profile_photo": "Add a profile photo",
+    "skip_for_later": "Skip for later",
+    "profile_photo": "Profile photo",
+    "add_credit_card": "Add credit card",
+    "credit_card_number": "Credit Card Number*",
+    "add_google_pay": "Add Google Pay",
+    "mm_yy": "MM/YY*",
+    "cvv": "CVV*",
+    "skip": "Skip",
+    "provider_login": "Provider Login",
+    "provider_sign_up": "Provider Sign Up",
+    "switch_to_client": "Switch to Client",
+    "add_profile": "Add a profile photo",
+    "find_doctor_text": "*It will help us to find a best doctor for you",
+    "type_provider": "Type of provider",
+    "specialty": "Specialty",
+    "upload_id": "Upload ID photo",
+    "license_number": "License number (for those who have)",
+    "upload_license": "Upload license photo",
+    "business_registration": "Business registration number",
+    "bank": "Bank",
+    "branch": "Branch",
+    "bank_account": "Bank account",
+    "authority": "Authority to add a prescription",
+    "yes": "Yes",
+    "no": "No",
+    "services_you": "Services you provide",
+    "cancel": "Cancel",
+    "start_using_heal": "Start using Heal",
+    "add_service":"Add service",
+    "another_service":"Add another service",
+    "name_service":"Name of the service",
+    "description":"Description",
+    "save":"Save",
+    "price":"Price*",
+    "no_services":"No Services",
+    "any_questions":"If you have any questions feel free to call us"
+          
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

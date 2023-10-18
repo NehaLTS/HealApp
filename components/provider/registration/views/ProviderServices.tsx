@@ -1,17 +1,20 @@
-import { Image, ScrollView, StyleSheet, View, TouchableOpacity } from 'react-native'
-import React, { SetStateAction, useEffect, useState } from 'react'
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import { dimens } from 'designToken/dimens';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { t } from "i18next";
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+
 import Text from 'components/common/Text';
+import { useTranslation } from 'react-i18next';
+
 
 
 const ProviderServices = () => {
   const { onGetProviderService } = AuthServicesProvider()
+  const { t } = useTranslation();
   const { userDataProvider } = UseUserContextProvider()
   const [services, setServices] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -61,9 +64,9 @@ const ProviderServices = () => {
 
   return (
     <>
-      <Text style={styles.text} title={t("Authority to add a prescription")} />
+      <Text style={styles.text} title={t("authority")} />
       <View style={styles.container}>
-        <Text style={styles.text} title={t("Yes")} />
+        <Text style={styles.text} title={t("yes")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(true)}>
           <Image
             source={isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
@@ -75,7 +78,7 @@ const ProviderServices = () => {
             }]}
           />
         </TouchableOpacity>
-        <Text style={ styles.textServices} title={t("No")} />
+        <Text style={ styles.textServices} title={t("no")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
           <Image
             source={!isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
@@ -88,7 +91,7 @@ const ProviderServices = () => {
           />
         </TouchableOpacity>
       </View>
-      <Text style={styles.textS} title={t("Services you provide")} />
+      <Text style={styles.textS} title={t("services_you")} />
       <View style={styles.servicesContainer}>
         {services.length > 0 ? (
           <ScrollView contentContainerStyle={{ paddingBottom: getHeight(dimens.marginM) }} style={{ height: "100%", }}>
@@ -111,7 +114,7 @@ const ProviderServices = () => {
 
             ))}
           </ScrollView>)
-          : <Text style={ styles.textServices} title={t("No Services")} />}
+          : <Text style={ styles.textServices} title={t("no_services")} />}
       </View>
     </>
   );

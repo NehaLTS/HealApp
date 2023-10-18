@@ -1,33 +1,34 @@
-import React, { useState, useEffect } from "react";
-import {
-  Image,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Alert,
-} from "react-native";
+import Button from "components/common/Button";
+import Input from "components/common/Input";
+import Text from "components/common/Text";
+import TextButton from "components/common/TextButton";
+import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { colors } from "designToken/colors";
+import { dimens } from "designToken/dimens";
 import { fontFamily } from "designToken/fontFamily";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import { dimens } from "designToken/dimens";
-import Modal from "react-native-modal/dist/modal";
-import Input from "components/common/Input";
-import Button from "components/common/Button";
-import { fontWeight } from "designToken/fontWeights";
-import ProviderAddServicesController from "../controllers/ProviderAddServicesController";
-import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { Name, Service } from "libs/types/ProvierTypes";
-import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import { Service } from "libs/types/ProvierTypes";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import Modal from "react-native-modal/dist/modal";
+import ProviderAddServicesController from "../controllers/ProviderAddServicesController";
 
 const ProviderAddServices = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { onCreateProviderServices, onGetUserAllServices } =
     AuthServicesProvider();
+    const { t } = useTranslation();
   const {  setUserDataProvider } = UseUserContextProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isServiceLoading, setIsServiceLoading] = useState(false);
@@ -189,7 +190,7 @@ const ProviderAddServices = () => {
               style={styles.addicon}
             />
           </TouchableOpacity>
-          <Text style={styles.textAdd}>Add another service</Text>
+          <Text style={styles.textAdd}>{t("another_service")}</Text>
         </View>
       </ScrollView>
 
@@ -201,9 +202,9 @@ const ProviderAddServices = () => {
               
       <KeyboardAvoidingView  keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
             <View style={styles.modalContent}>
-              <Text style={styles.addService}>Add service</Text>
+              <Text style={styles.addService}>{t("add_service")}</Text>
               <Input
-                placeholder={"Name of the service*"}
+                placeholder={t("name_service")}
                 onBlur={onBlurServiceName}
                 onChangeText={onChangeServiceName}
                 ref={serviceNameRef}
@@ -216,7 +217,7 @@ const ProviderAddServices = () => {
 
               />
               <Input
-                placeholder={"Price*"}
+                placeholder={t("price")}
                 inputStyle={styles.input}
                 onBlur={onBlurPriceName}
                 onChangeText={onChangePriceName}
@@ -231,7 +232,7 @@ const ProviderAddServices = () => {
 
               />
               <Input
-                placeholder={"Description"}
+                placeholder={t("description")}
                 inputStyle={styles.description}
                 onBlur={onBlurDescription}
                 onChangeText={onChangeDescription}
@@ -243,7 +244,7 @@ const ProviderAddServices = () => {
 
               />
               <Button
-                title={"Save"}
+                title={t("save")}
                 isPrimary
                 isSmall
                 width={getWidth(85)}
@@ -252,13 +253,13 @@ const ProviderAddServices = () => {
                   marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
                 }}
                 onPress={saveService}
-                fontSized={getWidth(15)}
+                textSize={getWidth(15)}
                 height={getHeight(34)}
               />
               <TextButton
                 style={{ alignSelf: "center" }}
                 fontSize={getWidth(fontSize.textXl + 2)}
-                title={"Cancel"}
+                title={t("cancel")}
                 onPress={toggleModal}
               />
             </View>
