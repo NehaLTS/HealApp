@@ -28,40 +28,48 @@ const LoginViewController = () => {
 
 
 
-  const onChangeEmail = (value: string) => emailRef.current.value = value
-  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value ) }
+  const onChangeEmail = (value: string) => {
+    emailRef.current.value = value
+    validateEmail()
+  }
+  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value) }
 
-  const onChangePassword = (value: string) => passwordRef.current.value = value
-  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value ) }
-  
+  const onChangePassword = (value: string) => {
+    passwordRef.current.value = value;
+    validatePassword()
+  }
+  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value) }
+  const isValidEmail = (email: string) => {
+    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    return emailPattern.test(email);
+  };
 
 
 
   const validateEmail = () => {
-    if (!email) {
+    if (!emailRef.current.value) {
       setEmailError("Email is required");
-    } else if (!isValidEmail(email)) {
+    } else if (!isValidEmail(emailRef.current.value)) {
       setEmailError("Invalid email address");
     } else {
-      setEmailError("");
+      setEmailError('');
     }
   };
 
   const isValidPassword = (password: string) => {
-    const passwordPattern =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     return passwordPattern.test(password);
   };
 
   const validatePassword = () => {
-    if (!password) {
+    if (!passwordRef.current.value) {
       setPasswordError("Password is required");
-    } else if (password.length < 5) {
+    } else if (passwordRef.current.value.length < 5) {
       setPasswordError("Password must be at least 8 characters");
-    } else if (!isValidPassword(password)) {
+    } else if (!isValidPassword(passwordRef.current.value)) {
       setPasswordError("Password must contain special characters");
     } else {
-      setPasswordError("");
+      setPasswordError('');
     }
   };
 
@@ -69,10 +77,10 @@ const LoginViewController = () => {
     if (!emailError && !passwordError) onPressLoginButton(email, password);
   };
 
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };  /** To handle Response from API after authentication request */
+
+
+  /** To handle Response from API after authentication request */
+
   const handleAuthResponse = () => {
     console.log(getLocalData('USER')?.user)
     navigation.navigate(NavigationRoutes.ClientHome)
@@ -81,7 +89,7 @@ const LoginViewController = () => {
   const onPressLoginButton = async (email: string, password: string) => {
     try {
       setIsLoading(true)
-      if (email != '') {
+      if (email != '' || password != '') {
         const res = await onSubmitAuthRequest({ email, password });
         setUserData({ ...userData, token: res?.token, isSuccessful: res?.isSuccessful });
         setLocalData('USER', res)
@@ -152,7 +160,7 @@ const LoginViewController = () => {
         if (res?.isSuccessful === true) {
           setIsLoading(true)
           navigation.navigate('BasicInfo')
-          
+
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
           setIsLoading(false)

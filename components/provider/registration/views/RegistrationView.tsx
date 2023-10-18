@@ -28,11 +28,27 @@ const RegistrationView = () => {
 
 
 
-  const onChangeEmail = (value: string) => emailRef.current.value = value
+  const onChangeEmail = (value: string) => {
+    emailRef.current.value = value;
+    validateEmail()
+  }
   const onBlurEmail = () => { validateEmail() }
 
-  const onChangePassword = (value: string) => passwordRef.current.value = value
+  const onChangePassword = (value: string) => {
+    passwordRef.current.value = value;
+    validatePassword()
+  }
   const onBlurPassword = () => { validatePassword() }
+
+  const isValidEmail = (email: string) => {
+    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+    return emailPattern.test(email);
+  };
+
+  const isValidPassword = (password: string) => {
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordPattern.test(password);
+  };
 
   const validateEmail = () => {
     if (!emailRef.current.value) {
@@ -44,10 +60,7 @@ const RegistrationView = () => {
     }
   };
 
-  const isValidPassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
+
   const validatePassword = () => {
     if (!passwordRef.current.value) {
       setPasswordError("Password is required");
@@ -64,10 +77,7 @@ const RegistrationView = () => {
     if (!emailError && !passwordError) onPressSignUpProvider(emailRef.current.value, passwordRef.current.value)
   };
 
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
+
 
   return (
     <>

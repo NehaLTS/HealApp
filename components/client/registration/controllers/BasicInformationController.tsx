@@ -131,11 +131,8 @@ const BasicInformationController = ({
 
   };
   const onPressBack = () => {
-    if (currentStep.length >= 1) {
+    if (currentStep.length <= 2) {
       setCurrentStep((prev) => prev.slice(0, prev.length - 1));
-    }
-    if (currentStep.length === 1) {
-      navigation.goBack()
     }
     if (currentStep.length === 3) {
       BackHandler.exitApp()
@@ -147,7 +144,7 @@ const BasicInformationController = ({
   const onPressNavigateHome = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: NavigationRoutes.ClientHome}],
+      routes: [{ name: NavigationRoutes.ClientHome }],
     })
   }
 

@@ -65,6 +65,8 @@ const LoginViewController = () => {
 
   const handleSignIn = () => {
     if (!emailError && !passwordError) onPressLoginButton(email, password)
+
+
   };
 
   const isValidEmail = (email: string) => {
@@ -82,18 +84,23 @@ const LoginViewController = () => {
   const onPressLoginButton = async (email: string, password: string) => {
     console.log("yegfjusdfj", email, password)
     try {
-      setIsLoading(true)
-      const res = await OnProviderSignIn({ email, password });
-      setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
-      setLocalData('USER', res)
-      if (res?.isSuccessful === true) {
-        handleAuthResponse();
-        setIsLoading(false)
-      } else {
-        Alert.alert("Login Failed", "Please check your email and password and try again.");
-        setIsLoading(false)
+      if (email != '' || password != '') {
+        setIsLoading(true)
+        const res = await OnProviderSignIn({ email, password });
+        setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
+        setLocalData('USER', res)
+        if (res?.isSuccessful === true) {
+          handleAuthResponse();
+          setIsLoading(false)
+        } else {
+          Alert.alert("Login Failed", "Please check your email and password and try again.");
+          setIsLoading(false)
+        }
       }
-
+      else {
+        setIsLoading(false)
+        Alert.alert("Please enter email or password");
+      }
     } catch (error) {
       Alert.alert("An error occurred during login.");
       setIsLoading(false)

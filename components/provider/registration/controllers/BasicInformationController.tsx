@@ -115,9 +115,9 @@ const BasicInformationController = ({
 
         setIsLoading(false)
         // if (res?.isSuccessful) {
-          setCurrentStep(() => {
-            return [0,1,2,3];
-          });
+        setCurrentStep(() => {
+          return [0, 1, 2, 3];
+        });
         // }
       } else {
         if (!userDataProvider.registration?.length) setRegistrationError("Registration is required");
@@ -138,24 +138,16 @@ const BasicInformationController = ({
 
 
   const onPressBack = () => {
-    if (currentStep.length > 1) {
+    if (currentStep.length <= 3) {
       setCurrentStep((prev) => prev.slice(0, prev.length - 1));
     }
-    if (currentStep.length === 1) {
-      navigation.goBack()
-    }
-    if (currentStep.length === 2) {
-      Alert.alert('hello')
+    if (currentStep.length === 4) {
       BackHandler.exitApp()
       setCurrentStep(() => {
         return [2];
       });
     }
-    if (currentStep.length === 3) {
-      BackHandler.exitApp()
-    }
   };
-
 
   return {
     currentStep,

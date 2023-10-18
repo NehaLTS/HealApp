@@ -57,6 +57,8 @@ const RegistrationView = () => {
   const handleSignUp = () => {
     setIsLoadingGoogle(true)
     if (!emailError && !passwordError) onPressSignUp(emailRef.current.value, passwordRef.current.value)
+    setIsLoadingGoogle(false)
+
   };
 
   const isValidEmail = (email: string) => {
