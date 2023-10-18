@@ -9,7 +9,8 @@ import { Alert } from "react-native";
 import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvider";
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
 import React from "react";
-import useToast from "components/common/useToast";
+// import useToast from "components/common/useToast";
+import { emailPattern, passwordPattern } from "libs/utility/Utils";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -19,96 +20,86 @@ const LoginViewController = () => {
   const { onFBAuthProcessing } = FacebookAuthProvider()
   const { userData, setUserData } = UseUserContext()
   const { onSubmitAuthRequest, onSubmitFBAuthRequest, onSubmitGoogleAuthRequest } = AuthServicesClient()
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+
+  //TODO: KAMAL toi change the error to useRef
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const emailRef = React.useRef<any>("");
   const passwordRef = React.useRef<any>("");
-  const { showToast, renderToast } = useToast();
+  // const { showToast, renderToast } = useToast();
 
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value
     validateEmail()
   }
-  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value) }
+  const onBlurEmail = () => { validateEmail();  }
 
   const onChangePassword = (value: string) => {
     passwordRef.current.value = value;
     validatePassword()
   }
-  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value) }
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
+  const onBlurPassword = () => validatePassword(); 
 
 
 
   const validateEmail = () => {
-    if (!emailRef.current.value) {
-      setEmailError("Email is required");
-    } else if (!isValidEmail(emailRef.current.value)) {
-      setEmailError("Invalid email address");
-    } else {
-      setEmailError('');
-    }
+    if (!emailRef.current.value) setEmailError("Email is required");
+    else if (!emailPattern.test(emailRef.current.value)) setEmailError("Invalid email address");
+    else setEmailError('');
   };
 
-  const isValidPassword = (password: string) => {
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
+  const isValidPassword = (password: string) =>  passwordPattern.test(password)
+  
+ 
 
   const validatePassword = () => {
-    if (!passwordRef.current.value) {
-      setPasswordError("Password is required");
-    } else if (passwordRef.current.value.length < 5) {
-      setPasswordError("Password must be at least 8 characters");
-    } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError("Password must contain special characters");
-    } else {
-      setPasswordError('');
-    }
+    if (!passwordRef.current.value)  setPasswordError("Password is required");
+    else if (passwordRef.current.value.length < 5)  setPasswordError("Password must be at least 8 characters");
+    else if (!isValidPassword(passwordRef.current.value)) setPasswordError("Password must contain special characters");
+    else setPasswordError('');
+   
   };
 
   const handleSignIn = () => {
-    if (!emailError && !passwordError) onPressLoginButton(email, password);
+    if (!emailError && !passwordError) onPressLoginButton(emailRef.current.value, passwordRef.current.value);
   };
 
 
 
   /** To handle Response from API after authentication request */
 
-  const handleAuthResponse = () => {
-    console.log(getLocalData('USER')?.user)
+  //TODO: Kamal needs to change any to type
+
+  const handleAuthSuccessResponse = (response:any) => {
+    //TODO: set eMail Id here
+    setUserData({ ...userData, token: response?.token, isSuccessful: true });
+    setLocalData('USER', response)
+
+    // console.log(getLocalData('USER')?.user)
     navigation.navigate(NavigationRoutes.ClientHome)
   }
+
+
+
+
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
     try {
-      setIsLoading(true)
+     
       if (email != '' || password != '') {
+         setIsLoading(true)
         const res = await onSubmitAuthRequest({ email, password });
-        setUserData({ ...userData, token: res?.token, isSuccessful: res?.isSuccessful });
-        setLocalData('USER', res)
+    
         setIsLoading(false)
-        if (res?.isSuccessful === true) {
-          handleAuthResponse();
-        } else {
-          Alert.alert("Login Failed", "Please check your email and password and try again.");
-        }
+        if (res?.isSuccessful === true) handleAuthSuccessResponse(res);
+       else Alert.alert("Login Failed", "Please check your email and password and try again.");
       }
-      else {
-        setIsLoading(false)
-        showToast("", "Please enter email or password", "warning")
-
-        // Alert.alert("Please enter email or password");
-      }
+      // else  showToast("", "Please enter email or password", "warning")
     } catch (error) {
-      console.error("Error during login:", error);
+       setIsLoading(false)
+     
       Alert.alert("An error occurred during login.");
     }
   }
@@ -124,24 +115,20 @@ const LoginViewController = () => {
 
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
 
+         setIsLoading(false)
         if (res?.isSuccessful === true) {
-          setIsLoading(true)
-          setUserData?.({ ...userData, token: res.token });
-          setLocalData('USER', res)
-          navigation.navigate('BasicInfo')
+            handleAuthSuccessResponse(res);
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
-        setIsLoading(false)
+       
       }
       catch (err) {
         console.log('Error occurred!');
         setIsLoading(false)
       }
     })
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000);
+  
   }
   /** To handle Facebook login  button click*/
   const onPressFBButton = () => {
@@ -151,31 +138,24 @@ const LoginViewController = () => {
     onFBAuthProcessing().then(async (userData) => {
 
       try {
-        //TODO: under review with facebook
-        // const email = "amanshar@gmail.com"
-        // const facebookId = "sharm@hmail.com"
-
-        const email = userData.user.email
+            const email = userData.user.email
         const facebookId = userData.additionalUserInfo?.profile?.id
         const res = await onSubmitFBAuthRequest({ email, facebookId });
-        setUserData?.({ ...userData, token: res.token });
-        setLocalData('USER', res)
+        setIsLoading(false)
+        
         if (res?.isSuccessful === true) {
-          setIsLoading(true)
-          navigation.navigate('BasicInfo')
-
+          handleAuthSuccessResponse(res)
+      
         } else {
           Alert.alert("Login Failed", "Please check your email and password and try again.");
-          setIsLoading(false)
+         
         }
       } catch (err) {
         console.log('Error occurred!');
 
       }
     })
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000);
+   
   }
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {
@@ -192,13 +172,7 @@ const LoginViewController = () => {
     onChangeLanguage,
     onPressLoginButton,
     onSelectSocialAuth,
-    validateEmail,
-    setEmail,
-    setPassword,
     handleSignIn,
-    validatePassword,
-    email,
-    password,
     emailError,
     passwordError,
     isLoading,
@@ -208,7 +182,7 @@ const LoginViewController = () => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    renderToast
+    // renderToast
   };
 };
 

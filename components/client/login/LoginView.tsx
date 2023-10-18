@@ -20,8 +20,8 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   const { t } = useTranslation();
   const {
     handleSignIn,
-    email,
-    password,
+    // email,
+    // password,
     emailError,
     passwordError,
     isLoading,
@@ -31,13 +31,13 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    renderToast
+    // renderToast
   } = LoginViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
-    {renderToast()}
+    {/* {renderToast()} */}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
@@ -79,7 +79,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={(passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError.length > 0 || emailError.length > 0 || emailRef.current.value==null || passwordRef.current.value==null)}
         />
       </View>
       <View style={styles.footerContainer}>
