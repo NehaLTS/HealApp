@@ -193,12 +193,13 @@ const ProviderAddServices = () => {
         </View>
       </ScrollView>
 
-      <KeyboardAvoidingView>
         {!isServiceAdded && (
           <Modal
             isVisible={isModalVisible}
             backdropOpacity={0.8}
             backdropColor={colors.white}>
+              
+      <KeyboardAvoidingView  keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
             <View style={styles.modalContent}>
               <Text style={styles.addService}>Add service</Text>
               <Input
@@ -261,9 +262,9 @@ const ProviderAddServices = () => {
                 onPress={toggleModal}
               />
             </View>
+            </KeyboardAvoidingView>
           </Modal>
         )}
-      </KeyboardAvoidingView>
       {/* {isServiceAdded && (
         <View style={[styles.serviceContainer, styles.elevation]}>
           <Text style={styles.textView}>{userDataProvider.services ?? ""}</Text>

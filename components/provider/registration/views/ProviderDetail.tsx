@@ -381,9 +381,9 @@ const styles = StyleSheet.create({
     },
 
     selectedImage: {
-        height: getHeight(dimens.imageS + dimens.marginS),
-        width: getWidth(dimens.imageS + dimens.marginS),
-        resizeMode: "contain",
+        height: getHeight(dimens.imageS + dimens.paddingS),
+        width: getWidth(dimens.imageS + dimens.paddingS + 2),
+        resizeMode: "cover",
         borderRadius: getHeight(dimens.paddingS),
     },
     box: {

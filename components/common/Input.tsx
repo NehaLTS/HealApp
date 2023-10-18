@@ -53,7 +53,7 @@ const Input = forwardRef(({
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
-  const fontSizeAnim = useRef(new Animated.Value(inputValue ? getHeight(fontSize.textS) : getHeight(fontSize.textL))).current;
+  const fontSizeAnim = useRef(new Animated.Value(inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL))).current;
 
   const onFocusHandler = () => moveTextTop();
   const onBlurHandler = () => moveTextBottom()
@@ -66,7 +66,7 @@ const Input = forwardRef(({
         useNativeDriver: false,
       }),
       Animated.timing(fontSizeAnim, {
-        toValue: getHeight(fontSize.textS),
+        toValue: getWidth(fontSize.textS),
         duration: 200,
         useNativeDriver: false,
       }),
@@ -81,7 +81,7 @@ const Input = forwardRef(({
           useNativeDriver: false,
         }),
         Animated.timing(fontSizeAnim, {
-          toValue: getHeight(fontSize.textL),
+          toValue: getWidth(fontSize.textL),
           duration: 200,
           useNativeDriver: false,
         }),
@@ -164,7 +164,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
-    minWidth: '24%',
+    // minWidth: '20%'
+     minWidth: '24%'
   },
   input: {
     fontSize: fontSize.textL,

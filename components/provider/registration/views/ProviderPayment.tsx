@@ -170,12 +170,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    // columnGap:16
   },
   inputBank: {
-    minWidth: "35%"
+    minWidth: "48%"
   },
   inputBranch: {
-    minWidth: "60%"
+    minWidth: "48%"
   },
   input: {
     marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),

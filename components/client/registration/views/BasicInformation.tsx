@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   loader: {
     position: 'absolute',
     zIndex: 1,
-    top: "20%",
+    top: "30%",
     left: "45%"
   }
 });

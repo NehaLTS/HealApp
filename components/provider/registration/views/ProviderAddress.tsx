@@ -89,6 +89,7 @@ const ProviderAddress = ({
         returnKeyType={"next"}
         onSubmitEditing={() => addressRef.current.focus()}
         onClearInputText={() => licenseRef.current.clear()}
+        
 
       />
 
