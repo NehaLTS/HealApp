@@ -56,7 +56,10 @@ const ProviderAuthenticatorView = () => {
             title={t("guest_entrance")}
             // style={styles.guestText}
             fontSize={getHeight(fontSize.textXl)}
-            onPress={() => navigation.navigate(NavigationRoutes.ProviderHome)}
+            onPress={() => navigation.reset({
+              index: 0,
+              routes: [{ name: NavigationRoutes.ProviderHomes }],
+            })}
           />
           {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton

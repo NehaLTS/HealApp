@@ -122,7 +122,7 @@ const Input = forwardRef(({
           editable
           {...props}
         />
-        {type === "password" && (
+        {!errorMessage && type === "password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Image
               source={require("assets/icon/eyeIcon.png")}
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.sideMargin),
     height: getHeight(dimens.sideMargin),
     marginRight: getHeight(dimens.marginS),
-    resizeMode:'contain'
+    resizeMode: 'contain'
   },
 });
 

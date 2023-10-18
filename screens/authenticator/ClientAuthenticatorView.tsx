@@ -56,7 +56,10 @@ const ClientAuthenticatorView = () => {
             title={t("guest_entrance")}
             // style={styles.guestText}
             fontSize={getHeight(fontSize.textXl)}
-            onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
+            onPress={() => navigation.reset({
+              index: 0,
+              routes: [{ name: NavigationRoutes.ClientHome }],
+            })}
           />
           {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton

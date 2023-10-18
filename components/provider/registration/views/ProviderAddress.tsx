@@ -52,7 +52,10 @@ const ProviderAddress = ({
   const validateAddress = () => {
     if (!addressRef.current.value) {
       setAddressError("Address is required");
-    } else {
+    } else if (addressRef.current.value.length < 4) {
+      setAddressError('Please fill full address')
+    }
+    else {
       setAddressError("");
     }
   };
@@ -103,7 +106,6 @@ const ProviderAddress = ({
         inputValue={userDataProvider?.address ?? ""}
         errorMessage={adError.length ? adError : addressError}
         onClearInputText={() => addressRef.current.clear()}
-
       />
 
       <View style={styles.iconContainer}>

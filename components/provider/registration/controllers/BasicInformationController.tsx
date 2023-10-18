@@ -1,10 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { useApiContext } from "contexts/useApiContext";
-import { UseUserContext } from "contexts/useUserContext";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import useUpdateEffect from "libs/UseUpdateEffect";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { setLocalData } from "libs/datastorage/useLocalStorage";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert, BackHandler } from "react-native";
@@ -75,7 +72,7 @@ const BasicInformationController = ({
         }
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        if (userDataProvider.address && userDataProvider.phone_number && userDataProvider.license_photo) {
+        if ((userDataProvider.address && userDataProvider.address.length >= 4) && userDataProvider.phone_number && userDataProvider.license_photo) {
           setCurrentStep(() => {
             const array = [...currentStep];
             array.push(array[array.length - 1] + 1);
@@ -85,6 +82,7 @@ const BasicInformationController = ({
         else {
           if (!userDataProvider.phone_number?.length) setPhoneError("Phone number is required");
           if (!userDataProvider.address?.length) setAddressError("Address is required");
+          else if (userDataProvider.address?.length) setAddressError("Please fill full address");
           if (!userDataProvider.license_photo?.length) Alert.alert("Please upload License photo")
         }
       }

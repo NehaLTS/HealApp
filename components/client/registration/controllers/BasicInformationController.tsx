@@ -64,7 +64,7 @@ const BasicInformationController = ({
         }
       }
       if (currentStep[currentStep.length - 1] === 1) {
-        if (userData.address && userData.id_number) {
+        if ((userData.address && userData.address.length >= 4) && userData.id_number) {
           setIsLoader(true)
           const res = await onUpdateUserProfile?.({
             firstname: userData?.firstname ?? '',
@@ -95,6 +95,7 @@ const BasicInformationController = ({
           }
         } else {
           if (!userData.address?.length) setAddressError("Address is required")
+          else if (userData.address?.length < 4) setAddressError('Please fill full adresss')
           if (!userData.id_number?.length) setIdNumberError("ID number is required")
           if (!userData.date_of_birth?.length) setDateOfBirthError("Birth date is required")
         }

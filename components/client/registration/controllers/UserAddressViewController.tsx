@@ -30,6 +30,9 @@ const UserAddressViewController = () => {
     setAddressError("Invalid address format");
     if (!regex.test(addressRef.current.value)) {
       setAddressError("Invalid address format");
+    }
+    else if (addressRef.current.value.length < 4) {
+      setAddressError('Please fill full address')
     } else {
       setAddressError("");
     }
