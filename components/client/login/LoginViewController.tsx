@@ -103,7 +103,7 @@ const LoginViewController = () => {
       }
       else {
         setIsLoading(false)
-        showToast("Please enter email or password", "warning")
+        showToast("", "Please enter email or password", "warning")
 
         // Alert.alert("Please enter email or password");
       }
