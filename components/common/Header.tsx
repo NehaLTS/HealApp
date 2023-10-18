@@ -1,4 +1,4 @@
-import logo from "assets/icon/logo.png";
+import logo from "assets/icon/healLogo.png";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
@@ -89,9 +89,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   logo: {
-    width: getWidth(dimens.imageS+30),
-    height: getHeight(dimens.imageS+20),
-    marginLeft: getWidth(dimens.marginS),
+    width: getWidth(dimens.imageS),
+    height: getHeight(dimens.imageS),
+    resizeMode:'center',
+    marginLeft: getWidth(dimens.marginM)
   },
   title: {
     fontSize: fontSize.headingL,

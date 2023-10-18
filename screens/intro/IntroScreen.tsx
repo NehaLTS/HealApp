@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import logo from "assets/icon/logo.png";
+import logo from "assets/icon/healLogo.png";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { getHeight, getWidth } from "libs/StyleHelper";
@@ -45,12 +45,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginM),
   },
   logo: {
-    width: getWidth(dimens.imageL+dimens.imageS),
-    height: getHeight(dimens.imageL+dimens.imageS + dimens.imageS),
+    width: getWidth(200),
+    height: getHeight(200),
     alignSelf: "center",
     flex: 0.4,
     justifyContent: "center",
-    // resizeMode: "contain",
+    resizeMode: "contain",
   },
   welcomeText: {
     fontSize: getHeight(fontSize.headingL),

@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, Image, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import logo from '../../assets/icon/logo.png';
+import logo from '../../assets/icon/healLogo.png';
 import Button from '../../components/common/Button';
 import { colors } from '../../designToken/colors';
 import { dimens } from '../../designToken/dimens';
@@ -92,10 +92,11 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat-Regular"
   },
   logo: {
-    width: getWidth(330),
-    height: getHeight(380),
+    width: getWidth(200),
+    height: getHeight(200),
     alignSelf: "center",
     flex: 0.4,
+    resizeMode:'contain'
   },
   buttonContainer: {
     flex: 0.12,
