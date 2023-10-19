@@ -6,36 +6,45 @@ const ProviderAddServicesController = () => {
   const serviceNameRef = React.useRef<any>("");
   const priceRef = React.useRef<any>("");
   const descriptionRef = React.useRef<any>("");
-  const [ serviceError,setServiceError] = useState('')
-  const [ priceError,setPriceError] = useState('')
-  const [ descriptionError,setDescriptionError] = useState('')
+  const [serviceError, setServiceError] = useState('')
+  const [priceError, setPriceError] = useState('')
+  const [descriptionError, setDescriptionError] = useState('')
 
 
-  const onBlurServiceName = () => {validateServiceName() ; setUserDataProvider({ ...userDataProvider, services: serviceNameRef.current.value })}
-  const onChangeServiceName = (value:string) => serviceNameRef.current.value = value
-  const onBlurPriceName = () => {validatePrice();setUserDataProvider({ ...userDataProvider, price: priceRef.current.value })}
-  const onChangePriceName = (value:string) => priceRef.current.value = value
-  const onBlurDescription = () => {validateDescription();setUserDataProvider({ ...userDataProvider, description: descriptionRef.current.value })}
-  const onChangeDescription  = (value:string) => descriptionRef.current.value = value
+  const onBlurServiceName = () => setUserDataProvider({ ...userDataProvider, services: serviceNameRef.current.value })
+  const onChangeServiceName = (value: string) => {
+    serviceNameRef.current.value = value,
+      validateServiceName();
+  }
+  const onBlurPriceName = () => setUserDataProvider({ ...userDataProvider, price: priceRef.current.value })
+  const onChangePriceName = (value: string) => {
+    priceRef.current.value = value,
+      validatePrice();
+  }
+  const onBlurDescription = () => setUserDataProvider({ ...userDataProvider, description: descriptionRef.current.value })
+  const onChangeDescription = (value: string) => {
+    descriptionRef.current.value = value,
+      validateDescription();
+  }
 
   const validateServiceName = () => {
     if (!serviceNameRef.current.value) {
       setServiceError("Service name is required");
-    }  else {
+    } else {
       setServiceError("");
     }
   };
   const validatePrice = () => {
     if (!priceRef.current.value) {
       setPriceError("Price is required");
-    }  else {
+    } else {
       setPriceError("");
     }
   };
   const validateDescription = () => {
     if (!descriptionRef.current.value) {
       setDescriptionError("Description is required");
-    }  else {
+    } else {
       setDescriptionError("");
     }
   };
@@ -53,9 +62,9 @@ const ProviderAddServicesController = () => {
     serviceError,
     priceError,
     descriptionError,
-   
 
-};
+
+  };
 }
 
 export default ProviderAddServicesController

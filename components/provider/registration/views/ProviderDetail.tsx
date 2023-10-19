@@ -23,7 +23,7 @@ const ProviderDetail = ({
     providerTypeError: prvError, }: any) => {
     const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
         BasicInformationController({});
-        const { t } = useTranslation();
+    const { t } = useTranslation();
     const [firstNameError, setFirstNameError] = useState("");
     const [lastNameError, setLastNameError] = useState("");
     const [providerTypeError, setProviderTypeError] = useState("");
@@ -39,17 +39,41 @@ const ProviderDetail = ({
     const lastNameRef = React.useRef<any>("");
     const providerTypeRef = React.useRef<any>("");
     const specialtyRef = React.useRef<any>("");
-    const onBlurFirstName = () => { validateFirstName(); setUserDataProvider({ ...userDataProvider, firstname: firstNameRef.current.value }) }
-    const onChangeFirstName = (value: string) => firstNameRef.current.value = value
+    const validateFirstName = () => {
+        if (!firstNameRef.current.value) {
+            setFirstNameError("First name is required");
+        } else {
+            setFirstNameError("");
+        }
+    };
 
-    const onBlurLastName = () => { validateLastName(); setUserDataProvider({ ...userDataProvider, lastname: lastNameRef.current.value }) }
-    const onChangeLastName = (value: string) => lastNameRef.current.value = value
+    const validateLastName = () => {
+        if (!lastNameRef.current.value) {
+            setLastNameError("Last name is required");
+        } else {
+            setLastNameError("");
+        }
+    };
+    const onBlurFirstName = () => setUserDataProvider({ ...userDataProvider, firstname: firstNameRef.current.value })
+    const onChangeFirstName = (value: string) => {
+        firstNameRef.current.value = value,
+            validateFirstName();
+    }
 
-    const onBlurProviderType = () => { validateProviderType(); setUserDataProvider({ ...userDataProvider, provider_type_id: selectedProvider?.name }) }
-    const onChangeProviderType = (value: string) => providerTypeRef.current.value = value
+    const onBlurLastName = () => setUserDataProvider({ ...userDataProvider, lastname: lastNameRef.current.value })
+    const onChangeLastName = (value: string) => {
+        lastNameRef.current.value = value, validateLastName();
+    }
 
-    const onBlurSpecialty = () => { validateSpecialty(); setUserDataProvider({ ...userDataProvider, speciality: selectedSpecialty?.name?.en }) }
-    const onChangeSpecialty = (value: string) => specialtyRef.current.value = value
+    const onBlurProviderType = () => setUserDataProvider({ ...userDataProvider, provider_type_id: selectedProvider?.name })
+    const onChangeProviderType = (value: string) => {
+        providerTypeRef.current.value = value, validateProviderType();
+    }
+    const onBlurSpecialty = () => { setUserDataProvider({ ...userDataProvider, speciality: selectedSpecialty?.name?.en }) }
+    const onChangeSpecialty = (value: string) => {
+        specialtyRef.current.value = value,
+            validateSpecialty();
+    }
     const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, id_photo: url });
 
 
@@ -214,21 +238,7 @@ const ProviderDetail = ({
     };
 
 
-    const validateFirstName = () => {
-        if (!firstNameRef.current.value) {
-            setFirstNameError("First name is required");
-        } else {
-            setFirstNameError("");
-        }
-    };
 
-    const validateLastName = () => {
-        if (!lastNameRef.current.value) {
-            setLastNameError("Last name is required");
-        } else {
-            setLastNameError("");
-        }
-    };
 
     const validateProviderType = () => {
 
@@ -252,7 +262,6 @@ const ProviderDetail = ({
 
 
     const onChangeProviderTypes = (value) => {
-        validateLastName();
         setUserDataProvider({ ...userDataProvider, type_Provider: value?.name, lastname: lastNameRef.current.value })
         setSelectedProvider(value);
     };
@@ -272,7 +281,7 @@ const ProviderDetail = ({
                 ref={firstNameRef}
                 defaultValue={userDataProvider.firstname}
                 inputValue={userDataProvider?.firstname ?? ""}
-                errorMessage={fnError.length ? fnError : firstNameError}
+                errorMessage={fnError?.length ? fnError : firstNameError}
                 returnKeyType={"next"}
                 onSubmitEditing={() => lastNameRef.current.focus()}
                 onClearInputText={() => firstNameRef.current.clear()}
@@ -287,7 +296,7 @@ const ProviderDetail = ({
                 defaultValue={userDataProvider.lastname}
                 ref={lastNameRef}
                 inputValue={userDataProvider?.lastname ?? ""}
-                errorMessage={lnError.length ? lnError : lastNameError}
+                errorMessage={lnError?.length ? lnError : lastNameError}
                 onClearInputText={() => lastNameRef.current.clear()}
             />
 
@@ -313,7 +322,7 @@ const ProviderDetail = ({
                 renderItem={renderItems}
             />
             {providerTypeError || prvError && (
-                <Text style={styles.errorMessage}>{prvError.length ? prvError : providerTypeError}</Text>
+                <Text style={styles.errorMessage}>{prvError?.length ? prvError : providerTypeError}</Text>
             )}
             <Dropdown
                 style={styles.dropdown}
@@ -331,7 +340,7 @@ const ProviderDetail = ({
                 renderItem={renderItem}
             />
             {specialtyError || spError && (
-                <Text style={styles.errorMessage}>{spError.length ? spError : specialtyError}</Text>
+                <Text style={styles.errorMessage}>{spError?.length ? spError : specialtyError}</Text>
             )}
 
 

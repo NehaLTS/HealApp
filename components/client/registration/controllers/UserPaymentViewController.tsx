@@ -54,7 +54,7 @@ const UserPaymentViewController = () => {
     const cleanedText = value.replace(/[^0-9]/g, '');
     let formattedText = '';
 
-    for (let i = 0; i < cleanedText.length; i += 4) {
+    for (let i = 0; i < cleanedText?.length; i += 4) {
       formattedText += cleanedText.slice(i, i + 4) + ' ';
     }
 
@@ -66,7 +66,7 @@ const UserPaymentViewController = () => {
   const onChangeExpireDate = (value: string) => {
     const cleanedText = value.replace(/[^0-9]/g, '');
     let formattedText = '';
-    for (let i = 0; i < cleanedText.length; i += 2) {
+    for (let i = 0; i < cleanedText?.length; i += 2) {
       formattedText += cleanedText.slice(i, i + 2) + '/';
     }
     formattedText = formattedText.replace(/\/$/, '');
@@ -75,21 +75,17 @@ const UserPaymentViewController = () => {
     validateCardExpiry()
   }
 
-  const onChangeCvv = (value: string) => cvvRef.current.value = value
-
-
-  const onBlurCardNumber = () => {
-    validateCardNumber()
-    setUserData({ ...userData, credit_card_number: cardNumberRef.current.value })
-  }
-  const onBlurExpireDate = () => {
-    validateCardExpiry()
-    setUserData({ ...userData, expire_date: expireDateRef.current.value })
-  }
-  const onBlueCvv = () => {
+  const onChangeCvv = (value: string) => {
+    cvvRef.current.value = value, validateCvv()
     validateCvv()
-    setUserData({ ...userData, cvv: cvvRef.current.value })
   }
+
+
+  const onBlurCardNumber = () => setUserData({ ...userData, credit_card_number: cardNumberRef.current.value })
+
+  const onBlurExpireDate = () => setUserData({ ...userData, expire_date: expireDateRef.current.value })
+
+  const onBlueCvv = () => setUserData({ ...userData, cvv: cvvRef.current.value })
 
   const onClearCard = () => cardNumberRef.current.clear()
   return {

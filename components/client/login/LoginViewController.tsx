@@ -33,13 +33,13 @@ const LoginViewController = () => {
     emailRef.current.value = value
     validateEmail()
   }
-  const onBlurEmail = () => { validateEmail(); setEmail(emailRef.current.value) }
+  const onBlurEmail = () => { setEmail(emailRef.current.value) }
 
   const onChangePassword = (value: string) => {
     passwordRef.current.value = value;
     validatePassword()
   }
-  const onBlurPassword = () => { validatePassword(); setPassword(passwordRef.current.value) }
+  const onBlurPassword = () => { setPassword(passwordRef.current.value) }
   const isValidEmail = (email: string) => {
     const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
     return emailPattern.test(email);
@@ -65,7 +65,7 @@ const LoginViewController = () => {
   const validatePassword = () => {
     if (!passwordRef.current.value) {
       setPasswordError("Password is required");
-    } else if (passwordRef.current.value.length < 5) {
+    } else if (passwordRef.current.value?.length < 5) {
       setPasswordError("Password must be at least 8 characters");
     } else if (!isValidPassword(passwordRef.current.value)) {
       setPasswordError("Password must contain special characters");

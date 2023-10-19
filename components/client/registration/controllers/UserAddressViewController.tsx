@@ -31,7 +31,7 @@ const UserAddressViewController = () => {
     if (!regex.test(addressRef.current.value)) {
       setAddressError("Invalid address format");
     }
-    else if (addressRef.current.value.length < 4) {
+    else if (addressRef.current.value?.length < 4) {
       setAddressError('Please fill full address')
     } else {
       setAddressError("");
@@ -59,30 +59,25 @@ const UserAddressViewController = () => {
       setDateOfBirthError("");
     }
   };
-  const onBlurAddress = () => {
-    validateAddress()
-    setUserData({ ...userData, address: addressRef.current.value })
-  }
-  const onBlurBirthDate = () => {
-    validateDateOfBirth()
-    setUserData({ ...userData, date_of_birth: birthDateRef.current.value })
-  }
-  const onBlurIdNumber = () => {
-    validateIdNumber()
-    setUserData({ ...userData, id_number: idNumberRef.current.value })
-  }
+  const onBlurAddress = () => setUserData({ ...userData, address: addressRef.current.value })
+  const onBlurBirthDate = () => setUserData({ ...userData, date_of_birth: birthDateRef.current.value })
+
+  const onBlurIdNumber = () => setUserData({ ...userData, id_number: idNumberRef.current.value })
 
   const onChangeAddress = (value: string) => {
     addressRef.current.value = value
     onBlurAddress()
+    validateAddress()
   }
   const onChangeBirthDate = (value: string) => {
     birthDateRef.current.value = value
     onBlurBirthDate()
+    validateDateOfBirth()
   }
   const onChangeIdNumber = (value: string) => {
     idNumberRef.current.value = value
     onBlurIdNumber()
+    validateIdNumber()
   }
 
   const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });

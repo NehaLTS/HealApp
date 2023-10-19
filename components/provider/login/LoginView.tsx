@@ -31,7 +31,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
 
   return (
     <>
-    {renderToast()}
+      {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
@@ -73,7 +73,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={(passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError?.length > 0 || emailError?.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>

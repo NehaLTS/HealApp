@@ -117,8 +117,8 @@ const Input = forwardRef(({
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           ref={ref as React.LegacyRef<TextInput>}
-          multiline={placeholder === "Description"?true : false}
-          numberOfLines={placeholder === "Description" ? 5 :  1}
+          multiline={placeholder === "Description" ? true : false}
+          numberOfLines={placeholder === "Description" ? 5 : 1}
           editable
           {...props}
         />
@@ -139,7 +139,7 @@ const Input = forwardRef(({
           </TouchableOpacity>
         )}
         {type === "dateOfBirth" && (
-          <TouchableOpacity onPress={() => { onPressCalender?.(); onFocusHandler() }}>
+          <TouchableOpacity style={styles.dob_input} onPress={() => { onPressCalender?.(); onFocusHandler() }}>
             <Image
               source={require("assets/icon/calender_icon.png")}
               style={styles.datePicker}
@@ -165,14 +165,14 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
     // minWidth: '20%'
-     minWidth: '24%'
+    minWidth: '24%'
   },
   input: {
     fontSize: fontSize.textL,
     marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
-    textAlignVertical:'top',
+    textAlignVertical: 'top',
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
@@ -205,6 +205,8 @@ const styles = StyleSheet.create({
     marginRight: getHeight(dimens.marginS),
     resizeMode: 'contain'
   },
+  dob_input:
+    { alignItems: 'flex-end', position: 'absolute', width: '100%' }
 });
 
 

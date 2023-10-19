@@ -42,13 +42,13 @@ const UserDetailViewController = () => {
   const validateFirstName = () => {
     if (!firstNameRef.current.value || firstNameRef.current.value === undefined) {
       setFirstNameError("First name is required");
-    } 
-    
+    }
+
     // else if (!/^[A-Z][a-z]*$/.test(firstNameRef.current.value)) {
     //   setFirstNameError("First letter should start with an uppercase , followed by lowercase ");
     // } 
-    
-    
+
+
     else {
       setFirstNameError("");
     }
@@ -57,13 +57,13 @@ const UserDetailViewController = () => {
   const validateLastName = () => {
     if (!lastNameRef.current.value) {
       setLastNameError("Last name is required");
-    } 
-    
+    }
+
     // else if (!/^[A-Z][a-z]*$/.test(lastNameRef.current.value)) {
     //   setLastNameError("First letter should start with an uppercase , followed by lowercase ");
     // } 
-    
-    
+
+
     else {
       setLastNameError("");
     }
@@ -77,31 +77,25 @@ const UserDetailViewController = () => {
       setPhoneNumberError("");
     }
   };
-  const onBlurFirstName = () => {
-    validateFirstName()
-    setUserData({ ...userData, firstname: firstNameRef.current.value })
-  }
+  const onBlurFirstName = () => setUserData({ ...userData, firstname: firstNameRef.current.value })
   const onChangeFirstName = (value: string) => {
-
     firstNameRef.current.value = value
     onBlurFirstName();
+    validateFirstName()
   }
-  const onBlurLastName = () => {
-
-    validateLastName()
-    setUserData({ ...userData, lastname: lastNameRef.current.value })
-  }
+  const onBlurLastName = () => setUserData({ ...userData, lastname: lastNameRef.current.value })
   const onChangeLastName = (value: string) => {
     lastNameRef.current.value = value
     onBlurLastName()
+    validateLastName()
   }
   const onBlurPhoneNumber = () => {
-    validatePhoneNumber()
     setUserData({ ...userData, phone_number: phoneNumberRef.current.value })
   }
   const onChangePhoneNumber = (value: string) => {
     phoneNumberRef.current.value = value
     onBlurPhoneNumber()
+    validatePhoneNumber()
   }
 
 

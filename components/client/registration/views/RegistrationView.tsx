@@ -23,11 +23,17 @@ const RegistrationView = () => {
 
   console.log('emailRef.current.value', (emailRef.current.value || passwordRef.current.value) === undefined)
 
-  const onChangeEmail = (value: string) => emailRef.current.value = value
-  const onBlurEmail = () => { validateEmail() }
+  const onChangeEmail = (value: string) => {
+    emailRef.current.value = value,
+      validateEmail()
+  }
+  const onBlurEmail = () => { }
 
-  const onChangePassword = (value: string) => passwordRef.current.value = value
-  const onBlurPassword = () => { validatePassword() }
+  const onChangePassword = (value: string) => {
+    passwordRef.current.value = value,
+      validatePassword()
+  }
+  const onBlurPassword = () => { }
 
   const validateEmail = () => {
     if (!emailRef.current.value) {
@@ -46,7 +52,7 @@ const RegistrationView = () => {
   const validatePassword = () => {
     if (!passwordRef.current.value) {
       setPasswordError("Password is required");
-    } else if (passwordRef.current.value.length < 5) {
+    } else if (passwordRef.current.value?.length < 5) {
       setPasswordError("Password must be at least 8 characters");
     } else if (!isValidPassword(passwordRef.current.value)) {
       setPasswordError("Password must contain special characters");
@@ -68,7 +74,7 @@ const RegistrationView = () => {
 
   return (
     <>
-    {renderToast()}
+      {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
@@ -110,7 +116,7 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={(passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError?.length > 0 || emailError?.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>

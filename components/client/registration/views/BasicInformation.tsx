@@ -39,7 +39,7 @@ const BasicInformation = () => {
       header: () => <Header title={t('registration')} />,
     });
   }, [navigation]);
-  const isCurrentStep = currentStep[currentStep.length - 1]
+  const isCurrentStep = currentStep[currentStep?.length - 1]
 
   return (
     <View style={styles.container}>
@@ -82,7 +82,7 @@ const BasicInformation = () => {
           />
         )}
       </View>
-      {currentStep[currentStep.length - 1] === 2 && !isLoading && !isCardDetails && (
+      {currentStep[currentStep?.length - 1] === 2 && !isLoading && !isCardDetails && (
         <Text style={styles.skipLaterText} title={t('skip_for_later')} onPress={onPressNavigateHome} />
       )
       }

@@ -35,7 +35,7 @@ const UserAddressView = ({
   } = UserAddressViewController();
   const currentDate = new Date();
 
-  const [date, setDate] = useState(new Date(currentDate.getFullYear() - 15,0,1));
+  const [date, setDate] = useState(new Date(currentDate.getFullYear() - 15, 0, 1));
   const [open, setOpen] = useState(false)
   const [firstOpenDialog, setFirstOpenDialog] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -50,12 +50,12 @@ const UserAddressView = ({
   }).replace(/ /g, '-');
   console.log('first', formattedDate)
   // const formatDigit = (digit: string) => {
-  //   if (digit.length === 1)
+  //   if (digit?.length === 1)
   //     return "0" + digit;
   //   else
   //     return digit;
   // }
-  
+
   const maxDate = new Date(currentDate.getFullYear() - 15, currentDate.getMonth(), currentDate.getDate());
 
   // const formatBirthDate = () => {
@@ -92,7 +92,7 @@ const UserAddressView = ({
         onChangeText={onChangeAddress}
         ref={addressRef}
         defaultValue={userData.address}
-        errorMessage={address.length ? address : addressError}
+        errorMessage={address?.length ? address : addressError}
         inputValue={userData.address ?? ''}
         returnKeyType={"next"}
         onSubmitEditing={() => birthDateRef.current.focus()}
@@ -100,7 +100,7 @@ const UserAddressView = ({
       <Input
         placeholder={t("date_of_birth")}
         keyboardType="numeric"
-        errorMessage={dateOfBirth.length ? dateOfBirth : dateOfBirthError}
+        errorMessage={dateOfBirth?.length ? dateOfBirth : dateOfBirthError}
         inputStyle={styles.inputDOB}
         onBlur={onBlurBirthDate}
         onChangeText={onChangeBirthDate}
@@ -123,7 +123,7 @@ const UserAddressView = ({
         ref={idNumberRef}
         onClearInputText={() => idNumberRef.current.clear()}
         defaultValue={userData.id_number}
-        errorMessage={idNumber.length ? idNumber : idNumberError}
+        errorMessage={idNumber?.length ? idNumber : idNumberError}
         inputValue={userData.id_number ?? ''}
       />
       <Text style={styles.text} title={t("find_doctor_text")} />

@@ -32,17 +32,24 @@ const ProviderPayment = ({
   const branchRef = React.useRef<any>("");
   const accountRef = React.useRef<any>("");
 
-  const onBlurRegistrationNumber = () => { validateRegistrationNumber(); setUserDataProvider({ ...userDataProvider, registration: registrationNumberRef.current.value }) }
-  const onChangeRegistrationNumber = (value: string) => {registrationNumberRef.current.value = value; validateRegistrationNumber()}
+  const onBlurRegistrationNumber = () => setUserDataProvider({ ...userDataProvider, registration: registrationNumberRef.current.value })
+  const onChangeRegistrationNumber = (value: string) => { registrationNumberRef.current.value = value; validateRegistrationNumber() }
 
-  const onBlurBankName = () => { validateBankName(); setUserDataProvider({ ...userDataProvider, bank_name: bankNameRef.current.value }) }
-  const onChangeBankName = (value: string) => bankNameRef.current.value = value
+  const onBlurBankName = () => setUserDataProvider({ ...userDataProvider, bank_name: bankNameRef.current.value })
+  const onChangeBankName = (value: string) => {
+    bankNameRef.current.value = value,
+      validateBankName();
+  }
 
-  const onBlurBranchType = () => { validateBranch(); setUserDataProvider({ ...userDataProvider, branch: branchRef?.current?.value }) }
-  const onChangeBranchType = (value: string) => branchRef.current.value = value
+  const onBlurBranchType = () => setUserDataProvider({ ...userDataProvider, branch: branchRef?.current?.value })
+  const onChangeBranchType = (value: string) => {
+    branchRef.current.value = value, validateBranch();
+  }
 
-  const onBlurAccount = () => { validateAccount(); setUserDataProvider({ ...userDataProvider, account: accountRef?.current?.value }) }
-  const onChangeAccount = (value: string) => accountRef.current.value = value
+  const onBlurAccount = () => setUserDataProvider({ ...userDataProvider, account: accountRef?.current?.value })
+  const onChangeAccount = (value: string) => {
+    accountRef.current.value = value, validateAccount();
+  }
 
   const getImageUrl = (url: string) =>
     setUserDataProvider({ ...userDataProvider, profile_picture: url });
@@ -107,7 +114,7 @@ const ProviderPayment = ({
           ref={bankNameRef}
           defaultValue={userDataProvider.bank_name}
           inputValue={userDataProvider?.bank_name ?? ""}
-          errorMessage={bankError.length ? bankError : bankNameError}
+          errorMessage={bankError?.length ? bankError : bankNameError}
           returnKeyType={"next"}
           onSubmitEditing={() => branchRef.current.focus()}
           onClearInputText={() => bankNameRef.current.clear()}
@@ -122,7 +129,7 @@ const ProviderPayment = ({
           ref={branchRef}
           defaultValue={userDataProvider.branch}
           inputValue={userDataProvider?.branch ?? ""}
-          errorMessage={brError.length ? brError : branchError}
+          errorMessage={brError?.length ? brError : branchError}
           returnKeyType={"next"}
           onSubmitEditing={() => accountRef.current.focus()}
           onClearInputText={() => branchRef.current.clear()}
@@ -138,7 +145,7 @@ const ProviderPayment = ({
         ref={accountRef}
         defaultValue={userDataProvider.account}
         inputValue={userDataProvider?.account ?? ""}
-        errorMessage={acError.length ? acError : accountError}
+        errorMessage={acError?.length ? acError : accountError}
         onClearInputText={() => accountRef.current.clear()}
 
       />
@@ -157,10 +164,10 @@ const ProviderPayment = ({
           />
         </TouchableOpacity>
         {userDataProvider.profile_picture && <TouchableOpacity onPress={() => setIsShowModal(true)}>
-           <Image
-              source={require("assets/icon/circumEditBlue.png")}
-              style={styles.editImage}
-            />
+          <Image
+            source={require("assets/icon/circumEditBlue.png")}
+            style={styles.editImage}
+          />
         </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}

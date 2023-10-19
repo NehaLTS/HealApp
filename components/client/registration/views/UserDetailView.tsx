@@ -36,7 +36,7 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
         inputStyle={styles.input}
         onBlur={onBlurFirstName}
         onClearInputText={() => firstNameRef.current.clear()}
-        errorMessage={firstNameEmptyError.length ? firstNameEmptyError : firstNameError}
+        errorMessage={firstNameEmptyError?.length ? firstNameEmptyError : firstNameError}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
         defaultValue={userData.firstname}
@@ -51,9 +51,9 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
         onBlur={onBlurLastName}
         defaultValue={userData.lastname}
         ref={lastNameRef}
-        errorMessage={lastNameEmptyError.length ? lastNameEmptyError : lastNameError}
+        errorMessage={lastNameEmptyError?.length ? lastNameEmptyError : lastNameError}
         inputValue={userData?.lastname ?? ""}
-        returnKeyType = {"next"}
+        returnKeyType={"next"}
         onSubmitEditing={() => phoneNumberRef.current.focus()}
       />
       <Input
@@ -66,9 +66,9 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
         onClearInputText={() => phoneNumberRef.current.clear()}
         onBlur={onBlurPhoneNumber}
         ref={phoneNumberRef}
-        errorMessage={phoneError.length ? phoneError : phoneNumberError}
+        errorMessage={phoneError?.length ? phoneError : phoneNumberError}
         inputValue={userData?.phone_number ?? ""}
-      
+
       />
       <Text style={styles.text} title={t('find_doctor_text')} />
     </>

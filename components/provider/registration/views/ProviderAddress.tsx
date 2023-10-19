@@ -28,14 +28,16 @@ const ProviderAddress = ({
   const licenseRef = React.useRef<any>("");
   const addressRef = React.useRef<any>("");
 
-  const onBlurPhoneNumber = () => { validatePhoneNumber(); setUserDataProvider({ ...userDataProvider, phone_number: phoneRef.current.value }) }
-  const onChangePhoneNumber = (value: string) => phoneRef.current.value = value
+  const onBlurPhoneNumber = () => setUserDataProvider({ ...userDataProvider, phone_number: phoneRef.current.value })
+  const onChangePhoneNumber = (value: string) => { phoneRef.current.value = value, validatePhoneNumber(); }
 
   const onBlurLastName = () => setUserDataProvider({ ...userDataProvider, license: licenseRef.current.value })
   const onChangeLastName = (value: string) => licenseRef.current.value = value
 
-  const onBlurAddress = () => { validateAddress(); setUserDataProvider({ ...userDataProvider, address: addressRef.current.value }) }
-  const onChangeAddress = (value: string) => addressRef.current.value = value
+  const onBlurAddress = () => setUserDataProvider({ ...userDataProvider, address: addressRef.current.value })
+  const onChangeAddress = (value: string) => {
+    addressRef.current.value = value, validateAddress();
+  }
 
   const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, license_photo: url });
   console.log('userDataProvider', userDataProvider)
@@ -51,7 +53,7 @@ const ProviderAddress = ({
   const validateAddress = () => {
     if (!addressRef.current.value) {
       setAddressError("Address is required");
-    } else if (addressRef.current.value.length < 4) {
+    } else if (addressRef.current.value?.length < 4) {
       setAddressError('Please fill full address')
     }
     else {
@@ -72,7 +74,7 @@ const ProviderAddress = ({
         ref={phoneRef}
         defaultValue={userDataProvider.phone_number}
         inputValue={userDataProvider?.phone_number ?? ""}
-        errorMessage={phError.length ? phError : phoneError}
+        errorMessage={phError?.length ? phError : phoneError}
         returnKeyType={"next"}
         onSubmitEditing={() => licenseRef.current.focus()}
         onClearInputText={() => phoneRef.current.clear()}
@@ -91,7 +93,7 @@ const ProviderAddress = ({
         returnKeyType={"next"}
         onSubmitEditing={() => addressRef.current.focus()}
         onClearInputText={() => licenseRef.current.clear()}
-        
+
 
       />
 
@@ -103,7 +105,7 @@ const ProviderAddress = ({
         ref={addressRef}
         defaultValue={userDataProvider.address}
         inputValue={userDataProvider?.address ?? ""}
-        errorMessage={adError.length ? adError : addressError}
+        errorMessage={adError?.length ? adError : addressError}
         onClearInputText={() => addressRef.current.clear()}
       />
 
@@ -124,10 +126,10 @@ const ProviderAddress = ({
           />
         </TouchableOpacity>
         {userDataProvider.license_photo && <TouchableOpacity onPress={() => setIsShowModal(true)}>
-           <Image
-              source={require("assets/icon/circumEditBlue.png")}
-              style={styles.editImage}
-            />
+          <Image
+            source={require("assets/icon/circumEditBlue.png")}
+            style={styles.editImage}
+          />
         </TouchableOpacity>}
         <SelectImage
           isShowModal={isShowModal}
@@ -168,6 +170,6 @@ const styles = StyleSheet.create({
   editImage: {
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
-    marginTop:getHeight(dimens.paddingS)
+    marginTop: getHeight(dimens.paddingS)
   },
 });

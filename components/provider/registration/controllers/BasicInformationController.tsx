@@ -48,8 +48,8 @@ const BasicInformationController = ({
 
 
   const onPressNext = async () => {
-    if (currentStep.length !== totalSteps) {
-      if (currentStep[currentStep.length - 1] === 0) {
+    if (currentStep?.length !== totalSteps) {
+      if (currentStep[currentStep?.length - 1] === 0) {
         if (
           (userDataProvider?.firstname?.length ?? 0) > 0 &&
           (userDataProvider.lastname?.length ?? 0) > 0 &&
@@ -59,7 +59,7 @@ const BasicInformationController = ({
         ) {
           setCurrentStep(() => {
             const array = [...currentStep];
-            array.push(array[array.length - 1] + 1);
+            array.push(array[array?.length - 1] + 1);
             return array;
           });
         }
@@ -71,11 +71,11 @@ const BasicInformationController = ({
           if (!userDataProvider.id_photo?.length) Alert.alert("Please Upload ID photo")
         }
       }
-      if (currentStep[currentStep.length - 1] === 1) {
-        if ((userDataProvider.address && userDataProvider.address.length >= 4) && userDataProvider.phone_number && userDataProvider.license_photo) {
+      if (currentStep[currentStep?.length - 1] === 1) {
+        if ((userDataProvider.address && userDataProvider?.address?.length >= 4) && userDataProvider.phone_number && userDataProvider.license_photo) {
           setCurrentStep(() => {
             const array = [...currentStep];
-            array.push(array[array.length - 1] + 1);
+            array.push(array[array?.length - 1] + 1);
             return array;
           });
         }
@@ -87,36 +87,37 @@ const BasicInformationController = ({
         }
       }
     }
-    if (currentStep[currentStep.length - 1] === 2) {
-
-
+    if (currentStep[currentStep?.length - 1] === 2) {
       if (userDataProvider.bank_name && userDataProvider.branch && userDataProvider.registration && userDataProvider.account && userDataProvider.profile_picture) {
-        setIsLoading(true)
-        const res = await OnUpdateProviderUserDetails?.({
-          firstname: userDataProvider.firstname ?? '',
-          lastname: 'saini' ?? '',
-          address: userDataProvider.address ?? '',
-          city: 'ambala',
-          state: 'haryana',
-          country: 'India',
-          phone_number: userDataProvider.phone_number ?? '',
-          profile_picture: userDataProvider.profile_picture ?? '',
-          provider_id: userDataProvider.provider_id?.toString() ?? '',
-          provider_type_id: userDataProvider.type_Provider ?? '',
-          license_number: userDataProvider.license ?? '',
-          upload_license_picture: userDataProvider.license_photo ?? '',
-          bank_name: userDataProvider.bank_name ?? '',
-          branch: userDataProvider.branch ?? '',
-          business_registration_number: userDataProvider.registration ?? '',
-          account: userDataProvider.account ?? ''
-        })
+        if (userDataProvider.type_Provider === "Doctor" || userDataProvider.type_Provider === "Nurse") {
+          setIsLoading(true)
+          const res = await OnUpdateProviderUserDetails?.({
+            firstname: userDataProvider.firstname ?? '',
+            lastname: 'saini' ?? '',
+            address: userDataProvider.address ?? '',
+            city: 'ambala',
+            state: 'haryana',
+            country: 'India',
+            phone_number: userDataProvider.phone_number ?? '',
+            profile_picture: userDataProvider.profile_picture ?? '',
+            provider_id: userDataProvider.provider_id?.toString() ?? '',
+            provider_type_id: userDataProvider.type_Provider ?? '',
+            license_number: userDataProvider.license ?? '',
+            upload_license_picture: userDataProvider.license_photo ?? '',
+            bank_name: userDataProvider.bank_name ?? '',
+            branch: userDataProvider.branch ?? '',
+            business_registration_number: userDataProvider.registration ?? '',
+            account: userDataProvider.account ?? ''
+          })
+          setIsLoading(false)
+          setCurrentStep(() => {
+            const array = [...currentStep];
+            array.push(array[array?.length - 1] + 1);
+            return array;
+          });
+        }
 
-        setIsLoading(false)
-        // if (res?.isSuccessful) {
-        setCurrentStep(() => {
-          return [0, 1, 2, 3];
-        });
-        // }
+
       } else {
         if (!userDataProvider.registration?.length) setRegistrationError("Registration is required");
         if (!userDataProvider.bank_name?.length) setBankNameError("Bank name is required");
@@ -125,8 +126,31 @@ const BasicInformationController = ({
         if (!userDataProvider.profile_picture?.length) Alert.alert("Required")
       }
     }
-    if (currentStep[currentStep.length - 1] === 3) {
+    if (currentStep[currentStep?.length - 1] === 3) {
+
+      setIsLoading(true)
+      const res = await OnUpdateProviderUserDetails?.({
+        firstname: userDataProvider.firstname ?? '',
+        lastname: 'saini' ?? '',
+        address: userDataProvider.address ?? '',
+        city: 'ambala',
+        state: 'haryana',
+        country: 'India',
+        phone_number: userDataProvider.phone_number ?? '',
+        profile_picture: userDataProvider.profile_picture ?? '',
+        provider_id: userDataProvider.provider_id?.toString() ?? '',
+        provider_type_id: userDataProvider.type_Provider ?? '',
+        license_number: userDataProvider.license ?? '',
+        upload_license_picture: userDataProvider.license_photo ?? '',
+        bank_name: userDataProvider.bank_name ?? '',
+        branch: userDataProvider.branch ?? '',
+        business_registration_number: userDataProvider.registration ?? '',
+        account: userDataProvider.account ?? ''
+      })
+
       setIsLoading(false)
+      console.log('res@@@##$#%$^%&%^', res)
+      // if (res?.isSuccessful)
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ProviderConfirmation }],
@@ -136,10 +160,10 @@ const BasicInformationController = ({
 
 
   const onPressBack = () => {
-    if (currentStep.length <= 3) {
-      setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+    if (currentStep?.length <= 3) {
+      setCurrentStep((prev) => prev.slice(0, prev?.length - 1));
     }
-    if (currentStep.length === 4) {
+    if (currentStep?.length === 4) {
       BackHandler.exitApp()
       setCurrentStep(() => {
         return [2];

@@ -119,7 +119,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
               onChangeText={onChangeCardNumber}
               ref={cardNumberRef}
               defaultValue={userData.credit_card_number}
-              errorMessage={cardError.length ? cardError : cardNumberError}
+              errorMessage={cardError?.length ? cardError : cardNumberError}
               inputValue={userData.credit_card_number ?? ''}
               returnKeyType={"next"}
               onSubmitEditing={() => expireDateRef.current.focus()}
@@ -136,7 +136,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 onClearInputText={() => expireDateRef.current.clear()}
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
-                errorMessage={expireDateError.length ? expireDateError : cardExpiry}
+                errorMessage={expireDateError?.length ? expireDateError : cardExpiry}
                 defaultValue={userData.expire_date}
                 inputValue={userData?.expire_date ?? ""}
                 returnKeyType={"next"}
@@ -148,7 +148,7 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
                 type="creditCardNumber"
                 placeholder={registration.cvv}
                 onBlur={onBlueCvv}
-                // errorMessage={cvvErrormessage.length ? cvvErrormessage : cvvError}
+                // errorMessage={cvvErrormessage?.length ? cvvErrormessage : cvvError}
                 onClearInputText={() => cvvRef.current.clear()}
                 onChangeText={onChangeCvv}
                 ref={cvvRef}

@@ -49,12 +49,12 @@ const BasicInformationController = ({
   }, [userData])
 
   const onPressNext = async () => {
-    if (currentStep.length !== totalSteps) {
-      if (currentStep[currentStep.length - 1] === 0) {
+    if (currentStep?.length !== totalSteps) {
+      if (currentStep[currentStep?.length - 1] === 0) {
         if (userData.firstname && userData.lastname && userData.phone_number) {
           setCurrentStep(() => {
             const array = [...currentStep];
-            array.push(array[array.length - 1] + 1);
+            array.push(array[array?.length - 1] + 1);
             return array;
           });
         } else {
@@ -63,8 +63,8 @@ const BasicInformationController = ({
           if (!userData.phone_number?.length) setPhoneNumberError("Phone number is required");
         }
       }
-      if (currentStep[currentStep.length - 1] === 1) {
-        if ((userData.address && userData.address.length >= 4) && userData.id_number) {
+      if (currentStep[currentStep?.length - 1] === 1) {
+        if ((userData.address && userData?.address?.length >= 4) && userData.id_number) {
           setIsLoader(true)
           const res = await onUpdateUserProfile?.({
             firstname: userData?.firstname ?? '',
@@ -86,7 +86,7 @@ const BasicInformationController = ({
           if (res?.isSuccessful) {
             setCurrentStep(() => {
               const array = [...currentStep];
-              array.push(array[array.length - 1] + 1);
+              array.push(array[array?.length - 1] + 1);
               return array;
             });
           }
@@ -95,13 +95,13 @@ const BasicInformationController = ({
           }
         } else {
           if (!userData.address?.length) setAddressError("Address is required")
-          else if (userData.address?.length < 4) setAddressError('Please fill full adresss')
+          else if (userData.address?.length < 4) setAddressError('Please fill full address')
           if (!userData.id_number?.length) setIdNumberError("ID number is required")
           if (!userData.date_of_birth?.length) setDateOfBirthError("Birth date is required")
         }
       }
     }
-    if (currentStep[currentStep.length - 1] === 2) {
+    if (currentStep[currentStep?.length - 1] === 2) {
       console.log("credit_card_number", userData.expire_date, userData.cvv)
       if (userData.credit_card_number && userData.expire_date) {
         setIsLoading(true)
@@ -132,10 +132,10 @@ const BasicInformationController = ({
 
   };
   const onPressBack = () => {
-    if (currentStep.length <= 2) {
-      setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+    if (currentStep?.length <= 2) {
+      setCurrentStep((prev) => prev.slice(0, prev?.length - 1));
     }
-    if (currentStep.length === 3) {
+    if (currentStep?.length === 3) {
       BackHandler.exitApp()
       setCurrentStep(() => {
         return [2];

@@ -28,8 +28,8 @@ const ProviderAddServices = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { onCreateProviderServices, onGetUserAllServices } =
     AuthServicesProvider();
-    const { t } = useTranslation();
-  const {  setUserDataProvider } = UseUserContextProvider();
+  const { t } = useTranslation();
+  const { setUserDataProvider } = UseUserContextProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isServiceLoading, setIsServiceLoading] = useState(false);
   const [services, setServices] = useState([]);
@@ -63,23 +63,19 @@ const ProviderAddServices = () => {
   const [priceError, setPriceError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
 
-  const onBlurServiceName = () => {
-    validateServiceName();
-
-  };
-  const onChangeServiceName = (value: string) =>
+  const onBlurServiceName = () => { };
+  const onChangeServiceName = (value: string) => {
     (serviceNameRef.current.value = value);
-  const onBlurPriceName = () => {
-    validatePrice();
-
-  };
-  const onChangePriceName = (value: string) => (priceRef.current.value = value);
-  const onBlurDescription = () => {
-    validateDescription();
-
-  };
-  const onChangeDescription = (value: string) =>
-    (descriptionRef.current.value = value);
+    validateServiceName();
+  }
+  const onBlurPriceName = () => { };
+  const onChangePriceName = (value: string) => {
+    (priceRef.current.value = value); validatePrice();
+  }
+  const onBlurDescription = () => { };
+  const onChangeDescription = (value: string) => {
+    (descriptionRef.current.value = value); validateDescription();
+  }
 
   const validateServiceName = () => {
     if (!serviceNameRef.current.value) {
@@ -112,7 +108,7 @@ const ProviderAddServices = () => {
     console.log("resp is ", response);
     if (response) {
       setServices(response);
-      setUserDataProvider({...userDataProvider, providerServices:true })
+      setUserDataProvider({ ...userDataProvider, providerServices: true })
     }
 
     setIsServiceLoading(false);
@@ -171,7 +167,7 @@ const ProviderAddServices = () => {
     <>
 
       <ScrollView>
-        {services && services.length > 0 ? (
+        {services && services?.length > 0 ? (
           <>{getAllServices()}</>
         ) : (
           <>
@@ -194,13 +190,13 @@ const ProviderAddServices = () => {
         </View>
       </ScrollView>
 
-        {!isServiceAdded && (
-          <Modal
-            isVisible={isModalVisible}
-            backdropOpacity={0.8}
-            backdropColor={colors.white}>
-              
-      <KeyboardAvoidingView  keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
+      {!isServiceAdded && (
+        <Modal
+          isVisible={isModalVisible}
+          backdropOpacity={0.8}
+          backdropColor={colors.white}>
+
+          <KeyboardAvoidingView keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
             <View style={styles.modalContent}>
               <Text style={styles.addService}>{t("add_service")}</Text>
               <Input
@@ -263,9 +259,9 @@ const ProviderAddServices = () => {
                 onPress={toggleModal}
               />
             </View>
-            </KeyboardAvoidingView>
-          </Modal>
-        )}
+          </KeyboardAvoidingView>
+        </Modal>
+      )}
       {/* {isServiceAdded && (
         <View style={[styles.serviceContainer, styles.elevation]}>
           <Text style={styles.textView}>{userDataProvider.services ?? ""}</Text>

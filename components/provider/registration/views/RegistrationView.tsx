@@ -16,7 +16,7 @@ import NavigationRoutes from "navigator/NavigationRoutes";
 import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
-  const { onPressSignUpProvider, isLoading,renderToast } = RegistrationViewController();
+  const { onPressSignUpProvider, isLoading, renderToast } = RegistrationViewController();
   const navigation = useNavigation()
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
@@ -32,13 +32,13 @@ const RegistrationView = () => {
     emailRef.current.value = value;
     validateEmail()
   }
-  const onBlurEmail = () => { validateEmail() }
+  const onBlurEmail = () => { }
 
   const onChangePassword = (value: string) => {
     passwordRef.current.value = value;
     validatePassword()
   }
-  const onBlurPassword = () => { validatePassword() }
+  const onBlurPassword = () => { }
 
   const isValidEmail = (email: string) => {
     const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -64,7 +64,7 @@ const RegistrationView = () => {
   const validatePassword = () => {
     if (!passwordRef.current.value) {
       setPasswordError("Password is required");
-    } else if (passwordRef.current.value.length < 5) {
+    } else if (passwordRef.current.value?.length < 5) {
       setPasswordError("Password must be at least 8 characters");
     } else if (!isValidPassword(passwordRef.current.value)) {
       setPasswordError("Password must contain special characters");
@@ -81,7 +81,7 @@ const RegistrationView = () => {
 
   return (
     <>
-{renderToast()}
+      {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
@@ -123,7 +123,7 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={(passwordError.length > 0 || emailError.length > 0)}
+          disabled={(passwordError?.length > 0 || emailError?.length > 0)}
         />
       </View>
       <View style={styles.footerContainer}>
