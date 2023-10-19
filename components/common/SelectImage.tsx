@@ -5,6 +5,7 @@ import { colors } from "designToken/colors";
 import { fontWeight } from "designToken/fontWeights";
 import { getHeight } from "libs/StyleHelper";
 import Modal from "react-native-modal/dist/modal";
+import * as Sentry from "@sentry/react-native";
 
 const SelectImage = ({
   imageUri,
@@ -36,20 +37,24 @@ const SelectImage = ({
   };
 
   const handleCameraPicker = () => {
-    ImagePicker?.openCamera?.({
-      width,
-      height,
-      cropping: true,
-    })
-      .then((image) => {
-        image.path?.length && imageUri(image?.path ?? '');
-        setHeight(height);
-        setWidth(width);
-        closeModal(false);
+    try {
+      ImagePicker?.openCamera?.({
+        width,
+        height,
+        cropping: true,
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((image) => {
+          image.path?.length && imageUri(image?.path ?? '');
+          setHeight(height);
+          setWidth(width);
+          closeModal(false);
+        })
+    }
+
+    catch (error) {
+      console.log(error)
+      Sentry.captureException(error);
+    }
   };
 
   return (
