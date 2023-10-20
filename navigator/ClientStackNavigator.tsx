@@ -4,6 +4,7 @@ import NavigationRoutes from "./NavigationRoutes";
 import { UserContext, UserType } from "contexts/useUserContext";
 import { getLocalData } from "libs/datastorage/useLocalStorage";
 import { defaultHeaderStyle } from "components/common/Header";
+import ClientAuthenticatorView from "../screens/authenticator/ClientAuthenticatorView";
 const Stack = createNativeStackNavigator();
 
 const ClientStackNavigator = () => {
@@ -15,9 +16,7 @@ const ClientStackNavigator = () => {
         <Stack.Screen
           options={defaultHeaderStyle}
           name={NavigationRoutes.ClientLogin}
-          component={lazy(
-            () => import("../screens/authenticator/ClientAuthenticatorView")
-          )}
+          component={ClientAuthenticatorView}
         />
         <Stack.Screen
           options={defaultHeaderStyle}

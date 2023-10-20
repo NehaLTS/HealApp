@@ -7,14 +7,9 @@ const OnBoardingViewController = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigation = useNavigation();
 
-  const onPressSkip =() => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: NavigationRoutes.Intro }],
-      })
-    );
-}
+  const onPressSkip = () => {
+    navigation.navigate(NavigationRoutes.Intro)
+  }
   useEffect(() => {
     const interval = setInterval(() => {
       if (swiperRef.current) {

@@ -10,15 +10,15 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
 import ClientAuthenticatorViewController from "./ClientAuthenticatorViewController";
 
 const ClientAuthenticatorView = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const { loginRegisterToggle, isSigninSelected, OnSwitchToProvider } = ClientAuthenticatorViewController();
+  const { loginRegisterToggle, isSigninSelected, OnSwitchToProvider, onPressGuestEntrance, isLoading } = ClientAuthenticatorViewController();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />
@@ -27,6 +27,12 @@ const ClientAuthenticatorView = () => {
 
   return (
     <View style={styles.mainContainer}>
+      {isLoading && <ActivityIndicator size={'large'} style={{
+        left: '45%',
+        top: '40%',
+        position: 'absolute',
+        zIndex: 1
+      }} />}
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <View style={styles.toggleContainer}>
@@ -46,6 +52,7 @@ const ClientAuthenticatorView = () => {
         <Text style={styles.loginText} title={isSigninSelected ? t("client_login") : t("client_sign_up")} />
       </View>
       <View style={styles.inputContainer}>
+
         {isSigninSelected ? (
           <LoginView isSigninSelected={isSigninSelected} />
         ) : (
@@ -56,10 +63,7 @@ const ClientAuthenticatorView = () => {
             title={t("guest_entrance")}
             // style={styles.guestText}
             fontSize={getHeight(fontSize.textXl)}
-            onPress={() => navigation.reset({
-              index: 0,
-              routes: [{ name: NavigationRoutes.ClientHome }],
-            })}
+            onPress={onPressGuestEntrance}
           />
           {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton
@@ -87,21 +91,21 @@ const styles = StyleSheet.create({
     position: "relative",
     flex: 0.34,
   },
-logo: {
+  logo: {
     width: getWidth(130),
     alignSelf: "center",
-    flex:0.6,
-    resizeMode:'contain'
+    flex: 0.6,
+    resizeMode: 'contain'
   },
   toggleContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    flex:0.2,
+    flex: 0.2,
   },
   loginText: {
     fontSize: getHeight(fontSize.textXl),
     alignSelf: "center",
-    flex:0.2,
+    flex: 0.2,
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl)

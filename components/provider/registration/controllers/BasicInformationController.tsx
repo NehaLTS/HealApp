@@ -123,7 +123,7 @@ const BasicInformationController = ({
         if (!userDataProvider.bank_name?.length) setBankNameError("Bank name is required");
         if (!userDataProvider.branch?.length) setBranchError("Branch name is required");
         if (!userDataProvider.account?.length) setAccountError("Account number is required");
-        if (!userDataProvider.profile_picture?.length) Alert.alert("Required")
+        if (!userDataProvider.profile_picture?.length) Alert.alert("Profile picture is required")
       }
     }
     if (currentStep[currentStep?.length - 1] === 3) {

@@ -60,7 +60,7 @@ export const AuthServicesClient = () => {
         client_id: string
     }): Promise<any> =>
         sendRequest(UPDATE_SIGNUP, {
-            method:PATCH,
+            method: PATCH,
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',

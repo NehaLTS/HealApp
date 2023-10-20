@@ -34,7 +34,6 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     renderToast
   } = LoginViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
-
   return (
     <>
       {renderToast()}

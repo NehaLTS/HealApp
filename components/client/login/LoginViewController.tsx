@@ -114,38 +114,47 @@ const LoginViewController = () => {
   }
   /** To handle Google login  button click*/
   const onPressGoogleButton = async () => {
-    setIsLoading(true)
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
         const email = userData?.user?.email ?? ""
         const googleId = userData.user?.uid ?? ""
         /** To handle Google auth request to API */
+        setIsLoading(true)
 
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
+        // setUserData?.({ ...userData, token: res.token, id: res?.id });
+        setLocalData('USER', res)
+        console.log("google api ", res)
+        if (res?.existing === true) {
+          setUserData?.({ ...userData, token: res.token, client_id: res?.user[0]?.client_id.toString() });
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ClientHome }],
+          })
+          setIsLoading(false)
 
-        if (res?.isSuccessful === true) {
-          setIsLoading(true)
-          setUserData?.({ ...userData, token: res.token });
-          setLocalData('USER', res)
-          navigation.navigate('BasicInfo')
         } else {
-          Alert.alert("Login Failed", "Please check your email and password and try again.");
+          setUserData?.({ ...userData, token: res.token, client_id: res?.id.toString() });
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'BasicInfo' }],
+          })
+          setIsLoading(false)
         }
-        setIsLoading(false)
       }
       catch (err) {
         console.log('Error occurred!');
         setIsLoading(false)
       }
     })
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000);
+    // setTimeout(() => {
+    //   setIsLoading(false)
+    // }, 2000);
   }
   /** To handle Facebook login  button click*/
   const onPressFBButton = () => {
-    setIsLoading(true)
+
     /** To process Facebook login from firestore */
 
     onFBAuthProcessing().then(async (userData) => {
@@ -154,28 +163,32 @@ const LoginViewController = () => {
         //TODO: under review with facebook
         // const email = "amanshar@gmail.com"
         // const facebookId = "sharm@hmail.com"
-
+        setIsLoading(true)
         const email = userData.user.email
         const facebookId = userData.additionalUserInfo?.profile?.id
         const res = await onSubmitFBAuthRequest({ email, facebookId });
-        setUserData?.({ ...userData, token: res.token });
+        // setUserData?.({ ...userData, token: res.token, client_id: res?.user[0]?.client_id });
         setLocalData('USER', res)
-        if (res?.isSuccessful === true) {
-          setIsLoading(true)
-          navigation.navigate('BasicInfo')
-
+        if (res?.existing === true) {
+          setUserData?.({ ...userData, token: res.token, client_id: res?.user[0]?.client_id.toString() });
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ClientHome }],
+          })
+          setIsLoading(false)
         } else {
-          Alert.alert("Login Failed", "Please check your email and password and try again.");
+          setUserData?.({ ...userData, token: res.token, client_id: res?.id.toString() });
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'BasicInfo' }],
+          })
           setIsLoading(false)
         }
       } catch (err) {
         console.log('Error occurred!');
-
+        setIsLoading(false)
       }
     })
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000);
   }
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {

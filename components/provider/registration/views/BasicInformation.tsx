@@ -63,7 +63,8 @@ const BasicInformation = () => {
       <Stepper currentStep={currentStep} totalStep={5} />
       <View style={styles.inputContainer}>
         {currentStep[currentStep?.length - 1] === 0 ? (
-          <ProviderDetail firstNameError={firstNameError} lastNameError={lastNameError} specialityError={specialityError} providerTypeError={providerTypeError} />
+          <ProviderServices />
+          // <ProviderDetail firstNameError={firstNameError} lastNameError={lastNameError} specialityError={specialityError} providerTypeError={providerTypeError} />
         ) : currentStep[currentStep?.length - 1] === 1 ? (
           <ProviderAddress phoneError={phoneError} addressError={addressError} />
         ) : currentStep[currentStep?.length - 1] === 2 ? (

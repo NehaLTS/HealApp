@@ -12,13 +12,13 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
 import ProviderAuthenticatorViewController from "./ProviderAuthenticatorViewController";
 
 const ProviderAuthenticatorView = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const { loginRegisterToggle, isSigninSelected, OnSwitchToClient } = ProviderAuthenticatorViewController();
+  const { loginRegisterToggle, isSigninSelected, OnSwitchToClient, isLoading, onPressGuestEntrance } = ProviderAuthenticatorViewController();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />
@@ -27,6 +27,12 @@ const ProviderAuthenticatorView = () => {
 
   return (
     <View style={styles.mainContainer}>
+      {isLoading && <ActivityIndicator size={'large'} style={{
+        left: '45%',
+        top: '40%',
+        position: 'absolute',
+        zIndex: 1
+      }} />}
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <View style={styles.toggleContainer}>
@@ -55,10 +61,7 @@ const ProviderAuthenticatorView = () => {
           <TextButton
             title={t("guest_entrance")}
             fontSize={getHeight(fontSize.textXl)}
-            onPress={() => navigation.reset({
-              index: 0,
-              routes: [{ name: NavigationRoutes.ProviderHomes }],
-            })}
+            onPress={onPressGuestEntrance}
           />
           <TextButton
             title={t("switch_to_client")}
@@ -87,18 +90,18 @@ const styles = StyleSheet.create({
   logo: {
     width: getWidth(130),
     alignSelf: "center",
-    flex:0.6,
-    resizeMode:'contain'
+    flex: 0.6,
+    resizeMode: 'contain'
   },
   toggleContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    flex:0.2,
+    flex: 0.2,
   },
   loginText: {
     fontSize: getHeight(fontSize.textXl),
     alignSelf: "center",
-    flex:0.2,
+    flex: 0.2,
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl)

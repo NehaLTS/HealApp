@@ -125,6 +125,7 @@ const UserAddressView = ({
         defaultValue={userData.id_number}
         errorMessage={idNumber?.length ? idNumber : idNumberError}
         inputValue={userData.id_number ?? ''}
+        returnKeyType={"done"}
       />
       <Text style={styles.text} title={t("find_doctor_text")} />
       <View style={styles.innerContainer}>

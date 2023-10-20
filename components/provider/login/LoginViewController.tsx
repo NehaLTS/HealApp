@@ -92,7 +92,6 @@ const LoginViewController = () => {
   }
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
-    console.log("yegfjusdfj", email, password)
     try {
       if (email != '' || password != '') {
         setIsLoading(true)
@@ -119,66 +118,75 @@ const LoginViewController = () => {
   }
   /** To handle Google login  button click*/
   const onHandleGoogleLogin = () => {
-    setIsLoading(true)
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
-        console.log("vbxcvbnxvb", userData)
+        setIsLoading(true)
         const email = userData?.user?.email
         const googleId = userData.user.providerData[0].uid
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequestProvider({ email, googleId });
-        setUserDataProvider?.({ ...userDataProvider, token: res.token });
+        // setUserDataProvider?.({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
-        if (res?.isSuccessful === true) {
+        console.log("google prob", res)
+        if (res?.existing === true) {
+          setUserDataProvider?.({ ...userDataProvider, token: res.token, provider_id: res?.user[0]?.provider_id.toString() });
           setIsLoading(false)
+
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderHome }],
+          })
+        } else {
+          setUserDataProvider?.({ ...userDataProvider, token: res.token, provider_id: res?.id.toString() });
+          setIsLoading(false)
+
           navigation.reset({
             index: 0,
             routes: [{ name: NavigationRoutes.ProviderRegistration }],
           })
-        } else {
-          setIsLoading(false)
-          Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
       } catch (err) {
         setIsLoading(false)
         console.log('Error occurred!');
       }
     })
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000);
   }
   /** To handle Facebook login  button click*/
   const onHandleFacebookLogin = () => {
-    setIsLoading(true)
     /** To process Facebook login from firestore */
 
     onFBAuthProcessing().then(async (userData) => {
       try {
+        setIsLoading(true)
         const email = userData?.user?.email
-        const facebookId = userData?.user?.providerData[0]?.uid
+        const facebookId = userData?.additionalUserInfo?.profile?.id
+        console.log("userData", userData)
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
-        setUserDataProvider({ ...userDataProvider, token: res.token });
+        // setUserDataProvider({ ...userDataProvider, token: res.token });
         setLocalData('USER', res)
-        if (res?.isSuccessful === true) {
-          setIsLoading(true)
+        if (res?.existing === true) {
+          setUserDataProvider?.({ ...userDataProvider, token: res.token, provider_id: res?.user[0]?.provider_id.toString() });
+          setIsLoading(false)
+
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderHome }],
+          })
+        } else {
+          setUserDataProvider?.({ ...userDataProvider, token: res.token, provider_id: res?.id.toString() });
+          setIsLoading(false)
+
           navigation.reset({
             index: 0,
             routes: [{ name: NavigationRoutes.ProviderRegistration }],
           })
-        } else {
-          setIsLoading(false)
-          Alert.alert("Login Failed", "Please check your email and password and try again.");
         }
       } catch (err) {
         setIsLoading(false)
         console.log('Error occurred!');
       }
     })
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 2000);
   }
   /** To handle social media selection button click */
   const onSelectSocialAuth = (index: number) => {

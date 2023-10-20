@@ -41,6 +41,8 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
         ref={firstNameRef}
         defaultValue={userData.firstname}
         inputValue={userData.firstname ?? ""}
+        returnKeyType={"next"}
+        onSubmitEditing={() => lastNameRef.current.focus()}
       />
       <Input
         placeholder={t('last_name')}

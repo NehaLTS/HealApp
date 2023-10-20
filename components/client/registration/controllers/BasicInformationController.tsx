@@ -76,8 +76,7 @@ const BasicInformationController = ({
             profile_picture: userData.profile_picture ?? "",
             date_of_birth: userData?.date_of_birth ?? "",
             phone_number: userData?.phone_number ?? "",
-            client_id: userData?.client_id ?? "",
-            id_number: userData?.id_number ?? ""
+            client_id: userData?.client_id ?? ""
           });
           setUserData({ ...userData, isSuccessful: res?.isSuccessful })
           setLocalData('USER', res)

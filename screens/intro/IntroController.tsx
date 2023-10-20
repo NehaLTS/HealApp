@@ -9,24 +9,13 @@ const IntroController = () => {
   const navigation = useNavigation<any>();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
   const { setLanguageCode } = useTranslationContext();
-  const continueAsClient = () =>{
-  navigation.reset({
-    index: 0,
-    routes: [
-      {
-        name: NavigationRoutes.ClientStack,
-        params: { isClient: true },
-      },
-    ],
-  });
-}
+  const continueAsClient = () => {
+    navigation.navigate(NavigationRoutes.ClientStack)
+  }
   const continueAsProvider = () => {
-     navigation.reset({
-    index: 0,
-    routes: [{name: NavigationRoutes.ProviderStack}],
-  })
+    navigation.navigate(NavigationRoutes.ProviderStack)
 
-}
+  }
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
 
   const handleLanguageChange = (lng: string) => {

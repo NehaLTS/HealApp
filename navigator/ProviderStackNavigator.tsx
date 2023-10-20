@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { defaultHeaderStyle } from 'components/common/Header';
 import { UserContextProvider, UserTypeProvider } from 'contexts/useUserContextProvider';
 import React, { lazy } from 'react';
+import ProviderAuthenticatorView from '../screens/authenticator/ProviderAuthenticatorView';
 import NavigationRoutes from './NavigationRoutes';
 const Stack = createNativeStackNavigator();
 const ProviderStackNavigator = () => {
@@ -12,7 +13,7 @@ const ProviderStackNavigator = () => {
       <Stack.Navigator initialRouteName={NavigationRoutes.ProviderLogin}>
         <Stack.Screen
           name={NavigationRoutes.ProviderLogin}
-          component={lazy(() => import("../screens/authenticator/ProviderAuthenticatorView"))}
+          component={ProviderAuthenticatorView}
           options={defaultHeaderStyle}
         />
         <Stack.Screen

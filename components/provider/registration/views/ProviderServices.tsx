@@ -68,28 +68,28 @@ const ProviderServices = () => {
       <View style={styles.container}>
         <Text style={styles.text} title={t("yes")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(true)}>
-        {!isPrescriptionSelected 
-         ? 
-          <View style={styles.outerCircle}>
-            <View style={styles.innerCircle} />
-          </View>
-          :
-          <View style={styles.outerCircle}>
-            <View style={[styles.innerCircle, {backgroundColor: colors.secondary, borderColor:colors.secondary}]} />
-          </View>
+          {!isPrescriptionSelected
+            ?
+            <View style={styles.outerCircle}>
+              <View style={styles.innerCircle} />
+            </View>
+            :
+            <View style={styles.outerCircle}>
+              <View style={[styles.innerCircle, { backgroundColor: colors.secondary, borderColor: colors.secondary }]} />
+            </View>
           }
         </TouchableOpacity>
         <Text style={styles.textServices} title={t("no")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
-         {isPrescriptionSelected 
-         ? 
-          <View style={styles.outerCircle}>
-            <View style={styles.innerCircle} />
-          </View>
-          :
-          <View style={styles.outerCircle}>
-            <View style={[styles.innerCircle, {backgroundColor: colors.secondary, borderColor:colors.secondary}]} />
-          </View>
+          {isPrescriptionSelected
+            ?
+            <View style={styles.outerCircle}>
+              <View style={styles.innerCircle} />
+            </View>
+            :
+            <View style={styles.outerCircle}>
+              <View style={[styles.innerCircle, { backgroundColor: colors.secondary, borderColor: colors.secondary }]} />
+            </View>
           }
         </TouchableOpacity>
       </View>
@@ -187,14 +187,16 @@ const styles = StyleSheet.create({
     borderWidth: getWidth(dimens.borderBold),
     justifyContent: 'center',
     alignItems: 'center',
-    padding: getWidth(4)
   },
   innerCircle: {
-    width: '100%',
-    height: '100%',
+    width: getWidth(16),
+    height: getWidth(16),
+    minWidth: getWidth(16),
+    minHeight: getWidth(16),
     borderRadius: getWidth(10),
     borderColor: colors.black,
     borderWidth: getWidth(dimens.borderBold),
+    alignSelf: 'center'
 
   },
 });

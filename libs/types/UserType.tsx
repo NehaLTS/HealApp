@@ -1,5 +1,5 @@
 export interface UserType {
-    existing?: string;
+    existing?: boolean;
     isSuccessful: boolean;
     token?: string;
     user?: User | User[];
@@ -9,6 +9,7 @@ export interface UserType {
     facebookId?: string;
     client_id?: string;
     msg?: string;
+    id?: string;
 }
 
 export interface User {
