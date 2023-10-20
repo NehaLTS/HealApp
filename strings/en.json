@@ -49,7 +49,15 @@
      "no":"No",
      "services_you":"Services you provide",
         "cancel": "Cancel",
-        "start_using_heal": "Start using Heal"
+        "start_using_heal": "Start using Heal",
+        "home":{
+
+                "providerList":[{
+                    "id":1,
+                    "name":"Doctor- Home Visit",
+                    "image":""
+                }]
+        }
 
 
 }
