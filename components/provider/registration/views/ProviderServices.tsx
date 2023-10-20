@@ -68,27 +68,29 @@ const ProviderServices = () => {
       <View style={styles.container}>
         <Text style={styles.text} title={t("yes")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(true)}>
-          <Image
-            source={isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
-            style={[!isPrescriptionSelected ? styles.select : {
-              height: dimens.marginL + 6,
-              width: dimens.marginL + 6,
-              resizeMode: "cover",
-              borderRadius: getHeight(dimens.paddingS)
-            }]}
-          />
+        {!isPrescriptionSelected 
+         ? 
+          <View style={styles.outerCircle}>
+            <View style={styles.innerCircle} />
+          </View>
+          :
+          <View style={styles.outerCircle}>
+            <View style={[styles.innerCircle, {backgroundColor: colors.secondary, borderColor:colors.secondary}]} />
+          </View>
+          }
         </TouchableOpacity>
         <Text style={styles.textServices} title={t("no")} />
         <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
-          <Image
-            source={!isPrescriptionSelected ? require("../../../../assets/icon/spectorOn.png") : require("../../../../assets/icon/selecter.png")}
-            style={[isPrescriptionSelected ? styles.select : {
-              height: dimens.marginL + 6,
-              width: dimens.marginL + 6,
-              resizeMode: "cover",
-              borderRadius: getHeight(dimens.paddingS)
-            }]}
-          />
+         {isPrescriptionSelected 
+         ? 
+          <View style={styles.outerCircle}>
+            <View style={styles.innerCircle} />
+          </View>
+          :
+          <View style={styles.outerCircle}>
+            <View style={[styles.innerCircle, {backgroundColor: colors.secondary, borderColor:colors.secondary}]} />
+          </View>
+          }
         </TouchableOpacity>
       </View>
       <Text style={styles.textS} title={t("services_you")} />
@@ -105,7 +107,7 @@ const ProviderServices = () => {
                   <TouchableOpacity onPress={() => onCheckedPress(index)}>
                     {!item.isChecked ? <View style={styles.checkbox} /> :
                       <View style={[styles.checkbox, { alignItems: 'center', justifyContent: 'center' }]}>
-                        <Image source={require('assets/icon/check.png')} style={{ width: getWidth(16), height: getHeight(10) }} />
+                        <Image source={require('assets/icon/check.png')} style={{ width: '70%', height: '70%', resizeMode: 'contain' }} />
                       </View>
                     }
                   </TouchableOpacity>
@@ -176,7 +178,25 @@ const styles = StyleSheet.create({
   textServices: {
     fontSize: getWidth(fontSize.textXl),
     textAlign: "center"
-  }
+  },
+  outerCircle: {
+    width: getWidth(dimens.marginL),
+    height: getWidth(dimens.marginL),
+    borderRadius: getWidth(dimens.imageS),
+    borderColor: colors.black,
+    borderWidth: getWidth(dimens.borderBold),
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: getWidth(4)
+  },
+  innerCircle: {
+    width: '100%',
+    height: '100%',
+    borderRadius: getWidth(10),
+    borderColor: colors.black,
+    borderWidth: getWidth(dimens.borderBold),
+
+  },
 });
 
 export default ProviderServices;

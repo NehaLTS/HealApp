@@ -8,7 +8,9 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { lazy } from "react";
+import ClientStackNavigator from "navigator/ClientStackNavigator";
+import ProviderStackNavigator from "navigator/ProviderStackNavigator";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TranslationContext } from "./contexts/UseTranslationsContext";
 import IntroStackNavigator from "./navigator/IntroStackNavigator";
@@ -33,15 +35,11 @@ const App = () => {
             <Stack.Screen name={NavigationRoutes.IntroStack} component={IntroStackNavigator} />
             <Stack.Screen
               name={NavigationRoutes.ClientStack}
-              component={lazy(
-                () => import("navigator/ClientStackNavigator")
-              )}
+              component={ClientStackNavigator}
             />
             <Stack.Screen
               name={NavigationRoutes.ProviderStack}
-              component={lazy(
-                () => import("./navigator/ProviderStackNavigator")
-              )}
+              component={ProviderStackNavigator}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -5,14 +5,15 @@ import TextButton from "components/common/TextButton";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
-import { t } from "i18next";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import RegistrationViewController from "../controllers/RegistrationViewController";
 import { GetSignInFooter } from "components/client/login/LoginView";
+import { useTranslation } from "react-i18next";
 
 const RegistrationView = () => {
+  const { t } = useTranslation();
   const { onPressSignUp, isLoading, renderToast } = RegistrationViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
   const [emailError, setEmailError] = useState('');

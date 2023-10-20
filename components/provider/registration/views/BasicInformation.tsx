@@ -17,15 +17,16 @@ import ProviderDetail from "./ProviderDetail";
 import ProviderAddress from "./ProviderAddress";
 import ProviderPayment from "./ProviderPayment";
 import ProviderServices from "./ProviderServices";
-import { t } from "i18next";
 import ProviderAddServies from "./ProviderAddServices";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import TextButton from "components/common/TextButton";
+import { useTranslation } from "react-i18next";
 
 //TODO: static strings are changed after setup i18
 const BasicInformation = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
   // const [userData, setUserData] = React.useState<Partial<UserType>>({});
   const { languageCode } = useTranslationContext();
   const { currentStep, onPressNext, onPressBack, isLoading, setIsLoading,
@@ -48,7 +49,7 @@ const BasicInformation = () => {
   const { userDataProvider } = UseUserContextProvider()
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header title="Registration" />,
+      header: () => <Header title={t("registration")} />,
     });
   }, [navigation]);
   const { registration, common } = getTexts(languageCode);

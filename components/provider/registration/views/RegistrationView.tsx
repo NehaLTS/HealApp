@@ -1,6 +1,5 @@
 import TextButton from "components/common/TextButton";
 import { GetSignInFooter } from "components/provider/login/LoginView";
-import { t } from "i18next";
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { colors } from "../../../../designToken/colors";
@@ -14,9 +13,11 @@ import RegistrationViewController from "../controllers/RegistrationViewControlle
 import Text from "components/common/Text";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const RegistrationView = () => {
-  const { onPressSignUpProvider, isLoading, renderToast } = RegistrationViewController();
+  const { t } = useTranslation();
+  const { onPressSignUpProvider, isLoading,renderToast } = RegistrationViewController();
   const navigation = useNavigation()
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
