@@ -1,5 +1,4 @@
 import Input from "common/Input";
-import Loader from "components/common/Loader";
 import Text from "components/common/Text";
 import { useTranslationContext } from "contexts/UseTranslationsContext";
 import { colors } from "designToken/colors";
@@ -11,23 +10,17 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+import Button from "components/common/Button";
+import TextButton from "components/common/TextButton";
+import NavigationRoutes from "navigator/NavigationRoutes";
+import { useTranslation } from "react-i18next";
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
-const UserPaymentView = ({ isLoading, isGetCardDetails,
-  cardError,
-  expireDateError,
-  evvError: cvvErrormessage,
-  setIsGetCardDetails,
-  setIsCardDetails
-}: {
-  isLoading: boolean, isGetCardDetails: boolean,
-  cardError: string,
-  expireDateError: string,
-  evvError: string,
-  setIsGetCardDetails: React.Dispatch<React.SetStateAction<boolean>>
-  setIsCardDetails: React.Dispatch<React.SetStateAction<boolean>>
-}) => {
+const UserPaymentView = () => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const {
@@ -44,136 +37,170 @@ const UserPaymentView = ({ isLoading, isGetCardDetails,
     cardNumberError,
     cvvError,
     cardExpiry,
-    onClearCard
+    onClearCard,
+    onPressNext,
+    onPressBack,
+    setIsCardDetails,
+    isLoader: isLoading,
+    isCardDetails
   } = UserPaymentViewController();
 
-  // const isLoading = false; //TODO: need to change after binding data
-  // const isGetCardDetails = false; //TODO: need to change after binding data
-  console.log("isloading", isLoading, isGetCardDetails)
   const last4Digits = !userData?.credit_card_number ? '' : userData?.credit_card_number.slice(-4);
   const cardNumber = "**** **** ***** " + last4Digits;
   return (
     <>
-      <View style={styles.container}>
-        {!isGetCardDetails && (
+      <View style={styles.inputsContainer}>
+        <View style={styles.container}>
+          {!isCardDetails && (
+            <>
+              <Image
+                source={require("assets/icon/card.png")}
+                style={styles.creditCard}
+              />
+              <Text
+                title={
+                  !isLoading
+                    ? registration.add_credit_card
+                    : registration.check_credit_card
+                }
+              />
+            </>
+          )}
+        </View>
+        {!isLoading ? (
+          isCardDetails ? (
+            <>
+              <View style={styles.innerContainer}>
+                <Image
+                  source={require("assets/icon/masterCard.png")}
+                  style={styles.googlePay}
+                />
+                <Text title="Master-card" />
+                <View style={styles.cardIcons}>
+                  <TouchableOpacity onPress={() => setIsCardDetails(false) }>
+                    <Image
+                      source={require("assets/icon/edit.png")}
+                      style={styles.cardImages}
+                    />
+                  </TouchableOpacity>
+                  <Image
+                    source={require("assets/icon/cancel.png")}
+                    style={styles.cardImages}
+                  />
+                </View>
+              </View>
+              <View style={styles.cardDetailContainer}>
+                <Text style={styles.cardDetail} title={cardNumber} />
+                <Text
+                  style={styles.cardDetail}
+                  title={`${registration.expires} ` + userData.expire_date}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <Input
+                placeholder={registration.credit_card_number}
+                keyboardType="numeric"
+                inputStyle={styles.cardNumber}
+                onBlur={onBlurCardNumber}
+                onChangeText={onChangeCardNumber}
+                ref={cardNumberRef}
+                defaultValue={userData.credit_card_number}
+                errorMessage={cardNumberError}
+                inputValue={userData.credit_card_number ?? ''}
+                returnKeyType={"next"}
+                onSubmitEditing={() => expireDateRef.current.focus()}
+                // onClearInputText={() => cardNumberRef?.current?.clear()}
+                onClearInputText={onClearCard}
+                maxLength={19}
+              />
+              <View style={[styles.container, styles.inputDateAndCvv]}>
+                <Input
+                  keyboardType="numeric"
+                  placeholder={registration.mm_yy}
+                  inputStyle={styles.expireDate}
+                  onBlur={onBlurExpireDate}
+                  onClearInputText={() => expireDateRef.current.clear()}
+                  onChangeText={onChangeExpireDate}
+                  ref={expireDateRef}
+                  errorMessage={cardExpiry}
+                  defaultValue={userData.expire_date}
+                  inputValue={userData?.expire_date ?? ""}
+                  returnKeyType={"next"}
+                  onSubmitEditing={() => cvvRef.current.focus()}
+                  maxLength={5}
+                />
+                <Input
+                  keyboardType="numeric"
+                  type="creditCardNumber"
+                  placeholder={registration.cvv}
+                  onBlur={onBlueCvv}
+                  // errorMessage={ cvvError}
+                  onClearInputText={() => cvvRef.current.clear()}
+                  onChangeText={onChangeCvv}
+                  ref={cvvRef}
+                  defaultValue={userData.cvv}
+                  inputValue={userData?.cvv ?? ""}
+                  maxLength={3}
+                />
+              </View>
+            </>
+          )
+        ) : (
+          <ActivityIndicator style={styles.loading} size={'large'} />
+        )}
+        {!isLoading && (
           <>
-            <Image
-              source={require("assets/icon/card.png")}
-              style={styles.creditCard}
-            />
-            <Text
-              title={
-                !isLoading
-                  ? registration.add_credit_card
-                  : registration.check_credit_card
-              }
-            />
+            <View style={styles.divider} />
+            <TouchableOpacity style={styles.googlePayContainer}>
+              <Image
+                source={require("assets/icon/googlePay.png")}
+                style={styles.googlePay}
+              />
+              <Text title={registration.add_google_pay} />
+            </TouchableOpacity>
           </>
         )}
       </View>
-      {!isLoading ? (
-        isGetCardDetails ? (
+      <View
+        style={[
+          styles.footerContainer,
+          { justifyContent: isLoading || isCardDetails ? "center" : "space-between" }
+        ]}>
+        {!isLoading && !isCardDetails ? (
           <>
-            <View style={styles.innerContainer}>
-              <Image
-                source={require("assets/icon/masterCard.png")}
-                style={styles.googlePay}
-              />
-              <Text title="Master-card" />
-              <View style={styles.cardIcons}>
-                <TouchableOpacity onPress={() => { setIsGetCardDetails(false), setIsCardDetails(false) }}>
-                  <Image
-                    source={require("assets/icon/edit.png")}
-                    style={styles.cardImages}
-                  />
-                </TouchableOpacity>
-                <Image
-                  source={require("assets/icon/cancel.png")}
-                  style={styles.cardImages}
-                />
-              </View>
-            </View>
-            {/* <View style={styles.cardDetailContainer}>
-              <Text style={styles.cardDetail} title="**** **** ***** 1234" />
-              <Text
-                style={styles.cardDetail}
-                title={`${registration.expires} 03/26`}
-              />
-            </View> */}
-
-            <View style={styles.cardDetailContainer}>
-              <Text style={styles.cardDetail} title={cardNumber} />
-              <Text
-                style={styles.cardDetail}
-                title={`${registration.expires} ` + userData.expire_date}
-              />
-            </View>
+            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+            <Button
+              title={t("next")}
+              isPrimary
+              onPress={onPressNext}
+              isSmall
+              width={'30%'}
+            />
           </>
         ) : (
-          <>
-            <Input
-              placeholder={registration.credit_card_number}
-              keyboardType="numeric"
-              inputStyle={styles.cardNumber}
-              onBlur={onBlurCardNumber}
-              onChangeText={onChangeCardNumber}
-              ref={cardNumberRef}
-              defaultValue={userData.credit_card_number}
-              errorMessage={cardError.length ? cardError : cardNumberError}
-              inputValue={userData.credit_card_number ?? ''}
-              returnKeyType={"next"}
-              onSubmitEditing={() => expireDateRef.current.focus()}
-              // onClearInputText={() => cardNumberRef?.current?.clear()}
-              onClearInputText={onClearCard}
-              maxLength={19}
-            />
-            <View style={[styles.container, styles.inputDateAndCvv]}>
-              <Input
-                keyboardType="numeric"
-                placeholder={registration.mm_yy}
-                inputStyle={styles.expireDate}
-                onBlur={onBlurExpireDate}
-                onClearInputText={() => expireDateRef.current.clear()}
-                onChangeText={onChangeExpireDate}
-                ref={expireDateRef}
-                errorMessage={expireDateError.length ? expireDateError : cardExpiry}
-                defaultValue={userData.expire_date}
-                inputValue={userData?.expire_date ?? ""}
-                returnKeyType={"next"}
-                onSubmitEditing={() => cvvRef.current.focus()}
-                maxLength={5}
-              />
-              <Input
-                keyboardType="numeric"
-                type="creditCardNumber"
-                placeholder={registration.cvv}
-                onBlur={onBlueCvv}
-                // errorMessage={cvvErrormessage.length ? cvvErrormessage : cvvError}
-                onClearInputText={() => cvvRef.current.clear()}
-                onChangeText={onChangeCvv}
-                ref={cvvRef}
-                defaultValue={userData.cvv}
-                inputValue={userData?.cvv ?? ""}
-                maxLength={3}
-              />
-            </View>
-          </>
-        )
-      ) : (
-        <ActivityIndicator style={styles.loading} size={'large'} />
-      )}
-      {!isLoading && (
-        <>
-          <View style={styles.divider} />
-          <TouchableOpacity style={styles.googlePayContainer}>
-            <Image
-              source={require("assets/icon/googlePay.png")}
-              style={styles.googlePay}
-            />
-            <Text title={registration.add_google_pay} />
-          </TouchableOpacity>
-        </>
-      )}
+          <Button
+            title={isLoading ? t("cancel") : t("start_using_heal")}
+            isPrimary
+            isSmall
+            style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
+            onPress={() => (isLoading ? console.log('goback') :
+              navigation.reset({
+                index: -1,
+                routes: [{ name: NavigationRoutes.ClientHome }],
+              })
+            )}
+          />
+        )}
+      </View>
+      {!isLoading && !isCardDetails && (
+        <TextButton containerStyle={{flex:0.08}} style={styles.skipLaterText} title={t('skip_for_later')} onPress={() => navigation.reset({
+          index: 0,
+          routes: [{ name: NavigationRoutes.ClientHome }],
+        })} />
+      )
+      }
     </>
   );
 };
@@ -215,6 +242,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.marginL),
+    verticalAlign:'middle', 
+    height:'100%'
   },
   text: {
     fontSize: fontSize.textM,
@@ -274,5 +303,15 @@ const styles = StyleSheet.create({
     top: '50%',
     position: 'absolute',
     zIndex: 1
+  },
+  inputsContainer: {
+    flex: 0.75,
+  },
+  footerContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    width: "100%",
+    flex: 0.12,
+    justifyContent: "center",
   },
 });

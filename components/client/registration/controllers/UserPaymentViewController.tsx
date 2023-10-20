@@ -1,8 +1,12 @@
+import { useRegistrationContext } from 'contexts/UseRegistrationContext';
 import { UseUserContext } from 'contexts/useUserContext';
-import useUpdateEffect from 'libs/UseUpdateEffect';
-import React, { useState } from 'react'
+import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
+import { setLocalData } from 'libs/datastorage/useLocalStorage';
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
 
 const UserPaymentViewController = () => {
+  const { onCreateCreditCardDetails } = AuthServicesClient()
   const { userData, setUserData } = UseUserContext();
   const cardNumberRef = React.useRef<any>("");
   const expireDateRef = React.useRef<any>("");
@@ -10,6 +14,9 @@ const UserPaymentViewController = () => {
   const [cardNumberError, setCardNumberError] = useState("");
   const [cvvError, setCvvError] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
+  const [isLoader, setIsLoader] = useState<boolean>(false)
+  const [isCardDetails, setIsCardDetails] = useState(false);
+
 
   // useUpdateEffect(() => {
   //   if (cardNumberRef.current.value) setCardNumberError("")
@@ -92,6 +99,39 @@ const UserPaymentViewController = () => {
   }
 
   const onClearCard = () => cardNumberRef.current.clear()
+
+
+  const onPressNext = async () => {
+    if (userData.credit_card_number && userData.expire_date) {
+      setIsLoader(true)
+      const res = await onCreateCreditCardDetails({
+        credit_card_number: userData?.credit_card_number ?? '',
+        expire_date: userData?.expire_date ?? '',
+        cvv: userData?.cvv ?? '',
+        client_id: userData?.client_id ?? ''
+      })
+      setUserData({ ...userData, token: res?.token },)
+      setLocalData('USER', res)
+      if (res?.isSuccessful) {
+        setIsCardDetails(true)
+        setIsLoader(false)
+      }
+      else {
+        Alert.alert('Some error occurred');
+      }
+    }
+    else {
+      if (!userData.credit_card_number?.length) setCardNumberError("Card number is required")
+      if (!userData.cvv?.length) setCvvError("Cvv is required")
+      if (!userData.expire_date?.length) setCardExpiry("Expiry date is required")
+    }
+    }
+
+  const onPressBack = () => {
+      // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+  };
+
+
   return {
     userData,
     cardNumberRef,
@@ -106,7 +146,12 @@ const UserPaymentViewController = () => {
     onChangeExpireDate,
     onChangeCvv,
     cvvError,
-    onClearCard
+    onClearCard,
+    onPressNext,
+    onPressBack,
+    setIsCardDetails,
+    isLoader,
+    isCardDetails
   }
 }
 

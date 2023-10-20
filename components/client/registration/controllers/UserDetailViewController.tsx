@@ -1,3 +1,4 @@
+import { useRegistrationContext } from 'contexts/UseRegistrationContext';
 import { UseUserContext } from 'contexts/useUserContext';
 import useUpdateEffect from 'libs/UseUpdateEffect';
 import React, { useEffect, useState } from 'react';
@@ -11,7 +12,7 @@ const UserDetailViewController = () => {
   const [lastNameError, setLastNameError] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [isNext, setIsNexts] = useState(false);
-
+  const {setCurrentStep} =useRegistrationContext()
   // console.log('isNext', isNext);
   useUpdateEffect(() => {
     console.log('isNext111');
@@ -106,6 +107,27 @@ const UserDetailViewController = () => {
 
 
 
+
+  const onPressNext = () => {
+    if (userData.firstname && userData.lastname && userData.phone_number) {
+      setCurrentStep('address')
+      // setCurrentStep(() => {
+      //   const array = [...currentStep];
+      //   array.push(array[array.length - 1] + 1);
+      //   return array;
+      // });
+    } else {
+      if (!userData.firstname?.length) setFirstNameError("First name is required");
+      if (!userData.lastname?.length) setLastNameError("Last name is required");
+      if (!userData.phone_number?.length) setPhoneNumberError("Phone number is required");
+    }
+  }
+
+  const onPressBack = () => {
+      // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+  };
+
+
   return {
     firstNameError,
     userData,
@@ -121,7 +143,10 @@ const UserDetailViewController = () => {
     onBlurPhoneNumber,
     onChangePhoneNumber,
     validateFirstName,
-    setIsNext
+    setIsNext,
+    onPressNext,
+    onPressBack
+
   };
 }
 

@@ -1,8 +1,13 @@
+import { useRegistrationContext } from 'contexts/UseRegistrationContext';
 import { UseUserContext } from 'contexts/useUserContext';
 import useUpdateEffect from 'libs/UseUpdateEffect';
+import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
+import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 
 const UserAddressViewController = () => {
+  const { onUpdateUserProfile } = AuthServicesClient()
   const [isShowModal, setIsShowModal] = useState(false);
   const { userData, setUserData } = UseUserContext()
   const addressRef = React.useRef<any>("");
@@ -12,6 +17,8 @@ const UserAddressViewController = () => {
   const [idNumberError, setIdNumberError] = useState("");
   const [dateOfBirthError, setDateOfBirthError] = useState("");
   const [isNext, setIsNexts] = useState(false);
+  const [isLoader, setIsLoader] = useState<boolean>(false)
+  const {setCurrentStep} =useRegistrationContext()
 
   useUpdateEffect(() => {
     if (isNext) {
@@ -87,6 +94,48 @@ const UserAddressViewController = () => {
 
   const getImageUrl = (url: string) => setUserData({ ...userData, profile_picture: url });
 
+  const onPressNext = async () => {
+    if ((userData.address && userData.address.length >= 4) && userData.id_number) {
+      setIsLoader(true)
+      const res = await onUpdateUserProfile?.({
+        firstname: userData?.firstname ?? '',
+        lastname: userData?.lastname ?? '',
+        address: userData?.address ?? "",
+        city: userData?.city ?? '',
+        state: userData.state ?? '',
+        country: userData?.country ?? '',
+        profile_picture: userData.profile_picture ?? "",
+        date_of_birth: userData?.date_of_birth ?? "",
+        phone_number: userData?.phone_number ?? "",
+        client_id: userData?.client_id ?? "",
+  
+      });
+      setUserData({ ...userData, isSuccessful: res?.isSuccessful })
+      setLocalData('USER', res)
+      setIsLoader(false)
+      if (res?.isSuccessful) {
+        setCurrentStep('payment')
+        // setCurrentStep(() => {
+        //   const array = [...currentStep];
+        //   array.push(array[array.length - 1] + 1);
+        //   return array;
+        // });
+      }
+      else {
+        Alert.alert('some error occurred');
+      }
+    } else {
+      if (!userData.address?.length) setAddressError("Address is required")
+      if ((userData.address?.length ?? 0) < 4) setAddressError('Please fill full adresss')
+      if (!userData.id_number?.length) setIdNumberError("ID number is required")
+      if (!userData.date_of_birth?.length) setDateOfBirthError("Birth date is required")
+    }
+    }
+
+  const onPressBack = () => {
+      // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+  };
+
 
   return {
     userData,
@@ -105,7 +154,9 @@ const UserAddressViewController = () => {
     addressError,
     dateOfBirthError,
     idNumberError,
-    setUserData
+    setUserData,
+    onPressNext,
+    onPressBack
   }
 }
 

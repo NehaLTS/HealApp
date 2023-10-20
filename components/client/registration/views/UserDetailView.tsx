@@ -1,16 +1,16 @@
 import Input from "common/Input";
+import Button from "components/common/Button";
 import Text from "components/common/Text";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight } from "libs/StyleHelper";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import UserDetailViewController from "../controllers/UserDetailViewController";
+import { useRegistrationContext } from "contexts/UseRegistrationContext";
 
-const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
-}
-) => {
+const UserDetailView = () => {
   const { t } = useTranslation();
   const {
     userData,
@@ -26,51 +26,65 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
     onBlurPhoneNumber,
     firstNameError,
     onChangePhoneNumber,
+    onPressNext,
+    onPressBack
   } = UserDetailViewController();
 
 
   return (
     <>
-      <Input
-        placeholder={t('first_name')}
-        inputStyle={styles.input}
-        onBlur={onBlurFirstName}
-        onClearInputText={() => firstNameRef.current.clear()}
-        errorMessage={firstNameEmptyError.length ? firstNameEmptyError : firstNameError}
-        onChangeText={onChangeFirstName}
-        ref={firstNameRef}
-        defaultValue={userData.firstname}
-        inputValue={userData.firstname ?? ""}
-      />
-      <Input
-        placeholder={t('last_name')}
-        type={"nameSuffix"}
-        inputStyle={styles.inputLastName}
-        onChangeText={onChangeLastName}
-        onClearInputText={() => lastNameRef.current.clear()}
-        onBlur={onBlurLastName}
-        defaultValue={userData.lastname}
-        ref={lastNameRef}
-        errorMessage={lastNameEmptyError.length ? lastNameEmptyError : lastNameError}
-        inputValue={userData?.lastname ?? ""}
-        returnKeyType = {"next"}
-        onSubmitEditing={() => phoneNumberRef.current.focus()}
-      />
-      <Input
-        placeholder={t('phone_number')}
-        type={"telephoneNumber"}
-        keyboardType="number-pad"
-        inputStyle={styles.inputPhone}
-        onChangeText={onChangePhoneNumber}
-        defaultValue={userData.phone_number}
-        onClearInputText={() => phoneNumberRef.current.clear()}
-        onBlur={onBlurPhoneNumber}
-        ref={phoneNumberRef}
-        errorMessage={phoneError.length ? phoneError : phoneNumberError}
-        inputValue={userData?.phone_number ?? ""}
-      
-      />
-      <Text style={styles.text} title={t('find_doctor_text')} />
+      <View style={styles.inputContainer}>
+        <Input
+          placeholder={t('first_name')}
+          inputStyle={styles.input}
+          onBlur={onBlurFirstName}
+          onClearInputText={() => firstNameRef.current.clear()}
+          errorMessage={firstNameError}
+          onChangeText={onChangeFirstName}
+          ref={firstNameRef}
+          defaultValue={userData.firstname}
+          inputValue={userData.firstname ?? ""}
+        />
+        <Input
+          placeholder={t('last_name')}
+          type={"nameSuffix"}
+          inputStyle={styles.inputLastName}
+          onChangeText={onChangeLastName}
+          onClearInputText={() => lastNameRef.current.clear()}
+          onBlur={onBlurLastName}
+          defaultValue={userData.lastname}
+          ref={lastNameRef}
+          errorMessage={lastNameError}
+          inputValue={userData?.lastname ?? ""}
+          returnKeyType={"next"}
+          onSubmitEditing={() => phoneNumberRef.current.focus()}
+        />
+        <Input
+          placeholder={t('phone_number')}
+          type={"telephoneNumber"}
+          keyboardType="number-pad"
+          inputStyle={styles.inputPhone}
+          onChangeText={onChangePhoneNumber}
+          defaultValue={userData.phone_number}
+          onClearInputText={() => phoneNumberRef.current.clear()}
+          onBlur={onBlurPhoneNumber}
+          ref={phoneNumberRef}
+          errorMessage={phoneNumberError}
+          inputValue={userData?.phone_number ?? ""}
+
+        />
+        <Text style={styles.text} title={t('find_doctor_text')} />
+      </View>
+      <View style={styles.footerContainer}>
+        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        <Button
+          title={t("next")}
+          isPrimary
+          onPress={onPressNext}
+          isSmall
+          width={'30%'}
+        />
+      </View>
     </>
   );
 };
@@ -78,6 +92,9 @@ const UserDetailView = ({ firstNameEmptyError, lastNameEmptyError, phoneError
 export default UserDetailView;
 
 const styles = StyleSheet.create({
+  inputContainer: {
+    flex: 0.75,
+  },
   text: {
     fontSize: getHeight(fontSize.textM),
     paddingTop: getHeight(dimens.paddingXs)
@@ -90,5 +107,12 @@ const styles = StyleSheet.create({
   },
   inputLastName: {
     marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
+  },
+  footerContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    width: "100%",
+    flex: 0.12,
+    justifyContent: "space-between"
   },
 });

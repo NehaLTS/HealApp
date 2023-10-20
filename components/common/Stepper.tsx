@@ -5,18 +5,17 @@ import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import { dimens } from "designToken/dimens";
 
-const Stepper = ({ currentStep , totalStep }: { currentStep:number[], totalStep: number }) => {
-  const step = Array(totalStep).fill(0);
+const Stepper = ({ currentStep , totalStep }: { currentStep:string, totalStep: string[] }) => {
   return (
     <View style={styles.container}>
-      {step?.map((_, index: number) => (
+      {totalStep?.map((item, index: number) => (
         <View
           key={index}
           style={[
             styles.activeButtonView,
             {
               backgroundColor:
-              currentStep?.includes(index) ? colors.secondary : colors.disabled,
+              item === currentStep ? colors.secondary : colors.disabled,
             },
           ]}
         >

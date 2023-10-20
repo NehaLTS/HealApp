@@ -9,10 +9,9 @@ import { useTranslation } from "react-i18next";
 import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
 import DatePicker from 'react-native-date-picker'
+import Button from "components/common/Button";
 
-const UserAddressView = ({
-  address, dateOfBirth, idNumber
-}) => {
+const UserAddressView = () => {
   const { t } = useTranslation();
   const {
     userData,
@@ -31,11 +30,13 @@ const UserAddressView = ({
     addressError,
     dateOfBirthError,
     idNumberError,
-    setUserData
+    setUserData,
+    onPressNext,
+    onPressBack
   } = UserAddressViewController();
   const currentDate = new Date();
 
-  const [date, setDate] = useState(new Date(currentDate.getFullYear() - 15,0,1));
+  const [date, setDate] = useState(new Date(currentDate.getFullYear() - 15, 0, 1));
   const [open, setOpen] = useState(false)
   const [firstOpenDialog, setFirstOpenDialog] = useState(true)
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -55,7 +56,7 @@ const UserAddressView = ({
   //   else
   //     return digit;
   // }
-  
+
   const maxDate = new Date(currentDate.getFullYear() - 15, currentDate.getMonth(), currentDate.getDate());
 
   // const formatBirthDate = () => {
@@ -83,87 +84,99 @@ const UserAddressView = ({
       // onDateChange={(e) => setUserData({ ...userData, date_of_birth: birthDateRef.current.value }) }
       // onDateChange={(e) => console.log('first', e)}
       />}
-      <Input
-        placeholder={t("address")}
-        type={"fullStreetAddress"}
-        inputStyle={styles.input}
-        onBlur={onBlurAddress}
-        onClearInputText={() => addressRef.current.clear()}
-        onChangeText={onChangeAddress}
-        ref={addressRef}
-        defaultValue={userData.address}
-        errorMessage={address.length ? address : addressError}
-        inputValue={userData.address ?? ''}
-        returnKeyType={"next"}
-        onSubmitEditing={() => birthDateRef.current.focus()}
-      />
-      <Input
-        placeholder={t("date_of_birth")}
-        keyboardType="numeric"
-        errorMessage={dateOfBirth.length ? dateOfBirth : dateOfBirthError}
-        inputStyle={styles.inputDOB}
-        onBlur={onBlurBirthDate}
-        onChangeText={onChangeBirthDate}
-        ref={birthDateRef}
-        defaultValue={formattedDate === 'Invalid-Date' ? '' : formattedDate}
-        inputValue={userData.date_of_birth?.toString() ?? ''}
-        onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
-        type="dateOfBirth"
-        returnKeyType={"next"}
-        editable={false}
-        onSubmitEditing={() => idNumberRef.current.focus()}
-      />
-      <Input
-        placeholder={t("id_number")}
-        type={"telephoneNumber"}
-        keyboardType="number-pad"
-        inputStyle={styles.inputIdNumber}
-        onBlur={onBlurIdNumber}
-        onChangeText={onChangeIdNumber}
-        ref={idNumberRef}
-        onClearInputText={() => idNumberRef.current.clear()}
-        defaultValue={userData.id_number}
-        errorMessage={idNumber.length ? idNumber : idNumberError}
-        inputValue={userData.id_number ?? ''}
-      />
-      <Text style={styles.text} title={t("find_doctor_text")} />
-      <View style={styles.innerContainer}>
-        <Text
-          style={[!userData.profile_picture && { marginTop: getHeight(dimens.marginS) }]}
-          title={t("add_profile")}
+      <View style={styles.inputContainer}>
+        <Input
+          placeholder={t("address")}
+          type={"fullStreetAddress"}
+          inputStyle={styles.input}
+          onBlur={onBlurAddress}
+          onClearInputText={() => addressRef.current.clear()}
+          onChangeText={onChangeAddress}
+          ref={addressRef}
+          defaultValue={userData.address}
+          errorMessage={addressError}
+          inputValue={userData.address ?? ''}
+          returnKeyType={"next"}
+          onSubmitEditing={() => birthDateRef.current.focus()}
         />
-        <TouchableOpacity
-          activeOpacity={userData.profile_picture ? 1 : 0.5}
-          onPress={() => !userData.profile_picture && setIsShowModal(true)}
-          style={[styles.imageContainer, { marginLeft: getWidth(dimens.paddingXs) }]}>
-          <Image
-            source={
-              userData.profile_picture
-                ? { uri: userData.profile_picture }
-                : require("assets/icon/editprofile.png")
-            }
-            style={
-              userData.profile_picture
-                ? styles.selectedImage
-                : styles.editProfile
-            }
+        <Input
+          placeholder={t("date_of_birth")}
+          keyboardType="numeric"
+          errorMessage={dateOfBirthError}
+          inputStyle={styles.inputDOB}
+          onBlur={onBlurBirthDate}
+          onChangeText={onChangeBirthDate}
+          ref={birthDateRef}
+          defaultValue={formattedDate === 'Invalid-Date' ? '' : formattedDate}
+          inputValue={userData.date_of_birth?.toString() ?? ''}
+          onPressCalender={() => { setFirstOpenDialog(false); setOpen(true) }}
+          type="dateOfBirth"
+          returnKeyType={"next"}
+          editable={false}
+          onSubmitEditing={() => idNumberRef.current.focus()}
+        />
+        <Input
+          placeholder={t("id_number")}
+          type={"telephoneNumber"}
+          keyboardType="number-pad"
+          inputStyle={styles.inputIdNumber}
+          onBlur={onBlurIdNumber}
+          onChangeText={onChangeIdNumber}
+          ref={idNumberRef}
+          onClearInputText={() => idNumberRef.current.clear()}
+          defaultValue={userData.id_number}
+          errorMessage={idNumberError}
+          inputValue={userData.id_number ?? ''}
+        />
+        <Text style={styles.text} title={t("find_doctor_text")} />
+        <View style={styles.innerContainer}>
+          <Text
+            style={[!userData.profile_picture && { marginTop: getHeight(dimens.marginS) }]}
+            title={t("add_profile")}
           />
-        </TouchableOpacity>
-        {userData.profile_picture && (
           <TouchableOpacity
             activeOpacity={userData.profile_picture ? 1 : 0.5}
-            onPress={() => setIsShowModal(true)}
-            style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}>
+            onPress={() => !userData.profile_picture && setIsShowModal(true)}
+            style={[styles.imageContainer, { marginLeft: getWidth(dimens.paddingXs) }]}>
             <Image
-              source={require("assets/icon/circumEditBlue.png")}
-              style={styles.editImage}
+              source={
+                userData.profile_picture
+                  ? { uri: userData.profile_picture }
+                  : require("assets/icon/editprofile.png")
+              }
+              style={
+                userData.profile_picture
+                  ? styles.selectedImage
+                  : styles.editProfile
+              }
             />
           </TouchableOpacity>
-        )}
-        <SelectImage
-          isShowModal={isShowModal}
-          closeModal={setIsShowModal}
-          imageUri={getImageUrl}
+          {userData.profile_picture && (
+            <TouchableOpacity
+              activeOpacity={userData.profile_picture ? 1 : 0.5}
+              onPress={() => setIsShowModal(true)}
+              style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}>
+              <Image
+                source={require("assets/icon/circumEditBlue.png")}
+                style={styles.editImage}
+              />
+            </TouchableOpacity>
+          )}
+          <SelectImage
+            isShowModal={isShowModal}
+            closeModal={setIsShowModal}
+            imageUri={getImageUrl}
+          />
+        </View>
+      </View>
+      <View style={styles.footerContainer}>
+        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        <Button
+          title={t("next")}
+          isPrimary
+          onPress={onPressNext}
+          isSmall
+          width={'30%'}
         />
       </View>
     </>
@@ -211,5 +224,15 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
     // paddingLeft: getWidth(5)
+  },
+  inputContainer: {
+    flex: 0.75,
+  },
+  footerContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    width: "100%",
+    flex: 0.12,
+    justifyContent: "space-between"
   },
 });
