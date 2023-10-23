@@ -27,7 +27,7 @@ export interface User {
 export interface UserTypeProvider {
     id?: string | null;
     isSuccessful?: boolean;
-    existing: string;
+    existing: boolean;
     token?: string;
     user?: UserProvider;
     msg?: string
