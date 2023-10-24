@@ -8,12 +8,10 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 import UserDetailViewController from "../controllers/UserDetailViewController";
-import { useRegistrationContext } from "contexts/UseRegistrationContext";
 
 const UserDetailView = () => {
   const { t } = useTranslation();
   const {
-    userData,
     firstNameRef,
     lastNameRef,
     phoneNumberRef,
@@ -27,62 +25,60 @@ const UserDetailView = () => {
     firstNameError,
     onChangePhoneNumber,
     onPressNext,
-    onPressBack
+    onPressBack,
   } = UserDetailViewController();
-
 
   return (
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={t('first_name')}
+          placeholder={t("first_name")}
           inputStyle={styles.input}
           onBlur={onBlurFirstName}
           onClearInputText={() => firstNameRef.current.clear()}
           errorMessage={firstNameError}
           onChangeText={onChangeFirstName}
           ref={firstNameRef}
-          defaultValue={userData.firstname}
-          inputValue={userData.firstname ?? ""}
+          defaultValue={""}
+          inputValue={firstNameRef.current.value}
         />
         <Input
-          placeholder={t('last_name')}
+          placeholder={t("last_name")}
           type={"nameSuffix"}
           inputStyle={styles.inputLastName}
           onChangeText={onChangeLastName}
           onClearInputText={() => lastNameRef.current.clear()}
           onBlur={onBlurLastName}
-          defaultValue={userData.lastname}
+          defaultValue={""}
           ref={lastNameRef}
           errorMessage={lastNameError}
-          inputValue={userData?.lastname ?? ""}
+          inputValue={lastNameRef.current.value}
           returnKeyType={"next"}
           onSubmitEditing={() => phoneNumberRef.current.focus()}
         />
         <Input
-          placeholder={t('phone_number')}
+          placeholder={t("phone_number")}
           type={"telephoneNumber"}
           keyboardType="number-pad"
           inputStyle={styles.inputPhone}
           onChangeText={onChangePhoneNumber}
-          defaultValue={userData.phone_number}
+          defaultValue={""}
           onClearInputText={() => phoneNumberRef.current.clear()}
           onBlur={onBlurPhoneNumber}
           ref={phoneNumberRef}
           errorMessage={phoneNumberError}
-          inputValue={userData?.phone_number ?? ""}
-
+          inputValue={phoneNumberRef.current.value}
         />
-        <Text style={styles.text} title={t('find_doctor_text')} />
+        <Text style={styles.text} title={t("find_doctor_text")} />
       </View>
       <View style={styles.footerContainer}>
-        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        <Button title={t("back")} isSmall onPress={onPressBack} width={"30%"} />
         <Button
           title={t("next")}
           isPrimary
           onPress={onPressNext}
           isSmall
-          width={'30%'}
+          width={"30%"}
         />
       </View>
     </>
@@ -97,7 +93,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: getHeight(fontSize.textM),
-    paddingTop: getHeight(dimens.paddingXs)
+    paddingTop: getHeight(dimens.paddingXs),
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
@@ -113,6 +109,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     width: "100%",
     flex: 0.12,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 });

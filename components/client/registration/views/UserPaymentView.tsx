@@ -9,7 +9,6 @@ import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
-
 import { useNavigation } from "@react-navigation/native";
 import Button from "components/common/Button";
 import TextButton from "components/common/TextButton";
@@ -24,7 +23,6 @@ const UserPaymentView = () => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const {
-    userData,
     cardNumberRef,
     expireDateRef,
     cvvRef,
@@ -36,17 +34,18 @@ const UserPaymentView = () => {
     onChangeCvv,
     cardNumberError,
     cvvError,
-    cardExpiry,
+    cardExpiryError,
     onClearCard,
     onPressNext,
     onPressBack,
     setIsCardDetails,
     isLoader: isLoading,
-    isCardDetails
+    isCardDetails,
+    cardExpiry,
+    cardNumber
   } = UserPaymentViewController();
 
-  const last4Digits = !userData?.credit_card_number ? '' : userData?.credit_card_number.slice(-4);
-  const cardNumber = "**** **** ***** " + last4Digits;
+  
   return (
     <>
       <View style={styles.inputsContainer}>
@@ -93,7 +92,7 @@ const UserPaymentView = () => {
                 <Text style={styles.cardDetail} title={cardNumber} />
                 <Text
                   style={styles.cardDetail}
-                  title={`${registration.expires} ` + userData.expire_date}
+                  title={`${registration.expires} ` + cardExpiry}
                 />
               </View>
             </>
@@ -106,9 +105,9 @@ const UserPaymentView = () => {
                 onBlur={onBlurCardNumber}
                 onChangeText={onChangeCardNumber}
                 ref={cardNumberRef}
-                defaultValue={userData.credit_card_number}
+                defaultValue={""}
                 errorMessage={cardNumberError}
-                inputValue={userData.credit_card_number ?? ''}
+                inputValue={cardNumber}
                 returnKeyType={"next"}
                 onSubmitEditing={() => expireDateRef.current.focus()}
                 // onClearInputText={() => cardNumberRef?.current?.clear()}
@@ -124,9 +123,9 @@ const UserPaymentView = () => {
                   onClearInputText={() => expireDateRef.current.clear()}
                   onChangeText={onChangeExpireDate}
                   ref={expireDateRef}
-                  errorMessage={cardExpiry}
-                  defaultValue={userData.expire_date}
-                  inputValue={userData?.expire_date ?? ""}
+                  errorMessage={cardExpiryError}
+                  defaultValue={""}
+                  inputValue={cardExpiry}
                   returnKeyType={"next"}
                   onSubmitEditing={() => cvvRef.current.focus()}
                   maxLength={5}
@@ -136,12 +135,12 @@ const UserPaymentView = () => {
                   type="creditCardNumber"
                   placeholder={registration.cvv}
                   onBlur={onBlueCvv}
-                  // errorMessage={ cvvError}
+                  errorMessage={ cvvError}
                   onClearInputText={() => cvvRef.current.clear()}
                   onChangeText={onChangeCvv}
                   ref={cvvRef}
-                  defaultValue={userData.cvv}
-                  inputValue={userData?.cvv ?? ""}
+                  defaultValue={""}
+                  inputValue={""}
                   maxLength={3}
                 />
               </View>

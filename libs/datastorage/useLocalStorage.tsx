@@ -1,5 +1,7 @@
 import { UserType, UserTypeProvider } from '../types/UserType';
-import { dataStorage } from './LocalStorage'
+import { MMKV } from 'react-native-mmkv'
+const dataStorage = new MMKV()
+
 
 type StorageKeys = 'USER'
 type StorageObject = { USER: UserType | UserTypeProvider }

@@ -16,7 +16,7 @@ import {
   View,
 } from "react-native";
 
-const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
+const LoginView = ({ }: { }) => {
   const { t } = useTranslation();
   const {
     handleSignIn,
