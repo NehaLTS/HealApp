@@ -77,7 +77,10 @@ const RegistrationViewController = () => {
       setLocalData("USER", res);
       setIsLoading(false);
       if (res?.isSuccessful) {
-        navigation.navigate("OnboardDetails");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "OnboardDetails"}],
+        })
       } else {
         showToast("User already exist", "Please try SignIn", "error");
       }
