@@ -186,7 +186,7 @@ const UserPaymentView = () => {
             style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
             onPress={() => (isLoading ? console.log('goback') :
               navigation.reset({
-                index: -1,
+                index: 0,
                 routes: [{ name: NavigationRoutes.ClientHome }],
               })
             )}
@@ -194,7 +194,7 @@ const UserPaymentView = () => {
         )}
       </View>
       {!isLoading && !isCardDetails && (
-        <TextButton containerStyle={{flex:0.08}} style={styles.skipLaterText} title={t('skip_for_later')} onPress={() => navigation.reset({
+        <TextButton fontSize={getWidth(fontSize.textXl)} containerStyle={{flex:0.08}} style={styles.skipLaterText} title={t('skip_for_later')} onPress={() => navigation.reset({
           index: 0,
           routes: [{ name: NavigationRoutes.ClientHome }],
         })} />

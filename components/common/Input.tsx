@@ -139,7 +139,7 @@ const Input = forwardRef(({
           </TouchableOpacity>
         )}
         {type === "dateOfBirth" && (
-          <TouchableOpacity onPress={() => { onPressCalender?.(); onFocusHandler() }}>
+          <TouchableOpacity activeOpacity={0.6} style={styles.birthDate} onPress={() => { onPressCalender?.(); onFocusHandler() }}>
             <Image
               source={require("assets/icon/calender_icon.png")}
               style={styles.datePicker}
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     marginRight: getHeight(dimens.marginS),
     resizeMode: 'contain'
   },
+  birthDate:{ alignItems:'flex-end', position:'absolute', width:'100%'}
 });
 
 

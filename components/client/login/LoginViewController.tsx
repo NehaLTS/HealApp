@@ -9,6 +9,7 @@ import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvi
 import { GoogleAuthProvider } from "../../../libs/authsevices/GoogleAuthProvider";
 import React from "react";
 import { emailPattern, passwordPattern } from "libs/utility/Utils";
+import useToast from "components/common/useToast";
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ const LoginViewController = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const emailRef = React.useRef<any>("");
   const passwordRef = React.useRef<any>("");
-  // const { showToast, renderToast } = useToast();
+  const { showToast, renderToast } = useToast();
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -107,11 +108,7 @@ const LoginViewController = () => {
 
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res);
-        else
-          Alert.alert(
-            "Login Failed",
-            "Please check your email and password and try again."
-          );
+        else  showToast("Login Failed", "Please check your email and password and try again.", "error");
       }
       // else  showToast("", "Please enter email or password", "warning")
     } catch (error) {
@@ -199,7 +196,7 @@ const LoginViewController = () => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    // renderToast
+    renderToast
   };
 };
 

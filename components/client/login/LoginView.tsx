@@ -31,13 +31,13 @@ const LoginView = ({ }: { }) => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    // renderToast
+    renderToast
   } = LoginViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
-    {/* {renderToast()} */}
+      {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
