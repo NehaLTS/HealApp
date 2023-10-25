@@ -22,7 +22,7 @@ const ClientStackNavigator = () => {
         <Stack.Screen
           options={defaultHeaderStyle}
           name={NavigationRoutes.ClientHome}
-          component={lazy(() => import("../components/client/home/HomeView"))}
+          component={lazy(() => import("../screens/client/HomeScreen"))}
         />
         <Stack.Screen
           name={"BasicInfo"}

@@ -57,7 +57,7 @@ export const AuthServicesProvider = () => {
         branch: string;
         business_registration_number: string;
         account: string;
-        
+
     }): Promise<UserTypeProvider> =>
         sendRequest(UPDATE_SIGNUP_PROVIDER, {
             method: PATCH,
@@ -72,36 +72,34 @@ export const AuthServicesProvider = () => {
         description: string,
         price: string,
         provider_id: string,
-      
+
         specialty_id: string
-    }): Promise<UserTypeProvider> =>{
+    }): Promise<UserTypeProvider> => {
 
-        console.log("body is ",body);
+        console.log("body is ", body);
 
-       return sendRequest(CREATE_PROVIDER_SEVICES, {
+        return sendRequest(CREATE_PROVIDER_SEVICES, {
             method: POST,
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                // 'x-access-token': userDataProvider?.token
-                'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
+                'x-access-token': userDataProvider?.token
+                // 'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
             } as unknown as HeadersInit
         })
     }
 
 
-      
 
-        
-    const onGetProviderTypes = (): Promise<any> =>(
+
+
+    const onGetProviderTypes = (): Promise<any> => (
         sendRequest(GET_PROVIDER_TYPES, {
             method: GET,
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': userDataProvider?.token
             } as unknown as HeadersInit
-        }).then((res) => {
-          return  JSON.stringify(res)
         })
     )
 
@@ -114,28 +112,28 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-              //  'x-access-token': userDataProvider?.token
-                'x-access-token' : userDataProvider?.token
+                //  'x-access-token': userDataProvider?.token
+                'x-access-token': userDataProvider?.token
             } as unknown as HeadersInit
         })
 
 
     const onGetUserAllServices = (body: {
-            provider_id: string,
-        }): Promise<any> =>
-            sendRequest(GET_USER_SERVICES, {
-                method: POST,
-                body: body as unknown as BodyInit,
-                headers: {
-                    'Content-Type': 'application/json',
-                  //  'x-access-token': userDataProvider?.token
-                    'x-access-token' :   userDataProvider?.token
-                } as unknown as HeadersInit
-            })
+        provider_id: string,
+    }): Promise<any> =>
+        sendRequest(GET_USER_SERVICES, {
+            method: POST,
+            body: body as unknown as BodyInit,
+            headers: {
+                'Content-Type': 'application/json',
+                //  'x-access-token': userDataProvider?.token
+                'x-access-token': userDataProvider?.token
+            } as unknown as HeadersInit
+        })
 
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,
-        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes,onGetProviderService,
+        OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes, onGetProviderService,
         onGetUserAllServices
     }
 }

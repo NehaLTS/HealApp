@@ -4,30 +4,30 @@ import { dimens } from "designToken/dimens";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View, TouchableOpacity } from "react-native";
 import Header from "../../components/common/Header";
 import { fontSize } from "../../designToken/fontSizes";
 import HomeViewController from "./HomeViewController";
 import Text from "components/common/Text";
 import SearchBox from "components/common/SearchBox";
 import CardView from "components/common/CardView";
+import { providerList } from "libs/types/ProvierTypes";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { providerList,bannerAds } = HomeViewController();
+  const { providerList, bannerAds, onPressProviderCard, onPressAdBanner } = HomeViewController();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header isHideTitle />,
     });
   }, [navigation]);
-
-    const getProviderList = () => {
-    return providerList.map((item:any, index:number) => (
+  const getProviderList = () => {
+    return providerList.map((item: providerList, index: number) => (
       <View key={index} style={[]}>
-          {/* Pass on Press of card and array of data as props*/}
-    <CardView/>
+        {/* Pass on Press of card and array of data as props*/}
+        <CardView providerData={item} onPressProviderCard={onPressProviderCard} />
       </View>
     ));
   };
@@ -36,13 +36,16 @@ const HomeScreen = () => {
     <View style={styles.container}>
 
       {/* Banner Advertisement */}
-     <Image source= {require("assets/icon/google.png")}  />
-
-     {/* Pass onPress and handle it in controller of Home */}
-    <SearchBox/>
-    <Text>Which Specialist do you need?</Text>
-    {getProviderList()}
-    
+      <TouchableOpacity onPress={onPressAdBanner}>
+        <Image source={{
+          // uri: 'https://reactnative.dev/img/tiny_logo.png',
+          uri: bannerAds?.imageUrl
+        }} height={getHeight(147)} width={getWidth(375)} style={{ backgroundColor: 'rgba(217,217,217,255)' }} />
+      </TouchableOpacity>
+      {/* Pass onPress and handle it in controller of Home */}
+      <SearchBox />
+      <Text>Which Specialist do you need?</Text>
+      {getProviderList()}
     </View>
   );
 };
@@ -54,8 +57,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginM),
   },
   logo: {
-    width: getWidth(dimens.imageL+dimens.imageS),
-    height: getHeight(dimens.imageL+dimens.imageS + dimens.imageS),
+    width: getWidth(dimens.imageL + dimens.imageS),
+    height: getHeight(dimens.imageL + dimens.imageS + dimens.imageS),
     alignSelf: "center",
     flex: 0.4,
     justifyContent: "center",
