@@ -16,7 +16,7 @@ import NavigationRoutes from "navigator/NavigationRoutes";
 import { useNavigation } from "@react-navigation/native";
 
 const RegistrationView = () => {
-  const { onPressSignUpProvider, isLoading,renderToast } = RegistrationViewController();
+  const { onPressSignUpProvider, isLoading, renderToast } = RegistrationViewController();
   const navigation = useNavigation()
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
@@ -81,7 +81,7 @@ const RegistrationView = () => {
 
   return (
     <>
-{renderToast()}
+      {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && <ActivityIndicator style={styles.loading} size={'large'} />}
         <Input
@@ -126,10 +126,7 @@ const RegistrationView = () => {
           disabled={(passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
-      <View style={styles.footerContainer}>
-        <Text title={t("or_sign_in_via")} />
-        <GetSignInFooter loading={setIsLoadingGoogle} />
-      </View>
+      <GetSignInFooter />
     </>
   );
 };

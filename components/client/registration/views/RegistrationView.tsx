@@ -80,12 +80,7 @@ const RegistrationView = () => {
 
         />
       </View>
-      <View style={styles.footerContainer}>
-        <Text title={t("or_sign_in_via")} />
-
-        {/* TODO: Gurpreet to change this controller */}
-        <GetSignInFooter loading={setIsLoadingGoogle} />
-      </View>
+      <GetSignInFooter />
     </>
   );
 };
