@@ -16,7 +16,7 @@ import {
   View,
 } from "react-native";
 
-const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
+const LoginView = ({ }: { }) => {
   const { t } = useTranslation();
   const {
     handleSignIn,
@@ -31,13 +31,13 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    // renderToast
+    renderToast
   } = LoginViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
-    {/* {renderToast()} */}
+      {renderToast()}
       <View style={styles.inputContainer}>
         {(isLoading || isLoadingGoogle) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input

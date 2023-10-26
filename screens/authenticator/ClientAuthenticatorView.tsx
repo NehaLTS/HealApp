@@ -10,10 +10,11 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState} from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, View } from "react-native";
 import ClientAuthenticatorViewController from "./ClientAuthenticatorViewController";
+
 
 const ClientAuthenticatorView = () => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const ClientAuthenticatorView = () => {
   }, [navigation]);
 
   return (
-    <View style={styles.mainContainer}>
+     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <View style={styles.toggleContainer}>
@@ -47,7 +48,7 @@ const ClientAuthenticatorView = () => {
       </View>
       <View style={styles.inputContainer}>
         {isSigninSelected ? (
-          <LoginView isSigninSelected={isSigninSelected} />
+          <LoginView  />
         ) : (
           <RegistrationView />
         )}
@@ -71,6 +72,7 @@ const ClientAuthenticatorView = () => {
         </View>
       </View>
     </View>
+   
   );
 };
 

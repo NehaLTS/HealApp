@@ -1,136 +1,82 @@
-import { useRegistrationContext } from 'contexts/UseRegistrationContext';
-import { UseUserContext } from 'contexts/useUserContext';
-import useUpdateEffect from 'libs/UseUpdateEffect';
-import React, { useEffect, useState } from 'react';
+import { UseClientUserContext } from "contexts/UseClientUserContext";
+import React, {useState } from "react";
 
 const UserDetailViewController = () => {
-  const { userData, setUserData } = UseUserContext()
   const firstNameRef = React.useRef<any>("");
   const lastNameRef = React.useRef<any>("");
   const phoneNumberRef = React.useRef<any>("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
-  const [isNext, setIsNexts] = useState(false);
-  const {setCurrentStep} =useRegistrationContext()
-  // console.log('isNext', isNext);
-  useUpdateEffect(() => {
-    console.log('isNext111');
-    if (isNext) {
-      console.log('isNext2222');
-      validatePhoneNumber()
-      setFirstNameError("First name is required")
-    }
-
-  }, [isNext])
-  useEffect(() => {
-    console.log('isNext', isNext);
-    if (isNext) validateFirstName()
-  }, [])
-
-  userData.onbuttonClick = () => {
-    setIsNexts(true)
-    console.log('gurpreet************');
-    validatePhoneNumber()
-  }
-
-  const setIsNext = () => {
-    console.log('object************');
-    setIsNexts(true)
-    // validateFirstName()
-  }
+  const { setCurrentStep, setUserProfile } = UseClientUserContext();
 
   const validateFirstName = () => {
-    if (!firstNameRef.current.value || firstNameRef.current.value === undefined) {
+    if (
+      !firstNameRef.current.value ||
+      firstNameRef.current.value === undefined
+    ) {
       setFirstNameError("First name is required");
-    } 
-    
-    // else if (!/^[A-Z][a-z]*$/.test(firstNameRef.current.value)) {
-    //   setFirstNameError("First letter should start with an uppercase , followed by lowercase ");
-    // } 
-    
-    
-    else {
-      setFirstNameError("");
-    }
+    } else setFirstNameError("");
   };
 
   const validateLastName = () => {
     if (!lastNameRef.current.value) {
       setLastNameError("Last name is required");
-    } 
-    
-    // else if (!/^[A-Z][a-z]*$/.test(lastNameRef.current.value)) {
-    //   setLastNameError("First letter should start with an uppercase , followed by lowercase ");
-    // } 
-    
-    
-    else {
-      setLastNameError("");
-    }
+    } else setLastNameError("");
   };
 
   const validatePhoneNumber = () => {
-
     if (!phoneNumberRef.current.value) {
       setPhoneNumberError("Phone number is required");
-    } else {
-      setPhoneNumberError("");
-    }
+    } else setPhoneNumberError("");
   };
-  const onBlurFirstName = () => {
-    validateFirstName()
-    setUserData({ ...userData, firstname: firstNameRef.current.value })
-  }
+  const onBlurFirstName = () => validateFirstName();
   const onChangeFirstName = (value: string) => {
-
-    firstNameRef.current.value = value
+    firstNameRef.current.value = value;
     onBlurFirstName();
-  }
-  const onBlurLastName = () => {
+  };
+  const onBlurLastName = () => validateLastName();
 
-    validateLastName()
-    setUserData({ ...userData, lastname: lastNameRef.current.value })
-  }
   const onChangeLastName = (value: string) => {
-    lastNameRef.current.value = value
-    onBlurLastName()
-  }
-  const onBlurPhoneNumber = () => {
-    validatePhoneNumber()
-    setUserData({ ...userData, phone_number: phoneNumberRef.current.value })
-  }
+    lastNameRef.current.value = value;
+    onBlurLastName();
+  };
+  const onBlurPhoneNumber = () => validatePhoneNumber();
+
   const onChangePhoneNumber = (value: string) => {
-    phoneNumberRef.current.value = value
-    onBlurPhoneNumber()
-  }
-
-
-
+    phoneNumberRef.current.value = value;
+    onBlurPhoneNumber();
+  };
 
   const onPressNext = () => {
-    if (userData.firstname && userData.lastname && userData.phone_number) {
-      setCurrentStep('address')
-      // setCurrentStep(() => {
-      //   const array = [...currentStep];
-      //   array.push(array[array.length - 1] + 1);
-      //   return array;
-      // });
-    } else {
-      if (!userData.firstname?.length) setFirstNameError("First name is required");
-      if (!userData.lastname?.length) setLastNameError("Last name is required");
-      if (!userData.phone_number?.length) setPhoneNumberError("Phone number is required");
-    }
-  }
+    if (
+      firstNameRef.current.value &&
+      lastNameRef.current.value &&
+      phoneNumberRef.current.value
+    ) {
+      setUserProfile({
+        firstName: firstNameRef.current.value,
+        lastName: lastNameRef.current.value,
+        phoneNumber: phoneNumberRef.current.value,
+      });
 
-  const onPressBack = () => {
-      // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+      setCurrentStep("address");
+    } else {
+      if (!firstNameRef.current.value)
+        setFirstNameError("First name is required");
+      if (!lastNameRef.current.value) setLastNameError("Last name is required");
+      if (!phoneNumberRef.current.value)
+        setPhoneNumberError("Phone number is required");
+    }
   };
 
+  const onPressBack = () => {
+    // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+      setCurrentStep("payment");
+  };
 
   return {
     firstNameError,
-    userData,
     firstNameRef,
     lastNameRef,
     phoneNumberRef,
@@ -143,11 +89,9 @@ const UserDetailViewController = () => {
     onBlurPhoneNumber,
     onChangePhoneNumber,
     validateFirstName,
-    setIsNext,
     onPressNext,
-    onPressBack
-
+    onPressBack,
   };
-}
+};
 
-export default UserDetailViewController
+export default UserDetailViewController;

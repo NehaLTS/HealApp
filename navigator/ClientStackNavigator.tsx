@@ -1,16 +1,19 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { lazy } from "react";
+import React, { lazy,useState } from "react";
 import NavigationRoutes from "./NavigationRoutes";
-import { UserContext, UserType } from "contexts/useUserContext";
-import { getLocalData } from "libs/datastorage/useLocalStorage";
+import { ClientUserContext, onboardStep } from "contexts/UseClientUserContext";
 import { defaultHeaderStyle } from "components/common/Header";
+import { ClientProfile } from "libs/types/UserType";
 const Stack = createNativeStackNavigator();
 
 const ClientStackNavigator = () => {
 
-  const [userData, setUserData] = React.useState<Partial<UserType>>({});
+   const [userProfile, setUserProfile]=useState<ClientProfile>(null)
+  const [userId, setUserId]=useState('')
+  const [token, setToken]=useState<string>('')
+   const [currentStep, setCurrentStep]=useState<onboardStep>('details')
   return (
-    <UserContext.Provider value={{ userData, setUserData }}>
+     <ClientUserContext.Provider value={{currentStep, setCurrentStep,userId,setUserId,token,setToken,userProfile,setUserProfile}}>
       <Stack.Navigator initialRouteName={NavigationRoutes.ClientLogin}>
         <Stack.Screen
           options={defaultHeaderStyle}
@@ -25,15 +28,15 @@ const ClientStackNavigator = () => {
           component={lazy(() => import("../screens/client/HomeScreen"))}
         />
         <Stack.Screen
-          name={"BasicInfo"}
+          name={"OnboardDetails"}
           options={defaultHeaderStyle}
           component={lazy(
             () =>
-              import("../components/client/registration/views/BasicInformation")
+              import("../screens/client/OnboardDetails")
           )}
         />
       </Stack.Navigator>
-    </UserContext.Provider>
+  </ClientUserContext.Provider>
   );
 };
 
