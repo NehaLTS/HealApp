@@ -1,4 +1,8 @@
 {
   "name": "HealApp",
-  "displayName": "HealApp"
+  "displayName": "HealApp",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9743823044590174~9408022128",
+    "ios_app_id": "ca-app-pub-9743823044590174~8450163676"
+  }
 }
