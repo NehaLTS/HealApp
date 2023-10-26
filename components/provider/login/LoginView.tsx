@@ -27,13 +27,12 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     onBlurPassword,
     renderToast
   } = LoginViewController();
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
 
   return (
     <>
-    {renderToast()}
+      {renderToast()}
       <View style={styles.inputContainer}>
-        {(isLoading || isLoadingGoogle) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
+        {isLoading && (<ActivityIndicator style={styles.loading} size={"large"} />)}
         <Input
           ref={emailRef}
           placeholder={t("email")}
@@ -76,10 +75,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           disabled={(passwordError.length > 0 || emailError.length > 0)}
         />
       </View>
-      <View style={styles.footerContainer}>
-        <Text title={t("or_sign_in_via")} />
-        <GetSignInFooter loading={setIsLoadingGoogle} />
-      </View>
+      <GetSignInFooter />
     </>
   );
 };
@@ -122,21 +118,25 @@ const styles = StyleSheet.create({
 });
 
 //TODO: Better way to use it with Signin as well as Signup as footer
-export const GetSignInFooter = ({ loading }: any) => {
+export const GetSignInFooter = () => {
+  const { t } = useTranslation();
   const images = [
     { url: require("assets/icon/google.png") },
     { url: require("assets/icon/facebook.png") },
     { url: require("assets/icon/apple.png") },
   ];
   const { onSelectSocialAuth, isLoading } = LoginViewController();
-  loading(isLoading)
   return (
     <>
-      {images.map((item, index) => (
-        <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
-          <Image source={item.url} style={styles.images} />
-        </TouchableOpacity>
-      ))}
+      {(isLoading) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
+      <View style={styles.footerContainer}>
+        <Text title={t("or_sign_in_via")} />
+        {images.map((item, index) => (
+          <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
+            <Image source={item.url} style={styles.images} />
+          </TouchableOpacity>
+        ))}
+      </View>
     </>
   );
 };
