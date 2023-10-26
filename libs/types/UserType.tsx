@@ -135,4 +135,5 @@ export interface ClientProfile {
   country?: string;
   date_of_birth?: string;
   idNumber?: number;
+  isPaymentAdded?: boolean;
 }
