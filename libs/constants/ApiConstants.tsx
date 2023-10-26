@@ -17,9 +17,9 @@ export const GET_CREATE_CARD_DETAILS = 'CardDetail/getCreditCardDetails'
 export const GET_PROVIDER_TYPES = 'providers/getAllProviderDetails'
 export const GET_PROVIDER_SERVICE = 'providers/getAllProviderServices'
 export const GET_USER_SERVICES = 'providers/getProviderServices'
-
-export const GET_AD_BANNER = 'users/getBanner'
-
+const id = 1;
+export const GET_AD_BANNER = `users/getBannersDetails/${id}`
+export const GET_TREATMENT_MENU = 'users/getTreatmentMenu'
 
 export const POST = 'POST';
 export const GET = 'GET';
