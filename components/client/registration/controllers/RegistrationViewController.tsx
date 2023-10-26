@@ -10,8 +10,7 @@ import { UseClientUserContext } from "contexts/UseClientUserContext";
 
 const RegistrationViewController = () => {
   const { onCreateSignUp } = AuthServicesClient();
-  const { setUserId, setToken } =
-    UseClientUserContext();
+  const { setUserId, setToken } = UseClientUserContext();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showToast, renderToast } = useToast();
@@ -68,19 +67,25 @@ const RegistrationViewController = () => {
 
       console.log("res is ", res);
 
-      if(res && res.token && res.client_id){
-      setToken(res.token);
-      setUserId(res.client_id);
+      if (res && res.token && res.client_id) {
+        setToken(res.token);
+        setUserId(res.client_id);
       }
-    
-      // setUserData({ ...userData, token: res?.token, client_id: res?.client_id });
-      setLocalData("USER", res);
+
+      setLocalData("USER", {
+        token: res?.token,
+        userId: res?.client_id,
+        isClient: true,
+      });
+      setLocalData("USERPROFILE", {
+        email: email,
+      });
       setIsLoading(false);
       if (res?.isSuccessful) {
         navigation.reset({
           index: 0,
-          routes: [{ name: "OnboardDetails"}],
-        })
+          routes: [{ name: "OnboardDetails" }],
+        });
       } else {
         showToast("User already exist", "Please try SignIn", "error");
       }

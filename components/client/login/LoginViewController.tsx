@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
-import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
+import { setLocalData } from "libs/datastorage/useLocalStorage";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useState } from "react";
 import { Alert } from "react-native";
@@ -17,7 +17,7 @@ const LoginViewController = () => {
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
   const { onGoogleAuthProcessing } = GoogleAuthProvider();
   const { onFBAuthProcessing } = FacebookAuthProvider();
-  const { setUserProfile, setUserId, setToken } =
+  const { setUserProfile, setUserId, setToken, userProfile } =
     UseClientUserContext();
   // const { userData, setUserData } = UseUserContext()
   const {
@@ -65,7 +65,8 @@ const LoginViewController = () => {
   };
 
   const handleSignIn = () => {
-  if (!emailError && !passwordError) onPressLoginButton(emailRef.current.value, passwordRef.current.value);
+    if (!emailError && !passwordError)
+      onPressLoginButton(emailRef.current.value, passwordRef.current.value);
   };
 
   /** To handle Response from API after authentication request */
@@ -89,14 +90,42 @@ const LoginViewController = () => {
       profilePicture: userDetails.profile_picture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
-      email:userDetails.email
+      email: userDetails.email,
     });
 
- 
-    //TODO: local storage needs to check
-    // setLocalData('USER', response)
+    setLocalData("USERPROFILE", {
+      firstName: userDetails.firstname,
+      lastName: userDetails.lastname,
+      phoneNumber: userDetails.phone_number,
+      address: userDetails.address,
+      city: userDetails.city,
+      state: userDetails.state,
+      country: userDetails.country,
+      profilePicture: userDetails.profile_picture,
+      date_of_birth: userDetails.date_of_birth,
+      idNumber: userDetails.id_number,
+      email: userDetails.email,
+    });
+    setLocalData("USER", {
+      token: response.token,
+      userId: response.id,
+      isClient: true,
+    });
 
-   navigation.navigate(NavigationRoutes.ClientHome);
+    //if first name is empty navigate to onboard else to Home
+    if (userDetails.firstName == "") {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "OnboardDetails" }],
+      });
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ClientHome }],
+      });
+    }
+
+    //navigation.navigate(NavigationRoutes.ClientHome);
   };
 
   /** To handle User auth via email and password */
@@ -108,13 +137,18 @@ const LoginViewController = () => {
 
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res);
-        else  showToast("Login Failed", "Please check your email and password and try again.", "error");
+        else
+          showToast(
+            "Login Failed",
+            "Please check your email and password and try again.",
+            "error"
+          );
       }
       // else  showToast("", "Please enter email or password", "warning")
     } catch (error) {
       setIsLoading(false);
 
-      console.log("error is ",error)
+      console.log("error is ", error);
       Alert.alert("An error occurred during login.");
     }
   };
@@ -196,7 +230,7 @@ const LoginViewController = () => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    renderToast
+    renderToast,
   };
 };
 

@@ -5,7 +5,7 @@ import { FacebookAuthProvider } from "../../../libs/authsevices/FcebookAuthProvi
 import { Alert } from "react-native";
 import { useTranslation } from "react-i18next";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
+import { setLocalData } from "libs/datastorage/useLocalStorage";
 import { UserType } from "libs/types/UserType";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import NavigationRoutes from "navigator/NavigationRoutes";
@@ -40,17 +40,17 @@ const LoginViewController = () => {
       Alert.alert("An error occurred during login.");
     }
   }
-  const handleLanguageChange = (lng: string) => {
-    i18n.changeLanguage(lng)
-    // setLocalData('USER', {  })
-    // setLocalData('USER', {  })
-    setLocalData('USER', {
-      ...getLocalData('USER')?.user,
-      user: {
-        language: lng
-      }
-    }) as unknown as UserType
-  };
+  // const handleLanguageChange = (lng: string) => {
+  //   i18n.changeLanguage(lng)
+  //   // setLocalData('USER', {  })
+  //   // setLocalData('USER', {  })
+  //   setLocalData('USER', {
+  //     ...getLocalData('USER')?.user,
+  //     user: {
+  //       language: lng
+  //     }
+  //   }) as unknown as UserType
+  // };
   /** To handle Google login  button click*/
   const onPressGoogleButton = async () => {
     /** To process Google login from firestore */

@@ -32,7 +32,7 @@ const OnBoardingView = () => {
   const { setUserProfile, setUserId, setToken } = UseClientUserContext();
 
   useEffect(() => {
-    //deleteLocalData();
+   // deleteLocalData();
     getLocalUserData();
   }, []);
 

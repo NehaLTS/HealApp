@@ -22,16 +22,17 @@ const UserAddressViewController = () => {
     UseClientUserContext();
 
   const validateAddress = () => {
-    if (addressRef.current.value.length < 4) setAddressError("Please fill full address");
-     else  setAddressError("");
+    if (!addressRef.current.value || addressRef.current.value === undefined)
+      setAddressError("Please fill full address");
+    else setAddressError("");
   };
 
   // Function to validate the ID number
   const validateIdNumber = () => {
-    if (!numericPattern.test(idNumberRef.current.value))  setIdNumberError("ID number must contain only numbers");
-   else  setIdNumberError("");
+    if (!numericPattern.test(idNumberRef.current.value))
+      setIdNumberError("ID number must contain only numbers");
+    else setIdNumberError("");
   };
-
 
   const onBlurAddress = () => validateAddress();
 
@@ -47,10 +48,10 @@ const UserAddressViewController = () => {
     onBlurIdNumber();
   };
 
-  const getImageUrl = (url: string) => {};
+  const getImageUrl = (url: string) => setProfilePicture(url);
 
   const onPressNext = async () => {
-    console.log("userId is ",userId)
+    console.log("userId is ", userId);
     if (
       addressRef.current.value &&
       dateOfBirth.toString() &&
@@ -80,23 +81,27 @@ const UserAddressViewController = () => {
           country: "",
           profilePicture: "",
         },
-       userId
+        userId
       );
 
       console.log("response is ", res);
 
-      //TODO: need formmating to save data in local
-      //  setUserData({ ...userData, isSuccessful: res?.isSuccessful })
-      // setLocalData('USER', res)
+      setLocalData("USERPROFILE", {
+        firstName: userProfile.firstName,
+        lastName: userProfile.lastName,
+        phoneNumber: userProfile.phoneNumber,
+        address: addressRef.current.value,
+        city: "",
+        state: "",
+        country: "",
+        profilePicture: "",
+        date_of_birth: dateOfBirth.toString(),
+        idNumber: idNumberRef.current.value
+      });
 
       setIsLoader(false);
       if (res?.isSuccessful) {
         setCurrentStep("payment");
-        // setCurrentStep(() => {
-        //   const array = [...currentStep];
-        //   array.push(array[array.length - 1] + 1);
-        //   return array;
-        // });
       } else {
         Alert.alert("some error occurred");
       }
@@ -108,7 +113,8 @@ const UserAddressViewController = () => {
   };
 
   const onPressBack = () => {
-    // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+    //TODO: Vandana to check why this is getting reset.
+    setCurrentStep("details");
   };
 
   return {

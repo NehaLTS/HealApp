@@ -26,6 +26,7 @@ const UserDetailView = () => {
     onChangePhoneNumber,
     onPressNext,
     onPressBack,
+    userProfile,
   } = UserDetailViewController();
 
   return (
@@ -40,7 +41,9 @@ const UserDetailView = () => {
           onChangeText={onChangeFirstName}
           ref={firstNameRef}
           defaultValue={""}
-          inputValue={firstNameRef.current.value}
+          inputValue={userProfile?.firstName ?? ""}
+          returnKeyType={"next"}
+           onSubmitEditing={() => lastNameRef.current.focus()}
         />
         <Input
           placeholder={t("last_name")}
@@ -52,7 +55,7 @@ const UserDetailView = () => {
           defaultValue={""}
           ref={lastNameRef}
           errorMessage={lastNameError}
-          inputValue={lastNameRef.current.value}
+          inputValue={userProfile?.lastName ?? ""}
           returnKeyType={"next"}
           onSubmitEditing={() => phoneNumberRef.current.focus()}
         />
@@ -62,12 +65,13 @@ const UserDetailView = () => {
           keyboardType="number-pad"
           inputStyle={styles.inputPhone}
           onChangeText={onChangePhoneNumber}
-          defaultValue={""}
+          defaultValue={userProfile?.phoneNumber ? userProfile.phoneNumber : ""}
           onClearInputText={() => phoneNumberRef.current.clear()}
           onBlur={onBlurPhoneNumber}
+          inputValue={userProfile?.phoneNumber ?? ""}
           ref={phoneNumberRef}
           errorMessage={phoneNumberError}
-          inputValue={phoneNumberRef.current.value}
+          returnKeyType={"done"}
         />
         <Text style={styles.text} title={t("find_doctor_text")} />
       </View>

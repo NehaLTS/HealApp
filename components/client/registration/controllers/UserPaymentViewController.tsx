@@ -92,11 +92,12 @@ const UserPaymentViewController = () => {
       })
    
       //TODO: Vandana to save in Local data with isPaymentAdded as true
-      //setLocalData('USER', {"isPaymentAdded":true})
+      setLocalData('USERPROFILE', {"isPaymentAdded":true})
 
        console.log("response is ",res)
        setIsLoader(false);
 
+       //TODO:Gurpreet to navigate to Home Page
       if (res?.isSuccessful) setIsCardDetails(true)
       else  Alert.alert('Some error occurred');
     }

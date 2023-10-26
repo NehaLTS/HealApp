@@ -2,13 +2,14 @@ import { UseClientUserContext } from "contexts/UseClientUserContext";
 import React, {useState } from "react";
 
 const UserDetailViewController = () => {
+  const { setCurrentStep, setUserProfile,userProfile } = UseClientUserContext();
   const firstNameRef = React.useRef<any>("");
   const lastNameRef = React.useRef<any>("");
   const phoneNumberRef = React.useRef<any>("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
-  const { setCurrentStep, setUserProfile } = UseClientUserContext();
+ 
 
   const validateFirstName = () => {
     if (
@@ -72,7 +73,6 @@ const UserDetailViewController = () => {
 
   const onPressBack = () => {
     // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
-      setCurrentStep("payment");
   };
 
   return {
@@ -91,6 +91,7 @@ const UserDetailViewController = () => {
     validateFirstName,
     onPressNext,
     onPressBack,
+    userProfile
   };
 };
 
