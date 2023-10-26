@@ -17,7 +17,7 @@ import { BannerAd, TestIds, AppOpenAd, InterstitialAd, RewardedAd } from 'react-
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { providerList, bannerAds, onPressProviderCard, onPressAdBanner } = HomeViewController();
+  const { providerList, onPressProviderCard } = HomeViewController();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -55,12 +55,6 @@ const HomeScreen = () => {
       <View style={{ height: getHeight(147), width: '100%', backgroundColor: 'rgba(217,217,217,255)' }}>
         <BannerAd onAdLoaded={() => console.log('loading....')} unitId={adUnitId} size={`${parentWidth}x${parentHeight}`} />
       </View>
-      {/* <TouchableOpacity onPress={onPressAdBanner}>
-        <Image source={{
-          // uri: 'https://reactnative.dev/img/tiny_logo.png',
-          uri: bannerAds?.imageUrl
-        }} height={getHeight(147)} width={getWidth(375)} style={{ backgroundColor: 'rgba(217,217,217,255)' }} />
-      </TouchableOpacity> */}
       {/* Pass onPress and handle it in controller of Home */}
       <SearchBox />
       <Text>Which Specialist do you need?</Text>

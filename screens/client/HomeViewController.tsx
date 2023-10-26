@@ -32,12 +32,10 @@ const HomeViewController = () => {
   const onPressProviderCard = () => {
     console.log('onPressProviderCard')
   }
-  const onPressAdBanner = async () => await Linking.openURL('https://google.com')
   return {
     bannerAds,
     providerList,
-    onPressProviderCard,
-    onPressAdBanner
+    onPressProviderCard
   };
 };
 
