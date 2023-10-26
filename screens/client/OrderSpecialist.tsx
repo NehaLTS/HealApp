@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     alignSelf:"center"
   },
   text:{
-    fontSize:fontSize.textS
+    fontSize:getWidth(fontSize.textS),
+    marginTop:getWidth(4)
   }
 });

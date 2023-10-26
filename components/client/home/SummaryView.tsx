@@ -17,21 +17,21 @@ const SummaryView = () => {
         <TextButton
           title={"Edit order"}
           fontSize={getHeight(fontSize.textL)}
-         isActive
+          isActive
         />
       </View>
       <View style={styles.container}>
         <View style={styles.rowContainer}>
           <View style={styles.patientAndAddress}>
-            <Text title={"The patient "} style={styles.text}/>
+            <Text title={"The patient "} style={styles.text} />
             <Text title={"17 y.o, 054-6178180"} />
           </View>
-          <View style={{flexDirection:"row",gap:15}}>
-          <Image
-            source={require("../../../assets/icon/location.png")}
-            style={styles.locationIcon}
-          />
-          <Text title={"Ahavat Zion, 10, \n Haifa"} />
+          <View style={{ flexDirection: "row", gap: 15 }}>
+            <Image
+              source={require("../../../assets/icon/location.png")}
+              style={styles.locationIcon}
+            />
+            <Text title={"Ahavat Zion, 10, \n Haifa"} />
           </View>
         </View>
       </View>
@@ -44,22 +44,22 @@ const SummaryView = () => {
       <Text title={"Services"} style={styles.text} />
       <Text title={"Basic - 500 NIS"} />
       <Text title={"Voltaren shot - 100 NIS"} style={styles.voltarenText} />
-      <View style={{flexDirection:"row"}}> 
-        <Text title={"Total"}  style={styles.total}/>
-      <Text title={"- 600 NIS"} />
+      <View style={{ flexDirection: "row" }}>
+        <Text title={"Total"} style={styles.total} />
+        <Text title={"- 600 NIS"} />
       </View>
-     
+
       <Text
         title={"*If the doctor won’t use your shot, you won’t pay for it"}
         style={styles.payForIt}
       />
       <View style={styles.cardDetail}>
-        <Text title={"Paid by card *4545"} style={styles.text} />
+        <Text title={"Paid by card *4545"} style={styles.textPaid} />
         <TextButton
           title={"Change"}
           fontSize={getHeight(fontSize.textL)}
           isActive
-         
+          style={styles.textPaid}
         />
       </View>
 
@@ -71,9 +71,8 @@ const SummaryView = () => {
         <Input
           placeholder={"Describe where is the entrance etc."}
           inputValue={""}
-          // multiline
-          // numberOfLines={2}
           inputStyle={styles.description}
+        
         />
       </View>
     </>
@@ -106,68 +105,61 @@ const styles = StyleSheet.create({
   patientAddress: {
     flexDirection: "row",
     gap: getWidth(dimens.sideMargin),
-    marginRight: getHeight(dimens.marginM),
+    marginRight: getWidth(dimens.marginM),
     marginTop: getWidth(dimens.marginS),
   },
   text: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
   },
   symptomsContainer: {
     flex: 0.17,
-    marginTop:getHeight(dimens.marginS),
-    backgroundColor:"red"
-
+    marginTop: getWidth(dimens.marginS),
+   
   },
 
   voltarenText: {
-    marginVertical: getHeight(dimens.paddingXs),
+    marginVertical: getWidth(dimens.paddingXs),
   },
   payForIt: {
-    marginVertical: getHeight(dimens.paddingXs),
-    fontSize: getHeight(fontSize.textS),
+    marginVertical: getWidth(dimens.paddingXs),
+    fontSize: getWidth(fontSize.textS),
   },
   cardDetail: {
-     alignItems: "center",
-    flex: 0.1,
+    flex: 0.15,
     flexDirection: "row",
     gap: getWidth(dimens.marginM),
-    // backgroundColor:"blue"
-   
+  },
+  textPaid: {
+    marginTop: getWidth(dimens.sideMargin +6),
+    fontSize: fontSize.textL,
   },
   instructionContainer: {
-    flex: 0.42,
+    flex: 0.41,
     gap: getWidth(dimens.marginS),
-    backgroundColor:"yellow"
-
   },
-  instruction:{
+  instruction: {
     fontSize: fontSize.textL,
-marginTop:getHeight(dimens.sideMargin+dimens.borderBold)
+    marginTop: getWidth(dimens.sideMargin + 7),
   },
   description: {
     height: getHeight(dimens.imageS + dimens.marginS),
+   
   },
- 
+
   container: {
     flex: 0.17,
-    justifyContent:"center",
-    backgroundColor:"green"
-
-
+    justifyContent: "center",
   },
   rowContainer: {
     flexDirection: "row",
-    // gap:getHeight(dimens.marginM),
-    marginTop:getHeight(dimens.sideMargin),
-    backgroundColor:"pink",
-    justifyContent:"space-between"
-
+    marginTop: getWidth(dimens.sideMargin),
+    justifyContent: "space-between",
   },
   patientAndAddress: {
     flexDirection: "column",
-  
   },
-  total:{
-    fontFamily:fontFamily.bold
-  }
+  total: {
+    fontFamily: fontFamily.bold,
+  },
+  
 });

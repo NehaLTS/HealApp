@@ -1,4 +1,3 @@
-
 import Button from "components/common/Button";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
@@ -7,44 +6,19 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  TextInput,
-  View
-} from "react-native";
+import { Image, StyleSheet, TextInput, View } from "react-native";
+import OrderFormController from "./OrderFormController";
 
 const OrderFormView = () => {
   const [isMeSelected, setIsMeSelected] = useState(true);
-  const [activeButton, setActiveButton] = useState<number[]>([]);
-  const [selectedResourceType, setSelectedResourceType] = useState();
-  const onSelectReasons = (item: any) => {
-    const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
-    const itemIndex = updatedActiveButton.indexOf(item.id);
-    
-    if (itemIndex !== -1) {
-      // The button is already selected, so remove it
-      updatedActiveButton.splice(itemIndex, 1);
-    } else {
-      // The button is not selected, so add it
-      updatedActiveButton.push(item.id);
-    }
-    setSelectedResourceType(item);
-    setActiveButton(updatedActiveButton); // Update the state with the new array
-  };
-  const reasons = [
-    { title: 'Back pain', id: 1 },
-    { title: 'Heart pain', id: 2 },
-    { title: 'Arrhythmia', id: 3 },
-    { title: 'Headache', id: 4 },
-    { title: 'Leg pain', id: 5 },
-    { title: 'Vomiting', id: 6 },
-  ];
-  const treatmentsData = [
-    { label: "Visit - 500 NIS" },
-    { label: "Voltaren shot  - 100 NIS" },
-    { label: "Clacksen shot  - 100 NIS" },
-  ];
+  const {
+    activeButton,
+    onSelectReasons,
+    setSelectedResourceType,
+    setActiveButton,
+    reasons,
+    treatmentsData,
+  } = OrderFormController();
   const toggleMe = () => {
     setIsMeSelected(true);
   };
@@ -56,35 +30,27 @@ const OrderFormView = () => {
     <>
       <Text title={"Reason"} style={styles.addressText} />
       <View style={styles.buttonContainer}>
-         {reasons?.map((item: any, index: number) => (
+        {reasons?.map((item: any, index: number) => (
           <Button
             key={index}
-              title={item.title}
+            title={item.title}
             isSmall
             isPrimary={activeButton.includes(item.id)}
-             onPress={() => onSelectReasons(item)}
+            onPress={() => onSelectReasons(item)}
             width={"28%"}
-            fontSized={getHeight(fontSize.textM)}
+            fontSized={getWidth(fontSize.textM)}
             height={getHeight(dimens.marginL)}
             borderRadius={getWidth(dimens.marginS)}
-            lineHeight={dimens.sideMargin+dimens.borderBold}
+            lineHeight={dimens.sideMargin + dimens.borderBold}
           />
         ))}
- {/* {reasons?.map((item: any, index: number) => (
-        <Button
-          key={index}
-          isPrimary={activeButton.includes(item.id)}
-          onPress={() => onSelectReasons(item)}
-          title={item.title}
-          isSmall
-        />
-      ))} */}
+
         <Button
           title={"Other"}
-          fontSized={getHeight(fontSize.textM)}
+          fontSized={getWidth(fontSize.textM)}
           height={getHeight(dimens.marginL)}
           borderRadius={getWidth(dimens.marginS)}
-          lineHeight={dimens.sideMargin+dimens.borderBold}
+          lineHeight={dimens.sideMargin + dimens.borderBold}
         />
         <Text
           title={
@@ -123,7 +89,7 @@ const OrderFormView = () => {
           isSmall
           width={"12%"}
           fontSized={fontSize.textL}
-          height={getHeight(dimens.marginL+4)}
+          height={getHeight(dimens.marginL + 4)}
           onPress={toggleMe}
         />
         <Button
@@ -132,7 +98,7 @@ const OrderFormView = () => {
           isSmall
           width={"40%"}
           fontSized={fontSize.textL}
-          height={getHeight(dimens.marginL+4)}
+          height={getHeight(dimens.marginL + 4)}
           onPress={toggleSomeoneElse}
         />
       </View>
@@ -156,7 +122,7 @@ const OrderFormView = () => {
               <TextButton
                 containerStyle={{ flex: 0.1 }}
                 title={"Edit"}
-                fontSize={getHeight(fontSize.textM)}
+                fontSize={getWidth(fontSize.textM)}
               />
             </View>
           </>
@@ -188,7 +154,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
-    marginTop: getHeight(dimens.marginL+4),
+    marginTop: getHeight(dimens.marginL + 4),
   },
   addressText: {
     fontSize: fontSize.textXl,
@@ -213,7 +179,7 @@ const styles = StyleSheet.create({
     borderColor: colors.disabled,
     flexDirection: "row",
     paddingHorizontal: getWidth(dimens.paddingS),
-    paddingVertical: getHeight(dimens.paddingXs+dimens.borderBold),
+    paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
     // flex: 0.2,
   },
   innerBox: {
@@ -237,7 +203,7 @@ const styles = StyleSheet.create({
   addressContainer: {
     flex: 0.25,
     justifyContent: "center",
-    marginTop:getHeight(dimens.paddingXs)
+    marginTop: getWidth(dimens.paddingXs),
   },
   button: {
     flexDirection: "row",
@@ -246,8 +212,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 0.28,
     gap: getWidth(dimens.sideMargin),
-    marginTop: getHeight(dimens.paddingXs),
- 
+    marginTop: getWidth(dimens.paddingXs),
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),
@@ -263,7 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.primary,
     flex: 1,
-    marginTop: getHeight(dimens.marginS),
+    marginTop: getWidth(dimens.marginS),
   },
   arrowIcon: {
     height: getHeight(dimens.marginL + dimens.paddingXs),
@@ -271,17 +236,16 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   textInput: {
-    borderBottomWidth: getHeight(dimens.borderThin),
+    borderBottomWidth: getWidth(dimens.borderThin),
     borderBottomColor: colors.black,
     width: getWidth(dimens.imageM + dimens.imageS),
     marginLeft: getWidth(dimens.marginS),
     fontSize: fontSize.textL,
     color: colors.grey,
-    
   },
   arrowIconContainer: {
     alignItems: "flex-end",
-    bottom: getHeight(dimens.marginL),
-    right: getHeight(dimens.marginS),
+    bottom: getWidth(dimens.marginL),
+    right: getWidth(dimens.marginS),
   },
 });
