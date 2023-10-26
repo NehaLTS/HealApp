@@ -8,7 +8,13 @@ import { fontSize } from "designToken/fontSizes";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
-import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Button from "components/common/Button";
@@ -16,9 +22,10 @@ import TextButton from "components/common/TextButton";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useTranslation } from "react-i18next";
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
+import logo from "assets/icon/healLogo.png";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
-const UserPaymentView = () => {
+const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { languageCode } = useTranslationContext();
@@ -42,13 +49,26 @@ const UserPaymentView = () => {
     onPressBack,
     setIsCardDetails,
     isLoader: isLoading,
-    isCardDetails
+    isCardDetails,
   } = UserPaymentViewController();
 
-  const last4Digits = !userData?.credit_card_number ? '' : userData?.credit_card_number.slice(-4);
+  const last4Digits = !userData?.credit_card_number
+    ? ""
+    : userData?.credit_card_number.slice(-4);
   const cardNumber = "**** **** ***** " + last4Digits;
   return (
     <>
+      {isFromHome && (
+        <View style={{ flexDirection: "row", gap: getHeight( dimens.buttonHeight), marginBottom: getHeight(dimens.buttonHeight) }}>
+          <Image source={logo} style={styles.logo} />
+          <Text
+            adjustsFontSizeToFit
+            numberOfLines={2}
+            style={styles.title}
+            title={"Add payment \n method"}
+          />
+        </View>
+      )}
       <View style={styles.inputsContainer}>
         <View style={styles.container}>
           {!isCardDetails && (
@@ -77,7 +97,7 @@ const UserPaymentView = () => {
                 />
                 <Text title="Master-card" />
                 <View style={styles.cardIcons}>
-                  <TouchableOpacity onPress={() => setIsCardDetails(false) }>
+                  <TouchableOpacity onPress={() => setIsCardDetails(false)}>
                     <Image
                       source={require("assets/icon/edit.png")}
                       style={styles.cardImages}
@@ -108,7 +128,7 @@ const UserPaymentView = () => {
                 ref={cardNumberRef}
                 defaultValue={userData.credit_card_number}
                 errorMessage={cardNumberError}
-                inputValue={userData.credit_card_number ?? ''}
+                inputValue={userData.credit_card_number ?? ""}
                 returnKeyType={"next"}
                 onSubmitEditing={() => expireDateRef.current.focus()}
                 // onClearInputText={() => cardNumberRef?.current?.clear()}
@@ -148,7 +168,7 @@ const UserPaymentView = () => {
             </>
           )
         ) : (
-          <ActivityIndicator style={styles.loading} size={'large'} />
+          <ActivityIndicator style={styles.loading} size={"large"} />
         )}
         {!isLoading && (
           <>
@@ -166,41 +186,61 @@ const UserPaymentView = () => {
       <View
         style={[
           styles.footerContainer,
-          { justifyContent: isLoading || isCardDetails ? "center" : "space-between" }
+          {
+            justifyContent:
+              isLoading || isCardDetails || isFromHome
+                ? "center"
+                : "space-between",
+          },
         ]}>
         {!isLoading && !isCardDetails ? (
           <>
-            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+            {!isFromHome && (
+              <Button
+                title={t("back")}
+                isSmall
+                onPress={onPressBack}
+                width={"30%"}
+              />
+            )}
             <Button
               title={t("next")}
               isPrimary
-              onPress={onPressNext}
+              onPress={isFromHome ? ()=> navigation.navigate('orderSpecialist') : onPressNext}
               isSmall
-              width={'30%'}
+              width={"30%"}
             />
           </>
         ) : (
           <Button
-            title={isLoading ? t("cancel") : t("start_using_heal")}
+            title={isLoading ? t("cancel") : isFromHome ? "Next" : t("start_using_heal")}
             isPrimary
             isSmall
             style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
-            onPress={() => (isLoading ? console.log('goback') :
-              navigation.reset({
-                index: -1,
-                routes: [{ name: NavigationRoutes.ClientHome }],
-              })
-            )}
+            onPress={() =>
+              isLoading
+                ? console.log("goback")
+                : navigation.reset({
+                    index: -1,
+                    routes: [{ name: NavigationRoutes.ClientHome }],
+                  })
+            }
           />
         )}
       </View>
-      {!isLoading && !isCardDetails && (
-        <TextButton containerStyle={{flex:0.08}} style={styles.skipLaterText} title={t('skip_for_later')} onPress={() => navigation.reset({
-          index: 0,
-          routes: [{ name: NavigationRoutes.ClientHome }],
-        })} />
-      )
-      }
+      {!isLoading && !isCardDetails && !isFromHome && (
+        <TextButton
+          containerStyle={{ flex: 0.08 }}
+          style={styles.skipLaterText}
+          title={t("skip_for_later")}
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{ name: NavigationRoutes.ClientHome }],
+            })
+          }
+        />
+      )}
     </>
   );
 };
@@ -242,8 +282,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.marginL),
-    verticalAlign:'middle', 
-    height:'100%'
+    verticalAlign: "middle",
+    height: "100%",
   },
   text: {
     fontSize: fontSize.textM,
@@ -257,7 +297,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginS),
   },
   cardDetail: {
-    fontFamily: fontFamily.light
+    fontFamily: fontFamily.light,
   },
   cardNumber: {
     marginTop: getHeight(dimens.sideMargin + dimens.borderBold),
@@ -296,13 +336,12 @@ const styles = StyleSheet.create({
   },
   expireDate: {
     minWidth: "30%",
-
   },
   loading: {
-    left: '44%',
-    top: '50%',
-    position: 'absolute',
-    zIndex: 1
+    left: "44%",
+    top: "50%",
+    position: "absolute",
+    zIndex: 1,
   },
   inputsContainer: {
     flex: 0.75,
@@ -313,5 +352,14 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 0.12,
     justifyContent: "center",
+  },
+  logo: {
+    width: getWidth(dimens.imageS ),
+    height: getHeight(dimens.imageS),
+    resizeMode:'center'    
+  },
+  title: {
+    fontSize: getWidth(fontSize.headingL),
+    textAlign:'center',
   },
 });

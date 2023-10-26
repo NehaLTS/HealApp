@@ -8,5 +8,6 @@ export const colors = {
     offWhite: "rgba(249, 253, 255, 1)",
     grey: "rgba(129, 127, 127, 1)",
     modal:"rgba(249, 247, 247, 1)",
-    transparent: "transparent"
+    transparent: "transparent",
+    lightGrey:"rgba(238, 238, 238, 1)",
 } as const

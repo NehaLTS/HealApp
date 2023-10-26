@@ -240,7 +240,8 @@ const ProviderAddServices = () => {
                 inputValue={""}
                 errorMessage={descriptionError}
                 onClearInputText={() => descriptionRef.current.clear()}
-
+                multiline
+                numberOfLines={5}
               />
               <Button
                 title={"Save"}
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
 
   description: {
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
-    height: getHeight(dimens.imageM + dimens.paddingL + 10),
+     height: getHeight(dimens.imageM + dimens.paddingL + 10),
     alignItems: "flex-start",
     justifyContent: "center",
   },

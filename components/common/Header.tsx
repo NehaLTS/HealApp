@@ -10,7 +10,8 @@ import Text from "./Text";
 
 export const defaultHeaderStyle = {
   headerShadowVisible: false,
-  title: '', headerStyle: {
+  title: '', 
+  headerStyle: {
     backgroundColor: 'transparent',
   },
   headerTintColor: 'transparent',
@@ -25,7 +26,7 @@ const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean 
       {title?.length && (
         <>
           <Image source={logo} style={styles.logo} />
-          <Text style={styles.title} title={title} />
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title} title={title} />
         </>
       )}
       {  /** TODO: Update the title according to selected language  */}
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     marginLeft: getWidth(dimens.marginS),
   },
   title: {
-    fontSize: fontSize.headingL,
+    fontSize: getWidth(fontSize.headingL),
   },
   headerRight: {
     padding: getHeight(dimens.sideMargin),

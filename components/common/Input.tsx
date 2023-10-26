@@ -41,8 +41,8 @@ const Input = forwardRef(({
   | 'nameSuffix'
   | 'telephoneNumber'
   | 'password'
-  | 'numeric' |
-  'dateOfBirth';
+  | 'numeric' 
+  |'dateOfBirth';
   inputStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
@@ -117,8 +117,6 @@ const Input = forwardRef(({
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           ref={ref as React.LegacyRef<TextInput>}
-          multiline={placeholder === "Description"?true : false}
-          numberOfLines={placeholder === "Description" ? 5 :  1}
           editable
           {...props}
         />

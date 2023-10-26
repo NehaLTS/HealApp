@@ -23,6 +23,8 @@ const Button = ({
   fontSized,
   height,
   disabled,
+  borderRadius,
+  lineHeight,
   ...props
 }: {
   title: string;
@@ -32,7 +34,9 @@ const Button = ({
   fontSized?:number
   height?:number
   width?: DimensionValue;
-  disabled?: boolean
+  borderRadius?:number;
+  disabled?: boolean;
+  lineHeight?:number
 } & TouchableOpacityProps) => {
   const scaleInAnimated = new Animated.Value(1);
 
@@ -69,7 +73,8 @@ const Button = ({
           borderColor: disabled ? colors.grey :isPrimary ? colors.primary : colors.black,
           backgroundColor: disabled ? colors.disabled :  isPrimary ? colors.primary :  colors.transparent,
           minWidth: width ?? '38%',
-          height: height ?? getHeight(dimens.buttonHeight)
+          height: height ?? getHeight(dimens.buttonHeight),
+          borderRadius : borderRadius ?? getWidth(dimens.marginS / dimens.borderBold)
         },
       ]}
       disabled={disabled}
@@ -81,6 +86,7 @@ const Button = ({
             color: disabled ? colors.grey : isPrimary ? colors.white : colors.black,
             fontFamily: isSmall || !isPrimary ? fontFamily.regular : fontFamily.semiBold,
             fontSize: fontSized ? fontSized : getHeight(24),
+            lineHeight : lineHeight ?   lineHeight: getHeight(dimens.marginL),
          
           }
         ]}
@@ -98,12 +104,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: getWidth(dimens.buttonHeight),
-    borderRadius: getWidth(dimens.marginS / dimens.borderBold),
+    // borderRadius: getWidth(dimens.marginS / dimens.borderBold),
     zIndex: 1,
   },
   buttonTitle: {
     fontSize: getWidth(fontSize.heading),
-    lineHeight: getHeight(dimens.marginL),
+    // lineHeight: getHeight(dimens.marginL),
   },
 });
 
