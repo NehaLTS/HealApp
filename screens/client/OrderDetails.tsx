@@ -46,7 +46,7 @@ const OrderDetails = () => {
       headerRight: null,
     });
   }, [navigation]);
-  
+
   return (
     <View style={styles.mainContainer}>
       {showSummary ? (
@@ -60,9 +60,9 @@ const OrderDetails = () => {
         isSmall
         style={styles.buttonOrder}
         onPress={handleNextButtonPress}
-         width={"30%"}
+        width={"30%"}
       />
-      {showSummary &&  <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
+      {showSummary && <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
     </View>
   );
 };
@@ -74,9 +74,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
- 
+
   },
- 
+
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
@@ -102,13 +102,13 @@ const styles = StyleSheet.create({
   specialist: {
     fontSize: getWidth(fontSize.textXl),
   },
-  buttonOrder:{
-    alignSelf:"center"
+  buttonOrder: {
+    alignSelf: "center"
   },
-  text:{
-    fontSize:getWidth(fontSize.textS),
-    marginTop:getWidth(4),
+  text: {
+    fontSize: getWidth(fontSize.textS),
+    marginTop: getWidth(4),
+    textAlign: "center"
 
-    
   }
 });

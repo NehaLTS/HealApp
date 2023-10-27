@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View  } from "react-native";
 import React from "react";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
@@ -12,6 +12,7 @@ import { fontFamily } from "designToken/fontFamily";
 const SummaryView = () => {
   return (
     <>
+  
       <View style={styles.textContainer}>
         <Text title={"Order summary"} style={styles.summary} />
         <TextButton
@@ -37,13 +38,13 @@ const SummaryView = () => {
       </View>
 
       <View style={styles.symptomsContainer}>
-        <Text title={"Symptoms "} style={styles.text} />
+        <Text title={"Symptoms "} style={styles.symptomsText} />
         <Text title={"Back pain"} style={styles.textSmall} />
       </View>
 
       <Text title={"Services"} style={styles.text} />
       <Text title={"Basic - 500 NIS"} style={styles.textSmall} />
-      <Text title={"Voltaren shot - 100 NIS"} style={styles.voltarenText} />
+      <Text title={"Voltaren shot - 100 NIS"} style={styles.voltaireText} />
       <View style={{ flexDirection: "row" }}>
         <Text title={"Total"} style={styles.total} />
         <Text title={"- 600 NIS"} style={styles.textSmall}/>
@@ -111,10 +112,13 @@ const styles = StyleSheet.create({
   text: {
     fontSize: getWidth(fontSize.textL),
   },
+  symptomsText:{
+    fontSize: getWidth(fontSize.textL),
+    marginTop: getWidth(dimens.marginS+5),
+
+  },
   symptomsContainer: {
     flex: 0.17,
-    marginTop: getWidth(dimens.marginS),
-   
   },
 
   voltarenText: {
@@ -129,18 +133,21 @@ const styles = StyleSheet.create({
     flex: 0.15,
     flexDirection: "row",
     gap: getWidth(dimens.marginM),
+    // backgroundColor:"green"
+
   },
   textPaid: {
-    marginTop: getWidth(dimens.sideMargin +6),
+     marginTop: getWidth(dimens.sideMargin +6),
     fontSize: fontSize.textL,
   },
   instructionContainer: {
-    flex: 0.41,
+    flex: 0.42,
     gap: getWidth(dimens.marginS),
+    // backgroundColor:"red"
   },
   instruction: {
     fontSize: fontSize.textL,
-    marginTop: getWidth(dimens.sideMargin + 7),
+    marginTop: getWidth(dimens.marginM+dimens.paddingXs),
   },
   description: {
     height: getHeight(dimens.imageS + dimens.marginS),
@@ -164,6 +171,6 @@ const styles = StyleSheet.create({
   },
   textSmall:{
     fontSize:fontSize.textM,
-
+  
   },
 });

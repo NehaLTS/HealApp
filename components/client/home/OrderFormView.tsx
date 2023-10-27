@@ -126,7 +126,7 @@ const OrderFormView = () => {
         {treatmentsData.map((item, index) => (
           <View key={index} style={styles.checkboxContainer}>
             <View style={styles.checkBox}></View>
-            <Text title={item.label} />
+            <Text title={item.label} style={styles.list}/>
           </View>
         ))}
         <Text
@@ -165,12 +165,12 @@ const OrderFormView = () => {
       <View
         style={[
           styles.addressContainer,
-          { justifyContent: !isMeSelected ? "flex-start" : "center" },
+          { justifyContent: !isMeSelected ? "center" : "center" },
         ]}>
         {isMeSelected &&
           <>
             <Text title={"Address"} style={styles.addressText} />
-            <View style={styles.locationContainer}>
+            <View style={{ ...styles.locationContainer, }}>
               <Image
                 source={require("../../../assets/icon/location.png")}
                 style={styles.locationIcon}
@@ -190,17 +190,17 @@ const OrderFormView = () => {
         {!isMeSelected && (
           isSubmitDetail ? (<>
             <Text title={"Address"} style={styles.addressText} />
-            <View style={styles.locationContainer}>
+            <View style={{ ...styles.locationContainer, borderRadius: 1}}>
               <Image
                 source={require("../../../assets/icon/location.png")}
                 style={styles.locationIcon}
               />
               <Text
-                style={{ flex: 0.84, paddingLeft: getWidth(dimens.sideMargin) }}
+                style={styles.street}
                 title={"Ramban st. 2, Haifa"}
               />
               <TextButton
-                containerStyle={{ flex: 0.1 }}
+                containerStyle={{ flex: 0.15 }}
                 title={"Edit"}
                 fontSize={getHeight(fontSize.textM)}
               />
@@ -269,7 +269,6 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.disabled,
     flexDirection: "row",
-  
     // paddingHorizontal: getWidth(dimens.paddingS),
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
     //  flex: 0.2,
@@ -280,12 +279,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   buttonContainer: {
-    flex: 0.37,
+    flex: 0.38,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "wrap",
     gap: getWidth(dimens.marginS + dimens.borderBold),
+     
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -302,10 +302,9 @@ const styles = StyleSheet.create({
     gap: getWidth(dimens.marginL),
   },
   container: {
-    flex: 0.29,
+    flex: 0.31,
     gap: getWidth(dimens.sideMargin),
-    marginTop: getHeight(dimens.paddingXs),
-
+    marginTop: getHeight(dimens.marginS),
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),
@@ -353,5 +352,14 @@ streetAddress:{
    flex: 0.80,
     paddingLeft: getWidth(dimens.sideMargin),
     fontSize:fontSize.textM
-   }
+   },
+   list:{
+    fontSize:fontSize.textM
+   },
+   street:{ 
+    flex: 0.84,
+     paddingLeft: getWidth(dimens.sideMargin ) ,
+     fontSize:fontSize.textM
+
+    }
 });
