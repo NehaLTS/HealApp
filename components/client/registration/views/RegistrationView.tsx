@@ -2,7 +2,6 @@ import Button from "common/Button";
 import Input from "common/Input";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
-import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { t } from "i18next";
@@ -77,7 +76,7 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-         disabled={(passwordError.length > 0 || emailError.length > 0 || emailRef.current.value==null || passwordRef.current.value==null)}
+       //  disabled={(passwordError.length > 0 || emailError.length > 0 || emailRef.current.value==null || passwordRef.current.value==null)}
 
         />
       </View>

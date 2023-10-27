@@ -38,7 +38,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
-      backdropOpacity={!isAddPayment ?0.9 :1}
+      backdropOpacity={!isAddPayment ? 0.9 : 1}
       onBackdropPress={onPaymentAdd}
       isVisible={isModalVisible}
       style={styles.modalContainer}>
@@ -71,19 +71,19 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
       {!isSearch ? (
         <TouchableOpacity onPress={onPress} activeOpacity={1}>
           <View style={[styles.servicesContainer, styles.elevation]}>
-            <Image source={item.iconSource} style={styles.specialistIcon} />
+            <Image source={require(item.image)} style={styles.specialistIcon} />
             <Text
               numberOfLines={2}
               style={styles.specialist}
-              title={item.title}
+              title={item.name}
             />
           </View>
         </TouchableOpacity>
       ) : (
         <View style={styles.specialistList}>
           <View style={styles.container}>
-            <Image source={item.iconSource} style={styles.specialistIcon} />
-            <Text style={styles.specialistSearched} title={item.title} />
+            <Image source={require(item.image)} style={styles.specialistIcon} />
+            <Text style={styles.specialistSearched} title={item.name} />
           </View>
           <Button
             title={"Order"}
@@ -165,6 +165,6 @@ const styles = StyleSheet.create({
   paymentContainer: {
     flex: 1,
     backgroundColor: colors.white,
-    zIndex:1
+    zIndex: 1
   },
 });

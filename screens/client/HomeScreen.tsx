@@ -13,9 +13,10 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -30,6 +31,8 @@ import Animated, {
 } from "react-native-reanimated";
 import HomeViewController from "./HomeViewController";
 import ProviderAddServices from "components/provider/registration/views/ProviderAddServices";
+import { BannerAd, TestIds, AppOpenAd, InterstitialAd, RewardedAd } from 'react-native-google-mobile-ads';
+import { ClientOrderServices } from "libs/ClientOrderServices";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -44,8 +47,24 @@ const HomeScreen = () => {
     onBlur,
     onChangeSearch,
   } = HomeViewController();
+  const { searchProviders } = ClientOrderServices()
   const isDataNotFound = true;
+  const parentWidth = Dimensions.get('window').width - 32;
+  const parentHeight = getHeight(147);
+  const adUnitId = __DEV__ ? TestIds.BANNER : 'ca-app-pub-9743823044590174/2032132976';
+  useEffect(() => {
+    // Create and load the App Open Ad
+    // const appOpenAd = AppOpenAd.createForAdRequest(TestIds.APP_OPEN);
+    // appOpenAd.load();
 
+    // Create and load the Interstitial Ad
+    const interstitialAd = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL);
+    interstitialAd.load();
+
+    // Create and load the Rewarded Ad
+    // const rewardedAd = RewardedAd.createForAdRequest(TestIds.REWARDED);
+    // rewardedAd.load();
+  }, [InterstitialAd]);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -98,6 +117,7 @@ const HomeScreen = () => {
             exiting={FadeInDown.duration(10).easing(Easing.ease)}>
             <CardView item={item} index={index} />
           </Animated.View>
+
         ))}
       </>
     );
@@ -130,7 +150,7 @@ const HomeScreen = () => {
   };
 
   return (
-   
+
     <ScrollView
       style={styles.container}
       contentContainerStyle={{ paddingBottom: 20 }}>
@@ -141,6 +161,9 @@ const HomeScreen = () => {
           source={require("assets/icon/google.png")}
         />
       )}
+      {/* <View style={{ height: getHeight(147), width: '100%', backgroundColor: 'rgba(217,217,217,255)' }}>
+        <BannerAd onAdLoaded={() => console.log('loading....')} unitId={adUnitId} size={`${parentWidth}x${parentHeight}`} />
+      </View> */}
       <SearchBox
         isTouchStart={isTouchStart && !searchRef?.current?.value}
         placeholder="What treatment do you need?"
@@ -153,8 +176,9 @@ const HomeScreen = () => {
       {!searchRef?.current?.value
         ? getProviderList()
         : isDataNotFound
-        ? getProviderSearchList()
-        : noSearchedList()}
+          ? getProviderSearchList()
+          // ? searchProviders({ name: 'Fever' })
+          : noSearchedList()}
     </ScrollView>
   );
 };

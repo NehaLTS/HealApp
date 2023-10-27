@@ -31,7 +31,6 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const {
-    userData,
     cardNumberRef,
     expireDateRef,
     cvvRef,
@@ -43,7 +42,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
     onChangeCvv,
     cardNumberError,
     cvvError,
-    cardExpiry,
+    cardExpiryError,
     onClearCard,
     onPressNext,
     onPressBack,
@@ -59,7 +58,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
   return (
     <>
       {isFromHome && (
-        <View style={{ flexDirection: "row", gap: getHeight( dimens.buttonHeight), marginBottom: getHeight(dimens.buttonHeight) }}>
+        <View style={{ flexDirection: "row", gap: getHeight(dimens.buttonHeight), marginBottom: getHeight(dimens.buttonHeight) }}>
           <Image source={logo} style={styles.logo} />
           <Text
             adjustsFontSizeToFit
@@ -113,7 +112,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 <Text style={styles.cardDetail} title={cardNumber} />
                 <Text
                   style={styles.cardDetail}
-                  title={`${registration.expires} ` + userData.expire_date}
+                  title={`${registration.expires} ` + cardExpiry}
                 />
               </View>
             </>
@@ -126,7 +125,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 onBlur={onBlurCardNumber}
                 onChangeText={onChangeCardNumber}
                 ref={cardNumberRef}
-                defaultValue={userData.credit_card_number}
+                defaultValue={""}
                 errorMessage={cardNumberError}
                 inputValue={userData.credit_card_number ?? ""}
                 returnKeyType={"next"}
@@ -144,9 +143,9 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                   onClearInputText={() => expireDateRef.current.clear()}
                   onChangeText={onChangeExpireDate}
                   ref={expireDateRef}
-                  errorMessage={cardExpiry}
-                  defaultValue={userData.expire_date}
-                  inputValue={userData?.expire_date ?? ""}
+                  errorMessage={cardExpiryError}
+                  defaultValue={""}
+                  inputValue={cardExpiry}
                   returnKeyType={"next"}
                   onSubmitEditing={() => cvvRef.current.focus()}
                   maxLength={5}
@@ -156,12 +155,12 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                   type="creditCardNumber"
                   placeholder={registration.cvv}
                   onBlur={onBlueCvv}
-                  // errorMessage={ cvvError}
+                  errorMessage={cvvError}
                   onClearInputText={() => cvvRef.current.clear()}
                   onChangeText={onChangeCvv}
                   ref={cvvRef}
-                  defaultValue={userData.cvv}
-                  inputValue={userData?.cvv ?? ""}
+                  defaultValue={""}
+                  inputValue={""}
                   maxLength={3}
                 />
               </View>
@@ -206,7 +205,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             <Button
               title={t("next")}
               isPrimary
-              onPress={isFromHome ? ()=> navigation.navigate('orderSpecialist') : onPressNext}
+              onPress={isFromHome ? () => navigation.navigate('orderSpecialist') : onPressNext}
               isSmall
               width={"30%"}
             />
@@ -221,9 +220,9 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
               isLoading
                 ? console.log("goback")
                 : navigation.reset({
-                    index: -1,
-                    routes: [{ name: NavigationRoutes.ClientHome }],
-                  })
+                  index: -1,
+                  routes: [{ name: NavigationRoutes.ClientHome }],
+                })
             }
           />
         )}
@@ -354,12 +353,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: {
-    width: getWidth(dimens.imageS ),
+    width: getWidth(dimens.imageS),
     height: getHeight(dimens.imageS),
-    resizeMode:'center'    
+    resizeMode: 'center'
   },
   title: {
     fontSize: getWidth(fontSize.headingL),
-    textAlign:'center',
+    textAlign: 'center',
   },
 });

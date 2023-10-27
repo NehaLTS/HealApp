@@ -27,14 +27,14 @@ const RegistrationViewController = () => {
           routes: [{ name: NavigationRoutes.ProviderRegistration }],
         })
       else {
-        showToast("User already exist","Please try SignIn", "error")
+        showToast("User already exist", "Please try SignIn", "error")
       }
     }
     else {
-      showToast("","Please enter email or password", "warning")
+      showToast("", "Please enter email or password", "warning")
     }
     setIsLoading(false)
   }
-  return { onPressSignUpProvider, isLoading,renderToast }
+  return { onPressSignUpProvider, isLoading, renderToast }
 }
 export default RegistrationViewController
