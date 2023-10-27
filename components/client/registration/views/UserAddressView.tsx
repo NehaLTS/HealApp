@@ -113,15 +113,15 @@ const UserAddressView = () => {
           onTouchStart={() => setIsVisible(true)}
           caretHidden
           inputValue={onSearchAddress}
-          onClearInputText={()=>setOnSearchAddress('')}
+          onClearInputText={() => setOnSearchAddress('')}
         />
         <Input
           placeholder={t("date_of_birth")}
           keyboardType="numeric"
           errorMessage={dateOfBirthError}
           inputStyle={styles.inputDOB}
-          onBlur={() => {}}
-          onChangeText={() => {}}
+          onBlur={() => { }}
+          onChangeText={() => { }}
           onClearInputText={() => birthDateRef.current.clear()}
           ref={birthDateRef}
           defaultValue={formattedDate === "Invalid-Date" ? "" : formattedDate}
@@ -264,13 +264,13 @@ const styles = StyleSheet.create({
     flex: 0.12,
     justifyContent: "space-between",
   },
-  modal:{ 
-    flex: 1, 
-    justifyContent: "flex-start" 
+  modal: {
+    flex: 1,
+    justifyContent: "flex-start"
   },
-  addressView:{
+  addressView: {
     flexDirection: "row",
-     alignItems: "center",
-     marginTop: getHeight(dimens.paddingS),
+    alignItems: "center",
+    marginTop: getHeight(dimens.paddingS),
   }
 });

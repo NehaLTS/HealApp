@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
+import { ClientOrderServices } from "libs/ClientOrderServices";
 import { Banner } from "libs/types/ProvierTypes";
-import React from "react";
+import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
@@ -12,11 +13,26 @@ const HomeViewController = () => {
   const navigation = useNavigation<any>();
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
-  const searchRef = React.useRef<any>("");
+  const { getBannerAds } = ClientOrderServices()
+  const searchRef = useRef<any>("");
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList: providerList[] = home.providerList;
 
+  useEffect(() => {
+    getBannerAd();
+  }, []);
+
+  const getBannerAd = async () => {
+    try {
+      const res = await getBannerAds();
+      console.log("resp", res);
+      setBannerAds(res)
+    } catch (error) {
+      // Handle any errors that occurred during the execution of getBannerAds
+      console.error("An error occurred:", error);
+    }
+  };
 
   const onChangeSearch = (value: string) => (searchRef.current.value = value);
   const onTouchStart = () => setIsTouchStart(false);
