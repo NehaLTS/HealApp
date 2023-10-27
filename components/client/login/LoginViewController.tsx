@@ -26,7 +26,7 @@ const LoginViewController = () => {
     onSubmitGoogleAuthRequest,
   } = AuthServicesClient();
 
-  //TODO: KAMAL to change the error to useRef
+  
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -113,7 +113,7 @@ const LoginViewController = () => {
     });
 
     //if first name is empty navigate to onboard else to Home
-    if (userDetails.firstName == "") {
+    if (!userDetails.firstName || userDetails.firstName == "" ) {
       navigation.reset({
         index: 0,
         routes: [{ name: "OnboardDetails" }],

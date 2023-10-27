@@ -137,3 +137,48 @@ export interface ClientProfile {
   idNumber?: number;
   isPaymentAdded?: boolean;
 }
+
+export type onboardStep = "details" | "address" | "payment" | "services";
+
+export interface ProviderProfile {
+  firstName: string;
+  lastName: string;
+  profilePicture?: string;
+  idPicture?: string;
+  provider: ProviderType;
+  speciality: ProviderSpeciality;
+  phoneNumber: string;
+  email?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  licensenumber?: string;
+  licensepicture?: string;
+  bankDetails: ProviderBankDetails;
+}
+
+export interface ProviderType {
+  name: string;
+  id: number;
+}
+
+export interface ProviderSpeciality {
+  name: string;
+  id: number;
+}
+
+export interface ProviderBankDetails {
+  registrationNumber: string;
+  bankname: string;
+  branchname: string;
+  accountnumber: string;
+}
+
+export interface ProviderServices {
+  id: number;
+  name: string;
+  price: number;
+  description?: string;
+  currency: string;
+}

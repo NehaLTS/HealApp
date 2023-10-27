@@ -19,7 +19,6 @@ import {
 } from "libs/datastorage/useLocalStorage";
 import {
   ClientUserContext,
-  onboardStep,
   UseClientUserContext,
 } from "contexts/UseClientUserContext";
 import { ClientProfile } from "libs/types/UserType";
@@ -32,8 +31,8 @@ const OnBoardingView = () => {
   const { setUserProfile, setUserId, setToken } = UseClientUserContext();
 
   useEffect(() => {
-   // deleteLocalData();
-    getLocalUserData();
+   deleteLocalData();
+  // getLocalUserData();
   }, []);
 
   const getLocalUserData = async () => {

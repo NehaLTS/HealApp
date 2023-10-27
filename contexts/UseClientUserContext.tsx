@@ -1,7 +1,7 @@
-import { ClientProfile } from 'libs/types/UserType'
+import { ClientProfile, onboardStep } from 'libs/types/UserType'
 import React, { createContext } from 'react'
 
-export type onboardStep = 'details' | 'address' | 'payment' |'services'
+
 
 export interface ClientUserContextFields {
   currentStep: onboardStep

@@ -17,7 +17,7 @@ const RegistrationViewController = () => {
   const emailRef = React.useRef<any>("");
   const passwordRef = React.useRef<any>("");
 
-  //TODO: KAMAL to change the error to useRef
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
