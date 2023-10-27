@@ -191,7 +191,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
               title={t("next")}
               isPrimary
               onPress={onPressNext }
-              // onPress={isFromHome ? () => navigation.navigate(NavigationRoutes.OrderSpecialist) : onPressNext}
+              // onPress={isFromHome ? () => navigation.navigate(NavigationRoutes.OrderDetails) : onPressNext}
               isSmall
               width={"30%"}
             />

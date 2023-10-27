@@ -31,11 +31,11 @@ const ClientStackNavigator = () => {
           )}
         />
         <Stack.Screen
-          name={NavigationRoutes.OrderSpecialist}
+          name={NavigationRoutes.OrderDetails}
           options={defaultHeaderStyle}
           component={lazy(
             () =>
-              import("../screens/client/OrderSpecialist")
+              import("../screens/client/OrderDetails")
           )}
         />
       </Stack.Navigator>

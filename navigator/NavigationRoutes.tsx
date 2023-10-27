@@ -8,7 +8,7 @@ enum NavigationRoutes {
   ClientLogin = "ClientLogin",
   OnboardDetails = "OnboardDetails",
   ClientHome = "ClientHome",
-  OrderSpecialist = "OrderSpecialist",
+  OrderDetails = "OrderDetails",
 
   //Provider Routes
   ProviderStack = "ProviderStack",

@@ -95,7 +95,7 @@ const HomeScreen = () => {
             key={index}
             entering={FadeInUp.duration(200).easing(Easing.ease)}
             exiting={FadeInDown.duration(10).easing(Easing.ease)}>
-            <CardView item={item} index={index} onPress={()=> navigation.navigate(NavigationRoutes.OrderSpecialist)} />
+            <CardView item={item} index={index} onPress={()=> navigation.navigate(NavigationRoutes.OrderDetails)} />
           </Animated.View>
         ))}
       </>
@@ -112,7 +112,7 @@ const HomeScreen = () => {
       </Animated.View>
     ));
   };
-  const noSearchedList = () => {
+  const noSearchedView = () => {
     return (
       <View style={styles.imageContainer}>
         <Text title={"No search results"} style={styles.noSearchText} />
@@ -152,8 +152,7 @@ const HomeScreen = () => {
         ? getProviderList()
         : isDataNotFound
         ? getProviderSearchList()
-        : // ? searchProviders({ name: 'Fever' })
-          noSearchedList()}
+        : noSearchedView()}
     </ScrollView>
   );
 };

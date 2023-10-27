@@ -13,7 +13,7 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
-const OrderSpecialist = () => {
+const OrderDetails = () => {
   const navigation = useNavigation();
   const [showSummary, setShowSummary] = useState(false);
 
@@ -67,7 +67,7 @@ const OrderSpecialist = () => {
   );
 };
 
-export default OrderSpecialist;
+export default OrderDetails;
 
 const styles = StyleSheet.create({
   mainContainer: {

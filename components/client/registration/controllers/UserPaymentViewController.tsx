@@ -110,7 +110,7 @@ const UserPaymentViewController = () => {
     setIsLoader(false);
 
     if (res?.isSuccessful) {
-      if (isFromHome) navigation.navigate(NavigationRoutes.OrderSpecialist)
+      if (isFromHome) navigation.navigate(NavigationRoutes.OrderDetails)
       else{
       navigation.reset({
         index: 0,
