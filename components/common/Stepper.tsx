@@ -8,7 +8,7 @@ import { dimens } from "designToken/dimens";
 const Stepper = ({ currentStep , totalStep }: { currentStep:string, totalStep: string[] }) => {
   return (
     <View style={styles.container}>
-      {totalStep?.map((item, index: number) => (
+      {totalStep?.map?.((item, index: number) => (
         <View
           key={index}
           style={[

@@ -10,6 +10,9 @@ import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import UserAddressViewController from "../controllers/UserAddressViewController";
 import DatePicker from "react-native-date-picker";
 import Button from "components/common/Button";
+import RNModal from "components/common/Modal";
+import { colors } from "designToken/colors";
+import TextButton from "components/common/TextButton";
 
 const UserAddressView = () => {
   const { t } = useTranslation();
@@ -32,6 +35,10 @@ const UserAddressView = () => {
     onPressNext,
     onPressBack,
     birthDateRef,
+    setOnSearchAddress,
+    setIsVisible,
+    isVisible,
+    onSearchAddress
   } = UserAddressViewController();
   const currentDate = new Date();
 
@@ -54,6 +61,29 @@ const UserAddressView = () => {
     currentDate.getMonth(),
     currentDate.getDate()
   );
+  const addAddressView = () => {
+    return (
+      <View style={styles.addressView}>
+        <Input
+          placeholder={t("address")}
+          type={"fullStreetAddress"}
+          inputStyle={[{ minWidth: "82%" }]}
+          onClearInputText={() => addressRef.current.clear()}
+          onChangeText={setOnSearchAddress}
+          inputValue={onSearchAddress}
+          value={onSearchAddress}
+          onSubmitEditing={() => setIsVisible(false)}
+          autoFocus
+        />
+        <TextButton
+          containerStyle={{ width: "18%", alignItems: "flex-end" }}
+          title="Close"
+          fontSize={fontSize.textL}
+          onPress={() => setIsVisible(false)}
+        />
+      </View>
+    );
+  };
 
   return (
     <>
@@ -77,17 +107,13 @@ const UserAddressView = () => {
       <View style={styles.inputContainer}>
         <Input
           placeholder={t("address")}
-          type={"fullStreetAddress"}
           inputStyle={styles.input}
-          onBlur={onBlurAddress}
-          onClearInputText={() => addressRef.current.clear()}
-          onChangeText={onChangeAddress}
-          ref={addressRef}
-          defaultValue={""}
+          value={onSearchAddress}
           errorMessage={addressError}
-          inputValue={addressRef.current.value}
-          returnKeyType={"next"}
-          onSubmitEditing={() => birthDateRef.current.focus()}
+          onTouchStart={() => setIsVisible(true)}
+          caretHidden
+          inputValue={onSearchAddress}
+          onClearInputText={()=>setOnSearchAddress('')}
         />
         <Input
           placeholder={t("date_of_birth")}
@@ -137,8 +163,7 @@ const UserAddressView = () => {
             style={[
               styles.imageContainer,
               { marginLeft: getWidth(dimens.paddingXs) },
-            ]}
-          >
+            ]}>
             <Image
               source={
                 profilePicture
@@ -152,8 +177,7 @@ const UserAddressView = () => {
             <TouchableOpacity
               activeOpacity={profilePicture ? 1 : 0.5}
               onPress={() => setIsShowModal(true)}
-              style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}
-            >
+              style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}>
               <Image
                 source={require("assets/icon/circumEditBlue.png")}
                 style={styles.editImage}
@@ -177,6 +201,13 @@ const UserAddressView = () => {
           width={"30%"}
         />
       </View>
+      <RNModal
+        style={styles.modal}
+        backdropOpacity={1}
+        backdropColor={colors.white}
+        isVisible={isVisible}>
+        {addAddressView()}
+      </RNModal>
     </>
   );
 };
@@ -233,4 +264,13 @@ const styles = StyleSheet.create({
     flex: 0.12,
     justifyContent: "space-between",
   },
+  modal:{ 
+    flex: 1, 
+    justifyContent: "flex-start" 
+  },
+  addressView:{
+    flexDirection: "row",
+     alignItems: "center",
+     marginTop: getHeight(dimens.paddingS),
+  }
 });

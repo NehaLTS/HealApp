@@ -1,5 +1,5 @@
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { t } from "i18next";
+
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
@@ -11,17 +11,23 @@ import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
 import BasicInformationController from '../controllers/BasicInformationController';
+import TextButton from 'components/common/TextButton';
+import RNModal from 'components/common/Modal';
+import { useTranslation } from 'react-i18next';
 
 const ProviderAddress = ({
   phoneError: phError,
   addressError: adError,
 }: any) => {
+  const { t } = useTranslation();
   const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
     BasicInformationController({});
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
   const [phoneError, setPhoneError] = useState("");
   const [addressError, setAddressError] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const [onSearchAddress, setOnSearchAddress] = useState("");
 
 
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
@@ -50,9 +56,9 @@ const ProviderAddress = ({
   };
 
   const validateAddress = () => {
-    if (!addressRef.current.value) {
+    if (onSearchAddress?.length === 0) {
       setAddressError("Address is required");
-    } else if (addressRef.current.value.length < 4) {
+    } else if (onSearchAddress?.length < 4) {
       setAddressError('Please fill full address')
     }
     else {
@@ -60,6 +66,29 @@ const ProviderAddress = ({
     }
   };
 
+  const addAddressView = () => {
+    return (
+      <View style={styles.addressView}>
+        <Input
+          placeholder={t("address")}
+          type={"fullStreetAddress"}
+          inputStyle={[{ minWidth: "82%" }]}
+          onClearInputText={() => addressRef.current.clear()}
+          onChangeText={setOnSearchAddress}
+          inputValue={onSearchAddress}
+          value={onSearchAddress}
+          onSubmitEditing={() => setIsVisible(false)}
+          autoFocus
+        />
+        <TextButton
+          containerStyle={{ width: "18%", alignItems: "flex-end" }}
+          title="Close"
+          fontSize={fontSize.textL}
+          onPress={() => setIsVisible(false)}
+        />
+      </View>
+    );
+  };
 
   return (
     <>
@@ -96,17 +125,16 @@ const ProviderAddress = ({
 
       />
 
-      <Input
-        placeholder={registration.address}
-        inputStyle={styles.input}
-        onBlur={onBlurAddress}
-        onChangeText={onChangeAddress}
-        ref={addressRef}
-        defaultValue={userDataProvider.address}
-        inputValue={userDataProvider?.address ?? ""}
-        errorMessage={adError.length ? adError : addressError}
-        onClearInputText={() => addressRef.current.clear()}
-      />
+        <Input
+          placeholder={t("address")}
+          inputStyle={styles.input}
+          value={onSearchAddress}
+          errorMessage={addressError}
+          onTouchStart={() => setIsVisible(true)}
+          caretHidden
+          inputValue={onSearchAddress}
+          onClearInputText={()=>setOnSearchAddress('')}
+        />
 
       <View style={styles.iconContainer}>
         <Text style={styles.text}>{t("Upload license photo")}</Text>
@@ -130,6 +158,13 @@ const ProviderAddress = ({
           imageUri={getImageUrl}
         />
       </View>
+      <RNModal
+        style={styles.modal}
+        backdropOpacity={1}
+        backdropColor={colors.white}
+        isVisible={isVisible}>
+        {addAddressView()}
+      </RNModal>
     </>
   );
 };
@@ -164,4 +199,13 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
   },
+  modal:{ 
+    flex: 1, 
+    justifyContent: "flex-start" 
+  },
+  addressView:{
+    flexDirection: "row",
+     alignItems: "center",
+     marginTop: getHeight(dimens.paddingS),
+  }
 });

@@ -42,7 +42,8 @@ const UserPaymentView = () => {
     isLoader: isLoading,
     isCardDetails,
     cardExpiry,
-    cardNumber
+    cardNumber,
+    onPressStartUsingHeal
   } = UserPaymentViewController();
 
   
@@ -57,18 +58,14 @@ const UserPaymentView = () => {
                 style={styles.creditCard}
               />
               <Text
-                title={
-                  !isLoading
-                    ? registration.add_credit_card
-                    : registration.check_credit_card
-                }
+                title={registration.add_credit_card}
               />
             </>
           )}
         </View>
-        {!isLoading ? (
-          isCardDetails ? (
+        {isCardDetails ? (
             <>
+            {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
               <View style={styles.innerContainer}>
                 <Image
                   source={require("assets/icon/masterCard.png")}
@@ -89,10 +86,10 @@ const UserPaymentView = () => {
                 </View>
               </View>
               <View style={styles.cardDetailContainer}>
-                <Text style={styles.cardDetail} title={cardNumber} />
+                <Text style={styles.cardDetail} title={("**** **** ***** " + cardNumberRef?.current?.value?.slice?.(-4) )} />
                 <Text
                   style={styles.cardDetail}
-                  title={`${registration.expires} ` + cardExpiry}
+                  title={`${t('expires')} ` + expireDateRef?.current?.value}
                 />
               </View>
             </>
@@ -145,11 +142,7 @@ const UserPaymentView = () => {
                 />
               </View>
             </>
-          )
-        ) : (
-          <ActivityIndicator style={styles.loading} size={'large'} />
-        )}
-        {!isLoading && (
+          )}
           <>
             <View style={styles.divider} />
             <TouchableOpacity style={styles.googlePayContainer}>
@@ -160,14 +153,13 @@ const UserPaymentView = () => {
               <Text title={registration.add_google_pay} />
             </TouchableOpacity>
           </>
-        )}
       </View>
       <View
         style={[
           styles.footerContainer,
-          { justifyContent: isLoading || isCardDetails ? "center" : "space-between" }
+          { justifyContent:isCardDetails ? "center" : "space-between" }
         ]}>
-        {!isLoading && !isCardDetails ? (
+        {!isCardDetails ? (
           <>
             <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
             <Button
@@ -180,20 +172,15 @@ const UserPaymentView = () => {
           </>
         ) : (
           <Button
-            title={isLoading ? t("cancel") : t("start_using_heal")}
+            title={t("start_using_heal")}
             isPrimary
             isSmall
-            style={{ paddingHorizontal: !isLoading ? getWidth(20) : 0 }}
-            onPress={() => (isLoading ? console.log('goback') :
-              navigation.reset({
-                index: 0,
-                routes: [{ name: NavigationRoutes.ClientHome }],
-              })
-            )}
+            style={{ paddingHorizontal: 0 }}
+            onPress={onPressStartUsingHeal}
           />
         )}
       </View>
-      {!isLoading && !isCardDetails && (
+      {!isCardDetails && (
         <TextButton fontSize={getWidth(fontSize.textXl)} containerStyle={{flex:0.08}} style={styles.skipLaterText} title={t('skip_for_later')} onPress={() => navigation.reset({
           index: 0,
           routes: [{ name: NavigationRoutes.ClientHome }],

@@ -18,13 +18,14 @@ const UserAddressViewController = () => {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [isLoader, setIsLoader] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [onSearchAddress, setOnSearchAddress] = useState("");
   const { setCurrentStep, setUserProfile, userProfile, userId } =
     UseClientUserContext();
 
   const validateAddress = () => {
-    if (!addressRef.current.value || addressRef.current.value === undefined)
-      setAddressError("Please fill full address");
-    else setAddressError("");
+    if (onSearchAddress?.length < 4) setAddressError("Please fill full address");
+     else  setAddressError("");
   };
 
   // Function to validate the ID number
@@ -106,7 +107,7 @@ const UserAddressViewController = () => {
         Alert.alert("some error occurred");
       }
     } else {
-      if (!addressRef.current.value) setAddressError("Address is required");
+      if (onSearchAddress?.length === 0) setAddressError("Address is required");
       if (!idNumberRef.current.value) setIdNumberError("ID number is required");
       if (!dateOfBirth) setDateOfBirthError("Birth date is required");
     }
@@ -137,6 +138,10 @@ const UserAddressViewController = () => {
     onPressNext,
     onPressBack,
     birthDateRef,
+    setOnSearchAddress,
+    setIsVisible,
+    isVisible,
+    onSearchAddress
   };
 };
 
