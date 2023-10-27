@@ -24,29 +24,29 @@ const SummaryView = () => {
         <View style={styles.rowContainer}>
           <View style={styles.patientAndAddress}>
             <Text title={"The patient "} style={styles.text} />
-            <Text title={"17 y.o, 054-6178180"} />
+            <Text title={"17 y.o, 054-6178180"} style={styles.textSmall}/>
           </View>
           <View style={{ flexDirection: "row", gap: 15 }}>
             <Image
               source={require("../../../assets/icon/location.png")}
               style={styles.locationIcon}
             />
-            <Text title={"Ahavat Zion, 10, \n Haifa"} />
+            <Text title={"Ahavat Zion, 10, \n Haifa"}style={styles.textSmall} />
           </View>
         </View>
       </View>
 
       <View style={styles.symptomsContainer}>
         <Text title={"Symptoms "} style={styles.text} />
-        <Text title={"Back pain"} />
+        <Text title={"Back pain"} style={styles.textSmall} />
       </View>
 
       <Text title={"Services"} style={styles.text} />
-      <Text title={"Basic - 500 NIS"} />
+      <Text title={"Basic - 500 NIS"} style={styles.textSmall} />
       <Text title={"Voltaren shot - 100 NIS"} style={styles.voltarenText} />
       <View style={{ flexDirection: "row" }}>
         <Text title={"Total"} style={styles.total} />
-        <Text title={"- 600 NIS"} />
+        <Text title={"- 600 NIS"} style={styles.textSmall}/>
       </View>
 
       <Text
@@ -64,7 +64,7 @@ const SummaryView = () => {
       </View>
 
       <Text title={"Estimated arrival"} style={styles.text} />
-      <Text title={"60 min"} />
+      <Text title={"60 min"} style={ styles.textSmall} />
 
       <View style={styles.instructionContainer}>
         <Text title={"Instructions for arrival"} style={styles.instruction} />
@@ -72,7 +72,7 @@ const SummaryView = () => {
           placeholder={"Describe where is the entrance etc."}
           inputValue={""}
           inputStyle={styles.description}
-        
+          placeholderStyle={ styles.textSmall}
         />
       </View>
     </>
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
 
   voltarenText: {
     marginVertical: getWidth(dimens.paddingXs),
+    fontSize:fontSize.textM
   },
   payForIt: {
     marginVertical: getWidth(dimens.paddingXs),
@@ -143,7 +144,6 @@ const styles = StyleSheet.create({
   },
   description: {
     height: getHeight(dimens.imageS + dimens.marginS),
-   
   },
 
   container: {
@@ -160,6 +160,10 @@ const styles = StyleSheet.create({
   },
   total: {
     fontFamily: fontFamily.bold,
+    fontSize:fontSize.textM
   },
-  
+  textSmall:{
+    fontSize:fontSize.textM,
+
+  },
 });

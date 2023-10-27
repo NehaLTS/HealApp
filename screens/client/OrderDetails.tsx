@@ -60,7 +60,7 @@ const OrderDetails = () => {
         isSmall
         style={styles.buttonOrder}
         onPress={handleNextButtonPress}
-        width={100}
+         width={"30%"}
       />
       {showSummary &&  <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
     </View>
@@ -107,6 +107,8 @@ const styles = StyleSheet.create({
   },
   text:{
     fontSize:getWidth(fontSize.textS),
-    marginTop:getWidth(4)
+    marginTop:getWidth(4),
+
+    
   }
 });

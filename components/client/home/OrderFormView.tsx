@@ -176,7 +176,7 @@ const OrderFormView = () => {
                 style={styles.locationIcon}
               />
               <Text
-                style={{ flex: 0.80, paddingLeft: getWidth(dimens.sideMargin) }}
+                style={styles.streetAddress}
                 title={"Ramban st. 2, Haifa"}
               />
               <TextButton
@@ -349,5 +349,9 @@ const styles = StyleSheet.create({
   description: {
     height: getHeight(117),
   },
-
+streetAddress:{
+   flex: 0.80,
+    paddingLeft: getWidth(dimens.sideMargin),
+    fontSize:fontSize.textM
+   }
 });
