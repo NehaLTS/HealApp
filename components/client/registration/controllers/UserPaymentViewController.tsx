@@ -94,7 +94,7 @@ const UserPaymentViewController = () => {
     setIsCardDetails(false);
   };
 
-  const onPressStartUsingHeal = async () => {
+  const onPressStartUsingHeal = async (isFromHome: boolean) => {
     setIsLoader(true);
     const res = await onCreateCreditCardDetails({
       credit_card_number: cardNumberRef?.current?.value ?? "",
@@ -110,10 +110,13 @@ const UserPaymentViewController = () => {
     setIsLoader(false);
 
     if (res?.isSuccessful) {
+      if (isFromHome) navigation.navigate(NavigationRoutes.OrderSpecialist)
+      else{
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ClientHome }],
       });
+    }
     } else Alert.alert("Some error occurred");
   };
 

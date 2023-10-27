@@ -22,6 +22,7 @@ import { fontFamily } from "designToken/fontFamily";
 
 const Input = forwardRef(({
   placeholder,
+  placeholderStyle,
   type,
   inputStyle,
   errorMessage,
@@ -30,6 +31,8 @@ const Input = forwardRef(({
   onClearInputText,
   onPressCalender,
   isToHideCross,
+  isDescription,
+  onSubmitDescription,
   ...props
 }: {
   placeholder: string;
@@ -41,15 +44,18 @@ const Input = forwardRef(({
   | 'nameSuffix'
   | 'telephoneNumber'
   | 'password'
-  | 'numeric' |
-  'dateOfBirth';
+  | 'numeric'
+  | 'dateOfBirth';
   inputStyle?: StyleProp<TextStyle>;
+  placeholderStyle?: StyleProp<TextStyle>;
   errorMessage?: string;
   containerWidth?: DimensionValue;
   inputValue: string,
   isToHideCross?: boolean,
-  onClearInputText: () => void
+  onClearInputText?: () => void
   onPressCalender?: () => void
+  onSubmitDescription?: () => void
+  isDescription?: boolean
 } & TextInputProps, ref) => {
   const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
   const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
@@ -105,10 +111,16 @@ const Input = forwardRef(({
   const fontSizeStyle = { fontSize: fontSizeAnim };
   return (
     <View>
-      <View style={[styles.inputContainer, inputStyle, { borderColor: errorMessage ? colors.invalid : colors.primary }]}>
-        <Animated.Text adjustsFontSizeToFit style={[styles.label, labelStyle, fontSizeStyle]}>
+      <View style={[styles.inputContainer, inputStyle,placeholderStyle, { borderColor: errorMessage ? colors.invalid : colors.primary }]}>
+        <Animated.Text adjustsFontSizeToFit style={[styles.label, labelStyle, fontSizeStyle ,placeholderStyle]} >
           {placeholder}
         </Animated.Text>
+        {isDescription && <TouchableOpacity onPress={onSubmitDescription} style={styles.arrowIconContainer}>
+          <Image
+            source={require("assets/icon/arrowNext.png")}
+            style={styles.arrowIcon}
+          />
+        </TouchableOpacity>}
         <TextInput
           style={styles.input}
           placeholderTextColor={colors.black}
@@ -117,8 +129,6 @@ const Input = forwardRef(({
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
           ref={ref as React.LegacyRef<TextInput>}
-          multiline={placeholder === "Description"?true : false}
-          numberOfLines={placeholder === "Description" ? 5 :  1}
           editable
           {...props}
         />
@@ -165,14 +175,15 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
     // minWidth: '20%'
-     minWidth: '24%'
+    minWidth: '24%'
   },
   input: {
     fontSize: fontSize.textL,
     marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
-    textAlignVertical:'top',
+    textAlignVertical: 'top',
+    // backgroundColor:'red'
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
@@ -205,7 +216,19 @@ const styles = StyleSheet.create({
     marginRight: getHeight(dimens.marginS),
     resizeMode: 'contain'
   },
-  birthDate:{ alignItems:'flex-end', position:'absolute', width:'100%'}
+  birthDate:{ alignItems:'flex-end', position:'absolute', width:'100%'},
+  arrowIconContainer: {
+    position: 'absolute',
+    bottom:0,
+    right: 0,
+    zIndex:2,
+    padding: getHeight(4),
+  },
+  arrowIcon: {
+    height: getHeight(dimens.marginL + dimens.paddingXs),
+    width: getWidth(dimens.marginL + dimens.paddingXs),
+    resizeMode: "center",
+  },
 });
 
 

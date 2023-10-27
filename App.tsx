@@ -31,8 +31,7 @@ const App = () => {
   const [userId, setUserId] = useState("");
   const [token, setToken] = useState<string>("");
   const [currentStep, setCurrentStep] = useState<onboardStep>("details");
-  const [providerServices, setProviderServices] =
-    useState<ProviderServices>(null);
+  const [providerServices, setProviderServices] = useState<ProviderServices>(null);
 
   /** To Initialize Google SDk */
   GoogleSignin.configure({

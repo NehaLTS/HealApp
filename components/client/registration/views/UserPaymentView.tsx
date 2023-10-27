@@ -8,16 +8,24 @@ import { fontSize } from "designToken/fontSizes";
 import { getTexts } from "libs/OneSkyHelper";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React from "react";
-import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import Button from "components/common/Button";
 import TextButton from "components/common/TextButton";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useTranslation } from "react-i18next";
 import UserPaymentViewController from "../controllers/UserPaymentViewController";
+import logo from "assets/icon/healLogo.png";
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
-const UserPaymentView = () => {
+const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { languageCode } = useTranslationContext();
@@ -49,6 +57,17 @@ const UserPaymentView = () => {
   
   return (
     <>
+      {isFromHome && (
+        <View style={{ flexDirection: "row", gap: getHeight(dimens.buttonHeight), marginBottom: getHeight(dimens.buttonHeight) }}>
+          <Image source={logo} style={styles.logo} />
+          <Text
+            adjustsFontSizeToFit
+            numberOfLines={2}
+            style={styles.title}
+            title={"Add payment \n method"}
+          />
+        </View>
+      )}
       <View style={styles.inputsContainer}>
         <View style={styles.container}>
           {!isCardDetails && (
@@ -65,7 +84,6 @@ const UserPaymentView = () => {
         </View>
         {isCardDetails ? (
             <>
-            {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
               <View style={styles.innerContainer}>
                 <Image
                   source={require("assets/icon/masterCard.png")}
@@ -73,7 +91,7 @@ const UserPaymentView = () => {
                 />
                 <Text title="Master-card" />
                 <View style={styles.cardIcons}>
-                  <TouchableOpacity onPress={() => setIsCardDetails(false) }>
+                  <TouchableOpacity onPress={() => setIsCardDetails(false)}>
                     <Image
                       source={require("assets/icon/edit.png")}
                       style={styles.cardImages}
@@ -132,7 +150,7 @@ const UserPaymentView = () => {
                   type="creditCardNumber"
                   placeholder={registration.cvv}
                   onBlur={onBlueCvv}
-                  errorMessage={ cvvError}
+                  errorMessage={cvvError}
                   onClearInputText={() => cvvRef.current.clear()}
                   onChangeText={onChangeCvv}
                   ref={cvvRef}
@@ -157,30 +175,38 @@ const UserPaymentView = () => {
       <View
         style={[
           styles.footerContainer,
-          { justifyContent:isCardDetails ? "center" : "space-between" }
+          { justifyContent:isCardDetails || isFromHome ? "center" : "space-between" }
         ]}>
         {!isCardDetails ? (
           <>
-            <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+            {!isFromHome && (
+              <Button
+                title={t("back")}
+                isSmall
+                onPress={onPressBack}
+                width={"30%"}
+              />
+            )}
             <Button
               title={t("next")}
               isPrimary
-              onPress={onPressNext}
+              onPress={onPressNext }
+              // onPress={isFromHome ? () => navigation.navigate(NavigationRoutes.OrderSpecialist) : onPressNext}
               isSmall
-              width={'30%'}
+              width={"30%"}
             />
           </>
         ) : (
           <Button
-            title={t("start_using_heal")}
+            title={isFromHome ? t("next"): t("start_using_heal")}
             isPrimary
             isSmall
-            style={{ paddingHorizontal: 0 }}
-            onPress={onPressStartUsingHeal}
+            style={{ paddingHorizontal:0 }}
+            onPress={()=> onPressStartUsingHeal(isFromHome ?? false)}
           />
         )}
       </View>
-      {!isCardDetails && (
+      {!isCardDetails&& !isFromHome && (
         <TextButton fontSize={getWidth(fontSize.textXl)} containerStyle={{flex:0.08}} style={styles.skipLaterText} title={t('skip_for_later')} onPress={() => navigation.reset({
           index: 0,
           routes: [{ name: NavigationRoutes.ClientHome }],
@@ -228,8 +254,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.marginL),
-    verticalAlign:'middle', 
-    height:'100%'
+    verticalAlign: "middle",
+    height: "100%",
   },
   text: {
     fontSize: fontSize.textM,
@@ -282,13 +308,12 @@ const styles = StyleSheet.create({
   },
   expireDate: {
     minWidth: "30%",
-
   },
   loading: {
-    left: '44%',
-    top: '50%',
-    position: 'absolute',
-    zIndex: 1
+    left: "44%",
+    top: "50%",
+    position: "absolute",
+    zIndex: 1,
   },
   inputsContainer: {
     flex: 0.75,
@@ -299,5 +324,14 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 0.12,
     justifyContent: "center",
+  },
+  logo: {
+    width: getWidth(dimens.imageS),
+    height: getHeight(dimens.imageS),
+    resizeMode: 'center'
+  },
+  title: {
+    fontSize: getWidth(fontSize.headingL),
+    textAlign: 'center',
   },
 });
