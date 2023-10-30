@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import arrowBack from "assets/icon/arrowBack.png";
 import specialistIcon from "assets/icon/doctor.png";
 import OrderFormView from "components/client/home/OrderFormView";
@@ -16,6 +16,8 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 const OrderDetails = () => {
   const navigation = useNavigation();
   const [showSummary, setShowSummary] = useState(false);
+  const route = useRoute<any>()
+  const { supplier } = route.params;
 
   const handleNextButtonPress = () => {
     setShowSummary(!showSummary);
@@ -29,11 +31,11 @@ const OrderDetails = () => {
       headerTitleAlign: "center",
       headerTitle: () => (
         <View style={styles.servicesContainer}>
-          <Image source={specialistIcon} style={styles.specialistIcon} />
+          <Image source={supplier?.image} style={styles.specialistIcon} />
           <Text
             numberOfLines={2}
             style={styles.specialist}
-            title={"Doctor - home visit"}
+            title={supplier?.name}
           />
         </View>
       ),

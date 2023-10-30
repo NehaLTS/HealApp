@@ -100,7 +100,7 @@ const UserPaymentViewController = () => {
       credit_card_number: cardNumberRef?.current?.value ?? "",
       expire_date: expireDateRef?.current?.value ?? "",
       cvv: cvvRef?.current?.value ?? "",
-      client_id: userId,
+      client_id: '22',
     });
 
     //TODO: Vandana to save in Local data with isPaymentAdded as true

@@ -9,7 +9,6 @@ import CardView from "components/common/CardView";
 import SearchBox from "components/common/SearchBox";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
-import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
@@ -22,7 +21,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import Animated, {
   Easing,
@@ -30,6 +29,7 @@ import Animated, {
   FadeInUp,
 } from "react-native-reanimated";
 import HomeViewController from "./HomeViewController";
+import { colors } from "designToken/colors";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -37,11 +37,11 @@ const HomeScreen = () => {
   const {
     providerList,
     bannerAds,
-    searchRef,
     isTouchStart,
     onPressBack,
     onTouchStart,
     onBlur,
+    onChange,
     onChangeSearch,
   } = HomeViewController();
   const isDataNotFound = true;
@@ -65,10 +65,10 @@ const HomeScreen = () => {
         <TouchableOpacity onPress={onPressBack}>
           <Image
             source={
-              !isTouchStart || searchRef?.current?.value ? arrowBack : logo
+              !isTouchStart || onChangeSearch?.length > 0 ? arrowBack : logo
             }
             style={
-              !isTouchStart || searchRef?.current?.value
+              !isTouchStart || onChangeSearch?.length > 0
                 ? styles.arrowBack
                 : styles.logo
             }
@@ -95,7 +95,13 @@ const HomeScreen = () => {
             key={index}
             entering={FadeInUp.duration(200).easing(Easing.ease)}
             exiting={FadeInDown.duration(10).easing(Easing.ease)}>
-            <CardView item={item} index={index} onPress={()=> navigation.navigate(NavigationRoutes.OrderDetails)} />
+            <CardView
+              item={item}
+              index={index}
+              onPress={() => navigation.navigate(NavigationRoutes.OrderDetails,{
+                supplier : item
+              })}
+            />
           </Animated.View>
         ))}
       </>
@@ -133,22 +139,21 @@ const HomeScreen = () => {
       style={styles.container}
       contentContainerStyle={{ paddingBottom: 20 }}>
       {/* Banner Advertisement */}
-      {isTouchStart && !searchRef?.current?.value && (
+      {isTouchStart && onChangeSearch?.length === 0 && (
         <Image
           style={styles.banner}
           source={require("assets/icon/google.png")}
         />
       )}
       <SearchBox
-        isTouchStart={isTouchStart && !searchRef?.current?.value}
+        isTouchStart={isTouchStart && onChangeSearch?.length === 0}
         placeholder="What treatment do you need?"
         onTouchStart={onTouchStart}
         onBlur={onBlur}
-        onChangeText={onChangeSearch}
-        ref={searchRef}
-        defaultValue={searchRef.current.value}
+        onChangeText={onChange}
+        defaultValue={onChangeSearch}
       />
-      {!searchRef?.current?.value
+      {onChangeSearch?.length === 0
         ? getProviderList()
         : isDataNotFound
         ? getProviderSearchList()

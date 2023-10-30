@@ -19,7 +19,7 @@ import {
   ProviderServices,
   onboardStep,
 } from "libs/types/UserType";
-import { ClientUserContext } from "contexts/UseClientUserContext";
+import { ClientUserContext, OrderDetail } from "contexts/UseClientUserContext";
 import { ProviderUserContext } from "contexts/UseProviderUserContext";
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +32,7 @@ const App = () => {
   const [token, setToken] = useState<string>("");
   const [currentStep, setCurrentStep] = useState<onboardStep>("details");
   const [providerServices, setProviderServices] = useState<ProviderServices>(null);
+  const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
 
   /** To Initialize Google SDk */
   GoogleSignin.configure({
@@ -52,6 +53,8 @@ const App = () => {
             setToken,
             userProfile,
             setUserProfile,
+            orderDetails, 
+            setOrderDetails 
           }}
         >
           <ProviderUserContext.Provider

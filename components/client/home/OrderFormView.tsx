@@ -10,22 +10,32 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import {
   Image,
-  KeyboardAvoidingView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View
 } from "react-native";
 import Modal from "react-native-modal";
+import OrderDetailsController from "../../../screens/client/OrderDetailsController";
+import { OrderDetail, UseClientUserContext } from "contexts/UseClientUserContext";
+import { useTranslation } from "react-i18next";
+import RNModal from "components/common/Modal";
 
 const OrderFormView = () => {
+  const { t } = useTranslation();
   const [isMeSelected, setIsMeSelected] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>([]);
-  const [selectedResourceType, setSelectedResourceType] = useState();
+  const [selectedResourceType, setSelectedResourceType] = useState<any[]>([]);
   const ageRef = React.useRef<any>("");
   const phoneRef = React.useRef<any>("");
+  const {orderDetails, setOrderDetails, userProfile } = UseClientUserContext()
+  const otherReasons = React.useRef<any>('')
+  const [isVisible, setIsVisible] = useState(false);
+  const [onSearchAddress, setOnSearchAddress] = useState("");
+  
+
 
   const onChangeAge = (value: string) => ageRef.current.value = value
   const onChangePhone = (value: string) => phoneRef.current.value = value
@@ -44,9 +54,12 @@ const OrderFormView = () => {
       // The button is not selected, so add it
       updatedActiveButton.push(item.id);
     }
-    setSelectedResourceType(item);
     setActiveButton(updatedActiveButton); // Update the state with the new array
+    setSelectedResourceType((prev)=> [...prev, item]);
+    
+    setOrderDetails?.({...orderDetails, reason: selectedResourceType })
   };
+console.log('userProfile?.address',userProfile?.address)
   const reasons = [
     { title: 'Back pain', id: 1 },
     { title: 'Heart pain', id: 2 },
@@ -56,12 +69,24 @@ const OrderFormView = () => {
     { title: 'Vomiting', id: 6 },
   ];
   const treatmentsData = [
-    { label: "Visit - 500 NIS" },
-    { label: "Voltaren shot  - 100 NIS" },
-    { label: "Clacksen shot  - 100 NIS" },
+    { id: 1 ,label: "Visit - 500 NIS" },
+    { id: 2,label: "Voltaren shot  - 100 NIS" },
+    { id: 3,label: "Clacksen shot  - 100 NIS" },
   ];
   const toggleMe = () => {
     setIsMeSelected(true);
+  };
+
+  const [selectedMenu, setSelectedMenu] = useState<{ id: number; label: string }[]>([]);
+
+  const handleItemPress = (item: { id: number; label: string }) => {
+    if (selectedMenu.find((selectedItem) => selectedItem.id === item.id)) {
+      setSelectedMenu(selectedMenu.filter((selectedItem) => selectedItem.id !== item.id));
+    } else {
+      setSelectedMenu([...selectedMenu, item]);
+    }
+
+    setOrderDetails({...orderDetails, services: selectedMenu })
   };
 
   const toggleSomeoneElse = () => {
@@ -104,7 +129,7 @@ const OrderFormView = () => {
       <Modal
         backdropColor={colors.white}
         isVisible={isModalVisible}
-        avoidKeyboard
+        // avoidKeyboard
         onBackdropPress={() => setIsModalVisible(false)}
       >
         <Input
@@ -114,7 +139,13 @@ const OrderFormView = () => {
           numberOfLines={4}
           inputStyle={styles.description}
           isDescription
-          onSubmitDescription={() => { }}
+          defaultValue={otherReasons?.current?.value}
+          ref={otherReasons}
+          onChangeText={(value:string)=> otherReasons.current.value = value}
+          onSubmitDescription={() => {
+            setOrderDetails({...orderDetails, Additional_notes: otherReasons?.current?.value })
+
+           }}
         />
       </Modal>
     </>
@@ -123,12 +154,16 @@ const OrderFormView = () => {
     <>
       <Text title={"Treatments menu"} style={styles.menuText} />
       <View style={styles.container}>
-        {treatmentsData.map((item, index) => (
-          <View key={index} style={styles.checkboxContainer}>
-            <View style={styles.checkBox}></View>
-            <Text title={item.label} />
-          </View>
-        ))}
+      {treatmentsData.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.checkboxContainer}
+          onPress={() => handleItemPress(item)} // Call the function with the item
+        >
+          <View style={styles.checkBox} />
+          <Text>{item.label}</Text>
+        </TouchableOpacity>
+      ))}
         <Text
           title={"*If the doctor won’t use your shot, you won’t pay for it"}
           style={styles.textSmall}
@@ -136,6 +171,36 @@ const OrderFormView = () => {
       </View>
     </>
   );
+
+  const addAddressView = () => {
+    return (
+      <RNModal
+        style={styles.modal}
+        backdropOpacity={1}
+        backdropColor={colors.white}
+        isVisible={isVisible}>
+      <View style={styles.addressView}>
+        <Input
+          placeholder={t("address")}
+          type={"fullStreetAddress"}
+          inputStyle={[{ minWidth: "82%" }]}
+          onClearInputText={() => setOnSearchAddress('')}
+          onChangeText={setOnSearchAddress}
+          inputValue={onSearchAddress}
+          value={onSearchAddress}
+          onSubmitEditing={() => setIsVisible(false)}
+          autoFocus
+        />
+        <TextButton
+          containerStyle={{ width: "18%", alignItems: "flex-end" }}
+          title="Close"
+          fontSize={fontSize.textL}
+          onPress={() => setIsVisible(false)}
+        />
+      </View>
+      </RNModal>
+    );
+  };
 
   return (
     <>
@@ -177,12 +242,13 @@ const OrderFormView = () => {
               />
               <Text
                 style={{ flex: 0.80, paddingLeft: getWidth(dimens.sideMargin) }}
-                title={"Ramban st. 2, Haifa"}
+                title={userProfile?.address ?? ''}
               />
               <TextButton
                 containerStyle={{ flex: 0.1 }}
                 title={"Edit"}
                 fontSize={getHeight(fontSize.textM)}
+                onPress={()=>setIsVisible(true)}
               />
             </View>
           </>
@@ -197,7 +263,7 @@ const OrderFormView = () => {
               />
               <Text
                 style={{ flex: 0.84, paddingLeft: getWidth(dimens.sideMargin) }}
-                title={"Ramban st. 2, Haifa"}
+                title={userProfile?.address ?? ''}
               />
               <TextButton
                 containerStyle={{ flex: 0.1 }}
@@ -235,6 +301,7 @@ const OrderFormView = () => {
       </View>
       {getReasonsView()}
       {getTreatmentsView()}
+      {addAddressView()}
     </>
   );
 };
@@ -349,5 +416,14 @@ const styles = StyleSheet.create({
   description: {
     height: getHeight(117),
   },
+  modal:{ 
+    flex: 1, 
+    justifyContent: "flex-start" 
+  },
+  addressView:{
+    flexDirection: "row",
+     alignItems: "center",
+     marginTop: getHeight(dimens.paddingS),
+  }
 
 });
