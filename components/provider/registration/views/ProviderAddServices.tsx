@@ -23,12 +23,17 @@ import TextButton from "components/common/TextButton";
 import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
 import { Name, Service } from "libs/types/ProvierTypes";
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
+import { useTranslation } from "react-i18next";
+import NavigationRoutes from "navigator/NavigationRoutes";
+import { useNavigation } from "@react-navigation/native";
 
 const ProviderAddServices = () => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const { onCreateProviderServices, onGetUserAllServices } =
     AuthServicesProvider();
-  const {  setUserDataProvider } = UseUserContextProvider();
+  const { setUserDataProvider } = UseUserContextProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isServiceLoading, setIsServiceLoading] = useState(false);
   const [services, setServices] = useState([]);
@@ -64,18 +69,15 @@ const ProviderAddServices = () => {
 
   const onBlurServiceName = () => {
     validateServiceName();
-
   };
   const onChangeServiceName = (value: string) =>
     (serviceNameRef.current.value = value);
   const onBlurPriceName = () => {
     validatePrice();
-
   };
   const onChangePriceName = (value: string) => (priceRef.current.value = value);
   const onBlurDescription = () => {
     validateDescription();
-
   };
   const onChangeDescription = (value: string) =>
     (descriptionRef.current.value = value);
@@ -111,7 +113,7 @@ const ProviderAddServices = () => {
     console.log("resp is ", response);
     if (response) {
       setServices(response);
-      setUserDataProvider({...userDataProvider, providerServices:true })
+      setUserDataProvider({ ...userDataProvider, providerServices: true });
     }
 
     setIsServiceLoading(false);
@@ -122,24 +124,32 @@ const ProviderAddServices = () => {
   }, []);
 
   const saveService = async () => {
-    if (serviceNameRef.current.value && descriptionRef.current.value && priceRef.current.value) {
-
+    if (
+      serviceNameRef.current.value &&
+      descriptionRef.current.value &&
+      priceRef.current.value
+    ) {
       let data = {
         name: { en: serviceNameRef.current.value, hi: "", he: "" },
         description: { en: descriptionRef.current.value, hi: "", he: "" },
-        price: priceRef.current.value
-      }
+        price: priceRef.current.value,
+      };
 
-      setService({ ...service as Service, ...data })
+      setService({ ...(service as Service), ...data });
 
       // if(userDataProvider.provider_id && userDataProvider.speciality_id){
       setIsLoading(true);
       //  let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,currency:"USD",provider_id:userDataProvider.provider_id, specialty_id: userDataProvider.speciality_id});
 
+      let response = await onCreateProviderServices({
+        name: serviceNameRef.current.value,
+        description: descriptionRef.current.value,
+        price: priceRef.current.value,
+        provider_id: "1",
+        specialty_id: "1",
+      });
 
-      let response = await onCreateProviderServices({ name: serviceNameRef.current.value, description: descriptionRef.current.value, price: priceRef.current.value, provider_id: '1', specialty_id: '1' });
-
-      console.log("response is ", response)
+      console.log("response is ", response);
 
       //Need to check for success and then append
       getUserAllServices();
@@ -149,7 +159,6 @@ const ProviderAddServices = () => {
     } else {
       Alert.alert("Please fill all the details");
     }
-
   };
 
   const getAllServices = () => {
@@ -166,106 +175,138 @@ const ProviderAddServices = () => {
     ));
   };
 
+  const getFooterView = () => (
+    <View style={styles.footerContainer}>
+      {userDataProvider.providerServices ? (
+        <Button
+          title={t("Approve")}
+          isPrimary
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+            });
+          }}
+          isSmall
+          width={"40%"}
+          style={{ alignSelf: "center", width: "100%" }}
+        />
+      ) : (
+        <TextButton
+          title="Skip"
+          style={{ alignSelf: "center" }}
+          containerStyle={{ width: "100%" }}
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+            });
+          }}
+        />
+      )}
+    </View>
+  );
   return (
     <>
-
-      <ScrollView>
-        {services && services.length > 0 ? (
-          <>{getAllServices()}</>
-        ) : (
-          <>
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>
-                Do you provide another {"\n"}services which not on {"\n"}the
-                list?
-              </Text>
-            </View>
-          </>
-        )}
-        <View style={styles.container}>
-          <TouchableOpacity onPress={toggleModal}>
-            <Image
-              source={require("../../../../assets/icon/add.png")}
-              style={styles.addicon}
-            />
-          </TouchableOpacity>
-          <Text style={styles.textAdd}>Add another service</Text>
-        </View>
-      </ScrollView>
+      <View style={styles.inputContainer}>
+        <ScrollView>
+          {services && services.length > 0 ? (
+            <>{getAllServices()}</>
+          ) : (
+            <>
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>
+                  Do you provide another {"\n"}services which not on {"\n"}the
+                  list?
+                </Text>
+              </View>
+            </>
+          )}
+          <View style={styles.container}>
+            <TouchableOpacity onPress={toggleModal}>
+              <Image
+                source={require("../../../../assets/icon/add.png")}
+                style={styles.addicon}
+              />
+            </TouchableOpacity>
+            <Text style={styles.textAdd}>Add another service</Text>
+          </View>
+        </ScrollView>
 
         {!isServiceAdded && (
           <Modal
             isVisible={isModalVisible}
             backdropOpacity={0.8}
             backdropColor={colors.white}>
-              
-      <KeyboardAvoidingView  keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
-            <View style={styles.modalContent}>
-              <Text style={styles.addService}>Add service</Text>
-              <Input
-                placeholder={"Name of the service*"}
-                onBlur={onBlurServiceName}
-                onChangeText={onChangeServiceName}
-                ref={serviceNameRef}
-                defaultValue={service?.name?.en}
-                inputValue={""}
-                errorMessage={serviceError}
-                returnKeyType={"next"}
-                onSubmitEditing={() => priceRef.current.focus()}
-                onClearInputText={() => serviceNameRef.current.clear()}
-
-              />
-              <Input
-                placeholder={"Price*"}
-                inputStyle={styles.input}
-                onBlur={onBlurPriceName}
-                onChangeText={onChangePriceName}
-                ref={priceRef}
-                defaultValue={service?.price}
-                inputValue={""}
-                errorMessage={priceError}
-                keyboardType="numeric"
-                returnKeyType={"next"}
-                onSubmitEditing={() => descriptionRef.current.focus()}
-                onClearInputText={() => priceRef.current.clear()}
-
-              />
-              <Input
-                placeholder={"Description"}
-                inputStyle={styles.description}
-                onBlur={onBlurDescription}
-                onChangeText={onChangeDescription}
-                ref={descriptionRef}
-                defaultValue={service?.description?.en}
-                inputValue={""}
-                errorMessage={descriptionError}
-                onClearInputText={() => descriptionRef.current.clear()}
-
-              />
-              <Button
-                title={"Save"}
-                isPrimary
-                isSmall
-                width={getWidth(85)}
-                style={{
-                  alignSelf: "center",
-                  marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
-                }}
-                onPress={saveService}
-                fontSized={getWidth(15)}
-                height={getHeight(34)}
-              />
-              <TextButton
-                style={{ alignSelf: "center" }}
-                fontSize={getWidth(fontSize.textXl + 2)}
-                title={"Cancel"}
-                onPress={toggleModal}
-              />
-            </View>
+            <KeyboardAvoidingView
+              keyboardVerticalOffset={-50}
+              behavior={"padding"}
+              style={{ flex: 0.8 }}>
+              <View style={styles.modalContent}>
+                <Text style={styles.addService}>Add service</Text>
+                <Input
+                  placeholder={"Name of the service*"}
+                  onBlur={onBlurServiceName}
+                  onChangeText={onChangeServiceName}
+                  ref={serviceNameRef}
+                  defaultValue={service?.name?.en}
+                  inputValue={""}
+                  errorMessage={serviceError}
+                  returnKeyType={"next"}
+                  onSubmitEditing={() => priceRef.current.focus()}
+                  onClearInputText={() => serviceNameRef.current.clear()}
+                />
+                <Input
+                  placeholder={"Price*"}
+                  inputStyle={styles.input}
+                  onBlur={onBlurPriceName}
+                  onChangeText={onChangePriceName}
+                  ref={priceRef}
+                  defaultValue={service?.price}
+                  inputValue={""}
+                  errorMessage={priceError}
+                  keyboardType="numeric"
+                  returnKeyType={"next"}
+                  onSubmitEditing={() => descriptionRef.current.focus()}
+                  onClearInputText={() => priceRef.current.clear()}
+                />
+                <Input
+                  placeholder={"Description"}
+                  inputStyle={styles.description}
+                  onBlur={onBlurDescription}
+                  onChangeText={onChangeDescription}
+                  ref={descriptionRef}
+                  defaultValue={service?.description?.en}
+                  inputValue={""}
+                  errorMessage={descriptionError}
+                  onClearInputText={() => descriptionRef.current.clear()}
+                />
+                <Button
+                  title={"Save"}
+                  isPrimary
+                  isSmall
+                  width={getWidth(85)}
+                  style={{
+                    alignSelf: "center",
+                    marginVertical: getHeight(
+                      dimens.sideMargin + dimens.marginS
+                    ),
+                  }}
+                  onPress={saveService}
+                  fontSized={getWidth(15)}
+                  height={getHeight(34)}
+                />
+                <TextButton
+                  style={{ alignSelf: "center" }}
+                  fontSize={getWidth(fontSize.textXl + 2)}
+                  title={"Cancel"}
+                  onPress={toggleModal}
+                />
+              </View>
             </KeyboardAvoidingView>
           </Modal>
         )}
-      {/* {isServiceAdded && (
+        {/* {isServiceAdded && (
         <View style={[styles.serviceContainer, styles.elevation]}>
           <Text style={styles.textView}>{userDataProvider.services ?? ""}</Text>
           <Text style={styles.textView}>
@@ -274,7 +315,8 @@ const ProviderAddServices = () => {
           <Text style={styles.textView}> {userDataProvider.price ?? ""}</Text>
         </View>
       )} */}
-
+      </View>
+      {getFooterView()}
     </>
   );
 };
@@ -359,6 +401,16 @@ const styles = StyleSheet.create({
   readMoreText: {
     color: colors.black,
     textDecorationLine: "underline",
+  },
+  inputContainer: {
+    flex: 0.79,
+  },
+  footerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    flex: 0.1,
+    justifyContent: "space-between",
   },
 });
 

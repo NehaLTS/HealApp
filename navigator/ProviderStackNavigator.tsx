@@ -9,7 +9,7 @@ const ProviderStackNavigator = () => {
 
   return (
     <UserContextProvider.Provider value={{ userDataProvider, setUserDataProvider }}>
-      <Stack.Navigator initialRouteName={NavigationRoutes.ProviderLogin}>
+      <Stack.Navigator initialRouteName={NavigationRoutes.ProviderRegistration}>
         <Stack.Screen
           name={NavigationRoutes.ProviderLogin}
           component={lazy(() => import("../screens/authenticator/ProviderAuthenticatorView"))}
@@ -17,7 +17,7 @@ const ProviderStackNavigator = () => {
         />
         <Stack.Screen
           name={NavigationRoutes.ProviderRegistration}
-          component={lazy(() => import("../components/provider/registration/views/BasicInformation"))}
+          component={lazy(() => import("../screens/provider/OnboardDetails"))}
           options={defaultHeaderStyle}
         />
         <Stack.Screen

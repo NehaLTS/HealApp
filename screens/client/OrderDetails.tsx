@@ -5,7 +5,6 @@ import OrderFormView from "components/client/home/OrderFormView";
 import SummaryView from "components/client/home/SummaryView";
 import Button from "components/common/Button";
 import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
@@ -21,8 +20,7 @@ const OrderDetails = () => {
     setShowSummary(!showSummary);
   };
 
-  useLayoutEffect(() => {
-  }, [navigation]);
+  useLayoutEffect(() => {}, [navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -46,14 +44,10 @@ const OrderDetails = () => {
       headerRight: null,
     });
   }, [navigation]);
-  
+
   return (
     <View style={styles.mainContainer}>
-      {showSummary ? (
-        <SummaryView />
-      ) : (
-        <OrderFormView />
-      )}
+      {showSummary ? <SummaryView /> : <OrderFormView />}
       <Button
         title={showSummary ? "Order" : "Next"}
         isPrimary
@@ -62,7 +56,12 @@ const OrderDetails = () => {
         onPress={handleNextButtonPress}
         width={100}
       />
-      {showSummary &&  <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
+      {showSummary && (
+        <Text
+          title={"*No fee will be collected within 3 minutes after order"}
+          style={styles.text}
+        />
+      )}
     </View>
   );
 };
@@ -74,9 +73,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
- 
   },
- 
+
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
@@ -102,11 +100,11 @@ const styles = StyleSheet.create({
   specialist: {
     fontSize: getWidth(fontSize.textXl),
   },
-  buttonOrder:{
-    alignSelf:"center"
+  buttonOrder: {
+    alignSelf: "center",
   },
-  text:{
-    fontSize:getWidth(fontSize.textS),
-    marginTop:getWidth(4)
-  }
+  text: {
+    fontSize: getWidth(fontSize.textS),
+    marginTop: getWidth(4),
+  },
 });
