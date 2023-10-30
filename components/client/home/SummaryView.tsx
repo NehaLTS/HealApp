@@ -8,8 +8,11 @@ import { dimens } from "designToken/dimens";
 import Input from "components/common/Input";
 import { fontWeight } from "designToken/fontWeights";
 import { fontFamily } from "designToken/fontFamily";
+import { UseClientUserContext } from "contexts/UseClientUserContext";
 
 const SummaryView = () => {
+    const {orderDetails, setOrderDetails } = UseClientUserContext()
+    console.log('first*******', orderDetails)
   return (
     <>
       <View style={styles.textContainer}>
