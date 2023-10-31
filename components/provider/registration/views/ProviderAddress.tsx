@@ -42,7 +42,9 @@ const ProviderAddress = ({
   const onChangeLastName = (value: string) => licenseRef.current.value = value
 
   const onBlurAddress = () => { validateAddress(); setUserDataProvider({ ...userDataProvider, address: addressRef.current.value }) }
-  const onChangeAddress = (value: string) => addressRef.current.value = value
+  const onChangeAddress = (value: string) => {
+    addressRef.current.value = value, setOnSearchAddress(value), setUserDataProvider({ ...userDataProvider, address: onSearchAddress })
+  }
 
   const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, license_photo: url });
   console.log('userDataProvider', userDataProvider)
@@ -74,7 +76,7 @@ const ProviderAddress = ({
           type={"fullStreetAddress"}
           inputStyle={[{ minWidth: "82%" }]}
           onClearInputText={() => addressRef.current.clear()}
-          onChangeText={setOnSearchAddress}
+          onChangeText={onChangeAddress}
           inputValue={onSearchAddress}
           value={onSearchAddress}
           onSubmitEditing={() => setIsVisible(false)}
@@ -121,20 +123,20 @@ const ProviderAddress = ({
         returnKeyType={"next"}
         onSubmitEditing={() => addressRef.current.focus()}
         onClearInputText={() => licenseRef.current.clear()}
-        
+
 
       />
 
-        <Input
-          placeholder={t("address")}
-          inputStyle={styles.input}
-          value={onSearchAddress}
-          errorMessage={addressError}
-          onTouchStart={() => setIsVisible(true)}
-          caretHidden
-          inputValue={onSearchAddress}
-          onClearInputText={()=>setOnSearchAddress('')}
-        />
+      <Input
+        placeholder={t("address")}
+        inputStyle={styles.input}
+        value={onSearchAddress}
+        errorMessage={addressError}
+        onTouchStart={() => setIsVisible(true)}
+        caretHidden
+        inputValue={onSearchAddress}
+        onClearInputText={() => setOnSearchAddress('')}
+      />
 
       <View style={styles.iconContainer}>
         <Text style={styles.text}>{t("Upload license photo")}</Text>
@@ -199,13 +201,13 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
   },
-  modal:{ 
-    flex: 1, 
-    justifyContent: "flex-start" 
+  modal: {
+    flex: 1,
+    justifyContent: "flex-start"
   },
-  addressView:{
+  addressView: {
     flexDirection: "row",
-     alignItems: "center",
-     marginTop: getHeight(dimens.paddingS),
+    alignItems: "center",
+    marginTop: getHeight(dimens.paddingS),
   }
 });

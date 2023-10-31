@@ -69,7 +69,7 @@ const UserAddressViewController = () => {
   const onPressNext = async () => {
     console.log("userId is ", userId);
     if (
-      addressRef.current.value &&
+      onSearchAddress &&
       dateOfBirth.toString() &&
       idNumberRef.current.value
     ) {
