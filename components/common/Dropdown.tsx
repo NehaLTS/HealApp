@@ -1,11 +1,12 @@
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import React from "react";
-import { StyleSheet } from "react-native";
-import { Dropdown as RNDropdown } from "react-native-element-dropdown";
-import Text from "./Text";
+import { colors } from 'designToken/colors'
+import { dimens } from 'designToken/dimens'
+import { fontSize } from 'designToken/fontSizes'
+import { getHeight, getWidth } from 'libs/StyleHelper'
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import { Dropdown as RNDropdown } from 'react-native-element-dropdown'
+import Text from './Text'
+import { fontFamily } from 'designToken/fontFamily'
 
 const Dropdown = ({
   data,
@@ -15,11 +16,11 @@ const Dropdown = ({
   errorMessage,
   ...props
 }: {
-  data: [];
-  labelField: string;
-  valueField: string;
-  onChange: () => void;
-  errorMessage: string;
+  data: []
+  labelField: string
+  valueField: string
+  onChange: () => void
+  errorMessage: string
 } & any) => {
   return (
     <>
@@ -37,20 +38,20 @@ const Dropdown = ({
       />
       {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
     </>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown
 
 const styles = StyleSheet.create({
   dropdown: {
     borderWidth: getHeight(dimens.borderBold),
     borderRadius: getHeight(dimens.marginS),
     backgroundColor: colors.offWhite,
-    height: getHeight(50),
+    height: getHeight(dimens.imageS),
     borderColor: colors.primary,
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
+    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold)
   },
   box: {
     borderWidth: getHeight(dimens.borderBold),
@@ -58,19 +59,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
     height: getHeight(dimens.imageS),
     borderColor: colors.primary,
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingS)
   },
   placeholderStyle: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
+    fontFamily: fontFamily.regular
   },
   selectedTextStyle: {
     fontSize: getWidth(fontSize.textL),
     color: colors.black,
+    fontFamily: fontFamily.regular
   },
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
-    fontSize: getWidth(fontSize.textS),
-  },
-});
+    fontSize: getWidth(fontSize.textS)
+  }
+})

@@ -4,11 +4,9 @@ import Text from 'components/common/Text'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { useTranslationContext } from '../../../../contexts/UseTranslationsContext'
 import { colors } from '../../../../designToken/colors'
 import { dimens } from '../../../../designToken/dimens'
 import { fontSize } from '../../../../designToken/fontSizes'
-import { getTexts } from '../../../../libs/OneSkyHelper'
 import { getHeight, getWidth } from '../../../../libs/StyleHelper'
 import Input from '../../../common/Input'
 import SelectImage from '../../../common/SelectImage'
@@ -16,17 +14,17 @@ import ProviderDetailController from '../controllers/ProviderDetailController'
 
 const ProviderDetail = () => {
   const { t } = useTranslation()
-  const { languageCode } = useTranslationContext()
-  const { registration } = getTexts(languageCode)
   const {
     firstNameError,
     isShowModal,
-    setIsShowModal,
     lastNameError,
     providerTypeError,
     specialtyError,
     selectedProvider,
     providerProfile,
+    firstNameRef,
+    lastNameRef,
+    setIsShowModal,
     getImageUrl,
     onChangeFirstName,
     onBlurFirstName,
@@ -34,15 +32,12 @@ const ProviderDetail = () => {
     onChangeLastName,
     onChangeProviderTypes,
     onChangeSpecialty,
-    firstNameRef,
-    lastNameRef,
     onBlurSpecialty,
     onBlurProviderTypes,
     onPressNext,
     renderToast
   } = ProviderDetailController()
 
-  console.log('idPicture', providerProfile)
   const data = [
     {
       id: 1,
@@ -189,17 +184,19 @@ const ProviderDetail = () => {
     }
   ]
 
-  const renderItem = (item: { name: { en: any } }) => {
-    return <Text style={styles.textItem}>{item?.name.en}</Text>
-  }
-
-  const renderItems = (item: { name: any } | { name: { en: any } }) => {
-    return <Text style={styles.textItem}>{item?.name || item?.name.en}</Text>
+  const renderItem = (item: { name: any } | { name: { en: any } }) => {
+    let textContent = ''
+    if (item.name && item.name.en) {
+      textContent = item.name.en
+    } else if (item.name) {
+      textContent = item.name
+    }
+    return <Text style={styles.textItem}>{textContent}</Text>
   }
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
-      <Text style={styles.text}>Upload ID photo</Text>
+      <Text style={styles.text}>{'Upload ID photo'}</Text>
       <TouchableOpacity activeOpacity={providerProfile?.idPicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
         <Image source={providerProfile?.idPicture ? { uri: providerProfile?.idPicture } : require('../../../../assets/icon/uploadProfile.png')} style={styles.selectedImage} />
       </TouchableOpacity>
@@ -218,7 +215,7 @@ const ProviderDetail = () => {
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={registration.first_name}
+          placeholder={'First name*'}
           onBlur={onBlurFirstName}
           onChangeText={onChangeFirstName}
           ref={firstNameRef}
@@ -230,7 +227,7 @@ const ProviderDetail = () => {
           onClearInputText={() => firstNameRef.current.clear()}
         />
         <Input
-          placeholder={registration.last_name}
+          placeholder={'Last name*'}
           type={'nameSuffix'}
           inputStyle={styles.inputLastName}
           onChangeText={onChangeLastName}
@@ -248,7 +245,7 @@ const ProviderDetail = () => {
           placeholder="Type of provider"
           value={providerProfile?.provider?.name}
           onChange={onChangeProviderTypes}
-          renderItem={renderItems}
+          renderItem={renderItem}
           errorMessage={providerTypeError}
           onBlur={onBlurProviderTypes}
         />
@@ -263,7 +260,6 @@ const ProviderDetail = () => {
           errorMessage={specialtyError}
           onBlur={onBlurSpecialty}
         />
-
         {getUploadImageView()}
       </View>
       {getFooterView()}
@@ -280,44 +276,20 @@ const styles = StyleSheet.create({
     color: colors.black,
     textAlign: 'center'
   },
-
   inputLastName: {
     marginTop: getHeight(dimens.marginM + dimens.paddingXs)
   },
-
   iconContainer: {
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
     marginTop: getHeight(dimens.sideMargin)
   },
-
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
     width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS)
-  },
-  box: {
-    borderWidth: getHeight(dimens.borderBold),
-    borderRadius: getHeight(dimens.marginS),
-    backgroundColor: colors.offWhite,
-    height: getHeight(dimens.imageS),
-    borderColor: colors.primary,
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS)
-  },
-  placeholderStyle: {
-    fontSize: fontSize.textL,
-    color: colors.black
-  },
-  dropdown: {
-    borderWidth: getHeight(dimens.borderBold),
-    borderRadius: getHeight(dimens.marginS),
-    backgroundColor: colors.offWhite,
-    height: getHeight(50),
-    borderColor: colors.primary,
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold)
   },
   icon: {
     marginRight: 5
@@ -328,19 +300,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     padding: getHeight(dimens.marginS),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold)
-  },
-  selectedTextStyle: {
-    fontSize: fontSize.textL,
-    color: colors.black
-  },
-  iconStyle: {
-    width: getWidth(dimens.marginM),
-    height: getHeight(dimens.marginM)
-  },
-  editBlueImage: {
-    height: getHeight(dimens.paddingL),
-    width: getWidth(dimens.paddingL),
-    marginBottom: getHeight(dimens.paddingXs)
   },
   inputContainer: {
     flex: 0.79

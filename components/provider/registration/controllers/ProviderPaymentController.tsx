@@ -1,13 +1,11 @@
-import { View, Text } from 'react-native'
-import React, { useState } from 'react'
-import { UseUserContextProvider } from 'contexts/useUserContextProvider'
+import useToast from 'components/common/useToast'
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext'
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider'
-import useToast from 'components/common/useToast'
-import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType'
+import { ProviderProfile } from 'libs/types/UserType'
+import React, { useState } from 'react'
 
 const ProviderPaymentController = () => {
-  const { providerProfile, setProviderProfile } = UseProviderUserContext()
+  const { providerProfile, setProviderProfile, userId } = UseProviderUserContext()
   const { setCurrentStep } = UseProviderUserContext()
   const { OnUpdateProviderUserDetails } = AuthServicesProvider()
   const [registrationError, setRegistrationError] = useState('')
@@ -27,7 +25,7 @@ const ProviderPaymentController = () => {
     validateRegistrationNumber()
     setProviderProfile({
       ...providerProfile,
-      bankDetails: { registrationNumber: registrationNumberRef.current.value }
+      ...{ bankDetails: { ...providerProfile.bankDetails, registrationNumber: registrationNumberRef.current.value } }
     } as unknown as ProviderProfile)
   }
   const onChangeRegistrationNumber = (value: string) => {
@@ -39,7 +37,7 @@ const ProviderPaymentController = () => {
     validateBankName()
     setProviderProfile({
       ...providerProfile,
-      bankDetails: { bankname: bankNameRef.current.value }
+      ...{ bankDetails: { ...providerProfile.bankDetails, bankname: bankNameRef.current.value } }
     } as unknown as ProviderProfile)
   }
   const onChangeBankName = (value: string) => (bankNameRef.current.value = value)
@@ -48,7 +46,7 @@ const ProviderPaymentController = () => {
     validateBranch()
     setProviderProfile({
       ...providerProfile,
-      bankDetails: { branchname: branchRef?.current?.value }
+      ...{ bankDetails: { ...providerProfile.bankDetails, branchname: branchRef?.current?.value } }
     } as unknown as ProviderProfile)
   }
   const onChangeBranchType = (value: string) => (branchRef.current.value = value)
@@ -57,7 +55,7 @@ const ProviderPaymentController = () => {
     validateAccount()
     setProviderProfile({
       ...providerProfile,
-      bankDetails: { accountnumber: accountRef?.current?.value }
+      ...{ bankDetails: { ...providerProfile.bankDetails, accountnumber: accountRef?.current?.value } }
     } as unknown as ProviderProfile)
   }
   const onChangeAccount = (value: string) => (accountRef.current.value = value)
@@ -105,52 +103,41 @@ const ProviderPaymentController = () => {
     } else {
       setCurrentStep('addServices')
     }
-    // if (
-    //   providerProfile?.bank_name &&
-    //   providerProfile?.branch &&
-    //   providerProfile?.registration &&
-    //   providerProfile?.account &&
-    //   providerProfile?.profile_picture
-    // ) {
-    //   setIsLoading(true);
+    // if (providerProfile?.bankDetails?.bankname && providerProfile?.bankDetails?.branchname && providerProfile?.bankDetails?.registrationNumber && providerProfile?.bankDetails?.accountnumber && providerProfile?.profilePicture) {
+    //   setIsLoading(true)
     //   const res = await OnUpdateProviderUserDetails?.({
-    //     firstname: providerProfile?.firstname ?? "",
-    //     lastname: "saini" ?? "",
-    //     address: providerProfile?.address ?? "",
-    //     city: "ambala",
-    //     state: "haryana",
-    //     country: "India",
-    //     phone_number: providerProfile?.phone_number ?? "",
-    //     profile_picture: providerProfile?.profile_picture ?? "",
-    //     provider_id: providerProfile?.provider_id?.toString() ?? "",
-    //     provider_type_id: providerProfile?.type_Provider ?? "",
-    //     license_number: providerProfile?.license ?? "",
-    //     upload_license_picture: providerProfile?.license_photo ?? "",
-    //     bank_name: providerProfile?.bank_name ?? "",
-    //     branch: providerProfile?.branch ?? "",
-    //     business_registration_number: providerProfile?.registration ?? "",
-    //     account: providerProfile?.account ?? "",
-    //   });
+    //     firstname: providerProfile?.firstName ?? '',
+    //     lastname: 'saini' ?? '',
+    //     address: providerProfile?.address ?? '',
+    //     city: 'ambala',
+    //     state: 'haryana',
+    //     country: 'India',
+    //     phone_number: providerProfile?.phoneNumber ?? '',
+    //     profile_picture: providerProfile?.profilePicture ?? '',
+    //     provider_id: userId ?? '',
+    //     provider_type_id: providerProfile?.provider.id ?? '',
+    //     license_number: providerProfile?.licensenumber ?? '',
+    //     upload_license_picture: providerProfile?.licensepicture ?? '',
+    //     bank_name: providerProfile?.bankDetails?.bankname ?? '',
+    //     branch: providerProfile?.bankDetails?.branchname ?? '',
+    //     business_registration_number: providerProfile?.bankDetails?.registrationNumber ?? '',
+    //     account: providerProfile?.bankDetails?.accountnumber ?? ''
+    //   })
 
-    //   setIsLoading(false);
+    //   setIsLoading(false)
     //   if (res?.isSuccessful) {
-    //        if (providerProfile?.type_Provider === ("Doctor" || "Nurse")) {
-    //   setCurrentStep("services");
-    //      } else {
-    //   setCurrentStep("addServices");
-    //      }
+    //     if (providerProfile?.provider.name === ('Doctor' || 'Nurse')) {
+    //       setCurrentStep('services')
+    //     } else {
+    //       setCurrentStep('addServices')
+    //     }
     //   }
     // } else {
-    //   if (!providerProfile?.registration?.length)
-    //     setRegistrationError("Registration is required");
-    //   if (!providerProfile?.bank_name?.length)
-    //     setBankNameError("Bank name is required");
-    //   if (!providerProfile?.branch?.length)
-    //     setBranchError("Branch name is required");
-    //   if (!providerProfile?.account?.length)
-    //     setAccountError("Account number is required");
-    //   if (!providerProfile?.profile_picture?.length)
-    //     showToast("", "Please upload profile image", "warning");
+    //   if (!providerProfile?.bankDetails?.registrationNumber?.length) setRegistrationError('Registration is required')
+    //   if (!providerProfile?.bankDetails?.bankname?.length) setBankNameError('Bank name is required')
+    //   if (!providerProfile?.bankDetails?.branchname?.length) setBranchError('Branch name is required')
+    //   if (!providerProfile?.bankDetails?.accountnumber?.length) setAccountError('Account number is required')
+    //   if (!providerProfile?.profilePicture?.length) showToast('', 'Please upload profile image', 'warning')
     // }
   }
 

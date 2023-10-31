@@ -23,7 +23,6 @@ const ProviderAddress = () => {
     providerProfile,
     phoneRef,
     licenseRef,
-    addressRef,
     onBlurPhoneNumber,
     onChangePhoneNumber,
     onBlurLastName,
@@ -39,16 +38,14 @@ const ProviderAddress = () => {
     onPressNext
   } = ProviderAddressController()
 
-  const addAddressView = () => {
-    return (
-      <RNModal style={styles.modal} backdropOpacity={1} backdropColor={colors.white} isVisible={isVisible}>
-        <View style={styles.addressView}>
-          <Input placeholder={t('address')} type={'fullStreetAddress'} inputStyle={[{ minWidth: '82%' }]} onClearInputText={() => addressRef.current.clear()} onChangeText={setOnSearchAddress} inputValue={onSearchAddress} value={onSearchAddress} onSubmitEditing={onBlurAddress} autoFocus />
-          <TextButton containerStyle={{ width: '18%', alignItems: 'flex-end' }} title="Close" fontSize={fontSize.textL} onPress={() => setIsVisible(false)} />
-        </View>
-      </RNModal>
-    )
-  }
+  const addAddressView = () => (
+    <RNModal style={styles.modal} backdropOpacity={1} backdropColor={colors.white} isVisible={isVisible}>
+      <View style={styles.addressView}>
+        <Input placeholder={t('address')} type={'fullStreetAddress'} inputStyle={[{ minWidth: '82%' }]} onChangeText={setOnSearchAddress} inputValue={onSearchAddress} defaultValue={onSearchAddress} onSubmitEditing={onBlurAddress} autoFocus />
+        <TextButton containerStyle={{ width: '18%', alignItems: 'flex-end' }} title="Close" fontSize={fontSize.textL} onPress={() => setIsVisible(false)} />
+      </View>
+    </RNModal>
+  )
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
@@ -83,7 +80,6 @@ const ProviderAddress = () => {
           onSubmitEditing={() => licenseRef.current.focus()}
           onClearInputText={() => phoneRef.current.clear()}
         />
-
         <Input
           placeholder={t('License number (for those who have)')}
           type={'nameSuffix'}
@@ -94,10 +90,9 @@ const ProviderAddress = () => {
           defaultValue={providerProfile?.licensenumber}
           inputValue={providerProfile?.licensenumber ?? ''}
           returnKeyType={'next'}
-          onSubmitEditing={() => addressRef.current.focus()}
+          onSubmitEditing={() => setIsVisible(true)}
           onClearInputText={() => licenseRef.current.clear()}
         />
-
         <Input placeholder={t('address')} inputStyle={styles.input} value={onSearchAddress} errorMessage={addressError} onTouchStart={() => setIsVisible(true)} caretHidden inputValue={onSearchAddress} onClearInputText={() => setOnSearchAddress('')} />
         {getUploadImageView()}
         {addAddressView()}
@@ -120,23 +115,17 @@ const styles = StyleSheet.create({
   input: {
     marginTop: getHeight(dimens.marginM + dimens.paddingXs)
   },
-
   iconContainer: {
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
     marginTop: getHeight(dimens.sideMargin)
   },
-
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
     width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS)
-  },
-  editImage: {
-    height: getHeight(dimens.paddingL + 2),
-    width: getWidth(dimens.paddingL)
   },
   modal: {
     flex: 1,

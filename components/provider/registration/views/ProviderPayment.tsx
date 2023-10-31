@@ -157,11 +157,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     marginTop: getHeight(dimens.marginS)
   },
-  editImage: {
-    height: getHeight(dimens.paddingL + 2),
-    width: getWidth(dimens.paddingL),
-    marginTop: getHeight(dimens.paddingS)
-  },
   inputContainer: {
     flex: 0.79
   },

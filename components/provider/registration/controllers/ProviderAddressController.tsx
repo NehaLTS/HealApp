@@ -10,7 +10,6 @@ const ProviderAddressController = () => {
   const [isShowModal, setIsShowModal] = useState(false)
   const phoneRef = React.useRef<any>('')
   const licenseRef = React.useRef<any>('')
-  const addressRef = React.useRef<any>('')
   const { showToast, renderToast } = useToast()
   const { providerProfile, setProviderProfile, setCurrentStep } = UseProviderUserContext()
 
@@ -34,7 +33,7 @@ const ProviderAddressController = () => {
     validateAddress()
     setProviderProfile({
       ...providerProfile,
-      address: addressRef.current.value
+      address: onSearchAddress
     })
     setIsVisible(false)
   }
@@ -88,7 +87,6 @@ const ProviderAddressController = () => {
     providerProfile,
     phoneRef,
     licenseRef,
-    addressRef,
     onBlurPhoneNumber,
     onChangePhoneNumber,
     onBlurLastName,

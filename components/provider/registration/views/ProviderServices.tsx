@@ -1,103 +1,42 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from "react-native";
-import React, { SetStateAction, useEffect, useState } from "react";
-import { colors } from "designToken/colors";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import { dimens } from "designToken/dimens";
-import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { UseUserContextProvider } from "contexts/useUserContextProvider";
-import { t } from "i18next";
-import Text from "components/common/Text";
-import Button from "components/common/Button";
+import Button from 'components/common/Button'
+import Loader from 'components/common/Loader'
+import Text from 'components/common/Text'
+import { colors } from 'designToken/colors'
+import { dimens } from 'designToken/dimens'
+import { fontSize } from 'designToken/fontSizes'
+import { t } from 'i18next'
+import { getHeight, getWidth } from 'libs/StyleHelper'
+import React from 'react'
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import ProviderServicesController from '../controllers/ProviderServicesController'
 
 const ProviderServices = () => {
-  const { onGetProviderService } = AuthServicesProvider();
-  const { userDataProvider } = UseUserContextProvider();
-  const [services, setServices] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
-  const [isSigninSelected, setIsSigninSelected] = useState(true);
-
-  const loginRegisterToggle = (val: number) => setIsSigninSelected(val === 1);
-
-  const getProviderServices = async () => {
-    setIsLoading(true);
-    let response = await onGetProviderService({
-      provider_id: "2",
-      specialty_id: "1",
-    });
-
-    if (response && response.services) {
-      setServices(response.services);
-    }
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    getProviderServices();
-  }, []);
-  const onCheckedPress = (index: number) => {
-    //TODO: Can Refactor this
-    let data = [...services];
-    if (data[index] && data[index].isChecked) {
-      data[index].isChecked = false;
-    } else {
-      data[index].isChecked = true;
-    }
-
-    setServices(data);
-  };
-
-  const onPrescriptionSelected = (isSelected: boolean) => {
-    setIsPrescriptionSelected(isSelected);
-  };
+  const { onPressBack, onPressNext, services, isLoading, isPrescriptionSelected, onCheckedPress, onPrescriptionSelected } = ProviderServicesController()
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
-      <Button title={t("back")} isSmall width={"30%"} />
-      <Button title={t("next")} isPrimary isSmall width={"30%"} />
+      <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} />
+      <Button title={t('next')} isPrimary isSmall width={'30%'} onPress={onPressNext} />
     </View>
-  );
+  )
 
   const getServicesView = () => (
     <>
-      <Text style={styles.textS} title={t("Services you provide")} />
+      <Text style={styles.textS} title={t('Services you provide')} />
       <View style={styles.servicesContainer}>
         {services.length > 0 ? (
-          <ScrollView
-            contentContainerStyle={{
-              paddingBottom: getHeight(dimens.marginM),
-            }}
-            style={{ height: "100%" }}>
+          <ScrollView contentContainerStyle={{ paddingBottom: getHeight(dimens.marginM) }} style={{ height: '100%' }}>
             {services.map((item, index) => (
               <View key={index} style={styles.serviceRow}>
                 <Text style={styles.serviceText} title={item.name.en} />
                 <View style={styles.serviceRight}>
-                  <Text style={styles.serviceText} title={"$ " + item.price} />
-
+                  <Text style={styles.serviceText} title={'$ ' + item.price} />
                   <TouchableOpacity onPress={() => onCheckedPress(index)}>
                     {!item.isChecked ? (
                       <View style={styles.checkbox} />
                     ) : (
-                      <View
-                        style={[
-                          styles.checkbox,
-                          { alignItems: "center", justifyContent: "center" },
-                        ]}>
-                        <Image
-                          source={require("assets/icon/check.png")}
-                          style={{
-                            width: getWidth(16),
-                            height: getHeight(10),
-                          }}
-                        />
+                      <View style={[styles.checkbox, { alignItems: 'center', justifyContent: 'center' }]}>
+                        <Image source={require('assets/icon/check.png')} style={{ width: getWidth(16), height: getHeight(10) }} />
                       </View>
                     )}
                   </TouchableOpacity>
@@ -106,139 +45,129 @@ const ProviderServices = () => {
             ))}
           </ScrollView>
         ) : (
-          <Text style={styles.textServices} title={t("No Services")} />
+          <Text style={styles.textServices} title={t('No Services')} />
         )}
       </View>
     </>
-  );
+  )
+
+  const RadioButton = ({ onPress, isChecked }: { onPress: () => void; isChecked: boolean }) => (
+    <TouchableOpacity onPress={onPress}>
+      {!isChecked ? (
+        <View style={styles.outerCircle}>
+          <View style={styles.innerCircle} />
+        </View>
+      ) : (
+        <View style={styles.outerCircle}>
+          <View style={[styles.innerCircle, { backgroundColor: colors.secondary, borderColor: colors.secondary }]} />
+        </View>
+      )}
+    </TouchableOpacity>
+  )
 
   const addPrescriptionView = () => (
     <View style={styles.container}>
-      <Text style={styles.text} title={t("Yes")} />
-      <TouchableOpacity onPress={() => onPrescriptionSelected(true)}>
-        <Image
-          source={
-            isPrescriptionSelected
-              ? require("../../../../assets/icon/spectorOn.png")
-              : require("../../../../assets/icon/selecter.png")
-          }
-          style={[
-            !isPrescriptionSelected
-              ? styles.select
-              : {
-                  height: dimens.marginL + 6,
-                  width: dimens.marginL + 6,
-                  resizeMode: "cover",
-                  borderRadius: getHeight(dimens.paddingS),
-                },
-          ]}
-        />
-      </TouchableOpacity>
-      <Text style={styles.textServices} title={t("No")} />
-      <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
-        <Image
-          source={
-            !isPrescriptionSelected
-              ? require("../../../../assets/icon/spectorOn.png")
-              : require("../../../../assets/icon/selecter.png")
-          }
-          style={[
-            isPrescriptionSelected
-              ? styles.select
-              : {
-                  height: dimens.marginL + 6,
-                  width: dimens.marginL + 6,
-                  resizeMode: "cover",
-                  borderRadius: getHeight(dimens.paddingS),
-                },
-          ]}
-        />
-      </TouchableOpacity>
+      <Text style={styles.text} title={t('yes')} />
+      <RadioButton onPress={() => onPrescriptionSelected(true)} isChecked={isPrescriptionSelected} />
+      <Text style={styles.textServices} title={t('no')} />
+      <RadioButton onPress={() => onPrescriptionSelected(false)} isChecked={!isPrescriptionSelected} />
     </View>
-  );
+  )
 
   return (
     <>
+      {isLoading && <Loader />}
       <View style={styles.inputContainer}>
-        <Text
-          style={styles.text}
-          title={t("Authority to add a prescription")}
-        />
+        <Text style={styles.text} title={t('Authority to add a prescription')} />
         {addPrescriptionView()}
         {getServicesView()}
       </View>
       {getFooterView()}
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    gap: 10,
+    flexDirection: 'row',
+    gap: getHeight(10),
     marginTop: getHeight(dimens.sideMargin),
-    alignItems: "center",
+    alignItems: 'center'
   },
   text: {
-    fontSize: fontSize.textM,
-  },
-  textNo: {
-    fontSize: fontSize.textM,
-    marginLeft: 16,
+    fontSize: fontSize.textM
   },
   select: {
     height: dimens.marginL + 2,
     width: dimens.marginL + 2,
-    resizeMode: "cover",
-    borderRadius: getHeight(dimens.paddingS),
+    resizeMode: 'cover',
+    borderRadius: getHeight(dimens.paddingS)
   },
   textS: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.sideMargin),
-    marginTop: getHeight(dimens.imageS),
+    marginTop: getHeight(dimens.imageS)
   },
   serviceText: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getWidth(fontSize.textM)
   },
   servicesContainer: {
     borderWidth: getWidth(dimens.borderBold),
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.primary,
-    height: "70%",
-    justifyContent: "center",
-    //  alignItems:"center"
+    height: '70%',
+    justifyContent: 'center'
   },
   serviceRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: getHeight(dimens.marginS),
-    paddingTop: getHeight(dimens.paddingL - 2),
+    paddingTop: getHeight(dimens.paddingL - 2)
   },
   serviceRight: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: getHeight(dimens.sideMargin - 2),
-    alignItems: "center",
+    alignItems: 'center'
   },
   checkbox: {
     width: getWidth(dimens.marginL - 3),
     height: getHeight(dimens.marginL - 3),
     borderWidth: getHeight(dimens.borderThin),
-    borderColor: colors.black,
+    borderColor: colors.black
   },
   textServices: {
     fontSize: getWidth(fontSize.textXl),
-    textAlign: "center",
+    textAlign: 'center'
   },
   inputContainer: {
-    flex: 0.79,
+    flex: 0.79
   },
   footerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     flex: 0.1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between'
   },
-});
+  outerCircle: {
+    width: getWidth(dimens.marginL),
+    height: getWidth(dimens.marginL),
+    borderRadius: getWidth(dimens.imageS),
+    borderColor: colors.black,
+    borderWidth: getWidth(dimens.borderBold),
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  innerCircle: {
+    width: getWidth(16),
+    height: getWidth(16),
+    minWidth: getWidth(16),
+    minHeight: getWidth(16),
+    borderRadius: getWidth(10),
+    borderColor: colors.black,
+    borderWidth: getWidth(dimens.borderBold),
+    alignSelf: 'center'
+  }
+})
 
-export default ProviderServices;
+export default ProviderServices
