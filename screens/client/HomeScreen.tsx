@@ -17,6 +17,7 @@ import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   TouchableHighlight,
@@ -43,6 +44,9 @@ const HomeScreen = () => {
     onBlur,
     onChange,
     onChangeSearch,
+    onPressBanner,
+    searchRef,
+    onSearchDone
   } = HomeViewController();
   const isDataNotFound = true;
   useLayoutEffect(() => {
@@ -89,7 +93,7 @@ const HomeScreen = () => {
 
     return (
       <>
-        <Text style={styles.searchHeading}>Which Specialist do you need?</Text>
+        <Text style={styles.searchHeading} title={'Which Specialist do you need?'}></Text>
         {providerList.map((item: any, index: number) => (
           <Animated.View
             key={index}
@@ -98,8 +102,8 @@ const HomeScreen = () => {
             <CardView
               item={item}
               index={index}
-              onPress={() => navigation.navigate(NavigationRoutes.OrderDetails,{
-                supplier : item
+              onPress={() => navigation.navigate(NavigationRoutes.OrderDetails, {
+                supplier: item
               })}
             />
           </Animated.View>
@@ -109,7 +113,7 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     // Pass on Press of card and array of data as props*/
-    return providerList.map((item: any, index: number) => (
+    return searchRef.current?.map((item: any, index: number) => (
       <Animated.View
         key={index}
         entering={FadeInUp.duration(200).easing(Easing.ease)}
@@ -140,10 +144,13 @@ const HomeScreen = () => {
       contentContainerStyle={{ paddingBottom: 20 }}>
       {/* Banner Advertisement */}
       {isTouchStart && onChangeSearch?.length === 0 && (
-        <Image
-          style={styles.banner}
-          source={require("assets/icon/google.png")}
-        />
+        <TouchableOpacity onPress={onPressBanner}>
+          <Image
+            style={styles.banner}
+            // source={require("assets/icon/google.png")}
+            source={{ uri: bannerAds[0]?.imageurl }}
+          />
+        </TouchableOpacity>
       )}
       <SearchBox
         isTouchStart={isTouchStart && onChangeSearch?.length === 0}
@@ -152,12 +159,13 @@ const HomeScreen = () => {
         onBlur={onBlur}
         onChangeText={onChange}
         defaultValue={onChangeSearch}
+        onSubmitEditing={onSearchDone}
       />
       {onChangeSearch?.length === 0
         ? getProviderList()
         : isDataNotFound
-        ? getProviderSearchList()
-        : noSearchedView()}
+          ? getProviderSearchList()
+          : noSearchedView()}
     </ScrollView>
   );
 };

@@ -26,7 +26,7 @@ const LoginViewController = () => {
     onSubmitGoogleAuthRequest,
   } = AuthServicesClient();
 
-  
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -113,7 +113,7 @@ const LoginViewController = () => {
     });
 
     //if first name is empty navigate to onboard else to Home
-    if (!userDetails.firstName || userDetails.firstName == "" ) {
+    if (!userDetails.firstName || userDetails.firstName == "") {
       navigation.reset({
         index: 0,
         routes: [{ name: "OnboardDetails" }],
@@ -134,7 +134,7 @@ const LoginViewController = () => {
       if (email != "" || password != "") {
         setIsLoading(true);
         const res = await onSubmitAuthRequest({ email, password });
-
+        console.log("sign in client by email and password", res)
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res);
         else

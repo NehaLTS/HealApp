@@ -1,16 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { ClientOrderServices } from "libs/ClientOrderServices";
-import { Banner } from "libs/types/ProvierTypes";
+import { Banner, search_provider } from "libs/types/ProvierTypes";
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Keyboard } from "react-native";
+import { Keyboard, Linking } from "react-native";
 
 const HomeViewController = () => {
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
-  const { getBannerAds } = ClientOrderServices()
-  const searchRef = useRef<any>("");
+  const { getBannerAds, searchProviders } = ClientOrderServices()
+  const searchRef = useRef<search_provider[]>([]);
   const [onChangeSearch, setOnChangeSearch] = useState<string>('');
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
@@ -49,7 +49,11 @@ const HomeViewController = () => {
 
   useEffect(() => {
     getBannerAd();
+    // getsearchResult();
   }, []);
+  const onPressBanner = () =>
+    Linking.openURL(bannerAds[0]?.destinationUrl)
+
 
   const getBannerAd = async () => {
     try {
@@ -61,10 +65,16 @@ const HomeViewController = () => {
       console.error("An error occurred:", error);
     }
   };
-
+  const onSearchDone = async () => {
+    const res = await searchProviders({ name: onChangeSearch });
+    console.log('bvjcxnb', res)
+    searchRef.current = res
+  }
   // const onChangeSearch = (value: string) => (searchRef.current.value = value);
   const onChange = (value: string) => setOnChangeSearch(value);
-  const onTouchStart = () => setIsTouchStart(false);
+  const onTouchStart = async () => {
+    setIsTouchStart(false)
+  };
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
     Keyboard.dismiss();
@@ -81,6 +91,9 @@ const HomeViewController = () => {
     onBlur,
     onChangeSearch,
     onChange,
+    onPressBanner,
+    searchRef,
+    onSearchDone
   };
 };
 

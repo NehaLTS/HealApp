@@ -26,7 +26,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAddPayment, setIsAddPayment] = useState(false);
   const onPaymentAdd = () => setIsAddPayment(true);
-  const {userProfile}= UseClientUserContext()
+  const { userProfile } = UseClientUserContext()
 
   useEffect(() => {
     Animated.timing(visibility, {
@@ -37,8 +37,8 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
     }).start();
   }, [index]);
   const onPressOrder = () => {
-    console.log('userProfile?.isPaymentAdded',userProfile?.isPaymentAdded)
-    if(userProfile?.isPaymentAdded ) navigation.navigate(NavigationRoutes.OrderDetails)
+    console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded)
+    if (userProfile?.isPaymentAdded) navigation.navigate(NavigationRoutes.OrderDetails)
     else setModalVisible(true)
   }
 
@@ -89,7 +89,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
       ) : (
         <View style={styles.specialistList}>
           <View style={styles.container}>
-            <Image source={item.image} style={styles.specialistIcon} />
+            <Image source={{ uri: item.image_url }} style={styles.specialistIcon} />
             <Text style={styles.specialistSearched} title={item.name} />
           </View>
           <Button

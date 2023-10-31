@@ -21,8 +21,7 @@ const UserAddressViewController = () => {
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState("");
-  const { setCurrentStep, setUserProfile, userProfile, userId } =
-    UseClientUserContext();
+  const { setCurrentStep, setUserProfile, userProfile, userId } = UseClientUserContext();
 
   const validateAddress = () => {
     if (onSearchAddress?.length < 4) setAddressError("Please fill full address");
@@ -117,7 +116,7 @@ const UserAddressViewController = () => {
       });
 
       setIsLoader(false);
-
+      console.log("res", res)
       if (res?.isSuccessful) {
         setCurrentStep("payment");
       } else {

@@ -2,7 +2,7 @@ import { BodyInit, HeadersInit } from "./api/ApiTypes";
 import { sendRequest } from "./api/RequestHandler";
 import { GET, GET_AD_BANNER, GET_SEARCH_PROVIDER, GET_TREATMENT_MENU, ORDER_PROVIDER, POST } from "./constants/ApiConstants";
 import { getLocalData } from "./datastorage/useLocalStorage";
-import { Banner, order_provider, treatment } from "./types/ProvierTypes";
+import { Banner, order_provider, search_provider, treatment } from "./types/ProvierTypes";
 
 export const ClientOrderServices = () => {
   const getBannerAds = (): Promise<Banner[]> => sendRequest(GET_AD_BANNER, {
@@ -10,18 +10,18 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODM4MTg0OCwiZXhwIjoxNjk4NDE0MjQ4fQ.VZoGbbMtW4ugcIMAPEnRsVAhG_97dWw9POqbe4bO3Ns'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
     } as unknown as HeadersInit
   });
 
-  const searchProviders = (body: { name: string }): Promise<[]> =>
+  const searchProviders = (body: { name: string }): Promise<search_provider[]> =>
     sendRequest(GET_SEARCH_PROVIDER, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
         // 'x-access-token': getLocalData?.('USER')?.token
-        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODMwNTAwNiwiZXhwIjoxNjk4MzM3NDA2fQ.MnfVklzQK08PMdI0hBo-HnIpSKqlphwgdoG4ErHegro'
+        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
       } as unknown as HeadersInit
     })
 
@@ -49,18 +49,21 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODM4MTg0OCwiZXhwIjoxNjk4NDE0MjQ4fQ.VZoGbbMtW4ugcIMAPEnRsVAhG_97dWw9POqbe4bO3Ns'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
     } as unknown as HeadersInit
   });
 
   const handlePayment = (body: {}): void => { };
 
-  const treatmentMenu = (): Promise<treatment[]> => sendRequest(GET_TREATMENT_MENU, {
-    method: GET,
+  const treatmentMenu = (body: {
+    provider_type_id: string
+  }): Promise<treatment[]> => sendRequest(GET_TREATMENT_MENU, {
+    method: POST,
+    body: body as unknown as BodyInit,
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODM4MTg0OCwiZXhwIjoxNjk4NDE0MjQ4fQ.VZoGbbMtW4ugcIMAPEnRsVAhG_97dWw9POqbe4bO3Ns'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
     } as unknown as HeadersInit
   });
 

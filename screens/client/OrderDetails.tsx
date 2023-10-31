@@ -1,31 +1,24 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import arrowBack from "assets/icon/arrowBack.png";
-import specialistIcon from "assets/icon/doctor.png";
 import OrderFormView from "components/client/home/OrderFormView";
 import SummaryView from "components/client/home/SummaryView";
 import Button from "components/common/Button";
 import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import OrderDetailsController from "./OrderDetailsController";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
-  const [showSummary, setShowSummary] = useState(false);
   const route = useRoute<any>()
   const { supplier } = route.params;
-
-  const handleNextButtonPress = () => {
-    setShowSummary(!showSummary);
-  };
-
   useLayoutEffect(() => {
   }, [navigation]);
-
+  const { handleNextButtonPress, showSummary } = OrderDetailsController()
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -48,7 +41,7 @@ const OrderDetails = () => {
       headerRight: null,
     });
   }, [navigation]);
-  
+
   return (
     <View style={styles.mainContainer}>
       {showSummary ? (
@@ -64,7 +57,7 @@ const OrderDetails = () => {
         onPress={handleNextButtonPress}
         width={100}
       />
-      {showSummary &&  <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
+      {showSummary && <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
     </View>
   );
 };
@@ -76,9 +69,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
- 
+
   },
- 
+
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
@@ -104,11 +97,11 @@ const styles = StyleSheet.create({
   specialist: {
     fontSize: getWidth(fontSize.textXl),
   },
-  buttonOrder:{
-    alignSelf:"center"
+  buttonOrder: {
+    alignSelf: "center"
   },
-  text:{
-    fontSize:getWidth(fontSize.textS),
-    marginTop:getWidth(4)
+  text: {
+    fontSize: getWidth(fontSize.textS),
+    marginTop: getWidth(4)
   }
 });

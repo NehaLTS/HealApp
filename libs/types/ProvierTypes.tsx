@@ -34,12 +34,44 @@ export interface Banner {
 }
 
 export interface treatment {
-  menu_id: number;
-  name: string;
-  provider_types_id: number;
-  price: string;
+  treatmentMenu: TreatmentMenu[];
+  reason: Reason[];
 }
+
+export interface Reason {
+  reason_id: number;
+  name: Name;
+}
+
+export interface Name {
+  en: string;
+  hi?: string;
+}
+
+export interface TreatmentMenu {
+  menu_id: number;
+  name: Name;
+  price: string;
+  provider_type_id: number;
+}
+
 export interface order_provider {
   isSuccessful: boolean,
   msg: string
+
+}
+
+
+export interface search_provider {
+  name: string;
+  image_url: string,
+  providers: Provider[];
+}
+
+export interface Provider {
+  name: string;
+  provider_id: number;
+  provider_type_id: number;
+  specialty_id: number;
+  distance: string;
 }

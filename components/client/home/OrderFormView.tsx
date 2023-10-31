@@ -7,8 +7,9 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   TextInput,
@@ -16,10 +17,12 @@ import {
   View
 } from "react-native";
 import Modal from "react-native-modal";
-import OrderDetailsController from "../../../screens/client/OrderDetailsController";
 import { OrderDetail, UseClientUserContext } from "contexts/UseClientUserContext";
 import { useTranslation } from "react-i18next";
 import RNModal from "components/common/Modal";
+import OrderFormController from "./OrderFormController";
+import { ClientOrderServices } from "libs/ClientOrderServices";
+import { Reason, TreatmentMenu } from "libs/types/ProvierTypes";
 
 const OrderFormView = () => {
   const { t } = useTranslation();
@@ -30,12 +33,11 @@ const OrderFormView = () => {
   const [selectedResourceType, setSelectedResourceType] = useState<any[]>([]);
   const ageRef = React.useRef<any>("");
   const phoneRef = React.useRef<any>("");
-  const {orderDetails, setOrderDetails, userProfile } = UseClientUserContext()
+  const { orderDetails, setOrderDetails, userProfile } = UseClientUserContext()
   const otherReasons = React.useRef<any>('')
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState("");
-  
-
+  const { treatmentReason } = OrderFormController()
 
   const onChangeAge = (value: string) => ageRef.current.value = value
   const onChangePhone = (value: string) => phoneRef.current.value = value
@@ -44,72 +46,69 @@ const OrderFormView = () => {
   }
 
   const onSelectReasons = (item: any) => {
+    console.log('object***********', item);
     const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
-    const itemIndex = updatedActiveButton.indexOf(item.id);
+    const itemIndex = updatedActiveButton.indexOf(item.reason_id);
 
     if (itemIndex !== -1) {
       // The button is already selected, so remove it
       updatedActiveButton.splice(itemIndex, 1);
     } else {
       // The button is not selected, so add it
-      updatedActiveButton.push(item.id);
+      updatedActiveButton.push(item.reason_id);
     }
     setActiveButton(updatedActiveButton); // Update the state with the new array
-    setSelectedResourceType((prev)=> [...prev, item]);
-    
-    setOrderDetails?.({...orderDetails, reason: selectedResourceType })
+    setSelectedResourceType((prev) => [...prev, item]);
+    console.log("selectedResourceType", selectedResourceType)
+    setOrderDetails({ ...orderDetails, reason: [...selectedResourceType, item] });
   };
-console.log('userProfile?.address',userProfile?.address)
-  const reasons = [
-    { title: 'Back pain', id: 1 },
-    { title: 'Heart pain', id: 2 },
-    { title: 'Arrhythmia', id: 3 },
-    { title: 'Headache', id: 4 },
-    { title: 'Leg pain', id: 5 },
-    { title: 'Vomiting', id: 6 },
-  ];
-  const treatmentsData = [
-    { id: 1 ,label: "Visit - 500 NIS" },
-    { id: 2,label: "Voltaren shot  - 100 NIS" },
-    { id: 3,label: "Clacksen shot  - 100 NIS" },
-  ];
+  console.log('userProfile?.address', userProfile?.address)
+
   const toggleMe = () => {
     setIsMeSelected(true);
+    setOrderDetails({ ...orderDetails, patient_type: 'me' })
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<{ id: number; label: string }[]>([]);
-
-  const handleItemPress = (item: { id: number; label: string }) => {
-    if (selectedMenu.find((selectedItem) => selectedItem.id === item.id)) {
-      setSelectedMenu(selectedMenu.filter((selectedItem) => selectedItem.id !== item.id));
+  const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>([]);
+  console.log('selectedResourceType', selectedResourceType);
+  const handleItemPress = (item: TreatmentMenu) => {
+    console.log('112222222222******', item);
+    if (selectedMenu.find((selectedItem) => selectedItem.menu_id === item.menu_id)) {
+      setSelectedMenu(selectedMenu.filter((selectedItem) => selectedItem.menu_id !== item.menu_id));
     } else {
       setSelectedMenu([...selectedMenu, item]);
     }
-
-    setOrderDetails({...orderDetails, services: selectedMenu })
+    if (!selectedResourceType.includes(item)) {
+      setOrderDetails({ ...orderDetails, services: [...selectedMenu, item] })
+    }
   };
 
   const toggleSomeoneElse = () => {
     setIsMeSelected(false);
+    setOrderDetails({ ...orderDetails, patient_type: 'someone else' })
   };
+  const abc = selectedResourceType?.map((i) => i?.reason_id)
+  console.log('hjjhghjghj00000', activeButton);
   const getReasonsView = () => (
     <>
       <Text title={"Reason"} style={styles.addressText} />
       <View style={styles.buttonContainer}>
-        {reasons?.map((item: any, index: number) => (
+        {treatmentReason?.reason.map((item: Reason, index: number) => (
           <Button
             key={index}
-            title={item.title}
+            title={item.name?.en}
             isSmall
-            isPrimary={activeButton.includes(item.id)}
+            isPrimary={activeButton.includes(item?.reason_id)}
             onPress={() => onSelectReasons(item)}
             width={"28%"}
-            fontSized={getHeight(fontSize.textM)}
-            height={getHeight(dimens.marginL)}
-            borderRadius={getWidth(dimens.marginS)}
-            lineHeight={dimens.sideMargin + dimens.borderBold}
+            fontSized={getHeight(fontSize?.textM)}
+            height={getHeight(dimens?.marginL)}
+            borderRadius={getWidth(dimens?.marginS)}
+            lineHeight={dimens?.sideMargin + dimens?.borderBold}
           />
-        ))}
+        ))
+          // <A/>ctivityIndicator size={'large'} color={colors?.primary} style={{ alignItems: 'center', flex: 1 }} />
+        }
         <Button
           title={"Other"}
           fontSized={getHeight(fontSize.textM)}
@@ -141,11 +140,10 @@ console.log('userProfile?.address',userProfile?.address)
           isDescription
           defaultValue={otherReasons?.current?.value}
           ref={otherReasons}
-          onChangeText={(value:string)=> otherReasons.current.value = value}
+          onChangeText={(value: string) => otherReasons.current.value = value}
           onSubmitDescription={() => {
-            setOrderDetails({...orderDetails, Additional_notes: otherReasons?.current?.value })
-
-           }}
+            setOrderDetails({ ...orderDetails, Additional_notes: otherReasons?.current?.value })
+          }}
         />
       </Modal>
     </>
@@ -154,16 +152,18 @@ console.log('userProfile?.address',userProfile?.address)
     <>
       <Text title={"Treatments menu"} style={styles.menuText} />
       <View style={styles.container}>
-      {treatmentsData.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.checkboxContainer}
-          onPress={() => handleItemPress(item)} // Call the function with the item
-        >
-          <View style={styles.checkBox} />
-          <Text>{item.label}</Text>
-        </TouchableOpacity>
-      ))}
+        {treatmentReason?.treatmentMenu?.length > 0 ? treatmentReason?.treatmentMenu?.map((item: TreatmentMenu, index: number) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.checkboxContainer}
+            onPress={() => handleItemPress(item)} // Call the function with the item
+          >
+            <View style={styles.checkBox} />
+            <Text>{item.name.en}</Text>
+          </TouchableOpacity>
+        ))
+          : <ActivityIndicator size={'large'} color={colors?.primary} style={{ alignItems: 'center', flex: 1 }} />
+        }
         <Text
           title={"*If the doctor won’t use your shot, you won’t pay for it"}
           style={styles.textSmall}
@@ -179,25 +179,25 @@ console.log('userProfile?.address',userProfile?.address)
         backdropOpacity={1}
         backdropColor={colors.white}
         isVisible={isVisible}>
-      <View style={styles.addressView}>
-        <Input
-          placeholder={t("address")}
-          type={"fullStreetAddress"}
-          inputStyle={[{ minWidth: "82%" }]}
-          onClearInputText={() => setOnSearchAddress('')}
-          onChangeText={setOnSearchAddress}
-          inputValue={onSearchAddress}
-          value={onSearchAddress}
-          onSubmitEditing={() => setIsVisible(false)}
-          autoFocus
-        />
-        <TextButton
-          containerStyle={{ width: "18%", alignItems: "flex-end" }}
-          title="Close"
-          fontSize={fontSize.textL}
-          onPress={() => setIsVisible(false)}
-        />
-      </View>
+        <View style={styles.addressView}>
+          <Input
+            placeholder={t("address")}
+            type={"fullStreetAddress"}
+            inputStyle={[{ minWidth: "82%" }]}
+            onClearInputText={() => setOnSearchAddress('')}
+            onChangeText={setOnSearchAddress}
+            inputValue={onSearchAddress}
+            value={onSearchAddress}
+            onSubmitEditing={() => { setIsVisible(false) }}
+            autoFocus
+          />
+          <TextButton
+            containerStyle={{ width: "18%", alignItems: "flex-end" }}
+            title="Close"
+            fontSize={fontSize.textL}
+            onPress={() => setIsVisible(false)}
+          />
+        </View>
       </RNModal>
     );
   };
@@ -226,7 +226,7 @@ console.log('userProfile?.address',userProfile?.address)
           onPress={toggleSomeoneElse}
         />
       </View>
-      
+
       <View
         style={[
           styles.addressContainer,
@@ -248,7 +248,7 @@ console.log('userProfile?.address',userProfile?.address)
                 containerStyle={{ flex: 0.1 }}
                 title={"Edit"}
                 fontSize={getHeight(fontSize.textM)}
-                onPress={()=>setIsVisible(true)}
+                onPress={() => setIsVisible(true)}
               />
             </View>
           </>
@@ -272,32 +272,32 @@ console.log('userProfile?.address',userProfile?.address)
               />
             </View>
           </>) : (
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={ageRef}
-              onChangeText={onChangeAge}
-              placeholderTextColor={colors.disabledText}
-              placeholder="Their age *"
-              style={styles.textInput}
-              defaultValue={ageRef?.current?.value}
-              maxLength={2}
-            />
-            <TextInput
-              ref={phoneRef}
-              placeholderTextColor={colors.disabledText}
-              placeholder="Their phone number"
-              style={styles.textInput}
-              onChangeText={onChangePhone}
-              defaultValue={phoneRef?.current?.value}
-              maxLength={10}
-            />
-            <TouchableOpacity style={styles.arrowIconContainer} onPress={onSubmitDetail} >
-              <Image
-                source={require("../../../assets/icon/arrowNext.png")}
-                style={styles.arrowIcon}
+            <View style={styles.inputContainer}>
+              <TextInput
+                ref={ageRef}
+                onChangeText={onChangeAge}
+                placeholderTextColor={colors.disabledText}
+                placeholder="Their age *"
+                style={styles.textInput}
+                defaultValue={ageRef?.current?.value}
+                maxLength={2}
               />
-            </TouchableOpacity>
-          </View>))}
+              <TextInput
+                ref={phoneRef}
+                placeholderTextColor={colors.disabledText}
+                placeholder="Their phone number"
+                style={styles.textInput}
+                onChangeText={onChangePhone}
+                defaultValue={phoneRef?.current?.value}
+                maxLength={10}
+              />
+              <TouchableOpacity style={styles.arrowIconContainer} onPress={onSubmitDetail} >
+                <Image
+                  source={require("../../../assets/icon/arrowNext.png")}
+                  style={styles.arrowIcon}
+                />
+              </TouchableOpacity>
+            </View>))}
       </View>
       {getReasonsView()}
       {getTreatmentsView()}
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.disabled,
     flexDirection: "row",
-  
+
     // paddingHorizontal: getWidth(dimens.paddingS),
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
     //  flex: 0.2,
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginM),
     resizeMode: "contain",
     flex: 0.07,
-    marginLeft:getWidth(dimens.marginS)
+    marginLeft: getWidth(dimens.marginS)
   },
   menuText: {
     fontSize: getWidth(fontSize.textXl),
@@ -416,14 +416,14 @@ const styles = StyleSheet.create({
   description: {
     height: getHeight(117),
   },
-  modal:{ 
-    flex: 1, 
-    justifyContent: "flex-start" 
+  modal: {
+    flex: 1,
+    justifyContent: "flex-start"
   },
-  addressView:{
+  addressView: {
     flexDirection: "row",
-     alignItems: "center",
-     marginTop: getHeight(dimens.paddingS),
+    alignItems: "center",
+    marginTop: getHeight(dimens.paddingS),
   }
 
 });

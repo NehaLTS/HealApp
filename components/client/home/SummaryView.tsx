@@ -11,8 +11,8 @@ import { fontFamily } from "designToken/fontFamily";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
 
 const SummaryView = () => {
-    const {orderDetails, setOrderDetails } = UseClientUserContext()
-    console.log('first*******', orderDetails)
+  const { orderDetails, setOrderDetails } = UseClientUserContext()
+  console.log('first*******', orderDetails)
   return (
     <>
       <View style={styles.textContainer}>
@@ -75,7 +75,7 @@ const SummaryView = () => {
           placeholder={"Describe where is the entrance etc."}
           inputValue={""}
           inputStyle={styles.description}
-        
+          onChangeText={(value) => setOrderDetails({ ...orderDetails, Instructions_for_arrival: value })}
         />
       </View>
     </>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   symptomsContainer: {
     flex: 0.17,
     marginTop: getWidth(dimens.marginS),
-   
+
   },
 
   voltarenText: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     gap: getWidth(dimens.marginM),
   },
   textPaid: {
-    marginTop: getWidth(dimens.sideMargin +6),
+    marginTop: getWidth(dimens.sideMargin + 6),
     fontSize: fontSize.textL,
   },
   instructionContainer: {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   description: {
     height: getHeight(dimens.imageS + dimens.marginS),
-   
+
   },
 
   container: {
@@ -164,5 +164,5 @@ const styles = StyleSheet.create({
   total: {
     fontFamily: fontFamily.bold,
   },
-  
+
 });
