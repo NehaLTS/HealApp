@@ -58,8 +58,8 @@ const ProviderAddressController = () => {
     }
   }
 
-  const onUploadLicense = () => setIsVisible(true)
-  const onCloseModal = () => setIsShowModal(false)
+  const onUploadLicense = () =>  setIsShowModal(true)
+  const onCloseModal = () => {setIsVisible(false),setIsShowModal(false)}
 
   const onPressBack = () => {
     setCurrentStep('details')

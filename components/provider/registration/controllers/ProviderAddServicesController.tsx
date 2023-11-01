@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { UseUserContextProvider } from 'contexts/useUserContextProvider'
+import { UseUserContextProvider, UserTypeProvider } from 'contexts/useUserContextProvider'
 import { useNavigation } from '@react-navigation/native'
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider'
 import { Service } from 'libs/types/ProvierTypes'
 import { Alert } from 'react-native'
 import NavigationRoutes from 'navigator/NavigationRoutes'
+import { setLocalData } from 'libs/datastorage/useLocalStorage'
 
 const ProviderAddServicesController = () => {
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
@@ -95,6 +96,11 @@ const ProviderAddServicesController = () => {
         provider_id: '1',
         specialty_id: '1'
       })
+      setLocalData('USERPROVIDERPROFILE',{
+        name: serviceNameRef.current.value,
+        description:descriptionRef.current.value,
+        price:priceRef.current.value,
+      } )
       //Need to check for success and then append
       getUserAllServices()
       setIsLoading(false)

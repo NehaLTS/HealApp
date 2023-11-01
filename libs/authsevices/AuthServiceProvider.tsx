@@ -64,7 +64,8 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': userDataProvider?.token
+                // 'x-access-token': userDataProvider?.token
+                'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
             } as unknown as HeadersInit
         })
     const onCreateProviderServices = (body: {

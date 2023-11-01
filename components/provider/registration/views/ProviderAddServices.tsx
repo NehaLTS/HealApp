@@ -51,7 +51,7 @@ const ProviderAddServices = () => {
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
-      {userDataProvider.providerServices ? <Button title={t('Approve')} isPrimary onPress={onApprove} isSmall width={'40%'} style={{ alignSelf: 'center', width: '100%' }} /> : <TextButton title="Skip" style={{ alignSelf: 'center' }} containerStyle={{ width: '100%' }} onPress={onApprove} />}
+      {userDataProvider.providerServices ? <Button title={t('Approve')} isPrimary onPress={onApprove} isSmall width={'40%'} style={styles.approve} /> : <TextButton title="Skip" style={styles.skip} containerStyle={{ width: '100%' }} onPress={onApprove} />}
     </View>
   )
 
@@ -97,8 +97,8 @@ const ProviderAddServices = () => {
             errorMessage={descriptionError}
             onClearInputText={() => descriptionRef.current.clear()}
           />
-          <Button title={'Save'} isPrimary isSmall width={getWidth(85)} style={{ alignSelf: 'center', marginVertical: getHeight(dimens.sideMargin + dimens.marginS) }} onPress={saveService} fontSized={getWidth(15)} height={getHeight(34)} />
-          <TextButton style={{ alignSelf: 'center' }} fontSize={getWidth(fontSize.textXl + 2)} title={'Cancel'} onPress={toggleModal} />
+          <Button title={'Save'} isPrimary isSmall width={getWidth(85)} style={{ alignSelf: 'center', marginVertical: getHeight(dimens.sideMargin + dimens.marginS) }} onPress={saveService} fontSized={getWidth(15)} height={getHeight(dimens.marginL+4)} />
+          <TextButton style={{ alignSelf: 'center' }} fontSize={getWidth(fontSize.textXl + dimens.borderBold)} title={'Cancel'} onPress={toggleModal} />
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -133,7 +133,7 @@ const ProviderAddServices = () => {
 const styles = StyleSheet.create({
   textContainer: {
     backgroundColor: colors.modal,
-    padding: getHeight(dimens.marginM + 2),
+    padding: getHeight(dimens.marginM + dimens.borderBold),
     marginHorizontal: getHeight(dimens.paddingL),
     marginTop: getHeight(dimens.sideMargin),
     marginBottom: getHeight(dimens.marginL)
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   addService: {
     textAlign: 'center',
     fontSize: getWidth(fontSize.textXl),
-    marginBottom: getHeight(20)
+    marginBottom: getHeight(dimens.marginM)
   },
   textView: {
     color: colors.black,
@@ -160,13 +160,13 @@ const styles = StyleSheet.create({
     marginHorizontal: getHeight(dimens.paddingL)
   },
   addicon: {
-    height: dimens.imageS,
-    width: dimens.imageS
+    height: getHeight(dimens.imageS),
+    width: getWidth(dimens.imageS)
   },
   textAdd: {
     color: colors.black,
     fontFamily: fontFamily.regular,
-    fontSize: fontSize.textXl
+    fontSize: getWidth(fontSize.textXl)
   },
   modalContent: {
     backgroundColor: colors.modal,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
-    height: getHeight(dimens.imageM + dimens.paddingL + 10),
+    height: getHeight(dimens.imageM + dimens.paddingL + dimens.marginS),
     alignItems: 'flex-start',
     justifyContent: 'center'
   },
@@ -189,10 +189,10 @@ const styles = StyleSheet.create({
     margin: getHeight(dimens.marginM),
     padding: getHeight(dimens.sideMargin),
     borderRadius: 5,
-    marginTop: 10
+    marginTop: getHeight(dimens.marginS)
   },
   elevation: {
-    elevation: getHeight(12),
+    elevation: getHeight(dimens.paddingS),
     shadowColor: colors.black
   },
   inputContainer: {
@@ -204,6 +204,13 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 0.1,
     justifyContent: 'space-between'
+  },
+  approve: {
+    alignSelf: 'center',
+    width: '100%'
+  },
+  skip: {
+    alignSelf: 'center'
   }
 })
 

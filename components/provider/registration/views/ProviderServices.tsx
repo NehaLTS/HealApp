@@ -25,7 +25,7 @@ const ProviderServices = () => {
       <Text style={styles.textS} title={t('Services you provide')} />
       <View style={styles.servicesContainer}>
         {services.length > 0 ? (
-          <ScrollView contentContainerStyle={{ paddingBottom: getHeight(dimens.marginM) }} style={{ height: '100%' }}>
+          <ScrollView contentContainerStyle={styles.containerStyle} style={{ height: '100%' }}>
             {services.map((item, index) => (
               <View key={index} style={styles.serviceRow}>
                 <Text style={styles.serviceText} title={item.name.en} />
@@ -36,7 +36,7 @@ const ProviderServices = () => {
                       <View style={styles.checkbox} />
                     ) : (
                       <View style={[styles.checkbox, { alignItems: 'center', justifyContent: 'center' }]}>
-                        <Image source={require('assets/icon/check.png')} style={{ width: getWidth(16), height: getHeight(10) }} />
+                        <Image source={require('assets/icon/check.png')} style={styles.checkIcon} />
                       </View>
                     )}
                   </TouchableOpacity>
@@ -90,7 +90,7 @@ const ProviderServices = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    gap: getHeight(10),
+    gap: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.sideMargin),
     alignItems: 'center'
   },
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textM
   },
   select: {
-    height: dimens.marginL + 2,
-    width: dimens.marginL + 2,
+    height: getHeight(dimens.marginL + dimens.borderBold),
+    width: getWidth(dimens.marginL + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS)
   },
@@ -122,11 +122,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: getHeight(dimens.marginS),
-    paddingTop: getHeight(dimens.paddingL - 2)
+    paddingTop: getHeight(dimens.paddingL - dimens.borderBold)
   },
   serviceRight: {
     flexDirection: 'row',
-    gap: getHeight(dimens.sideMargin - 2),
+    gap: getHeight(dimens.sideMargin - dimens.borderBold),
     alignItems: 'center'
   },
   checkbox: {
@@ -159,14 +159,21 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   innerCircle: {
-    width: getWidth(16),
-    height: getWidth(16),
-    minWidth: getWidth(16),
-    minHeight: getWidth(16),
-    borderRadius: getWidth(10),
+    width: getWidth(dimens.sideMargin),
+    height: getWidth(dimens.sideMargin),
+    minWidth: getWidth(dimens.sideMargin),
+    minHeight: getWidth(dimens.sideMargin),
+    borderRadius: getWidth(dimens.marginS),
     borderColor: colors.black,
     borderWidth: getWidth(dimens.borderBold),
     alignSelf: 'center'
+  },
+  containerStyle: {
+    paddingBottom: getHeight(dimens.marginM)
+  },
+  checkIcon: {
+    width: getWidth(dimens.marginS + dimens.paddingXs),
+    height: getHeight(dimens.marginS)
   }
 })
 

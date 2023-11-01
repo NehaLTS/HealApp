@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: colors.invalid,
-    fontSize: fontSize.textM
+    fontSize: getWidth(fontSize.textM)
   },
   loading: {
     left: '44%',

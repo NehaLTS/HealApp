@@ -20,8 +20,8 @@ const ProviderConfirmation = () => {
   }, [navigation])
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.white }}>
-      <View style={{ alignItems: 'center', paddingTop: getHeight(50) }}>
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
         <Image source={userDataProvider.profile_picture?.length ? { uri: userDataProvider.profile_picture } : require('../../../../assets/icon/provider.png')} style={styles.finalIcon} />
       </View>
       <View style={styles.textContainer}>
@@ -45,9 +45,9 @@ export default ProviderConfirmation
 const styles = StyleSheet.create({
   textContainer: {
     backgroundColor: colors.modal,
-    padding: getHeight(dimens.marginM + 2),
-    marginHorizontal: getHeight(30),
-    marginTop: getHeight(50)
+    padding: getHeight(dimens.marginM + dimens.borderBold),
+    marginHorizontal: getHeight(dimens.marginS),
+    marginTop: getHeight(dimens.marginL+dimens.marginM)
   },
   text: {
     textAlign: 'center',
@@ -67,5 +67,14 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textM,
     marginTop: getHeight(dimens.paddingL),
     textAlign: 'center'
-  }
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.white
+  },
+  imageContainer:{
+     alignItems: 'center',
+      paddingTop: getHeight(dimens.marginL+dimens.marginM)
+     }
+
 })

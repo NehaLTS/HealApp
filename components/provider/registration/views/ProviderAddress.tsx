@@ -42,7 +42,7 @@ const ProviderAddress = () => {
     <RNModal style={styles.modal} backdropOpacity={1} backdropColor={colors.white} isVisible={isVisible}>
       <View style={styles.addressView}>
         <Input placeholder={t('address')} type={'fullStreetAddress'} inputStyle={[{ minWidth: '82%' }]} onChangeText={setOnSearchAddress} inputValue={onSearchAddress} defaultValue={onSearchAddress} onSubmitEditing={onBlurAddress} autoFocus />
-        <TextButton containerStyle={{ width: '18%', alignItems: 'flex-end' }} title="Close" fontSize={fontSize.textL} onPress={() => setIsVisible(false)} />
+        <TextButton containerStyle={styles.containerStyle} title="Close" fontSize={fontSize.textL} onPress={() => setIsVisible(false)} />
       </View>
     </RNModal>
   )
@@ -107,7 +107,7 @@ export default ProviderAddress
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     textAlign: 'center'
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
+    width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS)
   },
@@ -145,5 +145,9 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 0.1,
     justifyContent: 'space-between'
-  }
+  },
+  containerStyle:{ 
+    width: '18%',
+     alignItems: 'flex-end'
+     }
 })

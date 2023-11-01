@@ -148,12 +148,12 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
+    width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS)
   },
   text: {
-    fontSize: fontSize.textL,
+    fontSize:getWidth(fontSize.textL),
     color: colors.black,
     marginTop: getHeight(dimens.marginS)
   },

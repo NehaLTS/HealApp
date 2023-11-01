@@ -23,7 +23,7 @@ export interface User {
 }
 
 export interface UserTypeProvider {
-  id?: string | null
+  provider_id?: string | null
   isSuccessful?: boolean
   existing: string
   token?: string
@@ -141,21 +141,31 @@ export interface ClientProfile {
 export type onboardStep = 'details' | 'address' | 'payment' | ('services' | 'addServices')
 
 export interface ProviderProfile {
-  firstName: string
-  lastName: string
-  profilePicture?: string
-  idPicture?: string
-  provider: ProviderType
-  speciality: ProviderSpeciality
-  phoneNumber: string
-  email?: string
-  address?: string
-  city?: string
-  state?: string
-  country?: string
-  licensenumber?: string
-  licensepicture?: string
-  bankDetails: ProviderBankDetails
+  firstName: string;
+  lastName: string;
+  profilePicture?: string;
+  idPicture?: string;
+  provider?: ProviderType;
+  speciality?: ProviderSpeciality;
+  phoneNumber: string;
+  email?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  licensenumber?: string;
+  licensepicture?: string;
+  bankDetails?: ProviderBankDetails;
+  isSuccessful?:boolean;
+  provider_id?:string;
+  provider_type_id?:string;
+  bankName?:string;
+  branch?:string;
+  account?:string;
+  business_registration_number?:string;
+  name?:string;
+  description?:string;
+  price?:string
 }
 
 export interface ProviderType {

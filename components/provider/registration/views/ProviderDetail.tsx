@@ -184,14 +184,12 @@ const ProviderDetail = () => {
     }
   ]
 
-  const renderItem = (item: { name: any } | { name: { en: any } }) => {
-    let textContent = ''
-    if (item.name && item.name.en) {
-      textContent = item.name.en
-    } else if (item.name) {
-      textContent = item.name
-    }
-    return <Text style={styles.textItem}>{textContent}</Text>
+  const renderProvider = (item: { name: any }) => {
+    return <Text style={styles.textItem}>{item?.name}</Text>
+  }
+
+  const renderSpecialties= (item: | { name: { en: any } }) => {
+    return <Text style={styles.textItem}>{item?.name?.en}</Text>
   }
 
   const getUploadImageView = () => (
@@ -210,7 +208,9 @@ const ProviderDetail = () => {
       <Button title={t('next')} isPrimary isSmall width={'30%'} onPress={onPressNext} />
     </View>
   )
-
+  const a = data?.find((item) => item.name.en === providerProfile?.provider?.name)?.specialties
+console.log('first***********',data?.find((item) => item?.name?.en === providerProfile?.provider?.name)?.specialties)
+console.log('second***********',selectedProvider)
   return (
     <>
       <View style={styles.inputContainer}>
@@ -245,18 +245,18 @@ const ProviderDetail = () => {
           placeholder="Type of provider"
           value={providerProfile?.provider?.name}
           onChange={onChangeProviderTypes}
-          renderItem={renderItem}
+          renderItem={renderProvider}
           errorMessage={providerTypeError}
           onBlur={onBlurProviderTypes}
         />
         <Dropdown
-          data={data.find((item) => item.name.en === selectedProvider?.name)?.specialties || []}
+          data={data?.find((item) => item?.name?.en === providerProfile?.provider?.name)?.specialties || []}
           labelField="name.en"
           valueField="name.en"
           placeholder="Specialty"
           value={providerProfile?.speciality?.name}
           onChange={onChangeSpecialty}
-          renderItem={renderItem}
+          renderItem={renderSpecialties}
           errorMessage={specialtyError}
           onBlur={onBlurSpecialty}
         />
@@ -272,7 +272,7 @@ export default ProviderDetail
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSize.textL,
+    fontSize:getWidth( fontSize.textL),
     color: colors.black,
     textAlign: 'center'
   },
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
+    width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS)
   },
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   textItem: {
     flex: 1,
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     padding: getHeight(dimens.marginS),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold)

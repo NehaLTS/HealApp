@@ -34,6 +34,7 @@ export interface UserTypeProvider {
   description: string;
   currentScreen: string;
   providerServices: boolean;
+  name?:string;
 }
 export interface UserContextFields {
   userDataProvider: Partial<UserTypeProvider>;
