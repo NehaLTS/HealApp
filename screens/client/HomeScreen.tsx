@@ -52,7 +52,7 @@ const HomeScreen = () => {
         <View style={styles.headerTitleContainer}>
           <View style={styles.headerTitle}>
             <Image source={location} style={styles.location} />
-            <Text numberOfLines={2}>Your current location</Text>
+            <Text numberOfLines={2} style={styles.text}>Your current location </Text>
           </View>
           <TextButton
             isActive
@@ -89,7 +89,7 @@ const HomeScreen = () => {
 
     return (
       <>
-        <Text style={styles.searchHeading}>Which Specialist do you need?</Text>
+        <Text style={styles.searchHeading}>Which specialist do you need?</Text>
         {providerList.map((item: any, index: number) => (
           <Animated.View
             key={index}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   banner: {
     width: "100%",
-    backgroundColor: colors.lightGrey,
+    backgroundColor: "rgba(238, 238, 238, 1)",
     height: getHeight(dimens.imageM),
     justifyContent: "center",
     alignItems: "center",
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
   },
   headerTitleContainer: {
     alignItems: "center",
+    paddingTop:getHeight(dimens.marginL)
   },
   noSearchText: {
     textAlign: "center",
@@ -222,4 +223,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: "center",
   },
+  text:{
+    fontSize:fontSize.textM
+  }
 });

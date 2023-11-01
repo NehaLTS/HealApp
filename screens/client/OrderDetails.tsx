@@ -1,6 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import arrowBack from "assets/icon/arrowBack.png";
 import specialistIcon from "assets/icon/doctor.png";
+import CardView from "components/client/home/CardView";
+import DoctorDetailCard from "components/client/home/DoctorDetailCard";
+import DoctorFound from "components/client/home/DoctorFound";
 import OrderFormView from "components/client/home/OrderFormView";
 import SummaryView from "components/client/home/SummaryView";
 import Button from "components/common/Button";
@@ -64,6 +67,8 @@ const OrderDetails = () => {
       />
       {showSummary && <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
     </View>
+    // <DoctorDetailCard showBothCards={false} isPrimary={true}/>
+    
   );
 };
 
@@ -81,6 +86,8 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: "center",
+    top:8
+  
   },
   header: {
     backgroundColor: colors.white,
@@ -92,6 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: getWidth(dimens.sideMargin),
+   paddingTop:getHeight(dimens.marginS)
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),

@@ -32,7 +32,7 @@ const SummaryView = () => {
               source={require("../../../assets/icon/location.png")}
               style={styles.locationIcon}
             />
-            <Text title={"Ahavat Zion, 10, \n Haifa"}style={styles.textSmall} />
+            <Text title={"Ahavat Zion, 10, \n Haifa"}style={styles.locationText} />
           </View>
         </View>
       </View>
@@ -115,13 +115,14 @@ const styles = StyleSheet.create({
   symptomsText:{
     fontSize: getWidth(fontSize.textL),
     marginTop: getWidth(dimens.marginS+5),
+    marginBottom:5
 
   },
   symptomsContainer: {
     flex: 0.17,
   },
 
-  voltarenText: {
+  voltaireText: {
     marginVertical: getWidth(dimens.paddingXs),
     fontSize:fontSize.textM
   },
@@ -171,6 +172,13 @@ const styles = StyleSheet.create({
   },
   textSmall:{
     fontSize:fontSize.textM,
-  
+  fontFamily:fontFamily.light
+  },
+  locationText:{
+    fontSize:fontSize.textM,
+  },
+  voltarenText: {
+    marginVertical: getWidth(dimens.paddingXs),
+    fontSize:fontSize.textM
   },
 });
