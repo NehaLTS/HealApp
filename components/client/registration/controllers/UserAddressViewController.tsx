@@ -1,6 +1,6 @@
 import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
-import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
+import { setLocalData } from "libs/datastorage/useLocalStorage";
 import { ClientProfile } from "libs/types/UserType";
 import uploadImage from "libs/uploadImage";
 import { generateRandomName, numericPattern } from "libs/utility/Utils";

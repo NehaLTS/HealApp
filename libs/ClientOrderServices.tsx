@@ -10,7 +10,7 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
     } as unknown as HeadersInit
   });
 
@@ -21,7 +21,7 @@ export const ClientOrderServices = () => {
       headers: {
         'Content-Type': 'application/json',
         // 'x-access-token': getLocalData?.('USER')?.token
-        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
+        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
       } as unknown as HeadersInit
     })
 
@@ -49,7 +49,7 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
     } as unknown as HeadersInit
   });
 
@@ -63,7 +63,7 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzIsImlhdCI6MTY5ODcyOTE2OSwiZXhwIjoxNjk4NzYxNTY5fQ.zXY-g8uFYhR-gpF5YfVd6X4fjrjmG2lpWxjiMa-n6Ec'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
     } as unknown as HeadersInit
   });
 

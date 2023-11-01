@@ -46,9 +46,11 @@ const HomeScreen = () => {
     onChangeSearch,
     onPressBanner,
     searchRef,
-    onSearchDone
+    onSearchDone,
+    isDataNotFound
   } = HomeViewController();
-  const isDataNotFound = true;
+  // const isDataNotFound = searchRef?.length > 0 ? true : false;
+  console.log("bhjbc", isDataNotFound)
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -112,6 +114,7 @@ const HomeScreen = () => {
     );
   };
   const getProviderSearchList = () => {
+    console.log(searchRef)
     // Pass on Press of card and array of data as props*/
     return searchRef.current?.map((item: any, index: number) => (
       <Animated.View
@@ -148,7 +151,7 @@ const HomeScreen = () => {
           <Image
             style={styles.banner}
             // source={require("assets/icon/google.png")}
-            source={{ uri: bannerAds[0]?.imageurl }}
+            source={{ uri: (bannerAds?.[0]?.imageurl || '') }}
           />
         </TouchableOpacity>
       )}
@@ -160,6 +163,7 @@ const HomeScreen = () => {
         onChangeText={onChange}
         defaultValue={onChangeSearch}
         onSubmitEditing={onSearchDone}
+      // onEndEditing={onSearchDone}
       />
       {onChangeSearch?.length === 0
         ? getProviderList()

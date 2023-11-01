@@ -7,7 +7,7 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -21,7 +21,6 @@ import { OrderDetail, UseClientUserContext } from "contexts/UseClientUserContext
 import { useTranslation } from "react-i18next";
 import RNModal from "components/common/Modal";
 import OrderFormController from "./OrderFormController";
-import { ClientOrderServices } from "libs/ClientOrderServices";
 import { Reason, TreatmentMenu } from "libs/types/ProvierTypes";
 
 const OrderFormView = () => {
@@ -38,6 +37,9 @@ const OrderFormView = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState("");
   const { treatmentReason } = OrderFormController()
+  const [isCheckedStates, setIsCheckedStates] = useState(
+    new Array(treatmentReason?.treatmentMenu?.length).fill(false)
+  );
 
   const onChangeAge = (value: string) => ageRef.current.value = value
   const onChangePhone = (value: string) => phoneRef.current.value = value
@@ -71,16 +73,20 @@ const OrderFormView = () => {
 
   const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>([]);
   console.log('selectedResourceType', selectedResourceType);
-  const handleItemPress = (item: TreatmentMenu) => {
+  const handleItemPress = (item: TreatmentMenu, index: number) => {
+    const newIsCheckedStates = [...isCheckedStates];
+    newIsCheckedStates[index] = !newIsCheckedStates[index];
+    setIsCheckedStates(newIsCheckedStates);
     console.log('112222222222******', item);
+    let updatedSelectedMenu;
     if (selectedMenu.find((selectedItem) => selectedItem.menu_id === item.menu_id)) {
-      setSelectedMenu(selectedMenu.filter((selectedItem) => selectedItem.menu_id !== item.menu_id));
+      updatedSelectedMenu = selectedMenu.filter((selectedItem) => selectedItem.menu_id !== item.menu_id);
     } else {
-      setSelectedMenu([...selectedMenu, item]);
+      updatedSelectedMenu = [...selectedMenu, item];
     }
-    if (!selectedResourceType.includes(item)) {
-      setOrderDetails({ ...orderDetails, services: [...selectedMenu, item] })
-    }
+    setSelectedMenu(updatedSelectedMenu);
+    setOrderDetails({ ...orderDetails, services: updatedSelectedMenu });
+
   };
 
   const toggleSomeoneElse = () => {
@@ -107,7 +113,6 @@ const OrderFormView = () => {
             lineHeight={dimens?.sideMargin + dimens?.borderBold}
           />
         ))
-          // <A/>ctivityIndicator size={'large'} color={colors?.primary} style={{ alignItems: 'center', flex: 1 }} />
         }
         <Button
           title={"Other"}
@@ -156,9 +161,11 @@ const OrderFormView = () => {
           <TouchableOpacity
             key={index}
             style={styles.checkboxContainer}
-            onPress={() => handleItemPress(item)} // Call the function with the item
+            onPress={() => handleItemPress(item, index)} // Call the function with the item
           >
-            <View style={styles.checkBox} />
+            <View style={styles.checkBox}>
+              {isCheckedStates[index] && (<Image source={require("assets/icon/check.png")} style={styles.image} />)}
+            </View>
             <Text>{item.name.en}</Text>
           </TouchableOpacity>
         ))
@@ -242,7 +249,7 @@ const OrderFormView = () => {
               />
               <Text
                 style={{ flex: 0.80, paddingLeft: getWidth(dimens.sideMargin) }}
-                title={userProfile?.address ?? ''}
+                title={userProfile?.address ?? 'Ambala cantt'}
               />
               <TextButton
                 containerStyle={{ flex: 0.1 }}
@@ -424,6 +431,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: getHeight(dimens.paddingS),
-  }
+  },
+  image: {
+    width: getWidth(12),
+    height: getHeight(12),
+
+  },
 
 });

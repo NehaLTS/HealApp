@@ -1,9 +1,7 @@
-import { useNavigation } from "@react-navigation/native";
 import { ClientOrderServices } from "libs/ClientOrderServices";
 import { Banner, search_provider } from "libs/types/ProvierTypes";
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Keyboard, Linking } from "react-native";
 
 const HomeViewController = () => {
@@ -12,7 +10,7 @@ const HomeViewController = () => {
   const { getBannerAds, searchProviders } = ClientOrderServices()
   const searchRef = useRef<search_provider[]>([]);
   const [onChangeSearch, setOnChangeSearch] = useState<string>('');
-
+  const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = [
     {
@@ -49,7 +47,6 @@ const HomeViewController = () => {
 
   useEffect(() => {
     getBannerAd();
-    // getsearchResult();
   }, []);
   const onPressBanner = () =>
     Linking.openURL(bannerAds[0]?.destinationUrl)
@@ -69,6 +66,9 @@ const HomeViewController = () => {
     const res = await searchProviders({ name: onChangeSearch });
     console.log('bvjcxnb', res)
     searchRef.current = res
+    if (res.length > 0) {
+      setIsDataNotFound(false)
+    }
   }
   // const onChangeSearch = (value: string) => (searchRef.current.value = value);
   const onChange = (value: string) => setOnChangeSearch(value);
@@ -93,7 +93,8 @@ const HomeViewController = () => {
     onChange,
     onPressBanner,
     searchRef,
-    onSearchDone
+    onSearchDone,
+    isDataNotFound
   };
 };
 

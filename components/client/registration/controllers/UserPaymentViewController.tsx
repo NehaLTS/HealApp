@@ -104,19 +104,19 @@ const UserPaymentViewController = () => {
     });
 
     //TODO: Vandana to save in Local data with isPaymentAdded as true
-    //setLocalData('USER', {"isPaymentAdded":true})
+    setLocalData('USER', { "isPaymentAdded": true })
 
     console.log("response is ", res);
     setIsLoader(false);
 
     if (res?.isSuccessful) {
       if (isFromHome) navigation.navigate(NavigationRoutes.OrderDetails)
-      else{
-      navigation.reset({
-        index: 0,
-        routes: [{ name: NavigationRoutes.ClientHome }],
-      });
-    }
+      else {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: NavigationRoutes.ClientHome }],
+        });
+      }
     } else Alert.alert("Some error occurred");
   };
 
