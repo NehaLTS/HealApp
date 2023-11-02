@@ -9,10 +9,13 @@ import Input from "components/common/Input";
 import { fontWeight } from "designToken/fontWeights";
 import { fontFamily } from "designToken/fontFamily";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
+interface SummaryViewProps {
+  setShowSummary: (value: boolean) => void;
+}
 
-const SummaryView = () => {
+const SummaryView = ({ setShowSummary }: SummaryViewProps) => {
   const { orderDetails, setOrderDetails } = UseClientUserContext()
-  console.log('first*******', orderDetails)
+
   return (
     <>
       <View style={styles.textContainer}>
@@ -21,6 +24,7 @@ const SummaryView = () => {
           title={"Edit order"}
           fontSize={getHeight(fontSize.textL)}
           isActive
+          onPress={() => setShowSummary(false)}
         />
       </View>
       <View style={styles.container}>
@@ -41,15 +45,14 @@ const SummaryView = () => {
 
       <View style={styles.symptomsContainer}>
         <Text title={"Symptoms "} style={styles.text} />
-        <Text title={"Back pain"} />
+        {orderDetails?.reason.map((item, index) => <Text key={index} title={item.name.en} />)}
       </View>
 
       <Text title={"Services"} style={styles.text} />
-      <Text title={"Basic - 500 NIS"} />
-      <Text title={"Voltaren shot - 100 NIS"} style={styles.voltarenText} />
+      {orderDetails?.services.map((item, index) => <Text key={index} title={item.name.en} />)}
       <View style={{ flexDirection: "row" }}>
         <Text title={"Total"} style={styles.total} />
-        <Text title={"- 600 NIS"} />
+        <Text title={`600 NIS`} />
       </View>
 
       <Text

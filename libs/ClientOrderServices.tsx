@@ -10,18 +10,21 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48'
     } as unknown as HeadersInit
   });
-
-  const searchProviders = (body: { name: string }): Promise<search_provider[]> =>
+  const searchProviders = (body: {
+    name: string,
+    longitude: string,
+    latitude: string
+  }): Promise<search_provider> =>
     sendRequest(GET_SEARCH_PROVIDER, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
         // 'x-access-token': getLocalData?.('USER')?.token
-        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
+        'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48'
       } as unknown as HeadersInit
     })
 
@@ -49,7 +52,7 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48'
     } as unknown as HeadersInit
   });
 
@@ -63,7 +66,7 @@ export const ClientOrderServices = () => {
     headers: {
       'Content-Type': 'application/json',
       // 'x-access-token': getLocalData?.('USER')?.token
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODgxMjc0MiwiZXhwIjoxNjk4ODQ1MTQyfQ.ETd7y0Ay0JMi0kmCzR1nzNsFs6xMvTNRS7mvs6I_P3g'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48'
     } as unknown as HeadersInit
   });
 

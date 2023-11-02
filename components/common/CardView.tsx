@@ -89,7 +89,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
       ) : (
         <View style={styles.specialistList}>
           <View style={styles.container}>
-            <Image source={{ uri: item.image_url }} style={styles.specialistIcon} />
+            <Image source={{ uri: item.image_url ?? '' }} style={styles.specialistIcon} />
             <Text style={styles.specialistSearched} title={item.name} />
           </View>
           <Button

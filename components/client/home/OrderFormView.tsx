@@ -86,7 +86,6 @@ const OrderFormView = () => {
     }
     setSelectedMenu(updatedSelectedMenu);
     setOrderDetails({ ...orderDetails, services: updatedSelectedMenu });
-
   };
 
   const toggleSomeoneElse = () => {
@@ -99,7 +98,7 @@ const OrderFormView = () => {
     <>
       <Text title={"Reason"} style={styles.addressText} />
       <View style={styles.buttonContainer}>
-        {treatmentReason?.reason.map((item: Reason, index: number) => (
+        {treatmentReason?.reason?.length ? treatmentReason?.reason.map((item: Reason, index: number) => (
           <Button
             key={index}
             title={item.name?.en}
@@ -113,6 +112,8 @@ const OrderFormView = () => {
             lineHeight={dimens?.sideMargin + dimens?.borderBold}
           />
         ))
+          : <ActivityIndicator size={'large'} color={colors?.primary} style={{ alignItems: 'center', flex: 1 }} />
+
         }
         <Button
           title={"Other"}

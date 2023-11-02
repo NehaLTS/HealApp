@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { Alert } from 'react-native'
 import React, { useState } from 'react'
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
@@ -9,19 +9,21 @@ const OrderDetailsController = () => {
   const [showSummary, setShowSummary] = useState(false);
   const { orderProvider } = ClientOrderServices()
   const { orderDetails } = UseClientUserContext()
+  const order = getLocalData('USER')
+  const userProfile = getLocalData?.('USERPROFILE') as ClientProfile | UserTypeProvider;
   const handleNextButtonPress = async () => {
-    setShowSummary(true);
+
     console.log('orderDetails', orderDetails)
     // const menuIds = orderDetails?.treatmentMenu.map(item => item.menu_id);
     if (showSummary === true) {
       const res = await orderProvider({
-        client_id: getLocalData('USER')?.userId,
-        patient_type: orderDetails.patient_type,
+        client_id: order?.userId,
+        patient_type: orderDetails.patient_type ?? '',
         patient_name: orderDetails.patient_name,
-        address: orderDetails.address,
+        address: userProfile?.address ?? '',
         city: '',
-        phonenumber: '',
-        Date_of_birth: orderDetails.Date_of_birth,
+        phonenumber: userProfile?.phoneNumber ?? '',
+        Date_of_birth: userProfile?.date_of_birth ?? "",
         services: "1,2",
         symptoms: `${orderDetails.reason}`,
         Additional_notes: orderDetails.Additional_notes,
@@ -32,14 +34,22 @@ const OrderDetailsController = () => {
         menu_id: "2",
         reason: `${orderDetails.reason}`
       })
-      console.log("dklklcv", res)
+      console.log("Order api", res)
 
+    }
+    else {
+      if (orderDetails.services.length && orderDetails.reason.length)
+        setShowSummary(true);
+      else {
+        Alert.alert("please select reasons and treatment menu")
+      }
     }
 
   };
   return {
     handleNextButtonPress,
-    showSummary
+    showSummary,
+    setShowSummary
   }
 }
 

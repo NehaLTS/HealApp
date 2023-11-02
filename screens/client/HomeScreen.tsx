@@ -17,7 +17,6 @@ import React, { useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Image,
-  Linking,
   ScrollView,
   StyleSheet,
   TouchableHighlight,
@@ -45,7 +44,7 @@ const HomeScreen = () => {
     onChange,
     onChangeSearch,
     onPressBanner,
-    searchRef,
+    providersList,
     onSearchDone,
     isDataNotFound
   } = HomeViewController();
@@ -114,9 +113,8 @@ const HomeScreen = () => {
     );
   };
   const getProviderSearchList = () => {
-    console.log(searchRef)
     // Pass on Press of card and array of data as props*/
-    return searchRef.current?.map((item: any, index: number) => (
+    return providersList?.map((item: any, index: number) => (
       <Animated.View
         key={index}
         entering={FadeInUp.duration(200).easing(Easing.ease)}

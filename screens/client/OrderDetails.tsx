@@ -18,7 +18,7 @@ const OrderDetails = () => {
   const { supplier } = route.params;
   useLayoutEffect(() => {
   }, [navigation]);
-  const { handleNextButtonPress, showSummary } = OrderDetailsController()
+  const { handleNextButtonPress, showSummary, setShowSummary } = OrderDetailsController()
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -45,7 +45,7 @@ const OrderDetails = () => {
   return (
     <View style={styles.mainContainer}>
       {showSummary ? (
-        <SummaryView />
+        <SummaryView setShowSummary={setShowSummary} />
       ) : (
         <OrderFormView />
       )}

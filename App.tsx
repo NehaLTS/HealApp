@@ -8,7 +8,7 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { lazy, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { TranslationContext } from "./contexts/UseTranslationsContext";
 import IntroStackNavigator from "./navigator/IntroStackNavigator";
@@ -21,7 +21,7 @@ import {
 } from "libs/types/UserType";
 import { ClientUserContext, OrderDetail } from "contexts/UseClientUserContext";
 import { ProviderUserContext } from "contexts/UseProviderUserContext";
-
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
@@ -33,12 +33,30 @@ const App = () => {
   const [currentStep, setCurrentStep] = useState<onboardStep>("details");
   const [providerServices, setProviderServices] = useState<ProviderServices>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
-
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
       "843919956986-js10nj0llot1b7r4ileqhkurco4tqo75.apps.googleusercontent.com",
   });
+
+  const requestLocationPermission = async () => {
+    try {
+      const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      if (result === RESULTS.GRANTED) {
+        console.log('permissionResult', result);
+      } else {
+        const permissionResult = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        if (permissionResult === RESULTS.GRANTED) {
+          console.log('permissionResult', permissionResult);
+        }
+      }
+    } catch (err) {
+      console.log('Error checking location permission: ' + err);
+    }
+  };
+  useEffect(() => {
+    requestLocationPermission();
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -53,8 +71,8 @@ const App = () => {
             setToken,
             userProfile,
             setUserProfile,
-            orderDetails, 
-            setOrderDetails 
+            orderDetails,
+            setOrderDetails
           }}
         >
           <ProviderUserContext.Provider

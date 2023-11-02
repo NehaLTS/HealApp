@@ -1,3 +1,4 @@
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { treatment } from 'libs/types/ProvierTypes';
 import { useEffect, useState } from 'react';
@@ -8,8 +9,9 @@ const OrderFormController = () => {
   const [selectedResourceType, setSelectedResourceType] = useState();
   const { treatmentMenu } = ClientOrderServices()
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>()
+  const { orderDetails, setOrderDetails } = UseClientUserContext()
   const onSelectReasons = (item: any) => {
-    const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
+    const updatedActiveButton = [...activeButton];
     const itemIndex = updatedActiveButton.indexOf(item.id);
     if (itemIndex !== -1) {
       // The button is already selected, so remove it
@@ -21,21 +23,9 @@ const OrderFormController = () => {
     setSelectedResourceType(item);
     setActiveButton(updatedActiveButton); // Update the state with the new array
   };
-  // const reasons = [
-  //   { title: 'Back pain', id: 1 },
-  //   { title: 'Heart pain', id: 2 },
-  //   { title: 'Arrhythmia', id: 3 },
-  //   { title: 'Headache', id: 4 },
-  //   { title: 'Leg pain', id: 5 },
-  //   { title: 'Vomiting', id: 6 },
-  // ];
-  // const treatmentsData = [
-  //   { label: "Visit - 500 NIS" },
-  //   { label: "Voltaren shot  - 100 NIS" },
-  //   { label: "Clacksen shot  - 100 NIS" },
-  // ];
   useEffect(() => {
     treatmentReasons()
+    setOrderDetails({ ...orderDetails, patient_type: 'me' })
   }, [])
   const treatmentReasons = async () => {
     try {

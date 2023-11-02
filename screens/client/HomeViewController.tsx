@@ -2,15 +2,24 @@ import { ClientOrderServices } from "libs/ClientOrderServices";
 import { Banner, search_provider } from "libs/types/ProvierTypes";
 import { useRef } from "react";
 import { useEffect, useState } from "react";
-import { Keyboard, Linking } from "react-native";
+import { Alert, Keyboard, Linking } from "react-native";
+import { check, PERMISSIONS, RESULTS, request } from "react-native-permissions";
+import Geolocation from 'react-native-geolocation-service';
 
+interface Location {
+  latitude: number
+  longitude: number
+}
 const HomeViewController = () => {
+
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
   const { getBannerAds, searchProviders } = ClientOrderServices()
-  const searchRef = useRef<search_provider[]>([]);
+  const [providersList, setProvidersList] = useState<search_provider[]>([])
   const [onChangeSearch, setOnChangeSearch] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
+  const [location, setLocation] = useState<Location>();
+
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = [
     {
@@ -47,9 +56,47 @@ const HomeViewController = () => {
 
   useEffect(() => {
     getBannerAd();
+    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
+      if (status === RESULTS.GRANTED) {
+        // Location permission is already granted
+        getLocation();
+      } else {
+        // Request location permission
+        requestLocationPermission();
+      }
+    });
   }, []);
-  const onPressBanner = () =>
-    Linking.openURL(bannerAds[0]?.destinationUrl)
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation({ latitude, longitude });
+      },
+      (error) => {
+        console.log('Error getting location: ' + error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+      }
+    );
+  };
+
+
+
+  const requestLocationPermission = async () => {
+    const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    if (status === RESULTS.GRANTED) {
+      // Location permission granted, get the location
+      getLocation();
+    } else {
+      console.log('Location permission not granted');
+      Alert.alert("Please turn on your permission")
+    }
+  };
+
+  const onPressBanner = () => Linking.openURL(bannerAds[0]?.destinationUrl)
 
 
   const getBannerAd = async () => {
@@ -63,15 +110,18 @@ const HomeViewController = () => {
     }
   };
   const onSearchDone = async () => {
-    const res = await searchProviders({ name: onChangeSearch });
-    console.log('bvjcxnb', res)
-    searchRef.current = res
-    if (res.length > 0) {
+    const res = await searchProviders({ name: onChangeSearch, latitude: location?.latitude.toString() ?? '', longitude: location?.longitude.toString() ?? '' });
+    console.log('onSearchDone', res)
+    if (res?.message)
       setIsDataNotFound(false)
-    }
+    else
+      setProvidersList(res)
+
   }
-  // const onChangeSearch = (value: string) => (searchRef.current.value = value);
-  const onChange = (value: string) => setOnChangeSearch(value);
+  const onChange = (value: string) => {
+    setOnChangeSearch(value)
+    setIsDataNotFound(true)
+  };
   const onTouchStart = async () => {
     setIsTouchStart(false)
   };
@@ -92,7 +142,7 @@ const HomeViewController = () => {
     onChangeSearch,
     onChange,
     onPressBanner,
-    searchRef,
+    providersList,
     onSearchDone,
     isDataNotFound
   };

@@ -63,9 +63,10 @@ export interface order_provider {
 
 
 export interface search_provider {
-  name: string;
-  image_url: string,
-  providers: Provider[];
+  image_url?: string,
+  provider_type_id?: number,
+  name?: string,
+  message?: string
 }
 
 export interface Provider {
