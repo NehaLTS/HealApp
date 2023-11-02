@@ -1,113 +1,52 @@
+import Button from 'components/common/Button';
+import Loader from 'components/common/Loader';
+import Text from 'components/common/Text';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { t } from 'i18next';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React from 'react';
 import {
   Image,
   ScrollView,
   StyleSheet,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import React, { SetStateAction, useEffect, useState } from 'react';
-import { colors } from 'designToken/colors';
-import { fontSize } from 'designToken/fontSizes';
-import { getHeight, getWidth } from 'libs/StyleHelper';
-import { dimens } from 'designToken/dimens';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { t } from 'i18next';
-import Text from 'components/common/Text';
+import ProviderServicesController from '../controllers/ProviderServicesController';
 
 const ProviderServices = () => {
-  const { onGetProviderService } = AuthServicesProvider();
-  const { userDataProvider } = UseUserContextProvider();
-  const [services, setServices] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
-  const [isSigninSelected, setIsSigninSelected] = useState(true);
+  const {
+    onPressBack,
+    onPressNext,
+    services,
+    isLoading,
+    isPrescriptionSelected,
+    onCheckedPress,
+    onPrescriptionSelected,
+  } = ProviderServicesController();
 
-  const loginRegisterToggle = (val: number) => setIsSigninSelected(val === 1);
+  const getFooterView = () => (
+    <View style={styles.footerContainer}>
+      <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} />
+      <Button
+        title={t('next')}
+        isPrimary
+        isSmall
+        width={'30%'}
+        onPress={onPressNext}
+      />
+    </View>
+  );
 
-  const getProviderServices = async () => {
-    setIsLoading(true);
-    let response = await onGetProviderService({
-      provider_id: '2',
-      specialty_id: '1',
-    });
-
-    if (response && response.services) {
-      setServices(response.services);
-    }
-
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    getProviderServices();
-  }, []);
-  const onCheckedPress = (index: number) => {
-    //TODO: Can Refactor this
-    let data = [...services];
-    if (data[index] && data[index].isChecked) {
-      data[index].isChecked = false;
-    } else {
-      data[index].isChecked = true;
-    }
-
-    setServices(data);
-  };
-
-  const onPrescriptionSelected = (isSelected: boolean) => {
-    setIsPrescriptionSelected(isSelected);
-  };
-
-  return (
+  const getServicesView = () => (
     <>
-      <Text style={styles.text} title={t('Authority to add a prescription')} />
-      <View style={styles.container}>
-        <Text style={styles.text} title={t('Yes')} />
-        <TouchableOpacity onPress={() => onPrescriptionSelected(true)}>
-          <Image
-            source={
-              isPrescriptionSelected
-                ? require('../../../../assets/icon/spectorOn.png')
-                : require('../../../../assets/icon/selecter.png')
-            }
-            style={[
-              !isPrescriptionSelected
-                ? styles.select
-                : {
-                    height: dimens.marginL + 6,
-                    width: dimens.marginL + 6,
-                    resizeMode: 'cover',
-                    borderRadius: getHeight(dimens.paddingS),
-                  },
-            ]}
-          />
-        </TouchableOpacity>
-        <Text style={styles.textServices} title={t('No')} />
-        <TouchableOpacity onPress={() => onPrescriptionSelected(false)}>
-          <Image
-            source={
-              !isPrescriptionSelected
-                ? require('../../../../assets/icon/spectorOn.png')
-                : require('../../../../assets/icon/selecter.png')
-            }
-            style={[
-              isPrescriptionSelected
-                ? styles.select
-                : {
-                    height: dimens.marginL + 6,
-                    width: dimens.marginL + 6,
-                    resizeMode: 'cover',
-                    borderRadius: getHeight(dimens.paddingS),
-                  },
-            ]}
-          />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.textS} title={t('Services you provide')} />
+      <Text style={styles.textS} title={t('services_you')} />
       <View style={styles.servicesContainer}>
         {services.length > 0 ? (
           <ScrollView
-            contentContainerStyle={{ paddingBottom: getHeight(dimens.marginM) }}
+            contentContainerStyle={styles.containerStyle}
             style={{ height: '100%' }}
           >
             {services.map((item, index) => (
@@ -115,7 +54,6 @@ const ProviderServices = () => {
                 <Text style={styles.serviceText} title={item.name.en} />
                 <View style={styles.serviceRight}>
                   <Text style={styles.serviceText} title={'$ ' + item.price} />
-
                   <TouchableOpacity onPress={() => onCheckedPress(index)}>
                     {!item.isChecked ? (
                       <View style={styles.checkbox} />
@@ -128,7 +66,7 @@ const ProviderServices = () => {
                       >
                         <Image
                           source={require('assets/icon/check.png')}
-                          style={{ width: getWidth(16), height: getHeight(10) }}
+                          style={styles.checkIcon}
                         />
                       </View>
                     )}
@@ -138,9 +76,64 @@ const ProviderServices = () => {
             ))}
           </ScrollView>
         ) : (
-          <Text style={styles.textServices} title={t('No Services')} />
+          <Text style={styles.textServices} title={t('no_services')} />
         )}
       </View>
+    </>
+  );
+
+  const RadioButton = ({
+    onPress,
+    isChecked,
+  }: {
+    onPress: () => void;
+    isChecked: boolean;
+  }) => (
+    <TouchableOpacity onPress={onPress}>
+      {!isChecked ? (
+        <View style={styles.outerCircle}>
+          <View style={styles.innerCircle} />
+        </View>
+      ) : (
+        <View style={styles.outerCircle}>
+          <View
+            style={[
+              styles.innerCircle,
+              {
+                backgroundColor: colors.secondary,
+                borderColor: colors.secondary,
+              },
+            ]}
+          />
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+
+  const addPrescriptionView = () => (
+    <View style={styles.container}>
+      <Text style={styles.text} title={t('yes')} />
+      <RadioButton
+        onPress={() => onPrescriptionSelected(true)}
+        isChecked={isPrescriptionSelected}
+      />
+      <Text style={styles.textServices} title={t('no')} />
+      <RadioButton
+        onPress={() => onPrescriptionSelected(false)}
+        isChecked={!isPrescriptionSelected}
+      />
+    </View>
+  );
+
+  return (
+    <>
+      {isLoading && <Loader />}
+      <View style={styles.inputContainer}>
+        <Text style={styles.text} title={t('authority')} />
+        {addPrescriptionView()}
+        {getServicesView()}
+      </View>
+      {getFooterView()}
     </>
   );
 };
@@ -148,20 +141,17 @@ const ProviderServices = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    gap: 10,
+    gap: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.sideMargin),
     alignItems: 'center',
   },
   text: {
-    fontSize: fontSize.textM,
-  },
-  textNo: {
-    fontSize: fontSize.textM,
-    marginLeft: 16,
+    fontSize: getWidth(fontSize.textM),
+    textAlign: 'left',
   },
   select: {
-    height: dimens.marginL + 2,
-    width: dimens.marginL + 2,
+    height: getHeight(dimens.marginL + dimens.borderBold),
+    width: getWidth(dimens.marginL + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS),
   },
@@ -169,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.sideMargin),
     marginTop: getHeight(dimens.imageS),
+    textAlign: 'left',
   },
   serviceText: {
     fontSize: getWidth(fontSize.textM),
@@ -179,17 +170,16 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     height: '70%',
     justifyContent: 'center',
-    //  alignItems:"center"
   },
   serviceRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: getHeight(dimens.marginS),
-    paddingTop: getHeight(dimens.paddingL - 2),
+    paddingTop: getHeight(dimens.paddingL - dimens.borderBold),
   },
   serviceRight: {
     flexDirection: 'row',
-    gap: getHeight(dimens.sideMargin - 2),
+    gap: getHeight(dimens.sideMargin - dimens.borderBold),
     alignItems: 'center',
   },
   checkbox: {
@@ -201,6 +191,42 @@ const styles = StyleSheet.create({
   textServices: {
     fontSize: getWidth(fontSize.textXl),
     textAlign: 'center',
+  },
+  inputContainer: {
+    flex: 0.79,
+  },
+  footerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    flex: 0.1,
+    justifyContent: 'space-between',
+  },
+  outerCircle: {
+    width: getWidth(dimens.marginL),
+    height: getWidth(dimens.marginL),
+    borderRadius: getWidth(dimens.imageS),
+    borderColor: colors.black,
+    borderWidth: getWidth(dimens.borderBold),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  innerCircle: {
+    width: getWidth(dimens.sideMargin),
+    height: getWidth(dimens.sideMargin),
+    minWidth: getWidth(dimens.sideMargin),
+    minHeight: getWidth(dimens.sideMargin),
+    borderRadius: getWidth(dimens.marginS),
+    borderColor: colors.black,
+    borderWidth: getWidth(dimens.borderBold),
+    alignSelf: 'center',
+  },
+  containerStyle: {
+    paddingBottom: getHeight(dimens.marginM),
+  },
+  checkIcon: {
+    width: getWidth(dimens.marginS + dimens.paddingXs),
+    height: getHeight(dimens.marginS),
   },
 });
 

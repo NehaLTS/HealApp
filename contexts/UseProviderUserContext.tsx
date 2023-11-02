@@ -1,8 +1,6 @@
 import { ProviderProfile, ProviderServices, onboardStep } from 'libs/types/UserType'
 import React, { createContext } from 'react'
 
-
-
 export interface ProviderUserContextFields {
   currentStep: onboardStep
   setCurrentStep: React.Dispatch<React.SetStateAction<onboardStep>>
@@ -10,9 +8,9 @@ export interface ProviderUserContextFields {
   setUserId: React.Dispatch<React.SetStateAction<string>>
   token: string
   setToken: React.Dispatch<React.SetStateAction<string>>
-  providerProfile :ProviderProfile
+  providerProfile: ProviderProfile
   setProviderProfile: React.Dispatch<React.SetStateAction<ProviderProfile>>
-  providerServices:ProviderServices
+  providerServices: ProviderServices
   setProviderServices: React.Dispatch<React.SetStateAction<ProviderServices>>
 }
 

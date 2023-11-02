@@ -28,7 +28,7 @@ const UserDetailView = () => {
     onPressBack,
     userProfile,
   } = UserDetailViewController();
-
+  console.log('userProfile', userProfile);
   return (
     <>
       <View style={styles.inputContainer}>
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: getHeight(fontSize.textM),
     paddingTop: getHeight(dimens.paddingXs),
+    textAlign: 'left',
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

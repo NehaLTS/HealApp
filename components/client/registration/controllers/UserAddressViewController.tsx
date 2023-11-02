@@ -55,7 +55,7 @@ const UserAddressViewController = () => {
   const onPressNext = async () => {
     console.log('userId is ', userId);
     if (
-      addressRef.current.value &&
+      onSearchAddress?.length !== 0 &&
       dateOfBirth.toString() &&
       idNumberRef.current.value
     ) {
@@ -85,8 +85,6 @@ const UserAddressViewController = () => {
         },
         userId,
       );
-
-      console.log('response is ', res);
 
       setLocalData('USERPROFILE', {
         firstName: userProfile.firstName,

@@ -235,8 +235,9 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.paddingS),
   },
   text: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
     paddingTop: getHeight(dimens.paddingXs),
+    textAlign: 'left',
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
@@ -255,7 +256,6 @@ const styles = StyleSheet.create({
   editImage: {
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
-    // paddingLeft: getWidth(5)
   },
   inputContainer: {
     flex: 0.75,

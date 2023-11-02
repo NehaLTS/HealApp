@@ -1,83 +1,44 @@
+import Button from 'components/common/Button';
+import Dropdown from 'components/common/Dropdown';
 import Text from 'components/common/Text';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import React, { useState } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
-import { getTexts } from '../../../../libs/OneSkyHelper';
 import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
-import BasicInformationController from '../controllers/BasicInformationController';
+import ProviderDetailController from '../controllers/ProviderDetailController';
 
-const ProviderDetail = ({
-  firstNameError: fnError,
-  lastNameError: lnError,
-  specialityError: spError,
-  providerTypeError: prvError,
-}: any) => {
-  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
-    BasicInformationController({});
-  const [firstNameError, setFirstNameError] = useState('');
-  const [lastNameError, setLastNameError] = useState('');
-  const [providerTypeError, setProviderTypeError] = useState('');
-  const [specialtyError, setSpecialtyError] = useState('');
-  const { languageCode } = useTranslationContext();
-  const { registration } = getTexts(languageCode);
-  const { onGetProviderTypes } = AuthServicesProvider();
-  const [selectedProvider, setSelectedProvider] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState({});
-
-  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
-  const firstNameRef = React.useRef<any>('');
-  const lastNameRef = React.useRef<any>('');
-  const providerTypeRef = React.useRef<any>('');
-  const specialtyRef = React.useRef<any>('');
-  const onBlurFirstName = () => {
-    validateFirstName();
-    setUserDataProvider({
-      ...userDataProvider,
-      firstname: firstNameRef.current.value,
-    });
-  };
-  const onChangeFirstName = (value: string) =>
-    (firstNameRef.current.value = value);
-
-  const onBlurLastName = () => {
-    validateLastName();
-    setUserDataProvider({
-      ...userDataProvider,
-      lastname: lastNameRef.current.value,
-    });
-  };
-  const onChangeLastName = (value: string) =>
-    (lastNameRef.current.value = value);
-
-  const onBlurProviderType = () => {
-    validateProviderType();
-    setUserDataProvider({
-      ...userDataProvider,
-      provider_type_id: selectedProvider?.name,
-    });
-  };
-  const onChangeProviderType = (value: string) =>
-    (providerTypeRef.current.value = value);
-
-  const onBlurSpecialty = () => {
-    validateSpecialty();
-    setUserDataProvider({
-      ...userDataProvider,
-      speciality: selectedSpecialty?.name?.en,
-    });
-  };
-  const onChangeSpecialty = (value: string) =>
-    (specialtyRef.current.value = value);
-  const getImageUrl = (url: string) =>
-    setUserDataProvider({ ...userDataProvider, id_photo: url });
+const ProviderDetail = () => {
+  const { t } = useTranslation();
+  const {
+    firstNameError,
+    isShowModal,
+    lastNameError,
+    providerTypeError,
+    specialtyError,
+    selectedProvider,
+    providerProfile,
+    firstNameRef,
+    lastNameRef,
+    setIsShowModal,
+    getImageUrl,
+    onChangeFirstName,
+    onBlurFirstName,
+    onBlurLastName,
+    onChangeLastName,
+    onChangeProviderTypes,
+    onChangeSpecialty,
+    onBlurSpecialty,
+    onBlurProviderTypes,
+    onPressNext,
+    renderToast,
+    selectedSpecialty,
+    idPicture,
+  } = ProviderDetailController();
 
   const data = [
     {
@@ -225,167 +186,113 @@ const ProviderDetail = ({
     },
   ];
 
-  const renderItem = (item) => {
-    return <Text style={styles.textItem}>{item?.name.en}</Text>;
-  };
-
-  const renderItems = (item) => {
+  const renderProvider = (item: { name: any }) => {
     return <Text style={styles.textItem}>{item?.name}</Text>;
   };
 
-  const validateFirstName = () => {
-    if (!firstNameRef.current.value) {
-      setFirstNameError('First name is required');
-    } else {
-      setFirstNameError('');
-    }
+  const renderSpecialties = (item: { name: { en: any } }) => {
+    return <Text style={styles.textItem}>{item?.name?.en}</Text>;
   };
 
-  const validateLastName = () => {
-    if (!lastNameRef.current.value) {
-      setLastNameError('Last name is required');
-    } else {
-      setLastNameError('');
-    }
-  };
+  const getUploadImageView = () => (
+    <View style={styles.iconContainer}>
+      <Text style={styles.text}>{t('upload_id_photo')}</Text>
+      <TouchableOpacity
+        activeOpacity={idPicture ? 1 : 0.5}
+        onPress={() => setIsShowModal(true)}
+      >
+        <Image
+          source={
+            idPicture
+              ? { uri: idPicture }
+              : require('../../../../assets/icon/uploadProfile.png')
+          }
+          style={styles.selectedImage}
+        />
+      </TouchableOpacity>
+      <SelectImage
+        isShowModal={isShowModal}
+        closeModal={setIsShowModal}
+        imageUri={getImageUrl}
+      />
+    </View>
+  );
 
-  const validateProviderType = () => {
-    if (!providerTypeRef.current.value) {
-      setProviderTypeError('Provider type is required');
-    } else {
-      setProviderTypeError('');
-    }
-  };
-
-  const validateSpecialty = () => {
-    if (!specialtyRef.current.value) {
-      setSpecialtyError('Specialty is required');
-    } else {
-      setSpecialtyError('');
-    }
-  };
-
-  const onChangeProviderTypes = (value) => {
-    validateLastName();
-    setUserDataProvider({
-      ...userDataProvider,
-      type_Provider: value?.name,
-      lastname: lastNameRef.current.value,
-    });
-    setSelectedProvider(value);
-  };
-
-  const onChangeSpecialtys = (value) => {
-    console.log('onChangeSpecialtys', value?.name?.en);
-    setUserDataProvider({
-      ...userDataProvider,
-      speciality: value?.name?.en,
-      speciality_id: value?.id,
-    });
-    setSelectedSpecialty(value);
-  };
+  const getFooterView = () => (
+    <View style={styles.footerContainer}>
+      <Button disabled title={t('back')} isSmall width={'30%'} />
+      <Button
+        title={t('next')}
+        isPrimary
+        isSmall
+        width={'30%'}
+        onPress={onPressNext}
+      />
+    </View>
+  );
 
   return (
     <>
-      <Input
-        placeholder={registration.first_name}
-        onBlur={onBlurFirstName}
-        onChangeText={onChangeFirstName}
-        ref={firstNameRef}
-        defaultValue={userDataProvider.firstname}
-        inputValue={userDataProvider?.firstname ?? ''}
-        errorMessage={fnError.length ? fnError : firstNameError}
-        returnKeyType={'next'}
-        onSubmitEditing={() => lastNameRef.current.focus()}
-        onClearInputText={() => firstNameRef.current.clear()}
-      />
-
-      <Input
-        placeholder={registration.last_name}
-        type={'nameSuffix'}
-        inputStyle={styles.inputLastName}
-        onChangeText={onChangeLastName}
-        onBlur={onBlurLastName}
-        defaultValue={userDataProvider.lastname}
-        ref={lastNameRef}
-        inputValue={userDataProvider?.lastname ?? ''}
-        errorMessage={lnError.length ? lnError : lastNameError}
-        onClearInputText={() => lastNameRef.current.clear()}
-      />
-
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
-        iconColor={colors.black}
-        selectedStyle={styles.box}
-        data={[
-          { name: 'Doctor' },
-          { name: 'Nurse' },
-          { name: 'Healer' },
-          { name: 'Physio' },
-          { name: 'Other' },
-        ]}
-        labelField={'name'}
-        valueField="name"
-        placeholder="Type of provider"
-        value={userDataProvider.type_Provider}
-        onChange={onChangeProviderTypes}
-        renderItem={renderItems}
-      />
-      {providerTypeError ||
-        (prvError && (
-          <Text style={styles.errorMessage}>
-            {prvError.length ? prvError : providerTypeError}
-          </Text>
-        ))}
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
-        iconColor={colors.black}
-        selectedStyle={styles.box}
-        data={
-          data.find((item) => item.name.en === selectedProvider?.name)
-            ?.specialties || []
-        }
-        labelField="name.en"
-        valueField="name.en"
-        placeholder="Specialty"
-        value={userDataProvider.speciality}
-        onChange={onChangeSpecialtys}
-        renderItem={renderItem}
-      />
-      {specialtyError ||
-        (spError && (
-          <Text style={styles.errorMessage}>
-            {spError.length ? spError : specialtyError}
-          </Text>
-        ))}
-
-      <View style={styles.iconContainer}>
-        <Text style={styles.text}>Upload ID photo</Text>
-        <TouchableOpacity
-          activeOpacity={userDataProvider.id_photo ? 1 : 0.5}
-          onPress={() => setIsShowModal(true)}
-        >
-          <Image
-            source={
-              userDataProvider.id_photo
-                ? { uri: userDataProvider.id_photo }
-                : require('../../../../assets/icon/uploadProfile.png')
-            }
-            style={styles.selectedImage}
-          />
-        </TouchableOpacity>
-        <SelectImage
-          isShowModal={isShowModal}
-          closeModal={setIsShowModal}
-          imageUri={getImageUrl}
+      <View style={styles.inputContainer}>
+        <Input
+          placeholder={t('first_name')}
+          onBlur={onBlurFirstName}
+          onChangeText={onChangeFirstName}
+          ref={firstNameRef}
+          defaultValue={providerProfile?.firstName}
+          inputValue={providerProfile?.firstName ?? ''}
+          errorMessage={firstNameError}
+          returnKeyType={'next'}
+          onSubmitEditing={() => lastNameRef.current.focus()}
+          onClearInputText={() => firstNameRef.current.clear()}
         />
+        <Input
+          placeholder={t('last_name')}
+          type={'nameSuffix'}
+          inputStyle={styles.inputLastName}
+          onChangeText={onChangeLastName}
+          onBlur={onBlurLastName}
+          defaultValue={providerProfile?.lastName}
+          ref={lastNameRef}
+          inputValue={providerProfile?.lastName ?? ''}
+          errorMessage={lastNameError}
+          onClearInputText={() => lastNameRef.current.clear()}
+        />
+        <Dropdown
+          data={[
+            { name: 'Doctor' },
+            { name: 'Nurse' },
+            { name: 'Healer' },
+            { name: 'Physio' },
+            { name: 'Other' },
+          ]}
+          labelField={'name'}
+          valueField="name"
+          placeholder={t('type_of_provider')}
+          value={selectedProvider}
+          onChange={onChangeProviderTypes}
+          renderItem={renderProvider}
+          errorMessage={providerTypeError}
+          onBlur={onBlurProviderTypes}
+        />
+        <Dropdown
+          data={
+            data?.find((item) => item?.name?.en === selectedProvider?.name)
+              ?.specialties || []
+          }
+          labelField="name.en"
+          valueField="name.en"
+          placeholder={t('specialty')}
+          value={selectedSpecialty}
+          onChange={onChangeSpecialty}
+          renderItem={renderSpecialties}
+          errorMessage={specialtyError}
+          onBlur={onBlurSpecialty}
+        />
+        {getUploadImageView()}
       </View>
+      {getFooterView()}
+      {renderToast()}
     </>
   );
 };
@@ -394,74 +301,43 @@ export default ProviderDetail;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     textAlign: 'center',
   },
-
   inputLastName: {
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
-
   iconContainer: {
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
     marginTop: getHeight(dimens.sideMargin),
   },
-
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
+    width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS),
-  },
-  box: {
-    borderWidth: getHeight(dimens.borderBold),
-    borderRadius: getHeight(dimens.marginS),
-    backgroundColor: colors.offWhite,
-    height: getHeight(dimens.imageS),
-    borderColor: colors.primary,
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
-  },
-  placeholderStyle: {
-    fontSize: fontSize.textL,
-    color: colors.black,
-  },
-  dropdown: {
-    borderWidth: getHeight(dimens.borderBold),
-    borderRadius: getHeight(dimens.marginS),
-    backgroundColor: colors.offWhite,
-    height: getHeight(50),
-    borderColor: colors.primary,
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
   },
   icon: {
     marginRight: 5,
   },
   textItem: {
     flex: 1,
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     padding: getHeight(dimens.marginS),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
   },
-  selectedTextStyle: {
-    fontSize: fontSize.textL,
-    color: colors.black,
+  inputContainer: {
+    flex: 0.79,
   },
-  iconStyle: {
-    width: getWidth(dimens.marginM),
-    height: getHeight(dimens.marginM),
-  },
-  editBlueImage: {
-    height: getHeight(dimens.paddingL),
-    width: getWidth(dimens.paddingL),
-    marginBottom: getHeight(dimens.paddingXs),
-  },
-  errorMessage: {
-    color: colors.invalid,
-    paddingTop: getHeight(dimens.paddingXs),
+  footerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    flex: 0.1,
+    justifyContent: 'space-between',
   },
 });

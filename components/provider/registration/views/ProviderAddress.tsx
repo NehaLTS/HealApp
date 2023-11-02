@@ -1,184 +1,154 @@
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
+import Button from 'components/common/Button';
+import RNModal from 'components/common/Modal';
+import TextButton from 'components/common/TextButton';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
-import { getTexts } from '../../../../libs/OneSkyHelper';
 import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
-import BasicInformationController from '../controllers/BasicInformationController';
-import TextButton from 'components/common/TextButton';
-import RNModal from 'components/common/Modal';
-import { useTranslation } from 'react-i18next';
+import ProviderAddressController from '../controllers/ProviderAddressController';
+import Text from 'components/common/Text';
 
-const ProviderAddress = ({
-  phoneError: phError,
-  addressError: adError,
-}: any) => {
+const ProviderAddress = () => {
   const { t } = useTranslation();
-  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
-    BasicInformationController({});
-  const { languageCode } = useTranslationContext();
-  const { registration } = getTexts(languageCode);
-  const [phoneError, setPhoneError] = useState('');
-  const [addressError, setAddressError] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
-  const [onSearchAddress, setOnSearchAddress] = useState('');
+  const {
+    phoneError,
+    addressError,
+    isVisible,
+    setIsVisible,
+    setOnSearchAddress,
+    providerProfile,
+    phoneRef,
+    licenseRef,
+    onBlurPhoneNumber,
+    onChangePhoneNumber,
+    getImageUrl,
+    onChangeLicense,
+    onBlurAddress,
+    onSearchAddress,
+    isShowModal,
+    onUploadLicense,
+    onCloseModal,
+    renderToast,
+    onPressBack,
+    onPressNext,
+    licensePicture,
+  } = ProviderAddressController();
 
-  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
-  const phoneRef = React.useRef<any>('');
-  const licenseRef = React.useRef<any>('');
-  const addressRef = React.useRef<any>('');
-
-  const onBlurPhoneNumber = () => {
-    validatePhoneNumber();
-    setUserDataProvider({
-      ...userDataProvider,
-      phone_number: phoneRef.current.value,
-    });
-  };
-  const onChangePhoneNumber = (value: string) =>
-    (phoneRef.current.value = value);
-
-  const onBlurLastName = () =>
-    setUserDataProvider({
-      ...userDataProvider,
-      license: licenseRef.current.value,
-    });
-  const onChangeLastName = (value: string) =>
-    (licenseRef.current.value = value);
-
-  const onBlurAddress = () => {
-    validateAddress();
-    setUserDataProvider({
-      ...userDataProvider,
-      address: addressRef.current.value,
-    });
-  };
-  const onChangeAddress = (value: string) => (addressRef.current.value = value);
-
-  const getImageUrl = (url: string) =>
-    setUserDataProvider({ ...userDataProvider, license_photo: url });
-  console.log('userDataProvider', userDataProvider);
-
-  const validatePhoneNumber = () => {
-    if (!phoneRef.current.value) {
-      setPhoneError('Phone number is required');
-    } else {
-      setPhoneError('');
-    }
-  };
-
-  const validateAddress = () => {
-    if (onSearchAddress?.length === 0) {
-      setAddressError('Address is required');
-    } else if (onSearchAddress?.length < 4) {
-      setAddressError('Please fill full address');
-    } else {
-      setAddressError('');
-    }
-  };
-
-  const addAddressView = () => {
-    return (
+  const addAddressView = () => (
+    <RNModal
+      style={styles.modal}
+      backdropOpacity={1}
+      backdropColor={colors.white}
+      isVisible={isVisible}
+    >
       <View style={styles.addressView}>
         <Input
           placeholder={t('address')}
           type={'fullStreetAddress'}
           inputStyle={[{ minWidth: '82%' }]}
-          onClearInputText={() => addressRef.current.clear()}
           onChangeText={setOnSearchAddress}
           inputValue={onSearchAddress}
-          value={onSearchAddress}
-          onSubmitEditing={() => setIsVisible(false)}
+          defaultValue={onSearchAddress}
+          onSubmitEditing={onBlurAddress}
           autoFocus
         />
         <TextButton
-          containerStyle={{ width: '18%', alignItems: 'flex-end' }}
+          containerStyle={styles.containerStyle}
           title="Close"
           fontSize={fontSize.textL}
           onPress={() => setIsVisible(false)}
         />
       </View>
-    );
-  };
+    </RNModal>
+  );
 
+  const getUploadImageView = () => (
+    <View style={styles.iconContainer}>
+      <Text style={styles.text}>{t('upload_license')}</Text>
+      <TouchableOpacity
+        disabled={!licenseRef.current?.value}
+        activeOpacity={licensePicture ? 1 : 0.5}
+        style={{ opacity: !licenseRef.current?.value ? 0.5 : 1 }}
+        onPress={onUploadLicense}
+      >
+        <Image
+          source={
+            licensePicture
+              ? { uri: licensePicture }
+              : require('../../../../assets/icon/licencesIcon.png')
+          }
+          style={styles.selectedImage}
+        />
+      </TouchableOpacity>
+      <SelectImage
+        isShowModal={isShowModal}
+        closeModal={onCloseModal}
+        imageUri={getImageUrl}
+      />
+    </View>
+  );
+
+  const getFooterView = () => (
+    <View style={styles.footerContainer}>
+      <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} />
+      <Button
+        title={t('next')}
+        isPrimary
+        isSmall
+        width={'30%'}
+        onPress={onPressNext}
+      />
+    </View>
+  );
   return (
     <>
-      <Input
-        placeholder={t('Phone Number*')}
-        type={'telephoneNumber'}
-        keyboardType="number-pad"
-        // inputStyle={styles.input}
-        onBlur={onBlurPhoneNumber}
-        onChangeText={onChangePhoneNumber}
-        ref={phoneRef}
-        defaultValue={userDataProvider.phone_number}
-        inputValue={userDataProvider?.phone_number ?? ''}
-        errorMessage={phError.length ? phError : phoneError}
-        returnKeyType={'next'}
-        onSubmitEditing={() => licenseRef.current.focus()}
-        onClearInputText={() => phoneRef.current.clear()}
-      />
-
-      <Input
-        placeholder={t('License number (for those who have)')}
-        type={'nameSuffix'}
-        inputStyle={styles.input}
-        onBlur={onBlurLastName}
-        onChangeText={onChangeLastName}
-        ref={licenseRef}
-        defaultValue={userDataProvider.license}
-        inputValue={userDataProvider?.license ?? ''}
-        returnKeyType={'next'}
-        onSubmitEditing={() => addressRef.current.focus()}
-        onClearInputText={() => licenseRef.current.clear()}
-      />
-
-      <Input
-        placeholder={t('address')}
-        inputStyle={styles.input}
-        value={onSearchAddress}
-        errorMessage={addressError}
-        onTouchStart={() => setIsVisible(true)}
-        caretHidden
-        inputValue={onSearchAddress}
-        onClearInputText={() => setOnSearchAddress('')}
-      />
-
-      <View style={styles.iconContainer}>
-        <Text style={styles.text}>{t('Upload license photo')}</Text>
-        <TouchableOpacity
-          activeOpacity={userDataProvider.license_photo ? 1 : 0.5}
-          onPress={() => setIsShowModal(true)}
-        >
-          <Image
-            source={
-              userDataProvider.license_photo
-                ? { uri: userDataProvider.license_photo }
-                : require('../../../../assets/icon/licencesIcon.png')
-            }
-            style={styles.selectedImage}
-          />
-        </TouchableOpacity>
-        <SelectImage
-          isShowModal={isShowModal}
-          closeModal={setIsShowModal}
-          imageUri={getImageUrl}
+      <View style={styles.inputContainer}>
+        <Input
+          placeholder={t('phone_number')}
+          type={'telephoneNumber'}
+          keyboardType="number-pad"
+          onBlur={onBlurPhoneNumber}
+          onChangeText={onChangePhoneNumber}
+          ref={phoneRef}
+          defaultValue={providerProfile?.phoneNumber}
+          inputValue={providerProfile?.phoneNumber ?? ''}
+          errorMessage={phoneError}
+          returnKeyType={'next'}
+          onSubmitEditing={() => licenseRef.current.focus()}
+          onClearInputText={() => phoneRef.current.clear()}
         />
-      </View>
-      <RNModal
-        style={styles.modal}
-        backdropOpacity={1}
-        backdropColor={colors.white}
-        isVisible={isVisible}
-      >
+        <Input
+          placeholder={t('license_number')}
+          type={'nameSuffix'}
+          inputStyle={styles.input}
+          onChangeText={onChangeLicense}
+          ref={licenseRef}
+          defaultValue={providerProfile?.licensenumber}
+          inputValue={providerProfile?.licensenumber ?? ''}
+          returnKeyType={'next'}
+          onSubmitEditing={() => setIsVisible(true)}
+          onClearInputText={() => licenseRef.current.clear()}
+        />
+        <Input
+          placeholder={t('address')}
+          inputStyle={styles.input}
+          value={onSearchAddress}
+          errorMessage={addressError}
+          onTouchStart={() => setIsVisible(true)}
+          caretHidden
+          inputValue={onSearchAddress}
+          onClearInputText={() => setOnSearchAddress('')}
+        />
+        {getUploadImageView()}
         {addAddressView()}
-      </RNModal>
+      </View>
+      {getFooterView()}
+      {renderToast()}
     </>
   );
 };
@@ -187,7 +157,7 @@ export default ProviderAddress;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
     textAlign: 'center',
@@ -195,23 +165,17 @@ const styles = StyleSheet.create({
   input: {
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
-
   iconContainer: {
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
     marginTop: getHeight(dimens.sideMargin),
   },
-
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
+    width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS),
-  },
-  editImage: {
-    height: getHeight(dimens.paddingL + 2),
-    width: getWidth(dimens.paddingL),
   },
   modal: {
     flex: 1,
@@ -221,5 +185,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: getHeight(dimens.paddingS),
+  },
+  inputContainer: {
+    flex: 0.79,
+  },
+  footerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    flex: 0.1,
+    justifyContent: 'space-between',
+  },
+  containerStyle: {
+    width: '18%',
+    alignItems: 'flex-end',
   },
 });

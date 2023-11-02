@@ -18,7 +18,7 @@ const UserPaymentViewController = () => {
   const [cardExpiry, setCardExpiry] = useState('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isCardDetails, setIsCardDetails] = useState(false);
-  const { userId } = UseClientUserContext();
+  const { userId, userProfile } = UseClientUserContext();
   const navigation = useNavigation();
 
   const validateCardNumber = () => {
@@ -121,6 +121,7 @@ const UserPaymentViewController = () => {
   };
 
   return {
+    userProfile,
     cardNumberRef,
     expireDateRef,
     cvvRef,

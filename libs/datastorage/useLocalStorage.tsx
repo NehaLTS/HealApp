@@ -1,10 +1,10 @@
-import { ClientProfile, UserType, UserTypeProvider } from '../types/UserType';
+import { ClientProfile, ProviderProfile, UserType, UserTypeProvider } from '../types/UserType';
 import { MMKV } from 'react-native-mmkv'
 const dataStorage = new MMKV()
 
 
-type StorageKeys = 'USERPROFILE' | 'USER'
-type StorageObject = { USERPROFILE: ClientProfile | UserTypeProvider }
+type StorageKeys = 'USERPROFILE' | 'USER' |'USERPROVIDERPROFILE'
+type StorageObject = { USERPROFILE: ClientProfile | UserTypeProvider,USERPROVIDERPROFILE:ProviderProfile }
 
 export const setLocalData = <K extends StorageKeys>(key: K, object: Partial<StorageObject[K]>) => {
   const data = getLocalData(key) || {}
