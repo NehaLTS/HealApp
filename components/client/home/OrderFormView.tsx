@@ -48,23 +48,19 @@ const OrderFormView = () => {
   }
 
   const onSelectReasons = (item: any) => {
-    console.log('object***********', item);
     const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
     const itemIndex = updatedActiveButton.indexOf(item.reason_id);
 
     if (itemIndex !== -1) {
-      // The button is already selected, so remove it
+
       updatedActiveButton.splice(itemIndex, 1);
     } else {
-      // The button is not selected, so add it
       updatedActiveButton.push(item.reason_id);
     }
-    setActiveButton(updatedActiveButton); // Update the state with the new array
+    setActiveButton(updatedActiveButton);
     setSelectedResourceType((prev) => [...prev, item]);
-    console.log("selectedResourceType", selectedResourceType)
     setOrderDetails({ ...orderDetails, reason: [...selectedResourceType, item] });
   };
-  console.log('userProfile?.address', userProfile?.address)
 
   const toggleMe = () => {
     setIsMeSelected(true);
@@ -72,7 +68,6 @@ const OrderFormView = () => {
   };
 
   const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>([]);
-  console.log('selectedResourceType', selectedResourceType);
   const handleItemPress = (item: TreatmentMenu, index: number) => {
     const newIsCheckedStates = [...isCheckedStates];
     newIsCheckedStates[index] = !newIsCheckedStates[index];
@@ -93,7 +88,6 @@ const OrderFormView = () => {
     setOrderDetails({ ...orderDetails, patient_type: 'someone else' })
   };
   const abc = selectedResourceType?.map((i) => i?.reason_id)
-  console.log('hjjhghjghj00000', activeButton);
   const getReasonsView = () => (
     <>
       <Text title={"Reason"} style={styles.addressText} />
@@ -124,9 +118,7 @@ const OrderFormView = () => {
           onPress={() => setIsModalVisible(true)}
         />
         <Text
-          title={
-            "*We don't do emergency calls. In case of emergency please call 077-773-45-69"
-          }
+          title={"*We don't do emergency calls. In case of emergency please call 077-773-45-69"}
           style={styles.textSmall}
         />
       </View>
@@ -176,7 +168,7 @@ const OrderFormView = () => {
           title={"*If the doctor won’t use your shot, you won’t pay for it"}
           style={styles.textSmall}
         />
-      </View>
+      </View >
     </>
   );
 
@@ -212,7 +204,6 @@ const OrderFormView = () => {
 
   return (
     <>
-
       <Text style={styles.text} title={"For whom is the doctor?"} />
       <View style={styles.button}>
         <Button
@@ -238,19 +229,19 @@ const OrderFormView = () => {
       <View
         style={[
           styles.addressContainer,
-          { justifyContent: !isMeSelected ? "flex-start" : "center" },
+          { justifyContent: !isMeSelected ? "center" : "center" },
         ]}>
         {isMeSelected &&
           <>
             <Text title={"Address"} style={styles.addressText} />
-            <View style={styles.locationContainer}>
+            <View style={{ ...styles.locationContainer, }}>
               <Image
                 source={require("../../../assets/icon/location.png")}
                 style={styles.locationIcon}
               />
               <Text
-                style={{ flex: 0.80, paddingLeft: getWidth(dimens.sideMargin) }}
-                title={userProfile?.address ?? 'Ambala cantt'}
+                style={styles.streetAddress}
+                title={userProfile?.address ?? ''}
               />
               <TextButton
                 containerStyle={{ flex: 0.1 }}
@@ -264,17 +255,17 @@ const OrderFormView = () => {
         {!isMeSelected && (
           isSubmitDetail ? (<>
             <Text title={"Address"} style={styles.addressText} />
-            <View style={styles.locationContainer}>
+            <View style={{ ...styles.locationContainer, borderRadius: 1 }}>
               <Image
                 source={require("../../../assets/icon/location.png")}
                 style={styles.locationIcon}
               />
               <Text
-                style={{ flex: 0.84, paddingLeft: getWidth(dimens.sideMargin) }}
+                style={styles.street}
                 title={userProfile?.address ?? ''}
               />
               <TextButton
-                containerStyle={{ flex: 0.1 }}
+                containerStyle={{ flex: 0.15 }}
                 title={"Edit"}
                 fontSize={getHeight(fontSize.textM)}
               />
@@ -344,7 +335,6 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.disabled,
     flexDirection: "row",
-
     // paddingHorizontal: getWidth(dimens.paddingS),
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
     //  flex: 0.2,
@@ -355,7 +345,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   buttonContainer: {
-    flex: 0.37,
+    flex: 0.38,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
@@ -377,10 +367,9 @@ const styles = StyleSheet.create({
     gap: getWidth(dimens.marginL),
   },
   container: {
-    flex: 0.29,
+    flex: 0.31,
     gap: getWidth(dimens.sideMargin),
-    marginTop: getHeight(dimens.paddingXs),
-
+    marginTop: getHeight(dimens.marginS),
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),
@@ -419,7 +408,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    padding: getWidth(4),
+    padding: getWidth(dimens.borderBold + dimens.borderBold),
   },
   description: {
     height: getHeight(117),
@@ -438,5 +427,18 @@ const styles = StyleSheet.create({
     height: getHeight(12),
 
   },
+  streetAddress: {
+    flex: 0.80,
+    paddingLeft: getWidth(dimens.sideMargin),
+    fontSize: getWidth(fontSize.textM)
+  },
+  list: {
+    fontSize: getWidth(fontSize.textM)
+  },
+  street: {
+    flex: 0.84,
+    paddingLeft: getWidth(dimens.sideMargin),
+    fontSize: getWidth(fontSize.textM)
 
+  }
 });

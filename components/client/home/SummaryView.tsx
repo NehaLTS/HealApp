@@ -1,5 +1,5 @@
-import { Image, StyleSheet, View } from "react-native";
-import React from "react";
+import { Image, Modal, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
 import { fontSize } from "designToken/fontSizes";
@@ -8,16 +8,32 @@ import { dimens } from "designToken/dimens";
 import Input from "components/common/Input";
 import { fontWeight } from "designToken/fontWeights";
 import { fontFamily } from "designToken/fontFamily";
+import { colors } from "designToken/colors";
+import UserPaymentView from "components/client/registration/views/UserPaymentView";
+import CardView from "components/common/CardView";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
 interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
 }
-
 const SummaryView = ({ setShowSummary }: SummaryViewProps) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false)
   const { orderDetails, setOrderDetails } = UseClientUserContext()
 
+  const paymentModal = () => (
+    <Modal
+      backdropColor={colors.white}
+      backdropOpacity={1}
+      // onBackdropPress={onPaymentAdd}
+      isVisible={isVisible}
+      style={styles.modalContainer}>
+      <View style={styles.paymentContainer}>
+        <UserPaymentView isFromHome={true} />
+      </View>
+    </Modal>
+  );
   return (
     <>
+
       <View style={styles.textContainer}>
         <Text title={"Order summary"} style={styles.summary} />
         <TextButton
@@ -31,14 +47,14 @@ const SummaryView = ({ setShowSummary }: SummaryViewProps) => {
         <View style={styles.rowContainer}>
           <View style={styles.patientAndAddress}>
             <Text title={"The patient "} style={styles.text} />
-            <Text title={"17 y.o, 054-6178180"} />
+            <Text title={"17 y.o, 054-6178180"} style={styles.textSmall} />
           </View>
-          <View style={{ flexDirection: "row", gap: 15 }}>
+          <View style={styles.locationContainer}>
             <Image
               source={require("../../../assets/icon/location.png")}
               style={styles.locationIcon}
             />
-            <Text title={"Ahavat Zion, 10, \n Haifa"} />
+            <Text title={"Ahavat Zion, 10,\nHaifa"} style={styles.locationText} />
           </View>
         </View>
       </View>
@@ -66,11 +82,12 @@ const SummaryView = ({ setShowSummary }: SummaryViewProps) => {
           fontSize={getHeight(fontSize.textL)}
           isActive
           style={styles.textPaid}
+          onPress={() => setIsVisible(true)}
         />
       </View>
 
       <Text title={"Estimated arrival"} style={styles.text} />
-      <Text title={"60 min"} />
+      <Text title={"60 min"} style={styles.textSmall} />
 
       <View style={styles.instructionContainer}>
         <Text title={"Instructions for arrival"} style={styles.instruction} />
@@ -79,8 +96,11 @@ const SummaryView = ({ setShowSummary }: SummaryViewProps) => {
           inputValue={""}
           inputStyle={styles.description}
           onChangeText={(value) => setOrderDetails({ ...orderDetails, Instructions_for_arrival: value })}
+          placeholderStyle={styles.textSmall}
         />
+
       </View>
+      {isVisible && paymentModal()}
     </>
   );
 };
@@ -101,7 +121,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: getWidth(dimens.marginS + 2),
+    marginTop: getWidth(dimens.marginS + dimens.borderBold),
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),
@@ -116,15 +136,26 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: getWidth(fontSize.textL),
+    marginBottom: getHeight(dimens.borderBold)
+  },
+  symptomsText: {
+    fontSize: getWidth(fontSize.textL),
+    marginTop: getWidth(dimens.marginS + 5),
+    marginBottom: 5
+
   },
   symptomsContainer: {
     flex: 0.17,
     marginTop: getWidth(dimens.marginS),
 
   },
-
-  voltarenText: {
+  locationContainer: {
+    flexDirection: "row",
+    gap: getWidth(dimens.marginS + 5)
+  },
+  voltaireText: {
     marginVertical: getWidth(dimens.paddingXs),
+    fontSize: fontSize.textM
   },
   payForIt: {
     marginVertical: getWidth(dimens.paddingXs),
@@ -136,20 +167,20 @@ const styles = StyleSheet.create({
     gap: getWidth(dimens.marginM),
   },
   textPaid: {
-    marginTop: getWidth(dimens.sideMargin + 6),
-    fontSize: fontSize.textL,
+    marginTop: getWidth(dimens.sideMargin + dimens.paddingXs),
+    fontSize: getWidth(fontSize.textL),
   },
   instructionContainer: {
-    flex: 0.41,
+    flex: 0.42,
     gap: getWidth(dimens.marginS),
   },
   instruction: {
-    fontSize: fontSize.textL,
-    marginTop: getWidth(dimens.sideMargin + 7),
+    fontSize: getWidth(fontSize.textL),
+    marginTop: getWidth(dimens.marginM + dimens.paddingXs),
   },
   description: {
-    height: getHeight(dimens.imageS + dimens.marginS),
-
+    height: getHeight(dimens.imageS + dimens.marginM),
+    backgroundColor: colors.white
   },
 
   container: {
@@ -166,6 +197,26 @@ const styles = StyleSheet.create({
   },
   total: {
     fontFamily: fontFamily.bold,
+    fontSize: getWidth(fontSize.textM)
   },
-
+  textSmall: {
+    fontSize: getWidth(fontSize.textM),
+    fontFamily: fontFamily.light,
+    backgroundColor: colors.white
+  },
+  locationText: {
+    fontSize: getWidth(fontSize.textM),
+  },
+  voltarenText: {
+    marginVertical: getWidth(dimens.paddingXs),
+    fontSize: getWidth(fontSize.textM)
+  },
+  paymentContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    zIndex: 1
+  },
+  modalContainer: {
+    justifyContent: "flex-start",
+  },
 });

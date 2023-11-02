@@ -1,17 +1,19 @@
+import { useNavigation } from "@react-navigation/native";
 import { ClientOrderServices } from "libs/ClientOrderServices";
+import { deleteLocalData } from "libs/datastorage/useLocalStorage";
 import { Banner, search_provider } from "libs/types/ProvierTypes";
-import { useRef } from "react";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import { useEffect, useState } from "react";
 import { Alert, Keyboard, Linking } from "react-native";
-import { check, PERMISSIONS, RESULTS, request } from "react-native-permissions";
 import Geolocation from 'react-native-geolocation-service';
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 
 interface Location {
   latitude: number
   longitude: number
 }
 const HomeViewController = () => {
-
+  const navigation = useNavigation()
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
   const { getBannerAds, searchProviders } = ClientOrderServices()
@@ -122,6 +124,10 @@ const HomeViewController = () => {
     setOnChangeSearch(value)
     setIsDataNotFound(true)
   };
+  const onSearch = () => {
+    deleteLocalData(),
+      navigation.navigate(NavigationRoutes.IntroStack)
+  }
   const onTouchStart = async () => {
     setIsTouchStart(false)
   };
@@ -144,8 +150,10 @@ const HomeViewController = () => {
     onPressBanner,
     providersList,
     onSearchDone,
-    isDataNotFound
+    isDataNotFound,
+    onSearch,
   };
 };
 
 export default HomeViewController;
+

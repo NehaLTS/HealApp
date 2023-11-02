@@ -13,7 +13,7 @@ import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Image,
@@ -30,10 +30,15 @@ import Animated, {
 } from "react-native-reanimated";
 import HomeViewController from "./HomeViewController";
 import { colors } from "designToken/colors";
+import { deleteLocalData } from "libs/datastorage/useLocalStorage";
+import RNModal from "components/common/Modal";
+import Input from "components/common/Input";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
+  const [isVisible, setIsVisible] = useState<boolean>(false)
+
   const {
     providerList,
     bannerAds,
@@ -46,7 +51,8 @@ const HomeScreen = () => {
     onPressBanner,
     providersList,
     onSearchDone,
-    isDataNotFound
+    isDataNotFound,
+    onSearch
   } = HomeViewController();
   // const isDataNotFound = searchRef?.length > 0 ? true : false;
   console.log("bhjbc", isDataNotFound)
@@ -57,14 +63,16 @@ const HomeScreen = () => {
         <View style={styles.headerTitleContainer}>
           <View style={styles.headerTitle}>
             <Image source={location} style={styles.location} />
-            <Text numberOfLines={2}>Your current location</Text>
+            <Text numberOfLines={2} style={styles.text} title={"Your current location"} />
           </View>
           <TextButton
             isActive
             title="Change"
             fontSize={getWidth(fontSize.textM)}
+            onPress={() => setIsVisible(true)}
           />
         </View>
+
       ),
       headerLeft: () => (
         <TouchableOpacity onPress={onPressBack}>
@@ -82,19 +90,43 @@ const HomeScreen = () => {
       ),
       headerStyle: styles.header,
       headerRight: () => (
-        <TouchableHighlight underlayColor="transparent">
+        <TouchableHighlight underlayColor="transparent" onPress={onSearch} >
           <Image source={avatar} style={styles.avatar} />
         </TouchableHighlight>
       ),
     });
   }, [navigation, isTouchStart]);
+  const addAddressView = () => {
+    return (
+      <RNModal
+        style={styles.modal}
+        backdropOpacity={1}
+        backdropColor={colors.white}
+        isVisible={isVisible}>
+        <View style={styles.addressView}>
+          <Input
+            placeholder={t("address")}
+            type={"fullStreetAddress"}
+            inputStyle={[{ minWidth: "82%" }]}
+            onSubmitEditing={() => { setIsVisible(false); }}
+            autoFocus inputValue={""} />
+          <TextButton
+            containerStyle={{ width: "18%", alignItems: "flex-end" }}
+            title="Close"
+            fontSize={fontSize.textL}
+            onPress={() => setIsVisible(false)}
+          />
+        </View>
+      </RNModal>
 
+    );
+  };
   const getProviderList = () => {
     // Pass on Press of card and array of data as props*/
 
     return (
       <>
-        <Text style={styles.searchHeading} title={'Which Specialist do you need?'}></Text>
+        <Text style={styles.searchHeading} title={"Which specialist do you need?"} />
         {providerList.map((item: any, index: number) => (
           <Animated.View
             key={index}
@@ -140,35 +172,38 @@ const HomeScreen = () => {
   };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: 20 }}>
-      {/* Banner Advertisement */}
-      {isTouchStart && onChangeSearch?.length === 0 && (
-        <TouchableOpacity onPress={onPressBanner}>
-          <Image
-            style={styles.banner}
-            // source={require("assets/icon/google.png")}
-            source={{ uri: (bannerAds?.[0]?.imageurl || '') }}
-          />
-        </TouchableOpacity>
-      )}
-      <SearchBox
-        isTouchStart={isTouchStart && onChangeSearch?.length === 0}
-        placeholder="What treatment do you need?"
-        onTouchStart={onTouchStart}
-        onBlur={onBlur}
-        onChangeText={onChange}
-        defaultValue={onChangeSearch}
-        onSubmitEditing={onSearchDone}
-      // onEndEditing={onSearchDone}
-      />
-      {onChangeSearch?.length === 0
-        ? getProviderList()
-        : isDataNotFound
-          ? getProviderSearchList()
-          : noSearchedView()}
-    </ScrollView>
+    <>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 20 }}>
+        {/* Banner Advertisement */}
+        {isTouchStart && onChangeSearch?.length === 0 && (
+          <TouchableOpacity onPress={onPressBanner}>
+            <Image
+              style={styles.banner}
+              // source={require("assets/icon/google.png")}
+              source={{ uri: (bannerAds?.[0]?.imageurl || '') }}
+            />
+          </TouchableOpacity>
+        )}
+        <SearchBox
+          isTouchStart={isTouchStart && onChangeSearch?.length === 0}
+          placeholder="What treatment do you need?"
+          onTouchStart={onTouchStart}
+          onBlur={onBlur}
+          onChangeText={onChange}
+          defaultValue={onChangeSearch}
+          onSubmitEditing={onSearchDone}
+        // onEndEditing={onSearchDone}
+        />
+        {onChangeSearch?.length === 0
+          ? getProviderList()
+          : isDataNotFound
+            ? getProviderSearchList()
+            : noSearchedView()}
+      </ScrollView>
+      {isVisible && addAddressView()}
+    </>
   );
 };
 export default HomeScreen;
@@ -216,6 +251,7 @@ const styles = StyleSheet.create({
   },
   headerTitleContainer: {
     alignItems: "center",
+    paddingTop: getHeight(dimens.marginL)
   },
   noSearchText: {
     textAlign: "center",
@@ -236,5 +272,17 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: "center",
+  },
+  text: {
+    fontSize: fontSize.textM
+  },
+  modal: {
+    flex: 1,
+    justifyContent: "flex-start"
+  },
+  addressView: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: getHeight(dimens.paddingS),
   },
 });
