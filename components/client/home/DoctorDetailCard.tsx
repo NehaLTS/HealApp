@@ -10,12 +10,14 @@ import Text from 'components/common/Text';
 const DoctorDetailCard = ({ isPrimary, showBothCards }: { isPrimary?: boolean, showBothCards: boolean }) => {
   return (
     <>
+    <View style={{ flex: 1, backgroundColor: "white", alignItems: 'center', justifyContent: 'center' }}>
+    <Image source={require('../../../assets/icon/map.png')} style={styles.mapImage} />
 
       {isPrimary || showBothCards ? (
+        
         <View style={showBothCards ? styles.cardBoth : styles.card}>
           <Image source={require('../../../assets/icon/warning.png')} style={showBothCards ? styles.icon : styles.warningIcon} />
           <Text style={showBothCards ? styles.titleText : styles.title} title={"Price went up by 50 NIS\nsince we didn’t find an\navailable doctor in your area"}/>
-        
         </View>
       ) : null}
 
@@ -23,12 +25,10 @@ const DoctorDetailCard = ({ isPrimary, showBothCards }: { isPrimary?: boolean, s
         <View style={styles.cardDetail}>
           <Text style={styles.doctorTitle} title={"Elena Miron, family doctor"}/>
           <Text style={styles.moreInfo} title={"More info"}/>
-
           <View style={styles.detailItem}>
             <View style={styles.doctorIconContainer}>
               <Image source={require("../../../assets/icon/doctorIcon.png")} style={styles.doctorIcon} />
               <Image source={require("../../../assets/icon/star.png")} style={styles.starIcon} />
-              
             </View>
             <View style={{ gap: 5, justifyContent: "center" }}>
               <View style={styles.details}>
@@ -40,9 +40,9 @@ const DoctorDetailCard = ({ isPrimary, showBothCards }: { isPrimary?: boolean, s
             </View>
           </View>
         </View>
-
       )}
-
+      
+      </View>
     </>
   );
 };
@@ -59,12 +59,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: getHeight(dimens.marginM),
     elevation: 2,
-    padding: getHeight(dimens.imageS),
-    margin: getWidth(dimens.marginS),
+    paddingHorizontal:getWidth(dimens.marginM),
+    paddingVertical:getWidth(dimens.imageS+dimens.marginS),
   },
   title: {
-    fontSize: fontSize.textL,
-   
+    fontSize:getWidth(fontSize.textL),
   },
   warningIcon: {
     width: getWidth(dimens.imageS + dimens.marginS),
@@ -76,18 +75,17 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     alignItems: "center",
     elevation: getWidth(dimens.borderBold),
-    height: "25%",
-    padding: getHeight(dimens.marginS),
-    margin: getWidth(dimens.marginS),
+    height: "28%",
+    padding: getHeight(dimens.marginM),
+    margin: getWidth(dimens.marginL),
   },
   doctorTitle: {
     fontSize: 20,
     color: colors.black,
     fontFamily: fontFamily.medium
   },
-
   detailItem: {
-    gap: 40,
+    gap: getWidth(dimens.imageXs),
     flexDirection: "row",
     alignItems: "center",
   },
@@ -101,7 +99,7 @@ const styles = StyleSheet.create({
   },
   starIcon: {
     position: 'absolute',
-    bottom: 10,
+    bottom: getHeight(dimens.marginS),
     right: getHeight(dimens.marginS),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
@@ -126,8 +124,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: getHeight(dimens.marginM),
     elevation: getWidth(dimens.borderBold),
-    paddingVertical: 15,
-    margin: getWidth(dimens.marginS),
+    paddingVertical: getWidth(dimens.marginM),
+    paddingHorizontal:getWidth(dimens.marginS),
     marginLeft: getWidth(dimens.imageS)
   },
   icon: {
@@ -146,12 +144,15 @@ const styles = StyleSheet.create({
   starIconText: {
     fontSize: fontSize.textL,
     alignSelf: 'flex-end',
-    paddingBottom: 20
+    paddingBottom: getHeight(dimens.marginM)
   },
   moreInfo:{
     fontSize:fontSize.textL,
-    marginLeft:80
-  }
-
-
+    marginLeft:getWidth(dimens.imageS+dimens.marginM)
+  },
+  mapImage: {
+    width: '100%',
+    height: '60%',
+    position: 'absolute',
+  },
 });

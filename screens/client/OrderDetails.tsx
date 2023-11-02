@@ -1,14 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import arrowBack from "assets/icon/arrowBack.png";
 import specialistIcon from "assets/icon/doctor.png";
-import CardView from "components/client/home/CardView";
 import DoctorDetailCard from "components/client/home/DoctorDetailCard";
-import DoctorFound from "components/client/home/DoctorFound";
 import OrderFormView from "components/client/home/OrderFormView";
 import SummaryView from "components/client/home/SummaryView";
+import TreatmentEnd from "components/client/home/TreatmentEnd";
 import Button from "components/common/Button";
 import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
 import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
@@ -66,8 +64,10 @@ const OrderDetails = () => {
         width={"30%"}
       />
       {showSummary && <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
+      {/* <TreatmentEnd/> */}
     </View>
-    // <DoctorDetailCard showBothCards={false} isPrimary={true}/>
+    //  <DoctorDetailCard showBothCards={true} isPrimary={false}/>
+
     
   );
 };

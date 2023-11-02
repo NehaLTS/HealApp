@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
 import { providerList } from '../../libs/types/ProvierTypes'
 import { home } from '../../strings/en.json'
+import { deleteLocalData } from "libs/datastorage/useLocalStorage";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 const HomeViewController = () => {
   const { t } = useTranslation();
@@ -19,6 +21,9 @@ const HomeViewController = () => {
 
 
   const onChangeSearch = (value: string) => (searchRef.current.value = value);
+  const onSearch = () => {deleteLocalData() , 
+    navigation.navigate(NavigationRoutes.IntroStack)
+  }
   const onTouchStart = () => setIsTouchStart(false);
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
@@ -38,7 +43,12 @@ const HomeViewController = () => {
     onTouchStart,
     onBlur,
     onChangeSearch,
+    onSearch,
   };
 };
 
 export default HomeViewController;
+function navigate(navigation: any) {
+  throw new Error("Function not implemented.");
+}
+

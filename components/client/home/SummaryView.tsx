@@ -1,5 +1,5 @@
-import { Image, StyleSheet, View  } from "react-native";
-import React from "react";
+import { Image, Modal, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 import Text from "components/common/Text";
 import TextButton from "components/common/TextButton";
 import { fontSize } from "designToken/fontSizes";
@@ -8,11 +8,27 @@ import { dimens } from "designToken/dimens";
 import Input from "components/common/Input";
 import { fontWeight } from "designToken/fontWeights";
 import { fontFamily } from "designToken/fontFamily";
+import { colors } from "designToken/colors";
+import UserPaymentView from "components/client/registration/views/UserPaymentView";
+import CardView from "components/common/CardView";
 
 const SummaryView = () => {
+  const [isVisible,setIsVisible]=useState<boolean>(false)
+  const paymentModal = () => (
+    <Modal
+      backdropColor={colors.white}
+      backdropOpacity={1 }
+      // onBackdropPress={onPaymentAdd}
+      isVisible={isVisible}
+      style={styles.modalContainer}>
+        <View style={styles.paymentContainer}>
+          <UserPaymentView isFromHome={true} />
+        </View>
+    </Modal>
+  );
   return (
     <>
-  
+    
       <View style={styles.textContainer}>
         <Text title={"Order summary"} style={styles.summary} />
         <TextButton
@@ -25,14 +41,14 @@ const SummaryView = () => {
         <View style={styles.rowContainer}>
           <View style={styles.patientAndAddress}>
             <Text title={"The patient "} style={styles.text} />
-            <Text title={"17 y.o, 054-6178180"} style={styles.textSmall}/>
+            <Text title={"17 y.o, 054-6178180"} style={styles.textSmall} />
           </View>
-          <View style={{ flexDirection: "row", gap: 15 }}>
+          <View style={styles.locationContainer}>
             <Image
               source={require("../../../assets/icon/location.png")}
               style={styles.locationIcon}
             />
-            <Text title={"Ahavat Zion, 10, \n Haifa"}style={styles.locationText} />
+            <Text title={"Ahavat Zion, 10,\nHaifa"} style={styles.locationText} />
           </View>
         </View>
       </View>
@@ -47,7 +63,7 @@ const SummaryView = () => {
       <Text title={"Voltaren shot - 100 NIS"} style={styles.voltaireText} />
       <View style={{ flexDirection: "row" }}>
         <Text title={"Total"} style={styles.total} />
-        <Text title={"- 600 NIS"} style={styles.textSmall}/>
+        <Text title={"- 600 NIS"} style={styles.textSmall} />
       </View>
 
       <Text
@@ -61,11 +77,12 @@ const SummaryView = () => {
           fontSize={getHeight(fontSize.textL)}
           isActive
           style={styles.textPaid}
+          onPress={()=>setIsVisible(true)}
         />
       </View>
 
       <Text title={"Estimated arrival"} style={styles.text} />
-      <Text title={"60 min"} style={ styles.textSmall} />
+      <Text title={"60 min"} style={styles.textSmall} />
 
       <View style={styles.instructionContainer}>
         <Text title={"Instructions for arrival"} style={styles.instruction} />
@@ -73,9 +90,11 @@ const SummaryView = () => {
           placeholder={"Describe where is the entrance etc."}
           inputValue={""}
           inputStyle={styles.description}
-          placeholderStyle={ styles.textSmall}
+          placeholderStyle={styles.textSmall}
         />
+         
       </View>
+      {isVisible&&paymentModal()}
     </>
   );
 };
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: getWidth(dimens.marginS + 2),
+    marginTop: getWidth(dimens.marginS + dimens.borderBold),
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),
@@ -111,20 +130,24 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: getWidth(fontSize.textL),
+    marginBottom: getHeight(dimens.borderBold)
   },
-  symptomsText:{
+  symptomsText: {
     fontSize: getWidth(fontSize.textL),
-    marginTop: getWidth(dimens.marginS+5),
-    marginBottom:5
+    marginTop: getWidth(dimens.marginS + 5),
+    marginBottom: 5
 
   },
   symptomsContainer: {
     flex: 0.17,
   },
-
+  locationContainer:{
+   flexDirection: "row",
+    gap: getWidth(dimens.marginS+5)
+   },
   voltaireText: {
     marginVertical: getWidth(dimens.paddingXs),
-    fontSize:fontSize.textM
+    fontSize: fontSize.textM
   },
   payForIt: {
     marginVertical: getWidth(dimens.paddingXs),
@@ -134,24 +157,22 @@ const styles = StyleSheet.create({
     flex: 0.15,
     flexDirection: "row",
     gap: getWidth(dimens.marginM),
-    // backgroundColor:"green"
-
   },
   textPaid: {
-     marginTop: getWidth(dimens.sideMargin +6),
-    fontSize: fontSize.textL,
+    marginTop: getWidth(dimens.sideMargin + dimens.paddingXs),
+    fontSize: getWidth(fontSize.textL),
   },
   instructionContainer: {
     flex: 0.42,
     gap: getWidth(dimens.marginS),
-    // backgroundColor:"red"
   },
   instruction: {
-    fontSize: fontSize.textL,
-    marginTop: getWidth(dimens.marginM+dimens.paddingXs),
+    fontSize: getWidth(fontSize.textL),
+    marginTop: getWidth(dimens.marginM + dimens.paddingXs),
   },
   description: {
-    height: getHeight(dimens.imageS + dimens.marginS),
+    height: getHeight(dimens.imageS + dimens.marginM),
+    backgroundColor: colors.white
   },
 
   container: {
@@ -168,17 +189,26 @@ const styles = StyleSheet.create({
   },
   total: {
     fontFamily: fontFamily.bold,
-    fontSize:fontSize.textM
+    fontSize: getWidth(fontSize.textM)
   },
-  textSmall:{
-    fontSize:fontSize.textM,
-  fontFamily:fontFamily.light
+  textSmall: {
+    fontSize: getWidth(fontSize.textM),
+    fontFamily: fontFamily.light,
+    backgroundColor: colors.white
   },
-  locationText:{
-    fontSize:fontSize.textM,
+  locationText: {
+    fontSize: getWidth(fontSize.textM),
   },
   voltarenText: {
     marginVertical: getWidth(dimens.paddingXs),
-    fontSize:fontSize.textM
+    fontSize: getWidth(fontSize.textM)
+  },
+  paymentContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    zIndex: 1
+  },
+  modalContainer: {
+    justifyContent: "flex-start",
   },
 });

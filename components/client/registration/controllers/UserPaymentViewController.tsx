@@ -1,5 +1,5 @@
 import { AuthServicesClient } from "libs/authsevices/AuthServicesClient";
-import { setLocalData } from "libs/datastorage/useLocalStorage";
+import { getLocalData, setLocalData } from "libs/datastorage/useLocalStorage";
 import React, { useState } from "react";
 import { Alert } from "react-native";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
@@ -100,11 +100,12 @@ const UserPaymentViewController = () => {
       credit_card_number: cardNumberRef?.current?.value ?? "",
       expire_date: expireDateRef?.current?.value ?? "",
       cvv: cvvRef?.current?.value ?? "",
-      client_id: userId,
+      // client_id: userId,
+      client_id:getLocalData?.('USER')?.userId
     });
 
     //TODO: Vandana to save in Local data with isPaymentAdded as true
-    //setLocalData('USER', {"isPaymentAdded":true})
+    setLocalData('USER', {"isPaymentAdded":true})
 
     console.log("response is ", res);
     setIsLoader(false);

@@ -10,7 +10,6 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useState } from "react";
 import {
   Image,
-  KeyboardAvoidingView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -34,18 +33,18 @@ const OrderFormView = () => {
   }
 
   const onSelectReasons = (item: any) => {
-    const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
+    const updatedActiveButton = [...activeButton]; 
     const itemIndex = updatedActiveButton.indexOf(item.id);
 
     if (itemIndex !== -1) {
-      // The button is already selected, so remove it
+     
       updatedActiveButton.splice(itemIndex, 1);
     } else {
-      // The button is not selected, so add it
+      
       updatedActiveButton.push(item.id);
     }
     setSelectedResourceType(item);
-    setActiveButton(updatedActiveButton); // Update the state with the new array
+    setActiveButton(updatedActiveButton); 
   };
   const reasons = [
     { title: 'Back pain', id: 1 },
@@ -94,9 +93,7 @@ const OrderFormView = () => {
           onPress={() => setIsModalVisible(true)}
         />
         <Text
-          title={
-            "*We don't do emergency calls. In case of emergency please call 077-773-45-69"
-          }
+          title={"*We don't do emergency calls. In case of emergency please call 077-773-45-69"}
           style={styles.textSmall}
         />
       </View>
@@ -139,7 +136,6 @@ const OrderFormView = () => {
 
   return (
     <>
-
       <Text style={styles.text} title={"For whom is the doctor?"} />
       <View style={styles.button}>
         <Button
@@ -285,7 +281,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
     gap: getWidth(dimens.marginS + dimens.borderBold),
-     
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -343,7 +338,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    padding: getWidth(4),
+    padding: getWidth(dimens.borderBold+dimens.borderBold),
   },
   description: {
     height: getHeight(117),
@@ -351,15 +346,15 @@ const styles = StyleSheet.create({
 streetAddress:{
    flex: 0.80,
     paddingLeft: getWidth(dimens.sideMargin),
-    fontSize:fontSize.textM
+    fontSize:getWidth(fontSize.textM)
    },
    list:{
-    fontSize:fontSize.textM
+    fontSize:getWidth(fontSize.textM)
    },
    street:{ 
     flex: 0.84,
      paddingLeft: getWidth(dimens.sideMargin ) ,
-     fontSize:fontSize.textM
+     fontSize:getWidth(fontSize.textM)
 
     }
 });
