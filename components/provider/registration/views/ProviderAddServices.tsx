@@ -1,21 +1,28 @@
-import Button from 'components/common/Button'
-import Input from 'components/common/Input'
-import Loader from 'components/common/Loader'
-import Text from 'components/common/Text'
-import TextButton from 'components/common/TextButton'
-import { colors } from 'designToken/colors'
-import { dimens } from 'designToken/dimens'
-import { fontFamily } from 'designToken/fontFamily'
-import { fontSize } from 'designToken/fontSizes'
-import { getHeight, getWidth } from 'libs/StyleHelper'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import Modal from 'react-native-modal/dist/modal'
-import ProviderAddServicesController from '../controllers/ProviderAddServicesController'
+import Button from 'components/common/Button';
+import Input from 'components/common/Input';
+import Loader from 'components/common/Loader';
+import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { fontFamily } from 'designToken/fontFamily';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Modal from 'react-native-modal/dist/modal';
+import ProviderAddServicesController from '../controllers/ProviderAddServicesController';
 
 const ProviderAddServices = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const {
     userDataProvider,
     serviceNameRef,
@@ -37,27 +44,55 @@ const ProviderAddServices = () => {
     serviceError,
     priceError,
     descriptionError,
-    onApprove
-  } = ProviderAddServicesController()
+    onApprove,
+  } = ProviderAddServicesController();
 
   const getAllServices = () => {
     return services.map((item, index) => (
       <View key={index} style={[styles.serviceContainer, styles.elevation]}>
-        <Text style={[{ marginBottom: getHeight(14), fontFamily: fontFamily.medium }]}>{`${item.name.en} $ ${item.price}`}</Text>
+        <Text
+          style={[
+            { marginBottom: getHeight(14), fontFamily: fontFamily.medium },
+          ]}
+        >{`${item.name.en} $ ${item.price}`}</Text>
         <Text style={styles.textView}>{item.description.en}</Text>
       </View>
-    ))
-  }
+    ));
+  };
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
-      {userDataProvider.providerServices ? <Button title={t('Approve')} isPrimary onPress={onApprove} isSmall width={'40%'} style={styles.approve} /> : <TextButton title={t('skip')} style={styles.skip} containerStyle={{ width: '100%' }} onPress={onApprove} />}
+      {userDataProvider.providerServices ? (
+        <Button
+          title={t('Approve')}
+          isPrimary
+          onPress={onApprove}
+          isSmall
+          width={'40%'}
+          style={styles.approve}
+        />
+      ) : (
+        <TextButton
+          title={t('skip')}
+          style={styles.skip}
+          containerStyle={{ width: '100%' }}
+          onPress={onApprove}
+        />
+      )}
     </View>
-  )
+  );
 
   const addServiceView = () => (
-    <Modal isVisible={isModalVisible} backdropOpacity={0.8} backdropColor={colors.white}>
-      <KeyboardAvoidingView keyboardVerticalOffset={-50} behavior={'padding'} style={styles.inputContainer}>
+    <Modal
+      isVisible={isModalVisible}
+      backdropOpacity={0.8}
+      backdropColor={colors.white}
+    >
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={-50}
+        behavior={'padding'}
+        style={styles.inputContainer}
+      >
         <View style={styles.modalContent}>
           <Text style={styles.addService}>{t('add_service')}</Text>
           <Input
@@ -104,17 +139,22 @@ const ProviderAddServices = () => {
             width={getWidth(85)}
             style={{
               alignSelf: 'center',
-              marginVertical: getHeight(dimens.sideMargin + dimens.marginS)
+              marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
             }}
             onPress={saveService}
             fontSized={getWidth(15)}
             height={getHeight(34)}
           />
-          <TextButton style={styles.skip} fontSize={getWidth(fontSize.heading)} title={t('cancel')} onPress={toggleModal} />
+          <TextButton
+            style={styles.skip}
+            fontSize={getWidth(fontSize.heading)}
+            title={t('cancel')}
+            onPress={toggleModal}
+          />
         </View>
       </KeyboardAvoidingView>
     </Modal>
-  )
+  );
 
   return (
     <>
@@ -130,7 +170,10 @@ const ProviderAddServices = () => {
           )}
           <View style={styles.container}>
             <TouchableOpacity onPress={toggleModal}>
-              <Image source={require('../../../../assets/icon/add.png')} style={styles.addicon} />
+              <Image
+                source={require('../../../../assets/icon/add.png')}
+                style={styles.addicon}
+              />
             </TouchableOpacity>
             <Text style={styles.textAdd}>{t('add_another_service')}</Text>
           </View>
@@ -139,8 +182,8 @@ const ProviderAddServices = () => {
       {getFooterView()}
       {addServiceView()}
     </>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   textContainer: {
@@ -148,78 +191,78 @@ const styles = StyleSheet.create({
     padding: getHeight(dimens.marginM + dimens.borderBold),
     marginHorizontal: getHeight(dimens.paddingL),
     marginTop: getHeight(dimens.sideMargin),
-    marginBottom: getHeight(dimens.marginL)
+    marginBottom: getHeight(dimens.marginL),
   },
   text: {
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textXl)
+    fontSize: getWidth(fontSize.textXl),
   },
   addService: {
     textAlign: 'center',
     fontSize: getWidth(fontSize.textXl),
-    marginBottom: getHeight(dimens.marginM)
+    marginBottom: getHeight(dimens.marginM),
   },
   textView: {
-    fontSize: getWidth(fontSize.textL)
+    fontSize: getWidth(fontSize.textL),
   },
   container: {
     flex: 0.27,
     flexDirection: 'row',
     alignItems: 'center',
     gap: getHeight(dimens.marginM),
-    marginHorizontal: getHeight(dimens.paddingL)
+    marginHorizontal: getHeight(dimens.paddingL),
   },
   addicon: {
     height: getHeight(dimens.imageS),
-    width: getWidth(dimens.imageS)
+    width: getWidth(dimens.imageS),
   },
   textAdd: {
-    fontSize: getWidth(fontSize.textXl)
+    fontSize: getWidth(fontSize.textXl),
   },
   modalContent: {
     backgroundColor: colors.modal,
     borderRadius: getWidth(dimens.marginS),
     marginBottom: getHeight(dimens.imageS + dimens.imageXs),
     paddingTop: getHeight(dimens.sideMargin),
-    paddingBottom: getHeight(dimens.paddingL)
+    paddingBottom: getHeight(dimens.paddingL),
   },
   input: {
-    marginTop: getHeight(dimens.sideMargin + dimens.marginS)
+    marginTop: getHeight(dimens.sideMargin + dimens.marginS),
   },
   description: {
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
     height: getHeight(dimens.imageM + dimens.paddingL + dimens.marginS),
     alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   serviceContainer: {
     backgroundColor: colors.white,
     margin: getHeight(dimens.marginM),
     padding: getHeight(dimens.sideMargin),
     borderRadius: 5,
-    marginTop: getHeight(dimens.marginS)
+    marginTop: getHeight(dimens.marginS),
   },
   elevation: {
     elevation: getHeight(dimens.paddingS),
-    shadowColor: colors.black
+    shadowColor: colors.black,
   },
   inputContainer: {
-    flex: 0.79
+    flex: 0.79,
   },
   footerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     flex: 0.1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   approve: {
     alignSelf: 'center',
-    width: '100%'
+    width: '100%',
   },
   skip: {
-    alignSelf: 'center'
-  }
-})
+    alignSelf: 'center',
+  },
+});
 
-export default ProviderAddServices
+export default ProviderAddServices;

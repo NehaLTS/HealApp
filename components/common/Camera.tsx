@@ -1,11 +1,11 @@
 // PopupComponent.js
-import React, { useState } from "react";
-import { View, Text, Button, Image } from "react-native";
-import Modal from "react-native-modal";
+import React, { useState } from 'react';
+import { View, Text, Button, Image } from 'react-native';
+import Modal from 'react-native-modal';
 import ImagePicker, {
   launchImageLibrary,
   launchCamera,
-} from "react-native-image-picker";
+} from 'react-native-image-picker';
 
 const Camera = () => {
   const [selectedImage, setSelectedImage] = useState();
@@ -21,18 +21,18 @@ const Camera = () => {
   };
   const openGallery = () => {
     const options = {
-      mediaType: "photo",
+      mediaType: 'photo',
     };
 
     launchImageLibrary(options, (response) => {
       if (response.didCancel) {
-        console.log("User canceled image picker");
+        console.log('User canceled image picker');
       } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
+        console.log('ImagePicker Error: ', response.error);
       } else {
-        const uri = response?.assets?.[0]?.uri
-        console.log('source',uri)
-        console.log('response',response)
+        const uri = response?.assets?.[0]?.uri;
+        console.log('source', uri);
+        console.log('response', response);
         setSelectedImage(uri);
       }
     });
@@ -40,14 +40,14 @@ const Camera = () => {
 
   const openCamera = () => {
     const options = {
-      mediaType: "photo",
+      mediaType: 'photo',
     };
 
     launchCamera(options, (response) => {
       if (response.didCancel) {
-        console.log("User canceled taking a photo");
+        console.log('User canceled taking a photo');
       } else if (response.error) {
-        console.log("Camera Error: ", response.error);
+        console.log('Camera Error: ', response.error);
       } else {
         const source = { uri: response.uri };
         setSelectedImage(source);

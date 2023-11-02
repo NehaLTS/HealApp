@@ -1,19 +1,19 @@
-import Button from 'components/common/Button'
-import Dropdown from 'components/common/Dropdown'
-import Text from 'components/common/Text'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { colors } from '../../../../designToken/colors'
-import { dimens } from '../../../../designToken/dimens'
-import { fontSize } from '../../../../designToken/fontSizes'
-import { getHeight, getWidth } from '../../../../libs/StyleHelper'
-import Input from '../../../common/Input'
-import SelectImage from '../../../common/SelectImage'
-import ProviderDetailController from '../controllers/ProviderDetailController'
+import Button from 'components/common/Button';
+import Dropdown from 'components/common/Dropdown';
+import Text from 'components/common/Text';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { colors } from '../../../../designToken/colors';
+import { dimens } from '../../../../designToken/dimens';
+import { fontSize } from '../../../../designToken/fontSizes';
+import { getHeight, getWidth } from '../../../../libs/StyleHelper';
+import Input from '../../../common/Input';
+import SelectImage from '../../../common/SelectImage';
+import ProviderDetailController from '../controllers/ProviderDetailController';
 
 const ProviderDetail = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const {
     firstNameError,
     isShowModal,
@@ -37,8 +37,8 @@ const ProviderDetail = () => {
     onPressNext,
     renderToast,
     selectedSpecialty,
-    idPicture
-  } = ProviderDetailController()
+    idPicture,
+  } = ProviderDetailController();
 
   const data = [
     {
@@ -46,7 +46,7 @@ const ProviderDetail = () => {
       name: {
         en: 'Doctor',
         hi: 'चिकित्सक',
-        he: ''
+        he: '',
       },
       specialties: [
         {
@@ -54,41 +54,41 @@ const ProviderDetail = () => {
           name: {
             en: 'Stomach And Digestion',
             hi: 'पेट और पाचन',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 2,
           name: {
             en: 'Gernaral and Physician',
             hi: 'गर्नराल और चिकित्सक',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 3,
           name: {
             en: 'Dermatology',
             hi: 'त्वचा विज्ञान',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 5,
           name: {
             ' en': 'orthopedist',
             hi: '',
-            he: ''
-          }
-        }
-      ]
+            he: '',
+          },
+        },
+      ],
     },
     {
       id: 2,
       name: {
         en: 'Nurse',
         hi: 'देखभाल करना',
-        he: ''
+        he: '',
       },
       specialties: [
         {
@@ -96,58 +96,58 @@ const ProviderDetail = () => {
           name: {
             en: 'Pediatric Nursing',
             hi: '',
-            he: ' '
-          }
+            he: ' ',
+          },
         },
         {
           id: 8,
           name: {
             en: 'Labor and Delivery Nursing',
             hi: '',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 9,
           name: {
             en: 'Cardiac Nursing',
             hi: '',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 10,
           name: {
             en: 'Oncology Nursing',
             hi: '',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 11,
           name: {
             en: 'Nurse Practitioner',
             hi: '',
-            he: ''
-          }
-        }
-      ]
+            he: '',
+          },
+        },
+      ],
     },
     {
       id: 3,
       name: {
         en: 'Healer',
         hi: 'आरोग्य करनेवाला',
-        he: ''
+        he: '',
       },
-      specialties: []
+      specialties: [],
     },
     {
       id: 4,
       name: {
         en: 'Physio',
         hi: 'फिजियो',
-        he: ''
+        he: '',
       },
       specialties: [
         {
@@ -155,61 +155,81 @@ const ProviderDetail = () => {
           name: {
             en: 'Neuromusculoskeletal',
             hi: '',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 6,
           name: {
             en: 'Dermatology',
             hi: '',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 12,
           name: {
             en: "Women's Health Physiotherapy",
             hi: '',
-            he: ''
-          }
+            he: '',
+          },
         },
         {
           id: 13,
           name: {
             en: 'Pain Management',
             hi: '',
-            he: ''
-          }
-        }
-      ]
-    }
-  ]
+            he: '',
+          },
+        },
+      ],
+    },
+  ];
 
   const renderProvider = (item: { name: any }) => {
-    return <Text style={styles.textItem}>{item?.name}</Text>
-  }
+    return <Text style={styles.textItem}>{item?.name}</Text>;
+  };
 
   const renderSpecialties = (item: { name: { en: any } }) => {
-    return <Text style={styles.textItem}>{item?.name?.en}</Text>
-  }
+    return <Text style={styles.textItem}>{item?.name?.en}</Text>;
+  };
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
       <Text style={styles.text}>{t('upload_id_photo')}</Text>
-      <TouchableOpacity activeOpacity={idPicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
-        <Image source={idPicture ? { uri: idPicture } : require('../../../../assets/icon/uploadProfile.png')} style={styles.selectedImage} />
+      <TouchableOpacity
+        activeOpacity={idPicture ? 1 : 0.5}
+        onPress={() => setIsShowModal(true)}
+      >
+        <Image
+          source={
+            idPicture
+              ? { uri: idPicture }
+              : require('../../../../assets/icon/uploadProfile.png')
+          }
+          style={styles.selectedImage}
+        />
       </TouchableOpacity>
-      <SelectImage isShowModal={isShowModal} closeModal={setIsShowModal} imageUri={getImageUrl} />
+      <SelectImage
+        isShowModal={isShowModal}
+        closeModal={setIsShowModal}
+        imageUri={getImageUrl}
+      />
     </View>
-  )
+  );
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
       <Button disabled title={t('back')} isSmall width={'30%'} />
-      <Button title={t('next')} isPrimary isSmall width={'30%'} onPress={onPressNext} />
+      <Button
+        title={t('next')}
+        isPrimary
+        isSmall
+        width={'30%'}
+        onPress={onPressNext}
+      />
     </View>
-  )
+  );
 
   return (
     <>
@@ -239,7 +259,13 @@ const ProviderDetail = () => {
           onClearInputText={() => lastNameRef.current.clear()}
         />
         <Dropdown
-          data={[{ name: 'Doctor' }, { name: 'Nurse' }, { name: 'Healer' }, { name: 'Physio' }, { name: 'Other' }]}
+          data={[
+            { name: 'Doctor' },
+            { name: 'Nurse' },
+            { name: 'Healer' },
+            { name: 'Physio' },
+            { name: 'Other' },
+          ]}
           labelField={'name'}
           valueField="name"
           placeholder={t('type_of_provider')}
@@ -250,7 +276,10 @@ const ProviderDetail = () => {
           onBlur={onBlurProviderTypes}
         />
         <Dropdown
-          data={data?.find((item) => item?.name?.en === selectedProvider?.name)?.specialties || []}
+          data={
+            data?.find((item) => item?.name?.en === selectedProvider?.name)
+              ?.specialties || []
+          }
           labelField="name.en"
           valueField="name.en"
           placeholder={t('specialty')}
@@ -265,50 +294,50 @@ const ProviderDetail = () => {
       {getFooterView()}
       {renderToast()}
     </>
-  )
-}
+  );
+};
 
-export default ProviderDetail
+export default ProviderDetail;
 
 const styles = StyleSheet.create({
   text: {
     fontSize: getWidth(fontSize.textL),
     color: colors.black,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   inputLastName: {
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs)
+    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
   iconContainer: {
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
-    marginTop: getHeight(dimens.sideMargin)
+    marginTop: getHeight(dimens.sideMargin),
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
     width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
-    borderRadius: getHeight(dimens.paddingS)
+    borderRadius: getHeight(dimens.paddingS),
   },
   icon: {
-    marginRight: 5
+    marginRight: 5,
   },
   textItem: {
     flex: 1,
     fontSize: getWidth(fontSize.textL),
     color: colors.black,
     padding: getHeight(dimens.marginS),
-    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold)
+    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
   },
   inputContainer: {
-    flex: 0.79
+    flex: 0.79,
   },
   footerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     flex: 0.1,
-    justifyContent: 'space-between'
-  }
-})
+    justifyContent: 'space-between',
+  },
+});

@@ -1,20 +1,32 @@
-import Button from 'common/Button'
-import Input from 'common/Input'
-import Text from 'components/common/Text'
-import TextButton from 'components/common/TextButton'
-import { dimens } from 'designToken/dimens'
-import { fontSize } from 'designToken/fontSizes'
-import { t } from 'i18next'
-import { getHeight, getWidth } from 'libs/StyleHelper'
-import React, { useState } from 'react'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import RegistrationViewController from '../controllers/RegistrationViewController'
-import { GetSignInFooter } from 'components/client/login/LoginView'
-import Loader from 'components/common/Loader'
+import Button from 'common/Button';
+import Input from 'common/Input';
+import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { t } from 'i18next';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React, { useState } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import RegistrationViewController from '../controllers/RegistrationViewController';
+import { GetSignInFooter } from 'components/client/login/LoginView';
+import Loader from 'components/common/Loader';
 
 const RegistrationView = () => {
-  const { handleSignUp, isLoading, renderToast, onBlurEmail, onBlurPassword, onChangeEmail, onChangePassword, emailError, emailRef, passwordRef, passwordError } = RegistrationViewController()
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false)
+  const {
+    handleSignUp,
+    isLoading,
+    renderToast,
+    onBlurEmail,
+    onBlurPassword,
+    onChangeEmail,
+    onChangePassword,
+    emailError,
+    emailRef,
+    passwordRef,
+    passwordError,
+  } = RegistrationViewController();
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
 
   return (
     <>
@@ -48,7 +60,12 @@ const RegistrationView = () => {
           returnKeyType={'done'}
           onClearInputText={() => passwordRef.current.clear()}
         />
-        <TextButton fontSize={getWidth(fontSize.textS)} isActive title={t('forgot_password')} containerStyle={styles.forgotPassword} />
+        <TextButton
+          fontSize={getWidth(fontSize.textS)}
+          isActive
+          title={t('forgot_password')}
+          containerStyle={styles.forgotPassword}
+        />
         <Button
           title={t('sign_up')}
           isPrimary
@@ -60,44 +77,44 @@ const RegistrationView = () => {
       </View>
       <GetSignInFooter />
     </>
-  )
-}
+  );
+};
 
-export default RegistrationView
+export default RegistrationView;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.7
+    flex: 0.7,
   },
   images: {
     width: getWidth(dimens.imageXs),
     height: getHeight(dimens.imageS),
-    resizeMode: 'center'
+    resizeMode: 'center',
   },
   forgotPassword: {
     paddingVertical: getHeight(dimens.paddingS),
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flex: 0.18
+    flex: 0.18,
   },
   signUpButton: {
     alignSelf: 'center',
-    marginTop: getHeight(dimens.marginM)
+    marginTop: getHeight(dimens.marginM),
   },
   password: {
-    marginTop: dimens.paddingL + dimens.borderBold
+    marginTop: dimens.paddingL + dimens.borderBold,
   },
   loading: {
     left: '44%',
     top: '13%',
     position: 'absolute',
-    zIndex: 1
+    zIndex: 1,
   },
   email: {
-    marginTop: dimens.paddingL
-  }
-})
+    marginTop: dimens.paddingL,
+  },
+});

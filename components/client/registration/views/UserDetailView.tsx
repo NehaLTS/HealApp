@@ -1,18 +1,34 @@
-import Input from 'common/Input'
-import Button from 'components/common/Button'
-import Text from 'components/common/Text'
-import { dimens } from 'designToken/dimens'
-import { fontSize } from 'designToken/fontSizes'
-import { getHeight } from 'libs/StyleHelper'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { StyleSheet, View } from 'react-native'
-import UserDetailViewController from '../controllers/UserDetailViewController'
+import Input from 'common/Input';
+import Button from 'components/common/Button';
+import Text from 'components/common/Text';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight } from 'libs/StyleHelper';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import UserDetailViewController from '../controllers/UserDetailViewController';
 
 const UserDetailView = () => {
-  const { t } = useTranslation()
-  const { firstNameRef, lastNameRef, phoneNumberRef, lastNameError, phoneNumberError, onBlurFirstName, onChangeFirstName, onBlurLastName, onChangeLastName, onBlurPhoneNumber, firstNameError, onChangePhoneNumber, onPressNext, onPressBack, userProfile } = UserDetailViewController()
-  console.log('userProfile', userProfile)
+  const { t } = useTranslation();
+  const {
+    firstNameRef,
+    lastNameRef,
+    phoneNumberRef,
+    lastNameError,
+    phoneNumberError,
+    onBlurFirstName,
+    onChangeFirstName,
+    onBlurLastName,
+    onChangeLastName,
+    onBlurPhoneNumber,
+    firstNameError,
+    onChangePhoneNumber,
+    onPressNext,
+    onPressBack,
+    userProfile,
+  } = UserDetailViewController();
+  console.log('userProfile', userProfile);
   return (
     <>
       <View style={styles.inputContainer}>
@@ -61,37 +77,43 @@ const UserDetailView = () => {
       </View>
       <View style={styles.footerContainer}>
         <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
-        <Button title={t('next')} isPrimary onPress={onPressNext} isSmall width={'30%'} />
+        <Button
+          title={t('next')}
+          isPrimary
+          onPress={onPressNext}
+          isSmall
+          width={'30%'}
+        />
       </View>
     </>
-  )
-}
+  );
+};
 
-export default UserDetailView
+export default UserDetailView;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 0.75
+    flex: 0.75,
   },
   text: {
     fontSize: getHeight(fontSize.textM),
     paddingTop: getHeight(dimens.paddingXs),
-    textAlign: 'left'
+    textAlign: 'left',
   },
   input: {
-    marginTop: getHeight(dimens.paddingS)
+    marginTop: getHeight(dimens.paddingS),
   },
   inputPhone: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS)
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
   },
   inputLastName: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingS)
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
   },
   footerContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     width: '100%',
     flex: 0.12,
-    justifyContent: 'space-between'
-  }
-})
+    justifyContent: 'space-between',
+  },
+});

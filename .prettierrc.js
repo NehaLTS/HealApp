@@ -1,7 +1,10 @@
 module.exports = {
-  singleQuote: true,
-  semi: false,
+  printWidth: 80,
   tabWidth: 2,
-  trailingComma: 'none',
-  printWidth: 300
+  useTabs: false,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'all',
+  bracketSpacing: true,
+  jsxBracketSameLine: false
 }

@@ -1,18 +1,18 @@
-import Button from 'components/common/Button'
-import Loader from 'components/common/Loader'
-import Text from 'components/common/Text'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { dimens } from '../../../../designToken/dimens'
-import { fontSize } from '../../../../designToken/fontSizes'
-import { getHeight, getWidth } from '../../../../libs/StyleHelper'
-import Input from '../../../common/Input'
-import SelectImage from '../../../common/SelectImage'
-import ProviderPaymentController from '../controllers/ProviderPaymentController'
+import Button from 'components/common/Button';
+import Loader from 'components/common/Loader';
+import Text from 'components/common/Text';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { dimens } from '../../../../designToken/dimens';
+import { fontSize } from '../../../../designToken/fontSizes';
+import { getHeight, getWidth } from '../../../../libs/StyleHelper';
+import Input from '../../../common/Input';
+import SelectImage from '../../../common/SelectImage';
+import ProviderPaymentController from '../controllers/ProviderPaymentController';
 
 const ProviderPayment = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const {
     providerProfile,
     registrationError,
@@ -38,25 +38,45 @@ const ProviderPayment = () => {
     onPressNext,
     isLoading,
     profilePicture,
-    renderToast
-  } = ProviderPaymentController()
+    renderToast,
+  } = ProviderPaymentController();
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
       <Text style={styles.text}>{t('add_profile')}</Text>
-      <TouchableOpacity activeOpacity={profilePicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
-        <Image source={profilePicture ? { uri: profilePicture } : require('../../../../assets/icon/editprofile.png')} style={styles.selectedImage} />
+      <TouchableOpacity
+        activeOpacity={profilePicture ? 1 : 0.5}
+        onPress={() => setIsShowModal(true)}
+      >
+        <Image
+          source={
+            profilePicture
+              ? { uri: profilePicture }
+              : require('../../../../assets/icon/editprofile.png')
+          }
+          style={styles.selectedImage}
+        />
       </TouchableOpacity>
-      <SelectImage isShowModal={isShowModal} closeModal={setIsShowModal} imageUri={getImageUrl} />
+      <SelectImage
+        isShowModal={isShowModal}
+        closeModal={setIsShowModal}
+        imageUri={getImageUrl}
+      />
     </View>
-  )
+  );
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
       <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} />
-      <Button title={t('next')} isPrimary isSmall width={'30%'} onPress={onPressNext} />
+      <Button
+        title={t('next')}
+        isPrimary
+        isSmall
+        width={'30%'}
+        onPress={onPressNext}
+      />
     </View>
-  )
+  );
 
   return (
     <>
@@ -124,49 +144,49 @@ const ProviderPayment = () => {
       {getFooterView()}
       {renderToast()}
     </>
-  )
-}
-export default ProviderPayment
+  );
+};
+export default ProviderPayment;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs)
+    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
   inputBank: {
-    minWidth: '48%'
+    minWidth: '48%',
   },
   inputBranch: {
-    minWidth: '48%'
+    minWidth: '48%',
   },
   input: {
-    marginTop: getHeight(dimens.sideMargin + dimens.marginS)
+    marginTop: getHeight(dimens.sideMargin + dimens.marginS),
   },
   iconContainer: {
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
-    marginTop: getHeight(dimens.sideMargin)
+    marginTop: getHeight(dimens.sideMargin),
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
     width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
     resizeMode: 'cover',
-    borderRadius: getHeight(dimens.paddingS)
+    borderRadius: getHeight(dimens.paddingS),
   },
   text: {
     fontSize: getWidth(fontSize.textL),
     paddingTop: getHeight(dimens.paddingXs),
-    textAlign: 'center'
+    textAlign: 'center',
   },
   inputContainer: {
-    flex: 0.79
+    flex: 0.79,
   },
   footerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     flex: 0.1,
-    justifyContent: 'space-between'
-  }
-})
+    justifyContent: 'space-between',
+  },
+});
