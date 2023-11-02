@@ -1,16 +1,16 @@
-import { useNavigation } from "@react-navigation/native";
-import Stepper from "common/Stepper";
-import Header from "components/common/Header";
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { getWidth } from "libs/StyleHelper";
-import React, { useLayoutEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
-import UserAddressView from "../../components/client/registration/views/UserAddressView";
-import UserDetailView from "../../components/client/registration/views/UserDetailView";
-import UserPaymentView from "../../components/client/registration/views/UserPaymentView";
-import { UseClientUserContext } from "contexts/UseClientUserContext";
+import { useNavigation } from '@react-navigation/native';
+import Stepper from 'common/Stepper';
+import Header from 'components/common/Header';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { getWidth } from 'libs/StyleHelper';
+import React, { useLayoutEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import UserAddressView from '../../components/client/registration/views/UserAddressView';
+import UserDetailView from '../../components/client/registration/views/UserDetailView';
+import UserPaymentView from '../../components/client/registration/views/UserPaymentView';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
 //TODO: static strings are changed after setup i18
 const OnboardDetails = () => {
@@ -19,7 +19,7 @@ const OnboardDetails = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <Header title={t("registration")} />,
+      header: () => <Header title={t('registration')} />,
     });
   }, [navigation]);
 
@@ -28,11 +28,11 @@ const OnboardDetails = () => {
     <View style={styles.container}>
       <Stepper
         currentStep={currentStep}
-        totalStep={["details", "address", "payment"]}
+        totalStep={['details', 'address', 'payment']}
       />
-      {currentStep === "details" && <UserDetailView />}
-      {currentStep === "address" && <UserAddressView />}
-      {currentStep === "payment" && <UserPaymentView />}
+      {currentStep === 'details' && <UserDetailView />}
+      {currentStep === 'address' && <UserAddressView />}
+      {currentStep === 'payment' && <UserPaymentView />}
     </View>
   );
 };

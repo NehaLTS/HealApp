@@ -1,14 +1,20 @@
-import Button from "common/Button";
-import Input from "common/Input";
-import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import LoginViewController from "./LoginViewController";
+import Button from 'common/Button';
+import Input from 'common/Input';
+import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import LoginViewController from './LoginViewController';
 
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
   const { t } = useTranslation();
@@ -25,31 +31,33 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     passwordRef,
     onChangePassword,
     onBlurPassword,
-    renderToast
+    renderToast,
   } = LoginViewController();
 
   return (
     <>
       {renderToast()}
       <View style={styles.inputContainer}>
-        {isLoading && (<ActivityIndicator style={styles.loading} size={"large"} />)}
+        {isLoading && (
+          <ActivityIndicator style={styles.loading} size={'large'} />
+        )}
         <Input
           ref={emailRef}
-          placeholder={t("email")}
+          placeholder={t('email')}
           defaultValue={emailRef.current.value}
           errorMessage={emailError}
           onChangeText={onChangeEmail}
           type="emailAddress"
           inputValue={emailRef.current.value}
           onBlur={onBlurEmail}
-          returnKeyType={"next"}
+          returnKeyType={'next'}
           onSubmitEditing={() => passwordRef.current.focus()}
           onClearInputText={() => emailRef.current.clear()}
         />
 
         <Input
           ref={passwordRef}
-          placeholder={t("password")}
+          placeholder={t('password')}
           type="password"
           defaultValue={passwordRef.current.value}
           errorMessage={passwordError}
@@ -57,22 +65,22 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           inputStyle={styles.password}
           inputValue={passwordRef.current.value}
           onSubmitEditing={onBlurPassword}
-          returnKeyType={"done"}
+          returnKeyType={'done'}
           onClearInputText={() => passwordRef.current.clear()}
         />
         <TextButton
           fontSize={getWidth(fontSize.textS)}
           isActive
           style={styles.forgotPassword}
-          title={t("forgot_password")}
+          title={t('forgot_password')}
         />
         <Button
-          title={isSigninSelected ? t("sign_in") : t("sign_up")}
+          title={isSigninSelected ? t('sign_in') : t('sign_up')}
           isPrimary
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={(passwordError.length > 0 || emailError.length > 0)}
+          disabled={passwordError.length > 0 || emailError.length > 0}
         />
       </View>
       <GetSignInFooter />
@@ -87,20 +95,20 @@ const styles = StyleSheet.create({
   images: {
     width: getWidth(dimens.imageXs),
     height: getHeight(dimens.imageS),
-    resizeMode: "center",
+    resizeMode: 'center',
   },
   forgotPassword: {
-    textAlign: "center",
-    paddingVertical: getHeight(dimens.paddingS)
+    textAlign: 'center',
+    paddingVertical: getHeight(dimens.paddingS),
   },
   footerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     flex: 0.18,
   },
   signInButton: {
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: getHeight(dimens.marginM),
   },
   password: {
@@ -113,7 +121,7 @@ const styles = StyleSheet.create({
     left: '44%',
     top: '13%',
     position: 'absolute',
-    zIndex: 1
+    zIndex: 1,
   },
 });
 
@@ -121,18 +129,21 @@ const styles = StyleSheet.create({
 export const GetSignInFooter = () => {
   const { t } = useTranslation();
   const images = [
-    { url: require("assets/icon/google.png") },
-    { url: require("assets/icon/facebook.png") },
-    { url: require("assets/icon/apple.png") },
+    { url: require('assets/icon/google.png') },
+    { url: require('assets/icon/facebook.png') },
+    { url: require('assets/icon/apple.png') },
   ];
   const { onSelectSocialAuth, isLoading } = LoginViewController();
   return (
     <>
-      {(isLoading) && (<ActivityIndicator style={styles.loading} size={"large"} />)}
+      {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
       <View style={styles.footerContainer}>
-        <Text title={t("or_sign_in_via")} />
+        <Text title={t('or_sign_in_via')} />
         {images.map((item, index) => (
-          <TouchableOpacity key={index} onPress={() => onSelectSocialAuth(index)}>
+          <TouchableOpacity
+            key={index}
+            onPress={() => onSelectSocialAuth(index)}
+          >
             <Image source={item.url} style={styles.images} />
           </TouchableOpacity>
         ))}
