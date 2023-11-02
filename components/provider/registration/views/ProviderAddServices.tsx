@@ -51,17 +51,17 @@ const ProviderAddServices = () => {
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
-      {userDataProvider.providerServices ? <Button title={t('Approve')} isPrimary onPress={onApprove} isSmall width={'40%'} style={styles.approve} /> : <TextButton title="Skip" style={styles.skip} containerStyle={{ width: '100%' }} onPress={onApprove} />}
+      {userDataProvider.providerServices ? <Button title={t('Approve')} isPrimary onPress={onApprove} isSmall width={'40%'} style={styles.approve} /> : <TextButton title={t('skip')} style={styles.skip} containerStyle={{ width: '100%' }} onPress={onApprove} />}
     </View>
   )
 
   const addServiceView = () => (
     <Modal isVisible={isModalVisible} backdropOpacity={0.8} backdropColor={colors.white}>
-      <KeyboardAvoidingView keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
+      <KeyboardAvoidingView keyboardVerticalOffset={-50} behavior={'padding'} style={styles.inputContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.addService}>{'Add service'}</Text>
+          <Text style={styles.addService}>{t('add_service')}</Text>
           <Input
-            placeholder={'Name of the service*'}
+            placeholder={t('name_of_service')}
             onBlur={onBlurServiceName}
             onChangeText={onChangeServiceName}
             ref={serviceNameRef}
@@ -73,7 +73,7 @@ const ProviderAddServices = () => {
             onClearInputText={() => serviceNameRef.current.clear()}
           />
           <Input
-            placeholder={'Price*'}
+            placeholder={t('price')}
             inputStyle={styles.input}
             onBlur={onBlurPriceName}
             onChangeText={onChangePriceName}
@@ -87,7 +87,7 @@ const ProviderAddServices = () => {
             onClearInputText={() => priceRef.current.clear()}
           />
           <Input
-            placeholder={'Description'}
+            placeholder={t('description')}
             inputStyle={styles.description}
             onBlur={onBlurDescription}
             onChangeText={onChangeDescription}
@@ -97,8 +97,20 @@ const ProviderAddServices = () => {
             errorMessage={descriptionError}
             onClearInputText={() => descriptionRef.current.clear()}
           />
-          <Button title={'Save'} isPrimary isSmall width={getWidth(85)} style={{ alignSelf: 'center', marginVertical: getHeight(dimens.sideMargin + dimens.marginS) }} onPress={saveService} fontSized={getWidth(15)} height={getHeight(dimens.marginL+4)} />
-          <TextButton style={{ alignSelf: 'center' }} fontSize={getWidth(fontSize.textXl + dimens.borderBold)} title={'Cancel'} onPress={toggleModal} />
+          <Button
+            title={t('save')}
+            isPrimary
+            isSmall
+            width={getWidth(85)}
+            style={{
+              alignSelf: 'center',
+              marginVertical: getHeight(dimens.sideMargin + dimens.marginS)
+            }}
+            onPress={saveService}
+            fontSized={getWidth(15)}
+            height={getHeight(34)}
+          />
+          <TextButton style={styles.skip} fontSize={getWidth(fontSize.heading)} title={t('cancel')} onPress={toggleModal} />
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -113,14 +125,14 @@ const ProviderAddServices = () => {
             getAllServices()
           ) : (
             <View style={styles.textContainer}>
-              <Text style={styles.text}>{'Do you provide another \n services which not on \n the list?'}</Text>
+              <Text style={styles.text}>{t('provide_another_service')}</Text>
             </View>
           )}
           <View style={styles.container}>
             <TouchableOpacity onPress={toggleModal}>
               <Image source={require('../../../../assets/icon/add.png')} style={styles.addicon} />
             </TouchableOpacity>
-            <Text style={styles.textAdd}>{'Add another service'}</Text>
+            <Text style={styles.textAdd}>{t('add_another_service')}</Text>
           </View>
         </ScrollView>
       </View>
@@ -148,8 +160,6 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.marginM)
   },
   textView: {
-    color: colors.black,
-    fontFamily: fontFamily.regular,
     fontSize: getWidth(fontSize.textL)
   },
   container: {
@@ -164,8 +174,6 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.imageS)
   },
   textAdd: {
-    color: colors.black,
-    fontFamily: fontFamily.regular,
     fontSize: getWidth(fontSize.textXl)
   },
   modalContent: {

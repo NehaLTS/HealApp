@@ -51,7 +51,7 @@ const UserAddressViewController = () => {
 
   const onPressNext = async () => {
     console.log('userId is ', userId)
-    if (addressRef.current.value && dateOfBirth.toString() && idNumberRef.current.value) {
+    if (onSearchAddress?.length !== 0 && dateOfBirth.toString() && idNumberRef.current.value) {
       setIsLoader(true)
       setUserProfile({
         ...(userProfile as ClientProfile),

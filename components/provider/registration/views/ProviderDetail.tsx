@@ -35,7 +35,9 @@ const ProviderDetail = () => {
     onBlurSpecialty,
     onBlurProviderTypes,
     onPressNext,
-    renderToast
+    renderToast,
+    selectedSpecialty,
+    idPicture
   } = ProviderDetailController()
 
   const data = [
@@ -188,15 +190,15 @@ const ProviderDetail = () => {
     return <Text style={styles.textItem}>{item?.name}</Text>
   }
 
-  const renderSpecialties= (item: | { name: { en: any } }) => {
+  const renderSpecialties = (item: { name: { en: any } }) => {
     return <Text style={styles.textItem}>{item?.name?.en}</Text>
   }
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
-      <Text style={styles.text}>{'Upload ID photo'}</Text>
-      <TouchableOpacity activeOpacity={providerProfile?.idPicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
-        <Image source={providerProfile?.idPicture ? { uri: providerProfile?.idPicture } : require('../../../../assets/icon/uploadProfile.png')} style={styles.selectedImage} />
+      <Text style={styles.text}>{t('upload_id_photo')}</Text>
+      <TouchableOpacity activeOpacity={idPicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
+        <Image source={idPicture ? { uri: idPicture } : require('../../../../assets/icon/uploadProfile.png')} style={styles.selectedImage} />
       </TouchableOpacity>
       <SelectImage isShowModal={isShowModal} closeModal={setIsShowModal} imageUri={getImageUrl} />
     </View>
@@ -208,14 +210,12 @@ const ProviderDetail = () => {
       <Button title={t('next')} isPrimary isSmall width={'30%'} onPress={onPressNext} />
     </View>
   )
-  const a = data?.find((item) => item.name.en === providerProfile?.provider?.name)?.specialties
-console.log('first***********',data?.find((item) => item?.name?.en === providerProfile?.provider?.name)?.specialties)
-console.log('second***********',selectedProvider)
+
   return (
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={'First name*'}
+          placeholder={t('first_name')}
           onBlur={onBlurFirstName}
           onChangeText={onChangeFirstName}
           ref={firstNameRef}
@@ -227,7 +227,7 @@ console.log('second***********',selectedProvider)
           onClearInputText={() => firstNameRef.current.clear()}
         />
         <Input
-          placeholder={'Last name*'}
+          placeholder={t('last_name')}
           type={'nameSuffix'}
           inputStyle={styles.inputLastName}
           onChangeText={onChangeLastName}
@@ -242,19 +242,19 @@ console.log('second***********',selectedProvider)
           data={[{ name: 'Doctor' }, { name: 'Nurse' }, { name: 'Healer' }, { name: 'Physio' }, { name: 'Other' }]}
           labelField={'name'}
           valueField="name"
-          placeholder="Type of provider"
-          value={providerProfile?.provider?.name}
+          placeholder={t('type_of_provider')}
+          value={selectedProvider}
           onChange={onChangeProviderTypes}
           renderItem={renderProvider}
           errorMessage={providerTypeError}
           onBlur={onBlurProviderTypes}
         />
         <Dropdown
-          data={data?.find((item) => item?.name?.en === providerProfile?.provider?.name)?.specialties || []}
+          data={data?.find((item) => item?.name?.en === selectedProvider?.name)?.specialties || []}
           labelField="name.en"
           valueField="name.en"
-          placeholder="Specialty"
-          value={providerProfile?.speciality?.name}
+          placeholder={t('specialty')}
+          value={selectedSpecialty}
           onChange={onChangeSpecialty}
           renderItem={renderSpecialties}
           errorMessage={specialtyError}
@@ -272,7 +272,7 @@ export default ProviderDetail
 
 const styles = StyleSheet.create({
   text: {
-    fontSize:getWidth( fontSize.textL),
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     textAlign: 'center'
   },

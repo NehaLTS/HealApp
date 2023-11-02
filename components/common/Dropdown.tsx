@@ -3,7 +3,7 @@ import { dimens } from 'designToken/dimens'
 import { fontSize } from 'designToken/fontSizes'
 import { getHeight, getWidth } from 'libs/StyleHelper'
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { I18nManager, StyleSheet } from 'react-native'
 import { Dropdown as RNDropdown } from 'react-native-element-dropdown'
 import Text from './Text'
 import { fontFamily } from 'designToken/fontFamily'
@@ -30,10 +30,14 @@ const Dropdown = ({
         valueField={valueField}
         onChange={onChange}
         style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
+        placeholderStyle={styles.placeholder}
         selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
+        itemContainerStyle={[I18nManager.isRTL && { minWidth: '100%', alignItems: 'flex-start' }]}
+        containerStyle={[I18nManager.isRTL && { flexDirection: 'row-reverse', justifyContent: 'flex-end' }]}
+        iconStyle={[styles.iconStyle, I18nManager.isRTL ? { left: 0 } : { right: 0 }]}
         iconColor={colors.black}
+        activeColor={colors.disabled}
+        fontFamily={fontFamily.regular}
         {...props}
       />
       {errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageS),
     borderColor: colors.primary,
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    paddingLeft: getHeight(dimens.paddingS + dimens.borderBold)
+    paddingHorizontal: getHeight(dimens.paddingS + dimens.borderBold)
   },
   box: {
     borderWidth: getHeight(dimens.borderBold),
@@ -61,19 +65,26 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     marginTop: getHeight(dimens.sideMargin + dimens.paddingS)
   },
-  placeholderStyle: {
-    fontSize: getWidth(fontSize.textL),
-    color: colors.black,
-    fontFamily: fontFamily.regular
-  },
   selectedTextStyle: {
     fontSize: getWidth(fontSize.textL),
     color: colors.black,
-    fontFamily: fontFamily.regular
+    fontFamily: fontFamily.regular,
+    minWidth: '100%',
+    textAlign: 'left'
   },
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
     fontSize: getWidth(fontSize.textS)
+  },
+  iconStyle: {
+    height: getHeight(26),
+    width: getWidth(26),
+    marginTop: getHeight(4),
+    position: 'absolute',
+    right: 0
+  },
+  placeholder: {
+    color: colors.black
   }
 })

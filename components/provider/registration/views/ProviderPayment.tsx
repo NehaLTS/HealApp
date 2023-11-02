@@ -1,16 +1,15 @@
 import Button from 'components/common/Button'
+import Loader from 'components/common/Loader'
 import Text from 'components/common/Text'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { colors } from '../../../../designToken/colors'
 import { dimens } from '../../../../designToken/dimens'
 import { fontSize } from '../../../../designToken/fontSizes'
 import { getHeight, getWidth } from '../../../../libs/StyleHelper'
 import Input from '../../../common/Input'
 import SelectImage from '../../../common/SelectImage'
 import ProviderPaymentController from '../controllers/ProviderPaymentController'
-import Loader from 'components/common/Loader'
 
 const ProviderPayment = () => {
   const { t } = useTranslation()
@@ -37,14 +36,16 @@ const ProviderPayment = () => {
     getImageUrl,
     onPressBack,
     onPressNext,
-    isLoading
+    isLoading,
+    profilePicture,
+    renderToast
   } = ProviderPaymentController()
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
-      <Text style={styles.text}>{t('Add a profile photo')}</Text>
-      <TouchableOpacity activeOpacity={providerProfile?.profilePicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
-        <Image source={providerProfile?.profilePicture ? { uri: providerProfile?.profilePicture } : require('../../../../assets/icon/editprofile.png')} style={styles.selectedImage} />
+      <Text style={styles.text}>{t('add_profile')}</Text>
+      <TouchableOpacity activeOpacity={profilePicture ? 1 : 0.5} onPress={() => setIsShowModal(true)}>
+        <Image source={profilePicture ? { uri: profilePicture } : require('../../../../assets/icon/editprofile.png')} style={styles.selectedImage} />
       </TouchableOpacity>
       <SelectImage isShowModal={isShowModal} closeModal={setIsShowModal} imageUri={getImageUrl} />
     </View>
@@ -62,14 +63,14 @@ const ProviderPayment = () => {
       {isLoading && <Loader />}
       <View style={styles.inputContainer}>
         <Input
-          placeholder={t('Business registration number')}
+          placeholder={t('business_registration')}
           keyboardType="numeric"
           type="creditCardNumber"
           onBlur={onBlurRegistrationNumber}
           onChangeText={onChangeRegistrationNumber}
           ref={registrationNumberRef}
-          defaultValue={providerProfile?.bankDetails?.registrationNumber}
-          inputValue={providerProfile?.bankDetails?.registrationNumber ?? ''}
+          defaultValue={registrationNumberRef?.current?.value}
+          inputValue={registrationNumberRef?.current?.value}
           errorMessage={registrationError}
           returnKeyType={'next'}
           onSubmitEditing={() => bankNameRef.current.focus()}
@@ -77,28 +78,28 @@ const ProviderPayment = () => {
         />
         <View style={styles.container}>
           <Input
-            placeholder={'Bank'}
+            placeholder={t('bank')}
             inputStyle={styles.inputBank}
             type={'nameSuffix'}
             onBlur={onBlurBankName}
             onChangeText={onChangeBankName}
             ref={bankNameRef}
-            defaultValue={providerProfile?.bankDetails?.bankname}
-            inputValue={providerProfile?.bankDetails?.bankname ?? ''}
+            defaultValue={bankNameRef?.current?.value}
+            inputValue={bankNameRef?.current?.value}
             errorMessage={bankNameError}
             returnKeyType={'next'}
             onSubmitEditing={() => branchRef.current.focus()}
             onClearInputText={() => bankNameRef.current.clear()}
           />
           <Input
-            placeholder={'Branch'}
+            placeholder={t('branch')}
             type={'nameSuffix'}
             inputStyle={styles.inputBranch}
             onBlur={onBlurBranchType}
             onChangeText={onChangeBranchType}
             ref={branchRef}
-            defaultValue={providerProfile?.bankDetails?.branchname}
-            inputValue={providerProfile?.bankDetails?.branchname ?? ''}
+            defaultValue={branchRef?.current?.value}
+            inputValue={branchRef?.current?.value}
             errorMessage={branchError}
             returnKeyType={'next'}
             onSubmitEditing={() => accountRef.current.focus()}
@@ -106,21 +107,22 @@ const ProviderPayment = () => {
           />
         </View>
         <Input
-          placeholder={'Bank account'}
+          placeholder={t('bank_account')}
           inputStyle={styles.input}
           type="creditCardNumber"
           keyboardType="numeric"
           onBlur={onBlurAccount}
           onChangeText={onChangeAccount}
           ref={accountRef}
-          defaultValue={providerProfile?.bankDetails?.accountnumber}
-          inputValue={providerProfile?.bankDetails?.accountnumber ?? ''}
+          defaultValue={accountRef?.current?.value}
+          inputValue={accountRef?.current?.value}
           errorMessage={accountError}
           onClearInputText={() => accountRef.current.clear()}
         />
         {getUploadImageView()}
       </View>
       {getFooterView()}
+      {renderToast()}
     </>
   )
 }
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     minWidth: '48%'
   },
   input: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingXs)
+    marginTop: getHeight(dimens.sideMargin + dimens.marginS)
   },
   iconContainer: {
     flexDirection: 'row',
@@ -153,9 +155,9 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.paddingS)
   },
   text: {
-    fontSize:getWidth(fontSize.textL),
-    color: colors.black,
-    marginTop: getHeight(dimens.marginS)
+    fontSize: getWidth(fontSize.textL),
+    paddingTop: getHeight(dimens.paddingXs),
+    textAlign: 'center'
   },
   inputContainer: {
     flex: 0.79

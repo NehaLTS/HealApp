@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 const ProviderServicesController = () => {
   const { onGetProviderService } = AuthServicesProvider()
   const navigation = useNavigation()
-  const { setCurrentStep } = UseProviderUserContext()
+  const { providerProfile, setCurrentStep } = UseProviderUserContext()
   const [services, setServices] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false)
@@ -15,8 +15,8 @@ const ProviderServicesController = () => {
   const getProviderServices = async () => {
     setIsLoading(true)
     let response = await onGetProviderService({
-      provider_id: '2',
-      specialty_id: '1'
+      provider_id: '2' ?? providerProfile?.provider?.id,
+      specialty_id: '1' ?? providerProfile?.speciality?.id
     })
     if (response && response.services) {
       setServices(response.services)

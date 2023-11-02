@@ -1,79 +1,69 @@
-import { UseClientUserContext } from "contexts/UseClientUserContext";
-import React, {useState } from "react";
+import { UseClientUserContext } from 'contexts/UseClientUserContext'
+import React, { useState } from 'react'
 
 const UserDetailViewController = () => {
-  const { setCurrentStep, setUserProfile,userProfile } = UseClientUserContext();
-  const firstNameRef = React.useRef<any>("");
-  const lastNameRef = React.useRef<any>("");
-  const phoneNumberRef = React.useRef<any>("");
-  const [firstNameError, setFirstNameError] = useState("");
-  const [lastNameError, setLastNameError] = useState("");
-  const [phoneNumberError, setPhoneNumberError] = useState("");
- 
+  const { setCurrentStep, setUserProfile, userProfile } = UseClientUserContext()
+  const firstNameRef = React.useRef<any>('')
+  const lastNameRef = React.useRef<any>('')
+  const phoneNumberRef = React.useRef<any>('')
+  const [firstNameError, setFirstNameError] = useState('')
+  const [lastNameError, setLastNameError] = useState('')
+  const [phoneNumberError, setPhoneNumberError] = useState('')
 
   const validateFirstName = () => {
-    if (
-      !firstNameRef.current.value ||
-      firstNameRef.current.value === undefined
-    ) {
-      setFirstNameError("First name is required");
-    } else setFirstNameError("");
-  };
+    if (!firstNameRef.current.value || firstNameRef.current.value === undefined) {
+      setFirstNameError('First name is required')
+    } else setFirstNameError('')
+  }
 
   const validateLastName = () => {
     if (!lastNameRef.current.value) {
-      setLastNameError("Last name is required");
-    } else setLastNameError("");
-  };
+      setLastNameError('Last name is required')
+    } else setLastNameError('')
+  }
 
   const validatePhoneNumber = () => {
     if (!phoneNumberRef.current.value) {
-      setPhoneNumberError("Phone number is required");
-    } else setPhoneNumberError("");
-  };
-  const onBlurFirstName = () => validateFirstName();
+      setPhoneNumberError('Phone number is required')
+    } else setPhoneNumberError('')
+  }
+  const onBlurFirstName = () => validateFirstName()
   const onChangeFirstName = (value: string) => {
-    firstNameRef.current.value = value;
-    onBlurFirstName();
-  };
-  const onBlurLastName = () => validateLastName();
+    firstNameRef.current.value = value
+    onBlurFirstName()
+  }
+  const onBlurLastName = () => validateLastName()
 
   const onChangeLastName = (value: string) => {
-    lastNameRef.current.value = value;
-    onBlurLastName();
-  };
-  const onBlurPhoneNumber = () => validatePhoneNumber();
+    lastNameRef.current.value = value
+    onBlurLastName()
+  }
+  const onBlurPhoneNumber = () => validatePhoneNumber()
 
   const onChangePhoneNumber = (value: string) => {
-    phoneNumberRef.current.value = value;
-    onBlurPhoneNumber();
-  };
+    phoneNumberRef.current.value = value
+    onBlurPhoneNumber()
+  }
 
   const onPressNext = () => {
-    if (
-      firstNameRef.current.value &&
-      lastNameRef.current.value &&
-      phoneNumberRef.current.value
-    ) {
+    if (firstNameRef.current.value && lastNameRef.current.value && phoneNumberRef.current.value) {
       setUserProfile({
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
-        phoneNumber: phoneNumberRef.current.value,
-      });
+        phoneNumber: phoneNumberRef.current.value
+      })
 
-      setCurrentStep("address");
+      setCurrentStep('address')
     } else {
-      if (!firstNameRef.current.value)
-        setFirstNameError("First name is required");
-      if (!lastNameRef.current.value) setLastNameError("Last name is required");
-      if (!phoneNumberRef.current.value)
-        setPhoneNumberError("Phone number is required");
+      if (!firstNameRef.current.value) setFirstNameError('First name is required')
+      if (!lastNameRef.current.value) setLastNameError('Last name is required')
+      if (!phoneNumberRef.current.value) setPhoneNumberError('Phone number is required')
     }
-  };
+  }
 
   const onPressBack = () => {
     // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
-  };
+  }
 
   return {
     firstNameError,
@@ -92,7 +82,7 @@ const UserDetailViewController = () => {
     onPressNext,
     onPressBack,
     userProfile
-  };
-};
+  }
+}
 
-export default UserDetailViewController;
+export default UserDetailViewController

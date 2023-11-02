@@ -3,7 +3,7 @@ import RNModal from 'components/common/Modal'
 import TextButton from 'components/common/TextButton'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { colors } from '../../../../designToken/colors'
 import { dimens } from '../../../../designToken/dimens'
 import { fontSize } from '../../../../designToken/fontSizes'
@@ -11,6 +11,7 @@ import { getHeight, getWidth } from '../../../../libs/StyleHelper'
 import Input from '../../../common/Input'
 import SelectImage from '../../../common/SelectImage'
 import ProviderAddressController from '../controllers/ProviderAddressController'
+import Text from 'components/common/Text'
 
 const ProviderAddress = () => {
   const { t } = useTranslation()
@@ -25,9 +26,8 @@ const ProviderAddress = () => {
     licenseRef,
     onBlurPhoneNumber,
     onChangePhoneNumber,
-    onBlurLastName,
     getImageUrl,
-    onChangeLastName,
+    onChangeLicense,
     onBlurAddress,
     onSearchAddress,
     isShowModal,
@@ -35,7 +35,8 @@ const ProviderAddress = () => {
     onCloseModal,
     renderToast,
     onPressBack,
-    onPressNext
+    onPressNext,
+    licensePicture
   } = ProviderAddressController()
 
   const addAddressView = () => (
@@ -49,9 +50,9 @@ const ProviderAddress = () => {
 
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
-      <Text style={styles.text}>{t('Upload license photo')}</Text>
-      <TouchableOpacity disabled={!providerProfile?.licensenumber} activeOpacity={providerProfile?.licensepicture ? 1 : 0.5} style={{ opacity: !providerProfile?.licensenumber ? 0.5 : 1 }} onPress={onUploadLicense}>
-        <Image source={providerProfile?.licensepicture ? { uri: providerProfile?.licensepicture } : require('../../../../assets/icon/licencesIcon.png')} style={styles.selectedImage} />
+      <Text style={styles.text}>{t('upload_license')}</Text>
+      <TouchableOpacity disabled={!licenseRef.current?.value} activeOpacity={licensePicture ? 1 : 0.5} style={{ opacity: !licenseRef.current?.value ? 0.5 : 1 }} onPress={onUploadLicense}>
+        <Image source={licensePicture ? { uri: licensePicture } : require('../../../../assets/icon/licencesIcon.png')} style={styles.selectedImage} />
       </TouchableOpacity>
       <SelectImage isShowModal={isShowModal} closeModal={onCloseModal} imageUri={getImageUrl} />
     </View>
@@ -67,7 +68,7 @@ const ProviderAddress = () => {
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={t('Phone Number*')}
+          placeholder={t('phone_number')}
           type={'telephoneNumber'}
           keyboardType="number-pad"
           onBlur={onBlurPhoneNumber}
@@ -81,11 +82,10 @@ const ProviderAddress = () => {
           onClearInputText={() => phoneRef.current.clear()}
         />
         <Input
-          placeholder={t('License number (for those who have)')}
+          placeholder={t('license_number')}
           type={'nameSuffix'}
           inputStyle={styles.input}
-          onBlur={onBlurLastName}
-          onChangeText={onChangeLastName}
+          onChangeText={onChangeLicense}
           ref={licenseRef}
           defaultValue={providerProfile?.licensenumber}
           inputValue={providerProfile?.licensenumber ?? ''}
@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     flex: 0.1,
     justifyContent: 'space-between'
   },
-  containerStyle:{ 
+  containerStyle: {
     width: '18%',
-     alignItems: 'flex-end'
-     }
+    alignItems: 'flex-end'
+  }
 })

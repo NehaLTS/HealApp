@@ -22,7 +22,7 @@ const ProviderServices = () => {
 
   const getServicesView = () => (
     <>
-      <Text style={styles.textS} title={t('Services you provide')} />
+      <Text style={styles.textS} title={t('services_you')} />
       <View style={styles.servicesContainer}>
         {services.length > 0 ? (
           <ScrollView contentContainerStyle={styles.containerStyle} style={{ height: '100%' }}>
@@ -45,7 +45,7 @@ const ProviderServices = () => {
             ))}
           </ScrollView>
         ) : (
-          <Text style={styles.textServices} title={t('No Services')} />
+          <Text style={styles.textServices} title={t('no_services')} />
         )}
       </View>
     </>
@@ -78,7 +78,7 @@ const ProviderServices = () => {
     <>
       {isLoading && <Loader />}
       <View style={styles.inputContainer}>
-        <Text style={styles.text} title={t('Authority to add a prescription')} />
+        <Text style={styles.text} title={t('authority')} />
         {addPrescriptionView()}
         {getServicesView()}
       </View>
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    fontSize: fontSize.textM
+    fontSize: getWidth(fontSize.textM),
+    textAlign: 'left'
   },
   select: {
     height: getHeight(dimens.marginL + dimens.borderBold),
@@ -106,7 +107,8 @@ const styles = StyleSheet.create({
   textS: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.sideMargin),
-    marginTop: getHeight(dimens.imageS)
+    marginTop: getHeight(dimens.imageS),
+    textAlign: 'left'
   },
   serviceText: {
     fontSize: getWidth(fontSize.textM)

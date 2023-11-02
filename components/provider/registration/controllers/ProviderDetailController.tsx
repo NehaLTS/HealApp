@@ -9,31 +9,21 @@ const ProviderDetailController = () => {
   const [providerTypeError, setProviderTypeError] = useState('')
   const [specialtyError, setSpecialtyError] = useState('')
   const [selectedProvider, setSelectedProvider] = useState({})
+  const [selectedSpecialty, setSelectedSpecialty] = useState({})
   const { providerProfile, setProviderProfile } = UseProviderUserContext()
   const firstNameRef = React.useRef<any>('')
   const lastNameRef = React.useRef<any>('')
   const { setCurrentStep } = UseProviderUserContext()
   const { showToast, renderToast } = useToast()
+  const [idPicture, setIdPicture] = useState('')
 
-  const onBlurFirstName = () => {
-    validateFirstName()
-    setProviderProfile({
-      ...providerProfile,
-      firstName: firstNameRef.current.value
-    })
-  }
   const onChangeFirstName = (value: string) => (firstNameRef.current.value = value)
-
-  const onBlurLastName = () => {
-    validateLastName()
-    setProviderProfile({
-      ...providerProfile,
-      lastName: lastNameRef.current.value
-    })
-  }
   const onChangeLastName = (value: string) => (lastNameRef.current.value = value)
 
-  const getImageUrl = (url: string) => setProviderProfile({ ...providerProfile, idPicture: url })
+  const onBlurLastName = () => validateLastName()
+  const onBlurFirstName = () => validateFirstName()
+
+  const getImageUrl = (url: string) => setIdPicture(url)
 
   const validateFirstName = () => {
     if (!firstNameRef.current.value) {
@@ -60,7 +50,7 @@ const ProviderDetailController = () => {
   }
 
   const validateSpecialty = () => {
-    if (!providerProfile.speciality) {
+    if (!selectedSpecialty) {
       setSpecialtyError('Specialty is required')
     } else {
       setSpecialtyError('')
@@ -69,47 +59,31 @@ const ProviderDetailController = () => {
 
   const onChangeProviderTypes = (value: string) => {
     setSelectedProvider(value)
-    validateLastName()
-    setProviderProfile({
-      ...providerProfile,
-      provider: { id: '1', name: value.name },
-      lastName: lastNameRef.current.value
-    })
+    if (!lastNameRef.current.value) validateLastName()
   }
   const onBlurProviderTypes = () => validateProviderType()
 
-  const onChangeSpecialty = (value: string) => {
-    setProviderProfile({
-      ...providerProfile,
-      speciality: {
-        name: value?.name?.en,
-        id: value?.id
-      }
-    })
-  }
+  const onChangeSpecialty = (value: string) => setSelectedSpecialty(value)
   const onBlurSpecialty = () => validateSpecialty()
+
   const onPressNext = () => {
-    setCurrentStep('address')
-    // if (
-    //   (providerProfile?.firstname?.length ?? 0) > 0 &&
-    //   (providerProfile.lastname?.length ?? 0) > 0 &&
-    //   (providerProfile.speciality?.length ?? 0) > 0 &&
-    //   (providerProfile.type_Provider?.length ?? 0) > 0 &&
-    //   (providerProfile.id_photo?.length ?? 0) > 0
-    // ) {
-    //   setCurrentStep("address");
-    // } else {
-    //   if (!providerProfile.firstname?.length)
-    //     setFirstNameError("First name is required");
-    //   if (!providerProfile.lastname?.length)
-    //     setLastNameError("Last name is required");
-    //   if (!providerProfile.speciality?.length)
-    //     setSpecialtyError("Specialty is required");
-    //   if (!providerProfile.type_Provider?.length)
-    //     setProviderTypeError("Type of provider is required");
-    //   if (!providerProfile.id_photo?.length)
-    //     showToast("", "Please upload ID", "warning");
-    // }
+    if ((firstNameRef.current.value?.length ?? 0) > 0 && (lastNameRef.current.value?.length ?? 0) > 0 && (selectedSpecialty?.name?.en?.length ?? 0) > 0 && (selectedProvider?.name?.length ?? 0) > 0 && (idPicture?.length ?? 0) > 0) {
+      setProviderProfile({
+        ...providerProfile,
+        firstName: firstNameRef.current.value,
+        lastName: lastNameRef.current.value,
+        provider: { id: '1', name: selectedProvider.name },
+        speciality: { name: selectedSpecialty?.name?.en, id: selectedSpecialty?.id },
+        idPicture: idPicture
+      })
+      setCurrentStep('address')
+    } else {
+      if (!firstNameRef.current.value?.length) setFirstNameError('First name is required')
+      if (!lastNameRef.current.value?.length) setLastNameError('Last name is required')
+      if (!selectedSpecialty?.name?.en) setSpecialtyError('Specialty is required')
+      if (!selectedProvider?.name) setProviderTypeError('Type of provider is required')
+      if (!idPicture?.length) showToast('', 'Please upload ID', 'warning')
+    }
   }
 
   return {
@@ -133,7 +107,9 @@ const ProviderDetailController = () => {
     onBlurSpecialty,
     onBlurProviderTypes,
     onPressNext,
-    renderToast
+    renderToast,
+    selectedSpecialty,
+    idPicture
   }
 }
 

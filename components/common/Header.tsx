@@ -1,24 +1,25 @@
-import logo from "assets/icon/logo.png";
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
-import LocalizationController from "./LocalizationController";
-import Text from "./Text";
+import logo from 'assets/icon/logo.png'
+import { colors } from 'designToken/colors'
+import { dimens } from 'designToken/dimens'
+import { fontSize } from 'designToken/fontSizes'
+import { getHeight, getWidth } from 'libs/StyleHelper'
+import React, { useState } from 'react'
+import { Image, StyleSheet, View } from 'react-native'
+import LocalizationController from './LocalizationController'
+import Text from './Text'
 
 export const defaultHeaderStyle = {
   headerShadowVisible: false,
-  title: '', headerStyle: {
-    backgroundColor: 'transparent',
+  title: '',
+  headerStyle: {
+    backgroundColor: 'transparent'
   },
   headerTintColor: 'transparent',
   headerBackVisible: false
 }
 // TODO: Need to change dropdown UI later
 const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean }) => {
-  const { currentLanguage, isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController();
+  const { currentLanguage, isLanguageChanged, onChangeLanguage, handleLanguageChange, setIsLanguageChanged } = LocalizationController()
 
   return (
     <View style={[styles.headerContainer, { justifyContent: isHideTitle ? 'flex-end' : 'space-between' }]}>
@@ -28,53 +29,65 @@ const Header = ({ title, isHideTitle }: { title?: string; isHideTitle?: boolean 
           <Text style={styles.title} title={title} />
         </>
       )}
-      {  /** TODO: Update the title according to selected language  */}
+      {/** TODO: Update the title according to selected language  */}
       <Text style={styles.headerRight} onPress={onChangeLanguage} title={currentLanguage.toUpperCase()} />
       {isLanguageChanged && (
         //  TODO: Update this code in optimized way
         <View style={styles.languageContainer}>
           <Text
-            style={[styles.language, { color: currentLanguage === "en" ? colors.primary : colors.black }]}
-            onPress={() => { handleLanguageChange("en"); setIsLanguageChanged(false) }}
+            style={[styles.language, { color: currentLanguage === 'en' ? colors.primary : colors.black }]}
+            onPress={() => {
+              handleLanguageChange('en')
+              setIsLanguageChanged(false)
+            }}
             title={'English'}
           />
           <Text
-            style={[styles.language, { color: currentLanguage === "he" ? colors.primary : colors.black }]}
-            onPress={() => { handleLanguageChange("he"); setIsLanguageChanged(false) }}
+            style={[styles.language, { color: currentLanguage === 'he' ? colors.primary : colors.black }]}
+            onPress={() => {
+              handleLanguageChange('he')
+              setIsLanguageChanged(false)
+            }}
             title={'עִברִית'}
           />
           <Text
-            style={[styles.language, { color: currentLanguage === "ar" ? colors.primary : colors.black }]}
-            onPress={() => { handleLanguageChange("ar"); setIsLanguageChanged(false) }}
+            style={[styles.language, { color: currentLanguage === 'ar' ? colors.primary : colors.black }]}
+            onPress={() => {
+              handleLanguageChange('ar')
+              setIsLanguageChanged(false)
+            }}
             title={'العربي'}
           />
           <Text
-            style={[styles.language, { color: currentLanguage === "ru" ? colors.primary : colors.black }]}
-            onPress={() => { handleLanguageChange("ru"); setIsLanguageChanged(false) }}
+            style={[styles.language, { color: currentLanguage === 'ru' ? colors.primary : colors.black }]}
+            onPress={() => {
+              handleLanguageChange('ru')
+              setIsLanguageChanged(false)
+            }}
             title={'русский'}
           />
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
 
 const styles = StyleSheet.create({
   headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.white,
-    width: "100%",
+    width: '100%'
   },
   language: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     padding: getHeight(dimens.borderThin),
-    fontSize: getHeight(fontSize.textL),
+    fontSize: getHeight(fontSize.textL)
   },
   languageContainer: {
-    position: "absolute",
+    position: 'absolute',
     width: getWidth(120), //TODO: should define sizes for every Width
     height: getWidth(142), //TODO: should define sizes for every Height
     padding: getWidth(dimens.marginS),
@@ -89,15 +102,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   logo: {
-    width: getWidth(dimens.imageS+30),
-    height: getHeight(dimens.imageS+20),
-    marginLeft: getWidth(dimens.marginS),
+    width: getWidth(dimens.imageS + 30),
+    height: getHeight(dimens.imageS + 20),
+    marginLeft: getWidth(dimens.marginS)
   },
   title: {
-    fontSize: fontSize.headingL,
+    fontSize: fontSize.headingL
   },
   headerRight: {
     padding: getHeight(dimens.sideMargin),
-    fontSize: getHeight(fontSize.textL),
-  },
-});
+    fontSize: getHeight(fontSize.textL)
+  }
+})

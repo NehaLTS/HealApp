@@ -7,9 +7,11 @@ import { dimens } from 'designToken/dimens'
 import { fontSize } from 'designToken/fontSizes'
 import { getHeight, getWidth } from 'libs/StyleHelper'
 import React, { useLayoutEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Image, StyleSheet, View } from 'react-native'
 
 const ProviderConfirmation = () => {
+  const { t } = useTranslation()
   const navigation = useNavigation()
   const { userDataProvider } = UseUserContextProvider()
 
@@ -25,15 +27,8 @@ const ProviderConfirmation = () => {
         <Image source={userDataProvider.profile_picture?.length ? { uri: userDataProvider.profile_picture } : require('../../../../assets/icon/provider.png')} style={styles.finalIcon} />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>
-          Your form was successfully submitted and now waiting{'\n'} for the approval.{'\n'}
-          We'll get back to you{'\n'}
-          within 7 days.
-        </Text>
-        <Text style={styles.queryText}>
-          If you have any questions{'\n'}
-          feel free to call us
-        </Text>
+        <Text style={styles.text}>{t('waiting_text')}</Text>
+        <Text style={styles.queryText}>{t('ask_question_text')}</Text>
         <Text style={styles.number}>+972-555-00-11</Text>
       </View>
     </View>

@@ -4,7 +4,7 @@ import { fontFamily } from 'designToken/fontFamily'
 import { fontSize } from 'designToken/fontSizes'
 import { getHeight, getWidth } from 'libs/StyleHelper'
 import React, { forwardRef, useRef, useState } from 'react'
-import { Animated, DimensionValue, Image, StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, TouchableOpacity, View } from 'react-native'
+import { Animated, DimensionValue, I18nManager, Image, StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, TouchableOpacity, View } from 'react-native'
 import Text from './Text'
 
 const Input = forwardRef(
@@ -25,7 +25,7 @@ const Input = forwardRef(
       ...props
     }: {
       placeholder: string
-      type?: 'creditCardNumber' | 'emailAddress' | 'fullStreetAddress' | 'name' | 'nameSuffix' | 'telephoneNumber' | 'password' | 'numeric' | 'dateOfBirth'
+      type?: 'creditCardNumber' | 'emailAddress' | 'fullStreetAddress' | 'name' | 'nameSuffix' | 'telephoneNumber' | 'password' | 'numeric' | 'dateOfBirth' | any
       inputStyle?: StyleProp<TextStyle>
       placeholderStyle?: StyleProp<TextStyle>
       errorMessage?: string
@@ -92,7 +92,7 @@ const Input = forwardRef(
     const fontSizeStyle = { fontSize: fontSizeAnim }
     return (
       <View>
-        <View style={[styles.inputContainer, inputStyle, placeholderStyle, { borderColor: errorMessage ? colors.invalid : colors.primary }]}>
+        <View style={[styles.inputContainer, inputStyle, , placeholderStyle, { borderColor: errorMessage ? colors.invalid : colors.primary }]}>
           <Animated.Text adjustsFontSizeToFit style={[styles.label, labelStyle, fontSizeStyle, placeholderStyle]}>
             {placeholder}
           </Animated.Text>
@@ -102,12 +102,12 @@ const Input = forwardRef(
             </TouchableOpacity>
           )}
           <TextInput style={styles.input} placeholderTextColor={colors.black} textContentType={type ?? 'password'} secureTextEntry={showPassword} onFocus={onFocusHandler} onBlur={onBlurHandler} ref={ref as React.LegacyRef<TextInput>} editable {...props} />
-          {!errorMessage && type === 'password' && (
+          {type === 'password' && (
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Image source={require('assets/icon/eyeIcon.png')} style={styles.showImage} />
             </TouchableOpacity>
           )}
-          {errorMessage && type !== ('password' && 'dateOfBirth') && (
+          {errorMessage && type !== ('password' || 'dateOfBirth') && (
             <TouchableOpacity onPress={onClearInputText}>
               <Image source={require('../../assets/icon/error.png')} style={styles.errorImage} />
             </TouchableOpacity>
@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
     marginLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
+    textAlign: I18nManager.isRTL ? 'right' : 'left'
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
@@ -163,7 +164,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
-    fontSize: getWidth(fontSize.textS)
+    fontSize: getWidth(fontSize.textS),
+    textAlign: 'left'
   },
   label: {
     position: 'absolute',
