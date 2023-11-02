@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import logo from 'assets/icon/healLogo.png';
 import Input from 'common/Input';
 import Text from 'components/common/Text';
 import { colors } from 'designToken/colors';
@@ -7,8 +9,6 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import logo from 'assets/icon/healLogo.png';
 import Button from 'components/common/Button';
 import TextButton from 'components/common/TextButton';
 import NavigationRoutes from 'navigator/NavigationRoutes';
@@ -19,7 +19,6 @@ import UserPaymentViewController from '../controllers/UserPaymentViewController'
 const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-
   const {
     cardNumberRef,
     expireDateRef,

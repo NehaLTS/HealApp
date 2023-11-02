@@ -1,16 +1,15 @@
 import Button from 'common/Button';
 import Input from 'common/Input';
-import Text from 'components/common/Text';
+import { GetSignInFooter } from 'components/client/login/LoginView';
+import Loader from 'components/common/Loader';
 import TextButton from 'components/common/TextButton';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import RegistrationViewController from '../controllers/RegistrationViewController';
-import { GetSignInFooter } from 'components/client/login/LoginView';
-import Loader from 'components/common/Loader';
 
 const RegistrationView = () => {
   const {

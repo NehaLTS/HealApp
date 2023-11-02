@@ -11,13 +11,13 @@ import {
   Image,
   StyleProp,
   StyleSheet,
+  Text,
   TextInput,
   TextInputProps,
   TextStyle,
   TouchableOpacity,
   View,
 } from 'react-native';
-import Text from './Text';
 
 const Input = forwardRef(
   (
@@ -124,7 +124,6 @@ const Input = forwardRef(
           style={[
             styles.inputContainer,
             inputStyle,
-            ,
             placeholderStyle,
             { borderColor: errorMessage ? colors.invalid : colors.primary },
           ]}
