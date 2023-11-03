@@ -65,7 +65,7 @@ const SummaryView = ({ setShowSummary }: SummaryViewProps) => {
       </View>
 
       <Text title={"Services"} style={styles.text} />
-      {orderDetails?.services.map((item, index) => <Text key={index} title={item.name.en} />)}
+      {orderDetails?.services.map((item, index) => <Text key={index} title={item?.name?.en + ' ' + item?.price} />)}
       <View style={{ flexDirection: "row" }}>
         <Text title={"Total"} style={styles.total} />
         <Text title={`600 NIS`} />

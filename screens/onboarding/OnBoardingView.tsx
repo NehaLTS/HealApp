@@ -31,8 +31,8 @@ const OnBoardingView = () => {
   const { setUserProfile, setUserId, setToken } = UseClientUserContext();
 
   useEffect(() => {
-   deleteLocalData();
-  // getLocalUserData();
+    // deleteLocalData();
+    getLocalUserData();
   }, []);
 
   const getLocalUserData = async () => {

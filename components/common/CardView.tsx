@@ -18,6 +18,7 @@ import Modal from "react-native-modal";
 import Button from "./Button";
 import { useNavigation } from "@react-navigation/native";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
+import NavigationRoutes from "navigator/NavigationRoutes";
 
 const CardView = ({ item, onPress, index, isSearch }: any) => {
   const navigation = useNavigation();

@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next";
 import RNModal from "components/common/Modal";
 import OrderFormController from "./OrderFormController";
 import { Reason, TreatmentMenu } from "libs/types/ProvierTypes";
+import { getLocalData } from "libs/datastorage/useLocalStorage";
 
 const OrderFormView = () => {
   const { t } = useTranslation();
@@ -64,7 +65,9 @@ const OrderFormView = () => {
 
   const toggleMe = () => {
     setIsMeSelected(true);
-    setOrderDetails({ ...orderDetails, patient_type: 'me' })
+    setOrderDetails({
+      ...orderDetails, patient_type: 'me', phonenumber: getLocalData('USERPROFILE')?.phoneNumber
+    })
   };
 
   const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>([]);
@@ -85,7 +88,7 @@ const OrderFormView = () => {
 
   const toggleSomeoneElse = () => {
     setIsMeSelected(false);
-    setOrderDetails({ ...orderDetails, patient_type: 'someone else' })
+    setOrderDetails({ ...orderDetails, patient_type: 'someone else', phonenumber: phoneRef?.current?.value })
   };
   const abc = selectedResourceType?.map((i) => i?.reason_id)
   const getReasonsView = () => (

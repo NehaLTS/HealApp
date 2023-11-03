@@ -10,7 +10,7 @@ const OrderDetailsController = () => {
   const { orderProvider } = ClientOrderServices()
   const { orderDetails } = UseClientUserContext()
   const order = getLocalData('USER')
-  const userProfile = getLocalData?.('USERPROFILE') as ClientProfile | UserTypeProvider;
+  const userProfile = getLocalData?.('USERPROFILE');
   const handleNextButtonPress = async () => {
 
     console.log('orderDetails', orderDetails)
@@ -22,7 +22,7 @@ const OrderDetailsController = () => {
         patient_name: orderDetails.patient_name,
         address: userProfile?.address ?? '',
         city: '',
-        phonenumber: userProfile?.phoneNumber ?? '',
+        phonenumber: orderDetails?.phonenumber,
         Date_of_birth: userProfile?.date_of_birth ?? "",
         services: "1,2",
         symptoms: `${orderDetails.reason}`,

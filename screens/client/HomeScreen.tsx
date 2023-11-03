@@ -30,9 +30,9 @@ import Animated, {
 } from "react-native-reanimated";
 import HomeViewController from "./HomeViewController";
 import { colors } from "designToken/colors";
-import { deleteLocalData } from "libs/datastorage/useLocalStorage";
 import RNModal from "components/common/Modal";
 import Input from "components/common/Input";
+import OrderDetails from "./OrderDetails";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -52,10 +52,11 @@ const HomeScreen = () => {
     providersList,
     onSearchDone,
     isDataNotFound,
-    onSearch
+    onSearch,
+    user
   } = HomeViewController();
+  console.log('user', user)
   // const isDataNotFound = searchRef?.length > 0 ? true : false;
-  console.log("bhjbc", isDataNotFound)
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -63,7 +64,7 @@ const HomeScreen = () => {
         <View style={styles.headerTitleContainer}>
           <View style={styles.headerTitle}>
             <Image source={location} style={styles.location} />
-            <Text numberOfLines={2} style={styles.text} title={"Your current location"} />
+            <Text numberOfLines={2} style={styles.text} title={user?.address ?? ''} />
           </View>
           <TextButton
             isActive

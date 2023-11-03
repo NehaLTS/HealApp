@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { ClientOrderServices } from "libs/ClientOrderServices";
-import { deleteLocalData } from "libs/datastorage/useLocalStorage";
+import { deleteLocalData, getLocalData } from "libs/datastorage/useLocalStorage";
 import { Banner, search_provider } from "libs/types/ProvierTypes";
+import { ClientProfile } from "libs/types/UserType";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import { useEffect, useState } from "react";
 import { Alert, Keyboard, Linking } from "react-native";
@@ -21,6 +22,7 @@ const HomeViewController = () => {
   const [onChangeSearch, setOnChangeSearch] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
+  const [user, setUser] = useState<ClientProfile>();
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = [
@@ -67,6 +69,8 @@ const HomeViewController = () => {
         requestLocationPermission();
       }
     });
+    const abc = getLocalData('USERPROFILE')
+    setUser(abc)
   }, []);
   const getLocation = () => {
     Geolocation.getCurrentPosition(
@@ -152,6 +156,7 @@ const HomeViewController = () => {
     onSearchDone,
     isDataNotFound,
     onSearch,
+    user
   };
 };
 
