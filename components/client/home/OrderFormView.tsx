@@ -1,4 +1,3 @@
-
 import Button from "components/common/Button";
 import Input from "components/common/Input";
 import Text from "components/common/Text";
@@ -11,107 +10,196 @@ import React, { useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import Modal from "react-native-modal";
-import { OrderDetail, UseClientUserContext } from "contexts/UseClientUserContext";
+import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { useTranslation } from "react-i18next";
 import RNModal from "components/common/Modal";
 import OrderFormController from "./OrderFormController";
-import { Reason, TreatmentMenu } from "libs/types/ProvierTypes";
+import { Reason, TreatmentMenu, treatment } from "libs/types/ProvierTypes";
 import { getLocalData } from "libs/datastorage/useLocalStorage";
+import { OrderDetail } from "libs/types/UserType";
 
-const OrderFormView = () => {
+const OrderFormView = ({
+  treatmentReason,
+  setOrder,
+  order,
+}: {
+  treatmentReason?: treatment[];
+  setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
+  order: OrderDetail;
+}) => {
+  const uniqueReasonIds: number[] = [];
+
+  // Loop through the data array
+  order?.reason.forEach((item) => {
+    if (!uniqueReasonIds.includes(item.reason_id)) {
+      uniqueReasonIds.push(item.reason_id);
+    }
+  });
+
+  const uniqueMenuIds: number[] = [];
+
+  // Loop through the data array
+  order?.services?.forEach((item) => {
+    if (!uniqueMenuIds.includes(item.menu_id)) {
+      uniqueMenuIds.push(item.menu_id);
+    }
+  });
   const { t } = useTranslation();
   const [isMeSelected, setIsMeSelected] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
-  const [activeButton, setActiveButton] = useState<number[]>([]);
-  const [selectedResourceType, setSelectedResourceType] = useState<any[]>([]);
+  const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
+  const [activeCheckbox, setActiveCheckbox] = useState<number[]>(uniqueMenuIds);
+  const [selectedResourceType, setSelectedResourceType] = useState<any[]>(
+    order?.reason
+  );
+  const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>(
+    order?.services
+  );
   const ageRef = React.useRef<any>("");
   const phoneRef = React.useRef<any>("");
-  const { orderDetails, setOrderDetails, userProfile } = UseClientUserContext()
-  const otherReasons = React.useRef<any>('')
+  const otherReasons = React.useRef<any>("");
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState("");
-  const { treatmentReason } = OrderFormController()
   const [isCheckedStates, setIsCheckedStates] = useState(
     new Array(treatmentReason?.treatmentMenu?.length).fill(false)
   );
 
-  const onChangeAge = (value: string) => ageRef.current.value = value
-  const onChangePhone = (value: string) => phoneRef.current.value = value
-  const onSubmitDetail = () => {
-    setIsSubmitDetail(true)
+  console.log("isCheckedStates", isCheckedStates);
+
+  function calculateBirthDate(age) {
+    const currentDate = new Date();
+    const birthYear = currentDate.getFullYear() - age;
+    const birthDate = new Date(birthYear, 0, 1, 0, 0, 0, 0);
+    birthDate.setMinutes(birthDate.getMinutes() + 330);
+    const options = {
+      weekday: "short",
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short",
+    };
+    const formattedDate = birthDate.toLocaleString("en-US", options);
+    return formattedDate;
   }
+
+  function calculateAgeFromDate(dateString) {
+    const parts = dateString.split(" ");
+    if (parts.length < 4) {
+      return NaN;
+    }
+    const year = parseInt(parts[3], 10);
+    const currentDate = new Date();
+    if (isNaN(year)) {
+      return NaN;
+    }
+    const age = currentDate.getFullYear() - year;
+    return age;
+  }
+
+  const onChangeAge = (value: string) => (ageRef.current.value = value);
+  const onChangePhone = (value: string) => (phoneRef.current.value = value);
+  const onSubmitDetail = () => {
+    setOrder({
+      ...order,
+      patient_type: {
+        type: "other",
+        age: String(calculateBirthDate(ageRef.current.value)),
+      },
+      phonenumber: phoneRef?.current?.value,
+    });
+    setIsSubmitDetail(true);
+  };
 
   const onSelectReasons = (item: any) => {
     const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
     const itemIndex = updatedActiveButton.indexOf(item.reason_id);
 
     if (itemIndex !== -1) {
-
       updatedActiveButton.splice(itemIndex, 1);
     } else {
       updatedActiveButton.push(item.reason_id);
     }
     setActiveButton(updatedActiveButton);
     setSelectedResourceType((prev) => [...prev, item]);
-    setOrderDetails({ ...orderDetails, reason: [...selectedResourceType, item] });
+    setOrder({
+      ...order,
+      reason: [...selectedResourceType, item],
+    });
   };
 
-  const toggleMe = () => {
-    setIsMeSelected(true);
-    setOrderDetails({
-      ...orderDetails, patient_type: 'me', phonenumber: getLocalData('USERPROFILE')?.phoneNumber
-    })
+  const toggleMe = (item) => {
+    if (item === "me") setIsMeSelected(true);
+    else setIsMeSelected(false);
+    setOrder({
+      ...order,
+      patient_type: item,
+    });
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>([]);
+  console.log("selectedMenu", selectedMenu);
   const handleItemPress = (item: TreatmentMenu, index: number) => {
-    const newIsCheckedStates = [...isCheckedStates];
-    newIsCheckedStates[index] = !newIsCheckedStates[index];
-    setIsCheckedStates(newIsCheckedStates);
-    console.log('112222222222******', item);
+    const updatedActiveCheckbox = [...activeCheckbox]; // Create a copy of the activeButton array
+    const itemIndex = updatedActiveCheckbox.indexOf(item?.menu_id);
     let updatedSelectedMenu;
-    if (selectedMenu.find((selectedItem) => selectedItem.menu_id === item.menu_id)) {
-      updatedSelectedMenu = selectedMenu.filter((selectedItem) => selectedItem.menu_id !== item.menu_id);
+    if (itemIndex !== -1) {
+      updatedActiveCheckbox.splice(itemIndex, 1);
+    } else {
+      updatedActiveCheckbox.push(item.menu_id);
+    }
+    setActiveCheckbox(updatedActiveCheckbox);
+    if (
+      selectedMenu.find((selectedItem) => selectedItem.menu_id === item.menu_id)
+    ) {
+      updatedSelectedMenu = selectedMenu.filter(
+        (selectedItem) => selectedItem.menu_id !== item.menu_id
+      );
     } else {
       updatedSelectedMenu = [...selectedMenu, item];
     }
     setSelectedMenu(updatedSelectedMenu);
-    setOrderDetails({ ...orderDetails, services: updatedSelectedMenu });
+    setOrder({
+      ...order,
+      services: [...selectedMenu, item],
+    });
   };
 
-  const toggleSomeoneElse = () => {
-    setIsMeSelected(false);
-    setOrderDetails({ ...orderDetails, patient_type: 'someone else', phonenumber: phoneRef?.current?.value })
-  };
-  const abc = selectedResourceType?.map((i) => i?.reason_id)
   const getReasonsView = () => (
     <>
       <Text title={"Reason"} style={styles.addressText} />
       <View style={styles.buttonContainer}>
-        {treatmentReason?.reason?.length ? treatmentReason?.reason.map((item: Reason, index: number) => (
-          <Button
-            key={index}
-            title={item.name?.en}
-            isSmall
-            isPrimary={activeButton.includes(item?.reason_id)}
-            onPress={() => onSelectReasons(item)}
-            width={"28%"}
-            fontSized={getHeight(fontSize?.textM)}
-            height={getHeight(dimens?.marginL)}
-            borderRadius={getWidth(dimens?.marginS)}
-            lineHeight={dimens?.sideMargin + dimens?.borderBold}
+        {treatmentReason?.reason?.length ? (
+          treatmentReason?.reason.map((item: Reason, index: number) => (
+            <Button
+              key={index}
+              title={item.name?.en}
+              isSmall
+              isPrimary={activeButton.includes(item?.reason_id)}
+              onPress={() => onSelectReasons(item)}
+              width={"28%"}
+              fontSized={getHeight(fontSize?.textM)}
+              height={getHeight(dimens?.marginL)}
+              borderRadius={getWidth(dimens?.marginS)}
+              lineHeight={dimens?.sideMargin + dimens?.borderBold}
+            />
+          ))
+        ) : (
+          <ActivityIndicator
+            size={"large"}
+            color={colors?.primary}
+            style={{ alignItems: "center", flex: 1 }}
           />
-        ))
-          : <ActivityIndicator size={'large'} color={colors?.primary} style={{ alignItems: 'center', flex: 1 }} />
-
-        }
+        )}
         <Button
           title={"Other"}
           fontSized={getHeight(fontSize.textM)}
@@ -121,7 +209,9 @@ const OrderFormView = () => {
           onPress={() => setIsModalVisible(true)}
         />
         <Text
-          title={"*We don't do emergency calls. In case of emergency please call 077-773-45-69"}
+          title={
+            "*We don't do emergency calls. In case of emergency please call 077-773-45-69"
+          }
           style={styles.textSmall}
         />
       </View>
@@ -130,8 +220,7 @@ const OrderFormView = () => {
         backdropColor={colors.white}
         isVisible={isModalVisible}
         // avoidKeyboard
-        onBackdropPress={() => setIsModalVisible(false)}
-      >
+        onBackdropPress={() => setIsModalVisible(false)}>
         <Input
           placeholder={"Describe where is the entrance etc."}
           inputValue={""}
@@ -141,9 +230,12 @@ const OrderFormView = () => {
           isDescription
           defaultValue={otherReasons?.current?.value}
           ref={otherReasons}
-          onChangeText={(value: string) => otherReasons.current.value = value}
+          onChangeText={(value: string) => (otherReasons.current.value = value)}
           onSubmitDescription={() => {
-            setOrderDetails({ ...orderDetails, Additional_notes: otherReasons?.current?.value })
+            setOrder({
+              ...order,
+              Additional_notes: otherReasons?.current?.value,
+            });
           }}
         />
       </Modal>
@@ -153,25 +245,38 @@ const OrderFormView = () => {
     <>
       <Text title={"Treatments menu"} style={styles.menuText} />
       <View style={styles.container}>
-        {treatmentReason?.treatmentMenu?.length > 0 ? treatmentReason?.treatmentMenu?.map((item: TreatmentMenu, index: number) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.checkboxContainer}
-            onPress={() => handleItemPress(item, index)} // Call the function with the item
-          >
-            <View style={styles.checkBox}>
-              {isCheckedStates[index] && (<Image source={require("assets/icon/check.png")} style={styles.image} />)}
-            </View>
-            <Text>{item.name.en}</Text>
-          </TouchableOpacity>
-        ))
-          : <ActivityIndicator size={'large'} color={colors?.primary} style={{ alignItems: 'center', flex: 1 }} />
-        }
+        {treatmentReason?.treatmentMenu?.length > 0 ? (
+          treatmentReason?.treatmentMenu?.map(
+            (item: TreatmentMenu, index: number) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.checkboxContainer}
+                onPress={() => handleItemPress(item, index)} // Call the function with the item
+              >
+                <View style={styles.checkBox}>
+                  {activeCheckbox.includes(item?.menu_id) && (
+                    <Image
+                      source={require("assets/icon/check.png")}
+                      style={styles.image}
+                    />
+                  )}
+                </View>
+                <Text>{item.name.en}</Text>
+              </TouchableOpacity>
+            )
+          )
+        ) : (
+          <ActivityIndicator
+            size={"large"}
+            color={colors?.primary}
+            style={{ alignItems: "center", flex: 1 }}
+          />
+        )}
         <Text
           title={"*If the doctor won’t use your shot, you won’t pay for it"}
           style={styles.textSmall}
         />
-      </View >
+      </View>
     </>
   );
 
@@ -187,11 +292,17 @@ const OrderFormView = () => {
             placeholder={t("address")}
             type={"fullStreetAddress"}
             inputStyle={[{ minWidth: "82%" }]}
-            onClearInputText={() => setOnSearchAddress('')}
+            onClearInputText={() => setOnSearchAddress("")}
             onChangeText={setOnSearchAddress}
-            inputValue={onSearchAddress}
-            value={onSearchAddress}
-            onSubmitEditing={() => { setIsVisible(false) }}
+            inputValue={order.address}
+            defaultValue={order.address}
+            onSubmitEditing={() => {
+              setOrder({
+                ...order,
+                address: onSearchAddress,
+              });
+              setIsVisible(false);
+            }}
             autoFocus
           />
           <TextButton
@@ -207,103 +318,121 @@ const OrderFormView = () => {
 
   return (
     <>
-      <Text style={styles.text} title={"For whom is the doctor?"} />
-      <View style={styles.button}>
-        <Button
-          title={"Me"}
-          isPrimary={isMeSelected}
-          isSmall
-          width={"12%"}
-          fontSized={fontSize.textL}
-          height={getHeight(dimens.marginL + 4)}
-          onPress={toggleMe}
-        />
-        <Button
-          title={isSubmitDetail ? `${ageRef?.current?.value}y.o., ${phoneRef?.current?.value}` : "Someone else"}
-          isPrimary={!isMeSelected}
-          isSmall
-          width={"40%"}
-          fontSized={fontSize.textL}
-          height={getHeight(dimens.marginL + 4)}
-          onPress={toggleSomeoneElse}
-        />
-      </View>
+      <KeyboardAvoidingView
+        behavior={"height"}
+        keyboardVerticalOffset={-200}
+        style={{ flex: 0.96 }}>
+        <Text style={styles.text} title={"For whom is the doctor?"} />
+        <View style={styles.button}>
+          <Button
+            title={"Me"}
+            isPrimary={isMeSelected}
+            isSmall
+            width={"12%"}
+            fontSized={fontSize.textL}
+            height={getHeight(dimens.marginL + 4)}
+            onPress={() => toggleMe("me")}
+          />
+          <Button
+            title={
+              isSubmitDetail
+                ? `${calculateAgeFromDate(order?.patient_type?.age)}y.o., ${
+                    order?.phonenumber
+                  }`
+                : "Someone else"
+            }
+            isPrimary={!isMeSelected}
+            isSmall
+            width={"40%"}
+            fontSized={fontSize.textL}
+            height={getHeight(dimens.marginL + 4)}
+            onPress={() => toggleMe("other")}
+          />
+        </View>
 
-      <View
-        style={[
-          styles.addressContainer,
-          { justifyContent: !isMeSelected ? "center" : "center" },
-        ]}>
-        {isMeSelected &&
-          <>
-            <Text title={"Address"} style={styles.addressText} />
-            <View style={{ ...styles.locationContainer, }}>
-              <Image
-                source={require("../../../assets/icon/location.png")}
-                style={styles.locationIcon}
-              />
-              <Text
-                style={styles.streetAddress}
-                title={userProfile?.address ?? ''}
-              />
-              <TextButton
-                containerStyle={{ flex: 0.1 }}
-                title={"Edit"}
-                fontSize={getHeight(fontSize.textM)}
-                onPress={() => setIsVisible(true)}
-              />
-            </View>
-          </>
-        }
-        {!isMeSelected && (
-          isSubmitDetail ? (<>
-            <Text title={"Address"} style={styles.addressText} />
-            <View style={{ ...styles.locationContainer, borderRadius: 1 }}>
-              <Image
-                source={require("../../../assets/icon/location.png")}
-                style={styles.locationIcon}
-              />
-              <Text
-                style={styles.street}
-                title={userProfile?.address ?? ''}
-              />
-              <TextButton
-                containerStyle={{ flex: 0.15 }}
-                title={"Edit"}
-                fontSize={getHeight(fontSize.textM)}
-              />
-            </View>
-          </>) : (
-            <View style={styles.inputContainer}>
-              <TextInput
-                ref={ageRef}
-                onChangeText={onChangeAge}
-                placeholderTextColor={colors.disabledText}
-                placeholder="Their age *"
-                style={styles.textInput}
-                defaultValue={ageRef?.current?.value}
-                maxLength={2}
-              />
-              <TextInput
-                ref={phoneRef}
-                placeholderTextColor={colors.disabledText}
-                placeholder="Their phone number"
-                style={styles.textInput}
-                onChangeText={onChangePhone}
-                defaultValue={phoneRef?.current?.value}
-                maxLength={10}
-              />
-              <TouchableOpacity style={styles.arrowIconContainer} onPress={onSubmitDetail} >
+        <View
+          style={[
+            styles.addressContainer,
+            { justifyContent: !isMeSelected ? "center" : "center" },
+          ]}>
+          {isMeSelected && (
+            <>
+              <Text title={"Address"} style={styles.addressText} />
+              <View style={{ ...styles.locationContainer }}>
                 <Image
-                  source={require("../../../assets/icon/arrowNext.png")}
-                  style={styles.arrowIcon}
+                  source={require("../../../assets/icon/location.png")}
+                  style={styles.locationIcon}
                 />
-              </TouchableOpacity>
-            </View>))}
-      </View>
-      {getReasonsView()}
-      {getTreatmentsView()}
-      {addAddressView()}
+                <Text
+                  style={styles.streetAddress}
+                  numberOfLines={1}
+                  title={order?.address ?? ""}
+                />
+                <TextButton
+                  containerStyle={{ flex: 0.1 }}
+                  title={"Edit"}
+                  fontSize={getHeight(fontSize.textM)}
+                  onPress={() => setIsVisible(true)}
+                />
+              </View>
+            </>
+          )}
+          {!isMeSelected &&
+            (isSubmitDetail ? (
+              <>
+                <Text title={"Address"} style={styles.addressText} />
+                <View style={{ ...styles.locationContainer, borderRadius: 1 }}>
+                  <Image
+                    source={require("../../../assets/icon/location.png")}
+                    style={styles.locationIcon}
+                  />
+                  <Text
+                    style={styles.street}
+                    numberOfLines={1}
+                    title={order?.address ?? ""}
+                  />
+                  <TextButton
+                    containerStyle={{ flex: 0.15 }}
+                    title={"Edit"}
+                    fontSize={getHeight(fontSize.textM)}
+                  />
+                </View>
+              </>
+            ) : (
+              <View style={styles.inputContainer}>
+                <TextInput
+                  ref={ageRef}
+                  onChangeText={onChangeAge}
+                  placeholderTextColor={colors.disabledText}
+                  placeholder="Their age *"
+                  style={styles.textInput}
+                  defaultValue={ageRef?.current?.value}
+                  maxLength={2}
+                />
+                <TextInput
+                  ref={phoneRef}
+                  placeholderTextColor={colors.disabledText}
+                  placeholder="Their phone number"
+                  style={styles.textInput}
+                  onChangeText={onChangePhone}
+                  defaultValue={phoneRef?.current?.value}
+                  maxLength={10}
+                />
+                <TouchableOpacity
+                  style={styles.arrowIconContainer}
+                  onPress={onSubmitDetail}>
+                  <Image
+                    source={require("../../../assets/icon/arrowNext.png")}
+                    style={styles.arrowIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+        </View>
+        {getReasonsView()}
+        {getTreatmentsView()}
+        {addAddressView()}
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -363,7 +492,7 @@ const styles = StyleSheet.create({
   addressContainer: {
     flex: 0.25,
     justifyContent: "center",
-    marginTop: getHeight(dimens.paddingXs)
+    marginTop: getHeight(dimens.paddingXs),
   },
   button: {
     flexDirection: "row",
@@ -379,7 +508,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginM),
     resizeMode: "contain",
     flex: 0.07,
-    marginLeft: getWidth(dimens.marginS)
+    marginLeft: getWidth(dimens.marginS),
   },
   menuText: {
     fontSize: getWidth(fontSize.textXl),
@@ -404,11 +533,10 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textL,
     color: colors.grey,
     paddingBottom: 0,
-    paddingTop: getWidth(dimens.sideMargin)
-
+    paddingTop: getWidth(dimens.sideMargin),
   },
   arrowIconContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
     padding: getWidth(dimens.borderBold + dimens.borderBold),
@@ -418,7 +546,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     flex: 1,
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   addressView: {
     flexDirection: "row",
@@ -428,20 +556,18 @@ const styles = StyleSheet.create({
   image: {
     width: getWidth(12),
     height: getHeight(12),
-
   },
   streetAddress: {
-    flex: 0.80,
+    flex: 0.8,
     paddingLeft: getWidth(dimens.sideMargin),
-    fontSize: getWidth(fontSize.textM)
+    fontSize: getWidth(fontSize.textM),
   },
   list: {
-    fontSize: getWidth(fontSize.textM)
+    fontSize: getWidth(fontSize.textM),
   },
   street: {
     flex: 0.84,
     paddingLeft: getWidth(dimens.sideMargin),
-    fontSize: getWidth(fontSize.textM)
-
-  }
+    fontSize: getWidth(fontSize.textM),
+  },
 });

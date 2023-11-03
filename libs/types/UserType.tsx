@@ -163,6 +163,25 @@ export interface ProviderType {
   id: number;
 }
 
+export interface OrderDetail {
+  client_id: string;
+  patient_type: { type: string; age: string };
+  patient_name: string;
+  address: string;
+  city: string;
+  phonenumber: string;
+  Date_of_birth: string;
+  services: any[];
+  symptoms: string;
+  Additional_notes: string;
+  Estimate_arrival: string;
+  Instructions_for_arrival: string;
+  Payment_mode: string;
+  TotalCost: string;
+  menu_id: string;
+  reason: any[];
+}
+
 export interface ProviderSpeciality {
   name: string;
   id: number;

@@ -37,7 +37,7 @@ import OrderDetails from "./OrderDetails";
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
-  const [isVisible, setIsVisible] = useState<boolean>(false)
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const {
     providerList,
@@ -53,9 +53,9 @@ const HomeScreen = () => {
     onSearchDone,
     isDataNotFound,
     onSearch,
-    user
+    user,
   } = HomeViewController();
-  console.log('user', user)
+  console.log("user", user);
   // const isDataNotFound = searchRef?.length > 0 ? true : false;
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,7 +64,11 @@ const HomeScreen = () => {
         <View style={styles.headerTitleContainer}>
           <View style={styles.headerTitle}>
             <Image source={location} style={styles.location} />
-            <Text numberOfLines={2} style={styles.text} title={user?.address ?? ''} />
+            <Text
+              numberOfLines={2}
+              style={styles.text}
+              title={user?.address ?? ""}
+            />
           </View>
           <TextButton
             isActive
@@ -73,7 +77,6 @@ const HomeScreen = () => {
             onPress={() => setIsVisible(true)}
           />
         </View>
-
       ),
       headerLeft: () => (
         <TouchableOpacity onPress={onPressBack}>
@@ -91,7 +94,7 @@ const HomeScreen = () => {
       ),
       headerStyle: styles.header,
       headerRight: () => (
-        <TouchableHighlight underlayColor="transparent" onPress={onSearch} >
+        <TouchableHighlight underlayColor="transparent" onPress={onSearch}>
           <Image source={avatar} style={styles.avatar} />
         </TouchableHighlight>
       ),
@@ -109,8 +112,12 @@ const HomeScreen = () => {
             placeholder={t("address")}
             type={"fullStreetAddress"}
             inputStyle={[{ minWidth: "82%" }]}
-            onSubmitEditing={() => { setIsVisible(false); }}
-            autoFocus inputValue={""} />
+            onSubmitEditing={() => {
+              setIsVisible(false);
+            }}
+            autoFocus
+            inputValue={""}
+          />
           <TextButton
             containerStyle={{ width: "18%", alignItems: "flex-end" }}
             title="Close"
@@ -119,7 +126,6 @@ const HomeScreen = () => {
           />
         </View>
       </RNModal>
-
     );
   };
   const getProviderList = () => {
@@ -127,7 +133,10 @@ const HomeScreen = () => {
 
     return (
       <>
-        <Text style={styles.searchHeading} title={"Which specialist do you need?"} />
+        <Text
+          style={styles.searchHeading}
+          title={"Which specialist do you need?"}
+        />
         {providerList.map((item: any, index: number) => (
           <Animated.View
             key={index}
@@ -136,9 +145,11 @@ const HomeScreen = () => {
             <CardView
               item={item}
               index={index}
-              onPress={() => navigation.navigate(NavigationRoutes.OrderDetails, {
-                supplier: item
-              })}
+              onPress={() =>
+                navigation.navigate(NavigationRoutes.OrderDetails, {
+                  supplier: item,
+                })
+              }
             />
           </Animated.View>
         ))}
@@ -147,14 +158,15 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     // Pass on Press of card and array of data as props*/
-    return providersList?.map((item: any, index: number) => (
-      <Animated.View
-        key={index}
-        entering={FadeInUp.duration(200).easing(Easing.ease)}
-        exiting={FadeInDown.duration(10).easing(Easing.ease)}>
-        <CardView item={item} index={index} isSearch />
-      </Animated.View>
-    ));
+    return providersList?.map((item: any, index: number) =>
+      console.log("item", item)
+      // <Animated.View
+      //   key={index}
+      //   entering={FadeInUp.duration(200).easing(Easing.ease)}
+      //   exiting={FadeInDown.duration(10).easing(Easing.ease)}>
+      //   <CardView item={item} index={index} isSearch />
+      // </Animated.View>
+    );
   };
   const noSearchedView = () => {
     return (
@@ -183,7 +195,7 @@ const HomeScreen = () => {
             <Image
               style={styles.banner}
               // source={require("assets/icon/google.png")}
-              source={{ uri: (bannerAds?.[0]?.imageurl || '') }}
+              source={{ uri: bannerAds?.[0]?.imageurl || "" }}
             />
           </TouchableOpacity>
         )}
@@ -195,13 +207,12 @@ const HomeScreen = () => {
           onChangeText={onChange}
           defaultValue={onChangeSearch}
           onSubmitEditing={onSearchDone}
-        // onEndEditing={onSearchDone}
         />
         {onChangeSearch?.length === 0
           ? getProviderList()
           : isDataNotFound
-            ? getProviderSearchList()
-            : noSearchedView()}
+          ? getProviderSearchList()
+          : noSearchedView()}
       </ScrollView>
       {isVisible && addAddressView()}
     </>
@@ -252,7 +263,7 @@ const styles = StyleSheet.create({
   },
   headerTitleContainer: {
     alignItems: "center",
-    paddingTop: getHeight(dimens.marginL)
+    paddingTop: getHeight(dimens.marginL),
   },
   noSearchText: {
     textAlign: "center",
@@ -275,11 +286,11 @@ const styles = StyleSheet.create({
     resizeMode: "center",
   },
   text: {
-    fontSize: fontSize.textM
+    fontSize: fontSize.textM,
   },
   modal: {
     flex: 1,
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
   },
   addressView: {
     flexDirection: "row",

@@ -14,14 +14,42 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import React, { useLayoutEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import OrderDetailsController from "./OrderDetailsController";
+import { ClientProfile, OrderDetail } from "libs/types/UserType";
+import { getLocalData } from "libs/datastorage/useLocalStorage";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
-  const route = useRoute<any>()
+  const route = useRoute<any>();
   const { supplier } = route.params;
-  useLayoutEffect(() => {
-  }, [navigation]);
-  const { handleNextButtonPress, showSummary, setShowSummary } = OrderDetailsController()
+  useLayoutEffect(() => {}, [navigation]);
+  const {
+    handleNextButtonPress,
+    showSummary,
+    setShowSummary,
+    treatmentReason,
+  } = OrderDetailsController();
+
+  const userProfile = getLocalData?.("USERPROFILE");
+
+  const [order, setOrder] = useState<OrderDetail>({
+    client_id: "",
+    patient_type: { type: "me", age: "" },
+    patient_name: "",
+    address: "",
+    city: (userProfile as ClientProfile)?.city ?? "",
+    phonenumber: "",
+    Date_of_birth: "",
+    services: [],
+    symptoms: "",
+    Additional_notes: "",
+    Estimate_arrival: "60",
+    Instructions_for_arrival: "",
+    Payment_mode: "",
+    TotalCost: "",
+    menu_id: "",
+    reason: [],
+  });
+  console.log("order", order);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -48,9 +76,17 @@ const OrderDetails = () => {
   return (
     <View style={styles.mainContainer}>
       {showSummary ? (
-        <SummaryView setShowSummary={setShowSummary} />
+        <SummaryView
+          setShowSummary={setShowSummary}
+          order={order}
+          setOrder={setOrder}
+        />
       ) : (
-        <OrderFormView />
+        <OrderFormView
+          treatmentReason={treatmentReason}
+          setOrder={setOrder}
+          order={order}
+        />
       )}
       <Button
         title={showSummary ? "Order" : "Next"}
@@ -60,7 +96,12 @@ const OrderDetails = () => {
         onPress={handleNextButtonPress}
         width={"30%"}
       />
-      {showSummary && <Text title={'*No fee will be collected within 3 minutes after order'} style={styles.text} />}
+      {showSummary && (
+        <Text
+          title={"*No fee will be collected within 3 minutes after order"}
+          style={styles.text}
+        />
+      )}
     </View>
   );
 };
@@ -72,15 +113,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
-
   },
 
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: "center",
-    top: 8
-
+    top: 8,
   },
   header: {
     backgroundColor: colors.white,
@@ -92,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: getWidth(dimens.sideMargin),
-    paddingTop: getHeight(dimens.marginS)
+    paddingTop: getHeight(dimens.marginS),
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),
@@ -104,11 +143,11 @@ const styles = StyleSheet.create({
     fontSize: getWidth(fontSize.textXl),
   },
   buttonOrder: {
-    alignSelf: "center"
+    alignSelf: "center",
   },
   text: {
     fontSize: getWidth(fontSize.textS),
     marginTop: getWidth(4),
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
