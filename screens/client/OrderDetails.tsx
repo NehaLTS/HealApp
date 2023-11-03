@@ -10,6 +10,7 @@ import { colors } from "designToken/colors";
 import { dimens } from "designToken/dimens";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
+import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -18,7 +19,8 @@ const OrderDetails = () => {
   const [showSummary, setShowSummary] = useState(false);
 
   const handleNextButtonPress = () => {
-    setShowSummary(!showSummary);
+    // setShowSummary(!showSummary);
+    navigation.navigate(NavigationRoutes.SearchDoctor)
   };
 
   useLayoutEffect(() => {

@@ -2,6 +2,8 @@
 
 buildscript {
     ext {
+         playServicesVersion = "18.0.0"
+        playServicesLocationVersion = "21.0.1"
         buildToolsVersion = "33.0.0"
         minSdkVersion = 21
         compileSdkVersion = 33

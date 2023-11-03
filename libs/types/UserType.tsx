@@ -67,6 +67,7 @@ export interface GoogleLoginResponse {
   user: UserGoogle;
 }
 
+
 export interface AdditionalUserInfo {
   providerId: string;
   profile: Profile;
@@ -182,3 +183,12 @@ export interface ProviderServices {
   description?: string;
   currency: string;
 }
+
+export type Location = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+  title?: string;
+  timestamp?: any;
+};

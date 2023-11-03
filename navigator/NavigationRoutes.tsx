@@ -9,6 +9,7 @@ enum NavigationRoutes {
   OnboardDetails = "OnboardDetails",
   ClientHome = "ClientHome",
   OrderDetails = "OrderDetails",
+  SearchDoctor="SearchDoctor",
 
   //Provider Routes
   ProviderStack = "ProviderStack",
@@ -16,6 +17,7 @@ enum NavigationRoutes {
   ProviderHome = "ProviderHome",
   ProviderRegistration = "ProviderRegistration",
   ProviderConfirmation = 'ProviderConfirmation'
+  
 }
 
 export default NavigationRoutes

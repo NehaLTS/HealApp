@@ -38,6 +38,14 @@ const ClientStackNavigator = () => {
               import("../screens/client/OrderDetails")
           )}
         />
+           <Stack.Screen
+          name={NavigationRoutes.SearchDoctor}
+          options={defaultHeaderStyle}
+          component={lazy(
+            () =>
+              import("../screens/client/SearchDoctor")
+          )}
+        />
       </Stack.Navigator>
   
   );
