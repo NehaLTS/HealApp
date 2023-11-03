@@ -1,17 +1,17 @@
-import { Alert } from "react-native";
-import React, { useEffect, useState } from "react";
-import { ClientOrderServices } from "libs/ClientOrderServices";
-import { getLocalData } from "libs/datastorage/useLocalStorage";
-import { ClientProfile, UserTypeProvider } from "libs/types/UserType";
-import { UseClientUserContext } from "contexts/UseClientUserContext";
-import { treatment } from "libs/types/ProvierTypes";
+import { Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ClientOrderServices } from 'libs/ClientOrderServices';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { ClientProfile, UserTypeProvider } from 'libs/types/UserType';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { treatment } from 'libs/types/ProvierTypes';
 
 const OrderDetailsController = () => {
   const [showSummary, setShowSummary] = useState(false);
   const { orderProvider, treatmentMenu } = ClientOrderServices();
   const { orderDetails } = UseClientUserContext();
-  const order = getLocalData("USER");
-  const userProfile = getLocalData?.("USERPROFILE");
+  const order = getLocalData('USER');
+  const userProfile = getLocalData?.('USERPROFILE');
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const OrderDetailsController = () => {
   }, []);
   const treatmentReasons = async () => {
     try {
-      const res = await treatmentMenu({ provider_type_id: "1" });
+      const res = await treatmentMenu({ provider_type_id: '1' });
       // console.log("res treatmentReasons", res); // Log the response data, not the string "res"
       setTreatmentReason(res);
     } catch (error) {

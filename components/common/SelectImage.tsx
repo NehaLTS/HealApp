@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import ImagePicker from "react-native-image-crop-picker";
-import { colors } from "designToken/colors";
-import { fontWeight } from "designToken/fontWeights";
-import { getHeight } from "libs/StyleHelper";
-import Modal from "react-native-modal/dist/modal";
-import uploadImage from "libs/uploadImage";
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import { colors } from 'designToken/colors';
+import { fontWeight } from 'designToken/fontWeights';
+import { getHeight } from 'libs/StyleHelper';
+import Modal from 'react-native-modal/dist/modal';
+import uploadImage from 'libs/uploadImage';
 
 const SelectImage = ({
   imageUri,
@@ -30,8 +30,7 @@ const SelectImage = ({
         setHeight(height);
         setWidth(width);
         closeModal(false);
-        console.log(image)
-
+        console.log(image);
       })
       .catch((error) => {
         console.log(error);
@@ -70,11 +69,11 @@ const SelectImage = ({
   };
 
   return (
-    <Modal isVisible={isShowModal} style={{ justifyContent: 'flex-end' }} >
+    <Modal isVisible={isShowModal} style={{ justifyContent: 'flex-end' }}>
       <View
         style={{
-          width: "100%",
-          position: "absolute",
+          width: '100%',
+          position: 'absolute',
           rowGap: getHeight(10),
         }}
       >
@@ -89,7 +88,7 @@ const SelectImage = ({
             style={{
               paddingVertical: getHeight(16),
               borderBottomWidth: getHeight(1),
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
@@ -99,14 +98,14 @@ const SelectImage = ({
                 fontWeight: fontWeight.semiBold,
               }}
             >
-              {"Choose from Gallery"}
+              {'Choose from Gallery'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleCameraPicker}
             style={{
               paddingVertical: getHeight(16),
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
@@ -116,7 +115,7 @@ const SelectImage = ({
                 fontWeight: fontWeight.semiBold,
               }}
             >
-              {"Take a Photo"}
+              {'Take a Photo'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -124,7 +123,7 @@ const SelectImage = ({
           onPress={() => closeModal(false)}
           style={{
             paddingVertical: getHeight(16),
-            alignItems: "center",
+            alignItems: 'center',
             backgroundColor: colors.white,
             borderRadius: getHeight(10),
           }}
@@ -136,7 +135,7 @@ const SelectImage = ({
               fontWeight: fontWeight.semiBold,
             }}
           >
-            {"Close"}
+            {'Close'}
           </Text>
         </TouchableOpacity>
       </View>

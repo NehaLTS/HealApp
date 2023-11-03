@@ -24,47 +24,66 @@ const ProviderAddress = ({
     BasicInformationController({});
   const { languageCode } = useTranslationContext();
   const { registration } = getTexts(languageCode);
-  const [phoneError, setPhoneError] = useState("");
-  const [addressError, setAddressError] = useState("");
+  const [phoneError, setPhoneError] = useState('');
+  const [addressError, setAddressError] = useState('');
   const [isVisible, setIsVisible] = useState(false);
-  const [onSearchAddress, setOnSearchAddress] = useState("");
+  const [onSearchAddress, setOnSearchAddress] = useState('');
 
+  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
+  const phoneRef = React.useRef<any>('');
+  const licenseRef = React.useRef<any>('');
+  const addressRef = React.useRef<any>('');
 
-  const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
-  const phoneRef = React.useRef<any>("");
-  const licenseRef = React.useRef<any>("");
-  const addressRef = React.useRef<any>("");
+  const onBlurPhoneNumber = () => {
+    validatePhoneNumber();
+    setUserDataProvider({
+      ...userDataProvider,
+      phone_number: phoneRef.current.value,
+    });
+  };
+  const onChangePhoneNumber = (value: string) =>
+    (phoneRef.current.value = value);
 
-  const onBlurPhoneNumber = () => { validatePhoneNumber(); setUserDataProvider({ ...userDataProvider, phone_number: phoneRef.current.value }) }
-  const onChangePhoneNumber = (value: string) => phoneRef.current.value = value
+  const onBlurLastName = () =>
+    setUserDataProvider({
+      ...userDataProvider,
+      license: licenseRef.current.value,
+    });
+  const onChangeLastName = (value: string) =>
+    (licenseRef.current.value = value);
 
-  const onBlurLastName = () => setUserDataProvider({ ...userDataProvider, license: licenseRef.current.value })
-  const onChangeLastName = (value: string) => licenseRef.current.value = value
-
-  const onBlurAddress = () => { validateAddress(); setUserDataProvider({ ...userDataProvider, address: addressRef.current.value }) }
+  const onBlurAddress = () => {
+    validateAddress();
+    setUserDataProvider({
+      ...userDataProvider,
+      address: addressRef.current.value,
+    });
+  };
   const onChangeAddress = (value: string) => {
-    addressRef.current.value = value, setOnSearchAddress(value), setUserDataProvider({ ...userDataProvider, address: onSearchAddress })
-  }
+    (addressRef.current.value = value),
+      setOnSearchAddress(value),
+      setUserDataProvider({ ...userDataProvider, address: onSearchAddress });
+  };
 
-  const getImageUrl = (url: string) => setUserDataProvider({ ...userDataProvider, license_photo: url });
-  console.log('userDataProvider', userDataProvider)
+  const getImageUrl = (url: string) =>
+    setUserDataProvider({ ...userDataProvider, license_photo: url });
+  console.log('userDataProvider', userDataProvider);
 
   const validatePhoneNumber = () => {
     if (!phoneRef.current.value) {
-      setPhoneError("Phone number is required");
+      setPhoneError('Phone number is required');
     } else {
-      setPhoneError("");
+      setPhoneError('');
     }
   };
 
   const validateAddress = () => {
     if (onSearchAddress?.length === 0) {
-      setAddressError("Address is required");
+      setAddressError('Address is required');
     } else if (onSearchAddress?.length < 4) {
-      setAddressError('Please fill full address')
-    }
-    else {
-      setAddressError("");
+      setAddressError('Please fill full address');
+    } else {
+      setAddressError('');
     }
   };
 
@@ -72,9 +91,9 @@ const ProviderAddress = ({
     return (
       <View style={styles.addressView}>
         <Input
-          placeholder={t("address")}
-          type={"fullStreetAddress"}
-          inputStyle={[{ minWidth: "82%" }]}
+          placeholder={t('address')}
+          type={'fullStreetAddress'}
+          inputStyle={[{ minWidth: '82%' }]}
           onClearInputText={() => addressRef.current.clear()}
           onChangeText={onChangeAddress}
           inputValue={onSearchAddress}
@@ -83,7 +102,7 @@ const ProviderAddress = ({
           autoFocus
         />
         <TextButton
-          containerStyle={{ width: "18%", alignItems: "flex-end" }}
+          containerStyle={{ width: '18%', alignItems: 'flex-end' }}
           title="Close"
           fontSize={fontSize.textL}
           onPress={() => setIsVisible(false)}
@@ -95,40 +114,37 @@ const ProviderAddress = ({
   return (
     <>
       <Input
-        placeholder={t("Phone Number*")}
-        type={"telephoneNumber"}
+        placeholder={t('Phone Number*')}
+        type={'telephoneNumber'}
         keyboardType="number-pad"
         // inputStyle={styles.input}
         onBlur={onBlurPhoneNumber}
         onChangeText={onChangePhoneNumber}
         ref={phoneRef}
         defaultValue={userDataProvider.phone_number}
-        inputValue={userDataProvider?.phone_number ?? ""}
+        inputValue={userDataProvider?.phone_number ?? ''}
         errorMessage={phError.length ? phError : phoneError}
-        returnKeyType={"next"}
+        returnKeyType={'next'}
         onSubmitEditing={() => licenseRef.current.focus()}
         onClearInputText={() => phoneRef.current.clear()}
-
       />
 
       <Input
-        placeholder={t("License number (for those who have)")}
-        type={"nameSuffix"}
+        placeholder={t('License number (for those who have)')}
+        type={'nameSuffix'}
         inputStyle={styles.input}
         onBlur={onBlurLastName}
         onChangeText={onChangeLastName}
         ref={licenseRef}
         defaultValue={userDataProvider.license}
-        inputValue={userDataProvider?.license ?? ""}
-        returnKeyType={"next"}
+        inputValue={userDataProvider?.license ?? ''}
+        returnKeyType={'next'}
         onSubmitEditing={() => addressRef.current.focus()}
         onClearInputText={() => licenseRef.current.clear()}
-
-
       />
 
       <Input
-        placeholder={t("address")}
+        placeholder={t('address')}
         inputStyle={styles.input}
         value={onSearchAddress}
         errorMessage={addressError}
@@ -139,17 +155,16 @@ const ProviderAddress = ({
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text}>{t("Upload license photo")}</Text>
+        <Text style={styles.text}>{t('Upload license photo')}</Text>
         <TouchableOpacity
           activeOpacity={userDataProvider.license_photo ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
-
         >
           <Image
             source={
               userDataProvider.license_photo
                 ? { uri: userDataProvider.license_photo }
-                : require("../../../../assets/icon/licencesIcon.png")
+                : require('../../../../assets/icon/licencesIcon.png')
             }
             style={styles.selectedImage}
           />
@@ -164,7 +179,8 @@ const ProviderAddress = ({
         style={styles.modal}
         backdropOpacity={1}
         backdropColor={colors.white}
-        isVisible={isVisible}>
+        isVisible={isVisible}
+      >
         {addAddressView()}
       </RNModal>
     </>
@@ -178,23 +194,23 @@ const styles = StyleSheet.create({
     fontSize: fontSize.textL,
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
-    textAlign: "center",
+    textAlign: 'center',
   },
   input: {
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
   },
 
   iconContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: getHeight(dimens.marginS),
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: getHeight(dimens.sideMargin),
   },
 
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
     width: getWidth(dimens.imageS + dimens.paddingS + 2),
-    resizeMode: "cover",
+    resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS),
   },
   editImage: {
@@ -203,11 +219,11 @@ const styles = StyleSheet.create({
   },
   modal: {
     flex: 1,
-    justifyContent: "flex-start"
+    justifyContent: 'flex-start',
   },
   addressView: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: getHeight(dimens.paddingS),
-  }
+  },
 });

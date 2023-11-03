@@ -7,9 +7,9 @@ import { StyleSheet } from 'react-native';
 const OrderFormController = () => {
   const [activeButton, setActiveButton] = useState<number[]>([]);
   const [selectedResourceType, setSelectedResourceType] = useState();
-  const { treatmentMenu } = ClientOrderServices()
-  const [treatmentReason, setTreatmentReason] = useState<treatment[]>()
-  const { orderDetails, setOrderDetails } = UseClientUserContext()
+  const { treatmentMenu } = ClientOrderServices();
+  const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
+  const { orderDetails, setOrderDetails } = UseClientUserContext();
   const onSelectReasons = (item: any) => {
     const updatedActiveButton = [...activeButton];
     const itemIndex = updatedActiveButton.indexOf(item.id);
@@ -24,14 +24,14 @@ const OrderFormController = () => {
     setActiveButton(updatedActiveButton); // Update the state with the new array
   };
   useEffect(() => {
-    treatmentReasons()
-    setOrderDetails({ ...orderDetails, patient_type: 'me' })
-  }, [])
+    treatmentReasons();
+    setOrderDetails({ ...orderDetails, patient_type: 'me' });
+  }, []);
   const treatmentReasons = async () => {
     try {
-      const res = await treatmentMenu({ provider_type_id: "1" });
-      console.log("res treatmentReasons", res); // Log the response data, not the string "res"
-      setTreatmentReason(res)
+      const res = await treatmentMenu({ provider_type_id: '1' });
+      console.log('res treatmentReasons', res); // Log the response data, not the string "res"
+      setTreatmentReason(res);
     } catch (error) {
       console.error(error);
     }
@@ -41,10 +41,10 @@ const OrderFormController = () => {
     onSelectReasons,
     setSelectedResourceType,
     setActiveButton,
-    treatmentReason
-  }
-}
+    treatmentReason,
+  };
+};
 
-export default OrderFormController
+export default OrderFormController;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

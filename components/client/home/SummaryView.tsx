@@ -1,19 +1,19 @@
-import { Image, KeyboardAvoidingView, StyleSheet, View } from "react-native";
-import React, { useState } from "react";
-import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import { dimens } from "designToken/dimens";
-import Input from "components/common/Input";
-import { fontWeight } from "designToken/fontWeights";
-import { fontFamily } from "designToken/fontFamily";
-import { colors } from "designToken/colors";
-import UserPaymentView from "components/client/registration/views/UserPaymentView";
-import CardView from "components/common/CardView";
-import { UseClientUserContext } from "contexts/UseClientUserContext";
-import Modal from "components/common/Modal";
-import { OrderDetail } from "libs/types/UserType";
+import { Image, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { dimens } from 'designToken/dimens';
+import Input from 'components/common/Input';
+import { fontWeight } from 'designToken/fontWeights';
+import { fontFamily } from 'designToken/fontFamily';
+import { colors } from 'designToken/colors';
+import UserPaymentView from 'components/client/registration/views/UserPaymentView';
+import CardView from 'components/common/CardView';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import Modal from 'components/common/Modal';
+import { OrderDetail } from 'libs/types/UserType';
 interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
   order: OrderDetail;
@@ -22,15 +22,15 @@ interface SummaryViewProps {
 const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const { orderDetails, setOrderDetails } = UseClientUserContext();
-  console.log("arrivalRef.current.value", order);
-  const arrivalRef = React.useRef<any>("");
+  console.log('arrivalRef.current.value', order);
+  const arrivalRef = React.useRef<any>('');
   const totalPrice: number = order?.services.reduce(
     (total, item) => total + parseInt(item.price, 10),
-    0
+    0,
   );
 
   function calculateAgeFromDate(dateString) {
-    const parts = dateString.split(" ");
+    const parts = dateString.split(' ');
     if (parts.length < 4) {
       return NaN;
     }
@@ -49,7 +49,8 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       backdropOpacity={1}
       // onBackdropPress={onPaymentAdd}
       isVisible={isVisible}
-      style={styles.modalContainer}>
+      style={styles.modalContainer}
+    >
       <View style={styles.paymentContainer}>
         <UserPaymentView isFromHome={true} />
       </View>
@@ -58,13 +59,14 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
   return (
     <>
       <KeyboardAvoidingView
-        behavior={"height"}
+        behavior={'height'}
         keyboardVerticalOffset={-200}
-        style={{ flex: 0.97 }}>
+        style={{ flex: 0.97 }}
+      >
         <View style={styles.textContainer}>
-          <Text title={"Order summary"} style={styles.summary} />
+          <Text title={'Order summary'} style={styles.summary} />
           <TextButton
-            title={"Edit order"}
+            title={'Edit order'}
             fontSize={getHeight(fontSize.textL)}
             isActive
             onPress={() => setShowSummary(false)}
@@ -73,17 +75,17 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         <View style={styles.container}>
           <View style={styles.rowContainer}>
             <View style={styles.patientAndAddress}>
-              <Text title={"The patient "} style={styles.text} />
+              <Text title={'The patient '} style={styles.text} />
               <Text
                 title={`${calculateAgeFromDate(
-                  order?.patient_type?.age
+                  order?.patient_type?.age,
                 )} y.o, ${order?.phonenumber}`}
                 style={styles.textSmall}
               />
             </View>
             <View style={styles.locationContainer}>
               <Image
-                source={require("../../../assets/icon/location.png")}
+                source={require('../../../assets/icon/location.png')}
                 style={styles.locationIcon}
               />
               <Text title={order?.address} style={styles.locationText} />
@@ -92,8 +94,8 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         </View>
 
         <View style={styles.symptomsContainer}>
-          <Text title={"Symptoms "} style={styles.symptomsText} />
-          <View style={{ flexDirection: "row", gap: 6, marginVertical: 4 }}>
+          <Text title={'Symptoms '} style={styles.symptomsText} />
+          <View style={{ flexDirection: 'row', gap: 6, marginVertical: 4 }}>
             {order?.reason.map((item, index) => (
               <Text
                 key={index}
@@ -104,27 +106,27 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
           </View>
         </View>
 
-        <Text title={"Services"} style={styles.text} />
+        <Text title={'Services'} style={styles.text} />
         {order?.services.map((item, index) => (
           <Text
             key={index}
-            title={item?.name?.en + " " + item?.price}
+            title={item?.name?.en + ' ' + item?.price}
             style={styles.voltaireText}
           />
         ))}
-        <View style={{ flexDirection: "row" }}>
-          <Text title={"Total "} style={styles.total} />
+        <View style={{ flexDirection: 'row' }}>
+          <Text title={'Total '} style={styles.total} />
           <Text title={`${totalPrice} NIS`} style={styles.textSmall} />
         </View>
 
         <Text
-          title={"*If the doctor won’t use your shot, you won’t pay for it"}
+          title={'*If the doctor won’t use your shot, you won’t pay for it'}
           style={styles.payForIt}
         />
         <View style={styles.cardDetail}>
-          <Text title={"Paid by card *4545"} style={styles.textPaid} />
+          <Text title={'Paid by card *4545'} style={styles.textPaid} />
           <TextButton
-            title={"Change"}
+            title={'Change'}
             fontSize={getHeight(fontSize.textL)}
             isActive
             style={styles.textPaid}
@@ -132,13 +134,13 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
           />
         </View>
 
-        <Text title={"Estimated arrival"} style={styles.text} />
-        <Text title={"60 min"} style={styles.textSmall} />
+        <Text title={'Estimated arrival'} style={styles.text} />
+        <Text title={'60 min'} style={styles.textSmall} />
 
         <View style={styles.instructionContainer}>
-          <Text title={"Instructions for arrival"} style={styles.instruction} />
+          <Text title={'Instructions for arrival'} style={styles.instruction} />
           <Input
-            placeholder={"Describe where is the entrance etc."}
+            placeholder={'Describe where is the entrance etc.'}
             inputValue={order?.Instructions_for_arrival}
             defaultValue={order?.Instructions_for_arrival}
             inputStyle={styles.description}
@@ -163,27 +165,27 @@ export default SummaryView;
 
 const styles = StyleSheet.create({
   textContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: getWidth(dimens.marginM),
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: getWidth(dimens.marginM),
   },
   summary: {
     fontSize: fontSize.textXl,
   },
   patientDetail: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: getWidth(dimens.marginS + dimens.borderBold),
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),
     height: getHeight(dimens.marginM),
-    resizeMode: "center",
+    resizeMode: 'center',
   },
   patientAddress: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: getWidth(dimens.sideMargin),
     marginRight: getWidth(dimens.marginM),
     marginTop: getWidth(dimens.marginS),
@@ -202,7 +204,7 @@ const styles = StyleSheet.create({
     marginTop: getWidth(dimens.marginS),
   },
   locationContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: getWidth(dimens.marginS + 5),
   },
   voltaireText: {
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
   },
   cardDetail: {
     flex: 0.15,
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: getWidth(dimens.marginM),
   },
   textPaid: {
@@ -237,15 +239,15 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 0.17,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   rowContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: getWidth(dimens.sideMargin),
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   patientAndAddress: {
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   total: {
     fontFamily: fontFamily.bold,
@@ -269,6 +271,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   modalContainer: {
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
   },
 });

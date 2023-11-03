@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   StyleSheet,
@@ -7,28 +7,28 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
-} from "react-native";
-import { colors } from "designToken/colors";
-import { fontFamily } from "designToken/fontFamily";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import { dimens } from "designToken/dimens";
-import Modal from "react-native-modal/dist/modal";
-import Input from "components/common/Input";
-import Button from "components/common/Button";
-import { fontWeight } from "designToken/fontWeights";
-import ProviderAddServicesController from "../controllers/ProviderAddServicesController";
-import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
-import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-import { Name, Service } from "libs/types/ProvierTypes";
-import { UseUserContextProvider } from "contexts/useUserContextProvider";
+} from 'react-native';
+import { colors } from 'designToken/colors';
+import { fontFamily } from 'designToken/fontFamily';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { dimens } from 'designToken/dimens';
+import Modal from 'react-native-modal/dist/modal';
+import Input from 'components/common/Input';
+import Button from 'components/common/Button';
+import { fontWeight } from 'designToken/fontWeights';
+import ProviderAddServicesController from '../controllers/ProviderAddServicesController';
+import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
+import { Name, Service } from 'libs/types/ProvierTypes';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 
 const ProviderAddServices = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const { onCreateProviderServices, onGetUserAllServices } =
     AuthServicesProvider();
-  const {  setUserDataProvider } = UseUserContextProvider();
+  const { setUserDataProvider } = UseUserContextProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [isServiceLoading, setIsServiceLoading] = useState(false);
   const [services, setServices] = useState([]);
@@ -58,47 +58,44 @@ const ProviderAddServices = () => {
   console.log(isServiceAdded);
 
   ////////TEMP ADDED HERE NEED TO MOVE TO CONTROLLERS
-  const [serviceError, setServiceError] = useState("");
-  const [priceError, setPriceError] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
+  const [serviceError, setServiceError] = useState('');
+  const [priceError, setPriceError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
   const onBlurServiceName = () => {
     validateServiceName();
-
   };
   const onChangeServiceName = (value: string) =>
     (serviceNameRef.current.value = value);
   const onBlurPriceName = () => {
     validatePrice();
-
   };
   const onChangePriceName = (value: string) => (priceRef.current.value = value);
   const onBlurDescription = () => {
     validateDescription();
-
   };
   const onChangeDescription = (value: string) =>
     (descriptionRef.current.value = value);
 
   const validateServiceName = () => {
     if (!serviceNameRef.current.value) {
-      setServiceError("Service name is required");
+      setServiceError('Service name is required');
     } else {
-      setServiceError("");
+      setServiceError('');
     }
   };
   const validatePrice = () => {
     if (!priceRef.current.value) {
-      setPriceError("Price is required");
+      setPriceError('Price is required');
     } else {
-      setPriceError("");
+      setPriceError('');
     }
   };
   const validateDescription = () => {
     if (!descriptionRef.current.value) {
-      setDescriptionError("Description is required");
+      setDescriptionError('Description is required');
     } else {
-      setDescriptionError("");
+      setDescriptionError('');
     }
   };
 
@@ -106,12 +103,12 @@ const ProviderAddServices = () => {
 
   const getUserAllServices = async () => {
     setIsServiceLoading(true);
-    let response = await onGetUserAllServices({ provider_id: "1" ?? "1" });
+    let response = await onGetUserAllServices({ provider_id: '1' ?? '1' });
 
-    console.log("resp is ", response);
+    console.log('resp is ', response);
     if (response) {
       setServices(response);
-      setUserDataProvider({...userDataProvider, providerServices:true })
+      setUserDataProvider({ ...userDataProvider, providerServices: true });
     }
 
     setIsServiceLoading(false);
@@ -122,24 +119,32 @@ const ProviderAddServices = () => {
   }, []);
 
   const saveService = async () => {
-    if (serviceNameRef.current.value && descriptionRef.current.value && priceRef.current.value) {
-
+    if (
+      serviceNameRef.current.value &&
+      descriptionRef.current.value &&
+      priceRef.current.value
+    ) {
       let data = {
-        name: { en: serviceNameRef.current.value, hi: "", he: "" },
-        description: { en: descriptionRef.current.value, hi: "", he: "" },
-        price: priceRef.current.value
-      }
+        name: { en: serviceNameRef.current.value, hi: '', he: '' },
+        description: { en: descriptionRef.current.value, hi: '', he: '' },
+        price: priceRef.current.value,
+      };
 
-      setService({ ...service as Service, ...data })
+      setService({ ...(service as Service), ...data });
 
       // if(userDataProvider.provider_id && userDataProvider.speciality_id){
       setIsLoading(true);
       //  let response= await onCreateProviderServices({name:serviceNameRef.current.value,description:descriptionRef.current.value,price:priceRef.current.value,currency:"USD",provider_id:userDataProvider.provider_id, specialty_id: userDataProvider.speciality_id});
 
+      let response = await onCreateProviderServices({
+        name: serviceNameRef.current.value,
+        description: descriptionRef.current.value,
+        price: priceRef.current.value,
+        provider_id: '1',
+        specialty_id: '1',
+      });
 
-      let response = await onCreateProviderServices({ name: serviceNameRef.current.value, description: descriptionRef.current.value, price: priceRef.current.value, provider_id: '1', specialty_id: '1' });
-
-      console.log("response is ", response)
+      console.log('response is ', response);
 
       //Need to check for success and then append
       getUserAllServices();
@@ -147,9 +152,8 @@ const ProviderAddServices = () => {
       toggleModal();
       // }
     } else {
-      Alert.alert("Please fill all the details");
+      Alert.alert('Please fill all the details');
     }
-
   };
 
   const getAllServices = () => {
@@ -158,7 +162,8 @@ const ProviderAddServices = () => {
         <Text
           style={[
             { marginBottom: getHeight(14), fontFamily: fontFamily.medium },
-          ]}>
+          ]}
+        >
           {item.name.en} $ {item.price}
         </Text>
         <Text style={styles.textView}>{item.description.en}</Text>
@@ -168,7 +173,6 @@ const ProviderAddServices = () => {
 
   return (
     <>
-
       <ScrollView>
         {services && services.length > 0 ? (
           <>{getAllServices()}</>
@@ -176,7 +180,7 @@ const ProviderAddServices = () => {
           <>
             <View style={styles.textContainer}>
               <Text style={styles.text}>
-                Do you provide another {"\n"}services which not on {"\n"}the
+                Do you provide another {'\n'}services which not on {'\n'}the
                 list?
               </Text>
             </View>
@@ -185,7 +189,7 @@ const ProviderAddServices = () => {
         <View style={styles.container}>
           <TouchableOpacity onPress={toggleModal}>
             <Image
-              source={require("../../../../assets/icon/add.png")}
+              source={require('../../../../assets/icon/add.png')}
               style={styles.addicon}
             />
           </TouchableOpacity>
@@ -193,62 +197,63 @@ const ProviderAddServices = () => {
         </View>
       </ScrollView>
 
-        {!isServiceAdded && (
-          <Modal
-            isVisible={isModalVisible}
-            backdropOpacity={0.8}
-            backdropColor={colors.white}>
-              
-      <KeyboardAvoidingView  keyboardVerticalOffset={-50} behavior={'padding'} style={{ flex: 0.8 }}>
+      {!isServiceAdded && (
+        <Modal
+          isVisible={isModalVisible}
+          backdropOpacity={0.8}
+          backdropColor={colors.white}
+        >
+          <KeyboardAvoidingView
+            keyboardVerticalOffset={-50}
+            behavior={'padding'}
+            style={{ flex: 0.8 }}
+          >
             <View style={styles.modalContent}>
               <Text style={styles.addService}>Add service</Text>
               <Input
-                placeholder={"Name of the service*"}
+                placeholder={'Name of the service*'}
                 onBlur={onBlurServiceName}
                 onChangeText={onChangeServiceName}
                 ref={serviceNameRef}
                 defaultValue={service?.name?.en}
-                inputValue={""}
+                inputValue={''}
                 errorMessage={serviceError}
-                returnKeyType={"next"}
+                returnKeyType={'next'}
                 onSubmitEditing={() => priceRef.current.focus()}
                 onClearInputText={() => serviceNameRef.current.clear()}
-
               />
               <Input
-                placeholder={"Price*"}
+                placeholder={'Price*'}
                 inputStyle={styles.input}
                 onBlur={onBlurPriceName}
                 onChangeText={onChangePriceName}
                 ref={priceRef}
                 defaultValue={service?.price}
-                inputValue={""}
+                inputValue={''}
                 errorMessage={priceError}
                 keyboardType="numeric"
-                returnKeyType={"next"}
+                returnKeyType={'next'}
                 onSubmitEditing={() => descriptionRef.current.focus()}
                 onClearInputText={() => priceRef.current.clear()}
-
               />
               <Input
-                placeholder={"Description"}
+                placeholder={'Description'}
                 inputStyle={styles.description}
                 onBlur={onBlurDescription}
                 onChangeText={onChangeDescription}
                 ref={descriptionRef}
                 defaultValue={service?.description?.en}
-                inputValue={""}
+                inputValue={''}
                 errorMessage={descriptionError}
                 onClearInputText={() => descriptionRef.current.clear()}
-
               />
               <Button
-                title={"Save"}
+                title={'Save'}
                 isPrimary
                 isSmall
                 width={getWidth(85)}
                 style={{
-                  alignSelf: "center",
+                  alignSelf: 'center',
                   marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
                 }}
                 onPress={saveService}
@@ -256,15 +261,15 @@ const ProviderAddServices = () => {
                 height={getHeight(34)}
               />
               <TextButton
-                style={{ alignSelf: "center" }}
+                style={{ alignSelf: 'center' }}
                 fontSize={getWidth(fontSize.textXl + 2)}
-                title={"Cancel"}
+                title={'Cancel'}
                 onPress={toggleModal}
               />
             </View>
-            </KeyboardAvoidingView>
-          </Modal>
-        )}
+          </KeyboardAvoidingView>
+        </Modal>
+      )}
       {/* {isServiceAdded && (
         <View style={[styles.serviceContainer, styles.elevation]}>
           <Text style={styles.textView}>{userDataProvider.services ?? ""}</Text>
@@ -274,7 +279,6 @@ const ProviderAddServices = () => {
           <Text style={styles.textView}> {userDataProvider.price ?? ""}</Text>
         </View>
       )} */}
-
     </>
   );
 };
@@ -289,12 +293,12 @@ const styles = StyleSheet.create({
     // alignItems:"center"
   },
   text: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: getWidth(fontSize.textXl),
     // marginTop:20
   },
   addService: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(20),
   },
@@ -306,8 +310,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 0.27,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: getHeight(dimens.marginM),
     marginHorizontal: getHeight(dimens.paddingL),
   },
@@ -334,11 +338,11 @@ const styles = StyleSheet.create({
   description: {
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
     height: getHeight(dimens.imageM + dimens.paddingL + 10),
-    alignItems: "flex-start",
-    justifyContent: "center",
+    alignItems: 'flex-start',
+    justifyContent: 'center',
   },
   buttonContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   serviceContainer: {
     backgroundColor: colors.white,
@@ -358,7 +362,7 @@ const styles = StyleSheet.create({
   },
   readMoreText: {
     color: colors.black,
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
 });
 

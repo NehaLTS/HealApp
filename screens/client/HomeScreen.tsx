@@ -1,20 +1,20 @@
-import { useNavigation } from "@react-navigation/native";
-import arrowBack from "assets/icon/arrowBack.png";
-import avatar from "assets/icon/avatar.png";
-import logo from "assets/icon/healLogo.png";
-import location from "assets/icon/location.png";
-import noSearchResult from "assets/icon/searchFallback.png";
-import Button from "components/common/Button";
-import CardView from "components/common/CardView";
-import SearchBox from "components/common/SearchBox";
-import Text from "components/common/Text";
-import TextButton from "components/common/TextButton";
-import { dimens } from "designToken/dimens";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import NavigationRoutes from "navigator/NavigationRoutes";
-import React, { useLayoutEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useNavigation } from '@react-navigation/native';
+import arrowBack from 'assets/icon/arrowBack.png';
+import avatar from 'assets/icon/avatar.png';
+import logo from 'assets/icon/healLogo.png';
+import location from 'assets/icon/location.png';
+import noSearchResult from 'assets/icon/searchFallback.png';
+import Button from 'components/common/Button';
+import CardView from 'components/common/CardView';
+import SearchBox from 'components/common/SearchBox';
+import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import React, { useLayoutEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Image,
   ScrollView,
@@ -22,17 +22,17 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   Easing,
   FadeInDown,
   FadeInUp,
-} from "react-native-reanimated";
-import HomeViewController from "./HomeViewController";
-import { colors } from "designToken/colors";
-import RNModal from "components/common/Modal";
-import Input from "components/common/Input";
-import OrderDetails from "./OrderDetails";
+} from 'react-native-reanimated';
+import HomeViewController from './HomeViewController';
+import { colors } from 'designToken/colors';
+import RNModal from 'components/common/Modal';
+import Input from 'components/common/Input';
+import OrderDetails from './OrderDetails';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -55,11 +55,11 @@ const HomeScreen = () => {
     onSearch,
     user,
   } = HomeViewController();
-  console.log("user", user);
+  console.log('user', user);
   // const isDataNotFound = searchRef?.length > 0 ? true : false;
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitleAlign: "center",
+      headerTitleAlign: 'center',
       headerTitle: () => (
         <View style={styles.headerTitleContainer}>
           <View style={styles.headerTitle}>
@@ -67,7 +67,7 @@ const HomeScreen = () => {
             <Text
               numberOfLines={2}
               style={styles.text}
-              title={user?.address ?? ""}
+              title={user?.address ?? ''}
             />
           </View>
           <TextButton
@@ -106,20 +106,21 @@ const HomeScreen = () => {
         style={styles.modal}
         backdropOpacity={1}
         backdropColor={colors.white}
-        isVisible={isVisible}>
+        isVisible={isVisible}
+      >
         <View style={styles.addressView}>
           <Input
-            placeholder={t("address")}
-            type={"fullStreetAddress"}
-            inputStyle={[{ minWidth: "82%" }]}
+            placeholder={t('address')}
+            type={'fullStreetAddress'}
+            inputStyle={[{ minWidth: '82%' }]}
             onSubmitEditing={() => {
               setIsVisible(false);
             }}
             autoFocus
-            inputValue={""}
+            inputValue={''}
           />
           <TextButton
-            containerStyle={{ width: "18%", alignItems: "flex-end" }}
+            containerStyle={{ width: '18%', alignItems: 'flex-end' }}
             title="Close"
             fontSize={fontSize.textL}
             onPress={() => setIsVisible(false)}
@@ -135,13 +136,14 @@ const HomeScreen = () => {
       <>
         <Text
           style={styles.searchHeading}
-          title={"Which specialist do you need?"}
+          title={'Which specialist do you need?'}
         />
         {providerList.map((item: any, index: number) => (
           <Animated.View
             key={index}
             entering={FadeInUp.duration(200).easing(Easing.ease)}
-            exiting={FadeInDown.duration(10).easing(Easing.ease)}>
+            exiting={FadeInDown.duration(10).easing(Easing.ease)}
+          >
             <CardView
               item={item}
               index={index}
@@ -158,8 +160,8 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     // Pass on Press of card and array of data as props*/
-    return providersList?.map((item: any, index: number) =>
-      console.log("item", item)
+    return providersList?.map(
+      (item: any, index: number) => console.log('item', item),
       // <Animated.View
       //   key={index}
       //   entering={FadeInUp.duration(200).easing(Easing.ease)}
@@ -171,13 +173,13 @@ const HomeScreen = () => {
   const noSearchedView = () => {
     return (
       <View style={styles.imageContainer}>
-        <Text title={"No search results"} style={styles.noSearchText} />
+        <Text title={'No search results'} style={styles.noSearchText} />
         <Image source={noSearchResult} style={styles.searching} />
         <Button
-          title={"Back to search"}
+          title={'Back to search'}
           isPrimary
           isSmall
-          width={"70%"}
+          width={'70%'}
           onPress={onPressBack}
         />
       </View>
@@ -188,14 +190,15 @@ const HomeScreen = () => {
     <>
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{ paddingBottom: 20 }}>
+        contentContainerStyle={{ paddingBottom: 20 }}
+      >
         {/* Banner Advertisement */}
         {isTouchStart && onChangeSearch?.length === 0 && (
           <TouchableOpacity onPress={onPressBanner}>
             <Image
               style={styles.banner}
               // source={require("assets/icon/google.png")}
-              source={{ uri: bannerAds?.[0]?.imageurl || "" }}
+              source={{ uri: bannerAds?.[0]?.imageurl || '' }}
             />
           </TouchableOpacity>
         )}
@@ -226,27 +229,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginM),
   },
   banner: {
-    width: "100%",
+    width: '100%',
     backgroundColor: colors.lightGrey,
     height: getHeight(dimens.imageM),
-    justifyContent: "center",
-    alignItems: "center",
-    resizeMode: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    resizeMode: 'center',
     marginTop: getHeight(dimens.marginS),
   },
   searchHeading: {
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: getHeight(fontSize.textXl),
   },
   logo: {
     width: getWidth(dimens.imageS),
     height: getHeight(40),
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   avatar: {
     height: getHeight(45),
     width: getWidth(45),
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   header: {
     backgroundColor: colors.white,
@@ -254,47 +257,47 @@ const styles = StyleSheet.create({
   location: {
     width: getWidth(dimens.sideMargin),
     height: getHeight(dimens.marginM),
-    resizeMode: "center",
+    resizeMode: 'center',
   },
   headerTitle: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: dimens.paddingS,
   },
   headerTitleContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingTop: getHeight(dimens.marginL),
   },
   noSearchText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: getHeight(fontSize.headingL),
     marginVertical: getHeight(dimens.imageXs),
   },
   searching: {
     width: getWidth(176),
     height: getHeight(332),
-    resizeMode: "center",
+    resizeMode: 'center',
     marginTop: getHeight(dimens.marginS),
   },
   imageContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: getHeight(dimens.marginL),
   },
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
-    resizeMode: "center",
+    resizeMode: 'center',
   },
   text: {
     fontSize: fontSize.textM,
   },
   modal: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
   },
   addressView: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: getHeight(dimens.paddingS),
   },
 });

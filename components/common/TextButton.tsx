@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import {
   StyleProp,
   TextStyle,
   TouchableOpacity,
-  ViewStyle
-} from "react-native";
-import { fontSize } from "../../designToken/fontSizes";
-import { getHeight } from "../../libs/StyleHelper";
-import Text from "./Text";
+  ViewStyle,
+} from 'react-native';
+import { fontSize } from '../../designToken/fontSizes';
+import { getHeight } from '../../libs/StyleHelper';
+import Text from './Text';
 
 const TextButton = ({
   title,
@@ -16,15 +16,15 @@ const TextButton = ({
   fontSize: fs,
   style,
   isCapitalize,
-  containerStyle
+  containerStyle,
 }: {
   title: string;
   onPress?: () => void;
   isActive?: boolean;
   fontSize?: number;
   style?: StyleProp<TextStyle>;
-  isCapitalize?: boolean
-  containerStyle?: StyleProp<ViewStyle>
+  isCapitalize?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
 }) => {
   return (
     <TouchableOpacity onPress={onPress} style={containerStyle}>
@@ -32,7 +32,7 @@ const TextButton = ({
         style={[
           style,
           { fontSize: fs ?? getHeight(fontSize.heading) },
-          isActive && { textDecorationLine: "underline" },
+          isActive && { textDecorationLine: 'underline' },
         ]}
         title={isCapitalize ? title?.toLocaleUpperCase() : title}
       />
@@ -41,4 +41,3 @@ const TextButton = ({
 };
 
 export default TextButton;
-
