@@ -122,15 +122,22 @@ Geocoder.init("AIzaSyDBdv2QXiVFswU6vKCkuwJfSZ1iJobbTVk")
       <View style={styles.mapContainer}>
       <MapView
        provider={PROVIDER_GOOGLE}
-      region={currentLocation}
+       showsUserLocation
+       followsUserLocation
+       loadingEnabled
+
+    region={currentLocation}
+     
   style={{flex:1}}
 > 
 <Polyline
             coordinates={locationHistory}
-            strokeColor="#000"
+            strokeColor="#006"
             strokeWidth={3}
           />
+ {/* TODO: Show marker for the destination or before show provider location before it start move    */}
 {currentLocation && (
+  
             <Marker
               coordinate={{
                 latitude: currentLocation.latitude,
