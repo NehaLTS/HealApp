@@ -81,19 +81,25 @@ const RegistrationViewController = () => {
       setLocalData('USERPROFILE', {
         email: email,
       });
-      setIsLoading(false);
+
       if (res?.isSuccessful) {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'OnboardDetails' }],
-        });
+        setTimeout(() => {
+          //TODO: need to check this as it's a workaround for iOS
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'OnboardDetails' }],
+          });
+        }, 200);
       } else {
         showToast('User already exist', 'Please try SignIn', 'error');
       }
+      setIsLoading(false);
     } else {
       setIsLoading(false);
       showToast('', 'Please enter email or password', 'warning');
     }
+
+    // setIsLoading(false);
   };
 
   return {
