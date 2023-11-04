@@ -3,7 +3,13 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight } from 'libs/StyleHelper';
 import React, { ReactNode } from 'react';
-import { Text as RNText, StyleProp, StyleSheet, TextStyle } from 'react-native';
+import {
+  Text as RNText,
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  TextProps,
+} from 'react-native';
 
 const Text = ({
   title,
@@ -14,7 +20,7 @@ const Text = ({
   title: any;
   style?: StyleProp<TextStyle>;
   children?: ReactNode;
-} & any) => {
+} & TextProps) => {
   return (
     <RNText {...props} style={[styles.text, style]}>
       {title}

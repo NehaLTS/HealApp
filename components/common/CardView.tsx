@@ -16,12 +16,17 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Button from './Button';
+import { useNavigation } from '@react-navigation/native';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const CardView = ({ item, onPress, index, isSearch }: any) => {
+  const navigation = useNavigation();
   const [visibility] = useState(new Animated.Value(0));
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAddPayment, setIsAddPayment] = useState(false);
   const onPaymentAdd = () => setIsAddPayment(true);
+  const { userProfile } = UseClientUserContext();
 
   useEffect(() => {
     Animated.timing(visibility, {
@@ -31,13 +36,18 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
       easing: Easing.ease,
     }).start();
   }, [index]);
-  const onPressOrder = () => setModalVisible(true);
+  const onPressOrder = () => {
+    console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);
+    if (userProfile?.isPaymentAdded)
+      navigation.navigate(NavigationRoutes.OrderDetails);
+    else setModalVisible(true);
+  };
 
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
       backdropOpacity={!isAddPayment ? 0.9 : 1}
-      onBackdropPress={onPaymentAdd}
+      onBackdropPress={() => setModalVisible(false)}
       isVisible={isModalVisible}
       style={styles.modalContainer}
     >
@@ -45,15 +55,16 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
         <>
           <View style={{ flex: 0.3 }} />
           <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              {'Please add method \n of payment first'}
-            </Text>
+            <Text
+              style={styles.modalText}
+              title={'Please add method\nof payment first'}
+            />
             <Button
               title={'Add payment method'}
               isPrimary
               isSmall
               fontSized={getHeight(15)}
-              height={getHeight(34)}
+              height={getHeight(40)}
               onPress={onPaymentAdd}
             />
           </View>
@@ -71,7 +82,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
         <TouchableOpacity onPress={onPress} activeOpacity={1}>
           <View style={[styles.servicesContainer, styles.elevation]}>
             <Image
-              source={item.image.toString()}
+              source={require('assets/icon/doctor.png')}
               style={styles.specialistIcon}
             />
             <Text
@@ -84,7 +95,10 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
       ) : (
         <View style={styles.specialistList}>
           <View style={styles.container}>
-            <Image source={item.image} style={styles.specialistIcon} />
+            <Image
+              source={{ uri: item.image_url ?? '' }}
+              style={styles.specialistIcon}
+            />
             <Text style={styles.specialistSearched} title={item.name} />
           </View>
           <Button
@@ -93,7 +107,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
             isSmall
             width={'25%'}
             fontSized={15}
-            height={35}
+            height={40}
             onPress={onPressOrder}
           />
         </View>

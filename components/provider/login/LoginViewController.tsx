@@ -1,14 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import useToast from 'components/common/useToast';
-import { useApiContext } from 'contexts/useApiContext';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { FacebookAuthProvider } from 'libs/authsevices/FcebookAuthProvider';
 import { GoogleAuthProvider } from 'libs/authsevices/GoogleAuthProvider';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
+import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'react-native';
 
 const LoginViewController = () => {
@@ -26,70 +26,115 @@ const LoginViewController = () => {
     onSubmitGoogleAuthRequestProvider,
     onSubmitFBAuthRequestProvider,
   } = AuthServicesProvider();
-  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
+  // const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
+  const { setToken, setUserId, setProviderProfile, token, userId } =
+    UseProviderUserContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showToast, renderToast } = useToast();
 
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
 
-  const onChangeEmail = (value: string) => (emailRef.current.value = value);
-  const onBlurEmail = () => {
+  const onChangeEmail = (value: string) => {
+    emailRef.current.value = value;
     validateEmail();
-    setEmail(emailRef.current.value);
   };
+  const onBlurEmail = () => validateEmail();
 
-  const onChangePassword = (value: string) =>
-    (passwordRef.current.value = value);
-  const onBlurPassword = () => {
+  const onChangePassword = (value: string) => {
+    passwordRef.current.value = value;
     validatePassword();
-    setPassword(passwordRef.current.value);
   };
-
+  const onBlurPassword = () => (value: string) => {
+    passwordRef.current.value = value;
+    validatePassword();
+  };
   const validateEmail = () => {
-    if (!email) {
+    if (!emailRef.current.value) {
       setEmailError('Email is required');
-    } else if (!isValidEmail(email)) {
+    } else if (!emailPattern.test(emailRef.current.value)) {
       setEmailError('Invalid email address');
     } else {
       setEmailError('');
     }
   };
-
-  const isValidPassword = (password: string) => {
-    const passwordPattern =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
+  const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validatePassword = () => {
-    if (!password) {
-      setPasswordError('Password is required');
-    } else if (password.length < 5) {
+    if (!passwordRef.current.value) setPasswordError('Password is required');
+    else if (passwordRef.current.value.length < 5)
       setPasswordError('Password must be at least 8 characters');
-    } else if (!isValidPassword(password)) {
-      setPasswordError(
-        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
-      );
-    } else {
-      setPasswordError('');
-    }
+    else if (!isValidPassword(passwordRef.current.value))
+      setPasswordError('Password must contain special characters');
+    else setPasswordError('');
   };
 
   const handleSignIn = () => {
-    if (!emailError && !passwordError) onPressLoginButton(email, password);
+    if (!emailError && !passwordError)
+      onPressLoginButton(emailRef.current.value, passwordRef.current.value);
   };
 
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
   /** To handle Response from API after authentication request */
-  const handleAuthResponse = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: NavigationRoutes.ProviderHome }],
+  const handleAuthResponse = (response: any) => {
+    let userDataProvider = response.user;
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{ name: NavigationRoutes.ProviderHome }],
+    // })
+    console.log('response.token', response.token);
+    setToken(response.token);
+    setUserId(response.id);
+    setProviderProfile({
+      firstName: userDataProvider?.firstname,
+      lastName: userDataProvider?.lastname,
+      phoneNumber: userDataProvider?.phone_number,
+      address: userDataProvider?.address,
+      city: userDataProvider?.city,
+      state: userDataProvider?.state,
+      country: userDataProvider?.country,
+      profilePicture: userDataProvider?.profile_picture,
+      provider_id: userDataProvider?.provider_id,
+      email: userDataProvider?.email,
+      licensenumber: userDataProvider?.license,
+      provider_type_id: userDataProvider?.provider_type_id,
+      licensepicture: userDataProvider?.license_photo,
+      isSuccessful: userDataProvider?.isSuccessful,
     });
+    // setUserDataProvider({ ...userDataProvider, token: response?.token, isSuccessful: response?.isSuccessful });
+    setLocalData('USERPROVIDERPROFILE', {
+      firstName: userDataProvider?.firstname,
+      lastName: userDataProvider?.lastname,
+      phoneNumber: userDataProvider?.phone_number,
+      address: userDataProvider?.address,
+      city: userDataProvider?.city,
+      state: userDataProvider?.state,
+      country: userDataProvider?.country,
+      profilePicture: userDataProvider?.profile_picture,
+      provider_id: userDataProvider?.provider_id,
+      email: userDataProvider?.email,
+      licensenumber: userDataProvider?.license,
+      provider_type_id: userDataProvider?.provider_type_id,
+      licensepicture: userDataProvider?.license_photo,
+      isSuccessful: userDataProvider?.isSuccessful,
+    });
+    setLocalData('USER', {
+      token: response.token,
+      userId: response.id,
+      isClient: false,
+    });
+    if (!userDataProvider.firstName || userDataProvider.firstName == '') {
+      console.log('setToken', token, userId);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ProviderRegistration }],
+      });
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ProviderHome }],
+      });
+    }
   };
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
@@ -98,15 +143,9 @@ const LoginViewController = () => {
       if (email != '' || password != '') {
         setIsLoading(true);
         const res = await OnProviderSignIn({ email, password });
-        setUserDataProvider({
-          ...userDataProvider,
-          token: res?.token,
-          isSuccessful: res?.isSuccessful,
-        });
-        setLocalData('USER', res);
+        setIsLoading(false);
         if (res?.isSuccessful === true) {
-          handleAuthResponse();
-          setIsLoading(false);
+          handleAuthResponse(res);
         } else {
           showToast(
             'Login Failed',
@@ -125,7 +164,7 @@ const LoginViewController = () => {
     }
   };
   /** To handle Google login  button click*/
-  const onHandleGoogleLogin = () => {
+  const onHandleGoogleLogin = async () => {
     setIsLoading(true);
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
@@ -138,14 +177,10 @@ const LoginViewController = () => {
           email,
           googleId,
         });
-        setUserDataProvider?.({ ...userDataProvider, token: res.token });
-        setLocalData('USER', res);
+        // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           setIsLoading(false);
-          navigation.reset({
-            index: 0,
-            routes: [{ name: NavigationRoutes.ProviderRegistration }],
-          });
+          handleAuthResponse(res);
         } else {
           setIsLoading(false);
           Alert.alert(
@@ -170,16 +205,11 @@ const LoginViewController = () => {
     onFBAuthProcessing().then(async (userData) => {
       try {
         const email = userData?.user?.email;
-        const facebookId = userData?.user?.providerData[0]?.uid;
+        const facebookId = userData.additionalUserInfo?.profile?.id;
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
-        setUserDataProvider({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          setIsLoading(true);
-          navigation.reset({
-            index: 0,
-            routes: [{ name: NavigationRoutes.ProviderRegistration }],
-          });
+          handleAuthResponse(res);
         } else {
           setIsLoading(false);
           Alert.alert(
@@ -235,157 +265,3 @@ const LoginViewController = () => {
 };
 
 export default LoginViewController;
-
-// import { useNavigation } from "@react-navigation/native";
-// import { UseUserContextProvider } from "contexts/useUserContextProvider";
-// import { AuthServicesProvider } from "libs/authsevices/AuthServiceProvider";
-// import { FacebookAuthProvider } from "libs/authsevices/FcebookAuthProvider";
-// import { GoogleAuthProvider } from "libs/authsevices/GoogleAuthProvider";
-// import { setLocalData } from "libs/datastorage/useLocalStorage";
-// import NavigationRoutes from "navigator/NavigationRoutes";
-// import { useState } from "react";
-// import { Alert } from "react-native";
-
-// const LoginViewController = () => {
-//   const navigation = useNavigation();
-//   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
-//   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
-//   const { onGoogleAuthProcessing } = GoogleAuthProvider()
-//   const { onFBAuthProcessing } = FacebookAuthProvider()
-//   const [email, setEmail] = useState<string>("");
-//   const [password, setPassword] = useState<string>("");
-//   const [emailError, setEmailError] = useState('');
-//   const [passwordError, setPasswordError] = useState('');
-//   const { OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider } = AuthServicesProvider();
-//   const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
-
-//   const validateEmail = () => {
-//     if (!email) {
-//       setEmailError("Email is required");
-//     } else if (!isValidEmail(email)) {
-//       setEmailError("Invalid email address");
-//     } else {
-//       setEmailError('');
-//     }
-//   };
-
-//   const isValidPassword = (password: string) => {
-//     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-//     return passwordPattern.test(password);
-//   };
-
-//   const validatePassword = () => {
-//     if (!password) {
-//       setPasswordError("Password is required");
-//     } else if (password.length < 5) {
-//       setPasswordError("Password must be at least 8 characters");
-//     } else if (!isValidPassword(password)) {
-//       setPasswordError("Password must contain special characters");
-//     } else {
-//       setPasswordError('');
-//     }
-//   };
-
-//   const handleSignIn = () => {
-//     if (!emailError && !passwordError) onPressLoginButton(email, password)
-//   };
-
-//   const isValidEmail = (email: string) => {
-//     const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-//     return emailPattern.test(email);
-//   };
-//   /** To handle Response from API after authentication request */
-//   const handleAuthResponse = () => {
-//     navigation.navigate(NavigationRoutes.ProviderHome)
-//   }
-//   /** To handle User auth via email and password */
-//   const onPressLoginButton = async (email: string, password: string) => {
-//     try {
-//       const res = await OnProviderSignIn({ email, password });
-//       if (res?.isSuccessful === true && email != '') {
-//         setUserDataProvider({ ...userDataProvider, token: res?.token, isSuccessful: res?.isSuccessful });
-//         setLocalData('USER', res)
-//         handleAuthResponse();
-//       } else {
-//         Alert.alert("Login Failed", "Please check your email and password and try again.");
-//       }
-
-//     } catch (error) {
-//       console.error("Error during login:", error);
-//       Alert.alert("An error occurred during login.");
-//     }
-
-//   }
-//   /** To handle Google login  button click*/
-//   const onHandleGoogleLogin = () => {
-//     /** To process Google login from firestore */
-//     onGoogleAuthProcessing().then(async (userData) => {
-//       try {
-//         console.log("vbxcvbnxvb", userData)
-//         const email = userData?.user?.email
-//         const googleId = userData.user.providerData[0].uid
-//         /** To handle Google auth request to API */
-//         const res = await onSubmitGoogleAuthRequestProvider({ email, googleId });
-//         setUserDataProvider?.({ ...userDataProvider, token: res.token });
-//         setLocalData('USER', res);
-//         if (res?.isSuccessful === true) {
-//           handleAuthResponse()
-//         } else {
-//           Alert.alert("Login Failed", "Please check your email and password and try again.");
-//         }
-//       } catch (err) {
-//         console.log('Error occurred!');
-//       }
-//     })
-//   }
-//   /** To handle Facebook login  button click*/
-//   const onHandleFacebookLogin = () => {
-//     /** To process Facebook login from firestore */
-
-//     onFBAuthProcessing().then(async (userData) => {
-//       try {
-//         const email = userData?.user?.email
-//         const facebookId = userData?.user?.providerData[0]?.uid
-//         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
-//         setUserDataProvider({ ...userDataProvider, token: res.token });
-//         setLocalData('USER', res)
-//         if (res?.isSuccessful === true) {
-//           handleAuthResponse()
-//         } else {
-//           Alert.alert("Login Failed", "Please check your email and password and try again.");
-//         }
-//       } catch (err) {
-//         console.log('Error occurred!');
-//       }
-//     })
-//   }
-//   /** To handle social media selection button click */
-//   const onSelectSocialAuth = (index: number) => {
-//     switch (index) {
-//       case 0: onHandleGoogleLogin()
-//         break;
-//       case 1: onHandleFacebookLogin()
-//         break;
-
-//     }
-//   }
-//   return {
-//     isLanguageChanged,
-//     onChangeLanguage,
-//     onPressLoginButton,
-//     onHandleGoogleLogin,
-//     onHandleFacebookLogin,
-//     onSelectSocialAuth,
-//     validateEmail,
-//     setEmail,
-//     setPassword,
-//     handleSignIn,
-//     validatePassword,
-//     email,
-//     password,
-//     emailError,
-//     passwordError,
-//   };
-// };
-
-// export default LoginViewController;
