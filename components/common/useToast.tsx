@@ -31,15 +31,11 @@ const useToast = () => {
   const renderToast = () => {
     return (
       <Modal
-        animationIn={'fadeInDown'}
-        animationOut={'fadeInUp'}
-        animationOutTiming={0.1}
-        onBackdropPress={hideToast}
         isVisible={isVisible}
         backdropColor="transparent"
         style={{
           alignItems: 'center',
-          justifyContent: 'flex-start',
+          justifyContent: 'flex-end',
         }}
       >
         <View

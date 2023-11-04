@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import TextButton from 'components/common/TextButton';
 import { GetSignInFooter } from 'components/provider/login/LoginView';
 import { t } from 'i18next';
@@ -7,16 +6,21 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
+import { fontWeight } from '../../../../designToken/fontWeights';
 import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Button from '../../../common/Button';
 import Input from '../../../common/Input';
 import RegistrationViewController from '../controllers/RegistrationViewController';
+import Text from 'components/common/Text';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import { useNavigation } from '@react-navigation/native';
 
 const RegistrationView = () => {
   const { onPressSignUpProvider, isLoading, renderToast } =
     RegistrationViewController();
   const navigation = useNavigation();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
+
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -66,9 +70,7 @@ const RegistrationView = () => {
     } else if (passwordRef.current.value.length < 5) {
       setPasswordError('Password must be at least 8 characters');
     } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError(
-        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
-      );
+      setPasswordError('Password must contain special characters');
     } else {
       setPasswordError('');
     }
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: colors.invalid,
-    fontSize: getWidth(fontSize.textM),
+    fontSize: fontSize.textM,
   },
   loading: {
     left: '44%',

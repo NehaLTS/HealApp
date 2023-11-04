@@ -1,148 +1,189 @@
-import Button from 'components/common/Button';
-import Loader from 'components/common/Loader';
-import Text from 'components/common/Text';
-import React from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
 import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
-import ProviderPaymentController from '../controllers/ProviderPaymentController';
+import BasicInformationController from '../controllers/BasicInformationController';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
+import { t } from 'i18next';
+import Text from 'components/common/Text';
+const ProviderPayment = ({
+  registrationError: regError,
+  bankNameError: bankError,
+  branchError: brError,
+  accountError: acError,
+}: any) => {
+  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
+  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
+    BasicInformationController({});
+  const [registrationError, setRegistrationError] = useState('');
+  const [bankNameError, setBankNameError] = useState('');
+  const [branchError, setBranchError] = useState('');
+  const [accountError, setAccountError] = useState('');
 
-const ProviderPayment = () => {
-  const { t } = useTranslation();
-  const {
-    providerProfile,
-    registrationError,
-    bankNameError,
-    branchError,
-    accountError,
-    isShowModal,
-    setIsShowModal,
-    registrationNumberRef,
-    bankNameRef,
-    branchRef,
-    accountRef,
-    onBlurRegistrationNumber,
-    onChangeRegistrationNumber,
-    onBlurBankName,
-    onChangeBankName,
-    onBlurBranchType,
-    onChangeBranchType,
-    onBlurAccount,
-    onChangeAccount,
-    getImageUrl,
-    onPressBack,
-    onPressNext,
-    isLoading,
-    profilePicture,
-    renderToast,
-  } = ProviderPaymentController();
+  const registrationNumberRef = React.useRef<any>('');
+  const bankNameRef = React.useRef<any>('');
+  const branchRef = React.useRef<any>('');
+  const accountRef = React.useRef<any>('');
 
-  const getUploadImageView = () => (
-    <View style={styles.iconContainer}>
-      <Text style={styles.text}>{t('add_profile')}</Text>
-      <TouchableOpacity
-        activeOpacity={profilePicture ? 1 : 0.5}
-        onPress={() => setIsShowModal(true)}
-      >
-        <Image
-          source={
-            profilePicture
-              ? { uri: profilePicture }
-              : require('../../../../assets/icon/editprofile.png')
-          }
-          style={styles.selectedImage}
-        />
-      </TouchableOpacity>
-      <SelectImage
-        isShowModal={isShowModal}
-        closeModal={setIsShowModal}
-        imageUri={getImageUrl}
-      />
-    </View>
-  );
+  const onBlurRegistrationNumber = () => {
+    validateRegistrationNumber();
+    setUserDataProvider({
+      ...userDataProvider,
+      registration: registrationNumberRef.current.value,
+    });
+  };
+  const onChangeRegistrationNumber = (value: string) => {
+    registrationNumberRef.current.value = value;
+    validateRegistrationNumber();
+  };
 
-  const getFooterView = () => (
-    <View style={styles.footerContainer}>
-      <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} />
-      <Button
-        title={t('next')}
-        isPrimary
-        isSmall
-        width={'30%'}
-        onPress={onPressNext}
-      />
-    </View>
-  );
+  const onBlurBankName = () => {
+    validateBankName();
+    setUserDataProvider({
+      ...userDataProvider,
+      bank_name: bankNameRef.current.value,
+    });
+  };
+  const onChangeBankName = (value: string) =>
+    (bankNameRef.current.value = value);
+
+  const onBlurBranchType = () => {
+    validateBranch();
+    setUserDataProvider({
+      ...userDataProvider,
+      branch: branchRef?.current?.value,
+    });
+  };
+  const onChangeBranchType = (value: string) =>
+    (branchRef.current.value = value);
+
+  const onBlurAccount = () => {
+    validateAccount();
+    setUserDataProvider({
+      ...userDataProvider,
+      account: accountRef?.current?.value,
+    });
+  };
+  const onChangeAccount = (value: string) => (accountRef.current.value = value);
+
+  const getImageUrl = (url: string) =>
+    setUserDataProvider({ ...userDataProvider, profile_picture: url });
+
+  const validateRegistrationNumber = () => {
+    if (!registrationNumberRef.current.value) {
+      setRegistrationError('Registration is required');
+    } else {
+      setRegistrationError('');
+    }
+  };
+
+  const validateBankName = () => {
+    if (!bankNameRef.current.value) {
+      setBankNameError('Bank is required');
+    } else {
+      setBankNameError('');
+    }
+  };
+
+  const validateBranch = () => {
+    if (!bankNameRef.current.value) {
+      setBranchError('Branch is required');
+    } else {
+      setBranchError('');
+    }
+  };
+  const validateAccount = () => {
+    if (!bankNameRef.current.value) {
+      setAccountError('Bank Account is required');
+    } else {
+      setAccountError('');
+    }
+  };
 
   return (
     <>
-      {isLoading && <Loader />}
-      <View style={styles.inputContainer}>
+      <Input
+        placeholder={t('Business registration number')}
+        keyboardType="numeric"
+        type="creditCardNumber"
+        onBlur={onBlurRegistrationNumber}
+        onChangeText={onChangeRegistrationNumber}
+        ref={registrationNumberRef}
+        defaultValue={userDataProvider.registration}
+        inputValue={userDataProvider?.registration ?? ''}
+        errorMessage={regError?.length ? regError : registrationError}
+        returnKeyType={'next'}
+        onSubmitEditing={() => bankNameRef.current.focus()}
+        onClearInputText={() => registrationNumberRef.current.clear()}
+      />
+      <View style={styles.container}>
         <Input
-          placeholder={t('business_registration')}
-          keyboardType="numeric"
-          type="creditCardNumber"
-          onBlur={onBlurRegistrationNumber}
-          onChangeText={onChangeRegistrationNumber}
-          ref={registrationNumberRef}
-          defaultValue={registrationNumberRef?.current?.value}
-          inputValue={registrationNumberRef?.current?.value}
-          errorMessage={registrationError}
+          placeholder={'Bank'}
+          inputStyle={styles.inputBank}
+          type={'nameSuffix'}
+          onBlur={onBlurBankName}
+          onChangeText={onChangeBankName}
+          ref={bankNameRef}
+          defaultValue={userDataProvider.bank_name}
+          inputValue={userDataProvider?.bank_name ?? ''}
+          errorMessage={bankError.length ? bankError : bankNameError}
           returnKeyType={'next'}
-          onSubmitEditing={() => bankNameRef.current.focus()}
-          onClearInputText={() => registrationNumberRef.current.clear()}
+          onSubmitEditing={() => branchRef.current.focus()}
+          onClearInputText={() => bankNameRef.current.clear()}
         />
-        <View style={styles.container}>
-          <Input
-            placeholder={t('bank')}
-            inputStyle={styles.inputBank}
-            type={'nameSuffix'}
-            onBlur={onBlurBankName}
-            onChangeText={onChangeBankName}
-            ref={bankNameRef}
-            defaultValue={bankNameRef?.current?.value}
-            inputValue={bankNameRef?.current?.value}
-            errorMessage={bankNameError}
-            returnKeyType={'next'}
-            onSubmitEditing={() => branchRef.current.focus()}
-            onClearInputText={() => bankNameRef.current.clear()}
-          />
-          <Input
-            placeholder={t('branch')}
-            type={'nameSuffix'}
-            inputStyle={styles.inputBranch}
-            onBlur={onBlurBranchType}
-            onChangeText={onChangeBranchType}
-            ref={branchRef}
-            defaultValue={branchRef?.current?.value}
-            inputValue={branchRef?.current?.value}
-            errorMessage={branchError}
-            returnKeyType={'next'}
-            onSubmitEditing={() => accountRef.current.focus()}
-            onClearInputText={() => branchRef.current.clear()}
-          />
-        </View>
         <Input
-          placeholder={t('bank_account')}
-          inputStyle={styles.input}
-          type="creditCardNumber"
-          keyboardType="numeric"
-          onBlur={onBlurAccount}
-          onChangeText={onChangeAccount}
-          ref={accountRef}
-          defaultValue={accountRef?.current?.value}
-          inputValue={accountRef?.current?.value}
-          errorMessage={accountError}
-          onClearInputText={() => accountRef.current.clear()}
+          placeholder={'Branch'}
+          type={'nameSuffix'}
+          inputStyle={styles.inputBranch}
+          onBlur={onBlurBranchType}
+          onChangeText={onChangeBranchType}
+          ref={branchRef}
+          defaultValue={userDataProvider.branch}
+          inputValue={userDataProvider?.branch ?? ''}
+          errorMessage={brError.length ? brError : branchError}
+          returnKeyType={'next'}
+          onSubmitEditing={() => accountRef.current.focus()}
+          onClearInputText={() => branchRef.current.clear()}
         />
-        {getUploadImageView()}
       </View>
-      {getFooterView()}
-      {renderToast()}
+      <Input
+        placeholder={'Bank account'}
+        inputStyle={styles.input}
+        type="creditCardNumber"
+        keyboardType="numeric"
+        onBlur={onBlurAccount}
+        onChangeText={onChangeAccount}
+        ref={accountRef}
+        defaultValue={userDataProvider.account}
+        inputValue={userDataProvider?.account ?? ''}
+        errorMessage={acError.length ? acError : accountError}
+        onClearInputText={() => accountRef.current.clear()}
+      />
+      <View style={styles.iconContainer}>
+        <Text style={styles.text}>{t('Add a profile photo')}</Text>
+        <TouchableOpacity
+          activeOpacity={userDataProvider.profile_picture ? 1 : 0.5}
+          onPress={() => setIsShowModal(true)}
+        >
+          <Image
+            source={
+              userDataProvider.profile_picture
+                ? { uri: userDataProvider.profile_picture }
+                : require('../../../../assets/icon/editprofile.png')
+            }
+            style={styles.selectedImage}
+          />
+        </TouchableOpacity>
+        <SelectImage
+          isShowModal={isShowModal}
+          closeModal={setIsShowModal}
+          imageUri={getImageUrl}
+        />
+      </View>
     </>
   );
 };
@@ -152,6 +193,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    // columnGap:16
   },
   inputBank: {
     minWidth: '48%',
@@ -160,7 +202,7 @@ const styles = StyleSheet.create({
     minWidth: '48%',
   },
   input: {
-    marginTop: getHeight(dimens.sideMargin + dimens.marginS),
+    marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),
   },
   iconContainer: {
     flexDirection: 'row',
@@ -170,23 +212,18 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + dimens.borderBold),
+    width: getWidth(dimens.imageS + dimens.paddingS + 2),
     resizeMode: 'cover',
     borderRadius: getHeight(dimens.paddingS),
   },
   text: {
-    fontSize: getWidth(fontSize.textL),
-    paddingTop: getHeight(dimens.paddingXs),
-    textAlign: 'center',
+    fontSize: fontSize.textL,
+    color: colors.black,
+    marginTop: getHeight(dimens.marginS),
   },
-  inputContainer: {
-    flex: 0.79,
-  },
-  footerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    flex: 0.1,
-    justifyContent: 'space-between',
+  editImage: {
+    height: getHeight(dimens.paddingL + 2),
+    width: getWidth(dimens.paddingL),
+    marginTop: getHeight(dimens.paddingS),
   },
 });

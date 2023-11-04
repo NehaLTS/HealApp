@@ -34,7 +34,6 @@ const IntroController = () => {
   const handleLanguageChange = (lng: string) => {
     setLanguageCode(lng);
     setLocalData('USER', {
-      ...getLocalData('USER')?.user,
       user: {
         language: lng,
       },

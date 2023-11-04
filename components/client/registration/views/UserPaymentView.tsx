@@ -1,24 +1,35 @@
-import { useNavigation } from '@react-navigation/native';
-import logo from 'assets/icon/healLogo.png';
 import Input from 'common/Input';
 import Text from 'components/common/Text';
+import { useTranslationContext } from 'contexts/UseTranslationsContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
+import { getTexts } from 'libs/OneSkyHelper';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
 import Button from 'components/common/Button';
 import TextButton from 'components/common/TextButton';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useTranslation } from 'react-i18next';
 import UserPaymentViewController from '../controllers/UserPaymentViewController';
+import logo from 'assets/icon/healLogo.png';
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { languageCode } = useTranslationContext();
+  const { registration } = getTexts(languageCode);
   const {
     cardNumberRef,
     expireDateRef,
@@ -43,94 +54,136 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
     onPressStartUsingHeal,
   } = UserPaymentViewController();
 
-  const addCreditCardView = () => (
+  return (
     <>
-      <Input
-        placeholder={t('credit_card_number')}
-        keyboardType="numeric"
-        inputStyle={styles.cardNumber}
-        onBlur={onBlurCardNumber}
-        onChangeText={onChangeCardNumber}
-        ref={cardNumberRef}
-        defaultValue={''}
-        errorMessage={cardNumberError}
-        inputValue={cardNumber}
-        returnKeyType={'next'}
-        onSubmitEditing={() => expireDateRef.current.focus()}
-        onClearInputText={onClearCard}
-        maxLength={19}
-      />
-      <View style={[styles.container, styles.inputDateAndCvv]}>
-        <Input
-          keyboardType="numeric"
-          placeholder={t('mm_yy')}
-          inputStyle={styles.expireDate}
-          onBlur={onBlurExpireDate}
-          onClearInputText={() => expireDateRef.current.clear()}
-          onChangeText={onChangeExpireDate}
-          ref={expireDateRef}
-          errorMessage={cardExpiryError}
-          defaultValue={''}
-          inputValue={cardExpiry}
-          returnKeyType={'next'}
-          onSubmitEditing={() => cvvRef.current.focus()}
-          maxLength={5}
-        />
-        <Input
-          keyboardType="numeric"
-          type="creditCardNumber"
-          placeholder={t('cvv')}
-          onBlur={onBlueCvv}
-          errorMessage={cvvError}
-          onClearInputText={() => cvvRef.current.clear()}
-          onChangeText={onChangeCvv}
-          ref={cvvRef}
-          defaultValue={''}
-          inputValue={''}
-          maxLength={3}
-        />
-      </View>
-    </>
-  );
-
-  const getCreditCardView = () => (
-    <>
-      <View style={styles.innerContainer}>
-        <Image
-          source={require('assets/icon/masterCard.png')}
-          style={styles.googlePay}
-        />
-        <Text title="Master-card" />
-        <View style={styles.cardIcons}>
-          <TouchableOpacity onPress={() => setIsCardDetails(false)}>
-            <Image
-              source={require('assets/icon/edit.png')}
-              style={styles.cardImages}
-            />
-          </TouchableOpacity>
-          <Image
-            source={require('assets/icon/cancel.png')}
-            style={styles.cardImages}
+      {isFromHome && (
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: getHeight(dimens.buttonHeight),
+            marginBottom: getHeight(dimens.buttonHeight),
+          }}
+        >
+          <Image source={logo} style={styles.logo} />
+          <Text
+            adjustsFontSizeToFit
+            numberOfLines={2}
+            style={styles.title}
+            title={'Add payment \n method'}
           />
         </View>
+      )}
+      <View style={styles.inputsContainer}>
+        <View style={styles.container}>
+          {!isCardDetails && (
+            <>
+              <Image
+                source={require('assets/icon/card.png')}
+                style={styles.creditCard}
+              />
+              <Text title={registration.add_credit_card} />
+            </>
+          )}
+        </View>
+        {isCardDetails ? (
+          <>
+            {isLoading && (
+              <ActivityIndicator style={styles.loading} size={'large'} />
+            )}
+            <View style={styles.innerContainer}>
+              <Image
+                source={require('assets/icon/masterCard.png')}
+                style={styles.googlePay}
+              />
+              <Text title="Master-card" />
+              <View style={styles.cardIcons}>
+                <TouchableOpacity onPress={() => setIsCardDetails(false)}>
+                  <Image
+                    source={require('assets/icon/edit.png')}
+                    style={styles.cardImages}
+                  />
+                </TouchableOpacity>
+                <Image
+                  source={require('assets/icon/cancel.png')}
+                  style={styles.cardImages}
+                />
+              </View>
+            </View>
+            <View style={styles.cardDetailContainer}>
+              <Text
+                style={styles.cardDetail}
+                title={
+                  '**** **** ***** ' +
+                  cardNumberRef?.current?.value?.slice?.(-4)
+                }
+              />
+              <Text
+                style={styles.cardDetail}
+                title={`${t('expires')} ` + expireDateRef?.current?.value}
+              />
+            </View>
+          </>
+        ) : (
+          <>
+            <Input
+              placeholder={registration.credit_card_number}
+              keyboardType="numeric"
+              inputStyle={styles.cardNumber}
+              onBlur={onBlurCardNumber}
+              onChangeText={onChangeCardNumber}
+              ref={cardNumberRef}
+              defaultValue={''}
+              errorMessage={cardNumberError}
+              inputValue={cardNumber}
+              returnKeyType={'next'}
+              onSubmitEditing={() => expireDateRef.current.focus()}
+              // onClearInputText={() => cardNumberRef?.current?.clear()}
+              onClearInputText={onClearCard}
+              maxLength={19}
+            />
+            <View style={[styles.container, styles.inputDateAndCvv]}>
+              <Input
+                keyboardType="numeric"
+                placeholder={registration.mm_yy}
+                inputStyle={styles.expireDate}
+                onBlur={onBlurExpireDate}
+                onClearInputText={() => expireDateRef.current.clear()}
+                onChangeText={onChangeExpireDate}
+                ref={expireDateRef}
+                errorMessage={cardExpiryError}
+                defaultValue={''}
+                inputValue={cardExpiry}
+                returnKeyType={'next'}
+                onSubmitEditing={() => cvvRef.current.focus()}
+                maxLength={5}
+              />
+              <Input
+                keyboardType="numeric"
+                type="creditCardNumber"
+                placeholder={registration.cvv}
+                onBlur={onBlueCvv}
+                errorMessage={cvvError}
+                onClearInputText={() => cvvRef.current.clear()}
+                onChangeText={onChangeCvv}
+                ref={cvvRef}
+                defaultValue={''}
+                inputValue={''}
+                maxLength={3}
+              />
+            </View>
+          </>
+        )}
+        <>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.googlePayContainer}>
+            <Image
+              source={require('assets/icon/googlePay.png')}
+              style={styles.googlePay}
+            />
+            <Text title={registration.add_google_pay} />
+          </TouchableOpacity>
+        </>
       </View>
-      <View style={styles.cardDetailContainer}>
-        <Text
-          style={styles.cardDetail}
-          title={
-            '**** **** ***** ' + cardNumberRef?.current?.value?.slice?.(-4)
-          }
-        />
-        <Text
-          style={styles.cardDetail}
-          title={`${t('expires')} ` + expireDateRef?.current?.value}
-        />
-      </View>
-    </>
-  );
-
-  const getFooterView = () => (
-    <>
       <View
         style={[
           styles.footerContainer,
@@ -182,51 +235,6 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
           }
         />
       )}
-    </>
-  );
-
-  return (
-    <>
-      {isFromHome && (
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: getHeight(dimens.buttonHeight),
-            marginBottom: getHeight(dimens.buttonHeight),
-          }}
-        >
-          <Image source={logo} style={styles.logo} />
-          <Text
-            adjustsFontSizeToFit
-            numberOfLines={2}
-            style={styles.title}
-            title={'Add payment \n method'}
-          />
-        </View>
-      )}
-      <View style={styles.inputsContainer}>
-        <View style={styles.container}>
-          {!isCardDetails && (
-            <>
-              <Image
-                source={require('assets/icon/card.png')}
-                style={styles.creditCard}
-              />
-              <Text title={t('add_credit_card')} />
-            </>
-          )}
-        </View>
-        {isCardDetails ? getCreditCardView() : addCreditCardView()}
-        <View style={styles.divider} />
-        <TouchableOpacity style={styles.googlePayContainer}>
-          <Image
-            source={require('assets/icon/googlePay.png')}
-            style={styles.googlePay}
-          />
-          <Text title={t('add_google_pay')} />
-        </TouchableOpacity>
-      </View>
-      {getFooterView()}
     </>
   );
 };

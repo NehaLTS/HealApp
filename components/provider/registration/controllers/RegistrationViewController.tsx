@@ -6,11 +6,6 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import { Alert } from 'react-native';
 import { useState } from 'react';
 import useToast from 'components/common/useToast';
-import { setLocalData } from 'libs/datastorage/useLocalStorage';
-import {
-  ProviderUserContext,
-  UseProviderUserContext,
-} from 'contexts/UseProviderUserContext';
 
 const RegistrationViewController = () => {
   const { onAuthSignInProvider } = useApiContext();
@@ -19,26 +14,11 @@ const RegistrationViewController = () => {
   const { OnProviderCreateSignUp } = AuthServicesProvider();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
   const { showToast, renderToast } = useToast();
-  const { setToken, setUserId } = UseProviderUserContext();
+
   const onPressSignUpProvider = async (email: string, password: string) => {
     setIsLoading(true);
     if (email !== undefined && password != undefined) {
-      const response = await OnProviderCreateSignUp({ email, password }); //api
-      // console.log("res is ", response);
-
-      if (response && response.token && response.provider_id) {
-        setToken(response.token);
-        setUserId(response.provider_id);
-      }
-
-      setLocalData('USER', {
-        token: response?.token,
-        userId: response?.provider_id,
-        isClient: false,
-      });
-      setLocalData('USERPROVIDERPROFILE', {
-        email: email,
-      });
+      const response = await OnProviderCreateSignUp({ email, password });
 
       setUserDataProvider({
         ...userDataProvider,

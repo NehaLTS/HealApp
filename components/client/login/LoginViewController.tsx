@@ -59,9 +59,7 @@ const LoginViewController = () => {
     else if (passwordRef.current.value.length < 5)
       setPasswordError('Password must be at least 8 characters');
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError(
-        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
-      );
+      setPasswordError('Password must contain special characters');
     else setPasswordError('');
   };
 
@@ -135,7 +133,7 @@ const LoginViewController = () => {
       if (email != '' || password != '') {
         setIsLoading(true);
         const res = await onSubmitAuthRequest({ email, password });
-
+        console.log('sign in client by email and password', res);
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res);
         else

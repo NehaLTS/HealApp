@@ -1,130 +1,55 @@
-import useToast from 'components/common/useToast';
-import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import React, { useState } from 'react';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
+import React from 'react';
 
 const ProviderDetailController = () => {
-  const [firstNameError, setFirstNameError] = useState('');
-  const [isShowModal, setIsShowModal] = useState(false);
-  const [lastNameError, setLastNameError] = useState('');
-  const [providerTypeError, setProviderTypeError] = useState('');
-  const [specialtyError, setSpecialtyError] = useState('');
-  const [selectedProvider, setSelectedProvider] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState({});
-  const { providerProfile, setProviderProfile } = UseProviderUserContext();
+  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
   const firstNameRef = React.useRef<any>('');
   const lastNameRef = React.useRef<any>('');
-  const { setCurrentStep } = UseProviderUserContext();
-  const { showToast, renderToast } = useToast();
-  const [idPicture, setIdPicture] = useState('');
+  const typeProviderRef = React.useRef<any>('');
+  const specialityRef = React.useRef<any>('');
 
+  const onBlurFirstName = () =>
+    setUserDataProvider({
+      ...userDataProvider,
+      firstname: firstNameRef.current.value,
+    });
   const onChangeFirstName = (value: string) =>
     (firstNameRef.current.value = value);
+  const onBlurLastName = () =>
+    setUserDataProvider({
+      ...userDataProvider,
+      lastname: lastNameRef.current.value,
+    });
   const onChangeLastName = (value: string) =>
     (lastNameRef.current.value = value);
-
-  const onBlurLastName = () => validateLastName();
-  const onBlurFirstName = () => validateFirstName();
-
-  const getImageUrl = (url: string) => setIdPicture(url);
-
-  const validateFirstName = () => {
-    if (!firstNameRef.current.value) {
-      setFirstNameError('First name is required');
-    } else {
-      setFirstNameError('');
-    }
-  };
-
-  const validateLastName = () => {
-    if (!lastNameRef.current.value) {
-      setLastNameError('Last name is required');
-    } else {
-      setLastNameError('');
-    }
-  };
-
-  const validateProviderType = () => {
-    if (!selectedProvider) {
-      setProviderTypeError('Provider type is required');
-    } else {
-      setProviderTypeError('');
-    }
-  };
-
-  const validateSpecialty = () => {
-    if (!selectedSpecialty) {
-      setSpecialtyError('Specialty is required');
-    } else {
-      setSpecialtyError('');
-    }
-  };
-
-  const onChangeProviderTypes = (value: string) => {
-    setSelectedProvider(value);
-    if (!lastNameRef.current.value) validateLastName();
-  };
-  const onBlurProviderTypes = () => validateProviderType();
-
-  const onChangeSpecialty = (value: string) => setSelectedSpecialty(value);
-  const onBlurSpecialty = () => validateSpecialty();
-
-  const onPressNext = () => {
-    if (
-      (firstNameRef.current.value?.length ?? 0) > 0 &&
-      (lastNameRef.current.value?.length ?? 0) > 0 &&
-      (selectedSpecialty?.name?.en?.length ?? 0) > 0 &&
-      (selectedProvider?.name?.length ?? 0) > 0 &&
-      (idPicture?.length ?? 0) > 0
-    ) {
-      setProviderProfile({
-        ...providerProfile,
-        firstName: firstNameRef.current.value,
-        lastName: lastNameRef.current.value,
-        provider: { id: '1', name: selectedProvider.name },
-        speciality: {
-          name: selectedSpecialty?.name?.en,
-          id: selectedSpecialty?.id,
-        },
-        idPicture: idPicture,
-      });
-      setCurrentStep('address');
-    } else {
-      if (!firstNameRef.current.value?.length)
-        setFirstNameError('First name is required');
-      if (!lastNameRef.current.value?.length)
-        setLastNameError('Last name is required');
-      if (!selectedSpecialty?.name?.en)
-        setSpecialtyError('Specialty is required');
-      if (!selectedProvider?.name)
-        setProviderTypeError('Type of provider is required');
-      if (!idPicture?.length) showToast('', 'Please upload ID', 'warning');
-    }
-  };
-
+  const onBlurTypeProvider = () =>
+    setUserDataProvider({
+      ...userDataProvider,
+      type_Provider: typeProviderRef.current.value,
+    });
+  const onChangeTypeProvider = (value: string) =>
+    (typeProviderRef.current.value = value);
+  const onBlurSpeciality = () =>
+    setUserDataProvider({
+      ...userDataProvider,
+      speciality: specialityRef.current.value,
+    });
+  const onChangeSpeciality = (value: string) =>
+    (specialityRef.current.value = value);
   return {
-    firstNameError,
-    isShowModal,
-    setIsShowModal,
-    lastNameError,
-    providerTypeError,
-    specialtyError,
-    selectedProvider,
-    providerProfile,
-    getImageUrl,
-    onChangeFirstName,
-    onBlurFirstName,
-    onBlurLastName,
-    onChangeLastName,
-    onChangeProviderTypes,
-    onChangeSpecialty,
+    userDataProvider,
     firstNameRef,
     lastNameRef,
-    onBlurSpecialty,
-    onBlurProviderTypes,
-    onPressNext,
-    renderToast,
-    selectedSpecialty,
-    idPicture,
+    typeProviderRef,
+    specialityRef,
+    onBlurFirstName,
+    onChangeFirstName,
+    onBlurLastName,
+    onChangeLastName,
+    onBlurTypeProvider,
+    onChangeTypeProvider,
+    onBlurSpeciality,
+    onChangeSpeciality,
   };
 };
 

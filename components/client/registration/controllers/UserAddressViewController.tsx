@@ -2,7 +2,8 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ClientProfile } from 'libs/types/UserType';
-import { numericPattern } from 'libs/utility/Utils';
+import uploadImage from 'libs/uploadImage';
+import { generateRandomName, numericPattern } from 'libs/utility/Utils';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 
@@ -50,12 +51,27 @@ const UserAddressViewController = () => {
     onBlurIdNumber();
   };
 
-  const getImageUrl = (url: string) => setProfilePicture(url);
+  const getImageUrl = (url: string) => {
+    // setProfilePicture(url)
+    const imagePath = url;
+    const folderName = 'images/users';
+    const fileName = generateRandomName();
+    uploadImage(imagePath, folderName, fileName)
+      .then((downloadURL) => {
+        // Handle the downloadURL as needed
+        console.log('Download URL:', downloadURL);
+        setProfilePicture(downloadURL);
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error('Error uploading image:', error);
+      });
+  };
 
   const onPressNext = async () => {
     console.log('userId is ', userId);
     if (
-      onSearchAddress?.length !== 0 &&
+      onSearchAddress &&
       dateOfBirth.toString() &&
       idNumberRef.current.value
     ) {
@@ -68,7 +84,7 @@ const UserAddressViewController = () => {
         city: '',
         state: '',
         country: '',
-        profilePicture: '',
+        profilePicture: profilePicture ?? '',
       });
 
       //Update User Profile
@@ -81,10 +97,12 @@ const UserAddressViewController = () => {
           city: '',
           state: '',
           country: '',
-          profilePicture: '',
+          profilePicture: profilePicture ?? '',
         },
         userId,
       );
+
+      console.log('response is ', res);
 
       setLocalData('USERPROFILE', {
         firstName: userProfile.firstName,
@@ -94,12 +112,13 @@ const UserAddressViewController = () => {
         city: '',
         state: '',
         country: '',
-        profilePicture: '',
+        profilePicture: profilePicture ?? '',
         date_of_birth: dateOfBirth.toString(),
         idNumber: idNumberRef.current.value,
       });
 
       setIsLoader(false);
+      console.log('res', res);
       if (res?.isSuccessful) {
         setCurrentStep('payment');
       } else {

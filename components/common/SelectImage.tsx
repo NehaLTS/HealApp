@@ -5,6 +5,7 @@ import { colors } from 'designToken/colors';
 import { fontWeight } from 'designToken/fontWeights';
 import { getHeight } from 'libs/StyleHelper';
 import Modal from 'react-native-modal/dist/modal';
+import uploadImage from 'libs/uploadImage';
 
 const SelectImage = ({
   imageUri,
@@ -29,6 +30,7 @@ const SelectImage = ({
         setHeight(height);
         setWidth(width);
         closeModal(false);
+        console.log(image);
       })
       .catch((error) => {
         console.log(error);
@@ -46,6 +48,20 @@ const SelectImage = ({
         setHeight(height);
         setWidth(width);
         closeModal(false);
+        // console.log(image)
+        const imagePath = image?.path;
+        const folderName = 'images/users';
+        const fileName = 'profile.jpg';
+        // uploadImage(imagePath, folderName, fileName)
+        //   .then((downloadURL) => {
+        //     // Handle the downloadURL as needed
+        //     console.log('Download URL:', downloadURL);
+
+        //   })
+        //   .catch((error) => {
+        //     // Handle any errors
+        //     console.error('Error uploading image:', error);
+        //   });
       })
       .catch((error) => {
         console.log(error);

@@ -1,13 +1,8 @@
-import { colors } from 'designToken/colors';
-import { dimens } from 'designToken/dimens';
-import { fontFamily } from 'designToken/fontFamily';
-import { fontSize } from 'designToken/fontSizes';
-import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { forwardRef, useRef, useState } from 'react';
 import {
+  Alert,
   Animated,
   DimensionValue,
-  I18nManager,
   Image,
   StyleProp,
   StyleSheet,
@@ -18,6 +13,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { fontFamily } from 'designToken/fontFamily';
 
 const Input = forwardRef(
   (
@@ -46,8 +46,7 @@ const Input = forwardRef(
         | 'telephoneNumber'
         | 'password'
         | 'numeric'
-        | 'dateOfBirth'
-        | any;
+        | 'dateOfBirth';
       inputStyle?: StyleProp<TextStyle>;
       placeholderStyle?: StyleProp<TextStyle>;
       errorMessage?: string;
@@ -156,7 +155,7 @@ const Input = forwardRef(
             editable
             {...props}
           />
-          {type === 'password' && (
+          {!errorMessage && type === 'password' && (
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Image
                 source={require('assets/icon/eyeIcon.png')}
@@ -164,7 +163,7 @@ const Input = forwardRef(
               />
             </TouchableOpacity>
           )}
-          {errorMessage && type !== ('password' || 'dateOfBirth') && (
+          {errorMessage && type !== ('password' && 'dateOfBirth') && (
             <TouchableOpacity onPress={onClearInputText}>
               <Image
                 source={require('../../assets/icon/error.png')}
@@ -204,6 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
+    // minWidth: '20%'
     minWidth: '24%',
   },
   input: {
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     flex: 1,
     textAlignVertical: 'top',
-    textAlign: I18nManager.isRTL ? 'right' : 'left',
+    // backgroundColor:'red'
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
@@ -229,8 +229,6 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
-    fontSize: getWidth(fontSize.textS),
-    textAlign: 'left',
   },
   label: {
     position: 'absolute',
@@ -240,7 +238,6 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
     fontFamily: fontFamily.regular,
-    fontSize: getWidth(fontSize.textL),
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),

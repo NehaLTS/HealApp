@@ -1,15 +1,15 @@
 import Button from 'common/Button';
 import Input from 'common/Input';
-import { GetSignInFooter } from 'components/client/login/LoginView';
-import Loader from 'components/common/Loader';
+import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import RegistrationViewController from '../controllers/RegistrationViewController';
+import { GetSignInFooter } from 'components/client/login/LoginView';
 
 const RegistrationView = () => {
   const {
@@ -31,7 +31,9 @@ const RegistrationView = () => {
     <>
       {renderToast()}
       <View style={styles.inputContainer}>
-        {(isLoading || isLoadingGoogle) && <Loader />}
+        {(isLoading || isLoadingGoogle) && (
+          <ActivityIndicator style={styles.loading} size={'large'} />
+        )}
         <Input
           ref={emailRef}
           placeholder={t('email')}
