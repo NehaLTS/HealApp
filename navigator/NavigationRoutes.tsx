@@ -14,7 +14,7 @@ enum NavigationRoutes {
   ProviderStack = "ProviderStack",
   ProviderLogin = "ProviderLogin",
   ProviderHome = "ProviderHome",
-  ProviderRegistration = "ProviderRegistration",
+  ProviderOnboardDetails = "ProviderOnboardDetails",
   ProviderConfirmation = 'ProviderConfirmation'
 }
 

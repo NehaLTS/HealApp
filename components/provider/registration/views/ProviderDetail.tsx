@@ -1,315 +1,79 @@
 import Text from 'components/common/Text';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import React, { useState } from 'react';
+import Button from 'components/common/Button';
+import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { useTranslationContext } from '../../../../contexts/UseTranslationsContext';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
-import { getTexts } from '../../../../libs/OneSkyHelper';
 import { getHeight, getWidth } from '../../../../libs/StyleHelper';
 import Input from '../../../common/Input';
 import SelectImage from '../../../common/SelectImage';
-import BasicInformationController from '../controllers/BasicInformationController';
+import ProviderDetailController from '../controllers/ProviderDetailController';
+import { useTranslation } from 'react-i18next';
+import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
 
-const ProviderDetail = ({
-  firstNameError: fnError,
-  lastNameError: lnError,
-  specialityError: spError,
-  providerTypeError: prvError,
-}: any) => {
-  const { selectedImage, setSelectedImage, isShowModal, setIsShowModal } =
-    BasicInformationController({});
-  const [firstNameError, setFirstNameError] = useState('');
-  const [lastNameError, setLastNameError] = useState('');
-  const [providerTypeError, setProviderTypeError] = useState('');
-  const [specialtyError, setSpecialtyError] = useState('');
-  const { languageCode } = useTranslationContext();
-  const { registration } = getTexts(languageCode);
-  const { onGetProviderTypes } = AuthServicesProvider();
-  const [selectedProvider, setSelectedProvider] = useState({});
-  const [selectedSpecialty, setSelectedSpecialty] = useState({});
+const ProviderDetail = () => {
+  const { t } = useTranslation();
+  const {
+    firstNameRef,
+    lastNameRef,
+    providerProfile,
+    onBlurFirstName,
+    onChangeFirstName,
+    onBlurLastName,
+    onChangeLastName,
+    firstNameError,
+    lastNameError,
+    providerTypeList,
+    selectedProvider,
+    onChangeProviderType,
+    providerTypeError,
+    isShowModal,
+    getImageUrl,
+    setIsShowModal,
+    idPicture,
+    onChangeSpeciality,
+    specialityError,
+    selectedSpecialty,
+    specialityList,
+    onPressBack,
+    onPressNext,
+  } = ProviderDetailController();
 
-  const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
-  const firstNameRef = React.useRef<any>('');
-  const lastNameRef = React.useRef<any>('');
-  const providerTypeRef = React.useRef<any>('');
-  const specialtyRef = React.useRef<any>('');
-  const onBlurFirstName = () => {
-    validateFirstName();
-    setUserDataProvider({
-      ...userDataProvider,
-      firstname: firstNameRef.current.value,
-    });
-  };
-  const onChangeFirstName = (value: string) =>
-    (firstNameRef.current.value = value);
-
-  const onBlurLastName = () => {
-    validateLastName();
-    setUserDataProvider({
-      ...userDataProvider,
-      lastname: lastNameRef.current.value,
-    });
-  };
-  const onChangeLastName = (value: string) =>
-    (lastNameRef.current.value = value);
-
-  const onBlurProviderType = () => {
-    validateProviderType();
-    setUserDataProvider({
-      ...userDataProvider,
-      provider_type_id: selectedProvider?.name,
-    });
-  };
-  const onChangeProviderType = (value: string) =>
-    (providerTypeRef.current.value = value);
-
-  const onBlurSpecialty = () => {
-    validateSpecialty();
-    setUserDataProvider({
-      ...userDataProvider,
-      speciality: selectedSpecialty?.name?.en,
-    });
-  };
-  const onChangeSpecialty = (value: string) =>
-    (specialtyRef.current.value = value);
-  const getImageUrl = (url: string) =>
-    setUserDataProvider({ ...userDataProvider, id_photo: url });
-
-  const data = [
-    {
-      id: 1,
-      name: {
-        en: 'Doctor',
-        hi: 'चिकित्सक',
-        he: '',
-      },
-      specialties: [
-        {
-          id: 1,
-          name: {
-            en: 'Stomach And Digestion',
-            hi: 'पेट और पाचन',
-            he: '',
-          },
-        },
-        {
-          id: 2,
-          name: {
-            en: 'Gernaral and Physician',
-            hi: 'गर्नराल और चिकित्सक',
-            he: '',
-          },
-        },
-        {
-          id: 3,
-          name: {
-            en: 'Dermatology',
-            hi: 'त्वचा विज्ञान',
-            he: '',
-          },
-        },
-        {
-          id: 5,
-          name: {
-            ' en': 'orthopedist',
-            hi: '',
-            he: '',
-          },
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: {
-        en: 'Nurse',
-        hi: 'देखभाल करना',
-        he: '',
-      },
-      specialties: [
-        {
-          id: 7,
-          name: {
-            en: 'Pediatric Nursing',
-            hi: '',
-            he: ' ',
-          },
-        },
-        {
-          id: 8,
-          name: {
-            en: 'Labor and Delivery Nursing',
-            hi: '',
-            he: '',
-          },
-        },
-        {
-          id: 9,
-          name: {
-            en: 'Cardiac Nursing',
-            hi: '',
-            he: '',
-          },
-        },
-        {
-          id: 10,
-          name: {
-            en: 'Oncology Nursing',
-            hi: '',
-            he: '',
-          },
-        },
-        {
-          id: 11,
-          name: {
-            en: 'Nurse Practitioner',
-            hi: '',
-            he: '',
-          },
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: {
-        en: 'Healer',
-        hi: 'आरोग्य करनेवाला',
-        he: '',
-      },
-      specialties: [],
-    },
-    {
-      id: 4,
-      name: {
-        en: 'Physio',
-        hi: 'फिजियो',
-        he: '',
-      },
-      specialties: [
-        {
-          id: 4,
-          name: {
-            en: 'Neuromusculoskeletal',
-            hi: '',
-            he: '',
-          },
-        },
-        {
-          id: 6,
-          name: {
-            en: 'Dermatology',
-            hi: '',
-            he: '',
-          },
-        },
-        {
-          id: 12,
-          name: {
-            en: "Women's Health Physiotherapy",
-            hi: '',
-            he: '',
-          },
-        },
-        {
-          id: 13,
-          name: {
-            en: 'Pain Management',
-            hi: '',
-            he: '',
-          },
-        },
-      ],
-    },
-  ];
-
-  const renderItem = (item) => {
-    return <Text style={styles.textItem}>{item?.name.en}</Text>;
+  const renderSpecialityItems = (item: ProviderSpeciality) => {
+    return <Text style={styles.textItem} title={item?.name.en} />;
   };
 
-  const renderItems = (item) => {
-    return <Text style={styles.textItem}>{item?.name}</Text>;
-  };
-
-  const validateFirstName = () => {
-    if (!firstNameRef.current.value) {
-      setFirstNameError('First name is required');
-    } else {
-      setFirstNameError('');
-    }
-  };
-
-  const validateLastName = () => {
-    if (!lastNameRef.current.value) {
-      setLastNameError('Last name is required');
-    } else {
-      setLastNameError('');
-    }
-  };
-
-  const validateProviderType = () => {
-    if (!providerTypeRef.current.value) {
-      setProviderTypeError('Provider type is required');
-    } else {
-      setProviderTypeError('');
-    }
-  };
-
-  const validateSpecialty = () => {
-    if (!specialtyRef.current.value) {
-      setSpecialtyError('Specialty is required');
-    } else {
-      setSpecialtyError('');
-    }
-  };
-
-  const onChangeProviderTypes = (value) => {
-    validateLastName();
-    setUserDataProvider({
-      ...userDataProvider,
-      type_Provider: value?.name,
-      lastname: lastNameRef.current.value,
-    });
-    setSelectedProvider(value);
-  };
-
-  const onChangeSpecialtys = (value) => {
-    console.log('onChangeSpecialtys', value?.name?.en);
-    setUserDataProvider({
-      ...userDataProvider,
-      speciality: value?.name?.en,
-      speciality_id: value?.id,
-    });
-    setSelectedSpecialty(value);
+  const renderProviderItems = (item: ProviderType) => {
+    return <Text style={styles.textItem} title={item?.name.en} />;
   };
 
   return (
     <>
       <Input
-        placeholder={registration.first_name}
+        placeholder={t('first_name')}
         onBlur={onBlurFirstName}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
-        defaultValue={userDataProvider.firstname}
-        inputValue={userDataProvider?.firstname ?? ''}
-        errorMessage={fnError.length ? fnError : firstNameError}
+        defaultValue={''}
+        inputValue={providerProfile?.firstName ?? ''}
+        errorMessage={firstNameError}
         returnKeyType={'next'}
         onSubmitEditing={() => lastNameRef.current.focus()}
         onClearInputText={() => firstNameRef.current.clear()}
       />
 
       <Input
-        placeholder={registration.last_name}
+        placeholder={t('last_name')}
         type={'nameSuffix'}
         inputStyle={styles.inputLastName}
         onChangeText={onChangeLastName}
         onBlur={onBlurLastName}
-        defaultValue={userDataProvider.lastname}
+        defaultValue={''}
         ref={lastNameRef}
-        inputValue={userDataProvider?.lastname ?? ''}
-        errorMessage={lnError.length ? lnError : lastNameError}
+        inputValue={providerProfile?.lastName ?? ''}
+        errorMessage={lastNameError}
         onClearInputText={() => lastNameRef.current.clear()}
       />
 
@@ -319,62 +83,49 @@ const ProviderDetail = ({
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
         iconColor={colors.black}
-        selectedStyle={styles.box}
-        data={[
-          { name: 'Doctor' },
-          { name: 'Nurse' },
-          { name: 'Healer' },
-          { name: 'Physio' },
-          { name: 'Other' },
-        ]}
-        labelField={'name'}
-        valueField="name"
+        // selectedStyle={styles.box}
+        data={providerTypeList}
+        labelField="name.en"
+        valueField="name.en"
         placeholder="Type of provider"
-        value={userDataProvider.type_Provider}
-        onChange={onChangeProviderTypes}
-        renderItem={renderItems}
+        value={selectedProvider}
+        onChange={onChangeProviderType}
+        renderItem={renderProviderItems}
       />
-      {providerTypeError ||
-        (prvError && (
-          <Text style={styles.errorMessage}>
-            {prvError.length ? prvError : providerTypeError}
-          </Text>
-        ))}
+
+      {providerTypeError != '' && (
+        <Text style={styles.errorMessage} title={providerTypeError} />
+      )}
+
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
         iconColor={colors.black}
-        selectedStyle={styles.box}
-        data={
-          data.find((item) => item.name.en === selectedProvider?.name)
-            ?.specialties || []
-        }
+        // selectedStyle={styles.box}
+        data={specialityList}
         labelField="name.en"
         valueField="name.en"
         placeholder="Specialty"
-        value={userDataProvider.speciality}
-        onChange={onChangeSpecialtys}
-        renderItem={renderItem}
+        value={selectedSpecialty}
+        onChange={onChangeSpeciality}
+        renderItem={renderSpecialityItems}
       />
-      {specialtyError ||
-        (spError && (
-          <Text style={styles.errorMessage}>
-            {spError.length ? spError : specialtyError}
-          </Text>
-        ))}
+      {specialityError != '' && (
+        <Text style={styles.errorMessage} title={specialityError} />
+      )}
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text}>Upload ID photo</Text>
+        <Text style={styles.text} title={'Upload ID photo'} />
         <TouchableOpacity
-          activeOpacity={userDataProvider.id_photo ? 1 : 0.5}
+          activeOpacity={idPicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
         >
           <Image
             source={
-              userDataProvider.id_photo
-                ? { uri: userDataProvider.id_photo }
+              idPicture
+                ? { uri: idPicture }
                 : require('../../../../assets/icon/uploadProfile.png')
             }
             style={styles.selectedImage}
@@ -384,6 +135,17 @@ const ProviderDetail = ({
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
           imageUri={getImageUrl}
+        />
+      </View>
+
+      <View style={styles.footerContainer}>
+        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        <Button
+          title={t('next')}
+          isPrimary
+          onPress={onPressNext}
+          isSmall
+          width={'30%'}
         />
       </View>
     </>
@@ -463,5 +225,12 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
+  },
+  footerContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    width: '100%',
+    flex: 0.12,
+    justifyContent: 'space-between',
   },
 });

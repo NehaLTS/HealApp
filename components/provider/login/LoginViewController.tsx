@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import useToast from 'components/common/useToast';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { FacebookAuthProvider } from 'libs/authsevices/FcebookAuthProvider';
 import { GoogleAuthProvider } from 'libs/authsevices/GoogleAuthProvider';
@@ -26,7 +25,6 @@ const LoginViewController = () => {
     onSubmitGoogleAuthRequestProvider,
     onSubmitFBAuthRequestProvider,
   } = AuthServicesProvider();
-  // const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
   const { setToken, setUserId, setProviderProfile, token, userId } =
     UseProviderUserContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,11 +75,11 @@ const LoginViewController = () => {
   /** To handle Response from API after authentication request */
   const handleAuthResponse = (response: any) => {
     let userDataProvider = response.user;
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{ name: NavigationRoutes.ProviderHome }],
-    // })
     console.log('response.token', response.token);
+
+    console.log('response ', response);
+
+
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
@@ -100,6 +98,7 @@ const LoginViewController = () => {
       licensepicture: userDataProvider?.license_photo,
       isSuccessful: userDataProvider?.isSuccessful,
     });
+
     // setUserDataProvider({ ...userDataProvider, token: response?.token, isSuccessful: response?.isSuccessful });
     setLocalData('USERPROVIDERPROFILE', {
       firstName: userDataProvider?.firstname,
@@ -127,7 +126,7 @@ const LoginViewController = () => {
 
       navigation.reset({
         index: 0,
-        routes: [{ name: NavigationRoutes.ProviderRegistration }],
+        routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
       });
     } else {
       navigation.reset({
@@ -138,12 +137,11 @@ const LoginViewController = () => {
   };
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {
-    console.log('yegfjusdfj', email, password);
     try {
       if (email != '' || password != '') {
         setIsLoading(true);
         const res = await OnProviderSignIn({ email, password });
-        setIsLoading(false);
+
         if (res?.isSuccessful === true) {
           handleAuthResponse(res);
         } else {
@@ -152,16 +150,15 @@ const LoginViewController = () => {
             'Please check your email and password and try again.',
             'warning',
           );
-          setIsLoading(false);
         }
       } else {
-        setIsLoading(false);
         showToast('', 'Please enter email or password', 'warning');
       }
     } catch (error) {
       Alert.alert('An error occurred during login.');
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
   /** To handle Google login  button click*/
   const onHandleGoogleLogin = async () => {

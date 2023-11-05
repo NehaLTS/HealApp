@@ -3,83 +3,30 @@ import { GetSignInFooter } from 'components/provider/login/LoginView';
 import { t } from 'i18next';
 import React, { useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { colors } from '../../../../designToken/colors';
-import { dimens } from '../../../../designToken/dimens';
-import { fontSize } from '../../../../designToken/fontSizes';
-import { fontWeight } from '../../../../designToken/fontWeights';
-import { getHeight, getWidth } from '../../../../libs/StyleHelper';
-import Button from '../../../common/Button';
-import Input from '../../../common/Input';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import Button from 'common/Button';
+import Input from 'common/Input';
 import RegistrationViewController from '../controllers/RegistrationViewController';
-import Text from 'components/common/Text';
-import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 
 const RegistrationView = () => {
-  const { onPressSignUpProvider, isLoading, renderToast } =
-    RegistrationViewController();
-  const navigation = useNavigation();
+  const {
+    handleSignUp,
+    isLoading,
+    renderToast,
+    onBlurEmail,
+    onBlurPassword,
+    onChangeEmail,
+    onChangePassword,
+    emailError,
+    emailRef,
+    passwordRef,
+    passwordError,
+  } = RegistrationViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
-
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-
-  const emailRef = React.useRef<any>('');
-  const passwordRef = React.useRef<any>('');
-
-  const onChangeEmail = (value: string) => {
-    emailRef.current.value = value;
-    validateEmail();
-  };
-  const onBlurEmail = () => {
-    validateEmail();
-  };
-
-  const onChangePassword = (value: string) => {
-    passwordRef.current.value = value;
-    validatePassword();
-  };
-  const onBlurPassword = () => {
-    validatePassword();
-  };
-
-  const isValidEmail = (email: string) => {
-    const emailPattern = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    return emailPattern.test(email);
-  };
-
-  const isValidPassword = (password: string) => {
-    const passwordPattern =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordPattern.test(password);
-  };
-
-  const validateEmail = () => {
-    if (!emailRef.current.value) {
-      setEmailError('Email is required');
-    } else if (!isValidEmail(emailRef.current.value)) {
-      setEmailError('Invalid email address');
-    } else {
-      setEmailError('');
-    }
-  };
-
-  const validatePassword = () => {
-    if (!passwordRef.current.value) {
-      setPasswordError('Password is required');
-    } else if (passwordRef.current.value.length < 5) {
-      setPasswordError('Password must be at least 8 characters');
-    } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError('Password must contain special characters');
-    } else {
-      setPasswordError('');
-    }
-  };
-  const handleSignUp = () => {
-    setIsLoadingGoogle(true);
-    if (!emailError && !passwordError)
-      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value);
-  };
 
   return (
     <>
