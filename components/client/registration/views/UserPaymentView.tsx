@@ -60,8 +60,8 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
         <View
           style={{
             flexDirection: 'row',
-            gap: getHeight(dimens.buttonHeight),
-            marginBottom: getHeight(dimens.buttonHeight),
+            gap: getHeight(dimens.imageXs),
+            marginBottom: getHeight(dimens.imageXs + 2),
           }}
         >
           <Image source={logo} style={styles.logo} />
@@ -69,7 +69,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             adjustsFontSizeToFit
             numberOfLines={2}
             style={styles.title}
-            title={'Add payment \n method'}
+            title={'Add payment\nmethod'}
           />
         </View>
       )}
@@ -190,6 +190,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
           {
             justifyContent:
               isCardDetails || isFromHome ? 'center' : 'space-between',
+            flex: 0.19,
           },
         ]}
       >

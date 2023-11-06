@@ -53,7 +53,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
     >
       {!isAddPayment ? (
         <>
-          <View style={{ flex: 0.3 }} />
+          <View style={{ flex: 0.33 }} />
           <View style={styles.modalContent}>
             <Text
               style={styles.modalText}
@@ -127,12 +127,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: getWidth(dimens.marginL),
-    marginTop: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.marginS + 8),
   },
   elevation: {
-    elevation: getHeight(dimens.paddingS),
+    elevation: getHeight(8),
     shadowColor: colors.black,
-    marginHorizontal: getWidth(6),
+    shadowOffset: {
+      width: 0,
+      height: getHeight(8),
+    },
+    marginHorizontal: getWidth(dimens.paddingXs),
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),

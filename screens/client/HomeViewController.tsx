@@ -63,45 +63,45 @@ const HomeViewController = () => {
 
   useEffect(() => {
     getBannerAd();
-    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
-      if (status === RESULTS.GRANTED) {
-        // Location permission is already granted
-        getLocation();
-      } else {
-        // Request location permission
-        requestLocationPermission();
-      }
-    });
+    // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
+    //   if (status === RESULTS.GRANTED) {
+    //     // Location permission is already granted
+    //     getLocation();
+    //   } else {
+    //     // Request location permission
+    //     requestLocationPermission();
+    //   }
+    // });
     const abc = getLocalData('USERPROFILE');
     setUser(abc);
   }, []);
-  const getLocation = () => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ latitude, longitude });
-      },
-      (error) => {
-        console.log('Error getting location: ' + error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-      },
-    );
-  };
+  // const getLocation = () => {
+  //   Geolocation.getCurrentPosition(
+  //     (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       setLocation({ latitude, longitude });
+  //     },
+  //     (error) => {
+  //       console.log('Error getting location: ' + error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: true,
+  //       timeout: 15000,
+  //       maximumAge: 10000,
+  //     },
+  //   );
+  // };
 
-  const requestLocationPermission = async () => {
-    const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-    if (status === RESULTS.GRANTED) {
-      // Location permission granted, get the location
-      getLocation();
-    } else {
-      console.log('Location permission not granted');
-      Alert.alert('Please turn on your permission');
-    }
-  };
+  // const requestLocationPermission = async () => {
+  //   const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+  //   if (status === RESULTS.GRANTED) {
+  //     // Location permission granted, get the location
+  //     getLocation();
+  //   } else {
+  //     console.log('Location permission not granted');
+  //     Alert.alert('Please turn on your permission');
+  //   }
+  // };
 
   const onPressBanner = () => Linking.openURL(bannerAds[0]?.destinationUrl);
 
