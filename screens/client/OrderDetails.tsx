@@ -12,7 +12,13 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useLayoutEffect, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import OrderDetailsController from './OrderDetailsController';
 import { ClientProfile, OrderDetail } from 'libs/types/UserType';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
@@ -49,13 +55,16 @@ const OrderDetails = () => {
     menu_id: '',
     reason: [],
   });
-  console.log('order', order);
+  console.log('order**********', order);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: 'center',
       headerTitle: () => (
         <View style={styles.servicesContainer}>
-          <Image source={supplier?.image} style={styles.specialistIcon} />
+          <Image
+            source={require('assets/icon/physio.png')}
+            style={styles.specialistIcon}
+          />
           <Text
             numberOfLines={2}
             style={styles.specialist}
@@ -75,33 +84,37 @@ const OrderDetails = () => {
 
   return (
     <View style={styles.mainContainer}>
-      {showSummary ? (
-        <SummaryView
-          setShowSummary={setShowSummary}
-          order={order}
-          setOrder={setOrder}
+      <ScrollView
+        contentContainerStyle={{ paddingVertical: getHeight(dimens.marginL) }}
+      >
+        {showSummary ? (
+          <SummaryView
+            setShowSummary={setShowSummary}
+            order={order}
+            setOrder={setOrder}
+          />
+        ) : (
+          <OrderFormView
+            treatmentReason={treatmentReason}
+            setOrder={setOrder}
+            order={order}
+          />
+        )}
+        <Button
+          title={showSummary ? 'Order' : 'Next'}
+          isPrimary
+          isSmall
+          style={styles.buttonOrder}
+          onPress={handleNextButtonPress}
+          width={'30%'}
         />
-      ) : (
-        <OrderFormView
-          treatmentReason={treatmentReason}
-          setOrder={setOrder}
-          order={order}
-        />
-      )}
-      <Button
-        title={showSummary ? 'Order' : 'Next'}
-        isPrimary
-        isSmall
-        style={styles.buttonOrder}
-        onPress={handleNextButtonPress}
-        width={'30%'}
-      />
-      {showSummary && (
-        <Text
-          title={'*No fee will be collected within 3 minutes after order'}
-          style={styles.text}
-        />
-      )}
+        {showSummary && (
+          <Text
+            title={'*No fee will be collected within 3 minutes after order'}
+            style={styles.text}
+          />
+        )}
+      </ScrollView>
     </View>
   );
 };

@@ -17,7 +17,7 @@ const Text = ({
   children,
   ...props
 }: {
-  title: any;
+  title?: any;
   style?: StyleProp<TextStyle>;
   children?: ReactNode;
 } & TextProps) => {

@@ -67,7 +67,7 @@ const HomeScreen = () => {
             <Text
               numberOfLines={2}
               style={styles.text}
-              title={user?.address ?? ''}
+              title={'Your current location'}
             />
           </View>
           <TextButton
@@ -160,15 +160,15 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     // Pass on Press of card and array of data as props*/
-    return providersList?.map(
-      (item: any, index: number) => console.log('item', item),
-      // <Animated.View
-      //   key={index}
-      //   entering={FadeInUp.duration(200).easing(Easing.ease)}
-      //   exiting={FadeInDown.duration(10).easing(Easing.ease)}>
-      //   <CardView item={item} index={index} isSearch />
-      // </Animated.View>
-    );
+    return providersList?.map((item: any, index: number) => (
+      <Animated.View
+        key={index}
+        entering={FadeInUp.duration(200).easing(Easing.ease)}
+        exiting={FadeInDown.duration(10).easing(Easing.ease)}
+      >
+        <CardView item={item} index={index} isSearch />
+      </Animated.View>
+    ));
   };
   const noSearchedView = () => {
     return (
@@ -210,6 +210,7 @@ const HomeScreen = () => {
           onChangeText={onChange}
           defaultValue={onChangeSearch}
           onSubmitEditing={onSearchDone}
+          // onEndEditing={onSearchDone}
         />
         {onChangeSearch?.length === 0
           ? getProviderList()
