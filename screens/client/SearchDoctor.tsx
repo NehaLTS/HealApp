@@ -21,7 +21,7 @@ const SearchDoctor = () => {
   const { t } = useTranslation();
   const [locationPermission, setLocationPermission] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Location>();
-const {permissionHelper, forceAlert}= SearchDoctorController()
+const {permissionHelper, forceAlert, checkPermission, createNotificationListeners}= SearchDoctorController()
 const [locationHistory, setLocationHistory] = useState<any>([]);
 //   const [showSummary, setShowSummary] = useState(false);
 
@@ -34,6 +34,8 @@ Geocoder.init("AIzaSyDBdv2QXiVFswU6vKCkuwJfSZ1iJobbTVk")
   }, [navigation]);
 
   useLayoutEffect(() => {
+    checkPermission()
+    createNotificationListeners()
     navigation.setOptions({
       headerTitleAlign: "center",
 

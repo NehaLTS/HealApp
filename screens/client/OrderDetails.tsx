@@ -13,12 +13,15 @@ import { getHeight, getWidth } from "libs/StyleHelper";
 import NavigationRoutes from "navigator/NavigationRoutes";
 import React, { useLayoutEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import {PermissionsAndroid} from 'react-native';
+
 
 const OrderDetails = () => {
   const navigation = useNavigation();
   const [showSummary, setShowSummary] = useState(false);
 
   const handleNextButtonPress = () => {
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
     // setShowSummary(!showSummary);
     navigation.navigate(NavigationRoutes.SearchDoctor)
   };

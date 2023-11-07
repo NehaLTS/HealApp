@@ -137,6 +137,7 @@ export interface ClientProfile {
   date_of_birth?: string;
   idNumber?: number;
   isPaymentAdded?: boolean;
+  deviceToken?:string
 }
 
 export type onboardStep = "details" | "address" | "payment" | "services";
