@@ -3,10 +3,11 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import LocalizationController from './LocalizationController';
 import Text from './Text';
+import { useNavigation } from '@react-navigation/native';
 
 export const defaultHeaderStyle = {
   headerShadowVisible: false,
@@ -115,6 +116,23 @@ const Header = ({
 
 export default Header;
 
+export const RNHeader = (
+  headerTitle?: () => React.ReactNode,
+  headerLeft?: () => React.ReactNode,
+  headerRight?: () => React.ReactNode,
+) => {
+  const navigation = useNavigation();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitleAlign: 'center',
+      headerTitle: headerTitle,
+      headerLeft: headerLeft,
+      headerStyle: styles.header,
+      headerRight: headerRight,
+    });
+  }, [navigation]);
+};
+
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
@@ -153,5 +171,8 @@ const styles = StyleSheet.create({
   headerRight: {
     padding: getHeight(dimens.sideMargin),
     fontSize: getHeight(fontSize.textL),
+  },
+  header: {
+    backgroundColor: colors.white,
   },
 });

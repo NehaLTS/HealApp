@@ -11,21 +11,21 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import OrderFormController from './OrderFormController';
+import { fontFamily } from 'designToken/fontFamily';
+import { useTranslation } from 'react-i18next';
 
 const OrderFormView = ({
   treatmentReason,
   setOrder,
   order,
 }: {
-  treatmentReason: treatment;
+  treatmentReason: treatment[];
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
 }) => {
-  const { t } = useTranslation();
   const {
     activeButton,
     onSelectReasons,
@@ -45,27 +45,32 @@ const OrderFormView = ({
     onChangePhone,
     onSubmitDetail,
     isVisible,
+    onChangeAddress,
+    onSubmitDescription,
   } = OrderFormController({ setOrder, order });
+  const { t } = useTranslation();
 
   const getReasonsView = () => (
     <>
-      <Text title={'Reason'} style={styles.reasonText} />
+      <Text title={t('reason')} style={styles.reasonText} />
       <View style={styles.buttonContainer}>
-        {treatmentReason?.reason?.length ? (
-          treatmentReason?.reason.map((item: Reason, index: number) => (
-            <Button
-              key={index}
-              title={item.name?.en}
-              isSmall
-              isPrimary={activeButton?.includes?.(item?.reason_id)}
-              onPress={() => onSelectReasons(item)}
-              width={'30%'}
-              fontSized={getHeight(fontSize?.textM)}
-              height={getHeight(dimens?.marginL)}
-              borderRadius={getWidth(dimens?.marginS)}
-              lineHeight={dimens?.sideMargin + dimens?.borderBold}
-            />
-          ))
+        {(treatmentReason as unknown as treatment)?.reason?.length ? (
+          (treatmentReason as unknown as treatment)?.reason.map(
+            (item: Reason, index: number) => (
+              <Button
+                key={index}
+                title={item.name?.en}
+                isSmall
+                isPrimary={activeButton?.includes?.(item?.reason_id)}
+                onPress={() => onSelectReasons(item)}
+                width={'30%'}
+                fontSized={getHeight(fontSize?.textM)}
+                height={getHeight(dimens?.marginL)}
+                borderRadius={getWidth(dimens?.marginS)}
+                lineHeight={dimens?.sideMargin + dimens?.borderBold}
+              />
+            ),
+          )
         ) : (
           <LoaderSmall style={styles.loader} />
         )}
@@ -77,21 +82,17 @@ const OrderFormView = ({
           lineHeight={dimens.sideMargin + dimens.borderBold}
           onPress={() => setIsModalVisible(true)}
         />
-        <Text
-          title={
-            "*We don't do emergency calls. In case of emergency please call 077-773-45-69"
-          }
-          style={styles.textSmall}
-        />
+        <Text title={t('we_don’t')} style={styles.textSmall} />
       </View>
-
+      <View style={styles.divider} />
       <Modal
         backdropColor={colors.white}
         isVisible={isModalVisible}
         onBackdropPress={() => setIsModalVisible(false)}
+        style={{ flex: 0.93 }}
       >
         <Input
-          placeholder={'Describe where is the entrance etc.'}
+          placeholder={t('describe_where')}
           inputValue={otherReasons?.current?.value}
           multiline
           numberOfLines={4}
@@ -100,21 +101,18 @@ const OrderFormView = ({
           defaultValue={otherReasons?.current?.value}
           ref={otherReasons}
           onChangeText={(value: string) => (otherReasons.current.value = value)}
-          onSubmitDescription={() => {
-            setOrder({
-              ...order,
-              Additional_notes: otherReasons?.current?.value,
-            });
-          }}
+          onSubmitDescription={onSubmitDescription}
+          placeholderStyle={styles.placeholder}
         />
       </Modal>
     </>
   );
   const getTreatmentsView = () => (
     <>
-      <Text title={'Treatments menu'} style={styles.reasonText} />
-      {(treatmentReason?.treatmentMenu?.length ?? 0) > 0 ? (
-        treatmentReason?.treatmentMenu?.map(
+      <Text title={t('treatments')} style={styles.reasonText} />
+      {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
+      0 ? (
+        (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             <TouchableOpacity
               key={index}
@@ -129,7 +127,10 @@ const OrderFormView = ({
                   />
                 )}
               </View>
-              <Text>{item.name.en}</Text>
+              <Text style={{ fontSize: fontSize.textM }}>
+                {' '}
+                {item.name.en.charAt(0).toUpperCase() + item.name.en.slice(1)}
+              </Text>
             </TouchableOpacity>
           ),
         )
@@ -137,8 +138,9 @@ const OrderFormView = ({
         <LoaderSmall style={styles.loader} />
       )}
       <Text
-        title={"*If the doctor won't use your shot, you won't pay for it"}
-        style={{ ...styles.textSmall, marginBottom: getHeight(dimens.marginL) }}
+        title={t('if_the_doctor')}
+        style={{ ...styles.textSmall }}
+        numberOfLines={1}
       />
     </>
   );
@@ -163,16 +165,17 @@ const OrderFormView = ({
 
   const getHeaderView = () => (
     <>
-      <Text style={styles.headingText} title={'For whom is the doctor?'} />
+      <Text style={styles.headingText} title={t('for_whom')} />
       <View style={styles.button}>
         <Button
-          title={'Me'}
+          title={t('me')}
           isPrimary={isMeSelected}
           isSmall
           width={'12%'}
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
           onPress={() => toggleMe('me')}
+          lineHeight={20}
         />
         <Button
           title={
@@ -184,10 +187,11 @@ const OrderFormView = ({
           }
           isPrimary={!isMeSelected}
           isSmall
-          width={'40%'}
+          width={'45%'}
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
           onPress={() => toggleMe('other')}
+          lineHeight={20}
         />
       </View>
     </>
@@ -204,7 +208,7 @@ const OrderFormView = ({
             ref={ageRef}
             onChangeText={onChangeAge}
             placeholderTextColor={colors.disabledText}
-            inputPlaceholder="Their age *"
+            inputPlaceholder={t('age')}
             style={styles.textInput}
             defaultValue={ageRef?.current?.value}
             maxLength={dimens.borderBold}
@@ -216,7 +220,7 @@ const OrderFormView = ({
           <Input
             ref={phoneRef}
             placeholderTextColor={colors.disabledText}
-            inputPlaceholder="Their phone number"
+            inputPlaceholder={t('number')}
             style={styles.textInput}
             onChangeText={onChangePhone}
             defaultValue={phoneRef?.current?.value}
@@ -239,13 +243,7 @@ const OrderFormView = ({
       {getReasonsView()}
       {getTreatmentsView()}
       <AddAddress
-        address={(address: string) => {
-          setOrder({
-            ...order,
-            address: address,
-          });
-          setIsVisible(false);
-        }}
+        address={onChangeAddress}
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
         defaultValue={order?.address}
@@ -269,6 +267,7 @@ const styles = StyleSheet.create({
   reasonText: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
+    marginTop: getHeight(dimens.paddingS + 3),
   },
   textSmall: {
     fontSize: getWidth(fontSize.textS),
@@ -289,7 +288,7 @@ const styles = StyleSheet.create({
     borderColor: colors.disabled,
     flexDirection: 'row',
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
-    marginBottom: getHeight(dimens.marginL),
+    marginBottom: getHeight(dimens.paddingS + 3),
     width: '100%',
   },
   buttonContainer: {
@@ -298,13 +297,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     gap: getWidth(dimens.marginS + dimens.borderBold),
-    marginBottom: getHeight(dimens.marginL),
+    marginBottom: getHeight(dimens.paddingS + 3),
   },
   checkboxContainer: {
     flexDirection: 'row',
-    gap: getWidth(dimens.paddingL),
+    gap: getWidth(dimens.marginM),
     alignItems: 'center',
-    marginBottom: getHeight(dimens.sideMargin),
+    marginBottom: getHeight(dimens.marginS),
   },
   button: {
     flexDirection: 'row',
@@ -320,9 +319,9 @@ const styles = StyleSheet.create({
     borderWidth: getWidth(dimens.borderBold),
     borderRadius: getWidth(dimens.marginS),
     borderColor: colors.primary,
-    paddingHorizontal: getWidth(10),
-    paddingBottom: getWidth(10),
-    marginVertical: getHeight(14),
+    paddingHorizontal: getWidth(dimens.marginS),
+    paddingBottom: getWidth(dimens.marginS),
+    marginVertical: getHeight(dimens.marginS + 4),
   },
   arrowIcon: {
     height: getHeight(dimens.marginL + dimens.paddingXs),
@@ -361,5 +360,15 @@ const styles = StyleSheet.create({
   },
   loader: {
     paddingVertical: getHeight(20),
+  },
+  divider: {
+    height: getWidth(dimens.borderThin),
+    backgroundColor: colors.black,
+    marginTop: getHeight(dimens.marginS),
+    marginBottom: getHeight(dimens.paddingXs),
+  },
+  placeholder: {
+    fontSize: getWidth(fontSize.textM),
+    color: colors.grey,
   },
 });

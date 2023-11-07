@@ -190,7 +190,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
           {
             justifyContent:
               isCardDetails || isFromHome ? 'center' : 'space-between',
-            flex: 0.19,
+            flex: 0.1,
           },
         ]}
       >
@@ -219,6 +219,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             isSmall
             style={{ paddingHorizontal: 0 }}
             onPress={() => onPressStartUsingHeal(isFromHome ?? false)}
+            width={'70%'}
           />
         )}
       </View>

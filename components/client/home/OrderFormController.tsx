@@ -142,6 +142,21 @@ const OrderFormController = ({
     });
   };
 
+  const onChangeAddress = (address: string) => {
+    setOrder({
+      ...order,
+      address: address,
+    });
+    setIsVisible(false);
+  };
+
+  const onSubmitDescription = () => {
+    setOrder({
+      ...order,
+      Additional_notes: otherReasons?.current?.value,
+    });
+  };
+
   return {
     activeButton,
     onSelectReasons,
@@ -161,6 +176,8 @@ const OrderFormController = ({
     onChangePhone,
     onSubmitDetail,
     isVisible,
+    onChangeAddress,
+    onSubmitDescription,
   };
 };
 

@@ -8,9 +8,7 @@ import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import { ClientProfile } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
-import { Alert, Keyboard, Linking } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import { Keyboard, Linking } from 'react-native';
 
 interface Location {
   latitude: number;
@@ -31,32 +29,32 @@ const HomeViewController = () => {
   const providerList = [
     {
       id: 1,
-      image: '../../assets/icon/doctor.png',
+      image: 'assets/icon/doctor.png',
       name: 'Doctor - home visit',
     },
     {
       id: 2,
-      image: '../../assets/icon/physio.png',
+      image: 'assets/icon/physio.png',
       name: 'Physio - home visit',
     },
     {
       id: 3,
-      image: '../../assets/icon/nurse.png',
+      image: 'assets/icon/nurse.png',
       name: 'Nurse - home visit',
     },
     {
       id: 4,
-      image: '../../assets/icon/healer.png',
+      image: 'assets/icon/healer.png',
       name: 'Alternative medicine',
     },
     {
       id: 5,
-      image: '../../assets/icon/doctor.png',
+      image: 'assets/icon/doctor.png',
       name: 'Doctor - home visit',
     },
     {
       id: 6,
-      image: '../../assets/icon/healer.png',
+      image: 'assets/icon/healer.png',
       name: 'Alternative medicine',
     },
   ];

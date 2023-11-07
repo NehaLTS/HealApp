@@ -1,7 +1,7 @@
 import { colors } from 'designToken/colors';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
-import { getHeight } from 'libs/StyleHelper';
+import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { ReactNode } from 'react';
 import {
   Text as RNText,
@@ -34,7 +34,7 @@ export default Text;
 const styles = StyleSheet.create({
   text: {
     color: colors.black,
-    fontSize: getHeight(fontSize.textL),
+    fontSize: getWidth(fontSize.textL),
     fontFamily: fontFamily.regular,
   },
 });

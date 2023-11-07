@@ -3,51 +3,36 @@ import Input from 'components/common/Input';
 import Modal from 'components/common/Modal';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { OrderDetail } from 'libs/types/UserType';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
+import SummaryViewController from './SummaryViewController';
+import { useTranslation } from 'react-i18next';
 interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
   order: OrderDetail;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
 }
 const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
-  const { orderDetails, setOrderDetails } = UseClientUserContext();
-  console.log('arrivalRef.current.value', order);
-  const arrivalRef = React.useRef<any>('');
-  const totalPrice: number = order?.services.reduce(
-    (total, item) => total + parseInt(item.price, 10),
-    0,
-  );
-
-  function calculateAgeFromDate(dateString: string) {
-    const parts = dateString.split(' ');
-    if (parts.length < 4) {
-      return NaN;
-    }
-    const year = parseInt(parts[3], 10);
-    const currentDate = new Date();
-    if (isNaN(year)) {
-      return NaN;
-    }
-    const age = currentDate.getFullYear() - year;
-    return age;
-  }
-
+  const {
+    isVisible,
+    calculateAgeFromDate,
+    totalPrice,
+    setIsVisible,
+    arrivalRef,
+  } = SummaryViewController({ order });
+  const { t } = useTranslation();
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
@@ -60,101 +45,128 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       </View>
     </Modal>
   );
-  return (
-    <>
-      <KeyboardAvoidingView
-        behavior={'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 70}
-        style={{ flex: 0.97 }}
-      >
-        <View style={styles.textContainer}>
-          <Text title={'Order summary'} style={styles.summaryText} />
-          <TextButton
-            title={'Edit order'}
-            fontSize={getHeight(fontSize.textL)}
-            isActive
-            onPress={() => setShowSummary(false)}
-          />
-        </View>
-        <View style={styles.rowContainer}>
-          <View style={styles.patientAndAddress}>
-            <Text title={'The patient '} style={styles.text} />
-            <Text
-              title={`${calculateAgeFromDate(order?.patient_type?.age)} y.o, ${
-                order?.phonenumber
-              }`}
-              style={styles.textSmall}
-            />
-          </View>
-          <View style={styles.locationContainer}>
-            <Image
-              source={require('../../../assets/icon/location.png')}
-              style={styles.locationIcon}
-            />
-            <Text title={order?.address} style={styles.locationText} />
-          </View>
-        </View>
-        <View style={styles.symptomsContainer}>
-          <Text title={'Symptoms '} style={styles.symptomsText} />
-          <View style={{ flexDirection: 'row', gap: 6 }}>
-            {order?.reason.map((item, index) => (
-              <Text
-                key={index}
-                title={item.length <= 1 ? item.name.en : `${item.name.en},`}
-                style={styles.textSmall}
-              />
-            ))}
-          </View>
-        </View>
-        <Text title={'Services'} style={styles.text} />
-        {order?.services.map((item, index) => (
+
+  const getSummaryHeader = () => (
+    <View style={styles.textContainer}>
+      <Text title={t('summary')} style={styles.summaryText} />
+      <TextButton
+        title={t('order')}
+        fontSize={getHeight(fontSize.textL)}
+        isActive
+        onPress={() => setShowSummary(false)}
+      />
+    </View>
+  );
+
+  const getPersonalDetail = () => (
+    <View style={styles.rowContainer}>
+      <View style={styles.patientAndAddress}>
+        <Text title={t('patient')} style={styles.text} />
+        <Text
+          title={`${calculateAgeFromDate(order?.patient_type?.age)} y.o, ${
+            order?.phonenumber
+          }`}
+          style={styles.textSmall}
+        />
+      </View>
+      <View style={styles.locationContainer}>
+        <Image
+          source={require('../../../assets/icon/location.png')}
+          style={styles.locationIcon}
+        />
+        <Text title={order?.address} style={styles.locationText} />
+      </View>
+    </View>
+  );
+
+  const SymptomsView = () => (
+    <View style={styles.symptomsContainer}>
+      <Text title={t('symptoms')} style={styles.symptomsText} />
+      <View style={{ flexDirection: 'row', gap: 6 }}>
+        {order?.reason.map((item, index) => (
           <Text
             key={index}
-            title={item?.name?.en + ' ' + item?.price}
-            style={styles.voltaireText}
+            title={item.length <= 1 ? item.name.en : `${item.name.en},`}
+            style={styles.textSmall}
           />
         ))}
-        <View style={{ flexDirection: 'row' }}>
-          <Text title={'Total - '} style={styles.total} />
-          <Text title={`${totalPrice} NIS`} style={styles.Small} />
-        </View>
+      </View>
+    </View>
+  );
+
+  const getServicesView = () => (
+    <>
+      <Text title={t('services')} style={styles.text} />
+      {order?.services.map((item, index) => (
         <Text
-          title={'*If the doctor won’t use your shot, you won’t pay for it'}
-          style={styles.payForIt}
+          key={index}
+          title={
+            item?.name?.en.charAt(0).toUpperCase() +
+            item?.name?.en.slice(1) +
+            ' - ' +
+            item?.price
+          }
+          style={styles.voltaireText}
         />
-        <View style={styles.cardDetail}>
-          <Text title={'Paid by card *4545'} style={styles.text} />
-          <TextButton
-            title={'Change'}
-            fontSize={getHeight(fontSize.textL)}
-            isActive
-            style={styles.changeText}
-            onPress={() => setIsVisible(true)}
-          />
-        </View>
-        <Text title={'Estimated arrival'} style={styles.text} />
-        <Text title={'60 min'} style={styles.textSmall} />
-        <View style={styles.instructionContainer}>
-          <Text title={'Instructions for arrival'} style={styles.instruction} />
-          <Input
-            placeholder={'Describe where is the entrance etc.'}
-            inputValue={order?.Instructions_for_arrival}
-            defaultValue={order?.Instructions_for_arrival}
-            inputStyle={styles.description}
-            ref={arrivalRef}
-            onChangeText={(value: string) => (arrivalRef.current.value = value)}
-            onSubmitEditing={() =>
-              setOrder({
-                ...order,
-                Instructions_for_arrival: arrivalRef.current.value,
-              })
-            }
-            placeholderStyle={styles.textSmall}
-          />
-        </View>
-        {isVisible && paymentModal()}
-      </KeyboardAvoidingView>
+      ))}
+      <View style={{ flexDirection: 'row' }}>
+        <Text title={'Total - '} style={styles.total} />
+        <Text title={`${totalPrice} NIS`} style={styles.Small} />
+      </View>
+      <Text
+        title={'*If the doctor won’t use your shot, you won’t pay for it'}
+        style={styles.payForIt}
+        numberOfLines={1}
+      />
     </>
+  );
+
+  const getCardView = () => (
+    <View style={styles.cardDetail}>
+      <Text title={'Paid by card *4545'} style={styles.text} />
+      <TextButton
+        title={'Change'}
+        fontSize={getHeight(fontSize.textL)}
+        isActive
+        style={styles.changeText}
+        onPress={() => setIsVisible(true)}
+      />
+    </View>
+  );
+
+  return (
+    <KeyboardAvoidingView
+      behavior={'position'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
+    >
+      {getSummaryHeader()}
+      {getPersonalDetail()}
+      {SymptomsView()}
+      {getServicesView()}
+      {getCardView()}
+      <Text title={'Estimated arrival'} style={styles.text} />
+      <Text title={'60 min'} style={styles.textSmall} />
+      <View style={styles.instructionContainer}>
+        <Text title={'Instructions for arrival'} style={styles.instruction} />
+        <Input
+          inputPlaceholder={'Describe where is the entrance etc.'}
+          inputValue={order?.Instructions_for_arrival}
+          defaultValue={order?.Instructions_for_arrival}
+          inputStyle={styles.description}
+          placeholderTextColor={colors.grey}
+          ref={arrivalRef}
+          onChangeText={(value: string) => (arrivalRef.current.value = value)}
+          onSubmitEditing={() =>
+            setOrder({
+              ...order,
+              Instructions_for_arrival: arrivalRef.current.value,
+            })
+          }
+          style={styles.placeholder}
+        />
+      </View>
+      {isVisible && paymentModal()}
+    </KeyboardAvoidingView>
   );
 };
 export default SummaryView;
@@ -203,13 +215,14 @@ const styles = StyleSheet.create({
   },
   cardDetail: {
     flexDirection: 'row',
-    gap: getWidth(dimens.imageS),
+    gap: getWidth(dimens.marginM + 5),
     marginTop: getWidth(dimens.marginM),
     marginBottom: getWidth(dimens.marginM),
   },
   instructionContainer: {
-    gap: getWidth(dimens.marginS),
+    gap: getWidth(dimens.paddingXs),
   },
+
   instruction: {
     fontSize: getWidth(fontSize.textL),
     marginTop: getWidth(dimens.marginM),
@@ -251,10 +264,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     textAlign: 'left',
   },
-  voltarenText: {
-    marginVertical: getWidth(3),
-    fontSize: getWidth(fontSize.textM),
-  },
   paymentContainer: {
     flex: 1,
     backgroundColor: colors.white,
@@ -262,5 +271,10 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     justifyContent: 'flex-start',
+  },
+  placeholder: {
+    marginTop: getHeight(-20),
+    paddingLeft: getWidth(10),
+    fontFamily: fontFamily.regular,
   },
 });
