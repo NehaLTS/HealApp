@@ -143,6 +143,7 @@ export interface ClientProfile {
   date_of_birth?: string;
   idNumber?: number;
   isPaymentAdded?: boolean;
+  description?:string,
 }
 
 export type onboardStep = "details" | "address" | "payment" | "services";

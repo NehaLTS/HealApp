@@ -18,6 +18,7 @@ export interface OrderDetail{
   TotalCost: string,
   menu_id: string,
   reason: any[],
+  description:string,
 }
 
 

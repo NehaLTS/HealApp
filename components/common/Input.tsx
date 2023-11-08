@@ -34,9 +34,10 @@ const Input = forwardRef(
       isToHideCross,
       isDescription,
       onSubmitDescription,
+      inputPlaceholder,
       ...props
     }: {
-      placeholder: string;
+      placeholder?: string;
       type?:
         | 'creditCardNumber'
         | 'emailAddress'
@@ -51,12 +52,13 @@ const Input = forwardRef(
       placeholderStyle?: StyleProp<TextStyle>;
       errorMessage?: string;
       containerWidth?: DimensionValue;
-      inputValue: string;
+      inputValue?: string;
       isToHideCross?: boolean;
       onClearInputText?: () => void;
       onPressCalender?: () => void;
       onSubmitDescription?: () => void;
       isDescription?: boolean;
+      inputPlaceholder?: string;
     } & TextInputProps,
     ref,
   ) => {
@@ -127,12 +129,19 @@ const Input = forwardRef(
             { borderColor: errorMessage ? colors.invalid : colors.primary },
           ]}
         >
-          <Animated.Text
-            adjustsFontSizeToFit
-            style={[styles.label, labelStyle, fontSizeStyle, placeholderStyle]}
-          >
-            {placeholder}
-          </Animated.Text>
+          {!inputPlaceholder?.length && (
+            <Animated.Text
+              adjustsFontSizeToFit
+              style={[
+                styles.label,
+                labelStyle,
+                fontSizeStyle,
+                placeholderStyle,
+              ]}
+            >
+              {placeholder}
+            </Animated.Text>
+          )}
           {isDescription && (
             <TouchableOpacity
               onPress={onSubmitDescription}
@@ -149,6 +158,7 @@ const Input = forwardRef(
             placeholderTextColor={colors.black}
             textContentType={type ?? 'password'}
             secureTextEntry={showPassword}
+            placeholder={inputPlaceholder}
             onFocus={onFocusHandler}
             onBlur={onBlurHandler}
             ref={ref as React.LegacyRef<TextInput>}
