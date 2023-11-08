@@ -170,7 +170,7 @@ const OrderFormView = ({
     </>
   );
 
-  const getHeaderView = () => (
+  const selectPatentTypeView = () => (
     <>
       <Text style={styles.headingText} title={t('for_whom')} />
       <View style={styles.button}>
@@ -206,7 +206,7 @@ const OrderFormView = ({
 
   return (
     <>
-      {getHeaderView()}
+      {selectPatentTypeView()}
       {isSubmitDetail || isMeSelected ? (
         getAddressView()
       ) : (
