@@ -11,11 +11,10 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import OrderFormController from './OrderFormController';
-import { fontFamily } from 'designToken/fontFamily';
-import { useTranslation } from 'react-i18next';
 
 const OrderFormView = ({
   treatmentReason,
@@ -82,7 +81,13 @@ const OrderFormView = ({
           lineHeight={dimens.sideMargin + dimens.borderBold}
           onPress={() => setIsModalVisible(true)}
         />
-        <Text title={t('emergency_calls')} style={styles.textSmall} />
+        <Text
+          title={t('emergency_calls')}
+          style={styles.textSmall}
+          numberOfLines={2}
+          adjustsFontSizeToFit
+          minimumFontScale={1}
+        />
       </View>
       <View style={styles.divider} />
       <Modal
@@ -117,7 +122,7 @@ const OrderFormView = ({
             <TouchableOpacity
               key={index}
               style={styles.checkboxContainer}
-              onPress={() => handleItemPress(item, index)} // Call the function with the item
+              onPress={() => handleItemPress(item, index)}
             >
               <View style={styles.checkBox}>
                 {activeCheckbox.includes(item?.menu_id) && (
@@ -128,8 +133,8 @@ const OrderFormView = ({
                 )}
               </View>
               <Text style={{ fontSize: fontSize.textM }}>
-                {' '}
-                {item.name.en.charAt(0).toUpperCase() + item.name.en.slice(1)}
+                {item?.name?.en.charAt(0).toUpperCase() +
+                  item?.name?.en.slice(1)}
               </Text>
             </TouchableOpacity>
           ),
@@ -141,6 +146,8 @@ const OrderFormView = ({
         title={t('if_the_doctor')}
         style={{ ...styles.textSmall }}
         numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={1}
       />
     </>
   );
@@ -363,9 +370,11 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: getWidth(dimens.borderThin),
-    backgroundColor: colors.black,
+    backgroundColor: colors.disabled,
     marginTop: getHeight(dimens.marginS),
     marginBottom: getHeight(dimens.paddingXs),
+    width: '80%',
+    alignSelf: 'center',
   },
   placeholder: {
     fontSize: getWidth(fontSize.textM),
