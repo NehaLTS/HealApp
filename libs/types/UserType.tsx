@@ -30,6 +30,13 @@ export interface UserTypeProvider {
   user?: UserProvider;
   msg?: string;
 }
+
+export interface HealLanguageType {
+ en:string,
+ hi:string,
+ he:string
+}
+
 type UserProvider = {
   provider_id: string | null;
   email: string;
@@ -157,17 +164,37 @@ export interface ProviderProfile {
   country?: string;
   licensenumber?: string;
   licensepicture?: string;
-  bankDetails: ProviderBankDetails;
+  bankDetails?: ProviderBankDetails;
 }
 
 export interface ProviderType {
-  name: string;
-  id: number;
+  name: HealLanguageType;
+  id: string;
+  specialties?:ProviderSpeciality[]
+}
+
+export interface OrderDetail {
+  client_id: string;
+  patient_type: { type: string; age: string };
+  patient_name: string;
+  address: string;
+  city: string;
+  phonenumber: string;
+  Date_of_birth: string;
+  services: any[];
+  symptoms: string;
+  Additional_notes: string;
+  Estimate_arrival: string;
+  Instructions_for_arrival: string;
+  Payment_mode: string;
+  TotalCost: string;
+  menu_id: string;
+  reason: any[];
 }
 
 export interface ProviderSpeciality {
-  name: string;
-  id: number;
+  name: HealLanguageType;
+  id: string;
 }
 
 export interface ProviderBankDetails {

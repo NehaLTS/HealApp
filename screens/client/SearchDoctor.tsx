@@ -16,26 +16,28 @@ import Geolocation from 'react-native-geolocation-service';
 import { Location } from "libs/types/UserType";
 import SearchDoctorController from "./SearchDoctorController";
 import Geocoder from 'react-native-geocoding';
+import { getLocalData } from "libs/datastorage/useLocalStorage";
+import DoctorDetailCard from "components/client/home/DoctorDetailCard";
+import { Double } from "react-native/Libraries/Types/CodegenTypes";
 const SearchDoctor = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const [locationPermission, setLocationPermission] = useState(false);
+  const localData= getLocalData('USER')
   const [currentLocation, setCurrentLocation] = useState<Location>();
-const {permissionHelper, forceAlert, checkPermission, createNotificationListeners}= SearchDoctorController()
+const {permissionHelper, forceAlert, handleNextButtonPress}= SearchDoctorController()
 const [locationHistory, setLocationHistory] = useState<any>([]);
+const [providerLocation, setProviderLocation]=useState<any>();
+
 //   const [showSummary, setShowSummary] = useState(false);
 
-Geocoder.init("AIzaSyDBdv2QXiVFswU6vKCkuwJfSZ1iJobbTVk")
-  const handleNextButtonPress = () => {
-    // setShowSummary(!showSummary);
-  };
+
 
   useLayoutEffect(() => {
   }, [navigation]);
 
   useLayoutEffect(() => {
-    checkPermission()
-    createNotificationListeners()
+ 
     navigation.setOptions({
       headerTitleAlign: "center",
 
@@ -50,6 +52,8 @@ Geocoder.init("AIzaSyDBdv2QXiVFswU6vKCkuwJfSZ1iJobbTVk")
   }, [navigation]);
   
   useEffect(() => {
+    console.log("localData?.providerLocation?.latitude", localData?.providerLocation[0].latitude)
+    setProviderLocation({latitude:localData?.providerLocation[0]?.latitude, longitude:localData?.providerLocation[0]?.longitude})
     let watchId:any
     //  getUser(currentUser);
     async function requestLocationPermission() {
@@ -127,29 +131,25 @@ Geocoder.init("AIzaSyDBdv2QXiVFswU6vKCkuwJfSZ1iJobbTVk")
        showsUserLocation
        followsUserLocation
        loadingEnabled
-
     region={currentLocation}
      
   style={{flex:1}}
 > 
-<Polyline
-            coordinates={locationHistory}
-            strokeColor="#006"
-            strokeWidth={3}
-          />
+
  {/* TODO: Show marker for the destination or before show provider location before it start move    */}
-{currentLocation && (
+{/* {providerLocation && ( */}
   
             <Marker
               coordinate={{
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude,
+                latitude: 30.37615360755907,
+                longitude: 76.77269519532668,
               }}
-              title="Your Location"
+              title="Doctor Location"
             />
-          )}
+          {/* )} */}
   </MapView>
-
+{/* {  providerLocation ? <DoctorDetailCard isPrimary={false} showBothCards={false}/>:<DoctorDetailCard isPrimary={true} showBothCards={false}/>} */}
+<DoctorDetailCard isPrimary={false} showBothCards={false}/>
 </View>
 
       <Button

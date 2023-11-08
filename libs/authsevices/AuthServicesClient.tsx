@@ -52,6 +52,7 @@ export const AuthServicesClient = () => {
   const onCreateSignUp = (body: {
     email: string;
     password: string;
+    device_token:string;
   }): Promise<UserType> =>
     sendRequest(CREATE_SIGNUP, {
       method: POST,

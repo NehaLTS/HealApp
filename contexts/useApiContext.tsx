@@ -12,7 +12,7 @@ interface UserReturnProps {
     onLoginUser: (email: string | null, password: string | null) => Promise<UserType | null>;
     onLoginWithGoogle: (email: string | null, googleId: string | null) => Promise<UserType | null>;
     onLoginWithFB: (email: string | null, facebookId: string | null) => Promise<UserType | null>;
-    onAuthSignUp: (email: string | null, password: string | null) => Promise<UserType | null>;
+    onAuthSignUp: (email: string | null, password: string | null, deviceId:string) => Promise<UserType | null>;
     onAuthUpdateUserProfile: (firstname: string | null, lastname: string | null, address: string | null, city: string | null, state: string | null, country: string | null, profile_picture: string | null, date_of_birth: string | null, phone_number: string | null, client_id: string | null) => Promise<any | null>;
     onAuthSignInProvider: (email: string | null, password: string | null) => Promise<UserTypeProvider | null>;
 }
@@ -70,10 +70,10 @@ export const UserContextProvider = (props: UserInputProps): React.ReactElement =
             return null;
         }
     };
-    const onAuthSignUp = async (email: string | null, password: string | null): Promise<UserType | null> => {
+    const onAuthSignUp = async (email: string | null, password: string | null, deviceId:string): Promise<UserType | null> => {
         try {
             if (email != null && password != null) {
-                const response: UserType = await onCreateSignUp({ email, password });
+                const response: UserType = await onCreateSignUp({ email, password , deviceId});
                 setUser(response);
                 setLocalData('USER', response)
                 return response;

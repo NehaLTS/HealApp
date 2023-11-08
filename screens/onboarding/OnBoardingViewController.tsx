@@ -1,20 +1,20 @@
-import { CommonActions, useNavigation } from "@react-navigation/native";
-import NavigationRoutes from "navigator/NavigationRoutes";
-import { useEffect, useRef, useState } from "react";
+import { CommonActions, useNavigation } from '@react-navigation/native';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import { useEffect, useRef, useState } from 'react';
 
 const OnBoardingViewController = () => {
   const swiperRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigation = useNavigation();
 
-  const onPressSkip =() => {
+  const onPressSkip = () => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.Intro }],
-      })
+      }),
     );
-}
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       if (swiperRef.current) {

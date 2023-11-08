@@ -14,11 +14,11 @@ const useToast = () => {
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
 
-  const showToast = (title = '',message:string, toastType: string) => {
+  const showToast = (title = '', message: string, toastType: string) => {
     setType(toastType);
     setMessage(message);
     setIsVisible(true);
-    setTitle(title)
+    setTitle(title);
     setTimeout(() => {
       hideToast();
     }, 4000);
@@ -36,8 +36,8 @@ const useToast = () => {
         style={{
           alignItems: 'center',
           justifyContent: 'flex-end',
-          
-        }}>
+        }}
+      >
         <View
           style={{
             borderRadius: getWidth(dimens.paddingXs),
@@ -52,12 +52,29 @@ const useToast = () => {
             paddingVertical: getWidth(dimens.marginS),
             paddingHorizontal: getWidth(dimens.sideMargin),
             gap: getHeight(4),
-            minHeight: getHeight(50)
-
-
-          }}>
-          {title !== "" && <Text style={{ color: colors.white,fontSize: fontSize.textS , fontFamily: fontFamily.bold }}>{title}</Text>}
-          <Text style={{ color: colors.white,fontSize: fontSize.textS , fontFamily: fontFamily.medium }}>{message}</Text>
+            minHeight: getHeight(50),
+          }}
+        >
+          {title !== '' && (
+            <Text
+              style={{
+                color: colors.white,
+                fontSize: fontSize.textS,
+                fontFamily: fontFamily.bold,
+              }}
+            >
+              {title}
+            </Text>
+          )}
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: fontSize.textS,
+              fontFamily: fontFamily.medium,
+            }}
+          >
+            {message}
+          </Text>
         </View>
       </Modal>
     );

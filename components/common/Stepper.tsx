@@ -1,11 +1,17 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { colors } from "designToken/colors";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import { dimens } from "designToken/dimens";
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { colors } from 'designToken/colors';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { dimens } from 'designToken/dimens';
 
-const Stepper = ({ currentStep , totalStep }: { currentStep:string, totalStep: string[] }) => {
+const Stepper = ({
+  currentStep,
+  totalStep,
+}: {
+  currentStep: string;
+  totalStep: string[];
+}) => {
   return (
     <View style={styles.container}>
       {totalStep?.map?.((item, index: number) => (
@@ -15,11 +21,11 @@ const Stepper = ({ currentStep , totalStep }: { currentStep:string, totalStep: s
             styles.activeButtonView,
             {
               backgroundColor:
-              item === currentStep ? colors.secondary : colors.disabled,
+                item === currentStep ? colors.secondary : colors.disabled,
             },
           ]}
         >
-          <Text style={styles.activeButtonText}>{index+1}</Text>
+          <Text style={styles.activeButtonText}>{index + 1}</Text>
         </View>
       ))}
     </View>
@@ -30,13 +36,13 @@ export default Stepper;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     columnGap: getHeight(dimens.sideMargin),
-    alignSelf:'center',
+    alignSelf: 'center',
     paddingVertical: getHeight(dimens.paddingXs),
-    flex:0.05,
-    alignItems:"center",
-    marginBottom:getHeight(dimens.paddingS),
+    flex: 0.05,
+    alignItems: 'center',
+    marginBottom: getHeight(dimens.paddingS),
     paddingTop: getHeight(dimens.paddingXs + dimens.borderThin),
   },
   activeButtonText: {
@@ -47,7 +53,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginL),
     width: getHeight(dimens.marginL),
     borderRadius: getWidth(dimens.marginS),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

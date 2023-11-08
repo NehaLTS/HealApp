@@ -1,9 +1,9 @@
-import { useTranslationContext } from "contexts/UseTranslationsContext";
-import { getTexts } from "libs/OneSkyHelper";
-import { getWidth } from "libs/StyleHelper";
-import React from "react";
-import { StyleSheet } from "react-native";
-import Text from "./Text";
+import { useTranslationContext } from 'contexts/UseTranslationsContext';
+import { getTexts } from 'libs/OneSkyHelper';
+import { getWidth } from 'libs/StyleHelper';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import Text from './Text';
 
 const LoaderText = () => {
   const { languageCode } = useTranslationContext();

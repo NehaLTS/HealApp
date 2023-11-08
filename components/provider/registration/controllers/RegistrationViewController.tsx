@@ -1,40 +1,128 @@
-import { useNavigation } from '@react-navigation/native'
-import { useApiContext } from "contexts/useApiContext"
-import { UseUserContextProvider } from 'contexts/useUserContextProvider'
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider'
-import NavigationRoutes from 'navigator/NavigationRoutes'
-import { Alert } from 'react-native'
-import { useState } from "react";
-import useToast from 'components/common/useToast'
+import { useNavigation } from '@react-navigation/native';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import React from 'react';
+import { useState } from 'react';
+import useToast from 'components/common/useToast';
+import { emailPattern, passwordPattern } from 'libs/utility/Utils';
+import { setLocalData } from 'libs/datastorage/useLocalStorage';
 
 const RegistrationViewController = () => {
-  const { onAuthSignInProvider } = useApiContext();
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const navigation = useNavigation()
-  const { OnProviderCreateSignUp } = AuthServicesProvider()
-  const { userDataProvider, setUserDataProvider } = UseUserContextProvider()
+
+  const navigation = useNavigation();
+  const { OnProviderCreateSignUp } = AuthServicesProvider();
+    const { setToken, setUserId } =
+    UseProviderUserContext();
   const { showToast, renderToast } = useToast();
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const emailRef = React.useRef<any>('');
+  const passwordRef = React.useRef<any>('');
+
+
+  const onChangeEmail = (value: string) => {
+    emailRef.current.value = value;
+    validateEmail();
+  };
+  const onBlurEmail = () => {
+    validateEmail();
+  };
+
+  const onChangePassword = (value: string) => {
+    passwordRef.current.value = value;
+    validatePassword();
+  };
+  const onBlurPassword = () => {
+    validatePassword();
+  };
+
+
+
+  const isValidPassword = (password: string) => passwordPattern.test(password);
+
+  const validateEmail = () => {
+if (!emailRef.current.value) setEmailError('Email is required');
+    else if (!emailPattern.test(emailRef.current.value))
+      setEmailError('Invalid email address');
+    else setEmailError('');
+
+  };
+
+  const validatePassword = () => {
+   if (!passwordRef.current.value) {
+      setPasswordError('Password is required');
+    } else if (passwordRef.current.value.length < 5) {
+      setPasswordError('Password must be at least 8 characters');
+    } else if (!isValidPassword(passwordRef.current.value)) {
+      setPasswordError('Password must contain special characters');
+    } else {
+      setPasswordError('');
+    }
+  };
+  const handleSignUp = () => {
+    // if (!emailError && !passwordError)
+    //   onPressSignUpProvider(emailRef.current.value, passwordRef.current.value);
+
+     navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+          });
+          
+  };
 
   const onPressSignUpProvider = async (email: string, password: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     if (email !== undefined && password != undefined) {
-      const response = await OnProviderCreateSignUp({ email, password })
+      const res = await OnProviderCreateSignUp({ email, password });
 
-      setUserDataProvider({ ...userDataProvider, isSuccessful: response?.isSuccessful, provider_id: response.provider_id ?? '', token: response?.token ?? '' })
-      if (response.isSuccessful)
-        navigation.reset({
-          index: 0,
-          routes: [{ name: NavigationRoutes.ProviderRegistration }],
-        })
-      else {
-        showToast("User already exist","Please try SignIn", "error")
+      console.log("response is ",res);
+      if (res && res.token && res.provider_id) {
+        setToken(res.token);
+        setUserId(res.provider_id);
       }
+
+      setLocalData('USER', {
+        token: res?.token,
+        userId: res?.provider_id,
+        isClient: false,
+      });
+      setLocalData('USERPROFILE', {
+        email: email,
+      });
+
+      if (res?.isSuccessful) {
+        setTimeout(() => {
+          //TODO: need to check this as it's a workaround for iOS
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+          });
+        }, 200);
+      } else {
+        showToast('User already exist', 'Please try SignIn', 'error');
+      }
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      showToast('', 'Please enter email or password', 'warning');
     }
-    else {
-      showToast("","Please enter email or password", "warning")
-    }
-    setIsLoading(false)
-  }
-  return { onPressSignUpProvider, isLoading,renderToast }
-}
-export default RegistrationViewController
+
+   
+  };
+ return {
+    handleSignUp,
+    isLoading,
+    renderToast,
+    onChangeEmail,
+    onBlurEmail,
+    onBlurPassword,
+    onChangePassword,
+    emailError,
+    emailRef,
+    passwordError,
+    passwordRef,
+  };
+};
+export default RegistrationViewController;

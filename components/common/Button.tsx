@@ -1,9 +1,9 @@
-import { colors } from "designToken/colors";
-import { dimens } from "designToken/dimens";
-import { fontFamily } from "designToken/fontFamily";
-import { fontSize } from "designToken/fontSizes";
-import { getHeight, getWidth } from "libs/StyleHelper";
-import React from "react";
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { fontFamily } from 'designToken/fontFamily';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React from 'react';
 import {
   Animated,
   DimensionValue,
@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 const Button = ({
   title,
   isPrimary,
@@ -31,12 +31,12 @@ const Button = ({
   isPrimary?: boolean;
   isSmall?: boolean;
   style?: StyleProp<ViewStyle>;
-  fontSized?:number
-  height?:number
+  fontSized?: number;
+  height?: number;
   width?: DimensionValue;
-  borderRadius?:number;
+  borderRadius?: number;
   disabled?: boolean;
-  lineHeight?:number
+  lineHeight?: number;
 } & TouchableOpacityProps) => {
   const scaleInAnimated = new Animated.Value(1);
 
@@ -69,30 +69,44 @@ const Button = ({
         scaleTransformationStyle,
         style,
         {
-          width: isSmall ? "auto" : "100%",
-          borderColor: disabled ? colors.grey :isPrimary ? colors.primary : colors.black,
-          backgroundColor: disabled ? colors.disabled :  isPrimary ? colors.primary :  colors.transparent,
+          width: isSmall ? 'auto' : '100%',
+          borderColor: disabled
+            ? colors.grey
+            : isPrimary
+            ? colors.primary
+            : colors.black,
+          backgroundColor: disabled
+            ? colors.disabled
+            : isPrimary
+            ? colors.primary
+            : colors.transparent,
           minWidth: width ?? '38%',
           height: height ?? getHeight(dimens.buttonHeight),
-          borderRadius : borderRadius ?? getWidth(dimens.marginS / dimens.borderBold)
+          borderRadius:
+            borderRadius ?? getWidth(dimens.marginS / dimens.borderBold),
         },
       ]}
       disabled={disabled}
-      {...props}>
+      {...props}
+    >
       <Text
         style={[
           styles.buttonTitle,
           {
-            color: disabled ? colors.grey : isPrimary ? colors.white : colors.black,
-            fontFamily: isSmall || !isPrimary ? fontFamily.regular : fontFamily.semiBold,
+            color: disabled
+              ? colors.grey
+              : isPrimary
+              ? colors.white
+              : colors.black,
+            fontFamily:
+              isSmall || !isPrimary ? fontFamily.regular : fontFamily.semiBold,
             fontSize: fontSized ? fontSized : getHeight(24),
-            lineHeight : lineHeight ?   lineHeight: getHeight(dimens.marginL),
-         
-          }
+            lineHeight: lineHeight ? lineHeight : getHeight(dimens.marginL),
+          },
         ]}
         // adjustsFontSizeToFit
         numberOfLines={1}
-        >
+      >
         {title}
       </Text>
     </TouchableOpacity>
@@ -102,8 +116,8 @@ const Button = ({
 const styles = StyleSheet.create({
   button: {
     borderWidth: getWidth(dimens.borderThin),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     height: getWidth(dimens.buttonHeight),
     // borderRadius: getWidth(dimens.marginS / dimens.borderBold),
     zIndex: 1,
