@@ -6,6 +6,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import {
   Animated,
+  ColorValue,
   DimensionValue,
   StyleProp,
   StyleSheet,
@@ -25,6 +26,7 @@ const Button = ({
   disabled,
   borderRadius,
   lineHeight,
+  background,
   ...props
 }: {
   title: string;
@@ -37,6 +39,7 @@ const Button = ({
   borderRadius?: number;
   disabled?: boolean;
   lineHeight?: number;
+  background?: ColorValue;
 } & TouchableOpacityProps) => {
   const scaleInAnimated = new Animated.Value(1);
 
@@ -74,12 +77,14 @@ const Button = ({
             ? colors.grey
             : isPrimary
             ? colors.primary
+            : background
+            ? colors.white
             : colors.black,
           backgroundColor: disabled
             ? colors.disabled
             : isPrimary
             ? colors.primary
-            : colors.transparent,
+            : background ?? colors.transparent,
           minWidth: width ?? '38%',
           height: height ?? getHeight(dimens.buttonHeight),
           borderRadius:
