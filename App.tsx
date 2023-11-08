@@ -23,7 +23,6 @@ import { ClientUserContext, OrderDetail } from 'contexts/UseClientUserContext';
 import { ProviderUserContext } from 'contexts/UseProviderUserContext';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
-import { StatusBar } from 'react-native';
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
@@ -80,7 +79,6 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <StatusBar barStyle="dark-content" hidden={true} translucent={true} />
       <TranslationContext.Provider value={{ languageCode, setLanguageCode }}>
         <ClientUserContext.Provider
           value={{
