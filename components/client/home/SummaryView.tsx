@@ -50,7 +50,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
     <View style={styles.textContainer}>
       <Text title={t('summary')} style={styles.summaryText} />
       <TextButton
-        title={t('order')}
+        title={t('edit_order')}
         fontSize={getHeight(fontSize.textL)}
         isActive
         onPress={() => setShowSummary(false)}
@@ -114,7 +114,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         <Text title={`${totalPrice} NIS`} style={styles.Small} />
       </View>
       <Text
-        title={'*If the doctor won’t use your shot, you won’t pay for it'}
+        title={t('if_the_doctor')}
         style={styles.payForIt}
         numberOfLines={1}
       />
@@ -144,12 +144,12 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       {SymptomsView()}
       {getServicesView()}
       {getCardView()}
-      <Text title={'Estimated arrival'} style={styles.text} />
+      <Text title={t('arrival')} style={styles.text} />
       <Text title={'60 min'} style={styles.textSmall} />
       <View style={styles.instructionContainer}>
-        <Text title={'Instructions for arrival'} style={styles.instruction} />
+        <Text title={t('instructions_for')} style={styles.instruction} />
         <Input
-          inputPlaceholder={'Describe where is the entrance etc.'}
+          inputPlaceholder={t('describe_where')}
           inputValue={order?.Instructions_for_arrival}
           defaultValue={order?.Instructions_for_arrival}
           inputStyle={styles.description}

@@ -82,7 +82,7 @@ const OrderFormView = ({
           lineHeight={dimens.sideMargin + dimens.borderBold}
           onPress={() => setIsModalVisible(true)}
         />
-        <Text title={t('we_don’t')} style={styles.textSmall} />
+        <Text title={t('emergency_calls')} style={styles.textSmall} />
       </View>
       <View style={styles.divider} />
       <Modal
