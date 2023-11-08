@@ -12,12 +12,12 @@ const SummaryViewController = ({ order }: { order: OrderDetail }) => {
   const calculateAgeFromDate = (dateString: string) => {
     const parts = dateString.split(' ');
     if (parts.length < 4) {
-      return NaN;
+      return 0;
     }
     const year = parseInt(parts[3], 10);
     const currentDate = new Date();
     if (isNaN(year)) {
-      return NaN;
+      return 0;
     }
     const age = currentDate.getFullYear() - year;
     return age;

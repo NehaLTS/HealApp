@@ -1,7 +1,7 @@
 import AddAddress from 'components/common/AddAddress';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
-import { LoaderSmall } from 'components/common/Loader';
+import { Loader } from 'components/common/Loader';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { colors } from 'designToken/colors';
@@ -35,7 +35,7 @@ const OrderFormView = ({
     activeCheckbox,
     setIsVisible,
     isMeSelected,
-    toggleMe,
+    onMeTogglePress,
     isSubmitDetail,
     calculateAgeFromDate,
     ageRef,
@@ -71,7 +71,7 @@ const OrderFormView = ({
             ),
           )
         ) : (
-          <LoaderSmall style={styles.loader} />
+          <Loader style={styles.loader} />
         )}
         <Button
           title={'Other'}
@@ -140,7 +140,7 @@ const OrderFormView = ({
           ),
         )
       ) : (
-        <LoaderSmall style={styles.loader} />
+        <Loader style={styles.loader} />
       )}
       <Text
         title={t('if_the_doctor')}
@@ -181,7 +181,7 @@ const OrderFormView = ({
           width={'12%'}
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
-          onPress={() => toggleMe('me')}
+          onPress={() => onMeTogglePress('me')}
           lineHeight={20}
         />
         <Button
@@ -197,7 +197,7 @@ const OrderFormView = ({
           width={'45%'}
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
-          onPress={() => toggleMe('other')}
+          onPress={() => onMeTogglePress('other')}
           lineHeight={20}
         />
       </View>

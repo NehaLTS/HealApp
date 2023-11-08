@@ -61,12 +61,12 @@ const OrderFormController = ({
   function calculateAgeFromDate(dateString: string) {
     const parts = dateString.split(' ');
     if (parts.length < 4) {
-      return NaN;
+      return 0;
     }
     const year = parseInt(parts[3], 10);
     const currentDate = new Date();
     if (isNaN(year)) {
-      return NaN;
+      return 0;
     }
     const age = currentDate.getFullYear() - year;
     return age;
@@ -103,7 +103,7 @@ const OrderFormController = ({
     });
   };
 
-  const toggleMe = (item: string) => {
+  const onMeTogglePress = (item: string) => {
     if (item === 'me') setIsMeSelected(true);
     else setIsMeSelected(false);
     setOrder({
@@ -167,7 +167,7 @@ const OrderFormController = ({
     activeCheckbox,
     setIsVisible,
     isMeSelected,
-    toggleMe,
+    onMeTogglePress,
     isSubmitDetail,
     calculateAgeFromDate,
     ageRef,

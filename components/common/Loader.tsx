@@ -17,7 +17,7 @@ export const LoaderText = () => {
   return <Text style={styles.loaderText} title={common.loader} />;
 };
 
-export const LoaderSmall = ({ style }: { style?: StyleProp<ViewStyle> }) => {
+export const Loader = ({ style }: { style?: StyleProp<ViewStyle> }) => {
   return (
     <ActivityIndicator
       size={'large'}
