@@ -269,12 +269,12 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
-    marginTop: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.marginL + 8),
   },
   reasonText: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
-    marginTop: getHeight(dimens.paddingS + 3),
+    marginTop: getHeight(dimens.paddingS + 2),
   },
   textSmall: {
     fontSize: getWidth(fontSize.textS),
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     paddingHorizontal: getWidth(dimens.marginS),
     paddingBottom: getWidth(dimens.marginS),
-    marginVertical: getHeight(dimens.marginS + 4),
+    marginVertical: getHeight(dimens.marginS),
   },
   arrowIcon: {
     height: getHeight(dimens.marginL + dimens.paddingXs),
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
   divider: {
     height: getWidth(dimens.borderThin),
     backgroundColor: colors.disabled,
-    marginTop: getHeight(dimens.marginS),
+    marginTop: getHeight(dimens.paddingXs),
     marginBottom: getHeight(dimens.paddingXs),
     width: '80%',
     alignSelf: 'center',
