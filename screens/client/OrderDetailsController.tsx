@@ -1,26 +1,44 @@
-import { Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
-import { ClientProfile, UserTypeProvider } from 'libs/types/UserType';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { treatment } from 'libs/types/ProvierTypes';
+import { ClientProfile, OrderDetail } from 'libs/types/UserType';
+import { useEffect, useState } from 'react';
 
 const OrderDetailsController = () => {
   const [showSummary, setShowSummary] = useState(false);
-  const { orderProvider, treatmentMenu } = ClientOrderServices();
-  const { orderDetails } = UseClientUserContext();
-  const order = getLocalData('USER');
+  const { treatmentMenu } = ClientOrderServices();
   const userProfile = getLocalData?.('USERPROFILE');
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
+  const navigation = useNavigation();
+  const route = useRoute<any>();
+  const { supplier } = route.params;
+  const [order, setOrder] = useState<OrderDetail>({
+    client_id: '',
+    patient_type: { type: 'me', age: '' },
+    patient_name: '',
+    address: '',
+    city: (userProfile as ClientProfile)?.city ?? '',
+    phonenumber: '',
+    Date_of_birth: '',
+    services: [],
+    symptoms: '',
+    Additional_notes: '',
+    Estimate_arrival: '60',
+    Instructions_for_arrival: '',
+    Payment_mode: '',
+    TotalCost: '',
+    menu_id: '',
+    reason: [],
+  });
 
   useEffect(() => {
     treatmentReasons();
   }, []);
+
   const treatmentReasons = async () => {
     try {
       const res = await treatmentMenu({ provider_type_id: '1' });
-      // console.log("res treatmentReasons", res); // Log the response data, not the string "res"
       setTreatmentReason(res);
     } catch (error) {
       console.error(error);
@@ -64,6 +82,10 @@ const OrderDetailsController = () => {
     showSummary,
     setShowSummary,
     treatmentReason,
+    navigation,
+    supplier,
+    order,
+    setOrder,
   };
 };
 
