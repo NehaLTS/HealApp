@@ -46,6 +46,7 @@ const HomeScreen = () => {
     onSearchDone,
     isDataNotFound,
     onSearch,
+    user,
   } = HomeViewController();
 
   const headerTitle = () => (
@@ -70,12 +71,8 @@ const HomeScreen = () => {
   const headerLeft = () => (
     <TouchableOpacity onPress={onPressBack}>
       <Image
-        source={!isTouchStart || onChangeSearch?.length > 0 ? arrowBack : logo}
-        style={
-          !isTouchStart || onChangeSearch?.length > 0
-            ? styles.arrowBack
-            : styles.logo
-        }
+        source={onChangeSearch?.length !== 0 ? arrowBack : logo}
+        style={onChangeSearch?.length !== 0 ? styles.arrowBack : styles.logo}
       />
     </TouchableOpacity>
   );
@@ -107,7 +104,7 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     return providersList?.map((item: any, index: number) => (
-      <CardView key={index} item={item} index={index} isSearch />
+      <CardView key={index} item={item} index={index} isSearch user={user} />
     ));
   };
   const noSearchedView = () => {
@@ -128,7 +125,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      {RNHeader(headerTitle, headerLeft, headerRight)}
+      {RNHeader(headerTitle, headerLeft, headerRight, onChangeSearch?.length)}
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ paddingBottom: 20 }}

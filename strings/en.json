@@ -57,25 +57,25 @@
   "back_search": "Back to search",
   "what_treatment": "What treatment do you need?",
   "start_using_heal": "Start using Heal",
-  "no_fee":"*No fee will be collected within 3 minutes after order",
-  "reason":"Reason",
-  "emergency_calls":"*We don’t do emergency calls. In case of emergency please call 077-773-45-69",
-  "describe_where":"Describe where is the entrance etc.",
-  "treatments":"Treatments menu",
-  "if_the_doctor":"*If the doctor won't use your shot, you won't pay for it",
-  "for_whom":"For whom is the doctor?",
-  "me":"Me",
-  "someone_else":"Someone else",
-  "other":"other",
-  "age":"Their age *",
-  "number":"Their phone number",
- "summary":"Order summary",
- "edit_order":"Edit order",
- "patient":"The patient",
- "symptoms":"Symptoms",
- "services":"Services",
- "arrival":"Estimated arrival",
- "instructions_for":"Instructions for arrival",
+  "no_fee": "*No fee will be collected within 3 minutes after order",
+  "reason": "Reason",
+  "emergency_calls": "*We don’t do emergency calls. In case of emergency please call 077-773-45-69",
+  "describe_where": "Describe where is the entrance etc.",
+  "treatments": "Treatments menu",
+  "if_the_doctor": "*If the doctor won't use your shot, you won't pay for it",
+  "for_whom": "For whom is the doctor?",
+  "me": "Me",
+  "someone_else": "Someone else",
+  "other": "other",
+  "age": "Their age *",
+  "number": "Their phone number",
+  "summary": "Order summary",
+  "edit_order": "Edit order",
+  "patient": "The patient",
+  "symptoms": "Symptoms",
+  "services": "Services",
+  "arrival": "Estimated arrival",
+  "instructions_for": "Instructions for arrival",
 
   "home": {
     "providerList": [
@@ -97,7 +97,7 @@
       {
         "id": 4,
         "image": "assets/icon/healer.png",
-        "name": "Alternative medicine"
+        "name": "Alternative medicine -\nhome visit"
       },
       {
         "id": 5,
@@ -107,9 +107,8 @@
       {
         "id": 6,
         "image": "assets/icon/healer.png",
-        "name": "Alternative medicine"
+        "name": "Clinics"
       }
     ]
   }
-  
 }

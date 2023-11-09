@@ -12,7 +12,7 @@ const OrderDetailsController = () => {
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
   const navigation = useNavigation();
   const route = useRoute<any>();
-  const { supplier } = route.params;
+  const supplier = route?.params?.supplier ?? '';
   const [order, setOrder] = useState<OrderDetail>({
     client_id: '',
     patient_type: { type: 'me', age: '' },

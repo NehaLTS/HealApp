@@ -17,8 +17,9 @@ import Animated, {
   FadeInDown,
   FadeInUp,
 } from 'react-native-reanimated';
+import { getProviderImage } from 'libs/utility/Utils';
 
-const CardView = ({ item, onPress, index, isSearch }: any) => {
+const CardView = ({ item, onPress, index, isSearch, user }: any) => {
   const navigation = useNavigation<any>();
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAddPayment, setIsAddPayment] = useState(false);
@@ -26,7 +27,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
   const { userProfile } = UseClientUserContext();
 
   const onPressOrder = () => {
-    if (userProfile?.isPaymentAdded)
+    if (user?.isPaymentAdded)
       navigation.navigate(NavigationRoutes.OrderDetails);
     else setModalVisible(true);
   };
@@ -78,7 +79,7 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
             activeOpacity={1}
           >
             <Image
-              source={require('assets/icon/doctor.png')}
+              source={getProviderImage(item?.name)}
               style={styles.specialistIcon}
             />
             <Text
@@ -91,10 +92,10 @@ const CardView = ({ item, onPress, index, isSearch }: any) => {
           <View style={styles.specialistList}>
             <View style={styles.container}>
               <Image
-                source={{ uri: item.image_url ?? '' }}
+                source={getProviderImage(item?.name?.en)}
                 style={styles.specialistIcon}
               />
-              <Text style={styles.specialistSearched} title={item.name} />
+              <Text style={styles.specialistSearched} title={item?.name?.en} />
             </View>
             <Button
               title={'Order'}

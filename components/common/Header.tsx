@@ -120,6 +120,7 @@ export const RNHeader = (
   headerTitle?: () => React.ReactNode,
   headerLeft?: () => React.ReactNode,
   headerRight?: () => React.ReactNode,
+  dependency?: any,
 ) => {
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -130,7 +131,7 @@ export const RNHeader = (
       headerStyle: styles.header,
       headerRight: headerRight,
     });
-  }, [navigation]);
+  }, [navigation, dependency]);
 };
 
 const styles = StyleSheet.create({

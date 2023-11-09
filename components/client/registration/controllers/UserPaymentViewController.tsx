@@ -104,7 +104,10 @@ const UserPaymentViewController = () => {
     });
 
     //TODO: Vandana to save in Local data with isPaymentAdded as true
-    setLocalData('USER', { isPaymentAdded: true });
+    setLocalData('USERPROFILE', {
+      isPaymentAdded: true,
+      card_number: '************1234',
+    });
 
     console.log('response is ', res);
     setIsLoader(false);

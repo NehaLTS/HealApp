@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import SummaryViewController from './SummaryViewController';
 import { useTranslation } from 'react-i18next';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
   order: OrderDetail;
@@ -32,6 +33,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
     setIsVisible,
     arrivalRef,
   } = SummaryViewController({ order });
+  const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
   const paymentModal = () => (
     <Modal
@@ -63,8 +65,14 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       <View style={styles.patientAndAddress}>
         <Text title={t('patient')} style={styles.text} />
         <Text
-          title={`${calculateAgeFromDate(order?.patient_type?.age)} y.o, ${
-            order?.phonenumber
+          title={`${calculateAgeFromDate(
+            order.patient_type?.type === 'me'
+              ? userProfile?.date_of_birth ?? ''
+              : order?.patient_type?.age,
+          )} y.o, ${
+            order.patient_type?.type === 'me'
+              ? userProfile?.phoneNumber
+              : order?.phonenumber
           }`}
           style={styles.textSmall}
         />
@@ -123,7 +131,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
 
   const getCardView = () => (
     <View style={styles.cardDetail}>
-      <Text title={'Paid by card *4545'} style={styles.text} />
+      <Text title={userProfile?.card_number ?? ''} style={styles.text} />
       <TextButton
         title={'Change'}
         fontSize={getHeight(fontSize.textL)}
