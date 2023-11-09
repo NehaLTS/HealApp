@@ -11,10 +11,12 @@ import Button from 'common/Button';
 import Input from 'common/Input';
 import RegistrationViewController from '../controllers/RegistrationViewController';
 import { useNavigation } from '@react-navigation/native';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 
 const RegistrationView = () => {
   const {
-    handleSignUp,
+    
+    onPressSignUpProvider,
     isLoading,
     renderToast,
     onBlurEmail,
@@ -27,7 +29,12 @@ const RegistrationView = () => {
     passwordError,
   } = RegistrationViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
-
+  const deviceToken= getLocalData('USER')?.deviceToken
+  const handleSignUp = () => {
+    setIsLoadingGoogle(true);
+    if (!emailError && !passwordError)
+      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value, deviceToken);
+  };
   return (
     <>
       {renderToast()}

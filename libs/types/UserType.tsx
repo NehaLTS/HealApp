@@ -29,6 +29,7 @@ export interface UserTypeProvider {
   token?: string;
   user?: UserProvider;
   msg?: string;
+  provider_id?:string
 }
 
 export interface HealLanguageType {
@@ -220,3 +221,17 @@ export type Location = {
   title?: string;
   timestamp?: any;
 };
+
+export interface SearcProviderLocation {
+  distance: number;
+  latitude: string;
+  location_id:string;
+  longitude:string; name: string; price: number, provider_id: number, provider_type_id: number; ratings: number, specialty_id: number
+}
+
+export interface BookOrderRequest {
+  provider_id:string;
+  order_id:string;
+  latitude:string;
+  longitude:string;
+}

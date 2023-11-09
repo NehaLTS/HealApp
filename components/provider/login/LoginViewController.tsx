@@ -121,19 +121,25 @@ const LoginViewController = () => {
       userId: response.id,
       isClient: false,
     });
-    if (!userDataProvider.firstName || userDataProvider.firstName == '') {
-      console.log('setToken', token, userId);
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
-      });
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: NavigationRoutes.ProviderHome }],
-      });
-    }
+    navigation.reset({
+      index: 0,
+      routes: [{ name: NavigationRoutes.ProviderHome }],
+      
+    });
+    // if (!userDataProvider.firstName || userDataProvider.firstName == '') {
+    //   console.log('setToken', token, userId);
+
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+    //   });
+    // } else {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{ name: NavigationRoutes.ProviderHome }],
+    //   });
+    // }
   };
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string) => {

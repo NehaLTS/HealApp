@@ -112,7 +112,7 @@ const ProviderDetailController = () => {
   };
 
   const onPressNext = () => {
-    if (firstNameRef.current.value && lastNameRef.current.value && selectedSpecialty && selectedProvider) {
+    if (firstNameRef.current.value && lastNameRef.current.value ) {
      setProviderProfile({
         firstName:firstNameRef.current.value,
         lastName:lastNameRef.current.value,

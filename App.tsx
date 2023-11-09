@@ -19,7 +19,7 @@ import {
   ProviderServices,
   onboardStep,
 } from "libs/types/UserType";
-import { ClientUserContext, OrderDetail } from "contexts/UseClientUserContext";
+import { ClientUserContext, OrderDetail, currentLocationOfUser } from "contexts/UseClientUserContext";
 import { ProviderUserContext } from "contexts/UseProviderUserContext";
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { createNotificationListeners } from "libs/notification/Notification";
@@ -35,6 +35,7 @@ const App = () => {
   const [currentStep, setCurrentStep] = useState<onboardStep>("details");
   const [providerServices, setProviderServices] = useState<ProviderServices>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
+  const [currentLocationOfUser, setCurrentLocationOfUser]= useState<currentLocationOfUser>(null);
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -79,7 +80,9 @@ const App = () => {
             userProfile,
             setUserProfile,
             orderDetails,
-            setOrderDetails
+            setOrderDetails,
+            setCurrentLocationOfUser,
+            currentLocationOfUser
           }}
         >
           <ProviderUserContext.Provider

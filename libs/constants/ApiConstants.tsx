@@ -12,6 +12,7 @@ export const GET_TREATMENT_MENU = 'users/getProviderMenu'
 export const GET_SEARCH_PROVIDER = 'users/getSearchProviderType'
 export const ORDER_PROVIDER = 'users/createClientOrder'
 export const GET_LOCATION_SEARCH= 'users/getSearchProvider'
+export const BOOK_ORDER='providers/providerOrder'
 // export const SEARCH_API = 'location/getSearchProviderType'
 
 
@@ -26,6 +27,8 @@ export const GET_CREATE_CARD_DETAILS = 'CardDetail/getCreditCardDetails'
 export const GET_PROVIDER_TYPES = 'providers/getAllProviderDetails'
 export const GET_PROVIDER_SERVICE = 'providers/getAllProviderServices'
 export const GET_USER_SERVICES = 'providers/getProviderServices'
+export const ORDER_REQUEST= 'providers/providerClientOrder'
+export const UPDATE_PROVIDER_LOCATION='providers/updateProviderStatus'
 
 
 export const POST = 'POST';

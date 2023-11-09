@@ -20,7 +20,10 @@ export interface OrderDetail{
   reason: any[],
 }
 
-
+export interface currentLocationOfUser{
+  latitude:string,
+  longitude:string
+}
 export interface ClientUserContextFields {
   currentStep: onboardStep
   setCurrentStep: React.Dispatch<React.SetStateAction<onboardStep>>
@@ -32,6 +35,8 @@ export interface ClientUserContextFields {
   userProfile:ClientProfile
   setUserProfile: React.Dispatch<React.SetStateAction<ClientProfile>>
   orderDetails:OrderDetail
+  setCurrentLocationOfUser:React.Dispatch<React.SetStateAction<currentLocationOfUser>>
+  currentLocationOfUser:currentLocationOfUser
   setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>
 }
 

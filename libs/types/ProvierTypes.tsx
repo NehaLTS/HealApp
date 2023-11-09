@@ -76,3 +76,17 @@ export interface Provider {
   specialty_id: number;
   distance: string;
 }
+
+export interface OrderRequest{
+    status:string;
+    provider_id:string;
+    latitude:string;
+    longitude:string;
+}
+
+export interface PoviderLocation {
+  provider_id:string;
+  latitude:string;
+  longitude:string;
+
+}

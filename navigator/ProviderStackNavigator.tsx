@@ -32,7 +32,7 @@ const ProviderStackNavigator = () => {
 
         <Stack.Screen
           name={NavigationRoutes.ProviderHome}
-          component={lazy(() => import("../components/provider/home/HomeView"))}
+          component={lazy(() => import("../screens/provider/HomeScreen"))}
           options={defaultHeaderStyle}
         />
         <Stack.Screen

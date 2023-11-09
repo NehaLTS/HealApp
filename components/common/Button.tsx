@@ -6,6 +6,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import {
   Animated,
+  ColorValue,
   DimensionValue,
   StyleProp,
   StyleSheet,
@@ -25,6 +26,7 @@ const Button = ({
   disabled,
   borderRadius,
   lineHeight,
+  background,
   ...props
 }: {
   title: string;
@@ -37,9 +39,9 @@ const Button = ({
   borderRadius?: number;
   disabled?: boolean;
   lineHeight?: number;
+  background?: ColorValue;
 } & TouchableOpacityProps) => {
   const scaleInAnimated = new Animated.Value(1);
-
   const handlePressIn = () => {
     Animated.timing(scaleInAnimated, {
       toValue: 1,
@@ -47,7 +49,6 @@ const Button = ({
       useNativeDriver: true,
     }).start();
   };
-
   const handlePressOut = () => {
     Animated.timing(scaleInAnimated, {
       toValue: 0.9,
@@ -55,11 +56,9 @@ const Button = ({
       useNativeDriver: true,
     }).start(() => handlePressIn());
   };
-
   const scaleTransformationStyle = {
     transform: [{ scale: scaleInAnimated }],
   };
-
   return (
     <TouchableOpacity
       onPressIn={handlePressIn}
@@ -74,12 +73,14 @@ const Button = ({
             ? colors.grey
             : isPrimary
             ? colors.primary
+            : background
+            ? colors.white
             : colors.black,
           backgroundColor: disabled
             ? colors.disabled
             : isPrimary
             ? colors.primary
-            : colors.transparent,
+            : background ?? colors.transparent,
           minWidth: width ?? '38%',
           height: height ?? getHeight(dimens.buttonHeight),
           borderRadius:
@@ -112,7 +113,6 @@ const Button = ({
     </TouchableOpacity>
   );
 };
-
 const styles = StyleSheet.create({
   button: {
     borderWidth: getWidth(dimens.borderThin),
@@ -127,5 +127,4 @@ const styles = StyleSheet.create({
     // lineHeight: getHeight(dimens.marginL),
   },
 });
-
 export default Button;

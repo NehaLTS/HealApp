@@ -85,8 +85,8 @@ const ProviderDetail = () => {
         iconColor={colors.black}
         // selectedStyle={styles.box}
         data={providerTypeList}
-        labelField="name.en"
-        valueField="name.en"
+        labelField={'name'}
+        valueField='name'
         placeholder="Type of provider"
         value={selectedProvider}
         onChange={onChangeProviderType}
@@ -105,8 +105,8 @@ const ProviderDetail = () => {
         iconColor={colors.black}
         // selectedStyle={styles.box}
         data={specialityList}
-        labelField="name.en"
-        valueField="name.en"
+        labelField='name'
+        valueField='name'
         placeholder="Specialty"
         value={selectedSpecialty}
         onChange={onChangeSpeciality}

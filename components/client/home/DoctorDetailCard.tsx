@@ -16,41 +16,28 @@ const DoctorDetailCard = ({
 }) => {
   return (
     <>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'white',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Image
-          source={require('../../../assets/icon/map.png')}
-          style={styles.mapImage}
-        />
+      {isPrimary || showBothCards ? (
+        <View style={showBothCards ? styles.cardBoth : styles.card}>
+          <Image
+            source={require('../../../assets/icon/warning.png')}
+            style={showBothCards ? styles.icon : styles.warningIcon}
+          />
+          <Text
+            style={showBothCards ? styles.titleText : styles.title}
+            title={
+              'Price went up by 50 NIS\nsince we didn’t find an\navailable doctor in your area'
+            }
+          />
+        </View>
+      ) : null}
 
-        {isPrimary || showBothCards ? (
-          <View style={showBothCards ? styles.cardBoth : styles.card}>
-            <Image
-              source={require('../../../assets/icon/warning.png')}
-              style={showBothCards ? styles.icon : styles.warningIcon}
-            />
-            <Text
-              style={showBothCards ? styles.titleText : styles.title}
-              title={
-                'Price went up by 50 NIS\nsince we didn’t find an\navailable doctor in your area'
-              }
-            />
-          </View>
-        ) : null}
-
-        {isPrimary ? null : (
-          <View style={styles.cardDetail}>
-            <Text
-              style={styles.doctorTitle}
-              title={'Elena Miron, family doctor'}
-            />
-            <Text style={styles.moreInfo} title={'More info'} />
+      {isPrimary ? null : (
+        <View style={styles.cardDetail}>
+          <Text
+            style={styles.doctorTitle}
+            title={'Elena Miron, family doctor'}
+          />
+          <View style={{}}>
             <View style={styles.detailItem}>
               <View style={styles.doctorIconContainer}>
                 <Image
@@ -62,7 +49,8 @@ const DoctorDetailCard = ({
                   style={styles.starIcon}
                 />
               </View>
-              <View style={{ gap: 5, justifyContent: 'center' }}>
+              <View style={styles.detailsContainer}>
+                <Text style={styles.moreInfo} title={'More info'} />
                 <View style={styles.details}>
                   <Image
                     source={require('../../../assets/icon/phonecall.png')}
@@ -71,12 +59,12 @@ const DoctorDetailCard = ({
                   <Text style={styles.title} title={'Call the doctor'} />
                 </View>
                 <Text style={styles.arrivalText} title={'Estimated arrival'} />
-                <Text style={styles.min} title={'60 min'} />
+                <Text style={styles.time} title={'60 min'} />
               </View>
             </View>
           </View>
-        )}
-      </View>
+        </View>
+      )}
     </>
   );
 };
@@ -95,23 +83,24 @@ const styles = StyleSheet.create({
     elevation: 2,
     paddingHorizontal: getWidth(dimens.marginM),
     paddingVertical: getWidth(dimens.imageS + dimens.marginS),
+    margin: getWidth(dimens.marginS),
   },
   title: {
     fontSize: getWidth(fontSize.textL),
   },
   warningIcon: {
-    width: getWidth(dimens.imageS + dimens.marginS),
+    width: getWidth(dimens.imageS + 3),
     height: getHeight(dimens.imageS),
+    resizeMode: 'contain',
   },
   cardDetail: {
-    backgroundColor: colors.white,
-    borderRadius: getWidth(dimens.marginS),
+    backgroundColor: colors.grey,
+    borderRadius: getWidth(5),
     shadowColor: colors.black,
     alignItems: 'center',
     elevation: getWidth(dimens.borderBold),
-    height: '28%',
-    padding: getHeight(dimens.marginM),
-    margin: getWidth(dimens.marginL),
+    paddingVertical: 10,
+    paddingHorizontal:20
   },
   doctorTitle: {
     fontSize: 20,
@@ -119,9 +108,10 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
   },
   detailItem: {
-    gap: getWidth(dimens.imageXs),
+    gap: getHeight(dimens.marginM),
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 10,
   },
   doctorIconContainer: {
     position: 'relative',
@@ -141,13 +131,14 @@ const styles = StyleSheet.create({
   phoneIcon: {
     width: getWidth(dimens.sideMargin + 5),
     height: getHeight(dimens.sideMargin + 4),
+    resizeMode: 'contain',
   },
   arrivalText: {
     fontFamily: fontFamily.medium,
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
   },
-  min: {
-    fontSize: fontSize.textM,
+  time: {
+    fontSize: getWidth(fontSize.textM),
   },
   cardBoth: {
     backgroundColor: colors.white,
@@ -160,33 +151,35 @@ const styles = StyleSheet.create({
     elevation: getWidth(dimens.borderBold),
     paddingVertical: getWidth(dimens.marginM),
     paddingHorizontal: getWidth(dimens.marginS),
-    marginLeft: getWidth(dimens.imageS),
+    marginLeft: getWidth(dimens.imageS + 10),
+    marginRight: getWidth(dimens.marginM),
   },
   icon: {
     width: getWidth(dimens.marginL + dimens.paddingXs),
     height: getHeight(dimens.marginL),
+    resizeMode: 'contain',
   },
   titleText: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
   },
   details: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: getWidth(dimens.marginS),
+    gap: getWidth(5),
     justifyContent: 'center',
   },
   starIconText: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     alignSelf: 'flex-end',
     paddingBottom: getHeight(dimens.marginM),
   },
   moreInfo: {
-    fontSize: fontSize.textL,
-    marginLeft: getWidth(dimens.imageS + dimens.marginM),
+    fontSize: getWidth(fontSize.textL),
+    marginTop: 10,
+    textAlign: 'left',
   },
-  mapImage: {
-    width: '100%',
-    height: '60%',
-    position: 'absolute',
+  detailsContainer: {
+    gap: 5,
+    justifyContent: 'center',
   },
 });

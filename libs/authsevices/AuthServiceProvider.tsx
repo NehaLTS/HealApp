@@ -1,9 +1,10 @@
-import { sendRequest } from "../api/RequestHandler";
-import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GET_USER_SERVICES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
+import { sendRequest, sendRequestWitoutToken } from "../api/RequestHandler";
+import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GET_USER_SERVICES, GOOGLE_LOGIN_API_PROVIDER, ORDER_REQUEST, PATCH, POST, PROVIDER_SIGNIN, UPDATE_PROVIDER_LOCATION, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 
 import { UseUserContextProvider } from "contexts/useUserContextProvider";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
+import { OrderRequest, PoviderLocation } from "libs/types/ProvierTypes";
 
 export const AuthServicesProvider = () => {
     const { userDataProvider } = UseUserContextProvider()
@@ -35,6 +36,7 @@ export const AuthServicesProvider = () => {
     const OnProviderCreateSignUp = (body: {
         email: string;
         password: string;
+        device_token:string;
     }): Promise<UserTypeProvider> =>
         sendRequest(CREATE_SIGNUP_PROVIDER, {
             method: POST,
@@ -133,9 +135,32 @@ export const AuthServicesProvider = () => {
                 } as unknown as HeadersInit
             })
 
+           
+
+
+    const OrderRequst = (body: OrderRequest): Promise<any> =>
+    sendRequestWitoutToken(ORDER_REQUEST, {
+        method: POST,
+        body: body as unknown as BodyInit,
+        headers: {
+            'Content-Type': 'application/json',
+          //  'x-access-token': userDataProvider?.token 'x-access-token' :   userDataProvider?.token
+        } as unknown as HeadersInit
+    })
+
+    const UpdateProviderLocation=(body: PoviderLocation): Promise<any> =>
+    sendRequestWitoutToken(UPDATE_PROVIDER_LOCATION, {
+    method: PATCH,
+    body: body as unknown as BodyInit,
+    headers: {
+        'Content-Type': 'application/json',
+      //  'x-access-token': userDataProvider?.token  'x-access-token' :   userDataProvider?.token
+    } as unknown as HeadersInit
+})
+
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,
         OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes,onGetProviderService,
-        onGetUserAllServices
+        onGetUserAllServices,OrderRequst,UpdateProviderLocation
     }
 }

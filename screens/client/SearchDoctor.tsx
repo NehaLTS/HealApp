@@ -7,9 +7,9 @@ import { dimens } from "designToken/dimens";
 import { fontFamily } from "designToken/fontFamily";
 import { fontSize } from "designToken/fontSizes";
 import { getHeight, getWidth } from "libs/StyleHelper";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, DeviceEventEmitter, Image, PermissionsAndroid, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 
 import Geolocation from 'react-native-geolocation-service';
@@ -19,22 +19,25 @@ import Geocoder from 'react-native-geocoding';
 import { getLocalData } from "libs/datastorage/useLocalStorage";
 import DoctorDetailCard from "components/client/home/DoctorDetailCard";
 import { Double } from "react-native/Libraries/Types/CodegenTypes";
+import { UseClientUserContext } from "contexts/UseClientUserContext";
 const SearchDoctor = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const [locationPermission, setLocationPermission] = useState(false);
   const localData= getLocalData('USER')
+  const {setCurrentLocationOfUser} =UseClientUserContext()
   const [currentLocation, setCurrentLocation] = useState<Location>();
 const {permissionHelper, forceAlert, handleNextButtonPress}= SearchDoctorController()
 const [locationHistory, setLocationHistory] = useState<any>([]);
 const [providerLocation, setProviderLocation]=useState<any>();
+const providerLatitude = useRef<number>()
+const providerLongnitude = useRef<number>()
 
 //   const [showSummary, setShowSummary] = useState(false);
 
 
 
-  useLayoutEffect(() => {
-  }, [navigation]);
+
 
   useLayoutEffect(() => {
  
@@ -52,8 +55,7 @@ const [providerLocation, setProviderLocation]=useState<any>();
   }, [navigation]);
   
   useEffect(() => {
-    console.log("localData?.providerLocation?.latitude", localData?.providerLocation[0].latitude)
-    setProviderLocation({latitude:localData?.providerLocation[0]?.latitude, longitude:localData?.providerLocation[0]?.longitude})
+    // console.log("localData?.providerLocation?.latitude", parseFloat(localData?.providerLocation[0]?.longitude))
     let watchId:any
     //  getUser(currentUser);
     async function requestLocationPermission() {
@@ -87,7 +89,13 @@ const [providerLocation, setProviderLocation]=useState<any>();
      watchId = Geolocation.watchPosition(
        
        (position) => {
-          // const { latitude, longitude } = position.coords;
+        providerLatitude.current= parseFloat(localData?.providerLocation[0]?.latitude)
+        providerLongnitude.current= parseFloat(localData?.providerLocation[0]?.longitude)
+       
+       console.log("providerLatitude.current", providerLatitude.current)
+        // const { latitude, longitude } = position.coords;
+          setProviderLocation({latitude: localData?.providerLocation?parseFloat(localData?.providerLocation[0]?.latitude):position.coords.latitude, longitude:localData?.providerLocation? parseFloat(localData?.providerLocation[0]?.longitude):position.coords.longitude})
+
           setCurrentLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -95,24 +103,13 @@ const [providerLocation, setProviderLocation]=useState<any>();
             longitudeDelta: 0.0021,
             timestamp: position.timestamp,
           });
+          setCurrentLocationOfUser({ latitude: position.coords.latitude.toString(),longitude: position.coords.longitude.toString()})
           setLocationHistory((prevLocationHistory) => [
             ...prevLocationHistory,
             { latitude: position.coords.latitude, longitude:position.coords.longitude },
           ]);
         },
       );
-      // Geolocation.getCurrentPosition((position)=>{
-      //   // Geocoder.from(position.coords.latitude, position.coords.longitude)
-       
-      //   setCurrentLocation({
-      //           latitude: position.coords.latitude,
-      //           longitude: position.coords.longitude,
-      //           latitudeDelta: 0.0022,
-      //           longitudeDelta: 0.0021,
-      //           timestamp: position.timestamp,
-      //         });
-
-      // })
      
      
     }
@@ -121,39 +118,57 @@ const [providerLocation, setProviderLocation]=useState<any>();
       Geolocation.clearWatch(watchId);
     };
   }, [locationPermission]);
+
+
+  useEffect(()=>{
+    DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
+      console.log("DoctorNotificationEvent", event)
+      if(event.title==='Accepted your request'||event.title==='Update Location' ){
+        Alert.alert("Data")
+      providerLatitude.current= parseFloat(event.latitude)
+      providerLongnitude.current= parseFloat(event.longitude)
+      console.log("providerLatitude.currentINsideEven", providerLatitude.current)
+      setProviderLocation({latitude: parseFloat(event.latitude), longitude: parseFloat(event.longitude)})}
+    })
+return ()=>{
+  DeviceEventEmitter.removeAllListeners('DoctorNotification')
+}
+  },[])
   
   return (
     <View style={styles.mainContainer}>
       <Text style={styles.lookingDoctor} title={t("Looking for a doctor")} />
       <View style={styles.mapContainer}>
-      <MapView
+      {providerLocation &&<MapView
        provider={PROVIDER_GOOGLE}
        showsUserLocation
        followsUserLocation
-       loadingEnabled
+       loadingEnabled={!providerLocation}
     region={currentLocation}
      
   style={{flex:1}}
 > 
 
  {/* TODO: Show marker for the destination or before show provider location before it start move    */}
-{/* {providerLocation && ( */}
+{providerLatitude.current &&providerLongnitude.current&& (
   
             <Marker
               coordinate={{
-                latitude: 30.37615360755907,
-                longitude: 76.77269519532668,
+                latitude: providerLatitude.current,
+                longitude:providerLongnitude.current,
               }}
               title="Doctor Location"
-            />
-          {/* )} */}
-  </MapView>
+            >
+              
+              </Marker>
+          )}
+  </MapView>}
 {/* {  providerLocation ? <DoctorDetailCard isPrimary={false} showBothCards={false}/>:<DoctorDetailCard isPrimary={true} showBothCards={false}/>} */}
-<DoctorDetailCard isPrimary={false} showBothCards={false}/>
+{/* {providerLatitude.current&&<View style={{ zIndex:1, position:'absolute', left:10,paddingHorizontal:getWidth(20)}}><DoctorDetailCard isPrimary={false} showBothCards={false}/></View>} */}
 </View>
 
       <Button
-        title={"Cancel"}
+        title={providerLatitude.current?"Order":"Cancel"}
         isPrimary
         isSmall
         

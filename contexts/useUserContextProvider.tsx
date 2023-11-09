@@ -33,7 +33,7 @@ export interface UserTypeProvider {
     price:string;
     description:string;
     currentScreen: string
-    providerServices: boolean
+    providerServices: boolean;
 }
 export interface UserContextFields {
     userDataProvider: Partial<UserTypeProvider>;

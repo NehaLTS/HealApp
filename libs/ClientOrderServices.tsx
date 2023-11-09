@@ -1,6 +1,7 @@
 import { BodyInit, HeadersInit } from "./api/ApiTypes";
 import { sendRequest, sendRequestSearch } from "./api/RequestHandler";
 import {
+  BOOK_ORDER,
   GET,
   GET_AD_BANNER,
   GET_LOCATION_SEARCH,
@@ -12,10 +13,14 @@ import {
 import { getLocalData } from "./datastorage/useLocalStorage";
 import {
   Banner,
+
   order_provider,
   search_provider,
   treatment,
 } from "./types/ProvierTypes";
+import {
+  BookOrderRequest
+} from "./types/UserType"
 
 export const ClientOrderServices = () => {
   const getBannerAds = (): Promise<Banner[]> =>
@@ -51,7 +56,7 @@ export const ClientOrderServices = () => {
     latitude: string;
     reqDistance:string
   }): Promise<any> =>
-  sendRequestSearch(GET_LOCATION_SEARCH, {
+  sendRequest(GET_LOCATION_SEARCH, {
     method: POST,
     body: body as unknown as BodyInit,
     headers: {
@@ -106,11 +111,23 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     });
 
+    const BookOrderRequest =(body: BookOrderRequest): Promise<any> =>
+    sendRequest(BOOK_ORDER, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        
+        // "x-access-token":
+        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
+      } as unknown as HeadersInit,
+    });
   return {
     getBannerAds,
     treatmentMenu,
     searchProviders,
     orderProvider,
     providerLocationSearch,
+    BookOrderRequest
   };
 };

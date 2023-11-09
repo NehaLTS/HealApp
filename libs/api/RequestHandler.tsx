@@ -21,14 +21,14 @@ export const sendRequest = (url: RequestInfo, opts: OptType) => {
         fetch(newUrl, { ...opts, headers: { ...DEFAULT_HEADERS, ...opts.headers } }),
     )
         .then((res: any) => {
+            console.log("responseProvider", res)
             return res.json();
         })
         .catch((error) => {
             console.error('Request error:', error);
         })
 }
-
-export const sendRequestSearch = (url: RequestInfo, opts: OptType) => {
+export const sendRequestWitoutToken = (url: RequestInfo, opts: OptType) => {
     if (opts.body) opts.body = JSON.stringify(opts.body)
     const newUrl = `${BASE_URL}${url}`;
     console.log("send request", newUrl, opts)
@@ -38,7 +38,7 @@ export const sendRequestSearch = (url: RequestInfo, opts: OptType) => {
         fetch(newUrl, { ...opts, headers: { ...DEFAULT_HEADERS, ...opts.headers } }),
     )
         .then((res: any) => {
-            console.log("resres", res)
+            console.log("responseProvider", res)
             return res.json();
         })
         .catch((error) => {

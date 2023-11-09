@@ -10,10 +10,11 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import ProviderAuthenticatorViewController from './ProviderAuthenticatorViewController';
+import { checkPermission } from 'libs/notification/Notification';
 
 const ProviderAuthenticatorView = () => {
   const navigation = useNavigation();
@@ -25,6 +26,9 @@ const ProviderAuthenticatorView = () => {
       header: () => <Header isHideTitle />,
     });
   }, [navigation]);
+  useMemo(()=>{
+    checkPermission()
+  },[])
 
   return (
     <View style={styles.mainContainer}>
