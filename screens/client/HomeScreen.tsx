@@ -92,6 +92,7 @@ const HomeScreen = () => {
         <Text style={styles.searchHeading} title={t('specialist')} />
         {providerList.map((item: any, index: number) => (
           <CardView
+            key={index}
             item={item}
             index={index}
             onPress={() =>
@@ -106,7 +107,7 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     return providersList?.map((item: any, index: number) => (
-      <CardView item={item} index={index} isSearch />
+      <CardView key={index} item={item} index={index} isSearch />
     ));
   };
   const noSearchedView = () => {
