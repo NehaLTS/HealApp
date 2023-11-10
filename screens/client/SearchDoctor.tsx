@@ -122,6 +122,7 @@ const providerLongnitude = useRef<number>()
 
   useEffect(()=>{
     DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
+      Alert.alert("accepted by provider")
       console.log("DoctorNotificationEvent", event)
       if(event.title==='Accepted your request'||event.title==='Update Location' ){
         Alert.alert("Data")

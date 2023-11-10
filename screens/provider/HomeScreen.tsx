@@ -94,6 +94,7 @@ let clientId = ''
               setAcceptOrder(true)
               OrderRequst({ status:"accept",
               provider_id:'3',
+              order_id: '1',
               latitude:"30.37775529243538",
               longitude:"76.77481109532673"}).then((res)=>{console.log("ordereAccepted", res)})
             }}
@@ -162,8 +163,8 @@ let clientId = ''
           style={[styles.available, isAvailable && styles.isAvailable]}
         />
       </View>
-      {IsNotification.current&&getNewOrderView()}
-      {/* {getNewOrderView()} */}
+      {/* {IsNotification.current&&getNewOrderView()} */}
+      {getNewOrderView()}
       {getCancelOrderView()}
     </>
   );

@@ -30,6 +30,7 @@ const RegistrationView = () => {
   } = RegistrationViewController();
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
   const deviceToken= getLocalData('USER')?.deviceToken
+  console.log('gurpreet', deviceToken)
   const handleSignUp = () => {
     setIsLoadingGoogle(true);
     if (!emailError && !passwordError)
