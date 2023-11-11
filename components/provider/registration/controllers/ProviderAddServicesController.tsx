@@ -8,7 +8,7 @@ import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { ProviderServices } from 'libs/types/UserType';
 
 const ProviderAddServicesController = () => {
-  const { providerProfile, userId,setProviderServices } = UseProviderUserContext();
+  const { providerProfile, userId,setProviderServices,token } = UseProviderUserContext();
   const serviceNameRef = React.useRef<any>('');
   const priceRef = React.useRef<any>('');
   const descriptionRef = React.useRef<any>('');
@@ -52,7 +52,7 @@ const ProviderAddServicesController = () => {
 
   const getUserAllServices = async () => {
     setIsLoading(true);
-    let response = await onGetUserAllServices({ provider_id: userId });
+    let response = await onGetUserAllServices({ provider_id: userId },token);
      console.log('resp is ', response);
     if (response) {
       setServices(response);
@@ -90,7 +90,7 @@ const ProviderAddServicesController = () => {
         price: priceRef.current.value,
         provider_id: userId,
         specialty_id: providerProfile?.speciality?.id,
-      });
+      },token);
 
 
       console.log("response add service is ",response)

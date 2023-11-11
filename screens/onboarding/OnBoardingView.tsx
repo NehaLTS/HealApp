@@ -29,7 +29,7 @@ const OnBoardingView = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    // deleteLocalData();
+   //  deleteLocalData();
     getLocalUserData();
   }, []);
 
@@ -56,12 +56,13 @@ const OnBoardingView = () => {
 
         console.log('useprofile is ', userData);
 
-        // const providerServices: ProviderServices = (await getLocalData(
-        //   'PROVIDERSERVICES',
-        // )) as ProviderServices;
+        const providerServices: ProviderServices = (await getLocalData(
+          'PROVIDERSERVICES',
+        )) as ProviderServices;
 
-         const providerServices: ProviderServices = null
+        console.log("provider services ",providerServices);
 
+         if(userData.firstName){
         if (!providerServices) {
           if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
             setCurrentStep('services');
@@ -69,6 +70,8 @@ const OnBoardingView = () => {
             setCurrentStep('addServices');
           }
         }
+         }
+      
 
         setProviderProfile(userData as ProviderProfile);
 

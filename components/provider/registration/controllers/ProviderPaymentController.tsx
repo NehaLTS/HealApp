@@ -18,7 +18,7 @@ const ProviderPaymentController = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
 
-  const { setCurrentStep, setProviderProfile, providerProfile, userId } =
+  const { setCurrentStep, setProviderProfile, providerProfile, userId,token } =
     UseProviderUserContext();
 
   const onBlurRegistrationNumber = () => validateRegistrationNumber();
@@ -111,9 +111,11 @@ const ProviderPaymentController = () => {
         branch: branchRef.current.value,
         business_registration_number: registrationNumberRef.current.value,
         account: accountRef.current.value,
-      });
+      },token);
 
-      if (res.isSuccessful) {
+      console.log("response udpate is ",res)
+
+      if (res?.msg) {
         setLocalData('USERPROFILE', {
           firstName: providerProfile.firstName ?? '',
           lastName: providerProfile.lastName ?? '',

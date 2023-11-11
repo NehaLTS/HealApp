@@ -29,6 +29,8 @@ export interface UserTypeProvider {
   token?: string;
   user?: UserProvider;
   msg?: string;
+  provider_id?: string | null;
+  
 }
 
 export interface HealLanguageType {

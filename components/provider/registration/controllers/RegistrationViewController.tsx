@@ -78,9 +78,15 @@ if (!emailRef.current.value) setEmailError('Email is required');
       const res = await OnProviderCreateSignUp({ email, password,device_token });
 
       console.log("response is ",res);
-      if (res && res.token && res.id) {
+
+      //TODO change res.proivder_id to res.id 
+      if (res && res.token && res.provider_id) {
         setToken(res.token);
-        setUserId(res.id);
+       
+        //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
+       // setUserId(res.id);
+
+       setUserId(res.provider_id);
       }
 
       setLocalData('USER', {

@@ -7,8 +7,8 @@ import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseProviderUserContext } from "contexts/UseProviderUserContext";
 
 export const AuthServicesProvider = () => {
-  const { token } =
-    UseProviderUserContext();
+//   const { token } =
+//     UseProviderUserContext();
 
     const OnProviderSignIn = (body: {
         email: string;
@@ -61,13 +61,13 @@ export const AuthServicesProvider = () => {
         business_registration_number: string;
         account: string;
         
-    }): Promise<UserTypeProvider> =>
+    }, accessToken:string): Promise<UserTypeProvider> =>
         sendRequest(UPDATE_SIGNUP_PROVIDER, {
             method: PATCH,
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': token
+                'x-access-token': accessToken
             } as unknown as HeadersInit
         })
     const onCreateProviderServices = (body: {
@@ -76,7 +76,7 @@ export const AuthServicesProvider = () => {
         price: string,
         provider_id: string,
         specialty_id: string
-    }): Promise<UserTypeProvider> =>{
+    }, accessToken:string): Promise<UserTypeProvider> =>{
 
         console.log("body is ",body);
 
@@ -85,7 +85,7 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': token
+                'x-access-token': accessToken
                } as unknown as HeadersInit
         })
     }
@@ -120,26 +120,26 @@ export const AuthServicesProvider = () => {
     const onGetProviderService = (body: {
         provider_id: string,
         specialty_id: string
-    }): Promise<any> =>
+    },accessToken:string): Promise<any> =>
         sendRequest(GET_PROVIDER_SERVICE, {
             method: POST,
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token' : token
+                'x-access-token' : accessToken
             } as unknown as HeadersInit
         })
 
 
     const onGetUserAllServices = (body: {
             provider_id: string,
-        }): Promise<any> =>
+        },accessToken:string): Promise<any> =>
             sendRequest(GET_USER_SERVICES, {
                 method: POST,
                 body: body as unknown as BodyInit,
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-access-token' :  token
+                    'x-access-token' :  accessToken
                 } as unknown as HeadersInit
             })
 
