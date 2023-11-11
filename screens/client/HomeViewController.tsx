@@ -2,11 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
+import { ClientProfile } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
-import { Alert, Keyboard, Linking } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import { Keyboard, Linking } from 'react-native';
 
 interface Location {
   latitude: number;
@@ -21,40 +20,28 @@ const HomeViewController = () => {
   const [onChangeSearch, setOnChangeSearch] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
-  const { userProfile } =
-    UseClientUserContext();
+  const [user, setUser] = useState<ClientProfile>();
+  const { userProfile, setUserProfile } = UseClientUserContext();
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = [
     {
-      id: 1,
-      image: '../../assets/icon/doctor.png',
       name: 'Doctor - home visit',
     },
     {
-      id: 2,
-      image: '../../assets/icon/physio.png',
-      name: 'Physio - home visit',
-    },
-    {
-      id: 3,
-      image: '../../assets/icon/nurse.png',
       name: 'Nurse - home visit',
     },
     {
-      id: 4,
-      image: '../../assets/icon/healer.png',
-      name: 'Alternative medicine',
+      name: 'Alternative medicine -\nhome visit',
     },
     {
-      id: 5,
-      image: '../../assets/icon/doctor.png',
+      name: 'Physio - home visit',
+    },
+    {
       name: 'Doctor - home visit',
     },
     {
-      id: 6,
-      image: '../../assets/icon/healer.png',
-      name: 'Alternative medicine',
+      name: 'Clinics',
     },
   ];
 
@@ -68,9 +55,10 @@ const HomeViewController = () => {
     //     // Request location permission
     //     requestLocationPermission();
     //   }
-    // }
-    
-    // );
+    // });
+    const abc = getLocalData('USERPROFILE');
+    setUser(abc as ClientProfile);
+    setUserProfile({ ...userProfile, card_number: abc?.card_number });
   }, []);
   // const getLocation = () => {
   //   Geolocation.getCurrentPosition(
@@ -115,14 +103,10 @@ const HomeViewController = () => {
   const onSearchDone = async () => {
     const res = await searchProviders({
       name: onChangeSearch,
-      latitude: location?.latitude.toString() ?? '',
-      longitude: location?.longitude.toString() ?? '',
+      latitude: '30.377305039494523',
+      longitude: '76.78137416040587',
     });
-    console.log('onSearchDone', res);
-
-
-
-    
+    // console.log('onSearchDone', res);
     if (res?.message) setIsDataNotFound(false);
     else setProvidersList(res);
   };
@@ -133,9 +117,7 @@ const HomeViewController = () => {
   const onSearch = () => {
    navigation.navigate(NavigationRoutes.IntroStack);
   };
-  const onTouchStart = async () => {
-    setIsTouchStart(false);
-  };
+  const onTouchStart = () => setIsTouchStart(false);
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
     Keyboard.dismiss();

@@ -32,9 +32,9 @@ export interface UserTypeProvider {
 }
 
 export interface HealLanguageType {
- en:string,
- hi:string,
- he:string
+  en: string;
+  hi: string;
+  he: string;
 }
 
 type UserProvider = {
@@ -143,9 +143,11 @@ export interface ClientProfile {
   date_of_birth?: string;
   idNumber?: number;
   isPaymentAdded?: boolean;
+  description?: string;
+  card_number?: string;
 }
 
-export type onboardStep = "details" | "address" | "payment" | "services";
+export type onboardStep = 'details' | 'address' | 'payment' | 'services';
 
 export interface ProviderProfile {
   firstName: string;
@@ -168,7 +170,7 @@ export interface ProviderProfile {
 export interface ProviderType {
   name: HealLanguageType;
   id: string;
-  specialties?:ProviderSpeciality[]
+  specialties?: ProviderSpeciality[];
 }
 
 export interface OrderDetail {

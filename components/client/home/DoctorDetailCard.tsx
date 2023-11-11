@@ -144,10 +144,10 @@ const styles = StyleSheet.create({
   },
   arrivalText: {
     fontFamily: fontFamily.medium,
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
   },
   min: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
   },
   cardBoth: {
     backgroundColor: colors.white,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginL),
   },
   titleText: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
   },
   details: {
     flexDirection: 'row',
@@ -176,12 +176,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   starIconText: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     alignSelf: 'flex-end',
     paddingBottom: getHeight(dimens.marginM),
   },
   moreInfo: {
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     marginLeft: getWidth(dimens.imageS + dimens.marginM),
   },
   mapImage: {

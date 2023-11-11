@@ -14,8 +14,10 @@ import {
   order_provider,
   search_provider,
   treatment,
-} from "./types/ProvierTypes";
+} from './types/ProvierTypes';
 
+const access_token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODk4NjY5NCwiZXhwIjoxNjk5MDE5MDk0fQ.6nHvRnfJwgmgnCo0zYLf9yO2kvDIxJ0IZALJCB_PHr0';
 export const ClientOrderServices = () => {
     const { token } =
     UseClientUserContext();

@@ -1,90 +1,114 @@
-{       "welcome_heal": "Welcome to Heal",
-        "continue_client": "Continue as a Client",
-        "continue_provider": "Continue as a Provider",
-        "sign_in": "Sign In",
-        "sign_up": "Sign Up",
-        "client_login": "Client Login",
-        "client_sign_up":"Client Sign Up",
-        "email": "E-mail*",
-        "password": "Password*",
-        "forgot_password": "Forgot password?",
-        "or_sign_in_via": "Or sign in via",
-        "guest_entrance": "Guest Entrance",
-        "switch_to_provider": "Switch to Provider",
-        "registration": "Registration",
-        "first_name": "First Name*",
-        "last_name": "Last Name*",
-        "phone_number": "Phone Number*",
-        "it_will_help_us_to_find_a_best_doctor_for_you": "*It will help us to find a best doctor for you",
-        "back": "Back",
-        "next": "Next",
-        "address": "Address*",
-        "date_of_birth": "Date of Birth*",
-        "id_number": "ID Number*",
-        "add_a_profile_photo": "Add a profile photo",
-        "skip_for_later": "Skip for later",
-        "profile_photo": "Profile photo",
-        "add_credit_card": "Add credit card",
-        "credit_card_number": "Credit Card Number*",
-        "add_google_pay": "Add Google Pay",
-        "mm_yy":"MM/YY*",
-        "cvv":"CVV*",
-        "skip":"Skip",
-        "provider_login":"Provider Login",
-        "provider_sign_up":"Provider Sign Up",
-        "switch_to_client":"Switch to Client",
-        "add_profile": "Add a profile photo",
-        "find_doctor_text": "*It will help us to find a best doctor for you",
-        "type_provider":"Type of provider",
-        "specialty":"Specialty",
-        "upload_id":"Upload ID photo",
-        "license_number":"License number (for those who have)",
-      "upload_license":"Upload license photo",
-      "business_registration":"Business registration number",
-      "bank":"Bank",
-      "branch":"Branch",
-      "bank_account":"Bank account",
-     "authority":"Authority to add a prescription",
-     "yes":"Yes",
-     "no":"No",
-     "services_you":"Services you provide",
-        "cancel": "Cancel",
-        "start_using_heal": "Start using Heal",
-        "home":{
+{
+  "welcome_heal": "Welcome to Heal",
+  "continue_client": "Continue as a Client",
+  "continue_provider": "Continue as a Provider",
+  "sign_in": "Sign In",
+  "sign_up": "Sign Up",
+  "client_login": "Client Login",
+  "client_sign_up": "Client Sign Up",
+  "email": "E-mail*",
+  "password": "Password*",
+  "forgot_password": "Forgot password?",
+  "or_sign_in_via": "Or sign in via",
+  "guest_entrance": "Guest Entrance",
+  "switch_to_provider": "Switch to Provider",
+  "registration": "Registration",
+  "first_name": "First Name*",
+  "last_name": "Last Name*",
+  "phone_number": "Phone Number*",
+  "it_will_help_us_to_find_a_best_doctor_for_you": "*It will help us to find a best doctor for you",
+  "back": "Back",
+  "next": "Next",
+  "address": "Address*",
+  "date_of_birth": "Date of Birth*",
+  "id_number": "ID Number*",
+  "add_a_profile_photo": "Add a profile photo",
+  "skip_for_later": "Skip for later",
+  "profile_photo": "Profile photo",
+  "add_credit_card": "Add credit card",
+  "credit_card_number": "Credit Card Number*",
+  "add_google_pay": "Add Google Pay",
+  "mm_yy": "MM/YY*",
+  "cvv": "CVV*",
+  "skip": "Skip",
+  "provider_login": "Provider Login",
+  "provider_sign_up": "Provider Sign Up",
+  "switch_to_client": "Switch to Client",
+  "add_profile": "Add a profile photo",
+  "find_doctor_text": "*It will help us to find a best doctor for you",
+  "type_provider": "Type of provider",
+  "specialty": "Specialty",
+  "upload_id": "Upload ID photo",
+  "license_number": "License number (for those who have)",
+  "upload_license": "Upload license photo",
+  "business_registration": "Business registration number",
+  "bank": "Bank",
+  "branch": "Branch",
+  "bank_account": "Bank account",
+  "authority": "Authority to add a prescription",
+  "yes": "Yes",
+  "no": "No",
+  "services_you": "Services you provide",
+  "cancel": "Cancel",
+  "your_location": " Your current location",
+  "change": "Change",
+  "specialist": "Which specialist do you need?",
+  "results": "No search results",
+  "back_search": "Back to search",
+  "what_treatment": "What treatment do you need?",
+  "start_using_heal": "Start using Heal",
+  "no_fee": "*No fee will be collected within 3 minutes after order",
+  "reason": "Reason",
+  "emergency_calls": "*We don’t do emergency calls. In case of emergency please call 077-773-45-69",
+  "describe_where": "Describe where is the entrance etc.",
+  "treatments": "Treatments menu",
+  "if_the_doctor": "*If the doctor won't use your shot, you won't pay for it",
+  "for_whom": "For whom is the doctor?",
+  "me": "Me",
+  "someone_else": "Someone else",
+  "other": "other",
+  "age": "Their age *",
+  "number": "Their phone number",
+  "summary": "Order summary",
+  "edit_order": "Edit order",
+  "patient": "The patient",
+  "symptoms": "Symptoms",
+  "services": "Services",
+  "arrival": "Estimated arrival",
+  "instructions_for": "Instructions for arrival",
 
-                "providerList":[
-                    {
-                        "id": 1,
-                        "image":"assets/icon/doctor.png",
-                        "name": "Doctor - home visit"
-                      },
-                      {
-                        "id": 2,
-                        "image":"assets/icon/physio.png",
-                        "name": "Physio - home visit"
-                      },
-                      {
-                        "id": 3,
-                        "image": "assets/icon/nurse.png",
-                        "name": "Nurse - home visit"
-                      },
-                      {
-                        "id": 4,
-                        "image": "assets/icon/healer.png",
-                        "name": "Alternative medicine"
-                      },
-                      {
-                        "id": 5,
-                        "image": "assets/icon/doctor.png",
-                        "name": "Doctor - home visit"
-                      },
-                      {
-                        "id": 6,
-                        "image": "assets/icon/healer.png",
-                        "name": "Alternative medicine"
-                      }
-            ]
-        }
-
-
+  "home": {
+    "providerList": [
+      {
+        "id": 1,
+        "image": "assets/icon/doctor.png",
+        "name": "Doctor - home visit"
+      },
+      {
+        "id": 2,
+        "image": "assets/icon/physio.png",
+        "name": "Physio - home visit"
+      },
+      {
+        "id": 3,
+        "image": "assets/icon/nurse.png",
+        "name": "Nurse - home visit"
+      },
+      {
+        "id": 4,
+        "image": "assets/icon/healer.png",
+        "name": "Alternative medicine -\nhome visit"
+      },
+      {
+        "id": 5,
+        "image": "assets/icon/doctor.png",
+        "name": "Doctor - home visit"
+      },
+      {
+        "id": 6,
+        "image": "assets/icon/healer.png",
+        "name": "Clinics"
+      }
+    ]
+  }
 }
