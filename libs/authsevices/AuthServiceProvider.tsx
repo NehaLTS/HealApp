@@ -126,7 +126,6 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-              //  'x-access-token': token
                 'x-access-token' : token
             } as unknown as HeadersInit
         })

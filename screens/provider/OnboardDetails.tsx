@@ -12,6 +12,7 @@ import ProviderAddress from 'components/provider/registration/views/ProviderAddr
 import ProviderPayment from 'components/provider/registration/views/ProviderPayment';
 import ProviderServices from 'components/provider/registration/views/ProviderServices';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import ProviderAddServices from 'components/provider/registration/views/ProviderAddServices';
 
 //TODO: static strings are changed after setup i18
 const OnboardDetails = () => {
@@ -29,12 +30,13 @@ const OnboardDetails = () => {
     <View style={styles.container}>
       <Stepper
         currentStep={currentStep}
-        totalStep={['details', 'address', 'payment', 'services']}
+        totalStep={['details', 'address', 'payment', 'services','addServices']}
       />
       {currentStep === 'details' && <ProviderDetail />}
       {currentStep === 'address' && <ProviderAddress />}
       {currentStep === 'payment' && <ProviderPayment />}
       {currentStep === 'services' && <ProviderServices />}
+      {currentStep === 'addServices' && <ProviderAddServices />}
     </View>
   );
 };

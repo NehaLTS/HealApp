@@ -45,14 +45,11 @@ const ProviderServicesController = () => {
   const onPressNext = () => {
 
     let selectedServices=services.filter(services => services.isSelected);
-
     console.log("selected services ", selectedServices)
-
-
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{ name: NavigationRoutes.ProviderConfirmation }],
-    // });
+    navigation.reset({
+      index: 0,
+      routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+    });
   };
   return {
     onPressBack,
