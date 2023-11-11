@@ -104,7 +104,7 @@ const HomeScreen = () => {
   };
   const getProviderSearchList = () => {
     return providersList?.map((item: any, index: number) => (
-      <CardView key={index} item={item} index={index} isSearch user={user} />
+      <CardView key={index} item={item} index={index} isSearch user={userProfile} />
     ));
   };
   const noSearchedView = () => {

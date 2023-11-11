@@ -33,3 +33,4 @@ export const PATCH = 'PATCH';
 export const DEFAULT_ACCESS_TOKEN = 'Logicease123';
 export const PAYMENT_ACCESS_TOKEN = 'Logicease_23';
 export const TIME_OUT = 30000;
+export const UNAUTHORIZED_ERROR_CODE = 401;

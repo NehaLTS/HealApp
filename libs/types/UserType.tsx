@@ -147,7 +147,7 @@ export interface ClientProfile {
   card_number?: string;
 }
 
-export type onboardStep = 'details' | 'address' | 'payment' | 'services';
+export type onboardStep = 'details' | 'address' | 'payment' | 'services' | 'addServices';
 
 export interface ProviderProfile {
   firstName: string;
@@ -206,8 +206,9 @@ export interface ProviderBankDetails {
 
 export interface ProviderServices {
   id: number;
-  name: string;
+  name: HealLanguageType;
   price: number;
-  description?: string;
-  currency: string;
+  description?: HealLanguageType;
+  currency?: string;
+  isSelected?:boolean
 }

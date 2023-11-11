@@ -62,30 +62,30 @@ if (!emailRef.current.value) setEmailError('Email is required');
     }
   };
   const handleSignUp = () => {
-    // if (!emailError && !passwordError)
-    //   onPressSignUpProvider(emailRef.current.value, passwordRef.current.value);
+    if (!emailError && !passwordError)
+      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value,"Test");
 
-     navigation.reset({
-            index: 0,
-            routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
-          });
+    //  navigation.reset({
+    //         index: 0,
+    //         routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+    //       });
           
   };
 
-  const onPressSignUpProvider = async (email: string, password: string) => {
+  const onPressSignUpProvider = async (email: string, password: string,device_token:string) => {
     setIsLoading(true);
     if (email !== undefined && password != undefined) {
-      const res = await OnProviderCreateSignUp({ email, password });
+      const res = await OnProviderCreateSignUp({ email, password,device_token });
 
       console.log("response is ",res);
-      if (res && res.token && res.provider_id) {
+      if (res && res.token && res.id) {
         setToken(res.token);
-        setUserId(res.provider_id);
+        setUserId(res.id);
       }
 
       setLocalData('USER', {
         token: res?.token,
-        userId: res?.provider_id,
+        userId: res?.id,
         isClient: false,
       });
       setLocalData('USERPROFILE', {

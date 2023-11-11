@@ -2,11 +2,13 @@ import { sendRequest } from "../api/RequestHandler";
 import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GET_USER_SERVICES, GOOGLE_LOGIN_API_PROVIDER, PATCH, POST, PROVIDER_SIGNIN, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 
-import { UseUserContextProvider } from "contexts/useUserContextProvider";
+
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
+import { UseProviderUserContext } from "contexts/UseProviderUserContext";
 
 export const AuthServicesProvider = () => {
-    const { userDataProvider } = UseUserContextProvider()
+  const { token } =
+    UseProviderUserContext();
 
     const OnProviderSignIn = (body: {
         email: string;
@@ -35,6 +37,7 @@ export const AuthServicesProvider = () => {
     const OnProviderCreateSignUp = (body: {
         email: string;
         password: string;
+        device_token:string
     }): Promise<UserTypeProvider> =>
         sendRequest(CREATE_SIGNUP_PROVIDER, {
             method: POST,
@@ -64,7 +67,7 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': userDataProvider?.token
+                'x-access-token': token
             } as unknown as HeadersInit
         })
     const onCreateProviderServices = (body: {
@@ -72,7 +75,6 @@ export const AuthServicesProvider = () => {
         description: string,
         price: string,
         provider_id: string,
-      
         specialty_id: string
     }): Promise<UserTypeProvider> =>{
 
@@ -83,9 +85,8 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-                // 'x-access-token': userDataProvider?.token
-                'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
-            } as unknown as HeadersInit
+                'x-access-token': token
+               } as unknown as HeadersInit
         })
     }
 
@@ -93,17 +94,28 @@ export const AuthServicesProvider = () => {
       
 
         
-    const onGetProviderTypes = (): Promise<any> =>(
-        sendRequest(GET_PROVIDER_TYPES, {
+    // const onGetProviderTypes = (): Promise<any> =>(
+    //     sendRequest(GET_PROVIDER_TYPES, {
+    //         method: GET,
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             // 'x-access-token':token
+    //              'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
+    //         } as unknown as HeadersInit
+    //     }).then((res) => {
+    //       return  JSON.stringify(res)
+    //     })
+    // )
+       const onGetProviderTypes = (): Promise<any> =>  sendRequest(GET_PROVIDER_TYPES, {
             method: GET,
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': userDataProvider?.token
+                // 'x-access-token': token
+                 'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjk5NzAxNzI1LCJleHAiOjE2OTk3MzQxMjV9.DQTzkp7dzNH1rz6t6AipCQqDLKMcnewG1YVPSdBakYg"
             } as unknown as HeadersInit
-        }).then((res) => {
-          return  JSON.stringify(res)
         })
-    )
+
+   
 
     const onGetProviderService = (body: {
         provider_id: string,
@@ -114,8 +126,8 @@ export const AuthServicesProvider = () => {
             body: body as unknown as BodyInit,
             headers: {
                 'Content-Type': 'application/json',
-              //  'x-access-token': userDataProvider?.token
-                'x-access-token' : userDataProvider?.token
+              //  'x-access-token': token
+                'x-access-token' : token
             } as unknown as HeadersInit
         })
 
@@ -128,8 +140,7 @@ export const AuthServicesProvider = () => {
                 body: body as unknown as BodyInit,
                 headers: {
                     'Content-Type': 'application/json',
-                  //  'x-access-token': userDataProvider?.token
-                    'x-access-token' :   userDataProvider?.token
+                    'x-access-token' :  token
                 } as unknown as HeadersInit
             })
 

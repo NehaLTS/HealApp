@@ -37,7 +37,7 @@ const ProviderStackNavigator = () => {
         />
         <Stack.Screen
           name={NavigationRoutes.ProviderConfirmation}
-          component={lazy(() => import("../components/provider/registration/views/ProviderConform"))}
+          component={lazy(() => import("../components/provider/registration/views/ProviderConfirmation"))}
         />
       </Stack.Navigator>
     </UserContextProvider.Provider>
