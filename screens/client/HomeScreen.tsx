@@ -32,13 +32,11 @@ import HomeViewController from './HomeViewController';
 import { colors } from 'designToken/colors';
 import RNModal from 'components/common/Modal';
 import Input from 'components/common/Input';
-import OrderDetails from './OrderDetails';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
   const {
     providerList,
     bannerAds,
@@ -53,9 +51,9 @@ const HomeScreen = () => {
     onSearchDone,
     isDataNotFound,
     onSearch,
-    user,
+    userProfile,
   } = HomeViewController();
-  console.log('user', user);
+ 
   // const isDataNotFound = searchRef?.length > 0 ? true : false;
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -67,7 +65,7 @@ const HomeScreen = () => {
             <Text
               numberOfLines={2}
               style={styles.text}
-              title={user?.address ?? ''}
+              title={userProfile?.address ?? ''}
             />
           </View>
           <TextButton

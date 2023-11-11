@@ -1,11 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
-import {
-  deleteLocalData,
-  getLocalData,
-} from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
-import { ClientProfile } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert, Keyboard, Linking } from 'react-native';
@@ -25,7 +21,8 @@ const HomeViewController = () => {
   const [onChangeSearch, setOnChangeSearch] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
-  const [user, setUser] = useState<ClientProfile>();
+  const { userProfile } =
+    UseClientUserContext();
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = [
@@ -63,52 +60,52 @@ const HomeViewController = () => {
 
   useEffect(() => {
     getBannerAd();
-    check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
-      if (status === RESULTS.GRANTED) {
-        // Location permission is already granted
-        getLocation();
-      } else {
-        // Request location permission
-        requestLocationPermission();
-      }
-    });
-    const abc = getLocalData('USERPROFILE');
-    setUser(abc);
+    // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
+    //   if (status === RESULTS.GRANTED) {
+    //     // Location permission is already granted
+    //     getLocation();
+    //   } else {
+    //     // Request location permission
+    //     requestLocationPermission();
+    //   }
+    // }
+    
+    // );
   }, []);
-  const getLocation = () => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation({ latitude, longitude });
-      },
-      (error) => {
-        console.log('Error getting location: ' + error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-      },
-    );
-  };
+  // const getLocation = () => {
+  //   Geolocation.getCurrentPosition(
+  //     (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       setLocation({ latitude, longitude });
+  //     },
+  //     (error) => {
+  //       console.log('Error getting location: ' + error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: true,
+  //       timeout: 15000,
+  //       maximumAge: 10000,
+  //     },
+  //   );
+  // };
 
-  const requestLocationPermission = async () => {
-    const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-    if (status === RESULTS.GRANTED) {
-      // Location permission granted, get the location
-      getLocation();
-    } else {
-      console.log('Location permission not granted');
-      Alert.alert('Please turn on your permission');
-    }
-  };
+  // const requestLocationPermission = async () => {
+  //   const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+  //   if (status === RESULTS.GRANTED) {
+  //     // Location permission granted, get the location
+  //     getLocation();
+  //   } else {
+  //     console.log('Location permission not granted');
+  //     Alert.alert('Please turn on your permission');
+  //   }
+  // };
 
   const onPressBanner = () => Linking.openURL(bannerAds[0]?.destinationUrl);
 
   const getBannerAd = async () => {
     try {
       const res = await getBannerAds();
-      console.log('resp', res);
+      console.log('banner ads', res);
       setBannerAds(res);
     } catch (error) {
       // Handle any errors that occurred during the execution of getBannerAds
@@ -122,6 +119,10 @@ const HomeViewController = () => {
       longitude: location?.longitude.toString() ?? '',
     });
     console.log('onSearchDone', res);
+
+
+
+    
     if (res?.message) setIsDataNotFound(false);
     else setProvidersList(res);
   };
@@ -130,7 +131,7 @@ const HomeViewController = () => {
     setIsDataNotFound(true);
   };
   const onSearch = () => {
-    deleteLocalData(), navigation.navigate(NavigationRoutes.IntroStack);
+   navigation.navigate(NavigationRoutes.IntroStack);
   };
   const onTouchStart = async () => {
     setIsTouchStart(false);
@@ -156,7 +157,7 @@ const HomeViewController = () => {
     onSearchDone,
     isDataNotFound,
     onSearch,
-    user,
+    userProfile,
   };
 };
 

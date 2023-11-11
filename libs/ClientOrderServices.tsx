@@ -1,3 +1,4 @@
+import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { BodyInit, HeadersInit } from "./api/ApiTypes";
 import { sendRequest } from "./api/RequestHandler";
 import {
@@ -8,7 +9,6 @@ import {
   ORDER_PROVIDER,
   POST,
 } from "./constants/ApiConstants";
-import { getLocalData } from "./datastorage/useLocalStorage";
 import {
   Banner,
   order_provider,
@@ -17,15 +17,15 @@ import {
 } from "./types/ProvierTypes";
 
 export const ClientOrderServices = () => {
+    const { token } =
+    UseClientUserContext();
   const getBannerAds = (): Promise<Banner[]> =>
     sendRequest(GET_AD_BANNER, {
       method: GET,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+         } as unknown as HeadersInit,
     });
   const searchProviders = (body: {
     name: string;
@@ -37,10 +37,8 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+          } as unknown as HeadersInit,
     });
 
   const orderProvider = (body: {
@@ -66,10 +64,8 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+              } as unknown as HeadersInit,
     });
 
   const handlePayment = (body: {}): void => {};
@@ -82,9 +78,8 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // 'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48'
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+            } as unknown as HeadersInit,
     });
 
   return {
