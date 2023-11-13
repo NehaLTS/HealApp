@@ -1,6 +1,7 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { ProviderProfile } from 'libs/types/UserType';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 const ProviderAddressController = () => {
   const [phoneError, setPhoneError] = useState('');
@@ -16,6 +17,14 @@ const ProviderAddressController = () => {
   const { setCurrentStep, setProviderProfile, providerProfile } =
     UseProviderUserContext();
 
+  useEffect(() => {
+    if (providerProfile.firstName) {
+      phoneRef.current.value = providerProfile.phoneNumber;
+      licenseRef.current.value = providerProfile.licensenumber;
+      addressRef.current.value = providerProfile.address;
+    }
+  }, []);
+
   const onBlurPhoneNumber = () => validatePhoneNumber();
 
   const onChangePhoneNumber = (value: string) =>
@@ -30,27 +39,31 @@ const ProviderAddressController = () => {
     (addressRef.current.value = value), setOnSearchAddress(value);
   };
 
-  const getImageUrl = (url: string) => {};
+  const getImageUrl = (url: string) => {
+    setLicensePicture(url);
+  };
 
   const onPressNext = () => {
     if (phoneRef.current.value && onSearchAddress) {
-      setProviderProfile({
-        ...(providerProfile as ProviderProfile),
-        address: onSearchAddress,
-        phoneNumber: phoneRef.current.value,
-        licensenumber: licenseRef.current.value,
-        licensepicture: licensePicture,
-      });
-      setCurrentStep('payment');
+      if (licenseRef.current.value && licensePicture) {
+        setProviderProfile({
+          ...(providerProfile as ProviderProfile),
+          address: onSearchAddress,
+          phoneNumber: phoneRef.current.value,
+          licensenumber: licenseRef.current.value,
+          licensepicture: licensePicture,
+        });
+        setCurrentStep('payment');
+      } else {
+        Alert.alert('Please select License picture');
+      }
     } else {
       if (!phoneRef.current.value) setPhoneError('Phone Number is required');
       if (!onSearchAddress) setAddressError('Address is required');
     }
   };
 
-  const onPressBack = () => {
-    // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
-  };
+  const onPressBack = () =>  setCurrentStep('details');
 
   const validatePhoneNumber = () => {
     if (!phoneRef.current.value) {

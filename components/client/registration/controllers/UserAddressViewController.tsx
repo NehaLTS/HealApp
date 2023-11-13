@@ -135,7 +135,6 @@ const UserAddressViewController = () => {
   };
 
   const onPressBack = () => {
-    //TODO: Vandana to check why this is getting reset.
     setCurrentStep('details');
   };
 

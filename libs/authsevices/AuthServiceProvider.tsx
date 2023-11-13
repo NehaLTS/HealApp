@@ -90,29 +90,12 @@ export const AuthServicesProvider = () => {
         })
     }
 
-
-      
-
-        
-    // const onGetProviderTypes = (): Promise<any> =>(
-    //     sendRequest(GET_PROVIDER_TYPES, {
-    //         method: GET,
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             // 'x-access-token':token
-    //              'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTA2LCJpYXQiOjE2OTcxNzg1MTEsImV4cCI6MTY5NzIxMDkxMX0.s1H7p8bVHKuN32oDAN1fyCN0hI8o_y_g8NI0NuPKp9M"
-    //         } as unknown as HeadersInit
-    //     }).then((res) => {
-    //       return  JSON.stringify(res)
-    //     })
-    // )
-       const onGetProviderTypes = (): Promise<any> =>  sendRequest(GET_PROVIDER_TYPES, {
+       const onGetProviderTypes = (accessToken:string): Promise<any> =>  sendRequest(GET_PROVIDER_TYPES, {
             method: GET,
             headers: {
                 'Content-Type': 'application/json',
-                // 'x-access-token': token
-                 'x-access-token' :"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjk5NzAxNzI1LCJleHAiOjE2OTk3MzQxMjV9.DQTzkp7dzNH1rz6t6AipCQqDLKMcnewG1YVPSdBakYg"
-            } as unknown as HeadersInit
+                 'x-access-token': accessToken
+                        } as unknown as HeadersInit
         })
 
    

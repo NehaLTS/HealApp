@@ -75,7 +75,7 @@ const ProviderAddress = () => {
         defaultValue={''}
         inputValue={providerProfile?.phoneNumber ?? ''}
         errorMessage={phoneError}
-        returnKeyType={'next'}
+        returnKeyType={'done'}
         onSubmitEditing={() => licenseRef.current.focus()}
         onClearInputText={() => phoneRef.current.clear()}
       />
@@ -90,12 +90,13 @@ const ProviderAddress = () => {
         defaultValue={''}
         inputValue={providerProfile?.licensenumber ?? ''}
         returnKeyType={'next'}
-        onSubmitEditing={() => addressRef.current.focus()}
+        // onSubmitEditing={() => addressRef.current.focus()}
         onClearInputText={() => licenseRef.current.clear()}
       />
 
       <Input
         placeholder={t('address')}
+        ref={addressRef}
         inputStyle={styles.input}
         value={onSearchAddress}
         errorMessage={addressError}

@@ -97,6 +97,7 @@ const ProviderPayment = () => {
         inputValue={providerProfile?.bankDetails?.accountnumber ?? ''}
         errorMessage={accountError}
         onClearInputText={() => accountRef.current.clear()}
+        returnKeyType={'done'}
       />
 
       <View style={styles.iconContainer}>

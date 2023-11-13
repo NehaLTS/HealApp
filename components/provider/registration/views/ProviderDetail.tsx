@@ -56,7 +56,7 @@ const ProviderDetail = () => {
         onBlur={onBlurFirstName}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
-        defaultValue={''}
+         defaultValue={providerProfile?.firstName ? providerProfile.firstName : ''}
         inputValue={providerProfile?.firstName ?? ''}
         errorMessage={firstNameError}
         returnKeyType={'next'}
@@ -70,11 +70,12 @@ const ProviderDetail = () => {
         inputStyle={styles.inputLastName}
         onChangeText={onChangeLastName}
         onBlur={onBlurLastName}
-        defaultValue={''}
+        defaultValue={providerProfile?.firstName ? providerProfile.firstName : ''}
         ref={lastNameRef}
         inputValue={providerProfile?.lastName ?? ''}
         errorMessage={lastNameError}
         onClearInputText={() => lastNameRef.current.clear()}
+        returnKeyType={'done'}
       />
 
       <Dropdown
@@ -139,7 +140,7 @@ const ProviderDetail = () => {
       </View>
 
       <View style={styles.footerContainer}>
-        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        {/* <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} /> */}
         <Button
           title={t('next')}
           isPrimary
