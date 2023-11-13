@@ -40,7 +40,7 @@ const UserDetailView = () => {
           errorMessage={firstNameError}
           onChangeText={onChangeFirstName}
           ref={firstNameRef}
-          defaultValue={''}
+         defaultValue={userProfile?.firstName ? userProfile.firstName : ''}
           inputValue={userProfile?.firstName ?? ''}
           returnKeyType={'next'}
           onSubmitEditing={() => lastNameRef.current.focus()}
@@ -52,7 +52,7 @@ const UserDetailView = () => {
           onChangeText={onChangeLastName}
           onClearInputText={() => lastNameRef.current.clear()}
           onBlur={onBlurLastName}
-          defaultValue={''}
+          defaultValue={userProfile?.lastName ? userProfile.lastName : ''}
           ref={lastNameRef}
           errorMessage={lastNameError}
           inputValue={userProfile?.lastName ?? ''}

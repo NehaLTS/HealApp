@@ -1,5 +1,5 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const UserDetailViewController = () => {
   const { setCurrentStep, setUserProfile, userProfile } =
@@ -11,6 +11,16 @@ const UserDetailViewController = () => {
   const [lastNameError, setLastNameError] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
+
+
+    useEffect(() => {
+      if(userProfile.firstName){
+        firstNameRef.current.value=userProfile.firstName;
+        lastNameRef.current.value=userProfile.lastName;
+        phoneNumberRef.current.value=userProfile.phoneNumber;
+      }
+
+  }, []);
   const validateFirstName = () => {
     if (
       !firstNameRef.current.value ||

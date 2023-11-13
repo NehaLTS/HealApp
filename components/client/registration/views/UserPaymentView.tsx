@@ -169,6 +169,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 defaultValue={''}
                 inputValue={''}
                 maxLength={3}
+                 returnKeyType={'done'}
               />
             </View>
           </>
@@ -196,14 +197,14 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
       >
         {!isCardDetails ? (
           <>
-            {!isFromHome && (
+            {/* {!isFromHome && (
               <Button
                 title={t('back')}
                 isSmall
                 onPress={onPressBack}
                 width={'30%'}
               />
-            )}
+            )} */}
             <Button
               title={t('next')}
               isPrimary
