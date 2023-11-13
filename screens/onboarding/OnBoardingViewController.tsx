@@ -1,6 +1,6 @@
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import {
   ClientProfile,
   ProviderProfile,
@@ -8,13 +8,22 @@ import {
 } from 'libs/types/UserType';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
-
+import { checkPermission } from 'libs/Notification';
+import LocalizationController from 'components/common/LocalizationController';
 
 const OnBoardingViewController = () => {
   const swiperRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigation = useNavigation();
   const { setUserProfile, setUserId, setToken } = UseClientUserContext();
+  const { setAppLanguage } = LocalizationController();
+
+  useMemo(() => {
+    checkPermission();
+
+  }, []);
+
+ const setDefaultLanguage = (languageCode:string) =>  setAppLanguage(languageCode)
 
   const onPressSkip = () => {
     navigation.dispatch(
@@ -123,7 +132,7 @@ const OnBoardingViewController = () => {
     };
   }, [currentIndex]);
 
-  return { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse };
+  return { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse, setDefaultLanguage };
 };
 
 export default OnBoardingViewController;

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   getLocalData,
@@ -7,6 +7,8 @@ import {
 } from '../../libs/datastorage/useLocalStorage';
 import { UserType } from '../../libs/types/UserType';
 import NavigationRoutes from '../../navigator/NavigationRoutes';
+import { I18nManager } from 'react-native';
+import RNRestart from 'react-native-restart';
 
 const LocalizationController = () => {
   const navigation = useNavigation();
@@ -20,19 +22,38 @@ const LocalizationController = () => {
       params: { isClient: true },
     });
   };
-  useEffect(() => {
-    const data = getLocalData?.('USER');
-    const userLanguage = data?.user?.language ?? 'en';
-    setCurrentLanguage(userLanguage);
-  }, [getLocalData?.('USER')]);
 
   const continueAsProvider = () =>
     navigation.navigate(NavigationRoutes.ProviderStack);
 
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
 
+  const setAppLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+    setCurrentLanguage(lng);
+    if (lng == ('en' || 'ru') && I18nManager.isRTL) {
+      I18nManager.forceRTL(false);
+    } else if (lng == ('he' || 'ar') && !I18nManager.isRTL) {
+      I18nManager.forceRTL(true);
+    }
+  };
+
   const handleLanguageChange = (lng: string) => {
     i18n.changeLanguage(lng);
+
+    if (lng == ('en' || 'ru') && I18nManager.isRTL) {
+      I18nManager.forceRTL(false);
+      RNRestart.restart();
+    } else if (lng == ('he' || 'ar') && !I18nManager.isRTL) {
+      I18nManager.forceRTL(true);
+      RNRestart.restart();
+    }
+
+    setCurrentLanguage(lng);
+    // if(lng=="he" || lng=='ar'){
+    //  I18nManager.forceRTL(true);
+    //  RNRestart.restart();
+    // }
     setLocalData('USER', {
       ...getLocalData('USER')?.user,
       user: {
@@ -49,6 +70,7 @@ const LocalizationController = () => {
     handleLanguageChange,
     continueAsProvider,
     setIsLanguageChanged,
+    setAppLanguage,
   };
 };
 

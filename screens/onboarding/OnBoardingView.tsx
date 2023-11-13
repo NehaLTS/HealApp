@@ -21,7 +21,7 @@ import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { ProviderProfile, ProviderServices } from 'libs/types/UserType';
 
 const OnBoardingView = () => {
-  const { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse } =
+  const { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse,setDefaultLanguage } =
     OnBoardingViewController();
   const navigation = useNavigation();
   const { setToken, setUserId, setProviderProfile, setCurrentStep } =
@@ -29,13 +29,18 @@ const OnBoardingView = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-   //  deleteLocalData();
+   // deleteLocalData();
     getLocalUserData();
   }, []);
 
   const getLocalUserData = async () => {
     const userResponse = await getLocalData('USER');
     console.log('token is ', userResponse?.token);
+
+    const userLanguage = userResponse?.user?.language ?? 'en';
+     console.log("user language is ",userLanguage);
+
+      setDefaultLanguage(userLanguage);
 
     //if token is there, user is LoggedIn
     if (userResponse?.token != null) {
