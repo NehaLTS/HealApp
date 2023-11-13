@@ -73,7 +73,7 @@ const UserAddressView = () => {
           inputValue={onSearchAddress}
           value={onSearchAddress}
           onSubmitEditing={() => setIsVisible(false)}
-          autoFocus
+          autoFocus={true}
         />
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}
@@ -97,9 +97,11 @@ const UserAddressView = () => {
             setDateOfBirth(date.toString());
             setDate(date);
             setOpen(false);
+            idNumberRef.current.focus()
           }}
           onCancel={() => {
             setOpen(false);
+            idNumberRef.current.focus()
           }}
           maximumDate={maxDate}
         />
@@ -148,6 +150,7 @@ const UserAddressView = () => {
           defaultValue={''}
           errorMessage={idNumberError}
           inputValue={idNumberRef.current.value}
+          returnKeyType={'done'}
         />
         <Text style={styles.text} title={t('find_doctor_text')} />
         <View style={styles.innerContainer}>
