@@ -7,7 +7,7 @@ export interface UserType {
   googleId?: string;
   email?: string;
   facebookId?: string;
-  client_id?: string;
+  id?: string;
   msg?: string;
 }
 

@@ -66,14 +66,14 @@ const RegistrationViewController = () => {
 
       console.log('res is ', res);
 
-      if (res && res.token && res.client_id) {
+      if (res && res.token && res.id) {
         setToken(res.token);
-        setUserId(res.client_id);
+        setUserId(res.id);
       }
 
       setLocalData('USER', {
         token: res?.token,
-        userId: res?.client_id,
+        userId: res?.id,
         isClient: true,
       });
       setLocalData('USERPROFILE', {
