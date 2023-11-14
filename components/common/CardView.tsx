@@ -103,9 +103,9 @@ const CardView = ({ item, onPress, index, isSearch, user }: any) => {
               title={'Order'}
               isPrimary
               isSmall
-              width={'25%'}
+              width={84}
               fontSized={15}
-              height={40}
+              height={36}
               onPress={onPressOrder}
             />
           </View>

@@ -12,7 +12,13 @@ import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import OrderFormController from './OrderFormController';
 
@@ -52,7 +58,15 @@ const OrderFormView = ({
   const getReasonsView = () => (
     <>
       <Text title={t('reason')} style={styles.reasonText} />
-      <View style={styles.buttonContainer}>
+      <View
+        style={{
+          ...styles.buttonContainer,
+          justifyContent: !(treatmentReason as unknown as treatment)?.reason
+            ?.length
+            ? 'center'
+            : 'space-between',
+        }}
+      >
         {(treatmentReason as unknown as treatment)?.reason?.length ? (
           (treatmentReason as unknown as treatment)?.reason.map(
             (item: Reason, index: number) => (
@@ -63,7 +77,7 @@ const OrderFormView = ({
                 isPrimary={activeButton?.includes?.(item?.reason_id)}
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
-                fontSized={getHeight(fontSize?.textM)}
+                fontSized={getWidth(fontSize?.textM)}
                 height={getHeight(dimens?.marginL)}
                 borderRadius={getWidth(dimens?.marginS)}
                 lineHeight={dimens?.sideMargin + dimens?.borderBold}
@@ -71,10 +85,14 @@ const OrderFormView = ({
             ),
           )
         ) : (
-          <Loader style={styles.loader} />
+          <ActivityIndicator
+            style={styles.loader}
+            size={'large'}
+            color={colors.primary}
+          />
         )}
         <Button
-          title={'Other'}
+          title={t('other')}
           fontSized={getHeight(fontSize.textM)}
           height={getHeight(dimens.marginL)}
           borderRadius={getWidth(dimens.marginS)}
@@ -132,7 +150,7 @@ const OrderFormView = ({
                   />
                 )}
               </View>
-              <Text style={{ fontSize: fontSize.textM }}>
+              <Text style={{ fontSize: getWidth(fontSize.textM) }}>
                 {item?.name?.en.charAt(0).toUpperCase() +
                   item?.name?.en.slice(1)}
               </Text>
@@ -140,7 +158,11 @@ const OrderFormView = ({
           ),
         )
       ) : (
-        <Loader style={styles.loader} />
+        <ActivityIndicator
+          style={styles.loader}
+          size={'large'}
+          color={colors.primary}
+        />
       )}
       <Text
         title={t('if_the_doctor')}
@@ -154,7 +176,7 @@ const OrderFormView = ({
 
   const getAddressView = () => (
     <>
-      <Text title={'Address'} style={styles.addressText} />
+      <Text title={t('address')} style={styles.addressText} />
       <View style={styles.locationContainer}>
         <Image
           source={require('../../../assets/icon/location.png')}
@@ -162,7 +184,7 @@ const OrderFormView = ({
         />
         <Text style={styles.streetAddress} title={order?.address ?? ''} />
         <TextButton
-          title={'Edit'}
+          title={t('edit')}
           fontSize={getHeight(fontSize.textM)}
           onPress={() => setIsVisible(true)}
         />
@@ -190,7 +212,7 @@ const OrderFormView = ({
               ? `${calculateAgeFromDate(order?.patient_type?.age)}y.o., ${
                   order?.phonenumber
                 }`
-              : 'Someone else'
+              : t('someone_else')
           }
           isPrimary={!isMeSelected}
           isSmall
@@ -367,6 +389,7 @@ const styles = StyleSheet.create({
   },
   loader: {
     paddingVertical: getHeight(20),
+    alignSelf: 'center',
   },
   divider: {
     height: getWidth(dimens.borderThin),

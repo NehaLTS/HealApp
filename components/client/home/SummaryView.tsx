@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   cardDetail: {
     flexDirection: 'row',
-    gap: getWidth(dimens.marginM + 5),
+    gap: getWidth(dimens.imageXs + 4),
     marginTop: getWidth(dimens.marginM),
     marginBottom: getWidth(dimens.marginM),
   },

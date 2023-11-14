@@ -82,7 +82,7 @@ const UserAddressView = () => {
           inputValue={onSearchAddress}
           value={onSearchAddress}
           onSubmitEditing={() => setIsVisible(false)}
-          autoFocus={true}
+          autoFocus
         />
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}

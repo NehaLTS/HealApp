@@ -92,6 +92,8 @@
   "price": "Price*",
   "waiting_text": "Your form was successfully \n submitted and now waiting \n for the approval.\n We will get back to you with in 7 days.",
   "ask_question_text": "If you have any questions feel free to call us",
+  "edit": "Edit",
+
   "home": {
     "providerList": [
       {
