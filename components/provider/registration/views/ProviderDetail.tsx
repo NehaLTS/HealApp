@@ -13,6 +13,7 @@ import ProviderDetailController from '../controllers/ProviderDetailController';
 import { useTranslation } from 'react-i18next';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
 import Dropdown from 'components/common/Dropdown';
+import { fontFamily } from 'designToken/fontFamily';
 
 const ProviderDetail = () => {
   const { t } = useTranslation();
@@ -65,6 +66,7 @@ const ProviderDetail = () => {
         returnKeyType={'next'}
         onSubmitEditing={() => lastNameRef.current.focus()}
         onClearInputText={() => firstNameRef.current.clear()}
+        inputStyle={styles.input}
       />
 
       <Input
@@ -92,6 +94,8 @@ const ProviderDetail = () => {
         onChange={onChangeProviderType}
         renderItem={renderProviderItems}
         errorMessage={providerTypeError}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
       />
 
       <Dropdown
@@ -103,6 +107,8 @@ const ProviderDetail = () => {
         onChange={onChangeSpeciality}
         renderItem={renderSpecialityItems}
         errorMessage={specialityError}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
       />
 
       <View style={styles.iconContainer}>
@@ -150,7 +156,7 @@ const styles = StyleSheet.create({
   },
 
   inputLastName: {
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
   },
 
   iconContainer: {
@@ -161,9 +167,9 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
-    resizeMode: 'cover',
+    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    width: getWidth(dimens.imageS + 8),
+    resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),
   },
   box: {
@@ -176,6 +182,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: fontSize.textL,
+    fontFamily: fontFamily.regular,
     color: colors.black,
   },
   dropdown: {
@@ -184,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
     height: getHeight(50),
     borderColor: colors.primary,
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
   },
   icon: {
@@ -192,7 +199,7 @@ const styles = StyleSheet.create({
   },
   textItem: {
     flex: 1,
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     padding: getHeight(dimens.marginS),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
@@ -200,25 +207,29 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: fontSize.textL,
     color: colors.black,
+    fontFamily: fontFamily.regular,
   },
   iconStyle: {
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
-  },
-  editBlueImage: {
-    height: getHeight(dimens.paddingL),
-    width: getWidth(dimens.paddingL),
-    marginBottom: getHeight(dimens.paddingXs),
   },
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
   },
   footerContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    width: '100%',
-    flex: 0.12,
-    justifyContent: 'space-between',
+    flex: 0.8,
+    justifyContent: 'flex-end',
+    alignSelf: 'center',
+  },
+  arrowIcon: {
+    marginRight: getWidth(dimens.marginS),
+    height: getHeight(dimens.marginM + 5),
+    width: getWidth(dimens.marginM + 5),
+    resizeMode: 'contain',
+    marginTop: getHeight(dimens.borderBold + dimens.borderBold),
+  },
+  input: {
+    marginTop: getHeight(dimens.marginM),
   },
 });

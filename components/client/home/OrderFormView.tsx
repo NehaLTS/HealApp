@@ -1,7 +1,7 @@
 import AddAddress from 'components/common/AddAddress';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
-import { Loader } from 'components/common/Loader';
+import Loader from 'components/common/Loader';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { colors } from 'designToken/colors';

@@ -6,13 +6,21 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import UserAddressViewController from '../controllers/UserAddressViewController';
 import DatePicker from 'react-native-date-picker';
 import Button from 'components/common/Button';
 import RNModal from 'components/common/Modal';
 import { colors } from 'designToken/colors';
 import TextButton from 'components/common/TextButton';
+import Loader from 'components/common/Loader';
 
 const UserAddressView = () => {
   const { t } = useTranslation();
@@ -39,6 +47,7 @@ const UserAddressView = () => {
     setIsVisible,
     isVisible,
     onSearchAddress,
+    isLoader,
   } = UserAddressViewController();
   const currentDate = new Date();
 
@@ -107,6 +116,7 @@ const UserAddressView = () => {
         />
       )}
       <View style={styles.inputContainer}>
+        {isLoader && <Loader />}
         <Input
           placeholder={t('address')}
           inputStyle={styles.input}

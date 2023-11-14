@@ -66,9 +66,10 @@ const UserDetailViewController = () => {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         phoneNumber: phoneNumberRef.current.value,
-        profilePicture: userProfile.profilePicture
-          ? userProfile.profilePicture
-          : '',
+        profilePicture:
+          userProfile && userProfile?.profilePicture
+            ? userProfile?.profilePicture
+            : '',
       });
 
       setCurrentStep('address');

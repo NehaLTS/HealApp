@@ -30,7 +30,7 @@ const OnboardDetails = () => {
     <View style={styles.container}>
       <Stepper
         currentStep={currentStep}
-        totalStep={['details', 'address', 'payment', 'services','addServices']}
+        totalStep={['details', 'address', 'payment', 'services', 'addServices']}
       />
       {currentStep === 'details' && <ProviderDetail />}
       {currentStep === 'address' && <ProviderAddress />}

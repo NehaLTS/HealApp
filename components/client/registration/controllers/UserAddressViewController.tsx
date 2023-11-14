@@ -17,7 +17,6 @@ const UserAddressViewController = () => {
   const [idNumberError, setIdNumberError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
-
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState('');
@@ -60,7 +59,6 @@ const UserAddressViewController = () => {
     const imagePath = url;
     const folderName = 'images/users';
     const fileName = generateRandomName();
-
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {
     //     // Handle the downloadURL as needed
@@ -164,6 +162,7 @@ const UserAddressViewController = () => {
     setIsVisible,
     isVisible,
     onSearchAddress,
+    isLoader,
   };
 };
 

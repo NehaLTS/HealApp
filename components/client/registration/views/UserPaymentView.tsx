@@ -183,8 +183,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
         style={[
           styles.footerContainer,
           {
-            justifyContent:
-              isCardDetails || isFromHome ? 'center' : 'space-between',
+            justifyContent: isCardDetails || isFromHome ? 'center' : 'center',
             flex: 0.1,
           },
         ]}

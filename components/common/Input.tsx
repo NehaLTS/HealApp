@@ -69,7 +69,7 @@ const Input = forwardRef(
     const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
     const fontSizeAnim = useRef(
       new Animated.Value(
-        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL),
+        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL - 2),
       ),
     ).current;
 
@@ -126,7 +126,7 @@ const Input = forwardRef(
           style={[
             styles.inputContainer,
             inputStyle,
-            placeholderStyle,
+            // placeholderStyle,
             { borderColor: errorMessage ? colors.invalid : colors.primary },
           ]}
         >
@@ -137,7 +137,7 @@ const Input = forwardRef(
                 styles.label,
                 labelStyle,
                 fontSizeStyle,
-                placeholderStyle,
+                // placeholderStyle,
               ]}
             >
               {placeholder}
@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
     fontFamily: fontFamily.regular,
+    fontSize: getHeight(fontSize.textL),
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),

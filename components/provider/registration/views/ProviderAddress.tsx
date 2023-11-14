@@ -65,69 +65,71 @@ const ProviderAddress = () => {
 
   return (
     <>
-      <Input
-        placeholder={t('Phone Number*')}
-        type={'telephoneNumber'}
-        keyboardType="number-pad"
-        onBlur={onBlurPhoneNumber}
-        onChangeText={onChangePhoneNumber}
-        ref={phoneRef}
-        defaultValue={''}
-        inputValue={providerProfile?.phoneNumber ?? ''}
-        errorMessage={phoneError}
-        returnKeyType={'done'}
-        onSubmitEditing={() => licenseRef.current.focus()}
-        onClearInputText={() => phoneRef.current.clear()}
-      />
-
-      <Input
-        placeholder={t('License number (for those who have)')}
-        type={'nameSuffix'}
-        inputStyle={styles.input}
-        // onBlur={onBlurPhoneNumber}
-        onChangeText={onChangeLicenseNumber}
-        ref={licenseRef}
-        defaultValue={''}
-        inputValue={providerProfile?.licensenumber ?? ''}
-        returnKeyType={'next'}
-        // onSubmitEditing={() => addressRef.current.focus()}
-        onClearInputText={() => licenseRef.current.clear()}
-      />
-
-      <Input
-        placeholder={t('address')}
-        ref={addressRef}
-        inputStyle={styles.input}
-        value={onSearchAddress}
-        errorMessage={addressError}
-        onTouchStart={() => setIsShowAddressodal(true)}
-        caretHidden
-        inputValue={onSearchAddress}
-        onClearInputText={() => setOnSearchAddress('')}
-      />
-
-      <View style={styles.iconContainer}>
-        <Text style={styles.text}>{t('Upload license photo')}</Text>
-        <TouchableOpacity
-          activeOpacity={licensePicture ? 1 : 0.5}
-          onPress={() => setIsShowModal(true)}
-        >
-          <Image
-            source={
-              licensePicture
-                ? { uri: licensePicture }
-                : require('../../../../assets/icon/licencesIcon.png')
-            }
-            style={styles.selectedImage}
-          />
-        </TouchableOpacity>
-        <SelectImage
-          isShowModal={isShowModal}
-          closeModal={setIsShowModal}
-          imageUri={getImageUrl}
+      <View style={styles.inputContainer}>
+        <Input
+          placeholder={t('Phone Number*')}
+          type={'telephoneNumber'}
+          keyboardType="number-pad"
+          onBlur={onBlurPhoneNumber}
+          onChangeText={onChangePhoneNumber}
+          ref={phoneRef}
+          defaultValue={''}
+          inputValue={providerProfile?.phoneNumber ?? ''}
+          errorMessage={phoneError}
+          returnKeyType={'done'}
+          onSubmitEditing={() => licenseRef.current.focus()}
+          onClearInputText={() => phoneRef.current.clear()}
+          inputStyle={styles.inputPhone}
         />
-      </View>
 
+        <Input
+          placeholder={t('License number (for those who have)')}
+          type={'nameSuffix'}
+          inputStyle={styles.input}
+          onBlur={onBlurPhoneNumber}
+          onChangeText={onChangeLicenseNumber}
+          ref={licenseRef}
+          defaultValue={''}
+          inputValue={providerProfile?.licensenumber ?? ''}
+          returnKeyType={'next'}
+          onSubmitEditing={() => addressRef.current.focus()}
+          onClearInputText={() => licenseRef.current.clear()}
+        />
+
+        <Input
+          placeholder={t('address')}
+          ref={addressRef}
+          inputStyle={styles.input}
+          value={onSearchAddress}
+          errorMessage={addressError}
+          onTouchStart={() => setIsShowAddressodal(true)}
+          caretHidden
+          inputValue={onSearchAddress}
+          onClearInputText={() => setOnSearchAddress('')}
+        />
+
+        <View style={styles.iconContainer}>
+          <Text style={styles.text}>{t('Upload license photo')}</Text>
+          <TouchableOpacity
+            activeOpacity={licensePicture ? 1 : 0.5}
+            onPress={() => setIsShowModal(true)}
+          >
+            <Image
+              source={
+                licensePicture
+                  ? { uri: licensePicture }
+                  : require('../../../../assets/icon/licencesIcon.png')
+              }
+              style={styles.selectedImage}
+            />
+          </TouchableOpacity>
+          <SelectImage
+            isShowModal={isShowModal}
+            closeModal={setIsShowModal}
+            imageUri={getImageUrl}
+          />
+        </View>
+      </View>
       <View style={styles.footerContainer}>
         <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
         <Button
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
   },
 
   iconContainer: {
@@ -172,13 +174,13 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
-    resizeMode: 'cover',
+    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    width: getWidth(dimens.imageS + 8),
+    resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),
   },
   editImage: {
-    height: getHeight(dimens.paddingL + 2),
+    height: getHeight(dimens.paddingL + dimens.borderBold),
     width: getWidth(dimens.paddingL),
   },
   modal: {
@@ -196,5 +198,11 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 0.12,
     justifyContent: 'space-between',
+  },
+  inputContainer: {
+    flex: 0.75,
+  },
+  inputPhone: {
+    marginTop: getHeight(dimens.marginS),
   },
 });

@@ -1,6 +1,6 @@
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
-import { Loader } from 'components/common/Loader';
+import Loader from 'components/common/Loader';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { colors } from 'designToken/colors';
@@ -24,7 +24,6 @@ import ProviderAddServicesController from '../controllers/ProviderAddServicesCon
 const ProviderAddServices = () => {
   const { t } = useTranslation();
   const {
-   
     serviceNameRef,
     priceRef,
     descriptionRef,
@@ -61,7 +60,7 @@ const ProviderAddServices = () => {
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
-      {services.length>0 ? (
+      {services.length > 0 ? (
         <Button
           title={t('Approve')}
           isPrimary
@@ -78,7 +77,6 @@ const ProviderAddServices = () => {
           onPress={onApprove}
         />
       )}
-
     </View>
   );
 
@@ -136,18 +134,18 @@ const ProviderAddServices = () => {
             title={t('save')}
             isPrimary
             isSmall
-            width={getWidth(85)}
+            width={getWidth(80)}
             style={{
               alignSelf: 'center',
               marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
             }}
             onPress={saveService}
             fontSized={getWidth(15)}
-            height={getHeight(34)}
+            height={getHeight(45)}
           />
           <TextButton
             style={styles.skip}
-            fontSize={getWidth(fontSize.heading)}
+            fontSize={getWidth(fontSize.textXl)}
             title={t('cancel')}
             onPress={toggleModal}
           />
@@ -158,7 +156,7 @@ const ProviderAddServices = () => {
 
   return (
     <>
-      {(isLoading) && <Loader />}
+      {isLoading && <Loader />}
       <View style={styles.inputContainer}>
         <ScrollView>
           {services && services?.length > 0 ? (
@@ -213,8 +211,9 @@ const styles = StyleSheet.create({
     marginHorizontal: getHeight(dimens.paddingL),
   },
   addicon: {
-    height: getHeight(dimens.imageS),
+    height: getHeight(dimens.imageS + 8),
     width: getWidth(dimens.imageS),
+    resizeMode: 'contain',
   },
   textAdd: {
     fontSize: getWidth(fontSize.textXl),
@@ -234,7 +233,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageM + dimens.paddingL + dimens.marginS),
     alignItems: 'flex-start',
     justifyContent: 'center',
-    padddingTop:getHeight(dimens.marginS),
+    padddingTop: getHeight(dimens.marginS),
   },
   serviceContainer: {
     backgroundColor: colors.white,
@@ -252,8 +251,7 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
+    alignSelf: 'center',
     flex: 0.1,
     justifyContent: 'space-between',
   },

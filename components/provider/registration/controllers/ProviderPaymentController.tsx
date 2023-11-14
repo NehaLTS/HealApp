@@ -1,3 +1,4 @@
+import Loader from 'components/common/Loader';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
@@ -18,7 +19,7 @@ const ProviderPaymentController = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
 
-  const { setCurrentStep, setProviderProfile, providerProfile, userId,token } =
+  const { setCurrentStep, setProviderProfile, providerProfile, userId, token } =
     UseProviderUserContext();
 
   const onBlurRegistrationNumber = () => validateRegistrationNumber();
@@ -94,26 +95,30 @@ const ProviderPaymentController = () => {
       });
 
       setIsLoading(true);
-      const res = await OnUpdateProviderUserDetails?.({
-        firstname: providerProfile.firstName ?? '',
-        lastname: providerProfile.lastName ?? '',
-        address: providerProfile.address ?? '',
-        city: '',
-        state: '',
-        country: '',
-        phone_number: providerProfile.phoneNumber ?? '',
-        profile_picture: providerProfile.profilePicture ?? '',
-        provider_id:  userId ?? '',
-        provider_type_id: providerProfile.provider.id ?? '',
-        license_number: providerProfile.licensenumber ?? '',
-        upload_license_picture: providerProfile.licensepicture ?? '',
-        bank_name: bankNameRef.current.value,
-        branch: branchRef.current.value,
-        business_registration_number: registrationNumberRef.current.value,
-        account: accountRef.current.value,
-      },token);
 
-      console.log("response udpate is ",res)
+      const res = await OnUpdateProviderUserDetails?.(
+        {
+          firstname: providerProfile.firstName ?? '',
+          lastname: providerProfile.lastName ?? '',
+          address: providerProfile.address ?? '',
+          city: '',
+          state: '',
+          country: '',
+          phone_number: providerProfile.phoneNumber ?? '',
+          profile_picture: providerProfile.profilePicture ?? '',
+          provider_id: userId ?? '',
+          provider_type_id: providerProfile.provider.id ?? '',
+          license_number: providerProfile.licensenumber ?? '',
+          upload_license_picture: providerProfile.licensepicture ?? '',
+          bank_name: bankNameRef.current.value,
+          branch: branchRef.current.value,
+          business_registration_number: registrationNumberRef.current.value,
+          account: accountRef.current.value,
+        },
+        token,
+      );
+
+      console.log('response udpate is ', res);
 
       if (res?.msg) {
         setLocalData('USERPROFILE', {
@@ -188,6 +193,7 @@ const ProviderPaymentController = () => {
     onPressNext,
     onPressBack,
     setIsShowModal,
+    isLoading,
   };
 };
 

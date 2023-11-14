@@ -49,21 +49,21 @@ const HomeViewController = () => {
     },
   ];
 
-  useEffect(() => {
-    getBannerAd();
-    // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
-    //   if (status === RESULTS.GRANTED) {
-    //     // Location permission is already granted
-    //     getLocation();
-    //   } else {
-    //     // Request location permission
-    //     requestLocationPermission();
-    //   }
-    // });
-    const abc = getLocalData('USERPROFILE');
-    setUser(abc as ClientProfile);
-    setUserProfile({ ...userProfile, card_number: abc?.card_number });
-  }, []);
+  // useEffect(() => {
+  //   getBannerAd();
+  // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
+  //   if (status === RESULTS.GRANTED) {
+  //     // Location permission is already granted
+  //     getLocation();
+  //   } else {
+  //     // Request location permission
+  //     requestLocationPermission();
+  //   }
+  // });
+  //   const abc = getLocalData('USERPROFILE');
+  //   setUser(abc as ClientProfile);
+  //   setUserProfile({ ...userProfile, card_number: abc?.card_number });
+  // }, []);
   // const getLocation = () => {
   //   Geolocation.getCurrentPosition(
   //     (position) => {

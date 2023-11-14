@@ -1,5 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Button from 'components/common/Button';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
@@ -10,6 +16,7 @@ import SelectImage from 'common/SelectImage';
 import { useTranslation } from 'react-i18next';
 import Text from 'components/common/Text';
 import ProviderPaymentController from '../controllers/ProviderPaymentController';
+import Loader from 'components/common/Loader';
 const ProviderPayment = () => {
   const { t } = useTranslation();
   const {
@@ -35,6 +42,7 @@ const ProviderPayment = () => {
     getImageUrl,
     onPressNext,
     onPressBack,
+    isLoading,
   } = ProviderPaymentController();
 
   return (
@@ -52,6 +60,7 @@ const ProviderPayment = () => {
         returnKeyType={'next'}
         onSubmitEditing={() => bankNameRef.current.focus()}
         onClearInputText={() => registrationNumberRef.current.clear()}
+        inputStyle={styles.numberInput}
       />
       <View style={styles.container}>
         <Input
@@ -84,7 +93,7 @@ const ProviderPayment = () => {
           onClearInputText={() => branchRef.current.clear()}
         />
       </View>
-
+      {isLoading && <Loader />}
       <Input
         placeholder={'Bank account'}
         inputStyle={styles.input}
@@ -123,7 +132,7 @@ const ProviderPayment = () => {
       </View>
 
       <View style={styles.footerContainer}>
-        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        {/* <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} /> */}
         <Button
           title={t('next')}
           isPrimary
@@ -141,16 +150,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    // columnGap:16
   },
   inputBank: {
     minWidth: '48%',
+    marginTop: getHeight(dimens.paddingXs),
   },
   inputBranch: {
     minWidth: '48%',
+    marginTop: getHeight(dimens.paddingXs),
   },
   input: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
   },
   iconContainer: {
     flexDirection: 'row',
@@ -159,26 +169,26 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin),
   },
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
-    resizeMode: 'cover',
+    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    width: getWidth(dimens.imageS + 8),
+    resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),
   },
   text: {
     fontSize: fontSize.textL,
-    color: colors.black,
     marginTop: getHeight(dimens.marginS),
   },
   editImage: {
-    height: getHeight(dimens.paddingL + 2),
+    height: getHeight(dimens.paddingL + dimens.borderBold),
     width: getWidth(dimens.paddingL),
     marginTop: getHeight(dimens.paddingS),
   },
   footerContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    width: '100%',
-    flex: 0.12,
-    justifyContent: 'space-between',
+    flex: 0.8,
+    justifyContent: 'flex-end',
+    alignSelf: 'center',
+  },
+  numberInput: {
+    marginTop: getHeight(dimens.marginM),
   },
 });

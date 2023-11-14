@@ -1,6 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import RNModal from './Modal';
+import { colors } from 'designToken/colors';
 
 const Loader = () => {
   return (
@@ -10,7 +11,11 @@ const Loader = () => {
       animationIn={'fadeIn'}
       animationInTiming={5}
     >
-      <ActivityIndicator style={styles.loading} size={'large'} />
+      <ActivityIndicator
+        style={styles.loading}
+        size={'large'}
+        color={colors.primary}
+      />
     </RNModal>
   );
 };
