@@ -77,7 +77,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 source={require('assets/icon/card.png')}
                 style={styles.creditCard}
               />
-              <Text title={registration.add_credit_card} />
+              <Text title={t('add_credit_card')} />
             </>
           )}
         </View>
@@ -120,7 +120,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
         ) : (
           <>
             <Input
-              placeholder={registration.credit_card_number}
+              placeholder={t('credit_card_number')}
               keyboardType="numeric"
               inputStyle={styles.cardNumber}
               onBlur={onBlurCardNumber}
@@ -138,7 +138,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             <View style={[styles.container, styles.inputDateAndCvv]}>
               <Input
                 keyboardType="numeric"
-                placeholder={registration.mm_yy}
+                placeholder={t('mm_yy')}
                 inputStyle={styles.expireDate}
                 onBlur={onBlurExpireDate}
                 onClearInputText={() => expireDateRef.current.clear()}
@@ -154,7 +154,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
               <Input
                 keyboardType="numeric"
                 type="creditCardNumber"
-                placeholder={registration.cvv}
+                placeholder={t('cvv')}
                 onBlur={onBlueCvv}
                 errorMessage={cvvError}
                 onClearInputText={() => cvvRef.current.clear()}
@@ -175,7 +175,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
               source={require('assets/icon/googlePay.png')}
               style={styles.googlePay}
             />
-            <Text title={registration.add_google_pay} />
+            <Text title={t('add_google_pay')} />
           </TouchableOpacity>
         </>
       </View>

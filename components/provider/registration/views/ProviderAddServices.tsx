@@ -62,7 +62,7 @@ const ProviderAddServices = () => {
     <View style={styles.footerContainer}>
       {services.length > 0 ? (
         <Button
-          title={t('Approve')}
+          title={t('approve')}
           isPrimary
           onPress={onApprove}
           isSmall

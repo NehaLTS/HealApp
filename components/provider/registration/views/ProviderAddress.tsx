@@ -55,7 +55,7 @@ const ProviderAddress = () => {
         />
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}
-          title="Close"
+          title={t('close')}
           fontSize={fontSize.textL}
           onPress={() => setIsShowAddressodal(false)}
         />
@@ -67,7 +67,7 @@ const ProviderAddress = () => {
     <>
       <View style={styles.inputContainer}>
         <Input
-          placeholder={t('Phone Number*')}
+          placeholder={t('phone_number')}
           type={'telephoneNumber'}
           keyboardType="number-pad"
           onBlur={onBlurPhoneNumber}
@@ -83,7 +83,7 @@ const ProviderAddress = () => {
         />
 
         <Input
-          placeholder={t('License number (for those who have)')}
+          placeholder={t('license_number')}
           type={'nameSuffix'}
           inputStyle={styles.input}
           onBlur={onBlurPhoneNumber}
@@ -109,7 +109,7 @@ const ProviderAddress = () => {
         />
 
         <View style={styles.iconContainer}>
-          <Text style={styles.text}>{t('Upload license photo')}</Text>
+          <Text style={styles.text}>{t('upload_license')}</Text>
           <TouchableOpacity
             activeOpacity={licensePicture ? 1 : 0.5}
             onPress={() => setIsShowModal(true)}

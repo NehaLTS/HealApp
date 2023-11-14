@@ -48,7 +48,7 @@ const ProviderPayment = () => {
   return (
     <>
       <Input
-        placeholder={t('Business registration number')}
+        placeholder={t('business_registration')}
         keyboardType="numeric"
         type="creditCardNumber"
         onBlur={onBlurRegistrationNumber}
@@ -64,7 +64,7 @@ const ProviderPayment = () => {
       />
       <View style={styles.container}>
         <Input
-          placeholder={'Bank'}
+          placeholder={t('bank')}
           inputStyle={styles.inputBank}
           type={'nameSuffix'}
           onBlur={onBlurBankName}
@@ -79,7 +79,7 @@ const ProviderPayment = () => {
         />
 
         <Input
-          placeholder={'Branch'}
+          placeholder={t('branch')}
           type={'nameSuffix'}
           inputStyle={styles.inputBranch}
           onBlur={onBlurBranchType}
@@ -95,7 +95,7 @@ const ProviderPayment = () => {
       </View>
       {isLoading && <Loader />}
       <Input
-        placeholder={'Bank account'}
+        placeholder={t('bank_account')}
         inputStyle={styles.input}
         type="creditCardNumber"
         keyboardType="numeric"
@@ -110,7 +110,7 @@ const ProviderPayment = () => {
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text} title={t('Add a profile photo')} />
+        <Text style={styles.text} title={t('add_profile')} />
         <TouchableOpacity
           activeOpacity={providerProfile?.profilePicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}

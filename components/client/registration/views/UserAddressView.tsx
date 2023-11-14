@@ -86,7 +86,7 @@ const UserAddressView = () => {
         />
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}
-          title="Close"
+          title={t('close')}
           fontSize={getWidth(fontSize.textL)}
           onPress={() => setIsVisible(false)}
         />

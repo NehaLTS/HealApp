@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
     fontSize: getWidth(fontSize.textS),
+    textAlign: 'left',
   },
   iconStyle: {
     height: getHeight(26),
@@ -96,5 +97,6 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     color: colors.black,
+    textAlign: 'left',
   },
 });

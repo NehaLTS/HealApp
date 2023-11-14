@@ -89,7 +89,7 @@ const ProviderDetail = () => {
         data={providerTypeList}
         labelField="name.en"
         valueField="name.en"
-        placeholder="Type of provider"
+        placeholder={t('type_of_provider')}
         value={selectedProvider}
         onChange={onChangeProviderType}
         renderItem={renderProviderItems}
@@ -102,7 +102,7 @@ const ProviderDetail = () => {
         data={specialityList}
         labelField="name.en"
         valueField="name.en"
-        placeholder="Specialty"
+        placeholder={t('specialty')}
         value={selectedSpecialty}
         onChange={onChangeSpeciality}
         renderItem={renderSpecialityItems}
@@ -112,7 +112,7 @@ const ProviderDetail = () => {
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text} title={'Upload ID photo'} />
+        <Text style={styles.text} title={t('upload_id_photo')} />
         <TouchableOpacity
           activeOpacity={idPicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
