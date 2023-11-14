@@ -87,13 +87,13 @@ const RegistrationViewController = () => {
       console.log('response is ', res);
 
       //TODO change res.proivder_id to res.id
-      if (res && res.token && res.provider_id) {
+      if (res && res.token && res.id) {
         setToken(res.token);
 
         //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
         // setUserId(res.id);
 
-        setUserId(res.provider_id);
+        setUserId(res.id);
       }
 
       setLocalData('USER', {

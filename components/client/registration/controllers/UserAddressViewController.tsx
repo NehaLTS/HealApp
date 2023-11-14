@@ -24,7 +24,7 @@ const UserAddressViewController = () => {
     UseClientUserContext();
 
   const [profilePicture, setProfilePicture] = useState(
-    userProfile.profilePicture ? userProfile.profilePicture : '',
+    userProfile && userProfile.profilePicture ? userProfile.profilePicture : '',
   );
 
   const validateAddress = () => {

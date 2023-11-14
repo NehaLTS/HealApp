@@ -117,7 +117,7 @@ const ProviderPayment = () => {
         >
           <Image
             source={
-              providerProfile.profilePicture
+              providerProfile && providerProfile.profilePicture
                 ? { uri: providerProfile.profilePicture }
                 : require('../../../../assets/icon/editprofile.png')
             }

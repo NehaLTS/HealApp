@@ -170,7 +170,7 @@ const LoginViewController = () => {
     onGoogleAuthProcessing().then(async (userData) => {
       try {
         console.log('vbxcvbnxvb', userData);
-        const email = userData?.user?.email;
+        const email = userData?.user?.email ?? '';
         const googleId = userData.user.providerData[0].uid;
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequestProvider({
@@ -180,7 +180,7 @@ const LoginViewController = () => {
         // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           setIsLoading(false);
-          handleAuthResponse(res, userData?.user?.photoURL);
+          handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
           setIsLoading(false);
           Alert.alert(
@@ -204,7 +204,7 @@ const LoginViewController = () => {
 
     onFBAuthProcessing().then(async (userData) => {
       try {
-        const email = userData?.user?.email;
+        const email = userData?.user?.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
         setLocalData('USER', res);

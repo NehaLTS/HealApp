@@ -7,7 +7,7 @@ export interface UserType {
   googleId?: string;
   email?: string;
   facebookId?: string;
-  client_id?: string;
+  id?: string;
   msg?: string;
 }
 
@@ -29,7 +29,6 @@ export interface UserTypeProvider {
   token?: string;
   user?: UserProvider;
   msg?: string;
-  provider_id?: string | null;
 }
 
 export interface HealLanguageType {

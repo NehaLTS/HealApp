@@ -12,7 +12,7 @@ const UserDetailViewController = () => {
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
   useEffect(() => {
-    if (userProfile?.firstName) {
+    if (userProfile && userProfile?.firstName) {
       firstNameRef.current.value = userProfile?.firstName;
       lastNameRef.current.value = userProfile?.lastName;
       phoneNumberRef.current.value = userProfile?.phoneNumber;
