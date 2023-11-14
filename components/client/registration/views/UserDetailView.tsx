@@ -72,6 +72,7 @@ const UserDetailView = () => {
           ref={phoneNumberRef}
           errorMessage={phoneNumberError}
           returnKeyType={'done'}
+          maxLength={10}
         />
         <Text style={styles.text} title={t('find_doctor_text')} />
       </View>

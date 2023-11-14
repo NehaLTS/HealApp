@@ -28,7 +28,9 @@ const CardView = ({ item, onPress, index, isSearch, user }: any) => {
 
   const onPressOrder = () => {
     if (user?.isPaymentAdded)
-      navigation.navigate(NavigationRoutes.OrderDetails);
+      navigation.navigate(NavigationRoutes.OrderDetails, {
+        supplier: item,
+      });
     else setModalVisible(true);
   };
 

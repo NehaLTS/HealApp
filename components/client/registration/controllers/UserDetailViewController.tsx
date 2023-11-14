@@ -36,6 +36,8 @@ const UserDetailViewController = () => {
   const validatePhoneNumber = () => {
     if (!phoneNumberRef.current.value) {
       setPhoneNumberError('Phone number is required');
+    } else if (phoneNumberRef?.current?.value?.length !== 10) {
+      setPhoneNumberError('Phone number is to short');
     } else setPhoneNumberError('');
   };
   const onBlurFirstName = () => validateFirstName();

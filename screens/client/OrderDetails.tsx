@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import OrderDetailsController from './OrderDetailsController';
 import { useTranslation } from 'react-i18next';
+import { getProviderImage } from 'libs/utility/Utils';
 
 const OrderDetails = () => {
   const {
@@ -34,13 +35,15 @@ const OrderDetails = () => {
   const HeaderTitle = () => (
     <View style={styles.servicesContainer}>
       <Image
-        source={require('assets/icon/physio.png')}
+        source={getProviderImage(
+          supplier?.name?.length ? supplier?.name : supplier?.name?.en,
+        )}
         style={styles.specialistIcon}
       />
       <Text
         numberOfLines={2}
         style={styles.specialist}
-        title={supplier?.name}
+        title={supplier?.name?.length ? supplier?.name : supplier?.name?.en}
       />
     </View>
   );
@@ -112,6 +115,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: getWidth(dimens.sideMargin),
     paddingTop: getHeight(dimens.marginS + 3),
+    width: '100%',
+    marginLeft: getWidth(50),
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),
