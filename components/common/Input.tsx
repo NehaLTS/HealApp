@@ -3,6 +3,7 @@ import {
   Alert,
   Animated,
   DimensionValue,
+  I18nManager,
   Image,
   StyleProp,
   StyleSheet,
@@ -213,7 +214,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
-    // minWidth: '20%'
     minWidth: '24%',
   },
   input: {
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     flex: 1,
     textAlignVertical: 'top',
-    // backgroundColor:'red'
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
@@ -239,6 +239,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
+    fontSize: getWidth(fontSize.textS),
+    textAlign: 'left',
   },
   label: {
     position: 'absolute',

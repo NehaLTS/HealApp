@@ -2,7 +2,7 @@ import Text from 'components/common/Text';
 import Button from 'components/common/Button';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+// import { Dropdown } from 'react-native-element-dropdown';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
@@ -12,6 +12,7 @@ import SelectImage from '../../../common/SelectImage';
 import ProviderDetailController from '../controllers/ProviderDetailController';
 import { useTranslation } from 'react-i18next';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
+import Dropdown from 'components/common/Dropdown';
 
 const ProviderDetail = () => {
   const { t } = useTranslation();
@@ -56,7 +57,9 @@ const ProviderDetail = () => {
         onBlur={onBlurFirstName}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
-         defaultValue={providerProfile?.firstName ? providerProfile.firstName : ''}
+        defaultValue={
+          providerProfile?.firstName ? providerProfile.firstName : ''
+        }
         inputValue={providerProfile?.firstName ?? ''}
         errorMessage={firstNameError}
         returnKeyType={'next'}
@@ -70,7 +73,9 @@ const ProviderDetail = () => {
         inputStyle={styles.inputLastName}
         onChangeText={onChangeLastName}
         onBlur={onBlurLastName}
-        defaultValue={providerProfile?.firstName ? providerProfile.firstName : ''}
+        defaultValue={
+          providerProfile?.firstName ? providerProfile.firstName : ''
+        }
         ref={lastNameRef}
         inputValue={providerProfile?.lastName ?? ''}
         errorMessage={lastNameError}
@@ -79,12 +84,6 @@ const ProviderDetail = () => {
       />
 
       <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
-        iconColor={colors.black}
-        // selectedStyle={styles.box}
         data={providerTypeList}
         labelField="name.en"
         valueField="name.en"
@@ -92,19 +91,10 @@ const ProviderDetail = () => {
         value={selectedProvider}
         onChange={onChangeProviderType}
         renderItem={renderProviderItems}
+        errorMessage={providerTypeError}
       />
 
-      {providerTypeError != '' && (
-        <Text style={styles.errorMessage} title={providerTypeError} />
-      )}
-
       <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
-        iconColor={colors.black}
-        // selectedStyle={styles.box}
         data={specialityList}
         labelField="name.en"
         valueField="name.en"
@@ -112,10 +102,8 @@ const ProviderDetail = () => {
         value={selectedSpecialty}
         onChange={onChangeSpeciality}
         renderItem={renderSpecialityItems}
+        errorMessage={specialityError}
       />
-      {specialityError != '' && (
-        <Text style={styles.errorMessage} title={specialityError} />
-      )}
 
       <View style={styles.iconContainer}>
         <Text style={styles.text} title={'Upload ID photo'} />
@@ -140,7 +128,6 @@ const ProviderDetail = () => {
       </View>
 
       <View style={styles.footerContainer}>
-        {/* <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} /> */}
         <Button
           title={t('next')}
           isPrimary

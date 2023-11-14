@@ -1,6 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
+import {
+  deleteLocalData,
+  getLocalData,
+} from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import { ClientProfile } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
@@ -115,7 +119,8 @@ const HomeViewController = () => {
     setIsDataNotFound(true);
   };
   const onSearch = () => {
-   navigation.navigate(NavigationRoutes.IntroStack);
+    deleteLocalData();
+    navigation.navigate(NavigationRoutes.IntroStack);
   };
   const onTouchStart = () => setIsTouchStart(false);
   const onBlur = () => setIsTouchStart(true);

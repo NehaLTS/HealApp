@@ -17,14 +17,16 @@ const UserAddressViewController = () => {
   const [idNumberError, setIdNumberError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
- 
+
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState('');
   const { setCurrentStep, setUserProfile, userProfile, userId } =
     UseClientUserContext();
 
-  const [profilePicture, setProfilePicture] = useState(userProfile.profilePicture?userProfile.profilePicture:"");
+  const [profilePicture, setProfilePicture] = useState(
+    userProfile.profilePicture ? userProfile.profilePicture : '',
+  );
 
   const validateAddress = () => {
     if (onSearchAddress?.length < 4)
@@ -58,7 +60,7 @@ const UserAddressViewController = () => {
     const imagePath = url;
     const folderName = 'images/users';
     const fileName = generateRandomName();
-    
+
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {
     //     // Handle the downloadURL as needed
@@ -74,7 +76,7 @@ const UserAddressViewController = () => {
   const onPressNext = async () => {
     console.log('userId is ', userId);
     if (
-      onSearchAddress &&
+      onSearchAddress?.length !== 0 &&
       dateOfBirth.toString() &&
       idNumberRef.current.value
     ) {

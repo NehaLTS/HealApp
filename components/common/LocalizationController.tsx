@@ -1,21 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { I18nManager, NativeModules } from 'react-native';
 import {
   getLocalData,
   setLocalData,
 } from '../../libs/datastorage/useLocalStorage';
 import { UserType } from '../../libs/types/UserType';
 import NavigationRoutes from '../../navigator/NavigationRoutes';
-import { I18nManager } from 'react-native';
-import RNRestart from 'react-native-restart';
 
 const LocalizationController = () => {
+  const { t, i18n } = useTranslation();
   const navigation = useNavigation();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState('EN');
 
-  const { t, i18n } = useTranslation();
   const continueAsClient = () => {
     navigation.navigate(NavigationRoutes.ClientStack, {
       screen: NavigationRoutes.ClientLogin,
@@ -30,7 +28,6 @@ const LocalizationController = () => {
 
   const setAppLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-    setCurrentLanguage(lng);
     if (lng == ('en' || 'ru') && I18nManager.isRTL) {
       I18nManager.forceRTL(false);
     } else if (lng == ('he' || 'ar') && !I18nManager.isRTL) {
@@ -40,16 +37,14 @@ const LocalizationController = () => {
 
   const handleLanguageChange = (lng: string) => {
     i18n.changeLanguage(lng);
-
-    if (lng == ('en' || 'ru') && I18nManager.isRTL) {
+    if (lng == 'en' || lng === 'ru') {
       I18nManager.forceRTL(false);
-      RNRestart.restart();
-    } else if (lng == ('he' || 'ar') && !I18nManager.isRTL) {
+      NativeModules.DevSettings.reload();
+    } else if (lng == 'he' || lng == 'ar') {
       I18nManager.forceRTL(true);
-      RNRestart.restart();
+      NativeModules.DevSettings.reload();
     }
 
-    setCurrentLanguage(lng);
     // if(lng=="he" || lng=='ar'){
     //  I18nManager.forceRTL(true);
     //  RNRestart.restart();
@@ -63,7 +58,7 @@ const LocalizationController = () => {
   };
 
   return {
-    currentLanguage,
+    currentLanguage: i18n?.language,
     isLanguageChanged,
     onChangeLanguage,
     continueAsClient,

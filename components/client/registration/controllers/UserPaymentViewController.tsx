@@ -1,6 +1,6 @@
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { useNavigation } from '@react-navigation/native';
@@ -18,8 +18,14 @@ const UserPaymentViewController = () => {
   const [cardExpiry, setCardExpiry] = useState('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isCardDetails, setIsCardDetails] = useState(false);
-  const { userId } = UseClientUserContext();
+  const { userId, userProfile, setUserProfile } = UseClientUserContext();
   const navigation = useNavigation();
+  useEffect(() => {
+    if (userProfile?.card_number) {
+      cardNumberRef.current.value = userProfile?.card_number;
+      expireDateRef.current.value = userProfile?.expire_date;
+    }
+  }, []);
 
   const validateCardNumber = () => {
     if (!cardNumberRef.current.value)
@@ -80,6 +86,11 @@ const UserPaymentViewController = () => {
       expireDateRef.current.value &&
       cvvRef.current.value
     ) {
+      setUserProfile({
+        ...userProfile,
+        card_number: cardNumberRef.current.value,
+        expire_date: expireDateRef.current.value,
+      });
       setIsCardDetails(true);
     } else {
       if (!cardNumberRef.current.value)
@@ -145,6 +156,7 @@ const UserPaymentViewController = () => {
     cardNumber,
     cardExpiry,
     onPressStartUsingHeal,
+    userProfile,
   };
 };
 

@@ -30,7 +30,6 @@ export interface UserTypeProvider {
   user?: UserProvider;
   msg?: string;
   provider_id?: string | null;
-  
 }
 
 export interface HealLanguageType {
@@ -147,9 +146,15 @@ export interface ClientProfile {
   isPaymentAdded?: boolean;
   description?: string;
   card_number?: string;
+  expire_date?: string;
 }
 
-export type onboardStep = 'details' | 'address' | 'payment' | 'services' | 'addServices';
+export type onboardStep =
+  | 'details'
+  | 'address'
+  | 'payment'
+  | 'services'
+  | 'addServices';
 
 export interface ProviderProfile {
   firstName: string;
@@ -212,5 +217,5 @@ export interface ProviderServices {
   price: number;
   description?: HealLanguageType;
   currency?: string;
-  isSelected?:boolean
+  isSelected?: boolean;
 }

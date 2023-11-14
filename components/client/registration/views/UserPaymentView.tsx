@@ -8,21 +8,16 @@ import { fontSize } from 'designToken/fontSizes';
 import { getTexts } from 'libs/OneSkyHelper';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import logo from 'assets/icon/healLogo.png';
 import Button from 'components/common/Button';
+import Loader from 'components/common/Loader';
 import TextButton from 'components/common/TextButton';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useTranslation } from 'react-i18next';
 import UserPaymentViewController from '../controllers/UserPaymentViewController';
-import logo from 'assets/icon/healLogo.png';
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
@@ -50,9 +45,10 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
     isLoader: isLoading,
     isCardDetails,
     cardExpiry,
-    cardNumber,
+    userProfile,
     onPressStartUsingHeal,
   } = UserPaymentViewController();
+  console.log('gurprret', cardNumberRef?.current?.value);
 
   return (
     <>
@@ -87,9 +83,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
         </View>
         {isCardDetails ? (
           <>
-            {isLoading && (
-              <ActivityIndicator style={styles.loading} size={'large'} />
-            )}
+            {isLoading && <Loader />}
             <View style={styles.innerContainer}>
               <Image
                 source={require('assets/icon/masterCard.png')}
@@ -132,9 +126,9 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
               onBlur={onBlurCardNumber}
               onChangeText={onChangeCardNumber}
               ref={cardNumberRef}
-              defaultValue={''}
+              defaultValue={userProfile?.card_number}
               errorMessage={cardNumberError}
-              inputValue={cardNumber}
+              inputValue={userProfile?.card_number}
               returnKeyType={'next'}
               onSubmitEditing={() => expireDateRef.current.focus()}
               // onClearInputText={() => cardNumberRef?.current?.clear()}
@@ -151,8 +145,8 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
                 errorMessage={cardExpiryError}
-                defaultValue={''}
-                inputValue={cardExpiry}
+                defaultValue={userProfile?.expire_date}
+                inputValue={userProfile?.expire_date}
                 returnKeyType={'next'}
                 onSubmitEditing={() => cvvRef.current.focus()}
                 maxLength={5}
@@ -166,10 +160,10 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 onClearInputText={() => cvvRef.current.clear()}
                 onChangeText={onChangeCvv}
                 ref={cvvRef}
-                defaultValue={''}
-                inputValue={''}
+                defaultValue={cvvRef?.current?.value ?? ''}
+                inputValue={cvvRef?.current?.value ?? ''}
                 maxLength={3}
-                 returnKeyType={'done'}
+                returnKeyType={'done'}
               />
             </View>
           </>

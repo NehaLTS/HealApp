@@ -56,16 +56,14 @@ const ProviderDetailController = () => {
 
   useEffect(() => {
     getProviderTypes();
-    if (providerProfile.firstName) {
-      firstNameRef.current.value = providerProfile.firstName;
-      lastNameRef.current.value = providerProfile.lastName;
+    if (providerProfile?.firstName) {
+      firstNameRef.current.value = providerProfile?.firstName;
+      lastNameRef.current.value = providerProfile?.lastName;
 
       //TODO: SAGAR to check these are not getting SET when back press
       // setSelectedProvider(providerProfile.provider);
       // setSelectedSpeciality(providerProfile.speciality);
       // if(providerProfile.idPicture)  setIdPicture(providerProfile.idPicture)
-     
-
     }
   }, []);
 

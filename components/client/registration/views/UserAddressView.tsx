@@ -78,7 +78,7 @@ const UserAddressView = () => {
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}
           title="Close"
-          fontSize={fontSize.textL}
+          fontSize={getWidth(fontSize.textL)}
           onPress={() => setIsVisible(false)}
         />
       </View>
@@ -97,11 +97,11 @@ const UserAddressView = () => {
             setDateOfBirth(date.toString());
             setDate(date);
             setOpen(false);
-            idNumberRef.current.focus()
+            idNumberRef.current.focus();
           }}
           onCancel={() => {
             setOpen(false);
-            idNumberRef.current.focus()
+            idNumberRef.current.focus();
           }}
           maximumDate={maxDate}
         />
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.textM,
     paddingTop: getHeight(dimens.paddingXs),
+    textAlign: 'left',
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

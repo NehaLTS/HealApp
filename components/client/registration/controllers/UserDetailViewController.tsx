@@ -11,15 +11,12 @@ const UserDetailViewController = () => {
   const [lastNameError, setLastNameError] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
-
-
-    useEffect(() => {
-      if(userProfile.firstName){
-        firstNameRef.current.value=userProfile.firstName;
-        lastNameRef.current.value=userProfile.lastName;
-        phoneNumberRef.current.value=userProfile.phoneNumber;
-      }
-
+  useEffect(() => {
+    if (userProfile?.firstName) {
+      firstNameRef.current.value = userProfile?.firstName;
+      lastNameRef.current.value = userProfile?.lastName;
+      phoneNumberRef.current.value = userProfile?.phoneNumber;
+    }
   }, []);
   const validateFirstName = () => {
     if (
@@ -69,7 +66,9 @@ const UserDetailViewController = () => {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         phoneNumber: phoneNumberRef.current.value,
-        profilePicture:userProfile.profilePicture?userProfile.profilePicture:""
+        profilePicture: userProfile.profilePicture
+          ? userProfile.profilePicture
+          : '',
       });
 
       setCurrentStep('address');

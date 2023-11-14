@@ -1,5 +1,5 @@
 import Button from 'components/common/Button';
-import {Loader} from 'components/common/Loader';
+import { Loader } from 'components/common/Loader';
 import Text from 'components/common/Text';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
