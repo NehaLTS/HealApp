@@ -18,6 +18,8 @@ import {
 } from 'react-native';
 import OrderDetailsController from './OrderDetailsController';
 import { useTranslation } from 'react-i18next';
+import TreatmentEnd from 'components/client/home/TreatmentEnd';
+import RatingView from 'components/client/home/RatingView';
 
 const OrderDetails = () => {
   const {
@@ -55,7 +57,7 @@ const OrderDetails = () => {
   return (
     <>
       {RNHeader(HeaderTitle, HeaderLeft)}
-      <View style={styles.mainContainer}>
+      {/* <View style={styles.mainContainer}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingVertical: getHeight(dimens.marginL) }}
@@ -85,7 +87,9 @@ const OrderDetails = () => {
             <Text title={t('no_fee')} numberOfLines={1} style={styles.text} />
           )}
         </ScrollView>
-      </View>
+      </View> */}
+      {/* <TreatmentEnd /> */}
+      <RatingView />
     </>
   );
 };
