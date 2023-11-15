@@ -20,7 +20,13 @@ import { useTranslation } from 'react-i18next';
 import UserPaymentViewController from '../controllers/UserPaymentViewController';
 
 //TODO: * are changed after setup i18 and static data i changes after binding data
-const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
+const UserPaymentView = ({
+  isFromHome,
+  item,
+}: {
+  isFromHome?: boolean;
+  item?: any;
+}) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { languageCode } = useTranslationContext();
@@ -38,7 +44,6 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
     cardNumberError,
     cvvError,
     cardExpiryError,
-    onClearCard,
     onPressNext,
     onPressBack,
     setIsCardDetails,
@@ -47,8 +52,14 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
     cardExpiry,
     userProfile,
     onPressStartUsingHeal,
-  } = UserPaymentViewController();
-  console.log('gurprret', cardNumberRef?.current?.value);
+    card,
+    expiry,
+    cvv,
+    onClearCard,
+  } = UserPaymentViewController({ item });
+  console.log('card', card);
+  console.log('expiry', expiry);
+  console.log('cvv', cvv);
 
   return (
     <>
@@ -106,14 +117,11 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             <View style={styles.cardDetailContainer}>
               <Text
                 style={styles.cardDetail}
-                title={
-                  '**** **** ***** ' +
-                  cardNumberRef?.current?.value?.slice?.(-4)
-                }
+                title={'**** **** ***** ' + card?.slice?.(-4)}
               />
               <Text
                 style={styles.cardDetail}
-                title={`${t('expires')} ` + expireDateRef?.current?.value}
+                title={`${t('expires')} ` + expiry}
               />
             </View>
           </>
@@ -125,12 +133,12 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
               inputStyle={styles.cardNumber}
               onBlur={onBlurCardNumber}
               onChangeText={onChangeCardNumber}
-              ref={cardNumberRef}
-              defaultValue={userProfile?.card_number}
+              // ref={cardNumberRef}
+              defaultValue={card}
               errorMessage={cardNumberError}
-              inputValue={userProfile?.card_number}
+              inputValue={card}
               returnKeyType={'next'}
-              onSubmitEditing={() => expireDateRef.current.focus()}
+              onSubmitEditing={onClearCard}
               // onClearInputText={() => cardNumberRef?.current?.clear()}
               onClearInputText={onClearCard}
               maxLength={19}
@@ -141,12 +149,12 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 placeholder={t('mm_yy')}
                 inputStyle={styles.expireDate}
                 onBlur={onBlurExpireDate}
-                onClearInputText={() => expireDateRef.current.clear()}
+                // onClearInputText={() => expireDateRef.current.clear()}
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
                 errorMessage={cardExpiryError}
-                defaultValue={userProfile?.expire_date}
-                inputValue={userProfile?.expire_date}
+                defaultValue={expiry}
+                inputValue={expiry}
                 returnKeyType={'next'}
                 onSubmitEditing={() => cvvRef.current.focus()}
                 maxLength={5}
@@ -157,11 +165,10 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 placeholder={t('cvv')}
                 onBlur={onBlueCvv}
                 errorMessage={cvvError}
-                onClearInputText={() => cvvRef.current.clear()}
-                onChangeText={onChangeCvv}
                 ref={cvvRef}
-                defaultValue={cvvRef?.current?.value ?? ''}
-                inputValue={cvvRef?.current?.value ?? ''}
+                onChangeText={onChangeCvv}
+                defaultValue={cvv ?? ''}
+                inputValue={cvv ?? ''}
                 maxLength={3}
                 returnKeyType={'done'}
               />

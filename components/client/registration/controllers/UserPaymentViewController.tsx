@@ -6,11 +6,14 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 
-const UserPaymentViewController = () => {
+const UserPaymentViewController = ({ item }: any) => {
   const { onCreateCreditCardDetails } = AuthServicesClient();
   const cardNumberRef = React.useRef<any>('');
   const expireDateRef = React.useRef<any>('');
   const cvvRef = React.useRef<any>('');
+  const [card, setCard] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
   const [cardNumberError, setCardNumberError] = useState('');
   const [cvvError, setCvvError] = useState('');
   const [cardExpiryError, setCardExpiryError] = useState('');
@@ -19,27 +22,25 @@ const UserPaymentViewController = () => {
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isCardDetails, setIsCardDetails] = useState(false);
   const { userId, userProfile, setUserProfile } = UseClientUserContext();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   useEffect(() => {
     if (userProfile?.card_number) {
-      cardNumberRef.current.value = userProfile?.card_number;
-      expireDateRef.current.value = userProfile?.expire_date;
+      setCard(userProfile?.card_number ?? '');
+      setExpiry(userProfile?.expire_date ?? '');
     }
   }, []);
 
   const validateCardNumber = () => {
-    if (!cardNumberRef.current.value)
-      setCardNumberError('Card number is required');
+    if (!card?.length) setCardNumberError('Card number is required');
     else setCardNumberError('');
   };
 
   const validateCardExpiry = () => {
-    if (!expireDateRef.current.value)
-      setCardExpiryError('Expiry date is required');
+    if (!expiry?.length) setCardExpiryError('Expiry date is required');
     else setCardExpiryError('');
   };
   const validateCvv = () => {
-    if (!cvvRef.current.value) setCvvError('Cvv is required');
+    if (!cvv?.length) setCvvError('Cvv is required');
     else setCvvError('');
   };
 
@@ -54,8 +55,10 @@ const UserPaymentViewController = () => {
     }
 
     formattedText = formattedText.trim();
-    cardNumberRef.current.setNativeProps({ text: formattedText });
-    cardNumberRef.current.value = formattedText;
+    // cardNumberRef.current.setNativeProps({ text: formattedText });
+    // cardNumberRef.current.value = formattedText;
+    console.log('formattedText', formattedText);
+    setCard(formattedText);
     validateCardNumber();
   };
   const onChangeExpireDate = (value: string) => {
@@ -65,12 +68,16 @@ const UserPaymentViewController = () => {
       formattedText += cleanedText.slice(i, i + 2) + '/';
     }
     formattedText = formattedText.replace(/\/$/, '');
-    expireDateRef.current.setNativeProps({ text: formattedText });
-    expireDateRef.current.value = formattedText;
+    // expireDateRef.current.setNativeProps({ text: formattedText });
+    // expireDateRef.current.value = formattedText;
+    setExpiry(formattedText);
     validateCardExpiry();
   };
 
-  const onChangeCvv = (value: string) => (cvvRef.current.value = value);
+  const onChangeCvv = (value: string) => {
+    setCvv(value);
+    // cvvRef.current.value = value;
+  };
 
   const onBlurCardNumber = () => validateCardNumber();
 
@@ -78,26 +85,23 @@ const UserPaymentViewController = () => {
 
   const onBlueCvv = () => validateCvv();
 
-  const onClearCard = () => cardNumberRef.current.clear();
+  const onClearCard = () => {
+    setCard('');
+    expireDateRef.current.focus();
+  };
 
   const onPressNext = async () => {
-    if (
-      cardNumberRef.current.value &&
-      expireDateRef.current.value &&
-      cvvRef.current.value
-    ) {
+    if (card?.length && expiry?.length && cvv?.length) {
       setUserProfile({
         ...userProfile,
-        card_number: cardNumberRef.current.value,
-        expire_date: expireDateRef.current.value,
+        card_number: card,
+        expire_date: expiry,
       });
       setIsCardDetails(true);
     } else {
-      if (!cardNumberRef.current.value)
-        setCardNumberError('Card number is required');
-      if (!cvvRef.current.value) setCvvError('Cvv is required');
-      if (!expireDateRef.current.value)
-        setCardExpiryError('Expiry date is required');
+      if (!card?.length) setCardNumberError('Card number is required');
+      if (!cvv?.length) setCvvError('Cvv is required');
+      if (!expiry?.length) setCardExpiryError('Expiry date is required');
     }
   };
 
@@ -108,9 +112,9 @@ const UserPaymentViewController = () => {
   const onPressStartUsingHeal = async (isFromHome: boolean) => {
     setIsLoader(true);
     const res = await onCreateCreditCardDetails({
-      credit_card_number: cardNumberRef?.current?.value ?? '',
-      expire_date: expireDateRef?.current?.value ?? '',
-      cvv: cvvRef?.current?.value ?? '',
+      credit_card_number: card ?? '',
+      expire_date: expiry ?? '',
+      cvv: cvv ?? '',
       client_id: getLocalData?.('USER')?.userId,
     });
 
@@ -124,7 +128,10 @@ const UserPaymentViewController = () => {
     setIsLoader(false);
 
     if (res?.isSuccessful) {
-      if (isFromHome) navigation.navigate(NavigationRoutes.OrderDetails);
+      if (isFromHome)
+        navigation.navigate(NavigationRoutes.OrderDetails, {
+          supplier: item,
+        });
       else {
         navigation.reset({
           index: 0,
@@ -157,6 +164,9 @@ const UserPaymentViewController = () => {
     cardExpiry,
     onPressStartUsingHeal,
     userProfile,
+    card,
+    expiry,
+    cvv,
   };
 };
 

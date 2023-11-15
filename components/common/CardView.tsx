@@ -62,7 +62,7 @@ const CardView = ({ item, onPress, index, isSearch, user }: any) => {
         </>
       ) : (
         <View style={styles.paymentContainer}>
-          <UserPaymentView isFromHome />
+          <UserPaymentView isFromHome item={item} />
         </View>
       )}
     </Modal>
