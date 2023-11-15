@@ -16,7 +16,7 @@ import { getLocalData } from 'libs/datastorage/useLocalStorage';
 const RegistrationView = () => {
   const {
     
-    onPressSignUpProvider,
+    handleSignUp,
     isLoading,
     renderToast,
     onBlurEmail,
@@ -31,11 +31,7 @@ const RegistrationView = () => {
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
   const deviceToken= getLocalData('USER')?.deviceToken
   console.log('gurpreet', deviceToken)
-  const handleSignUp = () => {
-    setIsLoadingGoogle(true);
-    if (!emailError && !passwordError)
-      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value, deviceToken);
-  };
+  
   return (
     <>
       {renderToast()}

@@ -72,11 +72,12 @@ const LoginViewController = () => {
 
   //TODO: Kamal needs to change any to type
 
-  const handleAuthSuccessResponse = (response: any) => {
-    let userDetails = response.user;
+  const handleAuthSuccessResponse = (response: any, profilePicture?:string) => {
 
+    let userDetails = response.user;
     //save details in context
     setToken(response.token);
+    console.log("response.token", response.token)
     setUserId(response.id);
     setUserProfile({
       firstName: userDetails.firstname,
@@ -86,7 +87,7 @@ const LoginViewController = () => {
       city: userDetails.city,
       state: userDetails.state,
       country: userDetails.country,
-      profilePicture: userDetails.profile_picture,
+      profilePicture: userDetails.profile_picture?userDetails.profile_picture:profilePicture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
@@ -100,7 +101,7 @@ const LoginViewController = () => {
       city: userDetails.city,
       state: userDetails.state,
       country: userDetails.country,
-      profilePicture: userDetails.profile_picture,
+      profilePicture: userDetails.profile_picture?userDetails.profile_picture:profilePicture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
@@ -112,7 +113,7 @@ const LoginViewController = () => {
     });
 
     //if first name is empty navigate to onboard else to Home
-    if (!userDetails.firstName || userDetails.firstName == '') {
+    if (!userDetails.firstname || userDetails.firstname == '') {
       navigation.reset({
         index: 0,
         routes: [{ name: 'OnboardDetails' }],
@@ -135,7 +136,7 @@ const LoginViewController = () => {
         const res = await onSubmitAuthRequest({ email, password });
         console.log('sign in client by email and password', res);
         setIsLoading(false);
-        if (res?.isSuccessful === true) handleAuthSuccessResponse(res);
+        if (res?.isSuccessful === true) handleAuthSuccessResponse(res,"");
         else
           showToast(
             'Login Failed',
@@ -156,16 +157,16 @@ const LoginViewController = () => {
     setIsLoading(true);
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
+
       try {
         const email = userData?.user?.email ?? '';
         const googleId = userData.user?.uid ?? '';
         /** To handle Google auth request to API */
-
         const res = await onSubmitGoogleAuthRequest({ email, googleId });
 
         setIsLoading(false);
         if (res?.isSuccessful === true) {
-          handleAuthSuccessResponse(res);
+          handleAuthSuccessResponse(res, userData?.user?.photoURL);
         } else {
           Alert.alert(
             'Login Failed',
@@ -191,7 +192,7 @@ const LoginViewController = () => {
         setIsLoading(false);
 
         if (res?.isSuccessful === true) {
-          handleAuthSuccessResponse(res);
+          handleAuthSuccessResponse(res,"");
         } else {
           Alert.alert(
             'Login Failed',

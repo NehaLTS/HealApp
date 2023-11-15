@@ -1,7 +1,9 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
+import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType';
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 
 const ProviderPaymentController = () => {
   const [registrationError, setRegistrationError] = useState('');
@@ -13,10 +15,10 @@ const ProviderPaymentController = () => {
   const bankNameRef = React.useRef<any>('');
   const branchRef = React.useRef<any>('');
   const accountRef = React.useRef<any>('');
-   const [isLoading, setIsLoading] = useState(false);
-   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
+  const [isLoading, setIsLoading] = useState(false);
+  const { OnUpdateProviderUserDetails } = AuthServicesProvider();
 
-  const { setCurrentStep, setProviderProfile, providerProfile,userId } =
+  const { setCurrentStep, setProviderProfile, providerProfile, userId,token } =
     UseProviderUserContext();
 
   const onBlurRegistrationNumber = () => validateRegistrationNumber();
@@ -73,7 +75,7 @@ const ProviderPaymentController = () => {
     }
   };
 
-  const onPressNext = async() => {
+  const onPressNext = async () => {
     if (
       registrationNumberRef.current.value &&
       bankNameRef.current.value &&
@@ -91,37 +93,62 @@ const ProviderPaymentController = () => {
         bankDetails: bankDetails,
       });
 
+      setIsLoading(true);
+      const res = await OnUpdateProviderUserDetails?.({
+        firstname: providerProfile.firstName ?? '',
+        lastname: providerProfile.lastName ?? '',
+        address: providerProfile.address ?? '',
+        city: '',
+        state: '',
+        country: '',
+        phone_number: providerProfile.phoneNumber ?? '',
+        profile_picture: providerProfile.profilePicture ?? '',
+        provider_id:  userId ?? '',
+        provider_type_id: providerProfile.provider.id ?? '',
+        license_number: providerProfile.licensenumber ?? '',
+        upload_license_picture: providerProfile.licensepicture ?? '',
+        bank_name: bankNameRef.current.value,
+        branch: branchRef.current.value,
+        business_registration_number: registrationNumberRef.current.value,
+        account: accountRef.current.value,
+      },token);
 
-        setIsLoading(true);
-        const res = await OnUpdateProviderUserDetails?.({
-          firstname: providerProfile.firstName ?? '',
-          lastname:  providerProfile.lastName ?? '',
-          address:  providerProfile.address ?? '',
+      console.log("response udpate is ",res)
+
+      if (res?.msg) {
+        setLocalData('USERPROFILE', {
+          firstName: providerProfile.firstName ?? '',
+          lastName: providerProfile.lastName ?? '',
+          address: providerProfile.address ?? '',
           city: '',
           state: '',
           country: '',
-          phone_number:  providerProfile.phoneNumber ?? '',
-          profile_picture:  providerProfile.profilePicture ?? '',
-        
-          //TODO: temp to check
-         // provider_id:  userId ?? '',
-          provider_id:  '120',
-
-          provider_type_id:  providerProfile.provider.id ?? '',
-          license_number:  providerProfile.firstName ?? '',
-          upload_license_picture:  providerProfile.firstName ?? '',
-          bank_name: bankNameRef.current.value,
-          branch: branchRef.current.value,
-          business_registration_number: registrationNumberRef.current.value,
-          account: accountRef.current.value,
+          phoneNumber: providerProfile.phoneNumber ?? '',
+          profilePicture: providerProfile.profilePicture ?? '',
+          provider: providerProfile.provider,
+          speciality: providerProfile.speciality,
+          licensenumber: providerProfile.licensenumber ?? '',
+          licensepicture: providerProfile.licensepicture ?? '',
+          bankDetails: {
+            bankname: bankNameRef.current.value,
+            branchname: branchRef.current.value,
+            registrationNumber: registrationNumberRef.current.value,
+            accountnumber: accountRef.current.value,
+          },
         });
 
-        setIsLoading(false);
+        if (providerProfile?.provider?.name.en === ('Doctor' || 'Nurse')) {
+          setCurrentStep('services');
+        } else {
+          setCurrentStep('addServices');
+        }
+      } else {
+        Alert.alert('Some Error on Updating the Details. Please try again !!');
+      }
 
+      setIsLoading(false);
 
-          console.log("respionse is ", res);
-
-
+      console.log('respionse is ', res);
 
       // setCurrentStep('payment');
     } else {

@@ -20,6 +20,7 @@ const UserPaymentViewController = () => {
   const [isCardDetails, setIsCardDetails] = useState(false);
   const { userId } = UseClientUserContext();
   const navigation = useNavigation();
+  const token =getLocalData('USER')?.token
 
   const validateCardNumber = () => {
     if (!cardNumberRef.current.value)
@@ -101,10 +102,13 @@ const UserPaymentViewController = () => {
       expire_date: expireDateRef?.current?.value ?? '',
       cvv: cvvRef?.current?.value ?? '',
       client_id: getLocalData?.('USER')?.userId,
-    });
+    }, token);
 
     //TODO: Vandana to save in Local data with isPaymentAdded as true
-    setLocalData('USER', { isPaymentAdded: true });
+    setLocalData('USERPROFILE', {
+      isPaymentAdded: true,
+      card_number: '************1234',
+    });
 
     console.log('response is ', res);
     setIsLoader(false);

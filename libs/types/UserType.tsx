@@ -29,13 +29,14 @@ export interface UserTypeProvider {
   token?: string;
   user?: UserProvider;
   msg?: string;
-  provider_id?:string
+  provider_id?: string | null;
+  
 }
 
 export interface HealLanguageType {
- en:string,
- hi:string,
- he:string
+  en: string;
+  hi: string;
+  he: string;
 }
 
 type UserProvider = {
@@ -146,9 +147,11 @@ export interface ClientProfile {
   idNumber?: number;
   isPaymentAdded?: boolean;
   deviceToken?:string
+  description?: string;
+  card_number?: string;
 }
 
-export type onboardStep = "details" | "address" | "payment" | "services";
+export type onboardStep = 'details' | 'address' | 'payment' | 'services' | 'addServices';
 
 export interface ProviderProfile {
   firstName: string;
@@ -171,7 +174,7 @@ export interface ProviderProfile {
 export interface ProviderType {
   name: HealLanguageType;
   id: string;
-  specialties?:ProviderSpeciality[]
+  specialties?: ProviderSpeciality[];
 }
 
 export interface OrderDetail {
@@ -207,10 +210,11 @@ export interface ProviderBankDetails {
 
 export interface ProviderServices {
   id: number;
-  name: string;
+  name: HealLanguageType;
   price: number;
-  description?: string;
-  currency: string;
+  description?: HealLanguageType;
+  currency?: string;
+  isSelected?:boolean
 }
 
 export type Location = {
@@ -234,4 +238,9 @@ export interface BookOrderRequest {
   order_id:string;
   latitude:string;
   longitude:string;
+}
+
+export interface currentLocationOfUser{
+  latitude:string,
+  longitude:string
 }

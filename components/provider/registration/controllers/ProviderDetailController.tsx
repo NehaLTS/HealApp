@@ -3,6 +3,7 @@ import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
 import { generateRandomName } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 const ProviderDetailController = () => {
   const firstNameRef = React.useRef<any>('');
@@ -19,7 +20,7 @@ const ProviderDetailController = () => {
   const [idPicture, setIdPicture] = useState('');
 
   const { onGetProviderTypes } = AuthServicesProvider();
-  const { setCurrentStep, setProviderProfile, providerProfile } =
+  const { setCurrentStep, setProviderProfile, providerProfile, token } =
     UseProviderUserContext();
 
   const [selectedProvider, setSelectedProvider] = useState<ProviderType>();
@@ -42,6 +43,7 @@ const ProviderDetailController = () => {
 
   const onChangeProviderType = (value: ProviderType) => {
     setSelectedProvider(value);
+    setProviderTypeError('');
     if (value.specialties) setSpecialityList(value.specialties);
   };
 
@@ -49,20 +51,32 @@ const ProviderDetailController = () => {
 
   const onChangeSpeciality = (value: ProviderSpeciality) => {
     setSelectedSpeciality(value);
+    setSpecialityError('');
   };
 
   useEffect(() => {
     getProviderTypes();
+    if (providerProfile?.firstName) {
+      firstNameRef.current.value = providerProfile.firstName??'';
+      lastNameRef.current.value = providerProfile.lastName??'';
+
+      //TODO: SAGAR to check these are not getting SET when back press
+      // setSelectedProvider(providerProfile.provider);
+      // setSelectedSpeciality(providerProfile.speciality);
+      // if(providerProfile.idPicture)  setIdPicture(providerProfile.idPicture)
+     
+
+    }
   }, []);
 
   const getProviderTypes = async () => {
-    let res = await onGetProviderTypes();
+    let res = await onGetProviderTypes(token);
 
     console.log('res is ', res);
     setProviderTypeList(res);
   };
   const getImageUrl = (url: string) => {
-    // setProfilePicture(url)
+    setIdPicture(url);
     const imagePath = url;
     const folderName = 'images/users';
     const fileName = generateRandomName();
@@ -112,21 +126,28 @@ const ProviderDetailController = () => {
   };
 
   const onPressNext = () => {
-    if (firstNameRef.current.value && lastNameRef.current.value ) {
-     setProviderProfile({
-        firstName:firstNameRef.current.value,
-        lastName:lastNameRef.current.value,
-        provider:selectedProvider,
-        speciality:selectedSpecialty,
-        phoneNumber:""
-      })
+    if (
+      firstNameRef.current.value &&
+      lastNameRef.current.value &&
+      selectedSpecialty &&
+      selectedProvider &&
+      idPicture
+    ) {
+      setProviderProfile({
+        firstName: firstNameRef.current.value,
+        lastName: lastNameRef.current.value,
+        provider: selectedProvider,
+        speciality: selectedSpecialty,
+        phoneNumber: '',
+      });
       setCurrentStep('address');
     } else {
       if (!firstNameRef.current.value)
         setFirstNameError('First name is required');
       if (!lastNameRef.current.value) setLastNameError('Last name is required');
-       if (!selectedSpecialty) setSpecialityError('Speciality is required');
+      if (!selectedSpecialty) setSpecialityError('Speciality is required');
       if (!selectedProvider) setProviderTypeError('Provider type is required');
+      if (!idPicture) Alert.alert('Please select ID Picture');
     }
   };
 
@@ -134,7 +155,6 @@ const ProviderDetailController = () => {
     // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
   };
 
-  
   return {
     firstNameRef,
     lastNameRef,

@@ -27,6 +27,9 @@ const forceAlert = () => {
   };
 
  const  handleNextButtonPress=()=>{
+  Alert.alert('', userId.toString())
+  console.log("localData?.providerLocation[0]?.provider_id", localData?.providerLocation[0]?.provider_id)
+  // Alert.alert("localData?.providerLocation[0]?.provider_id", localData?.providerLocation[0]?.provider_id)
   BookOrderRequest({ provider_id:localData?.providerLocation[0]?.provider_id,
   order_id:"1",
   latitude:currentLocationOfUser.latitude,

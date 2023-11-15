@@ -1,5 +1,6 @@
+import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { BodyInit, HeadersInit } from "./api/ApiTypes";
-import { sendRequest, sendRequestSearch } from "./api/RequestHandler";
+import { sendRequest } from "./api/RequestHandler";
 import {
   BOOK_ORDER,
   GET,
@@ -17,21 +18,22 @@ import {
   order_provider,
   search_provider,
   treatment,
-} from "./types/ProvierTypes";
+} from './types/ProvierTypes';
 import {
   BookOrderRequest
-} from "./types/UserType"
-
+} from './types/UserType'
+const access_token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODk4NjY5NCwiZXhwIjoxNjk5MDE5MDk0fQ.6nHvRnfJwgmgnCo0zYLf9yO2kvDIxJ0IZALJCB_PHr0';
 export const ClientOrderServices = () => {
+    const { token } =
+    UseClientUserContext();
   const getBannerAds = (): Promise<Banner[]> =>
     sendRequest(GET_AD_BANNER, {
       method: GET,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+         } as unknown as HeadersInit,
     });
   const searchProviders = (body: {
     name: string;
@@ -43,10 +45,8 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+          } as unknown as HeadersInit,
     });
 
   const providerLocationSearch =(body: {
@@ -90,10 +90,8 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+              } as unknown as HeadersInit,
     });
 
   const handlePayment = (body: {}): void => {};
@@ -106,9 +104,8 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
-        // 'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48'
-      } as unknown as HeadersInit,
+        "x-access-token": token,
+            } as unknown as HeadersInit,
     });
 
     const BookOrderRequest =(body: BookOrderRequest): Promise<any> =>

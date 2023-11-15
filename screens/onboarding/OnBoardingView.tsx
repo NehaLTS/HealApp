@@ -17,21 +17,19 @@ import {
   deleteLocalData,
   getLocalData,
 } from 'libs/datastorage/useLocalStorage';
-import {
-  ClientUserContext,
-  UseClientUserContext,
-} from 'contexts/UseClientUserContext';
-import { ClientProfile } from 'libs/types/UserType';
-import NavigationRoutes from 'navigator/NavigationRoutes';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import { ProviderProfile, ProviderServices } from 'libs/types/UserType';
 
 const OnBoardingView = () => {
-  const { swiperRef, onPressSkip } = OnBoardingViewController();
+  const { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse,setDefaultLanguage } =
+    OnBoardingViewController();
   const navigation = useNavigation();
+  const { setToken, setUserId, setProviderProfile, setCurrentStep } =
+    UseProviderUserContext();
   const { t } = useTranslation();
-  const { setUserProfile, setUserId, setToken } = UseClientUserContext();
 
   useEffect(() => {
-    // deleteLocalData();
+  //  deleteLocalData();
     getLocalUserData();
   }, []);
 
@@ -39,46 +37,53 @@ const OnBoardingView = () => {
     const userResponse = await getLocalData('USER');
     console.log('token is ', userResponse?.token);
 
+    const userLanguage = userResponse?.user?.language ?? 'en';
+     console.log("user language is ",userLanguage);
+
+      setDefaultLanguage(userLanguage);
+
     //if token is there, user is LoggedIn
     if (userResponse?.token != null) {
-      setToken(userResponse.token);
-      setUserId(userResponse?.userId);
+      if (userResponse?.isClient) parseClientResponse(userResponse);
+      else {
+        setToken(userResponse.token);
 
-      const userData: ClientProfile = (await getLocalData(
-        'USERPROFILE',
-      )) as ClientProfile;
+        //TEMP : HARDCODED ID SET HERE
+        if (userResponse?.userId) {
+          setUserId(userResponse?.userId);
+        } else {
+          setUserId('4');
+        }
 
-      console.log('useprofile is ', userData);
+        const userData: ProviderProfile = (await getLocalData(
+          'USERPROFILE',
+        )) as ProviderProfile;
 
-      setUserProfile(userData as ClientProfile);
+        console.log('useprofile is ', userData);
 
-      //Handle onboard navigation for the logged In User
-      if (!userData.firstName) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: NavigationRoutes.ClientStack,
-                params: { screen: NavigationRoutes.OnboardDetails },
-              },
-            ],
-          }),
-        );
-      } else {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: NavigationRoutes.ClientStack,
-                params: { screen: NavigationRoutes.ClientHome },
-              },
-            ],
-          }),
-        );
+        const providerServices: ProviderServices = (await getLocalData(
+          'PROVIDERSERVICES',
+        )) as ProviderServices;
+
+        console.log("provider services ",providerServices);
+
+         if(userData.firstName){
+        if (!providerServices) {
+          if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
+            setCurrentStep('services');
+          } else {
+            setCurrentStep('addServices');
+          }
+        }
+         }
+      
+
+        setProviderProfile(userData as ProviderProfile);
+
+        parseProviderResponse(userData, providerServices as ProviderServices);
       }
     }
+
     SplashScreen?.hide();
   };
 

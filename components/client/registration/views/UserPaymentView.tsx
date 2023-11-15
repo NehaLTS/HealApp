@@ -60,8 +60,8 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
         <View
           style={{
             flexDirection: 'row',
-            gap: getHeight(dimens.buttonHeight),
-            marginBottom: getHeight(dimens.buttonHeight),
+            gap: getHeight(dimens.imageXs),
+            marginBottom: getHeight(dimens.imageXs + 2),
           }}
         >
           <Image source={logo} style={styles.logo} />
@@ -69,7 +69,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             adjustsFontSizeToFit
             numberOfLines={2}
             style={styles.title}
-            title={'Add payment \n method'}
+            title={'Add payment\nmethod'}
           />
         </View>
       )}
@@ -169,6 +169,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
                 defaultValue={''}
                 inputValue={''}
                 maxLength={3}
+                 returnKeyType={'done'}
               />
             </View>
           </>
@@ -190,19 +191,20 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
           {
             justifyContent:
               isCardDetails || isFromHome ? 'center' : 'space-between',
+            flex: 0.1,
           },
         ]}
       >
         {!isCardDetails ? (
           <>
-            {!isFromHome && (
+            {/* {!isFromHome && (
               <Button
                 title={t('back')}
                 isSmall
                 onPress={onPressBack}
                 width={'30%'}
               />
-            )}
+            )} */}
             <Button
               title={t('next')}
               isPrimary
@@ -218,6 +220,7 @@ const UserPaymentView = ({ isFromHome }: { isFromHome?: boolean }) => {
             isSmall
             style={{ paddingHorizontal: 0 }}
             onPress={() => onPressStartUsingHeal(isFromHome ?? false)}
+            width={'70%'}
           />
         )}
       </View>

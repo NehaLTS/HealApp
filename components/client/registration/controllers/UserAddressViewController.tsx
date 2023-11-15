@@ -2,7 +2,7 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ClientProfile } from 'libs/types/UserType';
-import uploadImage from 'libs/uploadImage';
+// import uploadImage from 'libs/uploadImage';
 import { generateRandomName, numericPattern } from 'libs/utility/Utils';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
@@ -17,12 +17,14 @@ const UserAddressViewController = () => {
   const [idNumberError, setIdNumberError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
-  const [profilePicture, setProfilePicture] = useState('');
+ 
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState('');
-  const { setCurrentStep, setUserProfile, userProfile, userId } =
+  const { setCurrentStep, setUserProfile, userProfile, userId, token } =
     UseClientUserContext();
+
+  const [profilePicture, setProfilePicture] = useState(userProfile.profilePicture?userProfile.profilePicture:"");
 
   const validateAddress = () => {
     if (onSearchAddress?.length < 4)
@@ -56,16 +58,17 @@ const UserAddressViewController = () => {
     const imagePath = url;
     const folderName = 'images/users';
     const fileName = generateRandomName();
-    uploadImage(imagePath, folderName, fileName)
-      .then((downloadURL) => {
-        // Handle the downloadURL as needed
-        console.log('Download URL:', downloadURL);
-        setProfilePicture(downloadURL);
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error('Error uploading image:', error);
-      });
+    
+    // uploadImage(imagePath, folderName, fileName)
+    //   .then((downloadURL) => {
+    //     // Handle the downloadURL as needed
+    //     console.log('Download URL:', downloadURL);
+    //     setProfilePicture(downloadURL);
+    //   })
+    //   .catch((error) => {
+    //     // Handle any errors
+    //     console.error('Error uploading image:', error);
+    //   });
   };
 
   const onPressNext = async () => {
@@ -100,9 +103,10 @@ const UserAddressViewController = () => {
           profilePicture: profilePicture ?? '',
         },
         userId,
+        token
       );
 
-      console.log('response is ', res);
+      console.log('response is ', res, "token",token);
 
       setLocalData('USERPROFILE', {
         firstName: userProfile.firstName,
@@ -132,7 +136,6 @@ const UserAddressViewController = () => {
   };
 
   const onPressBack = () => {
-    //TODO: Vandana to check why this is getting reset.
     setCurrentStep('details');
   };
 

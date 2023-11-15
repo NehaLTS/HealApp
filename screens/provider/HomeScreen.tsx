@@ -3,54 +3,34 @@ import RNModal from 'components/common/Modal';
 import ToggleButton from 'components/common/SwitchButton';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
+import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, DeviceEventEmitter, StyleSheet, View } from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
+import { DeviceEventEmitter, StyleSheet, View } from 'react-native';
+import HomeScreenControlller from './HomeScreenController';
 
 const HomeScreen = () => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [isCancelOrder, setIsCancelOrder] = useState(false);
-  const { OrderRequst, UpdateProviderLocation } = AuthServicesProvider();
-  const { userDataProvider } = UseUserContextProvider();
-  const IsNotification= useRef<boolean>(false)
-  const [acceptOrder, setAcceptOrder] =useState<boolean>()
-let clientId = ''
- 
+  const [notification, setNotification]=useState(false)
+   const  {acceptOrder, OnPressTakeOrder , updateLocation} =HomeScreenControlller()
   useEffect(() => {
-  
-  
+    createNotificationListeners()
     DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
-      clientId= event.clientId 
-      IsNotification.current= true
-      Alert.alert("evnetAccepted")
-    
+      setNotification(true)
     })
-    
-
+   
     const interval = setInterval(() => {
-      console.log("update")
-   if(acceptOrder){
-      Geolocation.watchPosition(
-        //  124
-        (position) => {
-           // const { latitude, longitude } = position.coords;
-           UpdateProviderLocation({provider_id:'3',
-           latitude:position.coords.latitude.toString(),
-           longitude:position.coords.longitude.toString()}).then((res)=>{
-            Alert.alert("ResPonseOFProvider", JSON.stringify(res))
-           })
-         
-         },
-       );
-        }
-    },100000);
+      console.log("acceptOrder", acceptOrder)
+      if(acceptOrder){ 
+      console.log('accept')
+        updateLocation()
+      }
+      },100000);
   
     return () => {
       clearInterval(interval);
@@ -60,7 +40,7 @@ let clientId = ''
 
   const getNewOrderView = () => (
     <RNModal
-      isVisible={isAvailable}
+      isVisible={notification&& isAvailable}
       style={styles.modal}
       backdropOpacity={1}
       backdropColor={colors.transparent}
@@ -90,14 +70,7 @@ let clientId = ''
             height={getWidth(36)}
             fontSized={getWidth(fontSize.textL)}
             background={colors.white}
-            onPress={()=>{
-              setAcceptOrder(true)
-              OrderRequst({ status:"accept",
-              provider_id:'3',
-              order_id: '1',
-              latitude:"30.37775529243538",
-              longitude:"76.77481109532673"}).then((res)=>{console.log("ordereAccepted", res)})
-            }}
+            onPress={OnPressTakeOrder}
           />
           <TextButton
             title="Cancel an order"
@@ -163,8 +136,8 @@ let clientId = ''
           style={[styles.available, isAvailable && styles.isAvailable]}
         />
       </View>
-      {/* {IsNotification.current&&getNewOrderView()} */}
       {getNewOrderView()}
+      {/* {getNewOrderView()} */}
       {getCancelOrderView()}
     </>
   );

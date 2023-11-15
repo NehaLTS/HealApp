@@ -15,9 +15,11 @@ import {
 import { ClientProfile, UserType } from "../types/UserType";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
+import { getLocalData } from "libs/datastorage/useLocalStorage";
 
 export const AuthServicesClient = () => {
-  const { token } =UseClientUserContext();
+
+  
 
   /** To provide auth data to server */
   const onSubmitAuthRequest = (body: {
@@ -61,7 +63,8 @@ export const AuthServicesClient = () => {
 
   const onUpdateUserProfile = (
     profile: ClientProfile,
-    userId: string
+    userId: string,
+    token:string
   ): Promise<any> => {
     let body = {
       firstname: profile.firstName,
@@ -95,7 +98,8 @@ export const AuthServicesClient = () => {
     expire_date: string;
     cvv: string;
     client_id: string;
-  }): Promise<any> =>{
+  
+  },   token:string): Promise<any> =>{
 
     console.log("body is *** ",body);
     console.log("token is *** ",token);
@@ -112,7 +116,7 @@ export const AuthServicesClient = () => {
       } as unknown as HeadersInit,
     });
   }
-  const onGetCreditCard = (body: { client_id: string }): Promise<any> =>
+  const onGetCreditCard = (body: { client_id: string }, token:string): Promise<any> =>
     sendRequest(GET_CREATE_CARD_DETAILS, {
       method: POST,
       body: body as unknown as BodyInit,

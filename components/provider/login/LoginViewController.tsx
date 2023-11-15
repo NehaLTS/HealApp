@@ -73,13 +73,9 @@ const LoginViewController = () => {
   };
 
   /** To handle Response from API after authentication request */
-  const handleAuthResponse = (response: any) => {
+  const handleAuthResponse = (response: any, profilePicture?:string) => {
     let userDataProvider = response.user;
-    console.log('response.token', response.token);
-
-    console.log('response ', response);
-
-
+    
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
@@ -90,7 +86,7 @@ const LoginViewController = () => {
       city: userDataProvider?.city,
       state: userDataProvider?.state,
       country: userDataProvider?.country,
-      profilePicture: userDataProvider?.profile_picture,
+      profilePicture: userDataProvider.profile_picture?userDataProvider.profile_picture:profilePicture,
       provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
       licensenumber: userDataProvider?.license,
@@ -108,7 +104,7 @@ const LoginViewController = () => {
       city: userDataProvider?.city,
       state: userDataProvider?.state,
       country: userDataProvider?.country,
-      profilePicture: userDataProvider?.profile_picture,
+      profilePicture: userDataProvider.profile_picture?userDataProvider.profile_picture:profilePicture,
       provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
       licensenumber: userDataProvider?.license,
@@ -120,7 +116,7 @@ const LoginViewController = () => {
       token: response.token,
       userId: response.id,
       isClient: false,
-    });
+  });
 
     navigation.reset({
       index: 0,
@@ -147,9 +143,10 @@ const LoginViewController = () => {
       if (email != '' || password != '') {
         setIsLoading(true);
         const res = await OnProviderSignIn({ email, password });
+        console.log("res is ",res);
 
         if (res?.isSuccessful === true) {
-          handleAuthResponse(res);
+          handleAuthResponse(res,'');
         } else {
           showToast(
             'Login Failed',
@@ -178,12 +175,12 @@ const LoginViewController = () => {
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
-          googleId,
+          googleId
         });
         // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           setIsLoading(false);
-          handleAuthResponse(res);
+          handleAuthResponse(res,userData?.user?.photoURL);
         } else {
           setIsLoading(false);
           Alert.alert(
@@ -212,7 +209,7 @@ const LoginViewController = () => {
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          handleAuthResponse(res);
+          handleAuthResponse(res,'');
         } else {
           setIsLoading(false);
           Alert.alert(

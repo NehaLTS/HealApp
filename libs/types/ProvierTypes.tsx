@@ -88,6 +88,7 @@ export interface OrderRequest{
 export interface PoviderLocation {
   provider_id:string;
   latitude:string;
+  order_id:string;
   longitude:string;
 
 }

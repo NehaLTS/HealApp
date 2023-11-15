@@ -1,29 +1,26 @@
 import { useNavigation } from '@react-navigation/native';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import { AuthServicesProvider, } from 'libs/authsevices/AuthServiceProvider';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React from 'react';
 import { useState } from 'react';
 import useToast from 'components/common/useToast';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
-import { Alert } from 'react-native';
 
 const RegistrationViewController = () => {
 
   const navigation = useNavigation();
-  const { OnProviderCreateSignUp, OrderRequst } = AuthServicesProvider();
+  const { OnProviderCreateSignUp } = AuthServicesProvider();
     const { setToken, setUserId } =
     UseProviderUserContext();
-    const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
   const { showToast, renderToast } = useToast();
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
- 
+  const deviceToken= getLocalData('USER')?.deviceToken
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -65,13 +62,9 @@ if (!emailRef.current.value) setEmailError('Email is required');
     }
   };
   const handleSignUp = () => {
-    // if (!emailError && !passwordError)
-    //   onPressSignUpProvider(emailRef.current.value, passwordRef.current.value);
-    OrderRequst({ status:"accept",
-    client_id:"2",
-    provider_id:"124",
-    latitude:"30.37775529243538",
-    longitude:"76.77481109532673"}).then((res)=>{console.log("ordereAccepted", res)})
+    if (!emailError && !passwordError)
+      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value, deviceToken);
+
     //  navigation.reset({
     //         index: 0,
     //         routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
@@ -79,48 +72,50 @@ if (!emailRef.current.value) setEmailError('Email is required');
           
   };
 
-  const onPressSignUpProvider = async (email: string, password: string, device_token:string) => {
+  const onPressSignUpProvider = async (email: string, password: string,device_token:string) => {
     setIsLoading(true);
-    Alert.alert("tokenecvise", device_token)
     if (email !== undefined && password != undefined) {
-      const response = await OnProviderCreateSignUp({ email, password, device_token}); //api
-      console.log("res is Providerjdsdfsdjj ", response);
+      const res = await OnProviderCreateSignUp({ email, password,device_token });
 
-      if (response && response.token && response.provider_id) {
-        setToken(response.token);
-        setUserId(response.provider_id);
+      console.log("response is ",res);
+
+      //TODO change res.proivder_id to res.id 
+      if (res && res.token && res.id) {
+        setToken(res.token);
+       
+        //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
+       // setUserId(res.id);
+
+       setUserId(res.id);
       }
 
       setLocalData('USER', {
-        token: response?.token,
-        userId: response?.provider_id,
+        token: res?.token,
+        userId: res?.id,
         isClient: false,
       });
-      setLocalData('USERPROVIDERPROFILE', {
+      setLocalData('USERPROFILE', {
         email: email,
       });
 
-      setUserDataProvider({
-        ...userDataProvider,
-        isSuccessful: response?.isSuccessful,
-        provider_id: response.provider_id ?? '',
-        token: response?.token ?? '',
-      });
-      if (response.isSuccessful){
-       
-        navigation.reset({
-          index: 0,
-          routes: [{ name: NavigationRoutes.ProviderHome }],
-          
-        });
-      }
-      else {
+      if (res?.isSuccessful) {
+        setTimeout(() => {
+          //TODO: need to check this as it's a workaround for iOS
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+          });
+        }, 200);
+      } else {
         showToast('User already exist', 'Please try SignIn', 'error');
       }
+      setIsLoading(false);
     } else {
+      setIsLoading(false);
       showToast('', 'Please enter email or password', 'warning');
     }
-    setIsLoading(false);
+
+   
   };
  return {
     handleSignUp,
@@ -134,7 +129,6 @@ if (!emailRef.current.value) setEmailError('Email is required');
     emailRef,
     passwordError,
     passwordRef,
-    onPressSignUpProvider
   };
 };
 export default RegistrationViewController;
