@@ -128,7 +128,7 @@ const ProviderServices = () => {
   return (
     <>
       <View style={styles.inputContainer}>
-        <Text style={styles.text} title={t('authority')} />
+        <Text style={styles.textAuthority} title={t('authority')} />
         {addPrescriptionView()}
         {getServicesView()}
         {isLoading && <Loader />}
@@ -158,15 +158,18 @@ const styles = StyleSheet.create({
   textS: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.sideMargin),
-    marginTop: getHeight(dimens.imageS),
+    marginTop: getHeight(dimens.imageXs),
     textAlign: 'left',
+  },
+  textAuthority: {
+    fontSize: getWidth(fontSize.textXl),
   },
   serviceText: {
     fontSize: getWidth(fontSize.textM),
   },
   servicesContainer: {
     borderWidth: getWidth(dimens.borderBold),
-    borderRadius: getWidth(dimens.marginS),
+    borderRadius: getWidth(5),
     borderColor: colors.primary,
     height: '65%',
     justifyContent: 'center',

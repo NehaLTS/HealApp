@@ -80,11 +80,13 @@ const ProviderAddress = () => {
           onSubmitEditing={() => licenseRef.current.focus()}
           onClearInputText={() => phoneRef.current.clear()}
           inputStyle={styles.inputPhone}
+          maxLength={10}
         />
 
         <Input
           placeholder={t('license_number')}
           type={'nameSuffix'}
+          keyboardType="number-pad"
           inputStyle={styles.input}
           onBlur={onBlurPhoneNumber}
           onChangeText={onChangeLicenseNumber}
@@ -94,6 +96,7 @@ const ProviderAddress = () => {
           returnKeyType={'next'}
           onSubmitEditing={() => addressRef.current.focus()}
           onClearInputText={() => licenseRef.current.clear()}
+          maxLength={10}
         />
 
         <Input

@@ -1,18 +1,19 @@
+import { useNavigation } from '@react-navigation/native';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import React, { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import { useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
 
 const UserPaymentViewController = ({ item }: any) => {
+  const { userId, userProfile, setUserProfile } = UseClientUserContext();
   const { onCreateCreditCardDetails } = AuthServicesClient();
   const cardNumberRef = React.useRef<any>('');
   const expireDateRef = React.useRef<any>('');
   const cvvRef = React.useRef<any>('');
-  const [card, setCard] = useState('');
-  const [expiry, setExpiry] = useState('');
+  const [card, setCard] = useState(userProfile?.card_number ?? '');
+  const [expiry, setExpiry] = useState(userProfile?.expire_date ?? '');
   const [cvv, setCvv] = useState('');
   const [cardNumberError, setCardNumberError] = useState('');
   const [cvvError, setCvvError] = useState('');
@@ -21,32 +22,32 @@ const UserPaymentViewController = ({ item }: any) => {
   const [cardExpiry, setCardExpiry] = useState('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isCardDetails, setIsCardDetails] = useState(false);
-  const { userId, userProfile, setUserProfile } = UseClientUserContext();
   const navigation = useNavigation<any>();
-  useEffect(() => {
-    if (userProfile?.card_number) {
-      setCard(userProfile?.card_number ?? '');
-      setExpiry(userProfile?.expire_date ?? '');
-    }
-  }, []);
 
   const validateCardNumber = () => {
     if (!card?.length) setCardNumberError('Card number is required');
-    else setCardNumberError('');
+    else if (card?.length !== 19) {
+      setCardNumberError('Card number is to short');
+    } else setCardNumberError('');
   };
 
   const validateCardExpiry = () => {
     if (!expiry?.length) setCardExpiryError('Expiry date is required');
-    else setCardExpiryError('');
+    else if (expiry?.length !== 5) {
+      setCardExpiryError('Expiry number is to short');
+    } else setCardExpiryError('');
   };
   const validateCvv = () => {
     if (!cvv?.length) setCvvError('Cvv is required');
-    else setCvvError('');
+    else if (cvv?.length !== 3) {
+      setCvvError('Cvv number is to short');
+    } else setCvvError('');
   };
 
   const trimPaymentValue = (value: string) => value.replace(/[^0-9]/g, '');
 
   const onChangeCardNumber = (value: string) => {
+    validateCardNumber();
     const cleanedText = trimPaymentValue(value);
     let formattedText = '';
 
@@ -59,9 +60,9 @@ const UserPaymentViewController = ({ item }: any) => {
     // cardNumberRef.current.value = formattedText;
     console.log('formattedText', formattedText);
     setCard(formattedText);
-    validateCardNumber();
   };
   const onChangeExpireDate = (value: string) => {
+    validateCardExpiry();
     const cleanedText = trimPaymentValue(value);
     let formattedText = '';
     for (let i = 0; i < cleanedText.length; i += 2) {
@@ -71,7 +72,6 @@ const UserPaymentViewController = ({ item }: any) => {
     // expireDateRef.current.setNativeProps({ text: formattedText });
     // expireDateRef.current.value = formattedText;
     setExpiry(formattedText);
-    validateCardExpiry();
   };
 
   const onChangeCvv = (value: string) => {
@@ -88,6 +88,12 @@ const UserPaymentViewController = ({ item }: any) => {
   const onClearCard = () => {
     setCard('');
     expireDateRef.current.focus();
+  };
+  const onDeleteCard = () => {
+    setIsCardDetails(false);
+    setCard('');
+    setExpiry('');
+    setCvv('');
   };
 
   const onPressNext = async () => {
@@ -110,35 +116,39 @@ const UserPaymentViewController = ({ item }: any) => {
   };
 
   const onPressStartUsingHeal = async (isFromHome: boolean) => {
-    setIsLoader(true);
-    const res = await onCreateCreditCardDetails({
-      credit_card_number: card ?? '',
-      expire_date: expiry ?? '',
-      cvv: cvv ?? '',
-      client_id: getLocalData?.('USER')?.userId,
-    });
+    if (card?.length === 19 && expiry?.length === 5 && cvv?.length === 3) {
+      setIsLoader(true);
+      const res = await onCreateCreditCardDetails({
+        credit_card_number: card ?? '',
+        expire_date: expiry ?? '',
+        cvv: cvv ?? '',
 
-    //TODO: Vandana to save in Local data with isPaymentAdded as true
-    setLocalData('USERPROFILE', {
-      isPaymentAdded: true,
-      card_number: '************1234',
-    });
+        client_id: getLocalData?.('USER')?.userId,
+      });
 
-    console.log('response is ', res);
-    setIsLoader(false);
-
-    if (res?.isSuccessful) {
-      if (isFromHome)
-        navigation.navigate(NavigationRoutes.OrderDetails, {
-          supplier: item,
+      if (res?.isSuccessful) {
+        //TODO: Vandana to save in Local data with isPaymentAdded as true
+        setLocalData('USERPROFILE', {
+          isPaymentAdded: true,
+          card_number: card,
+          expire_date: expiry,
         });
-      else {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: NavigationRoutes.ClientHome }],
-        });
+        setIsLoader(false);
+        if (isFromHome)
+          navigation.navigate(NavigationRoutes.OrderDetails, {
+            supplier: item,
+          });
+        else {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ClientHome }],
+          });
+        }
+      } else {
+        setIsLoader(false);
+        Alert.alert('Some error occurred');
       }
-    } else Alert.alert('Some error occurred');
+    }
   };
 
   return {
@@ -167,6 +177,7 @@ const UserPaymentViewController = ({ item }: any) => {
     card,
     expiry,
     cvv,
+    onDeleteCard,
   };
 };
 

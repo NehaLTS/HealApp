@@ -1,7 +1,6 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
-import { generateRandomName } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
@@ -53,6 +52,12 @@ const ProviderDetailController = () => {
     setSelectedSpeciality(value);
     setSpecialityError('');
   };
+  const getProviderTypes = async () => {
+    let res = await onGetProviderTypes(token);
+
+    console.log('res is ', res);
+    setProviderTypeList(res);
+  };
 
   useEffect(() => {
     getProviderTypes();
@@ -67,17 +72,11 @@ const ProviderDetailController = () => {
     }
   }, []);
 
-  const getProviderTypes = async () => {
-    let res = await onGetProviderTypes(token);
-
-    console.log('res is ', res);
-    setProviderTypeList(res);
-  };
   const getImageUrl = (url: string) => {
     setIdPicture(url);
-    const imagePath = url;
-    const folderName = 'images/users';
-    const fileName = generateRandomName();
+    // const imagePath = url;
+    // const folderName = 'images/users';
+    // const fileName = generateRandomName();
 
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {

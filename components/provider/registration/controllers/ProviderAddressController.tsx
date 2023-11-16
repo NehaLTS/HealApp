@@ -1,5 +1,6 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { ProviderProfile } from 'libs/types/UserType';
+import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
@@ -27,8 +28,10 @@ const ProviderAddressController = () => {
 
   const onBlurPhoneNumber = () => validatePhoneNumber();
 
-  const onChangePhoneNumber = (value: string) =>
-    (phoneRef.current.value = value);
+  const onChangePhoneNumber = (value: string) => {
+    phoneRef.current.value = value;
+    validatePhoneNumber();
+  };
 
   const onChangeLicenseNumber = (value: string) =>
     (licenseRef.current.value = value);
@@ -63,14 +66,15 @@ const ProviderAddressController = () => {
     }
   };
 
-  const onPressBack = () =>  setCurrentStep('details');
+  const onPressBack = () => setCurrentStep('details');
+  const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
   const validatePhoneNumber = () => {
     if (!phoneRef.current.value) {
       setPhoneError('Phone number is required');
-    } else {
-      setPhoneError('');
-    }
+    } else if (!isValidPhoneNumber(phoneRef.current.value)) {
+      setPhoneError('Phone number is to short');
+    } else setPhoneError('');
   };
 
   const validateAddress = () => {

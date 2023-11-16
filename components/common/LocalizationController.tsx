@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { I18nManager, NativeModules } from 'react-native';
+import { I18nManager } from 'react-native';
+import RNRestart from 'react-native-restart';
 import {
   getLocalData,
   setLocalData,
 } from '../../libs/datastorage/useLocalStorage';
 import { UserType } from '../../libs/types/UserType';
 import NavigationRoutes from '../../navigator/NavigationRoutes';
+import SplashScreen from 'react-native-splash-screen';
 
 const LocalizationController = () => {
   const { t, i18n } = useTranslation();
@@ -39,10 +41,14 @@ const LocalizationController = () => {
     i18n.changeLanguage(lng);
     if (lng == 'en' || lng === 'ru') {
       I18nManager.forceRTL(false);
-      NativeModules.DevSettings.reload();
+      I18nManager.allowRTL(false);
+      SplashScreen.show();
+      RNRestart.restart();
     } else if (lng == 'he' || lng == 'ar') {
+      SplashScreen.show();
       I18nManager.forceRTL(true);
-      NativeModules.DevSettings.reload();
+      I18nManager.allowRTL(true);
+      RNRestart.restart();
     }
 
     // if(lng=="he" || lng=='ar'){

@@ -24,7 +24,6 @@ const Input = forwardRef(
   (
     {
       placeholder,
-      placeholderStyle,
       type,
       inputStyle,
       errorMessage,
@@ -50,7 +49,6 @@ const Input = forwardRef(
         | 'numeric'
         | 'dateOfBirth';
       inputStyle?: StyleProp<TextStyle>;
-      placeholderStyle?: StyleProp<TextStyle>;
       errorMessage?: string;
       containerWidth?: DimensionValue;
       inputValue?: string;
@@ -126,19 +124,13 @@ const Input = forwardRef(
           style={[
             styles.inputContainer,
             inputStyle,
-            // placeholderStyle,
             { borderColor: errorMessage ? colors.invalid : colors.primary },
           ]}
         >
           {!inputPlaceholder?.length && (
             <Animated.Text
               adjustsFontSizeToFit
-              style={[
-                styles.label,
-                labelStyle,
-                fontSizeStyle,
-                // placeholderStyle,
-              ]}
+              style={[styles.label, labelStyle, fontSizeStyle]}
             >
               {placeholder}
             </Animated.Text>

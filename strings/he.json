@@ -92,5 +92,13 @@
   "arrival": "הגעה משוערת",
   "instructions_for": "הוראות הגעה",
   "start_using_heal": "התחל להשתמש ב-Heal",
-  "edit": "לַעֲרוֹך"
+  "edit": "לַעֲרוֹך",
+  "order": "להזמין",
+  "describe_symptoms": "תאר את הסימפטומים וכו'.",
+  "current_location": "המיקום הנוכחי שלך",
+  "60_min": "60 דקות",
+  "total": "סה\"כ -",
+  "please_add_payment": "הוסף תחילה שיטת תשלום\n",
+  "payment_method": "הוסף אמצעי תשלום",
+  "master_card": "מאסטר-קארד"
 }

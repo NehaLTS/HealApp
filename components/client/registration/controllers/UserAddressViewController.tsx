@@ -55,10 +55,10 @@ const UserAddressViewController = () => {
   };
 
   const getImageUrl = (url: string) => {
-    // setProfilePicture(url)
-    const imagePath = url;
-    const folderName = 'images/users';
-    const fileName = generateRandomName();
+    setProfilePicture(url);
+    // const imagePath = url;
+    // const folderName = 'images/users';
+    // const fileName = generateRandomName();
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {
     //     // Handle the downloadURL as needed
@@ -81,7 +81,7 @@ const UserAddressViewController = () => {
       setIsLoader(true);
       setUserProfile({
         ...(userProfile as ClientProfile),
-        address: addressRef.current.value,
+        address: onSearchAddress,
         date_of_birth: dateOfBirth.toString(),
         idNumber: idNumberRef.current.value,
         city: '',
@@ -94,7 +94,7 @@ const UserAddressViewController = () => {
       const res = await onUpdateUserProfile?.(
         {
           ...userProfile,
-          address: addressRef.current.value,
+          address: onSearchAddress,
           date_of_birth: dateOfBirth.toString(),
           idNumber: idNumberRef.current.value,
           city: '',
@@ -111,7 +111,7 @@ const UserAddressViewController = () => {
         firstName: userProfile.firstName,
         lastName: userProfile.lastName,
         phoneNumber: userProfile.phoneNumber,
-        address: addressRef.current.value,
+        address: onSearchAddress,
         city: '',
         state: '',
         country: '',

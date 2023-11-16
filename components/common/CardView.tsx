@@ -18,22 +18,25 @@ import Animated, {
   FadeInUp,
 } from 'react-native-reanimated';
 import { getProviderImage } from 'libs/utility/Utils';
+import { useTranslation } from 'react-i18next';
 
-const CardView = ({ item, onPress, index, isSearch, user }: any) => {
+const CardView = ({ item, index, isSearch }: any) => {
   const navigation = useNavigation<any>();
   const [isModalVisible, setModalVisible] = useState(false);
   const [isAddPayment, setIsAddPayment] = useState(false);
   const onPaymentAdd = () => setIsAddPayment(true);
   const { userProfile } = UseClientUserContext();
-
+  const { t } = useTranslation();
   const onPressOrder = () => {
-    if (user?.isPaymentAdded)
+    if (userProfile?.isPaymentAdded) {
       navigation.navigate(NavigationRoutes.OrderDetails, {
         supplier: item,
       });
-    else setModalVisible(true);
+    } else {
+      setModalVisible(true);
+    }
   };
-
+  // console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
@@ -46,12 +49,10 @@ const CardView = ({ item, onPress, index, isSearch, user }: any) => {
         <>
           <View style={{ flex: 0.33 }} />
           <View style={styles.modalContent}>
-            <Text
-              style={styles.modalText}
-              title={'Please add method\nof payment first'}
-            />
+            <Text style={styles.modalText} title={t('please_add_payment')} />
+
             <Button
-              title={'Add payment method'}
+              title={t('payment_method')}
               isPrimary
               isSmall
               fontSized={getHeight(15)}
@@ -77,7 +78,7 @@ const CardView = ({ item, onPress, index, isSearch, user }: any) => {
         {!isSearch ? (
           <TouchableOpacity
             style={[styles.servicesContainer, styles.elevation]}
-            onPress={onPress}
+            onPress={onPressOrder}
             activeOpacity={1}
           >
             <Image
@@ -100,7 +101,7 @@ const CardView = ({ item, onPress, index, isSearch, user }: any) => {
               <Text style={styles.specialistSearched} title={item?.name?.en} />
             </View>
             <Button
-              title={'Order'}
+              title={t('order')}
               isPrimary
               isSmall
               width={84}

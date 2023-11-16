@@ -82,7 +82,7 @@ const ProviderDetail = () => {
         inputValue={providerProfile?.lastName ?? ''}
         errorMessage={lastNameError}
         onClearInputText={() => lastNameRef.current.clear()}
-        returnKeyType={'done'}
+        returnKeyType={'next'}
       />
 
       <Dropdown

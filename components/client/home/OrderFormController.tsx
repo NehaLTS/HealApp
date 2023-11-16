@@ -1,5 +1,6 @@
 import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
+import { numericPattern } from 'libs/utility/Utils';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
@@ -23,7 +24,9 @@ const OrderFormController = ({
     }
   });
 
-  const [isMeSelected, setIsMeSelected] = useState(true);
+  const [isMeSelected, setIsMeSelected] = useState(
+    order?.patient_type?.type === 'me',
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
@@ -38,7 +41,8 @@ const OrderFormController = ({
   const phoneRef = React.useRef<any>('');
   const otherReasons = React.useRef<any>('');
   const [isVisible, setIsVisible] = useState(false);
-
+  const [phoneError, setPhoneError] = useState('');
+  const [ageError, setAgeError] = useState('');
   function calculateBirthDate(age: number) {
     const currentDate = new Date();
     const birthYear = currentDate.getFullYear() - age;
@@ -72,22 +76,43 @@ const OrderFormController = ({
     return age;
   }
 
-  const onChangeAge = (value: string) => (ageRef.current.value = value);
-  const onChangePhone = (value: string) => (phoneRef.current.value = value);
+  const isValidPhoneNumber = (p: string) => numericPattern.test(p);
+
+  const validatePhoneNumber = () => {
+    if (!isValidPhoneNumber(phoneRef.current.value)) {
+      setPhoneError('Phone number is not valid');
+    } else setPhoneError('');
+  };
+  const validateAge = () => {
+    if (!isValidPhoneNumber(ageRef.current.value)) {
+      setAgeError('Age is not valid');
+    } else setAgeError('');
+  };
+  const onChangeAge = (value: string) => {
+    ageRef.current.value = value;
+    validateAge();
+  };
+  const onChangePhone = (value: string) => {
+    phoneRef.current.value = value;
+    validatePhoneNumber();
+  };
+
   const onSubmitDetail = () => {
-    setOrder({
-      ...order,
-      patient_type: {
-        type: 'other',
-        age: calculateBirthDate(ageRef.current.value),
-      },
-      phonenumber: phoneRef?.current?.value,
-    });
-    setIsSubmitDetail(true);
+    if (!phoneError?.length && !ageError?.length) {
+      setOrder({
+        ...order,
+        patient_type: {
+          type: 'other',
+          age: calculateBirthDate(ageRef.current.value),
+        },
+        phonenumber: phoneRef?.current?.value,
+      });
+      setIsSubmitDetail(true);
+    }
   };
 
   const onSelectReasons = (item: any) => {
-    const updatedActiveButton = [...activeButton]; // Create a copy of the activeButton array
+    const updatedActiveButton = [...activeButton];
     const itemIndex = updatedActiveButton.indexOf(item.reason_id);
 
     if (itemIndex !== -1) {
@@ -96,30 +121,45 @@ const OrderFormController = ({
       updatedActiveButton.push(item.reason_id);
     }
     setActiveButton(updatedActiveButton);
-    setSelectedResourceType((prev) => [...prev, item]);
-    setOrder({
-      ...order,
-      reason: [...selectedResourceType, item],
-    });
+    const updatedSelectedResourceType = selectedResourceType.includes(item)
+      ? selectedResourceType.filter((selectedItem) => selectedItem !== item)
+      : [...selectedResourceType, item];
+
+    setSelectedResourceType(updatedSelectedResourceType);
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      reason: updatedSelectedResourceType,
+    }));
   };
 
   const onMeTogglePress = (item: string) => {
-    if (item === 'me') setIsMeSelected(true);
-    else setIsMeSelected(false);
-    setOrder({
-      ...order,
-      patient_type: {
-        type: 'me',
-        age: calculateBirthDate(ageRef?.current?.value ?? ''),
-      },
-    });
+    if (item === 'me') {
+      setIsMeSelected(true);
+      setOrder({
+        ...order,
+        isOrderForOther: false,
+      });
+    } else {
+      setIsMeSelected(false);
+      setOrder({
+        ...order,
+        isOrderForOther: true,
+      });
+    }
+    // setOrder({
+    //   ...order,
+    //   patient_type: {
+    //     type: item,
+    //     age: calculateBirthDate(ageRef?.current?.value ?? ''),
+    //   },
+    // });
   };
 
-  console.log('selectedMenu', selectedMenu);
-  const handleItemPress = (item: TreatmentMenu, index: number) => {
-    const updatedActiveCheckbox = [...activeCheckbox]; // Create a copy of the activeButton array
+  const handleItemPress = (item: TreatmentMenu) => {
+    const updatedActiveCheckbox = [...activeCheckbox];
     const itemIndex = updatedActiveCheckbox.indexOf(item?.menu_id);
-    let updatedSelectedMenu;
+    let updatedSelectedMenu: TreatmentMenu[]; // Explicitly define the type
+
     if (itemIndex !== -1) {
       updatedActiveCheckbox.splice(itemIndex, 1);
     } else {
@@ -136,10 +176,10 @@ const OrderFormController = ({
       updatedSelectedMenu = [...selectedMenu, item];
     }
     setSelectedMenu(updatedSelectedMenu);
-    setOrder({
-      ...order,
-      services: [...selectedMenu, item],
-    });
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      services: updatedSelectedMenu,
+    }));
   };
 
   const onChangeAddress = (address: string) => {
@@ -151,10 +191,13 @@ const OrderFormController = ({
   };
 
   const onSubmitDescription = () => {
-    setOrder({
-      ...order,
-      Additional_notes: otherReasons?.current?.value,
-    });
+    if (otherReasons.current.value) {
+      setIsModalVisible(false);
+      setOrder({
+        ...order,
+        Additional_notes: otherReasons?.current?.value,
+      });
+    }
   };
 
   return {
@@ -178,6 +221,8 @@ const OrderFormController = ({
     isVisible,
     onChangeAddress,
     onSubmitDescription,
+    phoneError,
+    ageError,
   };
 };
 

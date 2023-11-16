@@ -52,7 +52,6 @@
   "start_using_heal": "Start using Heal",
   "expires": "Expires",
   "type_of_provider": "Type of provider",
-  "your_location": " Your current location",
   "change": "Change",
   "specialist": "Which specialist do you need?",
   "results": "No search results",
@@ -93,6 +92,14 @@
   "waiting_text": "Your form was successfully \n submitted and now waiting \n for the approval.\n We will get back to you with in 7 days.",
   "ask_question_text": "If you have any questions feel free to call us",
   "edit": "Edit",
+  "order": "Order",
+  "describe_symptoms": "Describe the symptoms, etc.",
+  "current_location": "Your current location",
+  "60_min": "60min",
+  "total": "Total - ",
+  "please_add_payment": "Please add method\nof payment first",
+  "payment_method": "Add payment method",
+  "master_card": "Master-card",
 
   "home": {
     "providerList": [

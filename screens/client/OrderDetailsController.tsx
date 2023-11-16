@@ -13,13 +13,14 @@ const OrderDetailsController = () => {
   const navigation = useNavigation();
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
+  // console.log('userProfile', userProfile);
   const [order, setOrder] = useState<OrderDetail>({
     client_id: '',
     patient_type: { type: 'me', age: '' },
     patient_name: '',
-    address: '',
+    address: (userProfile as ClientProfile)?.address ?? '',
     city: (userProfile as ClientProfile)?.city ?? '',
-    phonenumber: '',
+    phonenumber: (userProfile as ClientProfile)?.phoneNumber ?? '',
     Date_of_birth: '',
     services: [],
     symptoms: '',
@@ -30,6 +31,7 @@ const OrderDetailsController = () => {
     TotalCost: '',
     menu_id: '',
     reason: [],
+    isOrderForOther: false,
   });
 
   useEffect(() => {
@@ -46,7 +48,21 @@ const OrderDetailsController = () => {
   };
 
   const handleNextButtonPress = async () => {
-    setShowSummary(true);
+    if (
+      order.isOrderForOther &&
+      order?.reason?.length > 0 &&
+      order?.services?.length > 0 &&
+      order?.patient_type?.age?.length > 0
+    ) {
+      setShowSummary(true);
+    }
+    if (
+      order.isOrderForOther === false &&
+      order?.reason?.length > 0 &&
+      order?.services?.length > 0
+    ) {
+      setShowSummary(true);
+    }
     // console.log("orderDetails", orderDetails);
     // const menuIds = orderDetails?.treatmentMenu.map(item => item.menu_id);
     // if (showSummary === true) {

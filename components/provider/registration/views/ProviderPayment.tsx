@@ -43,6 +43,7 @@ const ProviderPayment = () => {
     onPressNext,
     onPressBack,
     isLoading,
+    profilePicture,
   } = ProviderPaymentController();
 
   return (
@@ -112,14 +113,14 @@ const ProviderPayment = () => {
       <View style={styles.iconContainer}>
         <Text style={styles.text} title={t('add_profile')} />
         <TouchableOpacity
-          activeOpacity={providerProfile?.profilePicture ? 1 : 0.5}
+          activeOpacity={profilePicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
         >
           <Image
             source={
-              providerProfile && providerProfile.profilePicture
-                ? { uri: providerProfile.profilePicture }
-                : require('../../../../assets/icon/editprofile.png')
+              profilePicture
+                ? { uri: profilePicture }
+                : require('assets/icon/editprofile.png')
             }
             style={styles.selectedImage}
           />

@@ -1,4 +1,5 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 
 const UserDetailViewController = () => {
@@ -32,12 +33,13 @@ const UserDetailViewController = () => {
       setLastNameError('Last name is required');
     } else setLastNameError('');
   };
+  const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
   const validatePhoneNumber = () => {
     if (!phoneNumberRef.current.value) {
       setPhoneNumberError('Phone number is required');
-    } else if (phoneNumberRef?.current?.value?.length !== 10) {
-      setPhoneNumberError('Phone number is to short');
+    } else if (!isValidPhoneNumber(phoneNumberRef.current.value)) {
+      setPhoneNumberError('Phone number is not valid');
     } else setPhoneNumberError('');
   };
   const onBlurFirstName = () => validateFirstName();
@@ -55,7 +57,7 @@ const UserDetailViewController = () => {
 
   const onChangePhoneNumber = (value: string) => {
     phoneNumberRef.current.value = value;
-    onBlurPhoneNumber();
+    validatePhoneNumber();
   };
 
   const onPressNext = () => {

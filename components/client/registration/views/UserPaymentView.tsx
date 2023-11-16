@@ -23,9 +23,11 @@ import UserPaymentViewController from '../controllers/UserPaymentViewController'
 const UserPaymentView = ({
   isFromHome,
   item,
+  onPress,
 }: {
   isFromHome?: boolean;
   item?: any;
+  onPress?: () => void;
 }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -56,10 +58,8 @@ const UserPaymentView = ({
     expiry,
     cvv,
     onClearCard,
+    onDeleteCard,
   } = UserPaymentViewController({ item });
-  console.log('card', card);
-  console.log('expiry', expiry);
-  console.log('cvv', cvv);
 
   return (
     <>
@@ -76,7 +76,7 @@ const UserPaymentView = ({
             adjustsFontSizeToFit
             numberOfLines={2}
             style={styles.title}
-            title={'Add payment\nmethod'}
+            title={t('payment_method')}
           />
         </View>
       )}
@@ -100,7 +100,7 @@ const UserPaymentView = ({
                 source={require('assets/icon/masterCard.png')}
                 style={styles.googlePay}
               />
-              <Text title="Master-card" />
+              <Text title={t('master_card')} />
               <View style={styles.cardIcons}>
                 <TouchableOpacity onPress={() => setIsCardDetails(false)}>
                   <Image
@@ -108,10 +108,12 @@ const UserPaymentView = ({
                     style={styles.cardImages}
                   />
                 </TouchableOpacity>
-                <Image
-                  source={require('assets/icon/cancel.png')}
-                  style={styles.cardImages}
-                />
+                <TouchableOpacity onPress={onDeleteCard}>
+                  <Image
+                    source={require('assets/icon/cancel.png')}
+                    style={styles.cardImages}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.cardDetailContainer}>
@@ -219,7 +221,10 @@ const UserPaymentView = ({
             isPrimary
             isSmall
             style={{ paddingHorizontal: 0 }}
-            onPress={() => onPressStartUsingHeal(isFromHome ?? false)}
+            onPress={() => {
+              onPressStartUsingHeal(isFromHome ?? false);
+              onPress?.();
+            }}
             width={'70%'}
           />
         )}

@@ -18,6 +18,7 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  I18nManager,
   Image,
   ScrollView,
   StyleSheet,
@@ -56,7 +57,7 @@ const HomeScreen = () => {
         <Text
           numberOfLines={1}
           style={styles.text}
-          title={t('your_location')}
+          title={t('current_location')}
         />
       </View>
       <TextButton
@@ -69,7 +70,10 @@ const HomeScreen = () => {
     </View>
   );
   const headerLeft = () => (
-    <TouchableOpacity onPress={onPressBack}>
+    <TouchableOpacity
+      onPress={onPressBack}
+      disabled={onChangeSearch?.length === 0}
+    >
       <Image
         source={onChangeSearch?.length !== 0 ? arrowBack : logo}
         style={onChangeSearch?.length !== 0 ? styles.arrowBack : styles.logo}
@@ -88,29 +92,14 @@ const HomeScreen = () => {
       <>
         <Text style={styles.searchHeading} title={t('specialist')} />
         {providerList.map((item: any, index: number) => (
-          <CardView
-            key={index}
-            item={item}
-            index={index}
-            onPress={() =>
-              navigation.navigate(NavigationRoutes.OrderDetails, {
-                supplier: item,
-              })
-            }
-          />
+          <CardView key={index} item={item} index={index} />
         ))}
       </>
     );
   };
   const getProviderSearchList = () => {
     return providersList?.map((item: any, index: number) => (
-      <CardView
-        key={index}
-        item={item}
-        index={index}
-        isSearch
-        user={userProfile}
-      />
+      <CardView key={index} item={item} index={index} isSearch />
     ));
   };
   const noSearchedView = () => {
@@ -210,7 +199,7 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   headerTitle: {
-    flexDirection: 'row',
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
     alignItems: 'center',
     gap: dimens.paddingS,
   },

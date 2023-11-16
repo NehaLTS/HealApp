@@ -21,6 +21,11 @@ const ProviderPaymentController = () => {
 
   const { setCurrentStep, setProviderProfile, providerProfile, userId, token } =
     UseProviderUserContext();
+  const [profilePicture, setProfilePicture] = useState(
+    providerProfile && providerProfile.profilePicture
+      ? providerProfile.profilePicture
+      : '',
+  );
 
   const onBlurRegistrationNumber = () => validateRegistrationNumber();
 
@@ -43,7 +48,9 @@ const ProviderPaymentController = () => {
 
   const onChangeAccount = (value: string) => (accountRef.current.value = value);
 
-  const getImageUrl = (url: string) => {};
+  const getImageUrl = (url: string) => {
+    setProfilePicture(url);
+  };
 
   const validateRegistrationNumber = () => {
     if (!registrationNumberRef.current.value) {
@@ -194,6 +201,7 @@ const ProviderPaymentController = () => {
     onPressBack,
     setIsShowModal,
     isLoading,
+    profilePicture,
   };
 };
 

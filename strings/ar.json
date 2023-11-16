@@ -92,5 +92,13 @@
   "close": "يغلق",
   "price": "سعر*",
   "start_using_heal": "البدء في استخدام شفاء",
-  "edit": "يحرر"
+  "edit": "يحرر",
+  "order": "طلب",
+  "describe_symptoms": "وصف الأعراض، الخ.",
+  "current_location": "موقعك الحالي",
+  "60_min": "60 دقيقة",
+  "total": "المجموع -",
+  "please_add_payment": "الرجاء إضافة طريقة\nالدفع أولاً",
+  "payment_method": "إضافة طريقة دفع",
+  "master_card": "بطاقة ماستر بطاقة ائتمان"
 }

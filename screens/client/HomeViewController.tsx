@@ -6,7 +6,11 @@ import {
   getLocalData,
 } from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
-import { ClientProfile } from 'libs/types/UserType';
+import {
+  ClientProfile,
+  ProviderProfile,
+  UserTypeProvider,
+} from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Keyboard, Linking } from 'react-native';
@@ -60,9 +64,13 @@ const HomeViewController = () => {
     //     requestLocationPermission();
     //   }
     // });
-    //   const abc = getLocalData('USERPROFILE');
-    //   setUser(abc as ClientProfile);
-    //   setUserProfile({ ...userProfile, card_number: abc?.card_number });
+    const user = getLocalData('USERPROFILE');
+    // setUser(abc as ClientProfile);
+    setUserProfile({
+      ...userProfile,
+      isPaymentAdded: (user as ClientProfile)?.isPaymentAdded,
+    });
+    console.log('user?.isPaymentAdded********', user);
   }, []);
   // const getLocation = () => {
   //   Geolocation.getCurrentPosition(

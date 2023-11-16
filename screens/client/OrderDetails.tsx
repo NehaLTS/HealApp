@@ -10,6 +10,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import {
+  I18nManager,
   Image,
   ScrollView,
   StyleSheet,
@@ -19,6 +20,7 @@ import {
 import OrderDetailsController from './OrderDetailsController';
 import { useTranslation } from 'react-i18next';
 import { getProviderImage } from 'libs/utility/Utils';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const OrderDetails = () => {
   const {
@@ -49,7 +51,13 @@ const OrderDetails = () => {
   );
   const HeaderLeft = () => {
     return (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={{
+          padding: I18nManager.isRTL ? getWidth(16) : 0,
+          paddingLeft: getWidth(0),
+        }}
+        onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
+      >
         <Image source={arrowBack} style={styles.arrowBack} />
       </TouchableOpacity>
     );
@@ -77,7 +85,7 @@ const OrderDetails = () => {
             />
           )}
           <Button
-            title={showSummary ? 'Order' : 'Next'}
+            title={showSummary ? t('order') : t('next')}
             isPrimary
             isSmall
             style={styles.buttonOrder}
@@ -115,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: getWidth(dimens.sideMargin),
     paddingTop: getHeight(dimens.marginS + 3),
-    width: '100%',
+    width: I18nManager.isRTL ? '82%' : '100%',
     marginLeft: getWidth(50),
   },
   specialistIcon: {
@@ -126,6 +134,7 @@ const styles = StyleSheet.create({
   },
   specialist: {
     fontSize: getWidth(fontSize.textXl),
+    textAlign: 'left',
   },
   buttonOrder: {
     alignSelf: 'center',
