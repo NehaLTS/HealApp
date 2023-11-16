@@ -17,9 +17,13 @@ const HomeScreen = () => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [isCancelOrder, setIsCancelOrder] = useState(false);
   const [notification, setNotification]=useState(false)
-   const  {acceptOrder, OnPressTakeOrder , updateLocation} =HomeScreenControlller()
-  useEffect(() => {
+  const  {acceptOrder, OnPressTakeOrder , updateLocation} =HomeScreenControlller()
+   
+   useEffect(()=>{
     createNotificationListeners()
+   },[])
+  
+   useEffect(() => {
     DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
       setNotification(true)
     })
@@ -36,7 +40,7 @@ const HomeScreen = () => {
       clearInterval(interval);
       DeviceEventEmitter.removeAllListeners('DoctorNotification')
     }
-  }, [])
+  }, [acceptOrder])
 
   const getNewOrderView = () => (
     <RNModal
@@ -137,7 +141,6 @@ const HomeScreen = () => {
         />
       </View>
       {getNewOrderView()}
-      {/* {getNewOrderView()} */}
       {getCancelOrderView()}
     </>
   );

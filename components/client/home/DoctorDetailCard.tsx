@@ -9,9 +9,11 @@ import Text from 'components/common/Text';
 
 const DoctorDetailCard = ({
   isPrimary,
+  showProvider,
   showBothCards,
 }: {
   isPrimary?: boolean;
+  showProvider?:boolean;
   showBothCards: boolean;
 }) => {
   return (
@@ -31,7 +33,7 @@ const DoctorDetailCard = ({
         </View>
       ) : null}
 
-      {isPrimary ? null : (
+      {showProvider||showBothCards ? (
         <View style={styles.cardDetail}>
           <Text
             style={styles.doctorTitle}
@@ -64,7 +66,7 @@ const DoctorDetailCard = ({
             </View>
           </View>
         </View>
-      )}
+      ):null}
     </>
   );
 };

@@ -18,6 +18,7 @@ import { getLocalData } from "libs/datastorage/useLocalStorage";
 import { Location } from "libs/types/UserType";
 import Geolocation from 'react-native-geolocation-service';
 import SearchDoctorController from "./SearchDoctorController";
+import { Loader } from "components/common/Loader";
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const SearchDoctor = () => {
   const localData= getLocalData('USER')
   const {setCurrentLocationOfUser} =UseClientUserContext()
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const {permissionHelper, forceAlert, handleNextButtonPress}= SearchDoctorController()
+  const {permissionHelper, forceAlert, handleNextButtonPress, showRateAlert}= SearchDoctorController()
   const [providerLocation, setProviderLocation]=useState<{latitude:number, longitude:number}>();
 
   useLayoutEffect(() => {
@@ -103,14 +104,18 @@ return DeviceEventEmitter.removeAllListeners('DoctorNotification')
   return (
     <View style={styles.mainContainer}>
       <Text style={styles.lookingDoctor} title={t("Looking for a doctor")} />
+      
       <View style={styles.mapContainer}>
-        {providerLocation &&<MapView
+      {providerLocation===undefined &&
+      <Loader style={{zIndex:1,position:'absolute', alignSelf:'center',bottom:getHeight(30), top:getHeight(30)}}/>
+      }
+       <MapView
         provider={PROVIDER_GOOGLE}
         showsUserLocation
         followsUserLocation
-        loadingEnabled={!providerLocation}
         region={currentLocation} 
         style={{flex:1}}> 
+        
           {providerLocation!=undefined&& ( 
             <Marker
               coordinate={{
@@ -118,12 +123,12 @@ return DeviceEventEmitter.removeAllListeners('DoctorNotification')
                 longitude:providerLocation.longitude,
               }}
               title="Doctor Location">
-              </Marker>)}  
-            </MapView>}
-            {providerLocation!=undefined &&
-            <View style={{ zIndex:1, position:'absolute', left:10,paddingHorizontal:getWidth(20)}}>
-              <DoctorDetailCard isPrimary={false} showBothCards={false}/>
-              </View>}
+              </Marker>)} 
+            </MapView>
+           
+            <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20)}}>
+              <DoctorDetailCard isPrimary={showRateAlert} showBothCards={showRateAlert&&providerLocation!=undefined} showProvider={providerLocation!=undefined}/>
+              </View>
       </View>
         <Button
         title={providerLocation!=undefined?"Order":"Cancel"}

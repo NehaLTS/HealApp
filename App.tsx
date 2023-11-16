@@ -15,11 +15,14 @@ import IntroStackNavigator from './navigator/IntroStackNavigator';
 import NavigationRoutes from './navigator/NavigationRoutes';
 import {
   ClientProfile,
+  OrderDetail,
   ProviderProfile,
   ProviderServices,
   onboardStep,
+  currentLocationOfUser
 } from 'libs/types/UserType';
-import { ClientUserContext, OrderDetail } from 'contexts/UseClientUserContext';
+
+import { ClientUserContext } from 'contexts/UseClientUserContext';
 import { ProviderUserContext } from 'contexts/UseProviderUserContext';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
@@ -51,6 +54,7 @@ const App = () => {
         Geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
+            setCurrentLocationOfUser({latitude:latitude.toString() , longitude:longitude.toString()})
             // setLocation({ latitude, longitude });
           },
           (error) => {

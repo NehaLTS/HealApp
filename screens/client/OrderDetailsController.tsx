@@ -1,4 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { treatment } from 'libs/types/ProvierTypes';
@@ -8,10 +9,11 @@ import { useEffect, useState } from 'react';
 
 const OrderDetailsController = () => {
   const [showSummary, setShowSummary] = useState(false);
-  const { treatmentMenu, providerLocationSearch } = ClientOrderServices();
-  const userData = getLocalData('USER');;
+  const { treatmentMenu } = ClientOrderServices();
+  const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation();
+  const {currentLocationOfUser}= UseClientUserContext()
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
@@ -47,6 +49,7 @@ const OrderDetailsController = () => {
     }
   };
 
+  
   const handleNextButtonPress = async () => {
     setShowSummary(true);
     // "name":"Back Pain",
@@ -54,19 +57,9 @@ const OrderDetailsController = () => {
     // "latitude":"30.37775529243538",
     // "longitude":"76.77481109532673",
     // "reqDistance":"req1"
-    const serachResponse= providerLocationSearch({ name: "Back Pain",
-      provider_type_id: "1",
-      latitude:userData?.longitude as unknown as string,
-      longitude:userData?.longitude as unknown as string,
-      reqDistance:"req1"})
-     
-    // setShowSummary(!showSummary);
-    serachResponse.then((data)=>{
-      console.log("hiii heloo data... ", data, userData?.longitude, userData?.latitude)
-      setLocalData("USER",{providerLocation:data})
-    })
-   
-    navigation.navigate(NavigationRoutes.SearchDoctor)
+  
+
+   navigation.navigate(NavigationRoutes.SearchDoctor)
 
     // console.log("orderDetails", orderDetails);
     // const menuIds = orderDetails?.treatmentMenu.map(item => item.menu_id);

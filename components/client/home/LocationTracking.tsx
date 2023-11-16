@@ -13,6 +13,7 @@ import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 
 import Geolocation from 'react-native-geolocation-service';
 import { Location } from "libs/types/UserType";
+import SearchDoctorController from "screens/client/SearchDoctorController";
 // import SearchDoctorController from "screens/client/SearchDoctorController";
 // import SearchDoctorController from "screens/client/SearchDoctorController";
 
