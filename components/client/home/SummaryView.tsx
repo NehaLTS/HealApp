@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   },
   voltaireText: {
     marginVertical: 5,
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
     textAlign: 'left',
   },
   payForIt: {

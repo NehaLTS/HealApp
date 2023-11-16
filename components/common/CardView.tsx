@@ -132,10 +132,6 @@ const styles = StyleSheet.create({
   elevation: {
     elevation: getHeight(8),
     shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: getHeight(8),
-    },
     marginHorizontal: getWidth(dimens.paddingXs),
   },
   specialistIcon: {
@@ -147,6 +143,7 @@ const styles = StyleSheet.create({
   specialist: {
     fontSize: getWidth(fontSize.textM),
     flex: 1,
+    textAlign: 'left',
   },
   specialistSearched: {
     textAlign: 'center',

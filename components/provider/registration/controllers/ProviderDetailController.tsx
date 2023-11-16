@@ -56,8 +56,8 @@ const ProviderDetailController = () => {
   const getProviderTypes = async () => {
     let res = await onGetProviderTypes(token);
 
-    console.log('res is ', res);
-    setProviderTypeList(res);
+    console.log('res is11 ', res);
+    setProviderTypeList?.(res ?? []);
   };
 
   useEffect(() => {

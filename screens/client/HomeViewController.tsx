@@ -25,7 +25,7 @@ const HomeViewController = () => {
   const [isTouchStart, setIsTouchStart] = useState(true);
   const { getBannerAds, searchProviders } = ClientOrderServices();
   const [providersList, setProvidersList] = useState<search_provider[]>([]);
-  const [onChangeSearch, setOnChangeSearch] = useState<string>('');
+  const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
   const [user, setUser] = useState<ClientProfile>();
@@ -114,7 +114,7 @@ const HomeViewController = () => {
   };
   const onSearchDone = async () => {
     const res = await searchProviders({
-      name: onChangeSearch,
+      name: searchSpecialist,
       latitude: '30.377305039494523',
       longitude: '76.78137416040587',
     });
@@ -123,7 +123,7 @@ const HomeViewController = () => {
     else setProvidersList(res);
   };
   const onChange = (value: string) => {
-    setOnChangeSearch(value);
+    setSearchSpecialist(value);
     setIsDataNotFound(true);
   };
   const onSearch = () => {
@@ -134,7 +134,7 @@ const HomeViewController = () => {
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
     Keyboard.dismiss();
-    setOnChangeSearch('');
+    setSearchSpecialist('');
     setIsTouchStart(true);
   };
 
@@ -145,7 +145,7 @@ const HomeViewController = () => {
     onPressBack,
     onTouchStart,
     onBlur,
-    onChangeSearch,
+    searchSpecialist,
     onChange,
     onPressBanner,
     providersList,

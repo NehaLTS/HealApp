@@ -76,7 +76,6 @@ const UserDetailView = () => {
         <Text style={styles.text} title={t('find_doctor_text')} />
       </View>
       <View style={styles.footerContainer}>
-        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
         <Button
           title={t('next')}
           isPrimary
@@ -114,6 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     width: '100%',
     flex: 0.12,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
 });

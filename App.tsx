@@ -25,6 +25,8 @@ import { ProviderUserContext } from 'contexts/UseProviderUserContext';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import SplashScreen from 'react-native-splash-screen';
+import * as Sentry from '@sentry/react-native';
+
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
@@ -43,6 +45,12 @@ const App = () => {
       '843919956986-js10nj0llot1b7r4ileqhkurco4tqo75.apps.googleusercontent.com',
   });
 
+  Sentry.init({
+    dsn: 'https://5bf4a6ef5ed5d3ff62d62d7de134f8d6@o4506076220817408.ingest.sentry.io/4506076223242240',
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    // tracesSampleRate: 1.0,
+  });
   const requestLocationPermission = async () => {
     try {
       const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);

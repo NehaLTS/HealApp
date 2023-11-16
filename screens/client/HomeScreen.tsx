@@ -41,7 +41,7 @@ const HomeScreen = () => {
     onTouchStart,
     onBlur,
     onChange,
-    onChangeSearch,
+    searchSpecialist,
     onPressBanner,
     providersList,
     onSearchDone,
@@ -72,11 +72,12 @@ const HomeScreen = () => {
   const headerLeft = () => (
     <TouchableOpacity
       onPress={onPressBack}
-      disabled={onChangeSearch?.length === 0}
+      disabled={searchSpecialist?.length === 0}
+      style={{ padding: getWidth(16), paddingLeft: 0 }}
     >
       <Image
-        source={onChangeSearch?.length !== 0 ? arrowBack : logo}
-        style={onChangeSearch?.length !== 0 ? styles.arrowBack : styles.logo}
+        source={searchSpecialist?.length !== 0 ? arrowBack : logo}
+        style={searchSpecialist?.length !== 0 ? styles.arrowBack : styles.logo}
       />
     </TouchableOpacity>
   );
@@ -91,7 +92,7 @@ const HomeScreen = () => {
     return (
       <>
         <Text style={styles.searchHeading} title={t('specialist')} />
-        {providerList.map((item: any, index: number) => (
+        {providerList?.map((item: any, index: number) => (
           <CardView key={index} item={item} index={index} />
         ))}
       </>
@@ -120,12 +121,12 @@ const HomeScreen = () => {
 
   return (
     <>
-      {RNHeader(headerTitle, headerLeft, headerRight, onChangeSearch?.length)}
+      {RNHeader(headerTitle, headerLeft, headerRight, searchSpecialist?.length)}
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {isTouchStart && onChangeSearch?.length === 0 && (
+        {isTouchStart && searchSpecialist?.length === 0 && (
           <TouchableOpacity onPress={onPressBanner}>
             <Image
               style={styles.banner}
@@ -134,15 +135,15 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
         <SearchBox
-          isTouchStart={isTouchStart && onChangeSearch?.length === 0}
+          isTouchStart={isTouchStart && searchSpecialist?.length === 0}
           placeholder={t('what_treatment')}
           onTouchStart={onTouchStart}
           onBlur={onBlur}
           onChangeText={onChange}
-          defaultValue={onChangeSearch}
+          defaultValue={searchSpecialist}
           onSubmitEditing={onSearchDone}
         />
-        {onChangeSearch?.length === 0
+        {searchSpecialist?.length === 0
           ? getProviderList()
           : isDataNotFound
           ? getProviderSearchList()
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   },
   searchHeading: {
     alignSelf: 'center',
-    fontSize: getHeight(fontSize.textXl),
+    fontSize: getWidth(fontSize.textXl),
   },
   logo: {
     width: getWidth(dimens.imageS),

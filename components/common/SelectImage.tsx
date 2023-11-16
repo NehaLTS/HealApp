@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { colors } from 'designToken/colors';
 import { fontWeight } from 'designToken/fontWeights';
@@ -30,10 +30,10 @@ const SelectImage = ({
         setHeight(height);
         setWidth(width);
         closeModal(false);
-        console.log(image);
+        console.log('gallery image******', image);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('error gallery', error);
       });
   };
 
@@ -48,10 +48,11 @@ const SelectImage = ({
         setHeight(height);
         setWidth(width);
         closeModal(false);
+        console.log('camera image******', image);
         // console.log(image)
-        const imagePath = image?.path;
-        const folderName = 'images/users';
-        const fileName = 'profile.jpg';
+        // const imagePath = image?.path;
+        // const folderName = 'images/users';
+        // const fileName = 'profile.jpg';
         // uploadImage(imagePath, folderName, fileName)
         //   .then((downloadURL) => {
         //     // Handle the downloadURL as needed
@@ -63,8 +64,12 @@ const SelectImage = ({
         //     console.error('Error uploading image:', error);
         //   });
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error: Error) => {
+        console.log('error camera', error);
+
+        if (error.message.includes('permission')) {
+          Alert.alert('Please give Camera Permission from Settings');
+        }
       });
   };
 

@@ -119,7 +119,7 @@ const UserPaymentView = ({
             <View style={styles.cardDetailContainer}>
               <Text
                 style={styles.cardDetail}
-                title={'**** **** ***** ' + card?.slice?.(-4)}
+                title={'**** **** **** ' + card?.slice?.(-4)}
               />
               <Text
                 style={styles.cardDetail}
@@ -220,7 +220,7 @@ const UserPaymentView = ({
             title={isFromHome ? t('next') : t('start_using_heal')}
             isPrimary
             isSmall
-            style={{ paddingHorizontal: 0 }}
+            style={{ paddingHorizontal: getWidth(10) }}
             onPress={() => {
               onPressStartUsingHeal(isFromHome ?? false);
               onPress?.();
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   text: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
   },

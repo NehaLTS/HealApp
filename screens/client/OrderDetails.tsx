@@ -55,6 +55,8 @@ const OrderDetails = () => {
         style={{
           padding: I18nManager.isRTL ? getWidth(16) : 0,
           paddingLeft: getWidth(0),
+          zIndex: 1,
+          minWidth: '10%',
         }}
         onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
       >
@@ -123,8 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: getWidth(dimens.sideMargin),
     paddingTop: getHeight(dimens.marginS + 3),
-    width: I18nManager.isRTL ? '82%' : '100%',
-    marginLeft: getWidth(50),
+    width: I18nManager.isRTL ? '86%' : '100%',
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),
