@@ -15,14 +15,16 @@ import IntroStackNavigator from './navigator/IntroStackNavigator';
 import NavigationRoutes from './navigator/NavigationRoutes';
 import {
   ClientProfile,
+  OrderDetail,
   ProviderProfile,
   ProviderServices,
   onboardStep,
 } from 'libs/types/UserType';
-import { ClientUserContext, OrderDetail } from 'contexts/UseClientUserContext';
+import { ClientUserContext } from 'contexts/UseClientUserContext';
 import { ProviderUserContext } from 'contexts/UseProviderUserContext';
 import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
+import SplashScreen from 'react-native-splash-screen';
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 const App = () => {
@@ -108,7 +110,11 @@ const App = () => {
               setProviderServices,
             }}
           >
-            <NavigationContainer>
+            <NavigationContainer
+              onReady={() => {
+                SplashScreen.hide();
+              }}
+            >
               <Stack.Navigator
                 initialRouteName={NavigationRoutes.IntroStack}
                 screenOptions={{ headerShown: false }}

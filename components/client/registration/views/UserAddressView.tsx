@@ -6,13 +6,21 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import UserAddressViewController from '../controllers/UserAddressViewController';
 import DatePicker from 'react-native-date-picker';
 import Button from 'components/common/Button';
 import RNModal from 'components/common/Modal';
 import { colors } from 'designToken/colors';
 import TextButton from 'components/common/TextButton';
+import Loader from 'components/common/Loader';
 
 const UserAddressView = () => {
   const { t } = useTranslation();
@@ -39,6 +47,7 @@ const UserAddressView = () => {
     setIsVisible,
     isVisible,
     onSearchAddress,
+    isLoader,
   } = UserAddressViewController();
   const currentDate = new Date();
 
@@ -73,12 +82,12 @@ const UserAddressView = () => {
           inputValue={onSearchAddress}
           value={onSearchAddress}
           onSubmitEditing={() => setIsVisible(false)}
-          autoFocus={true}
+          autoFocus
         />
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}
-          title="Close"
-          fontSize={fontSize.textL}
+          title={t('close')}
+          fontSize={getWidth(fontSize.textL)}
           onPress={() => setIsVisible(false)}
         />
       </View>
@@ -97,16 +106,17 @@ const UserAddressView = () => {
             setDateOfBirth(date.toString());
             setDate(date);
             setOpen(false);
-            idNumberRef.current.focus()
+            idNumberRef.current.focus();
           }}
           onCancel={() => {
             setOpen(false);
-            idNumberRef.current.focus()
+            idNumberRef.current.focus();
           }}
           maximumDate={maxDate}
         />
       )}
       <View style={styles.inputContainer}>
+        {isLoader && <Loader />}
         <Input
           placeholder={t('address')}
           inputStyle={styles.input}
@@ -240,6 +250,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: fontSize.textM,
     paddingTop: getHeight(dimens.paddingXs),
+    textAlign: 'left',
   },
   input: {
     marginTop: getHeight(dimens.paddingS),

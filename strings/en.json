@@ -49,14 +49,15 @@
   "yes": "Yes",
   "no": "No",
   "services_you": "Services you provide",
-  "cancel": "Cancel",
-  "your_location": " Your current location",
+  "start_using_heal": "Start using Heal",
+  "expires": "Expires",
+  "type_of_provider": "Type of provider",
   "change": "Change",
   "specialist": "Which specialist do you need?",
   "results": "No search results",
   "back_search": "Back to search",
   "what_treatment": "What treatment do you need?",
-  "start_using_heal": "Start using Heal",
+  "upload_id_photo": "Upload ID photo",
   "no_fee": "*No fee will be collected within 3 minutes after order",
   "reason": "Reason",
   "emergency_calls": "*We don’t do emergency calls. In case of emergency please call 077-773-45-69",
@@ -76,15 +77,30 @@
   "services": "Services",
   "arrival": "Estimated arrival",
   "instructions_for": "Instructions for arrival",
-  "provide_another_service": "Do you provide another \n services which not on \n the list?",
-  "add_another_service":"Add another service",
-   "add_service": "Add service",
-   "name_of_service": "Name of the service*",
-   "price": "Price*",
+  "no_services": "No Services",
+  "approve": "Approve",
+  "add_service": "Add service",
+  "name_of_service": "Name of the service*",
+  "Price*": "Price*",
   "description": "Description",
   "save": "Save",
-  "waiting_text":"Your form was successfully \n submitted and now waiting \n for the approval.\n We will get back to you with in 7 days.",
-  "ask_question_text":"If you have any questions feel free to call us",
+  "cancel": "Cancel",
+  "provide_another_service": "Do you provide another \n services which not on \n the list?",
+  "add_another_service": "Add another service",
+  "close": "Close",
+  "price": "Price*",
+  "waiting_text": "Your form was successfully \n submitted and now waiting \n for the approval.\n We will get back to you with in 7 days.",
+  "ask_question_text": "If you have any questions feel free to call us",
+  "edit": "Edit",
+  "order": "Order",
+  "describe_symptoms": "Describe the symptoms, etc.",
+  "current_location": "Your current location",
+  "60_min": "60min",
+  "total": "Total - ",
+  "please_add_payment": "Please add method\nof payment first",
+  "payment_method": "Add payment method",
+  "master_card": "Master-card",
+
   "home": {
     "providerList": [
       {
@@ -105,7 +121,7 @@
       {
         "id": 4,
         "image": "assets/icon/healer.png",
-        "name": "Alternative medicine -\nhome visit"
+        "name": "Alternative medicine"
       },
       {
         "id": 5,
@@ -115,7 +131,7 @@
       {
         "id": 6,
         "image": "assets/icon/healer.png",
-        "name": "Clinics"
+        "name": "Alternative medicine"
       }
     ]
   }

@@ -56,17 +56,18 @@ const styles = StyleSheet.create({
     fontSize: getWidth(fontSize.textXl),
   },
   number: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
     textAlign: 'center',
     marginTop: getHeight(dimens.marginS),
   },
   finalIcon: {
-    height: dimens.imageM,
-    width: dimens.imageM,
+    height: getHeight(dimens.imageM),
+    width: getWidth(dimens.imageM - 12),
     borderRadius: getWidth(dimens.imageM),
+    resizeMode: 'contain',
   },
   queryText: {
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
     marginTop: getHeight(dimens.paddingL),
     textAlign: 'center',
   },

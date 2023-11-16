@@ -90,9 +90,10 @@ const styles = StyleSheet.create({
     flex: 0.34,
   },
   logo: {
-    width: getWidth(dimens.imageM + 80),
+    width: getWidth(dimens.imageM + 55),
     height: getHeight(dimens.imageM),
     alignSelf: 'center',
+    resizeMode: 'cover',
   },
   toggleContainer: {
     flexDirection: 'row',

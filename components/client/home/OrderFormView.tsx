@@ -1,7 +1,7 @@
 import AddAddress from 'components/common/AddAddress';
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
-import { Loader } from 'components/common/Loader';
+import Loader from 'components/common/Loader';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { colors } from 'designToken/colors';
@@ -12,7 +12,14 @@ import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  I18nManager,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import OrderFormController from './OrderFormController';
 
@@ -46,13 +53,23 @@ const OrderFormView = ({
     isVisible,
     onChangeAddress,
     onSubmitDescription,
+    phoneError,
+    ageError,
   } = OrderFormController({ setOrder, order });
   const { t } = useTranslation();
 
   const getReasonsView = () => (
     <>
       <Text title={t('reason')} style={styles.reasonText} />
-      <View style={styles.buttonContainer}>
+      <View
+        style={{
+          ...styles.buttonContainer,
+          justifyContent: !(treatmentReason as unknown as treatment)?.reason
+            ?.length
+            ? 'center'
+            : 'space-between',
+        }}
+      >
         {(treatmentReason as unknown as treatment)?.reason?.length ? (
           (treatmentReason as unknown as treatment)?.reason.map(
             (item: Reason, index: number) => (
@@ -63,7 +80,7 @@ const OrderFormView = ({
                 isPrimary={activeButton?.includes?.(item?.reason_id)}
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
-                fontSized={getHeight(fontSize?.textM)}
+                fontSized={getWidth(fontSize?.textM)}
                 height={getHeight(dimens?.marginL)}
                 borderRadius={getWidth(dimens?.marginS)}
                 lineHeight={dimens?.sideMargin + dimens?.borderBold}
@@ -71,11 +88,15 @@ const OrderFormView = ({
             ),
           )
         ) : (
-          <Loader style={styles.loader} />
+          <ActivityIndicator
+            style={styles.loader}
+            size={'large'}
+            color={colors.primary}
+          />
         )}
         <Button
-          title={'Other'}
-          fontSized={getHeight(fontSize.textM)}
+          title={t('other')}
+          fontSized={getHeight(fontSize.textM + 1)}
           height={getHeight(dimens.marginL)}
           borderRadius={getWidth(dimens.marginS)}
           lineHeight={dimens.sideMargin + dimens.borderBold}
@@ -97,17 +118,16 @@ const OrderFormView = ({
         style={{ flex: 0.93 }}
       >
         <Input
-          placeholder={t('describe_where')}
+          placeholder={t('describe_symptoms')}
           inputValue={otherReasons?.current?.value}
           multiline
           numberOfLines={4}
-          inputStyle={styles.description}
+          inputStyle={[styles.description, styles.placeholder]}
           isDescription
           defaultValue={otherReasons?.current?.value}
           ref={otherReasons}
           onChangeText={(value: string) => (otherReasons.current.value = value)}
           onSubmitDescription={onSubmitDescription}
-          placeholderStyle={styles.placeholder}
         />
       </Modal>
     </>
@@ -122,7 +142,7 @@ const OrderFormView = ({
             <TouchableOpacity
               key={index}
               style={styles.checkboxContainer}
-              onPress={() => handleItemPress(item, index)}
+              onPress={() => handleItemPress(item)}
             >
               <View style={styles.checkBox}>
                 {activeCheckbox.includes(item?.menu_id) && (
@@ -132,7 +152,7 @@ const OrderFormView = ({
                   />
                 )}
               </View>
-              <Text style={{ fontSize: fontSize.textM }}>
+              <Text style={{ fontSize: getWidth(fontSize.textM + 1) }}>
                 {item?.name?.en.charAt(0).toUpperCase() +
                   item?.name?.en.slice(1)}
               </Text>
@@ -140,7 +160,11 @@ const OrderFormView = ({
           ),
         )
       ) : (
-        <Loader style={styles.loader} />
+        <ActivityIndicator
+          style={styles.loader}
+          size={'large'}
+          color={colors.primary}
+        />
       )}
       <Text
         title={t('if_the_doctor')}
@@ -154,7 +178,7 @@ const OrderFormView = ({
 
   const getAddressView = () => (
     <>
-      <Text title={'Address'} style={styles.addressText} />
+      <Text title={t('address')} style={styles.addressText} />
       <View style={styles.locationContainer}>
         <Image
           source={require('../../../assets/icon/location.png')}
@@ -162,8 +186,8 @@ const OrderFormView = ({
         />
         <Text style={styles.streetAddress} title={order?.address ?? ''} />
         <TextButton
-          title={'Edit'}
-          fontSize={getHeight(fontSize.textM)}
+          title={t('edit')}
+          fontSize={getWidth(fontSize.textM)}
           onPress={() => setIsVisible(true)}
         />
       </View>
@@ -176,29 +200,34 @@ const OrderFormView = ({
       <View style={styles.button}>
         <Button
           title={t('me')}
-          isPrimary={isMeSelected}
+          isPrimary={!order?.isOrderForOther}
           isSmall
           width={'12%'}
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
-          onPress={() => onMeTogglePress('me')}
+          onPress={() => {
+            if (order?.isOrderForOther) onMeTogglePress('me');
+          }}
           lineHeight={20}
         />
         <Button
           title={
-            isSubmitDetail
-              ? `${calculateAgeFromDate(order?.patient_type?.age)}y.o., ${
+            isSubmitDetail || order?.patient_type?.type === 'other'
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
                   order?.phonenumber
                 }`
-              : 'Someone else'
+              : t('someone_else')
           }
-          isPrimary={!isMeSelected}
+          isPrimary={order?.isOrderForOther}
           isSmall
           width={'45%'}
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
-          onPress={() => onMeTogglePress('other')}
+          onPress={() => {
+            if (!order?.isOrderForOther) onMeTogglePress('other');
+          }}
           lineHeight={20}
+          style={{ paddingHorizontal: getWidth(10) }}
         />
       </View>
     </>
@@ -207,7 +236,7 @@ const OrderFormView = ({
   return (
     <>
       {selectPatentTypeView()}
-      {isSubmitDetail || isMeSelected ? (
+      {isSubmitDetail || !order?.isOrderForOther ? (
         getAddressView()
       ) : (
         <View style={styles.inputContainer}>
@@ -216,9 +245,18 @@ const OrderFormView = ({
             onChangeText={onChangeAge}
             placeholderTextColor={colors.disabledText}
             inputPlaceholder={t('age')}
-            style={styles.textInput}
-            defaultValue={ageRef?.current?.value}
-            maxLength={dimens.borderBold}
+            style={{
+              ...styles.textInput,
+              borderBottomColor: ageError
+                ? colors.invalid
+                : colors.disabledText,
+            }}
+            defaultValue={
+              order?.patient_type?.age
+                ? calculateAgeFromDate(order?.patient_type?.age)?.toString()
+                : ''
+            }
+            maxLength={3}
             keyboardType="numeric"
             inputStyle={styles.inputStyle}
             returnKeyType={'next'}
@@ -228,10 +266,14 @@ const OrderFormView = ({
             ref={phoneRef}
             placeholderTextColor={colors.disabledText}
             inputPlaceholder={t('number')}
-            style={styles.textInput}
+            style={{
+              ...styles.textInput,
+              borderBottomColor: phoneError
+                ? colors.invalid
+                : colors.disabledText,
+            }}
             onChangeText={onChangePhone}
-            defaultValue={phoneRef?.current?.value}
-            maxLength={dimens.marginS}
+            defaultValue={order?.phonenumber}
             keyboardType="numeric"
             inputStyle={styles.inputStyle}
             returnKeyType={'done'}
@@ -269,7 +311,7 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
-    marginTop: getHeight(dimens.marginL + 8),
+    marginTop: getHeight(dimens.paddingL),
   },
   reasonText: {
     fontSize: getWidth(fontSize.textXl),
@@ -277,7 +319,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.paddingS + 2),
   },
   textSmall: {
-    fontSize: getWidth(fontSize.textS),
+    fontSize: getWidth(fontSize.textS - 1),
   },
   checkBox: {
     width: getWidth(dimens.sideMargin + dimens.borderBold),
@@ -295,8 +337,9 @@ const styles = StyleSheet.create({
     borderColor: colors.disabled,
     flexDirection: 'row',
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
-    marginBottom: getHeight(dimens.paddingS + 3),
+    marginBottom: getHeight(dimens.paddingS),
     width: '100%',
+    paddingHorizontal: getWidth(2),
   },
   buttonContainer: {
     justifyContent: 'space-between',
@@ -311,6 +354,7 @@ const styles = StyleSheet.create({
     gap: getWidth(dimens.marginM),
     alignItems: 'center',
     marginBottom: getHeight(dimens.marginS),
+    alignSelf: 'flex-start',
   },
   button: {
     flexDirection: 'row',
@@ -328,7 +372,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     paddingHorizontal: getWidth(dimens.marginS),
     paddingBottom: getWidth(dimens.marginS),
-    marginVertical: getHeight(dimens.marginS),
+    marginTop: getHeight(10 + 4),
   },
   arrowIcon: {
     height: getHeight(dimens.marginL + dimens.paddingXs),
@@ -337,9 +381,11 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderBottomWidth: getHeight(dimens.borderThin),
-    borderBottomColor: colors.disabledText,
-    width: '100%',
+    width: '90%',
     color: colors.grey,
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
+    textAlignVertical: 'bottom',
+    paddingBottom: getHeight(10),
   },
   arrowIconContainer: {
     position: 'absolute',
@@ -359,6 +405,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.sideMargin),
     fontSize: getWidth(fontSize.textM),
     flex: 0.97,
+    textAlign: 'left',
   },
   inputStyle: {
     borderWidth: 0,
@@ -367,6 +414,7 @@ const styles = StyleSheet.create({
   },
   loader: {
     paddingVertical: getHeight(20),
+    alignSelf: 'center',
   },
   divider: {
     height: getWidth(dimens.borderThin),

@@ -1,19 +1,14 @@
 import Button from 'common/Button';
 import Input from 'common/Input';
+import Loader from 'components/common/Loader';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LoginViewController from './LoginViewController';
 
 const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
@@ -38,9 +33,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
     <>
       {renderToast()}
       <View style={styles.inputContainer}>
-        {isLoading && (
-          <ActivityIndicator style={styles.loading} size={'large'} />
-        )}
+        {isLoading && <Loader />}
         <Input
           ref={emailRef}
           placeholder={t('email')}
@@ -80,7 +73,12 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isSmall
           style={styles.signInButton}
           onPress={handleSignIn}
-          disabled={passwordError.length > 0 || emailError.length > 0}
+          disabled={
+            passwordError.length > 0 ||
+            emailError.length > 0 ||
+            emailRef.current.value == null ||
+            passwordRef.current.value == null
+          }
         />
       </View>
       <GetSignInFooter />
@@ -136,7 +134,7 @@ export const GetSignInFooter = () => {
   const { onSelectSocialAuth, isLoading } = LoginViewController();
   return (
     <>
-      {isLoading && <ActivityIndicator style={styles.loading} size={'large'} />}
+      {isLoading && <Loader />}
       <View style={styles.footerContainer}>
         <Text title={t('or_sign_in_via')} />
         {images.map((item, index) => (

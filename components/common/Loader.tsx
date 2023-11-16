@@ -1,34 +1,27 @@
-import { useTranslationContext } from 'contexts/UseTranslationsContext';
-import { getTexts } from 'libs/OneSkyHelper';
-import { getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import {
-  ActivityIndicator,
-  StyleProp,
-  StyleSheet,
-  ViewStyle,
-} from 'react-native';
-import Text from './Text';
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import RNModal from './Modal';
 import { colors } from 'designToken/colors';
 
-export const LoaderText = () => {
-  const { languageCode } = useTranslationContext();
-  const { common } = getTexts(languageCode);
-  return <Text style={styles.loaderText} title={common.loader} />;
-};
-
-export const Loader = ({ style }: { style?: StyleProp<ViewStyle> }) => {
+const Loader = () => {
   return (
-    <ActivityIndicator
-      size={'large'}
-      color={colors?.primary}
-      style={[style, { alignItems: 'center', flex: 1 }]}
-    />
+    <RNModal
+      isVisible
+      backdropOpacity={0.2}
+      animationIn={'fadeIn'}
+      animationInTiming={5}
+    >
+      <ActivityIndicator
+        style={styles.loading}
+        size={'large'}
+        color={colors.primary}
+      />
+    </RNModal>
   );
 };
-
+export default Loader;
 const styles = StyleSheet.create({
-  loaderText: {
-    letterSpacing: getWidth(0.5),
+  loading: {
+    zIndex: 1,
   },
 });

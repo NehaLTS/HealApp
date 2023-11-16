@@ -2,7 +2,7 @@ import Text from 'components/common/Text';
 import Button from 'components/common/Button';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
+// import { Dropdown } from 'react-native-element-dropdown';
 import { colors } from '../../../../designToken/colors';
 import { dimens } from '../../../../designToken/dimens';
 import { fontSize } from '../../../../designToken/fontSizes';
@@ -12,6 +12,8 @@ import SelectImage from '../../../common/SelectImage';
 import ProviderDetailController from '../controllers/ProviderDetailController';
 import { useTranslation } from 'react-i18next';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
+import Dropdown from 'components/common/Dropdown';
+import { fontFamily } from 'designToken/fontFamily';
 
 const ProviderDetail = () => {
   const { t } = useTranslation();
@@ -56,12 +58,15 @@ const ProviderDetail = () => {
         onBlur={onBlurFirstName}
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
-         defaultValue={providerProfile?.firstName ? providerProfile.firstName : ''}
+        defaultValue={
+          providerProfile?.firstName ? providerProfile.firstName : ''
+        }
         inputValue={providerProfile?.firstName ?? ''}
         errorMessage={firstNameError}
         returnKeyType={'next'}
         onSubmitEditing={() => lastNameRef.current.focus()}
         onClearInputText={() => firstNameRef.current.clear()}
+        inputStyle={styles.input}
       />
 
       <Input
@@ -70,55 +75,44 @@ const ProviderDetail = () => {
         inputStyle={styles.inputLastName}
         onChangeText={onChangeLastName}
         onBlur={onBlurLastName}
-        defaultValue={providerProfile?.firstName ? providerProfile.firstName : ''}
+        defaultValue={
+          providerProfile?.firstName ? providerProfile.firstName : ''
+        }
         ref={lastNameRef}
         inputValue={providerProfile?.lastName ?? ''}
         errorMessage={lastNameError}
         onClearInputText={() => lastNameRef.current.clear()}
-        returnKeyType={'done'}
+        returnKeyType={'next'}
       />
 
       <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
-        iconColor={colors.black}
-        // selectedStyle={styles.box}
         data={providerTypeList}
         labelField="name.en"
         valueField="name.en"
-        placeholder="Type of provider"
+        placeholder={t('type_of_provider')}
         value={selectedProvider}
         onChange={onChangeProviderType}
         renderItem={renderProviderItems}
-      />
-
-      {providerTypeError != '' && (
-        <Text style={styles.errorMessage} title={providerTypeError} />
-      )}
-
-      <Dropdown
-        style={styles.dropdown}
+        errorMessage={providerTypeError}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
-        iconStyle={{ marginRight: 10, height: 25, width: 25, marginTop: 4 }}
-        iconColor={colors.black}
-        // selectedStyle={styles.box}
+      />
+
+      <Dropdown
         data={specialityList}
         labelField="name.en"
         valueField="name.en"
-        placeholder="Specialty"
+        placeholder={t('specialty')}
         value={selectedSpecialty}
         onChange={onChangeSpeciality}
         renderItem={renderSpecialityItems}
+        errorMessage={specialityError}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
       />
-      {specialityError != '' && (
-        <Text style={styles.errorMessage} title={specialityError} />
-      )}
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text} title={'Upload ID photo'} />
+        <Text style={styles.text} title={t('upload_id_photo')} />
         <TouchableOpacity
           activeOpacity={idPicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
@@ -140,7 +134,6 @@ const ProviderDetail = () => {
       </View>
 
       <View style={styles.footerContainer}>
-        {/* <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} /> */}
         <Button
           title={t('next')}
           isPrimary
@@ -163,7 +156,7 @@ const styles = StyleSheet.create({
   },
 
   inputLastName: {
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
   },
 
   iconContainer: {
@@ -174,9 +167,9 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
-    resizeMode: 'cover',
+    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    width: getWidth(dimens.imageS + 8),
+    resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),
   },
   box: {
@@ -189,6 +182,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: fontSize.textL,
+    fontFamily: fontFamily.regular,
     color: colors.black,
   },
   dropdown: {
@@ -197,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
     height: getHeight(50),
     borderColor: colors.primary,
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
   },
   icon: {
@@ -205,7 +199,7 @@ const styles = StyleSheet.create({
   },
   textItem: {
     flex: 1,
-    fontSize: fontSize.textL,
+    fontSize: getWidth(fontSize.textL),
     color: colors.black,
     padding: getHeight(dimens.marginS),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
@@ -213,25 +207,29 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: fontSize.textL,
     color: colors.black,
+    fontFamily: fontFamily.regular,
   },
   iconStyle: {
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
-  },
-  editBlueImage: {
-    height: getHeight(dimens.paddingL),
-    width: getWidth(dimens.paddingL),
-    marginBottom: getHeight(dimens.paddingXs),
   },
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
   },
   footerContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    width: '100%',
-    flex: 0.12,
-    justifyContent: 'space-between',
+    flex: 0.8,
+    justifyContent: 'flex-end',
+    alignSelf: 'center',
+  },
+  arrowIcon: {
+    marginRight: getWidth(dimens.marginS),
+    height: getHeight(dimens.marginM + 5),
+    width: getWidth(dimens.marginM + 5),
+    resizeMode: 'contain',
+    marginTop: getHeight(dimens.borderBold + dimens.borderBold),
+  },
+  input: {
+    marginTop: getHeight(dimens.marginM),
   },
 });

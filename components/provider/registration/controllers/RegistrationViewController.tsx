@@ -9,18 +9,15 @@ import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
 
 const RegistrationViewController = () => {
-
   const navigation = useNavigation();
   const { OnProviderCreateSignUp } = AuthServicesProvider();
-    const { setToken, setUserId } =
-    UseProviderUserContext();
+  const { setToken, setUserId } = UseProviderUserContext();
   const { showToast, renderToast } = useToast();
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
-
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -38,55 +35,65 @@ const RegistrationViewController = () => {
     validatePassword();
   };
 
-
-
   const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validateEmail = () => {
-if (!emailRef.current.value) setEmailError('Email is required');
+    if (!emailRef.current.value) setEmailError('Email is required');
     else if (!emailPattern.test(emailRef.current.value))
       setEmailError('Invalid email address');
     else setEmailError('');
-
   };
 
   const validatePassword = () => {
-   if (!passwordRef.current.value) {
+    if (!passwordRef.current.value) {
       setPasswordError('Password is required');
     } else if (passwordRef.current.value.length < 5) {
       setPasswordError('Password must be at least 8 characters');
     } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError('Password must contain special characters');
+      setPasswordError(
+        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
+      );
     } else {
       setPasswordError('');
     }
   };
   const handleSignUp = () => {
     if (!emailError && !passwordError)
-      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value,"Test");
+      onPressSignUpProvider(
+        emailRef.current.value,
+        passwordRef.current.value,
+        'Test',
+      );
 
     //  navigation.reset({
     //         index: 0,
     //         routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
     //       });
-          
   };
 
-  const onPressSignUpProvider = async (email: string, password: string,device_token:string) => {
+  const onPressSignUpProvider = async (
+    email: string,
+    password: string,
+    device_token: string,
+  ) => {
     setIsLoading(true);
     if (email !== undefined && password != undefined) {
-      const res = await OnProviderCreateSignUp({ email, password,device_token });
+      const res = await OnProviderCreateSignUp({
+        email,
+        password,
+        device_token,
+      });
 
-      console.log("response is ",res);
+      console.log('response is ', res);
 
-      //TODO change res.proivder_id to res.id 
-      if (res && res.token && res.provider_id) {
+      //TODO change res.proivder_id to res.id
+      if (res && res.token && res.id) {
         setToken(res.token);
-       
-        //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
-       // setUserId(res.id);
 
-       setUserId(res.provider_id);
+        //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
+        // setUserId(res.id);
+
+        setUserId(res.id);
       }
 
       setLocalData('USER', {
@@ -114,10 +121,8 @@ if (!emailRef.current.value) setEmailError('Email is required');
       setIsLoading(false);
       showToast('', 'Please enter email or password', 'warning');
     }
-
-   
   };
- return {
+  return {
     handleSignUp,
     isLoading,
     renderToast,

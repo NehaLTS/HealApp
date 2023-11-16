@@ -59,7 +59,9 @@ const LoginViewController = () => {
     else if (passwordRef.current.value.length < 5)
       setPasswordError('Password must be at least 8 characters');
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError('Password must contain special characters');
+      setPasswordError(
+        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
+      );
     else setPasswordError('');
   };
 
@@ -72,8 +74,10 @@ const LoginViewController = () => {
 
   //TODO: Kamal needs to change any to type
 
-  const handleAuthSuccessResponse = (response: any, profilePicture?:string) => {
-
+  const handleAuthSuccessResponse = (
+    response: any,
+    profilePicture?: string,
+  ) => {
     let userDetails = response.user;
     //save details in context
     setToken(response.token);
@@ -86,7 +90,9 @@ const LoginViewController = () => {
       city: userDetails.city,
       state: userDetails.state,
       country: userDetails.country,
-      profilePicture: userDetails.profile_picture?userDetails.profile_picture:profilePicture,
+      profilePicture: userDetails.profile_picture
+        ? userDetails.profile_picture
+        : profilePicture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
@@ -100,7 +106,9 @@ const LoginViewController = () => {
       city: userDetails.city,
       state: userDetails.state,
       country: userDetails.country,
-      profilePicture: userDetails.profile_picture?userDetails.profile_picture:profilePicture,
+      profilePicture: userDetails.profile_picture
+        ? userDetails.profile_picture
+        : profilePicture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
@@ -135,7 +143,7 @@ const LoginViewController = () => {
         const res = await onSubmitAuthRequest({ email, password });
         console.log('sign in client by email and password', res);
         setIsLoading(false);
-        if (res?.isSuccessful === true) handleAuthSuccessResponse(res,"");
+        if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
         else
           showToast(
             'Login Failed',
@@ -156,7 +164,6 @@ const LoginViewController = () => {
     setIsLoading(true);
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
-
       try {
         const email = userData?.user?.email ?? '';
         const googleId = userData.user?.uid ?? '';
@@ -191,7 +198,7 @@ const LoginViewController = () => {
         setIsLoading(false);
 
         if (res?.isSuccessful === true) {
-          handleAuthSuccessResponse(res,"");
+          handleAuthSuccessResponse(res, '');
         } else {
           Alert.alert(
             'Login Failed',

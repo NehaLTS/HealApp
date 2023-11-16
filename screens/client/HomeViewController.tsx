@@ -1,8 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
+import {
+  deleteLocalData,
+  getLocalData,
+} from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
-import { ClientProfile } from 'libs/types/UserType';
+import {
+  ClientProfile,
+  ProviderProfile,
+  UserTypeProvider,
+} from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Keyboard, Linking } from 'react-native';
@@ -56,9 +64,13 @@ const HomeViewController = () => {
     //     requestLocationPermission();
     //   }
     // });
-    const abc = getLocalData('USERPROFILE');
-    setUser(abc as ClientProfile);
-    setUserProfile({ ...userProfile, card_number: abc?.card_number });
+    const user = getLocalData('USERPROFILE');
+    // setUser(abc as ClientProfile);
+    setUserProfile({
+      ...userProfile,
+      isPaymentAdded: (user as ClientProfile)?.isPaymentAdded,
+    });
+    console.log('user?.isPaymentAdded********', user);
   }, []);
   // const getLocation = () => {
   //   Geolocation.getCurrentPosition(
@@ -106,7 +118,7 @@ const HomeViewController = () => {
       latitude: '30.377305039494523',
       longitude: '76.78137416040587',
     });
-    // console.log('onSearchDone', res);
+    console.log('onSearchDone', res);
     if (res?.message) setIsDataNotFound(false);
     else setProvidersList(res);
   };
@@ -115,7 +127,8 @@ const HomeViewController = () => {
     setIsDataNotFound(true);
   };
   const onSearch = () => {
-   navigation.navigate(NavigationRoutes.IntroStack);
+    deleteLocalData();
+    navigation.navigate(NavigationRoutes.IntroStack);
   };
   const onTouchStart = () => setIsTouchStart(false);
   const onBlur = () => setIsTouchStart(true);

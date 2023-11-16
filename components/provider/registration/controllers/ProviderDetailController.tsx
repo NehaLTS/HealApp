@@ -1,7 +1,6 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
-import { generateRandomName } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
@@ -53,33 +52,31 @@ const ProviderDetailController = () => {
     setSelectedSpeciality(value);
     setSpecialityError('');
   };
-
-  useEffect(() => {
-    getProviderTypes();
-    if (providerProfile.firstName) {
-      firstNameRef.current.value = providerProfile.firstName;
-      lastNameRef.current.value = providerProfile.lastName;
-
-      //TODO: SAGAR to check these are not getting SET when back press
-      // setSelectedProvider(providerProfile.provider);
-      // setSelectedSpeciality(providerProfile.speciality);
-      // if(providerProfile.idPicture)  setIdPicture(providerProfile.idPicture)
-     
-
-    }
-  }, []);
-
   const getProviderTypes = async () => {
     let res = await onGetProviderTypes(token);
 
     console.log('res is ', res);
     setProviderTypeList(res);
   };
+
+  useEffect(() => {
+    getProviderTypes();
+    if (providerProfile?.firstName) {
+      firstNameRef.current.value = providerProfile?.firstName;
+      lastNameRef.current.value = providerProfile?.lastName;
+
+      //TODO: SAGAR to check these are not getting SET when back press
+      // setSelectedProvider(providerProfile.provider);
+      // setSelectedSpeciality(providerProfile.speciality);
+      // if(providerProfile.idPicture)  setIdPicture(providerProfile.idPicture)
+    }
+  }, []);
+
   const getImageUrl = (url: string) => {
     setIdPicture(url);
-    const imagePath = url;
-    const folderName = 'images/users';
-    const fileName = generateRandomName();
+    // const imagePath = url;
+    // const folderName = 'images/users';
+    // const fileName = generateRandomName();
 
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {

@@ -63,7 +63,9 @@ const LoginViewController = () => {
     else if (passwordRef.current.value.length < 5)
       setPasswordError('Password must be at least 8 characters');
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError('Password must contain special characters');
+      setPasswordError(
+        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
+      );
     else setPasswordError('');
   };
 
@@ -73,9 +75,9 @@ const LoginViewController = () => {
   };
 
   /** To handle Response from API after authentication request */
-  const handleAuthResponse = (response: any, profilePicture?:string) => {
+  const handleAuthResponse = (response: any, profilePicture?: string) => {
     let userDataProvider = response.user;
-    
+
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
@@ -86,7 +88,9 @@ const LoginViewController = () => {
       city: userDataProvider?.city,
       state: userDataProvider?.state,
       country: userDataProvider?.country,
-      profilePicture: userDataProvider.profile_picture?userDataProvider.profile_picture:profilePicture,
+      profilePicture: userDataProvider.profile_picture
+        ? userDataProvider.profile_picture
+        : profilePicture,
       provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
       licensenumber: userDataProvider?.license,
@@ -104,7 +108,9 @@ const LoginViewController = () => {
       city: userDataProvider?.city,
       state: userDataProvider?.state,
       country: userDataProvider?.country,
-      profilePicture: userDataProvider.profile_picture?userDataProvider.profile_picture:profilePicture,
+      profilePicture: userDataProvider.profile_picture
+        ? userDataProvider.profile_picture
+        : profilePicture,
       provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
       licensenumber: userDataProvider?.license,
@@ -137,10 +143,10 @@ const LoginViewController = () => {
       if (email != '' || password != '') {
         setIsLoading(true);
         const res = await OnProviderSignIn({ email, password });
-        console.log("res is ",res);
+        console.log('res is ', res);
 
         if (res?.isSuccessful === true) {
-          handleAuthResponse(res,'');
+          handleAuthResponse(res, '');
         } else {
           showToast(
             'Login Failed',
@@ -164,17 +170,17 @@ const LoginViewController = () => {
     onGoogleAuthProcessing().then(async (userData) => {
       try {
         console.log('vbxcvbnxvb', userData);
-        const email = userData?.user?.email;
+        const email = userData?.user?.email ?? '';
         const googleId = userData.user.providerData[0].uid;
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
-          googleId
+          googleId,
         });
         // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           setIsLoading(false);
-          handleAuthResponse(res,userData?.user?.photoURL);
+          handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
           setIsLoading(false);
           Alert.alert(
@@ -198,12 +204,12 @@ const LoginViewController = () => {
 
     onFBAuthProcessing().then(async (userData) => {
       try {
-        const email = userData?.user?.email;
+        const email = userData?.user?.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          handleAuthResponse(res,'');
+          handleAuthResponse(res, '');
         } else {
           setIsLoading(false);
           Alert.alert(

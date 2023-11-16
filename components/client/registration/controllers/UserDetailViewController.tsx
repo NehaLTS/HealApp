@@ -1,4 +1,5 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 
 const UserDetailViewController = () => {
@@ -11,15 +12,12 @@ const UserDetailViewController = () => {
   const [lastNameError, setLastNameError] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
 
-
-
-    useEffect(() => {
-      if(userProfile.firstName){
-        firstNameRef.current.value=userProfile.firstName;
-        lastNameRef.current.value=userProfile.lastName;
-        phoneNumberRef.current.value=userProfile.phoneNumber;
-      }
-
+  useEffect(() => {
+    if (userProfile && userProfile?.firstName) {
+      firstNameRef.current.value = userProfile?.firstName;
+      lastNameRef.current.value = userProfile?.lastName;
+      phoneNumberRef.current.value = userProfile?.phoneNumber;
+    }
   }, []);
   const validateFirstName = () => {
     if (
@@ -35,10 +33,13 @@ const UserDetailViewController = () => {
       setLastNameError('Last name is required');
     } else setLastNameError('');
   };
+  const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
   const validatePhoneNumber = () => {
     if (!phoneNumberRef.current.value) {
       setPhoneNumberError('Phone number is required');
+    } else if (!isValidPhoneNumber(phoneNumberRef.current.value)) {
+      setPhoneNumberError('Phone number is not valid');
     } else setPhoneNumberError('');
   };
   const onBlurFirstName = () => validateFirstName();
@@ -56,7 +57,7 @@ const UserDetailViewController = () => {
 
   const onChangePhoneNumber = (value: string) => {
     phoneNumberRef.current.value = value;
-    onBlurPhoneNumber();
+    validatePhoneNumber();
   };
 
   const onPressNext = () => {
@@ -69,7 +70,10 @@ const UserDetailViewController = () => {
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         phoneNumber: phoneNumberRef.current.value,
-        profilePicture:userProfile.profilePicture?userProfile.profilePicture:""
+        profilePicture:
+          userProfile && userProfile?.profilePicture
+            ? userProfile?.profilePicture
+            : '',
       });
 
       setCurrentStep('address');

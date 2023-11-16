@@ -1,5 +1,5 @@
 import Button from 'components/common/Button';
-import {Loader} from 'components/common/Loader';
+import Loader from 'components/common/Loader';
 import Text from 'components/common/Text';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
@@ -127,11 +127,11 @@ const ProviderServices = () => {
 
   return (
     <>
-      {isLoading && <Loader />}
       <View style={styles.inputContainer}>
-        <Text style={styles.text} title={t('authority')} />
+        <Text style={styles.textAuthority} title={t('authority')} />
         {addPrescriptionView()}
         {getServicesView()}
+        {isLoading && <Loader />}
       </View>
       {getFooterView()}
     </>
@@ -158,17 +158,20 @@ const styles = StyleSheet.create({
   textS: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getHeight(dimens.sideMargin),
-    marginTop: getHeight(dimens.imageS),
+    marginTop: getHeight(dimens.imageXs),
     textAlign: 'left',
+  },
+  textAuthority: {
+    fontSize: getWidth(fontSize.textXl),
   },
   serviceText: {
     fontSize: getWidth(fontSize.textM),
   },
   servicesContainer: {
     borderWidth: getWidth(dimens.borderBold),
-    borderRadius: getWidth(dimens.marginS),
+    borderRadius: getWidth(5),
     borderColor: colors.primary,
-    height: '70%',
+    height: '65%',
     justifyContent: 'center',
   },
   serviceRow: {
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     borderColor: colors.black,
   },
   textServices: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getWidth(fontSize.textM),
     textAlign: 'center',
   },
   inputContainer: {
@@ -227,6 +230,7 @@ const styles = StyleSheet.create({
   checkIcon: {
     width: getWidth(dimens.marginS + dimens.paddingXs),
     height: getHeight(dimens.marginS),
+    resizeMode: 'center',
   },
 });
 

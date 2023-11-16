@@ -1,16 +1,16 @@
+import Button from 'common/Button';
+import Input from 'common/Input';
+import Loader from 'components/common/Loader';
 import TextButton from 'components/common/TextButton';
 import { GetSignInFooter } from 'components/provider/login/LoginView';
-import { t } from 'i18next';
-import React, { useState } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
+import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import Button from 'common/Button';
-import Input from 'common/Input';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import RegistrationViewController from '../controllers/RegistrationViewController';
-import { useNavigation } from '@react-navigation/native';
 
 const RegistrationView = () => {
   const {
@@ -32,9 +32,7 @@ const RegistrationView = () => {
     <>
       {renderToast()}
       <View style={styles.inputContainer}>
-        {(isLoading || isLoadingGoogle) && (
-          <ActivityIndicator style={styles.loading} size={'large'} />
-        )}
+        {(isLoading || isLoadingGoogle) && <Loader />}
         <Input
           ref={emailRef}
           placeholder={t('email')}
@@ -74,7 +72,12 @@ const RegistrationView = () => {
           isSmall
           style={styles.signUpButton}
           onPress={handleSignUp}
-          disabled={passwordError.length > 0 || emailError.length > 0}
+          disabled={
+            passwordError.length > 0 ||
+            emailError.length > 0 ||
+            emailRef.current.value == null ||
+            passwordRef.current.value == null
+          }
         />
       </View>
       <GetSignInFooter />
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: colors.invalid,
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
   },
   loading: {
     left: '44%',

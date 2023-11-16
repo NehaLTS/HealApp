@@ -5,6 +5,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { forwardRef } from 'react';
 import {
+  I18nManager,
   Image,
   StyleSheet,
   TextInput,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.regular,
     height: getHeight(36),
     paddingVertical: getWidth(dimens.paddingXs),
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
   searchIcon: {
     width: getWidth(dimens.marginM),

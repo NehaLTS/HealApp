@@ -37,6 +37,7 @@ const useToast = () => {
           alignItems: 'center',
           justifyContent: 'flex-end',
         }}
+        onBackdropPress={() => setIsVisible(false)}
       >
         <View
           style={{
