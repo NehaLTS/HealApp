@@ -4,6 +4,7 @@ import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const ProviderPaymentController = () => {
@@ -18,6 +19,7 @@ const ProviderPaymentController = () => {
   const accountRef = React.useRef<any>('');
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
+  const { t } = useTranslation();
 
   const { setCurrentStep, setProviderProfile, providerProfile, userId, token } =
     UseProviderUserContext();
@@ -54,7 +56,7 @@ const ProviderPaymentController = () => {
 
   const validateRegistrationNumber = () => {
     if (!registrationNumberRef.current.value) {
-      setRegistrationError('Registration is required');
+      setRegistrationError(t('registration_required'));
     } else {
       setRegistrationError('');
     }
@@ -62,7 +64,7 @@ const ProviderPaymentController = () => {
 
   const validateBankName = () => {
     if (!bankNameRef.current.value) {
-      setBankNameError('Bank is required');
+      setBankNameError(t('bank_required'));
     } else {
       setBankNameError('');
     }
@@ -70,14 +72,14 @@ const ProviderPaymentController = () => {
 
   const validateBranch = () => {
     if (!bankNameRef.current.value) {
-      setBranchError('Branch is required');
+      setBranchError(t('branch_required'));
     } else {
       setBranchError('');
     }
   };
   const validateAccount = () => {
     if (!bankNameRef.current.value) {
-      setAccountError('Bank Account is required');
+      setAccountError(t('bank_account_required'));
     } else {
       setAccountError('');
     }
@@ -155,7 +157,7 @@ const ProviderPaymentController = () => {
           setCurrentStep('addServices');
         }
       } else {
-        Alert.alert('Some Error on Updating the Details. Please try again !!');
+        Alert.alert(t('some_error'));
       }
 
       setIsLoading(false);
@@ -165,11 +167,11 @@ const ProviderPaymentController = () => {
       // setCurrentStep('payment');
     } else {
       if (!registrationNumberRef.current.value)
-        setRegistrationError('Registration is required');
-      if (!bankNameRef.current.value) setBankNameError('Bank is required');
+        setRegistrationError(t('registration_required'));
+      if (!bankNameRef.current.value) setBankNameError(t('bank_required'));
       if (!accountRef.current.value)
-        setAccountError('Bank Account is required');
-      if (!branchRef.current.value) setBranchError('Branch is required');
+        setAccountError(t('bank_account_required'));
+      if (!branchRef.current.value) setBranchError(t('branch_required'));
     }
   };
 

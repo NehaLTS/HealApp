@@ -8,6 +8,7 @@ import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const LoginViewController = () => {
@@ -29,6 +30,7 @@ const LoginViewController = () => {
     UseProviderUserContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showToast, renderToast } = useToast();
+  const { t } = useTranslation();
 
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
@@ -49,9 +51,9 @@ const LoginViewController = () => {
   };
   const validateEmail = () => {
     if (!emailRef.current.value) {
-      setEmailError('Email is required');
+      setEmailError(t('email_required'));
     } else if (!emailPattern.test(emailRef.current.value)) {
-      setEmailError('Invalid email address');
+      setEmailError(t('invalid_email'));
     } else {
       setEmailError('');
     }
@@ -59,13 +61,11 @@ const LoginViewController = () => {
   const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validatePassword = () => {
-    if (!passwordRef.current.value) setPasswordError('Password is required');
+    if (!passwordRef.current.value) setPasswordError(t('password_required'));
     else if (passwordRef.current.value.length < 5)
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('must_be_8_characters'));
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError(
-        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
-      );
+      setPasswordError(t(`password_must_have_special_character`));
     else setPasswordError('');
   };
 
@@ -149,16 +149,16 @@ const LoginViewController = () => {
           handleAuthResponse(res, '');
         } else {
           showToast(
-            'Login Failed',
-            'Please check your email and password and try again.',
+            t('login_failed'),
+            t('check_email_and_password'),
             'warning',
           );
         }
       } else {
-        showToast('', 'Please enter email or password', 'warning');
+        showToast('', t('email_or_password'), 'warning');
       }
     } catch (error) {
-      Alert.alert('An error occurred during login.');
+      Alert.alert(t('error_occurred_login'));
     }
 
     setIsLoading(false);
@@ -183,10 +183,7 @@ const LoginViewController = () => {
           handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
           setIsLoading(false);
-          Alert.alert(
-            'Login Failed',
-            'Please check your email and password and try again.',
-          );
+          Alert.alert(t('login_failed'), t('check_email_and_password'));
         }
       } catch (err) {
         setIsLoading(false);
@@ -212,10 +209,7 @@ const LoginViewController = () => {
           handleAuthResponse(res, '');
         } else {
           setIsLoading(false);
-          Alert.alert(
-            'Login Failed',
-            'Please check your email and password and try again.',
-          );
+          Alert.alert(t('login_failed'), t('check_email_and_password'));
         }
       } catch (err) {
         setIsLoading(false);

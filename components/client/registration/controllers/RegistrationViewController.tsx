@@ -7,6 +7,7 @@ import { Alert } from 'react-native';
 import React from 'react';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { useTranslation } from 'react-i18next';
 
 const RegistrationViewController = () => {
   const { onCreateSignUp } = AuthServicesClient();
@@ -19,6 +20,7 @@ const RegistrationViewController = () => {
 
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const { t } = useTranslation();
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -37,7 +39,7 @@ const RegistrationViewController = () => {
   const validateEmail = () => {
     if (!emailRef.current.value) setEmailError('Email is required');
     else if (!emailPattern.test(emailRef.current.value))
-      setEmailError('Invalid email address');
+      setEmailError(t('invalid_email'));
     else setEmailError('');
   };
 
@@ -45,13 +47,11 @@ const RegistrationViewController = () => {
 
   const validatePassword = () => {
     if (!passwordRef.current.value) {
-      setPasswordError('Password is required');
+      setPasswordError(t('password_required'));
     } else if (passwordRef.current.value.length < 5) {
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('must_be_8_characters'));
     } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError(
-        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
-      );
+      setPasswordError(t(`password_must_have_special_character`));
     } else {
       setPasswordError('');
     }
@@ -91,12 +91,12 @@ const RegistrationViewController = () => {
           });
         }, 200);
       } else {
-        showToast('User already exist', 'Please try SignIn', 'error');
+        showToast(t('user_exist'), t('try_signin'), 'error');
       }
       setIsLoading(false);
     } else {
       setIsLoading(false);
-      showToast('', 'Please enter email or password', 'warning');
+      showToast('', t('email_or_password'), 'warning');
     }
 
     // setIsLoading(false);

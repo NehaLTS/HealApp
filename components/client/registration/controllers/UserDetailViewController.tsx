@@ -1,6 +1,7 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const UserDetailViewController = () => {
   const { setCurrentStep, setUserProfile, userProfile } =
@@ -11,7 +12,7 @@ const UserDetailViewController = () => {
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (userProfile && userProfile?.firstName) {
       firstNameRef.current.value = userProfile?.firstName;
@@ -24,22 +25,22 @@ const UserDetailViewController = () => {
       !firstNameRef.current.value ||
       firstNameRef.current.value === undefined
     ) {
-      setFirstNameError('First name is required');
+      setFirstNameError(t('first_name_required'));
     } else setFirstNameError('');
   };
 
   const validateLastName = () => {
     if (!lastNameRef.current.value) {
-      setLastNameError('Last name is required');
+      setLastNameError(t('last_name_required'));
     } else setLastNameError('');
   };
   const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
   const validatePhoneNumber = () => {
     if (!phoneNumberRef.current.value) {
-      setPhoneNumberError('Phone number is required');
+      setPhoneNumberError(t('phone_number_required'));
     } else if (!isValidPhoneNumber(phoneNumberRef.current.value)) {
-      setPhoneNumberError('Phone number is not valid');
+      setPhoneNumberError(t('number_not_valid'));
     } else setPhoneNumberError('');
   };
   const onBlurFirstName = () => validateFirstName();
@@ -79,10 +80,10 @@ const UserDetailViewController = () => {
       setCurrentStep('address');
     } else {
       if (!firstNameRef.current.value)
-        setFirstNameError('First name is required');
-      if (!lastNameRef.current.value) setLastNameError('Last name is required');
+        setFirstNameError(t('first_name_required'));
+      if (!lastNameRef.current.value) setLastNameError(t('last_name_required'));
       if (!phoneNumberRef.current.value)
-        setPhoneNumberError('Phone number is required');
+        setPhoneNumberError(t('phone_number_required'));
     }
   };
 

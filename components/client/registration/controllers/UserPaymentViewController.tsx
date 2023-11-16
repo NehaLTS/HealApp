@@ -3,7 +3,8 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const UserPaymentViewController = ({ item }: any) => {
@@ -23,24 +24,25 @@ const UserPaymentViewController = ({ item }: any) => {
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isCardDetails, setIsCardDetails] = useState(false);
   const navigation = useNavigation<any>();
+  const { t } = useTranslation();
 
   const validateCardNumber = () => {
-    if (!card?.length) setCardNumberError('Card number is required');
+    if (!card?.length) setCardNumberError(t('card_number_required'));
     else if (card?.length !== 19) {
-      setCardNumberError('Card number is to short');
+      setCardNumberError(t('card_number_short'));
     } else setCardNumberError('');
   };
 
   const validateCardExpiry = () => {
-    if (!expiry?.length) setCardExpiryError('Expiry date is required');
+    if (!expiry?.length) setCardExpiryError(t('expiry_number_required'));
     else if (expiry?.length !== 5) {
-      setCardExpiryError('Expiry number is to short');
+      setCardExpiryError(t('expiry_number_short'));
     } else setCardExpiryError('');
   };
   const validateCvv = () => {
-    if (!cvv?.length) setCvvError('Cvv is required');
+    if (!cvv?.length) setCvvError(t('cvv_required'));
     else if (cvv?.length !== 3) {
-      setCvvError('Cvv number is to short');
+      setCvvError(t('cvv_number_short'));
     } else setCvvError('');
   };
 
@@ -105,9 +107,9 @@ const UserPaymentViewController = ({ item }: any) => {
       });
       setIsCardDetails(true);
     } else {
-      if (!card?.length) setCardNumberError('Card number is required');
-      if (!cvv?.length) setCvvError('Cvv is required');
-      if (!expiry?.length) setCardExpiryError('Expiry date is required');
+      if (!card?.length) setCardNumberError(t('card_number_required'));
+      if (!cvv?.length) setCvvError(t('cvv_required'));
+      if (!expiry?.length) setCardExpiryError(t('expiry_date_required'));
     }
   };
 
@@ -146,7 +148,7 @@ const UserPaymentViewController = ({ item }: any) => {
         }
       } else {
         setIsLoader(false);
-        Alert.alert('Some error occurred');
+        Alert.alert(t('error_occurred'));
       }
     }
   };

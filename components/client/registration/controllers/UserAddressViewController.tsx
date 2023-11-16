@@ -4,7 +4,8 @@ import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ClientProfile } from 'libs/types/UserType';
 // import uploadImage from 'libs/uploadImage';
 import { generateRandomName, numericPattern } from 'libs/utility/Utils';
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const UserAddressViewController = () => {
@@ -22,21 +23,20 @@ const UserAddressViewController = () => {
   const [onSearchAddress, setOnSearchAddress] = useState('');
   const { setCurrentStep, setUserProfile, userProfile, userId } =
     UseClientUserContext();
-
+  const { t } = useTranslation();
   const [profilePicture, setProfilePicture] = useState(
     userProfile && userProfile.profilePicture ? userProfile.profilePicture : '',
   );
 
   const validateAddress = () => {
-    if (onSearchAddress?.length < 4)
-      setAddressError('Please fill full address');
+    if (onSearchAddress?.length < 4) setAddressError(t('fill_address'));
     else setAddressError('');
   };
 
   // Function to validate the ID number
   const validateIdNumber = () => {
     if (!numericPattern.test(idNumberRef.current.value))
-      setIdNumberError('ID number must contain only numbers');
+      setIdNumberError(t('id_contain_numbers'));
     else setIdNumberError('');
   };
 
@@ -125,12 +125,12 @@ const UserAddressViewController = () => {
       if (res?.isSuccessful) {
         setCurrentStep('payment');
       } else {
-        Alert.alert('some error occurred');
+        Alert.alert(t('error_occurred'));
       }
     } else {
-      if (onSearchAddress?.length === 0) setAddressError('Address is required');
-      if (!idNumberRef.current.value) setIdNumberError('ID number is required');
-      if (!dateOfBirth) setDateOfBirthError('Birth date is required');
+      if (onSearchAddress?.length === 0) setAddressError(t('address_required'));
+      if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
+      if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
     }
   };
 

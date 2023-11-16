@@ -123,7 +123,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         />
       ))}
       <View style={{ flexDirection: 'row' }}>
-        <Text title={'Total - '} style={styles.total} />
+        <Text title={t('total')} style={styles.total} />
         <Text title={`${totalPrice} NIS`} style={styles.Small} />
       </View>
       <Text
@@ -137,7 +137,9 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
   const getCardView = () => (
     <View style={styles.cardDetail}>
       <Text
-        title={`Paid by card *${userProfile?.card_number?.slice?.(-4)}` ?? ''}
+        title={
+          `${t('paid_card')}${userProfile?.card_number?.slice?.(-4)}` ?? ''
+        }
         style={styles.text}
       />
       <TextButton
@@ -225,6 +227,7 @@ const styles = StyleSheet.create({
   voltaireText: {
     marginVertical: 5,
     fontSize: fontSize.textM,
+    textAlign: 'left',
   },
   payForIt: {
     fontSize: getWidth(fontSize.textS),
@@ -245,7 +248,7 @@ const styles = StyleSheet.create({
     fontSize: getWidth(fontSize.textL),
     marginTop: getWidth(dimens.marginM),
     fontFamily: fontFamily.medium,
-    textAlign: I18nManager.isRTL ? 'right' : 'left',
+    textAlign: 'left',
   },
   description: {
     height: getHeight(dimens.imageS + dimens.marginS),
@@ -275,6 +278,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.light,
     backgroundColor: colors.white,
     marginTop: 2,
+    textAlign: 'left',
   },
   locationText: {
     fontSize: getWidth(fontSize.textM),
@@ -296,5 +300,6 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.regular,
     color: colors.black,
     flex: 1,
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
 });

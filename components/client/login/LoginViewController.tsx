@@ -10,6 +10,7 @@ import { GoogleAuthProvider } from '../../../libs/authsevices/GoogleAuthProvider
 import React from 'react';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import useToast from 'components/common/useToast';
+import { useTranslation } from 'react-i18next';
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ const LoginViewController = () => {
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
   const { showToast, renderToast } = useToast();
+  const { t } = useTranslation();
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -46,22 +48,20 @@ const LoginViewController = () => {
   const onBlurPassword = () => validatePassword();
 
   const validateEmail = () => {
-    if (!emailRef.current.value) setEmailError('Email is required');
+    if (!emailRef.current.value) setEmailError(t('email_required'));
     else if (!emailPattern.test(emailRef.current.value))
-      setEmailError('Invalid email address');
+      setEmailError(t('invalid_email'));
     else setEmailError('');
   };
 
   const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validatePassword = () => {
-    if (!passwordRef.current.value) setPasswordError('Password is required');
+    if (!passwordRef.current.value) setPasswordError(t('password_required'));
     else if (passwordRef.current.value.length < 5)
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('must_be_8_characters'));
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError(
-        `Password must have at least one special character(@#$!%*?&), one digit(0-9), one uppercase(A-Z)`,
-      );
+      setPasswordError(t(`password_must_have_special_character`));
     else setPasswordError('');
   };
 
