@@ -26,16 +26,18 @@ const UserPaymentViewController = ({ item }: any) => {
   const navigation = useNavigation<any>();
   const { t } = useTranslation();
 
-  const validateCardNumber = () => {
-    if (!card?.length) setCardNumberError(t('card_number_required'));
-    else if (card?.length !== 19) {
+  const validateCardNumber = (value?: string) => {
+    if (value == null) value = card;
+    if (!value?.length) setCardNumberError(t('card_number_required'));
+    else if (value?.length !== 19) {
       setCardNumberError(t('card_number_short'));
     } else setCardNumberError('');
   };
 
-  const validateCardExpiry = () => {
-    if (!expiry?.length) setCardExpiryError(t('expiry_number_required'));
-    else if (expiry?.length !== 5) {
+  const validateCardExpiry = (value?: string) => {
+    if (value == null) value = expiry;
+    if (!value?.length) setCardExpiryError(t('expiry_number_required'));
+    else if (value?.length !== 5) {
       setCardExpiryError(t('expiry_number_short'));
     } else setCardExpiryError('');
   };
@@ -49,7 +51,7 @@ const UserPaymentViewController = ({ item }: any) => {
   const trimPaymentValue = (value: string) => value.replace(/[^0-9]/g, '');
 
   const onChangeCardNumber = (value: string) => {
-    validateCardNumber();
+    validateCardNumber(value);
     const cleanedText = trimPaymentValue(value);
     let formattedText = '';
 
@@ -64,7 +66,7 @@ const UserPaymentViewController = ({ item }: any) => {
     setCard(formattedText);
   };
   const onChangeExpireDate = (value: string) => {
-    validateCardExpiry();
+    validateCardExpiry(value);
     const cleanedText = trimPaymentValue(value);
     let formattedText = '';
     for (let i = 0; i < cleanedText.length; i += 2) {
@@ -89,7 +91,6 @@ const UserPaymentViewController = ({ item }: any) => {
 
   const onClearCard = () => {
     setCard('');
-    expireDateRef.current.focus();
   };
   const onDeleteCard = () => {
     setIsCardDetails(false);

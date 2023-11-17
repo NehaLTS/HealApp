@@ -60,7 +60,7 @@ const useToast = () => {
             <Text
               style={{
                 color: colors.white,
-                fontSize: fontSize.textS,
+                fontSize: getWidth(fontSize.textS),
                 fontFamily: fontFamily.bold,
               }}
             >
@@ -70,7 +70,7 @@ const useToast = () => {
           <Text
             style={{
               color: colors.white,
-              fontSize: fontSize.textS,
+              fontSize: getWidth(fontSize.textS),
               fontFamily: fontFamily.medium,
             }}
           >

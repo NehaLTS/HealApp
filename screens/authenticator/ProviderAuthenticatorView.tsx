@@ -93,10 +93,11 @@ const styles = StyleSheet.create({
     flex: 0.34,
   },
   logo: {
-    width: getWidth(dimens.imageM - 40),
-    height: getHeight(dimens.imageM),
+    width: getWidth(dimens.imageM),
+    height: getHeight(dimens.imageM - 30),
     alignSelf: 'center',
     resizeMode: 'center',
+    marginBottom: getHeight(30),
   },
   toggleContainer: {
     flexDirection: 'row',
@@ -106,7 +107,6 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
     alignSelf: 'center',
     paddingTop: getHeight(dimens.paddingS),
-    // paddingTop: getHeight(dimens.paddingXs + dimens.borderBold),
   },
   guestText: {
     fontSize: getHeight(fontSize.textXl),

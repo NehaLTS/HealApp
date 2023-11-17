@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     marginLeft: getWidth(dimens.marginS),
   },
   title: {
-    fontSize: fontSize.headingL,
+    fontSize: getWidth(fontSize.headingL),
   },
   headerRight: {
     padding: getHeight(dimens.sideMargin),

@@ -98,5 +98,6 @@ const styles = StyleSheet.create({
   placeholder: {
     color: colors.black,
     textAlign: 'left',
+    fontSize: getWidth(15),
   },
 });

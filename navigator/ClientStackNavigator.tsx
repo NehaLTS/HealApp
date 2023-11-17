@@ -4,6 +4,7 @@ import NavigationRoutes from './NavigationRoutes';
 // import { ClientUserContext, onboardStep } from 'contexts/UseClientUserContext';
 import { defaultHeaderStyle } from 'components/common/Header';
 import OrderDetails from '../screens/client/OrderDetails';
+import HomeScreen from '../screens/client/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,8 +21,10 @@ const ClientStackNavigator = () => {
       <Stack.Screen
         options={defaultHeaderStyle}
         name={NavigationRoutes.ClientHome}
-        component={lazy(() => import('..//screens/client/HomeScreen'))}
+        component={HomeScreen}
+        // component={lazy(() => import('..//screens/client/HomeScreen'))}
       />
+      {/* /> */}
       <Stack.Screen
         name={NavigationRoutes.OnboardDetails}
         options={defaultHeaderStyle}

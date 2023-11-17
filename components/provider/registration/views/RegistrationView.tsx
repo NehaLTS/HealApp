@@ -26,13 +26,12 @@ const RegistrationView = () => {
     passwordRef,
     passwordError,
   } = RegistrationViewController();
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
 
   return (
     <>
       {renderToast()}
       <View style={styles.inputContainer}>
-        {(isLoading || isLoadingGoogle) && <Loader />}
+        {isLoading && <Loader />}
         <Input
           ref={emailRef}
           placeholder={t('email')}
@@ -90,6 +89,7 @@ export default RegistrationView;
 const styles = StyleSheet.create({
   inputContainer: {
     flex: 0.7,
+    paddingTop: getHeight(dimens.marginS),
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     alignSelf: 'center',
-    marginTop: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.marginM - 2),
   },
   password: {
     marginTop: dimens.paddingL,

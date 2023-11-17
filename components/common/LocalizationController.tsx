@@ -30,27 +30,47 @@ const LocalizationController = () => {
 
   const setAppLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-    if (lng == ('en' || 'ru') && I18nManager.isRTL) {
+    // if (lng == ('en' || 'ru') && I18nManager.isRTL) {
+    if (lng == 'en' || lng == 'ru') {
       I18nManager.forceRTL(false);
-    } else if (lng == ('he' || 'ar') && !I18nManager.isRTL) {
+      I18nManager.allowRTL(false);
+    }
+    // else if (lng == ('he' || 'ar') && !I18nManager.isRTL) {
+    else if (lng == 'he' || lng == 'ar') {
       I18nManager.forceRTL(true);
+      I18nManager.allowRTL(true);
     }
   };
 
   const handleLanguageChange = (lng: string) => {
     if (i18n.language !== lng) {
       i18n.changeLanguage(lng);
-      if (lng == 'en' || lng === 'ru') {
+
+      console.log('entered (I18nManager.isRTL ', I18nManager.isRTL);
+
+      if (I18nManager.isRTL && (lng == 'en' || lng == 'ru')) {
         I18nManager.forceRTL(false);
         I18nManager.allowRTL(false);
-        SplashScreen.show();
+        // SplashScreen.show();
         RNRestart.restart();
-      } else if (lng == 'he' || lng == 'ar') {
-        SplashScreen.show();
+      } else if (!I18nManager.isRTL && (lng == 'he' || lng == 'ar')) {
+        // SplashScreen.show();
         I18nManager.forceRTL(true);
         I18nManager.allowRTL(true);
         RNRestart.restart();
       }
+
+      // if (lng == 'en' || lng === 'ru') {
+      //   I18nManager.forceRTL(false);
+      //   I18nManager.allowRTL(false);
+      //   SplashScreen.show();
+      //   RNRestart.restart();
+      // } else if (lng == 'he' || lng == 'ar') {
+      //   SplashScreen.show();
+      //   I18nManager.forceRTL(true);
+      //   I18nManager.allowRTL(true);
+      //   RNRestart.restart();
+      // }
 
       // if(lng=="he" || lng=='ar'){
       //  I18nManager.forceRTL(true);

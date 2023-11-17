@@ -4,8 +4,11 @@ import { getLocalData } from 'libs/datastorage/useLocalStorage';
 import { treatment } from 'libs/types/ProvierTypes';
 import { ClientProfile, OrderDetail } from 'libs/types/UserType';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert } from 'react-native';
 
 const OrderDetailsController = () => {
+  const { t } = useTranslation();
   const [showSummary, setShowSummary] = useState(false);
   const { treatmentMenu } = ClientOrderServices();
   const userProfile = getLocalData?.('USERPROFILE');
@@ -50,19 +53,28 @@ const OrderDetailsController = () => {
   const handleNextButtonPress = async () => {
     if (
       order.isOrderForOther &&
-      order?.reason?.length > 0 &&
+      (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
       order?.services?.length > 0 &&
-      order?.patient_type?.age?.length > 0
+      order?.patient_type?.age?.length > 0 &&
+      order?.address?.length
     ) {
       setShowSummary(true);
     }
     if (
       order.isOrderForOther === false &&
-      order?.reason?.length > 0 &&
-      order?.services?.length > 0
+      (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
+      order?.services?.length > 0 &&
+      order?.address?.length
     ) {
       setShowSummary(true);
     }
+    if (!order?.address?.length) Alert.alert(t('address_required'));
+    if (!(order?.reason?.length > 0 || order?.Additional_notes?.length))
+      Alert.alert(t('Please select at least one Reason'));
+    if (!order?.services?.length)
+      Alert.alert(t('Please select Treatment menu'));
+    if (order?.isOrderForOther && order.patient_type?.age === '')
+      Alert.alert(t('validationOther'));
     // console.log("orderDetails", orderDetails);
     // const menuIds = orderDetails?.treatmentMenu.map(item => item.menu_id);
     // if (showSummary === true) {

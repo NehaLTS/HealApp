@@ -28,6 +28,7 @@ const OrderFormController = ({
     order?.patient_type?.type === 'me',
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [otherReasons, setOtherReasons] = useState(order?.Additional_notes);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
   const [activeCheckbox, setActiveCheckbox] = useState<number[]>(uniqueMenuIds);
@@ -39,7 +40,7 @@ const OrderFormController = ({
   );
   const ageRef = React.useRef<any>('');
   const phoneRef = React.useRef<any>('');
-  const otherReasons = React.useRef<any>('');
+
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
@@ -76,7 +77,7 @@ const OrderFormController = ({
     return age;
   }
 
-  const isValidPhoneNumber = (p: string) => numericPattern.test(p);
+  const isValidPhoneNumber = (p: string) => numericPattern?.test(p);
 
   const validatePhoneNumber = () => {
     if (!isValidPhoneNumber(phoneRef.current.value)) {
@@ -98,14 +99,21 @@ const OrderFormController = ({
   };
 
   const onSubmitDetail = () => {
-    if (!phoneError?.length && !ageError?.length) {
+    if (
+      !phoneError?.length &&
+      !ageError?.length &&
+      (phoneRef?.current?.value?.length || order?.phonenumber) &&
+      ageRef?.current?.value?.length
+    ) {
       setOrder({
         ...order,
         patient_type: {
           type: 'other',
           age: calculateBirthDate(ageRef.current.value),
         },
-        phonenumber: phoneRef?.current?.value,
+        phonenumber: phoneRef?.current?.value?.length
+          ? phoneRef?.current?.value
+          : order?.phonenumber,
       });
       setIsSubmitDetail(true);
     }
@@ -191,21 +199,21 @@ const OrderFormController = ({
   };
 
   const onSubmitDescription = () => {
-    if (otherReasons.current.value) {
+    if (otherReasons) {
       setIsModalVisible(false);
       setOrder({
         ...order,
-        Additional_notes: otherReasons?.current?.value,
+        Additional_notes: otherReasons,
       });
     }
   };
-
   return {
     activeButton,
     onSelectReasons,
     setIsModalVisible,
     isModalVisible,
     otherReasons,
+    setOtherReasons,
     handleItemPress,
     activeCheckbox,
     setIsVisible,

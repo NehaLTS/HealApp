@@ -63,6 +63,32 @@ const ProviderAddress = () => {
     );
   };
 
+  const getUploadImageView = () => (
+    <View style={styles.iconContainer}>
+      <Text style={styles.text}>{t('upload_license')}</Text>
+      <TouchableOpacity
+        disabled={!licenseRef.current?.value}
+        activeOpacity={licensePicture ? 1 : 0.5}
+        style={{ opacity: !licenseRef.current?.value ? 0.5 : 1 }}
+        onPress={() => setIsShowModal(true)}
+      >
+        <Image
+          source={
+            licensePicture
+              ? { uri: licensePicture }
+              : require('../../../../assets/icon/licencesIcon.png')
+          }
+          style={styles.selectedImage}
+        />
+      </TouchableOpacity>
+      <SelectImage
+        isShowModal={isShowModal}
+        closeModal={setIsShowModal}
+        imageUri={getImageUrl}
+      />
+    </View>
+  );
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -76,8 +102,11 @@ const ProviderAddress = () => {
           defaultValue={''}
           inputValue={providerProfile?.phoneNumber ?? ''}
           errorMessage={phoneError}
-          returnKeyType={'done'}
-          onSubmitEditing={() => licenseRef.current.focus()}
+          returnKeyType={'next'}
+          onSubmitEditing={() => {
+            setIsShowAddressodal(true);
+            addressRef?.current?.focus();
+          }}
           onClearInputText={() => phoneRef.current.clear()}
           inputStyle={styles.inputPhone}
           maxLength={10}
@@ -89,12 +118,14 @@ const ProviderAddress = () => {
           keyboardType="number-pad"
           inputStyle={styles.input}
           onBlur={onBlurPhoneNumber}
-          onChangeText={onChangeLicenseNumber}
+          onChangeText={(v) => onChangeLicenseNumber(v)}
           ref={licenseRef}
           defaultValue={''}
           inputValue={providerProfile?.licensenumber ?? ''}
-          returnKeyType={'next'}
-          onSubmitEditing={() => addressRef.current.focus()}
+          returnKeyType={'done'}
+          onSubmitEditing={() => {
+            setIsShowModal(true);
+          }}
           onClearInputText={() => licenseRef.current.clear()}
           maxLength={10}
         />
@@ -110,28 +141,7 @@ const ProviderAddress = () => {
           inputValue={onSearchAddress}
           onClearInputText={() => setOnSearchAddress('')}
         />
-
-        <View style={styles.iconContainer}>
-          <Text style={styles.text}>{t('upload_license')}</Text>
-          <TouchableOpacity
-            activeOpacity={licensePicture ? 1 : 0.5}
-            onPress={() => setIsShowModal(true)}
-          >
-            <Image
-              source={
-                licensePicture
-                  ? { uri: licensePicture }
-                  : require('../../../../assets/icon/licencesIcon.png')
-              }
-              style={styles.selectedImage}
-            />
-          </TouchableOpacity>
-          <SelectImage
-            isShowModal={isShowModal}
-            closeModal={setIsShowModal}
-            imageUri={getImageUrl}
-          />
-        </View>
+        {getUploadImageView()}
       </View>
       <View style={styles.footerContainer}>
         <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
@@ -177,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    height: getHeight(dimens.imageS + dimens.paddingXs + 8),
     width: getWidth(dimens.imageS + 8),
     resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),

@@ -123,7 +123,7 @@ const LoginViewController = () => {
       userId: response.id,
       isClient: false,
     });
-    if (!userDataProvider.firstName || userDataProvider.firstName == '') {
+    if (!userDataProvider.firstname || userDataProvider.firstname == '') {
       console.log('setToken', token, userId);
 
       navigation.reset({

@@ -52,7 +52,7 @@ const CardView = ({ item, index, isSearch }: any) => {
             <Text style={styles.modalText} title={t('please_add_payment')} />
 
             <Button
-              title={t('payment_method')}
+              title={t('add_payment_method')}
               isPrimary
               isSmall
               fontSized={getHeight(15)}
