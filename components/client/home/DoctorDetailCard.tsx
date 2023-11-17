@@ -6,6 +6,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import Text from 'components/common/Text';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 
 const DoctorDetailCard = ({
   isPrimary,
@@ -16,6 +17,7 @@ const DoctorDetailCard = ({
   showProvider?:boolean;
   showBothCards: boolean;
 }) => {
+  const localData= getLocalData('USER')
   return (
     <>
       {isPrimary || showBothCards ? (
@@ -37,9 +39,12 @@ const DoctorDetailCard = ({
         <View style={styles.cardDetail}>
           <Text
             style={styles.doctorTitle}
-            title={'Elena Miron, family doctor'}
+            title={`${localData?.providerLocation?.firstname}${", "}${localData?.providerLocation?.name}`}
           />
+
           <View style={{}}>
+          
+       
             <View style={styles.detailItem}>
               <View style={styles.doctorIconContainer}>
                 <Image

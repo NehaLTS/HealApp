@@ -41,9 +41,11 @@ const forceAlert = () => {
   
  }
  const searchProviderNearBy=async (request:string)=>{
+
+  console.log("currentLocationOfUser?.longitudecurrentLocationOfUser?.longitude",currentLocationOfUser?.latitude, currentLocationOfUser?.longitude,  )
   const providerData=  await providerLocationSearch({ name: "Back Pain",
    provider_type_id: "1",
-   latitude:currentLocationOfUser?.longitude,
+   latitude:currentLocationOfUser?.latitude,
    longitude:currentLocationOfUser?.longitude,
    reqDistance:request}).then((response)=>{
      return response
@@ -51,11 +53,11 @@ const forceAlert = () => {
   return providerData
  }
 
-  const SearchDoctor=async ()=>{
+  const SearchDoctorLocation=async ()=>{
     let i :number=1;
     let searchData= await searchProviderNearBy(`${'req'}${i}`)
 
-    console.log("searchData...",searchData, i)
+    console.log("searchData...", JSON.stringify(searchData), i)
     if(searchData!=null){
       setLocalData("USER",{providerLocation:searchData})
       if(i!=1){
@@ -76,7 +78,7 @@ const forceAlert = () => {
     permissionHelper,
     forceAlert,
     handleNextButtonPress,
-    SearchDoctor,
+    SearchDoctorLocation,
     showRateAlert
   };
 };

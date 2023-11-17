@@ -51,7 +51,7 @@ const App = () => {
       if (result === RESULTS.GRANTED) {
         console.log('permissionResult', result);
 
-        Geolocation.getCurrentPosition(
+        Geolocation.watchPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
             setCurrentLocationOfUser({latitude:latitude.toString() , longitude:longitude.toString()})
@@ -62,8 +62,6 @@ const App = () => {
           },
           {
             enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 10000,
           },
         );
       } else {

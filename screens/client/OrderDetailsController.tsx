@@ -6,14 +6,15 @@ import { treatment } from 'libs/types/ProvierTypes';
 import { ClientProfile, OrderDetail } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 const OrderDetailsController = () => {
   const [showSummary, setShowSummary] = useState(false);
-  const { treatmentMenu } = ClientOrderServices();
+  const { treatmentMenu, orderProvider } = ClientOrderServices();
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation();
-  const {currentLocationOfUser}= UseClientUserContext()
+  const {currentLocationOfUser, orderDetails}= UseClientUserContext()
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
@@ -59,37 +60,39 @@ const OrderDetailsController = () => {
     // "reqDistance":"req1"
   
 
-   navigation.navigate(NavigationRoutes.SearchDoctor)
+  
 
-    // console.log("orderDetails", orderDetails);
-    // const menuIds = orderDetails?.treatmentMenu.map(item => item.menu_id);
-    // if (showSummary === true) {
-    //   const res = await orderProvider({
-    //     client_id: order?.userId,
-    //     patient_type: orderDetails.patient_type ?? "",
-    //     patient_name: orderDetails.patient_name,
-    //     address: userProfile?.address ?? "",
-    //     city: "",
-    //     phonenumber: orderDetails?.phonenumber,
-    //     Date_of_birth: userProfile?.date_of_birth ?? "",
-    //     services: "1,2",
-    //     symptoms: `${orderDetails.reason}`,
-    //     Additional_notes: orderDetails.Additional_notes,
-    //     Estimate_arrival: "30",
-    //     Instructions_for_arrival: orderDetails?.Instructions_for_arrival,
-    //     Payment_mode: orderDetails.Payment_mode,
-    //     TotalCost: "500",
-    //     menu_id: "2",
-    //     reason: `${orderDetails.reason}`,
-    //   });
-    //   // console.log("Order api", res);
-    // } else {
-    //   if (orderDetails.services.length && orderDetails.reason.length)
-    //     setShowSummary(true);
-    //   else {
-    //     Alert.alert("please select reasons and treatment menu");
-    //   }
-    // }
+    console.log("orderDetails", orderDetails);
+    // const menuIds = orderDetails?..map(item => item.menu_id);
+    if (showSummary === true) {
+      // const res = await orderProvider({
+      //   client_id: order?.client_id,
+      //   patient_type: orderDetails.patient_type.type ?? "",
+      //   patient_name: orderDetails.patient_name,
+      //   address: 'USerLocation' ?? "",
+      //   city: "",
+      //   phonenumber: orderDetails?.phonenumber,
+      //   Date_of_birth: '17/20/2000' ?? "",
+      //   services: "1,2",
+      //   symptoms: `${orderDetails.reason}`,
+      //   Additional_notes: orderDetails.Additional_notes,
+      //   Estimate_arrival: "30",
+      //   Instructions_for_arrival: orderDetails?.Instructions_for_arrival,
+      //   Payment_mode: orderDetails.Payment_mode,
+      //   TotalCost: "500",
+      //   menu_id: "2",
+      //   reason: `${orderDetails.reason}`,
+      // });
+      // if(res!==undefined) 
+      navigation.navigate(NavigationRoutes.SearchDoctor)
+      // console.log("Order api", res);
+    } else {
+      if (orderDetails.services.length && orderDetails.reason.length)
+        setShowSummary(true);
+      else {
+        Alert.alert("please select reasons and treatment menu");
+      }
+    }
   };
   return {
     handleNextButtonPress,

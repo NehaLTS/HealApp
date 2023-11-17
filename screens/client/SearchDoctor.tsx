@@ -19,6 +19,7 @@ import { Location } from "libs/types/UserType";
 import Geolocation from 'react-native-geolocation-service';
 import SearchDoctorController from "./SearchDoctorController";
 import { Loader } from "components/common/Loader";
+import ArrivalTime from "components/common/ArrivalTime";
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -27,9 +28,9 @@ const SearchDoctor = () => {
   const localData= getLocalData('USER')
   const {setCurrentLocationOfUser} =UseClientUserContext()
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const {permissionHelper, forceAlert, handleNextButtonPress, showRateAlert}= SearchDoctorController()
+  const {permissionHelper, forceAlert, handleNextButtonPress, showRateAlert, SearchDoctorLocation}= SearchDoctorController()
   const [providerLocation, setProviderLocation]=useState<{latitude:number, longitude:number}>();
-
+const [showDoctor,setShowDoctor]= useState(false)
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: "center",
@@ -75,7 +76,8 @@ const SearchDoctor = () => {
     } else {
      watchId = Geolocation.watchPosition(
        (position) => {
-          setProviderLocation({latitude: localData?.providerLocation?parseFloat(localData?.providerLocation[0]?.latitude):position.coords.latitude, longitude:localData?.providerLocation? parseFloat(localData?.providerLocation[0]?.longitude):position.coords.longitude})
+      
+          setProviderLocation({latitude: localData?.providerLocation?parseFloat(localData?.providerLocation?.latitude):position.coords.latitude, longitude:localData?.providerLocation? parseFloat(localData?.providerLocation?.longitude):position.coords.longitude})
           setCurrentLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -94,6 +96,10 @@ const SearchDoctor = () => {
 
   useEffect(()=>{
     createNotificationListeners()
+    SearchDoctorLocation()
+    setProviderLocation({latitude: localData?.providerLocation?parseFloat(localData?.providerLocation?.latitude):0.0, longitude:localData?.providerLocation? parseFloat(localData?.providerLocation?.longitude):0.0})
+
+    console.log("localData..",localData, providerLocation)
     DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
       console.log("DoctorNotificationEvent", event)
       setProviderLocation({latitude: parseFloat(event.latitude), longitude: parseFloat(event.longitude)})}
@@ -103,6 +109,7 @@ return DeviceEventEmitter.removeAllListeners('DoctorNotification')
   
   return (
     <View style={styles.mainContainer}>
+     {localData&& providerLocation!==undefined &&<ArrivalTime totalTime={60}/>}
       <Text style={styles.lookingDoctor} title={t("Looking for a doctor")} />
       
       <View style={styles.mapContainer}>
@@ -112,7 +119,13 @@ return DeviceEventEmitter.removeAllListeners('DoctorNotification')
        <MapView
         provider={PROVIDER_GOOGLE}
         showsUserLocation
+        showsScale
         followsUserLocation
+      tintColor={colors.disabled}
+        zoomEnabled
+        zoomTapEnabled
+        showsTraffic
+        showsBuildings
         region={currentLocation} 
         style={{flex:1}}> 
         
@@ -122,13 +135,17 @@ return DeviceEventEmitter.removeAllListeners('DoctorNotification')
                 latitude: providerLocation.latitude,
                 longitude:providerLocation.longitude,
               }}
+              onPress={()=>{
+                setShowDoctor(!showDoctor)
+              }}
               title="Doctor Location">
+
               </Marker>)} 
             </MapView>
            
-            <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20)}}>
+           { showDoctor ?<View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20)}}>
               <DoctorDetailCard isPrimary={showRateAlert} showBothCards={showRateAlert&&providerLocation!=undefined} showProvider={providerLocation!=undefined}/>
-              </View>
+              </View>:null}
       </View>
         <Button
         title={providerLocation!=undefined?"Order":"Cancel"}
