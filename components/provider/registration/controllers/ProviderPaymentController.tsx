@@ -1,8 +1,10 @@
+import Loader from 'components/common/Loader';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const ProviderPaymentController = () => {
@@ -17,9 +19,15 @@ const ProviderPaymentController = () => {
   const accountRef = React.useRef<any>('');
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
+  const { t } = useTranslation();
 
-  const { setCurrentStep, setProviderProfile, providerProfile, userId,token } =
+  const { setCurrentStep, setProviderProfile, providerProfile, userId, token } =
     UseProviderUserContext();
+  const [profilePicture, setProfilePicture] = useState(
+    providerProfile && providerProfile.profilePicture
+      ? providerProfile.profilePicture
+      : '',
+  );
 
   const onBlurRegistrationNumber = () => validateRegistrationNumber();
 
@@ -42,11 +50,13 @@ const ProviderPaymentController = () => {
 
   const onChangeAccount = (value: string) => (accountRef.current.value = value);
 
-  const getImageUrl = (url: string) => {};
+  const getImageUrl = (url: string) => {
+    setProfilePicture(url);
+  };
 
   const validateRegistrationNumber = () => {
     if (!registrationNumberRef.current.value) {
-      setRegistrationError('Registration is required');
+      setRegistrationError(t('registration_required'));
     } else {
       setRegistrationError('');
     }
@@ -54,7 +64,7 @@ const ProviderPaymentController = () => {
 
   const validateBankName = () => {
     if (!bankNameRef.current.value) {
-      setBankNameError('Bank is required');
+      setBankNameError(t('bank_required'));
     } else {
       setBankNameError('');
     }
@@ -62,14 +72,14 @@ const ProviderPaymentController = () => {
 
   const validateBranch = () => {
     if (!bankNameRef.current.value) {
-      setBranchError('Branch is required');
+      setBranchError(t('branch_required'));
     } else {
       setBranchError('');
     }
   };
   const validateAccount = () => {
     if (!bankNameRef.current.value) {
-      setAccountError('Bank Account is required');
+      setAccountError(t('bank_account_required'));
     } else {
       setAccountError('');
     }
@@ -94,26 +104,30 @@ const ProviderPaymentController = () => {
       });
 
       setIsLoading(true);
-      const res = await OnUpdateProviderUserDetails?.({
-        firstname: providerProfile.firstName ?? '',
-        lastname: providerProfile.lastName ?? '',
-        address: providerProfile.address ?? '',
-        city: '',
-        state: '',
-        country: '',
-        phone_number: providerProfile.phoneNumber ?? '',
-        profile_picture: providerProfile.profilePicture ?? '',
-        provider_id:  userId ?? '',
-        provider_type_id: providerProfile.provider.id ?? '',
-        license_number: providerProfile.licensenumber ?? '',
-        upload_license_picture: providerProfile.licensepicture ?? '',
-        bank_name: bankNameRef.current.value,
-        branch: branchRef.current.value,
-        business_registration_number: registrationNumberRef.current.value,
-        account: accountRef.current.value,
-      },token);
 
-      console.log("response udpate is ",res)
+      const res = await OnUpdateProviderUserDetails?.(
+        {
+          firstname: providerProfile.firstName ?? '',
+          lastname: providerProfile.lastName ?? '',
+          address: providerProfile.address ?? '',
+          city: '',
+          state: '',
+          country: '',
+          phone_number: providerProfile.phoneNumber ?? '',
+          profile_picture: providerProfile.profilePicture ?? '',
+          provider_id: userId ?? '',
+          provider_type_id: providerProfile.provider.id ?? '',
+          license_number: providerProfile.licensenumber ?? '',
+          upload_license_picture: providerProfile.licensepicture ?? '',
+          bank_name: bankNameRef.current.value,
+          branch: branchRef.current.value,
+          business_registration_number: registrationNumberRef.current.value,
+          account: accountRef.current.value,
+        },
+        token,
+      );
+
+      console.log('response udpate is ', res);
 
       if (res?.msg) {
         setLocalData('USERPROFILE', {
@@ -143,7 +157,7 @@ const ProviderPaymentController = () => {
           setCurrentStep('addServices');
         }
       } else {
-        Alert.alert('Some Error on Updating the Details. Please try again !!');
+        Alert.alert(t('some_error'));
       }
 
       setIsLoading(false);
@@ -153,11 +167,11 @@ const ProviderPaymentController = () => {
       // setCurrentStep('payment');
     } else {
       if (!registrationNumberRef.current.value)
-        setRegistrationError('Registration is required');
-      if (!bankNameRef.current.value) setBankNameError('Bank is required');
+        setRegistrationError(t('registration_required'));
+      if (!bankNameRef.current.value) setBankNameError(t('bank_required'));
       if (!accountRef.current.value)
-        setAccountError('Bank Account is required');
-      if (!branchRef.current.value) setBranchError('Branch is required');
+        setAccountError(t('bank_account_required'));
+      if (!branchRef.current.value) setBranchError(t('branch_required'));
     }
   };
 
@@ -188,6 +202,8 @@ const ProviderPaymentController = () => {
     onPressNext,
     onPressBack,
     setIsShowModal,
+    isLoading,
+    profilePicture,
   };
 };
 

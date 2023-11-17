@@ -10,6 +10,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import {
+  I18nManager,
   Image,
   ScrollView,
   StyleSheet,
@@ -18,6 +19,8 @@ import {
 } from 'react-native';
 import OrderDetailsController from './OrderDetailsController';
 import { useTranslation } from 'react-i18next';
+import { getProviderImage } from 'libs/utility/Utils';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const OrderDetails = () => {
   const {
@@ -34,19 +37,29 @@ const OrderDetails = () => {
   const HeaderTitle = () => (
     <View style={styles.servicesContainer}>
       <Image
-        source={require('assets/icon/physio.png')}
+        source={getProviderImage(
+          supplier?.name?.length ? supplier?.name : supplier?.name?.en,
+        )}
         style={styles.specialistIcon}
       />
       <Text
         numberOfLines={2}
         style={styles.specialist}
-        title={supplier?.name}
+        title={supplier?.name?.length ? supplier?.name : supplier?.name?.en}
       />
     </View>
   );
   const HeaderLeft = () => {
     return (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={{
+          padding: I18nManager.isRTL ? getWidth(16) : 0,
+          paddingLeft: getWidth(0),
+          zIndex: 1,
+          minWidth: '10%',
+        }}
+        onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
+      >
         <Image source={arrowBack} style={styles.arrowBack} />
       </TouchableOpacity>
     );
@@ -74,7 +87,7 @@ const OrderDetails = () => {
             />
           )}
           <Button
-            title={showSummary ? 'Order' : 'Next'}
+            title={showSummary ? t('order') : t('next')}
             isPrimary
             isSmall
             style={styles.buttonOrder}
@@ -112,6 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: getWidth(dimens.sideMargin),
     paddingTop: getHeight(dimens.marginS + 3),
+    width: I18nManager.isRTL ? '86%' : '100%',
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),
@@ -121,6 +135,7 @@ const styles = StyleSheet.create({
   },
   specialist: {
     fontSize: getWidth(fontSize.textXl),
+    textAlign: 'left',
   },
   buttonOrder: {
     alignSelf: 'center',

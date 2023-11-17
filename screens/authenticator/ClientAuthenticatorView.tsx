@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import logo from 'assets/icon/logo.png';
+import logo from 'assets/icon/healLogo.png';
 import LoginView from 'components/client/login/LoginView';
 import RegistrationView from 'components/client/registration/views/RegistrationView';
 import Header from 'components/common/Header';
@@ -96,9 +96,10 @@ const styles = StyleSheet.create({
     flex: 0.34,
   },
   logo: {
-    width: getWidth(dimens.imageM + 80),
+    width: getWidth(dimens.imageM - 40),
     height: getHeight(dimens.imageM),
     alignSelf: 'center',
+    resizeMode: 'center',
   },
   toggleContainer: {
     flexDirection: 'row',

@@ -11,6 +11,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { OrderDetail } from 'libs/types/UserType';
 import React from 'react';
 import {
+  I18nManager,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -35,6 +36,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
   } = SummaryViewController({ order });
   const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
+
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
@@ -43,7 +45,10 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       style={styles.modalContainer}
     >
       <View style={styles.paymentContainer}>
-        <UserPaymentView isFromHome={true} />
+        <UserPaymentView
+          isFromHome={true}
+          onPress={() => setIsVisible(false)}
+        />
       </View>
     </Modal>
   );
@@ -66,11 +71,11 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         <Text title={t('patient')} style={styles.text} />
         <Text
           title={`${calculateAgeFromDate(
-            order.patient_type?.type === 'me'
+            !order?.isOrderForOther
               ? userProfile?.date_of_birth ?? ''
               : order?.patient_type?.age,
           )} y.o, ${
-            order.patient_type?.type === 'me'
+            !order?.isOrderForOther
               ? userProfile?.phoneNumber
               : order?.phonenumber
           }`}
@@ -118,7 +123,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         />
       ))}
       <View style={{ flexDirection: 'row' }}>
-        <Text title={'Total - '} style={styles.total} />
+        <Text title={t('total')} style={styles.total} />
         <Text title={`${totalPrice} NIS`} style={styles.Small} />
       </View>
       <Text
@@ -131,9 +136,14 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
 
   const getCardView = () => (
     <View style={styles.cardDetail}>
-      <Text title={userProfile?.card_number ?? ''} style={styles.text} />
+      <Text
+        title={
+          `${t('paid_card')}${userProfile?.card_number?.slice?.(-4)}` ?? ''
+        }
+        style={styles.text}
+      />
       <TextButton
-        title={'Change'}
+        title={t('change')}
         fontSize={getHeight(fontSize.textL)}
         isActive
         style={styles.changeText}
@@ -153,7 +163,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       {getServicesView()}
       {getCardView()}
       <Text title={t('arrival')} style={styles.text} />
-      <Text title={'60 min'} style={styles.textSmall} />
+      <Text title={t('60_min')} style={styles.textSmall} />
       <View style={styles.instructionContainer}>
         <Text title={t('instructions_for')} style={styles.instruction} />
         <Input
@@ -171,6 +181,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
             })
           }
           style={styles.placeholder}
+          numberOfLines={2}
         />
       </View>
       {isVisible && paymentModal()}
@@ -215,7 +226,8 @@ const styles = StyleSheet.create({
   },
   voltaireText: {
     marginVertical: 5,
-    fontSize: fontSize.textM,
+    fontSize: getWidth(fontSize.textM),
+    textAlign: 'left',
   },
   payForIt: {
     fontSize: getWidth(fontSize.textS),
@@ -223,22 +235,23 @@ const styles = StyleSheet.create({
   },
   cardDetail: {
     flexDirection: 'row',
-    gap: getWidth(dimens.marginM + 5),
+    gap: getWidth(dimens.imageXs + 4),
     marginTop: getWidth(dimens.marginM),
     marginBottom: getWidth(dimens.marginM),
   },
   instructionContainer: {
     gap: getWidth(dimens.paddingXs),
+    marginBottom: getHeight(dimens.imageS + dimens.marginM),
   },
 
   instruction: {
     fontSize: getWidth(fontSize.textL),
     marginTop: getWidth(dimens.marginM),
     fontFamily: fontFamily.medium,
+    textAlign: 'left',
   },
   description: {
     height: getHeight(dimens.imageS + dimens.marginS),
-    backgroundColor: colors.white,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -265,6 +278,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.light,
     backgroundColor: colors.white,
     marginTop: 2,
+    textAlign: 'left',
   },
   locationText: {
     fontSize: getWidth(fontSize.textM),
@@ -284,5 +298,8 @@ const styles = StyleSheet.create({
     marginTop: getHeight(-20),
     paddingLeft: getWidth(10),
     fontFamily: fontFamily.regular,
+    color: colors.black,
+    flex: 1,
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
 });

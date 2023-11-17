@@ -4,10 +4,11 @@ import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { FacebookAuthProvider } from 'libs/authsevices/FcebookAuthProvider';
 import { GoogleAuthProvider } from 'libs/authsevices/GoogleAuthProvider';
-import { setLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const LoginViewController = () => {
@@ -29,6 +30,8 @@ const LoginViewController = () => {
     UseProviderUserContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showToast, renderToast } = useToast();
+  const { t } = useTranslation();
+  const device_Token= getLocalData('USER')?.deviceToken
 
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
@@ -49,9 +52,9 @@ const LoginViewController = () => {
   };
   const validateEmail = () => {
     if (!emailRef.current.value) {
-      setEmailError('Email is required');
+      setEmailError(t('email_required'));
     } else if (!emailPattern.test(emailRef.current.value)) {
-      setEmailError('Invalid email address');
+      setEmailError(t('invalid_email'));
     } else {
       setEmailError('');
     }
@@ -59,23 +62,23 @@ const LoginViewController = () => {
   const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validatePassword = () => {
-    if (!passwordRef.current.value) setPasswordError('Password is required');
+    if (!passwordRef.current.value) setPasswordError(t('password_required'));
     else if (passwordRef.current.value.length < 5)
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('must_be_8_characters'));
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError('Password must contain special characters');
+      setPasswordError(t(`password_must_have_special_character`));
     else setPasswordError('');
   };
 
   const handleSignIn = () => {
     if (!emailError && !passwordError)
-      onPressLoginButton(emailRef.current.value, passwordRef.current.value);
+      onPressLoginButton(emailRef.current.value, passwordRef.current.value ,device_Token);
   };
 
   /** To handle Response from API after authentication request */
-  const handleAuthResponse = (response: any, profilePicture?:string) => {
+  const handleAuthResponse = (response: any, profilePicture?: string) => {
     let userDataProvider = response.user;
-    
+
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
@@ -86,7 +89,9 @@ const LoginViewController = () => {
       city: userDataProvider?.city,
       state: userDataProvider?.state,
       country: userDataProvider?.country,
-      profilePicture: userDataProvider.profile_picture?userDataProvider.profile_picture:profilePicture,
+      profilePicture: userDataProvider.profile_picture
+        ? userDataProvider.profile_picture
+        : profilePicture,
       provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
       licensenumber: userDataProvider?.license,
@@ -104,7 +109,9 @@ const LoginViewController = () => {
       city: userDataProvider?.city,
       state: userDataProvider?.state,
       country: userDataProvider?.country,
-      profilePicture: userDataProvider.profile_picture?userDataProvider.profile_picture:profilePicture,
+      profilePicture: userDataProvider.profile_picture
+        ? userDataProvider.profile_picture
+        : profilePicture,
       provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
       licensenumber: userDataProvider?.license,
@@ -138,27 +145,27 @@ const LoginViewController = () => {
     // }
   };
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string) => {
+  const onPressLoginButton = async (email: string, password: string, device_token:string) => {
     try {
       if (email != '' || password != '') {
         setIsLoading(true);
-        const res = await OnProviderSignIn({ email, password });
-        console.log("res is ",res);
+        const res = await OnProviderSignIn({ email, password,device_token });
+        console.log('res is ', res);
 
         if (res?.isSuccessful === true) {
-          handleAuthResponse(res,'');
+          handleAuthResponse(res, '');
         } else {
           showToast(
-            'Login Failed',
-            'Please check your email and password and try again.',
+            t('login_failed'),
+            t('check_email_and_password'),
             'warning',
           );
         }
       } else {
-        showToast('', 'Please enter email or password', 'warning');
+        showToast('', t('email_or_password'), 'warning');
       }
     } catch (error) {
-      Alert.alert('An error occurred during login.');
+      Alert.alert(t('error_occurred_login'));
     }
 
     setIsLoading(false);
@@ -170,23 +177,20 @@ const LoginViewController = () => {
     onGoogleAuthProcessing().then(async (userData) => {
       try {
         console.log('vbxcvbnxvb', userData);
-        const email = userData?.user?.email;
+        const email = userData?.user?.email ?? '';
         const googleId = userData.user.providerData[0].uid;
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
-          googleId
+          googleId,
         });
         // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           setIsLoading(false);
-          handleAuthResponse(res,userData?.user?.photoURL);
+          handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
           setIsLoading(false);
-          Alert.alert(
-            'Login Failed',
-            'Please check your email and password and try again.',
-          );
+          Alert.alert(t('login_failed'), t('check_email_and_password'));
         }
       } catch (err) {
         setIsLoading(false);
@@ -204,18 +208,15 @@ const LoginViewController = () => {
 
     onFBAuthProcessing().then(async (userData) => {
       try {
-        const email = userData?.user?.email;
+        const email = userData?.user?.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
         const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          handleAuthResponse(res,'');
+          handleAuthResponse(res, '');
         } else {
           setIsLoading(false);
-          Alert.alert(
-            'Login Failed',
-            'Please check your email and password and try again.',
-          );
+          Alert.alert(t('login_failed'), t('check_email_and_password'));
         }
       } catch (err) {
         setIsLoading(false);

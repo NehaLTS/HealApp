@@ -22,7 +22,8 @@ const OnBoardingViewController = () => {
     checkPermission();
   }, []);
 
- const setDefaultLanguage = (languageCode:string) =>  setAppLanguage(languageCode)
+  const setDefaultLanguage = (languageCode: string) =>
+    setAppLanguage(languageCode);
 
   const onPressSkip = () => {
     navigation.dispatch(
@@ -45,14 +46,14 @@ const OnBoardingViewController = () => {
     setUserProfile(userData as ClientProfile);
 
     //Handle onboard navigation for the logged In User
-    if (!userData.firstName) {
+    if (userData && userData.firstName) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [
             {
               name: NavigationRoutes.ClientStack,
-              params: { screen: NavigationRoutes.OnboardDetails },
+              params: { screen: NavigationRoutes.ClientHome },
             },
           ],
         }),
@@ -64,7 +65,7 @@ const OnBoardingViewController = () => {
           routes: [
             {
               name: NavigationRoutes.ClientStack,
-              params: { screen: NavigationRoutes.ClientHome },
+              params: { screen: NavigationRoutes.OnboardDetails },
             },
           ],
         }),
@@ -77,19 +78,7 @@ const OnBoardingViewController = () => {
     providerServices: ProviderServices,
   ) => {
     //Handle onboard navigation for the logged In User
-    if (!userData.firstName) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: NavigationRoutes.ProviderStack,
-              params: { screen: NavigationRoutes.ProviderOnboardDetails },
-            },
-          ],
-        }),
-      );
-    } else {
+    if (userData && userData.firstName) {
       if (providerServices) {
         navigation.dispatch(
           CommonActions.reset({
@@ -115,6 +104,18 @@ const OnBoardingViewController = () => {
           }),
         );
       }
+    } else {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: NavigationRoutes.ProviderStack,
+              params: { screen: NavigationRoutes.ProviderOnboardDetails },
+            },
+          ],
+        }),
+      );
     }
   };
 
@@ -131,7 +132,13 @@ const OnBoardingViewController = () => {
     };
   }, [currentIndex]);
 
-  return { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse, setDefaultLanguage };
+  return {
+    swiperRef,
+    onPressSkip,
+    parseClientResponse,
+    parseProviderResponse,
+    setDefaultLanguage,
+  };
 };
 
 export default OnBoardingViewController;

@@ -25,6 +25,7 @@ export const AuthServicesClient = () => {
   const onSubmitAuthRequest = (body: {
     email: string;
     password: string;
+    device_token:string;
   }): Promise<UserType> =>
     sendRequest(LOGIN_API, {
       method: POST,
@@ -98,8 +99,7 @@ export const AuthServicesClient = () => {
     expire_date: string;
     cvv: string;
     client_id: string;
-  
-  },   token:string): Promise<any> =>{
+  }, token:string): Promise<any> =>{
 
     console.log("body is *** ",body);
     console.log("token is *** ",token);

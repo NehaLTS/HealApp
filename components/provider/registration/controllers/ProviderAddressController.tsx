@@ -1,6 +1,8 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { ProviderProfile } from 'libs/types/UserType';
+import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const ProviderAddressController = () => {
@@ -16,7 +18,7 @@ const ProviderAddressController = () => {
   const addressRef = React.useRef<any>('');
   const { setCurrentStep, setProviderProfile, providerProfile } =
     UseProviderUserContext();
-
+  const { t } = useTranslation();
   useEffect(() => {
     if (providerProfile.firstName) {
       phoneRef.current.value = providerProfile.phoneNumber;
@@ -27,8 +29,10 @@ const ProviderAddressController = () => {
 
   const onBlurPhoneNumber = () => validatePhoneNumber();
 
-  const onChangePhoneNumber = (value: string) =>
-    (phoneRef.current.value = value);
+  const onChangePhoneNumber = (value: string) => {
+    phoneRef.current.value = value;
+    validatePhoneNumber();
+  };
 
   const onChangeLicenseNumber = (value: string) =>
     (licenseRef.current.value = value);
@@ -55,29 +59,30 @@ const ProviderAddressController = () => {
         });
         setCurrentStep('payment');
       } else {
-        Alert.alert('Please select License picture');
+        Alert.alert(t('select_license_picture'));
       }
     } else {
-      if (!phoneRef.current.value) setPhoneError('Phone Number is required');
-      if (!onSearchAddress) setAddressError('Address is required');
+      if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
+      if (!onSearchAddress) setAddressError(t('address_required'));
     }
   };
 
-  const onPressBack = () =>  setCurrentStep('details');
+  const onPressBack = () => setCurrentStep('details');
+  const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
   const validatePhoneNumber = () => {
     if (!phoneRef.current.value) {
-      setPhoneError('Phone number is required');
-    } else {
-      setPhoneError('');
-    }
+      setPhoneError(t('phone_number_required'));
+    } else if (!isValidPhoneNumber(phoneRef.current.value)) {
+      setPhoneError(t('number_not_valid'));
+    } else setPhoneError('');
   };
 
   const validateAddress = () => {
     if (onSearchAddress?.length === 0) {
-      setAddressError('Address is required');
+      setAddressError(t('address_required'));
     } else if (onSearchAddress?.length < 4) {
-      setAddressError('Please fill full address');
+      setAddressError(t('fill_address'));
     } else {
       setAddressError('');
     }

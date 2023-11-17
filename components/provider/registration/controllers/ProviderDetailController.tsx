@@ -1,8 +1,8 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
-import { generateRandomName } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const ProviderDetailController = () => {
@@ -18,7 +18,7 @@ const ProviderDetailController = () => {
     [],
   );
   const [idPicture, setIdPicture] = useState('');
-
+  const { t } = useTranslation();
   const { onGetProviderTypes } = AuthServicesProvider();
   const { setCurrentStep, setProviderProfile, providerProfile, token } =
     UseProviderUserContext();
@@ -53,6 +53,12 @@ const ProviderDetailController = () => {
     setSelectedSpeciality(value);
     setSpecialityError('');
   };
+  const getProviderTypes = async () => {
+    let res = await onGetProviderTypes(token);
+
+    console.log('res is11 ', res);
+    setProviderTypeList?.(res ?? []);
+  };
 
   useEffect(() => {
     getProviderTypes();
@@ -64,22 +70,14 @@ const ProviderDetailController = () => {
       // setSelectedProvider(providerProfile.provider);
       // setSelectedSpeciality(providerProfile.speciality);
       // if(providerProfile.idPicture)  setIdPicture(providerProfile.idPicture)
-     
-
     }
   }, []);
 
-  const getProviderTypes = async () => {
-    let res = await onGetProviderTypes(token);
-
-    console.log('res is ', res);
-    setProviderTypeList(res);
-  };
   const getImageUrl = (url: string) => {
     setIdPicture(url);
-    const imagePath = url;
-    const folderName = 'images/users';
-    const fileName = generateRandomName();
+    // const imagePath = url;
+    // const folderName = 'images/users';
+    // const fileName = generateRandomName();
 
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {
@@ -95,7 +93,7 @@ const ProviderDetailController = () => {
 
   const validateFirstName = () => {
     if (!firstNameRef.current.value) {
-      setFirstNameError('First name is required');
+      setFirstNameError(t('first_name_required'));
     } else {
       setFirstNameError('');
     }
@@ -103,7 +101,7 @@ const ProviderDetailController = () => {
 
   const validateLastName = () => {
     if (!lastNameRef.current.value) {
-      setLastNameError('Last name is required');
+      setLastNameError(t('last_name_required'));
     } else {
       setLastNameError('');
     }
@@ -111,7 +109,7 @@ const ProviderDetailController = () => {
 
   const validateProviderType = () => {
     if (!selectedProvider) {
-      setProviderTypeError('Provider type is required');
+      setProviderTypeError(t('Provider_required'));
     } else {
       setProviderTypeError('');
     }
@@ -119,7 +117,7 @@ const ProviderDetailController = () => {
 
   const validateSpeciality = () => {
     if (!selectedSpecialty) {
-      setSpecialityError('Speciality is required');
+      setSpecialityError(t('specialty_required'));
     } else {
       setSpecialityError('');
     }
@@ -143,11 +141,11 @@ const ProviderDetailController = () => {
       setCurrentStep('address');
     } else {
       if (!firstNameRef.current.value)
-        setFirstNameError('First name is required');
-      if (!lastNameRef.current.value) setLastNameError('Last name is required');
-      if (!selectedSpecialty) setSpecialityError('Speciality is required');
-      if (!selectedProvider) setProviderTypeError('Provider type is required');
-      if (!idPicture) Alert.alert('Please select ID Picture');
+        setFirstNameError(t('first_name_required'));
+      if (!lastNameRef.current.value) setLastNameError(t('last_name_required'));
+      if (!selectedSpecialty) setSpecialityError(t('specialty_required'));
+      if (!selectedProvider) setProviderTypeError(t('Provider_required'));
+      if (!idPicture) Alert.alert(t('id_Picture'));
     }
   };
 

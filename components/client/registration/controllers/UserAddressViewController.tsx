@@ -4,7 +4,8 @@ import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ClientProfile } from 'libs/types/UserType';
 // import uploadImage from 'libs/uploadImage';
 import { generateRandomName, numericPattern } from 'libs/utility/Utils';
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const UserAddressViewController = () => {
@@ -17,25 +18,25 @@ const UserAddressViewController = () => {
   const [idNumberError, setIdNumberError] = useState('');
   const [dateOfBirthError, setDateOfBirthError] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
- 
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState('');
   const { setCurrentStep, setUserProfile, userProfile, userId, token } =
     UseClientUserContext();
-
-  const [profilePicture, setProfilePicture] = useState(userProfile.profilePicture?userProfile.profilePicture:"");
+  const { t } = useTranslation();
+  const [profilePicture, setProfilePicture] = useState(
+    userProfile && userProfile.profilePicture ? userProfile.profilePicture : '',
+  );
 
   const validateAddress = () => {
-    if (onSearchAddress?.length < 4)
-      setAddressError('Please fill full address');
+    if (onSearchAddress?.length < 4) setAddressError(t('fill_address'));
     else setAddressError('');
   };
 
   // Function to validate the ID number
   const validateIdNumber = () => {
     if (!numericPattern.test(idNumberRef.current.value))
-      setIdNumberError('ID number must contain only numbers');
+      setIdNumberError(t('id_contain_numbers'));
     else setIdNumberError('');
   };
 
@@ -54,11 +55,10 @@ const UserAddressViewController = () => {
   };
 
   const getImageUrl = (url: string) => {
-    // setProfilePicture(url)
-    const imagePath = url;
-    const folderName = 'images/users';
-    const fileName = generateRandomName();
-    
+    setProfilePicture(url);
+    // const imagePath = url;
+    // const folderName = 'images/users';
+    // const fileName = generateRandomName();
     // uploadImage(imagePath, folderName, fileName)
     //   .then((downloadURL) => {
     //     // Handle the downloadURL as needed
@@ -74,14 +74,14 @@ const UserAddressViewController = () => {
   const onPressNext = async () => {
     console.log('userId is ', userId);
     if (
-      onSearchAddress &&
+      onSearchAddress?.length !== 0 &&
       dateOfBirth.toString() &&
       idNumberRef.current.value
     ) {
       setIsLoader(true);
       setUserProfile({
         ...(userProfile as ClientProfile),
-        address: addressRef.current.value,
+        address: onSearchAddress,
         date_of_birth: dateOfBirth.toString(),
         idNumber: idNumberRef.current.value,
         city: '',
@@ -94,7 +94,7 @@ const UserAddressViewController = () => {
       const res = await onUpdateUserProfile?.(
         {
           ...userProfile,
-          address: addressRef.current.value,
+          address: onSearchAddress,
           date_of_birth: dateOfBirth.toString(),
           idNumber: idNumberRef.current.value,
           city: '',
@@ -112,7 +112,7 @@ const UserAddressViewController = () => {
         firstName: userProfile.firstName,
         lastName: userProfile.lastName,
         phoneNumber: userProfile.phoneNumber,
-        address: addressRef.current.value,
+        address: onSearchAddress,
         city: '',
         state: '',
         country: '',
@@ -126,12 +126,12 @@ const UserAddressViewController = () => {
       if (res?.isSuccessful) {
         setCurrentStep('payment');
       } else {
-        Alert.alert('some error occurred');
+        Alert.alert(t('error_occurred'));
       }
     } else {
-      if (onSearchAddress?.length === 0) setAddressError('Address is required');
-      if (!idNumberRef.current.value) setIdNumberError('ID number is required');
-      if (!dateOfBirth) setDateOfBirthError('Birth date is required');
+      if (onSearchAddress?.length === 0) setAddressError(t('address_required'));
+      if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
+      if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
     }
   };
 
@@ -163,6 +163,7 @@ const UserAddressViewController = () => {
     setIsVisible,
     isVisible,
     onSearchAddress,
+    isLoader,
   };
 };
 

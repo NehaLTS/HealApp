@@ -28,9 +28,9 @@ const LoginViewController = () => {
     navigation.navigate(NavigationRoutes.ClientHome);
   };
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string) => {
+  const onPressLoginButton = async (email: string, password: string, device_token:string) => {
     try {
-      const res = await OnProviderSignIn({ email, password });
+      const res = await OnProviderSignIn({ email, password, device_token });
       setUserDataProvider({
         ...userDataProvider,
         token: res?.token,

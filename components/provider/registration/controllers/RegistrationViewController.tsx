@@ -6,14 +6,13 @@ import React from 'react';
 import { useState } from 'react';
 import useToast from 'components/common/useToast';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import { setLocalData ,getLocalData} from 'libs/datastorage/useLocalStorage';
+import { useTranslation } from 'react-i18next';
 
 const RegistrationViewController = () => {
-
   const navigation = useNavigation();
   const { OnProviderCreateSignUp } = AuthServicesProvider();
-    const { setToken, setUserId } =
-    UseProviderUserContext();
+  const { setToken, setUserId } = UseProviderUserContext();
   const { showToast, renderToast } = useToast();
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -21,6 +20,7 @@ const RegistrationViewController = () => {
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
   const deviceToken= getLocalData('USER')?.deviceToken
+  const { t } = useTranslation();
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -38,55 +38,63 @@ const RegistrationViewController = () => {
     validatePassword();
   };
 
-
-
   const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validateEmail = () => {
-if (!emailRef.current.value) setEmailError('Email is required');
+    if (!emailRef.current.value) setEmailError(t('email_required'));
     else if (!emailPattern.test(emailRef.current.value))
-      setEmailError('Invalid email address');
+      setEmailError(t('invalid_email'));
     else setEmailError('');
-
   };
 
   const validatePassword = () => {
-   if (!passwordRef.current.value) {
-      setPasswordError('Password is required');
+    if (!passwordRef.current.value) {
+      setPasswordError(t('Provider_required'));
     } else if (passwordRef.current.value.length < 5) {
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('must_be_8_characters'));
     } else if (!isValidPassword(passwordRef.current.value)) {
-      setPasswordError('Password must contain special characters');
+      setPasswordError(t(`password_must_have_special_character`));
     } else {
       setPasswordError('');
     }
   };
   const handleSignUp = () => {
     if (!emailError && !passwordError)
-      onPressSignUpProvider(emailRef.current.value, passwordRef.current.value, deviceToken);
+      onPressSignUpProvider(
+        emailRef.current.value,
+        passwordRef.current.value,
+        deviceToken,
+      );
 
     //  navigation.reset({
     //         index: 0,
     //         routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
     //       });
-          
   };
 
-  const onPressSignUpProvider = async (email: string, password: string,device_token:string) => {
+  const onPressSignUpProvider = async (
+    email: string,
+    password: string,
+    device_token: string,
+  ) => {
     setIsLoading(true);
     if (email !== undefined && password != undefined) {
-      const res = await OnProviderCreateSignUp({ email, password,device_token });
+      const res = await OnProviderCreateSignUp({
+        email,
+        password,
+        device_token,
+      });
 
-      console.log("response is ",res);
+      console.log('response is ', res);
 
-      //TODO change res.proivder_id to res.id 
+      //TODO change res.proivder_id to res.id
       if (res && res.token && res.id) {
         setToken(res.token);
-       
-        //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
-       // setUserId(res.id);
 
-       setUserId(res.id);
+        //SINCE ID IS NOT COMING WE WILL SET THIS AS OPTION
+        // setUserId(res.id);
+
+        setUserId(res.id);
       }
 
       setLocalData('USER', {
@@ -107,17 +115,15 @@ if (!emailRef.current.value) setEmailError('Email is required');
           });
         }, 200);
       } else {
-        showToast('User already exist', 'Please try SignIn', 'error');
+        showToast(t('user_exist'), t('try_signin'), 'error');
       }
       setIsLoading(false);
     } else {
       setIsLoading(false);
-      showToast('', 'Please enter email or password', 'warning');
+      showToast('', t('email_or_password'), 'warning');
     }
-
-   
   };
- return {
+  return {
     handleSignUp,
     isLoading,
     renderToast,

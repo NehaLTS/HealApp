@@ -21,8 +21,13 @@ import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { ProviderProfile, ProviderServices } from 'libs/types/UserType';
 
 const OnBoardingView = () => {
-  const { swiperRef, onPressSkip, parseClientResponse, parseProviderResponse,setDefaultLanguage } =
-    OnBoardingViewController();
+  const {
+    swiperRef,
+    onPressSkip,
+    parseClientResponse,
+    parseProviderResponse,
+    setDefaultLanguage,
+  } = OnBoardingViewController();
   const navigation = useNavigation();
   const { setToken, setUserId, setProviderProfile, setCurrentStep } =
     UseProviderUserContext();
@@ -38,9 +43,9 @@ const OnBoardingView = () => {
     console.log('token is ', userResponse?.token);
 
     const userLanguage = userResponse?.user?.language ?? 'en';
-     console.log("user language is ",userLanguage);
+    console.log('user language is ', userLanguage);
 
-      setDefaultLanguage(userLanguage);
+    setDefaultLanguage(userLanguage);
 
     //if token is there, user is LoggedIn
     if (userResponse?.token != null) {
@@ -48,7 +53,7 @@ const OnBoardingView = () => {
       else {
         setToken(userResponse.token);
 
-        //TEMP : HARDCODED ID SET HERE
+        //TODO : GURPREET/SAGAR to check HARDCODED ID SET HERE
         if (userResponse?.userId) {
           setUserId(userResponse?.userId);
         } else {
@@ -65,18 +70,17 @@ const OnBoardingView = () => {
           'PROVIDERSERVICES',
         )) as ProviderServices;
 
-        console.log("provider services ",providerServices);
+        console.log('provider services ', providerServices);
 
-         if(userData.firstName){
-        if (!providerServices) {
-          if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
-            setCurrentStep('services');
-          } else {
-            setCurrentStep('addServices');
+        if (userData && userData.firstName) {
+          if (!providerServices) {
+            if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
+              setCurrentStep('services');
+            } else {
+              setCurrentStep('addServices');
+            }
           }
         }
-         }
-      
 
         setProviderProfile(userData as ProviderProfile);
 

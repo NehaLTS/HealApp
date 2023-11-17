@@ -3,7 +3,11 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
-import { ClientProfile } from 'libs/types/UserType';
+import {
+  ClientProfile,
+  ProviderProfile,
+  UserTypeProvider,
+} from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Keyboard, Linking } from 'react-native';
@@ -18,7 +22,7 @@ const HomeViewController = () => {
   const [isTouchStart, setIsTouchStart] = useState(true);
   const { getBannerAds, searchProviders } = ClientOrderServices();
   const [providersList, setProvidersList] = useState<search_provider[]>([]);
-  const [onChangeSearch, setOnChangeSearch] = useState<string>('');
+  const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
   const [user, setUser] = useState<ClientProfile>();
@@ -57,9 +61,13 @@ const HomeViewController = () => {
     //     requestLocationPermission();
     //   }
     // });
-    const abc = getLocalData('USERPROFILE');
-    setUser(abc as ClientProfile);
-    setUserProfile({ ...userProfile, card_number: abc?.card_number });
+    const user = getLocalData('USERPROFILE');
+    // setUser(abc as ClientProfile);
+    setUserProfile({
+      ...userProfile,
+      isPaymentAdded: (user as ClientProfile)?.isPaymentAdded,
+    });
+    console.log('user?.isPaymentAdded********', user);
   }, []);
   // const getLocation = () => {
   //   Geolocation.getCurrentPosition(
@@ -103,26 +111,27 @@ const HomeViewController = () => {
   };
   const onSearchDone = async () => {
     const res = await searchProviders({
-      name: onChangeSearch,
+      name: searchSpecialist,
       latitude: '30.377305039494523',
       longitude: '76.78137416040587',
     });
-    // console.log('onSearchDone', res);
+    console.log('onSearchDone', res);
     if (res?.message) setIsDataNotFound(false);
     else setProvidersList(res);
   };
   const onChange = (value: string) => {
-    setOnChangeSearch(value);
+    setSearchSpecialist(value);
     setIsDataNotFound(true);
   };
   const onSearch = () => {
-   navigation.navigate(NavigationRoutes.IntroStack);
+    deleteLocalData();
+    navigation.navigate(NavigationRoutes.IntroStack);
   };
   const onTouchStart = () => setIsTouchStart(false);
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
     Keyboard.dismiss();
-    setOnChangeSearch('');
+    setSearchSpecialist('');
     setIsTouchStart(true);
   };
 
@@ -133,7 +142,7 @@ const HomeViewController = () => {
     onPressBack,
     onTouchStart,
     onBlur,
-    onChangeSearch,
+    searchSpecialist,
     onChange,
     onPressBanner,
     providersList,

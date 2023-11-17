@@ -5,12 +5,13 @@ import { OrderRequest, PoviderLocation } from "libs/types/ProvierTypes";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
 
 export const AuthServicesProvider = () => {
-//   const { token } =
+    //   const { token } =
 //     UseProviderUserContext();
 
     const OnProviderSignIn = (body: {
         email: string;
         password: string;
+        device_token:string
     }): Promise<UserTypeProvider> =>
         sendRequest(PROVIDER_SIGNIN, {
             method: POST,

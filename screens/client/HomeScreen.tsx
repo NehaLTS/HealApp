@@ -18,6 +18,7 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  I18nManager,
   Image,
   ScrollView,
   StyleSheet,
@@ -40,7 +41,7 @@ const HomeScreen = () => {
     onTouchStart,
     onBlur,
     onChange,
-    onChangeSearch,
+    searchSpecialist,
     onPressBanner,
     providersList,
     onSearchDone,
@@ -56,7 +57,7 @@ const HomeScreen = () => {
         <Text
           numberOfLines={1}
           style={styles.text}
-          title={t('your_location')}
+          title={t('current_location')}
         />
       </View>
       <TextButton
@@ -69,10 +70,14 @@ const HomeScreen = () => {
     </View>
   );
   const headerLeft = () => (
-    <TouchableOpacity onPress={onPressBack}>
+    <TouchableOpacity
+      onPress={onPressBack}
+      disabled={searchSpecialist?.length === 0}
+      style={{ padding: getWidth(16), paddingLeft: 0 }}
+    >
       <Image
-        source={onChangeSearch?.length !== 0 ? arrowBack : logo}
-        style={onChangeSearch?.length !== 0 ? styles.arrowBack : styles.logo}
+        source={searchSpecialist?.length !== 0 ? arrowBack : logo}
+        style={searchSpecialist?.length !== 0 ? styles.arrowBack : styles.logo}
       />
     </TouchableOpacity>
   );
@@ -87,24 +92,15 @@ const HomeScreen = () => {
     return (
       <>
         <Text style={styles.searchHeading} title={t('specialist')} />
-        {providerList.map((item: any, index: number) => (
-          <CardView
-            key={index}
-            item={item}
-            index={index}
-            onPress={() =>
-              navigation.navigate(NavigationRoutes.OrderDetails, {
-                supplier: item,
-              })
-            }
-          />
+        {providerList?.map((item: any, index: number) => (
+          <CardView key={index} item={item} index={index} />
         ))}
       </>
     );
   };
   const getProviderSearchList = () => {
     return providersList?.map((item: any, index: number) => (
-      <CardView key={index} item={item} index={index} isSearch user={userProfile} />
+      <CardView key={index} item={item} index={index} isSearch />
     ));
   };
   const noSearchedView = () => {
@@ -125,12 +121,12 @@ const HomeScreen = () => {
 
   return (
     <>
-      {RNHeader(headerTitle, headerLeft, headerRight, onChangeSearch?.length)}
+      {RNHeader(headerTitle, headerLeft, headerRight, searchSpecialist?.length)}
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {isTouchStart && onChangeSearch?.length === 0 && (
+        {isTouchStart && searchSpecialist?.length === 0 && (
           <TouchableOpacity onPress={onPressBanner}>
             <Image
               style={styles.banner}
@@ -139,15 +135,15 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
         <SearchBox
-          isTouchStart={isTouchStart && onChangeSearch?.length === 0}
+          isTouchStart={isTouchStart && searchSpecialist?.length === 0}
           placeholder={t('what_treatment')}
           onTouchStart={onTouchStart}
           onBlur={onBlur}
           onChangeText={onChange}
-          defaultValue={onChangeSearch}
+          defaultValue={searchSpecialist}
           onSubmitEditing={onSearchDone}
         />
-        {onChangeSearch?.length === 0
+        {searchSpecialist?.length === 0
           ? getProviderList()
           : isDataNotFound
           ? getProviderSearchList()
@@ -183,7 +179,7 @@ const styles = StyleSheet.create({
   },
   searchHeading: {
     alignSelf: 'center',
-    fontSize: getHeight(fontSize.textXl),
+    fontSize: getWidth(fontSize.textXl),
   },
   logo: {
     width: getWidth(dimens.imageS),
@@ -204,7 +200,7 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   headerTitle: {
-    flexDirection: 'row',
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
     alignItems: 'center',
     gap: dimens.paddingS,
   },

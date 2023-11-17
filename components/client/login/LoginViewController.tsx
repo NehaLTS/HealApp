@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import { setLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useState } from 'react';
 import { Alert } from 'react-native';
@@ -10,6 +10,7 @@ import { GoogleAuthProvider } from '../../../libs/authsevices/GoogleAuthProvider
 import React from 'react';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import useToast from 'components/common/useToast';
+import { useTranslation } from 'react-i18next';
 
 const LoginViewController = () => {
   const navigation = useNavigation();
@@ -32,6 +33,8 @@ const LoginViewController = () => {
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
   const { showToast, renderToast } = useToast();
+  const { t } = useTranslation();
+  const device_Token= getLocalData('USER')?.deviceToken
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -46,34 +49,36 @@ const LoginViewController = () => {
   const onBlurPassword = () => validatePassword();
 
   const validateEmail = () => {
-    if (!emailRef.current.value) setEmailError('Email is required');
+    if (!emailRef.current.value) setEmailError(t('email_required'));
     else if (!emailPattern.test(emailRef.current.value))
-      setEmailError('Invalid email address');
+      setEmailError(t('invalid_email'));
     else setEmailError('');
   };
 
   const isValidPassword = (password: string) => passwordPattern.test(password);
 
   const validatePassword = () => {
-    if (!passwordRef.current.value) setPasswordError('Password is required');
+    if (!passwordRef.current.value) setPasswordError(t('password_required'));
     else if (passwordRef.current.value.length < 5)
-      setPasswordError('Password must be at least 8 characters');
+      setPasswordError(t('must_be_8_characters'));
     else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError('Password must contain special characters');
+      setPasswordError(t(`password_must_have_special_character`));
     else setPasswordError('');
   };
 
   const handleSignIn = () => {
     if (!emailError && !passwordError)
-      onPressLoginButton(emailRef.current.value, passwordRef.current.value);
+      onPressLoginButton(emailRef.current.value, passwordRef.current.value, device_Token);
   };
 
   /** To handle Response from API after authentication request */
 
   //TODO: Kamal needs to change any to type
 
-  const handleAuthSuccessResponse = (response: any, profilePicture?:string) => {
-
+  const handleAuthSuccessResponse = (
+    response: any,
+    profilePicture?: string,
+  ) => {
     let userDetails = response.user;
     //save details in context
     setToken(response.token);
@@ -87,7 +92,9 @@ const LoginViewController = () => {
       city: userDetails.city,
       state: userDetails.state,
       country: userDetails.country,
-      profilePicture: userDetails.profile_picture?userDetails.profile_picture:profilePicture,
+      profilePicture: userDetails.profile_picture
+        ? userDetails.profile_picture
+        : profilePicture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
@@ -101,7 +108,9 @@ const LoginViewController = () => {
       city: userDetails.city,
       state: userDetails.state,
       country: userDetails.country,
-      profilePicture: userDetails.profile_picture?userDetails.profile_picture:profilePicture,
+      profilePicture: userDetails.profile_picture
+        ? userDetails.profile_picture
+        : profilePicture,
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
@@ -129,14 +138,14 @@ const LoginViewController = () => {
   };
 
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string) => {
+  const onPressLoginButton = async (email: string, password: string, device_token:string) => {
     try {
       if (email != '' || password != '') {
         setIsLoading(true);
-        const res = await onSubmitAuthRequest({ email, password });
+        const res = await onSubmitAuthRequest({ email, password, device_token});
         console.log('sign in client by email and password', res);
         setIsLoading(false);
-        if (res?.isSuccessful === true) handleAuthSuccessResponse(res,"");
+        if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
         else
           showToast(
             'Login Failed',
@@ -157,7 +166,6 @@ const LoginViewController = () => {
     setIsLoading(true);
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
-
       try {
         const email = userData?.user?.email ?? '';
         const googleId = userData.user?.uid ?? '';
@@ -192,7 +200,7 @@ const LoginViewController = () => {
         setIsLoading(false);
 
         if (res?.isSuccessful === true) {
-          handleAuthSuccessResponse(res,"");
+          handleAuthSuccessResponse(res, '');
         } else {
           Alert.alert(
             'Login Failed',

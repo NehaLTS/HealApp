@@ -40,7 +40,7 @@ const UserDetailView = () => {
           errorMessage={firstNameError}
           onChangeText={onChangeFirstName}
           ref={firstNameRef}
-         defaultValue={userProfile?.firstName ? userProfile.firstName : ''}
+          defaultValue={userProfile?.firstName ? userProfile.firstName : ''}
           inputValue={userProfile?.firstName ?? ''}
           returnKeyType={'next'}
           onSubmitEditing={() => lastNameRef.current.focus()}
@@ -76,7 +76,6 @@ const UserDetailView = () => {
         <Text style={styles.text} title={t('find_doctor_text')} />
       </View>
       <View style={styles.footerContainer}>
-        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
         <Button
           title={t('next')}
           isPrimary
@@ -98,6 +97,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: getHeight(fontSize.textM),
     paddingTop: getHeight(dimens.paddingXs),
+    textAlign: 'left',
   },
   input: {
     marginTop: getHeight(dimens.paddingS),
@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     width: '100%',
     flex: 0.12,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
 });

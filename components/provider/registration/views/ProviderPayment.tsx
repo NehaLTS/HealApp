@@ -1,5 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Button from 'components/common/Button';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
@@ -10,6 +16,7 @@ import SelectImage from 'common/SelectImage';
 import { useTranslation } from 'react-i18next';
 import Text from 'components/common/Text';
 import ProviderPaymentController from '../controllers/ProviderPaymentController';
+import Loader from 'components/common/Loader';
 const ProviderPayment = () => {
   const { t } = useTranslation();
   const {
@@ -35,12 +42,14 @@ const ProviderPayment = () => {
     getImageUrl,
     onPressNext,
     onPressBack,
+    isLoading,
+    profilePicture,
   } = ProviderPaymentController();
 
   return (
     <>
       <Input
-        placeholder={t('Business registration number')}
+        placeholder={t('business_registration')}
         keyboardType="numeric"
         type="creditCardNumber"
         onBlur={onBlurRegistrationNumber}
@@ -52,10 +61,11 @@ const ProviderPayment = () => {
         returnKeyType={'next'}
         onSubmitEditing={() => bankNameRef.current.focus()}
         onClearInputText={() => registrationNumberRef.current.clear()}
+        inputStyle={styles.numberInput}
       />
       <View style={styles.container}>
         <Input
-          placeholder={'Bank'}
+          placeholder={t('bank')}
           inputStyle={styles.inputBank}
           type={'nameSuffix'}
           onBlur={onBlurBankName}
@@ -70,7 +80,7 @@ const ProviderPayment = () => {
         />
 
         <Input
-          placeholder={'Branch'}
+          placeholder={t('branch')}
           type={'nameSuffix'}
           inputStyle={styles.inputBranch}
           onBlur={onBlurBranchType}
@@ -84,9 +94,9 @@ const ProviderPayment = () => {
           onClearInputText={() => branchRef.current.clear()}
         />
       </View>
-
+      {isLoading && <Loader />}
       <Input
-        placeholder={'Bank account'}
+        placeholder={t('bank_account')}
         inputStyle={styles.input}
         type="creditCardNumber"
         keyboardType="numeric"
@@ -101,16 +111,16 @@ const ProviderPayment = () => {
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text} title={t('Add a profile photo')} />
+        <Text style={styles.text} title={t('add_profile')} />
         <TouchableOpacity
-          activeOpacity={providerProfile?.profilePicture ? 1 : 0.5}
+          activeOpacity={profilePicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
         >
           <Image
             source={
-              providerProfile.profilePicture
-                ? { uri: providerProfile.profilePicture }
-                : require('../../../../assets/icon/editprofile.png')
+              profilePicture
+                ? { uri: profilePicture }
+                : require('assets/icon/editprofile.png')
             }
             style={styles.selectedImage}
           />
@@ -123,7 +133,7 @@ const ProviderPayment = () => {
       </View>
 
       <View style={styles.footerContainer}>
-        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
+        {/* <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} /> */}
         <Button
           title={t('next')}
           isPrimary
@@ -141,16 +151,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: getHeight(dimens.marginM + dimens.paddingXs),
-    // columnGap:16
   },
   inputBank: {
     minWidth: '48%',
+    marginTop: getHeight(dimens.paddingXs),
   },
   inputBranch: {
     minWidth: '48%',
+    marginTop: getHeight(dimens.paddingXs),
   },
   input: {
-    marginTop: getHeight(dimens.sideMargin + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
   },
   iconContainer: {
     flexDirection: 'row',
@@ -159,26 +170,26 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin),
   },
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingS),
-    width: getWidth(dimens.imageS + dimens.paddingS + 2),
-    resizeMode: 'cover',
+    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    width: getWidth(dimens.imageS + 8),
+    resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),
   },
   text: {
     fontSize: fontSize.textL,
-    color: colors.black,
     marginTop: getHeight(dimens.marginS),
   },
   editImage: {
-    height: getHeight(dimens.paddingL + 2),
+    height: getHeight(dimens.paddingL + dimens.borderBold),
     width: getWidth(dimens.paddingL),
     marginTop: getHeight(dimens.paddingS),
   },
   footerContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    width: '100%',
-    flex: 0.12,
-    justifyContent: 'space-between',
+    flex: 0.8,
+    justifyContent: 'flex-end',
+    alignSelf: 'center',
+  },
+  numberInput: {
+    marginTop: getHeight(dimens.marginM),
   },
 });

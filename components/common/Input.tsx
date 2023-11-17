@@ -3,6 +3,7 @@ import {
   Alert,
   Animated,
   DimensionValue,
+  I18nManager,
   Image,
   StyleProp,
   StyleSheet,
@@ -23,7 +24,6 @@ const Input = forwardRef(
   (
     {
       placeholder,
-      placeholderStyle,
       type,
       inputStyle,
       errorMessage,
@@ -49,7 +49,6 @@ const Input = forwardRef(
         | 'numeric'
         | 'dateOfBirth';
       inputStyle?: StyleProp<TextStyle>;
-      placeholderStyle?: StyleProp<TextStyle>;
       errorMessage?: string;
       containerWidth?: DimensionValue;
       inputValue?: string;
@@ -68,7 +67,7 @@ const Input = forwardRef(
     const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
     const fontSizeAnim = useRef(
       new Animated.Value(
-        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL),
+        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL - 2),
       ),
     ).current;
 
@@ -125,19 +124,13 @@ const Input = forwardRef(
           style={[
             styles.inputContainer,
             inputStyle,
-            placeholderStyle,
             { borderColor: errorMessage ? colors.invalid : colors.primary },
           ]}
         >
           {!inputPlaceholder?.length && (
             <Animated.Text
               adjustsFontSizeToFit
-              style={[
-                styles.label,
-                labelStyle,
-                fontSizeStyle,
-                placeholderStyle,
-              ]}
+              style={[styles.label, labelStyle, fontSizeStyle]}
             >
               {placeholder}
             </Animated.Text>
@@ -213,7 +206,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
-    // minWidth: '20%'
     minWidth: '24%',
   },
   input: {
@@ -222,7 +214,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     flex: 1,
     textAlignVertical: 'top',
-    // backgroundColor:'red'
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
   showImage: {
     width: getWidth(dimens.marginM + dimens.borderThin),
@@ -239,6 +231,8 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
+    fontSize: getWidth(fontSize.textS),
+    textAlign: 'left',
   },
   label: {
     position: 'absolute',
@@ -248,6 +242,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
     fontFamily: fontFamily.regular,
+    fontSize: getHeight(fontSize.textL),
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),
