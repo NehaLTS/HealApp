@@ -12,6 +12,8 @@ import React from 'react';
 import {
   I18nManager,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -53,10 +55,9 @@ const OrderDetails = () => {
     return (
       <TouchableOpacity
         style={{
-          padding: I18nManager.isRTL ? getWidth(16) : 0,
+          padding: I18nManager.isRTL ? getWidth(20) : getWidth(20),
           paddingLeft: getWidth(0),
           zIndex: 1,
-          minWidth: '10%',
         }}
         onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
       >
@@ -68,10 +69,18 @@ const OrderDetails = () => {
   return (
     <>
       {RNHeader(HeaderTitle, HeaderLeft)}
-      <View style={styles.mainContainer}>
+
+      <KeyboardAvoidingView
+        behavior={'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
+        style={styles.mainContainer}
+        contentContainerStyle={{ height: '100%' }}
+      >
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingVertical: getHeight(dimens.marginL) }}
+          contentContainerStyle={{
+            paddingVertical: getHeight(dimens.marginL),
+          }}
         >
           {showSummary ? (
             <SummaryView
@@ -98,7 +107,7 @@ const OrderDetails = () => {
             <Text title={t('no_fee')} numberOfLines={1} style={styles.text} />
           )}
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     </>
   );
 };

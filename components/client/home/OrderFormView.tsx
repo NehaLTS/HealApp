@@ -55,9 +55,26 @@ const OrderFormView = ({
     onSubmitDescription,
     phoneError,
     ageError,
+    setOtherReasons,
   } = OrderFormController({ setOrder, order });
   const { t } = useTranslation();
 
+  const showFilledData = () => {
+    return (
+      <View style={styles.modalInputContainer}>
+        <Input
+          inputPlaceholder={t('describe_where')}
+          inputStyle={styles.modalInput}
+          placeholderTextColor={colors.grey}
+          style={styles.modalInput}
+          numberOfLines={2}
+          defaultValue={order?.Additional_notes}
+          onTouchStart={() => setIsModalVisible(true)}
+          caretHidden
+        />
+      </View>
+    );
+  };
   const getReasonsView = () => (
     <>
       <Text title={t('reason')} style={styles.reasonText} />
@@ -94,14 +111,18 @@ const OrderFormView = ({
             color={colors.primary}
           />
         )}
-        <Button
-          title={t('other')}
-          fontSized={getHeight(fontSize.textM + 1)}
-          height={getHeight(dimens.marginL)}
-          borderRadius={getWidth(dimens.marginS)}
-          lineHeight={dimens.sideMargin + dimens.borderBold}
-          onPress={() => setIsModalVisible(true)}
-        />
+        {order?.Additional_notes.length === 0 ? (
+          <Button
+            title={t('other')}
+            fontSized={getHeight(fontSize.textM + 1)}
+            height={getHeight(dimens.marginL)}
+            borderRadius={getWidth(dimens.marginS)}
+            lineHeight={dimens.sideMargin + dimens.borderBold}
+            onPress={() => setIsModalVisible(true)}
+          />
+        ) : (
+          showFilledData()
+        )}
         <Text
           title={t('emergency_calls')}
           style={styles.textSmall}
@@ -119,14 +140,13 @@ const OrderFormView = ({
       >
         <Input
           placeholder={t('describe_symptoms')}
-          inputValue={otherReasons?.current?.value}
+          inputValue={otherReasons ?? ''}
           multiline
           numberOfLines={4}
           inputStyle={[styles.description, styles.placeholder]}
           isDescription
-          defaultValue={otherReasons?.current?.value}
-          ref={otherReasons}
-          onChangeText={(value: string) => (otherReasons.current.value = value)}
+          defaultValue={otherReasons ?? ''}
+          onChangeText={(value: string) => setOtherReasons(value)}
           onSubmitDescription={onSubmitDescription}
         />
       </Modal>
@@ -316,7 +336,7 @@ const styles = StyleSheet.create({
   reasonText: {
     fontSize: getWidth(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
-    marginTop: getHeight(dimens.paddingS + 2),
+    marginTop: getHeight(dimens.paddingS + dimens.borderBold),
   },
   textSmall: {
     fontSize: getWidth(fontSize.textS - 1),
@@ -339,7 +359,7 @@ const styles = StyleSheet.create({
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
     marginBottom: getHeight(dimens.paddingS),
     width: '100%',
-    paddingHorizontal: getWidth(2),
+    paddingHorizontal: getWidth(dimens.borderBold),
   },
   buttonContainer: {
     justifyContent: 'space-between',
@@ -372,7 +392,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     paddingHorizontal: getWidth(dimens.marginS),
     paddingBottom: getWidth(dimens.marginS),
-    marginTop: getHeight(10 + 4),
+    marginTop: getHeight(dimens.marginS + 4),
   },
   arrowIcon: {
     height: getHeight(dimens.marginL + dimens.paddingXs),
@@ -385,7 +405,7 @@ const styles = StyleSheet.create({
     color: colors.grey,
     textAlign: I18nManager.isRTL ? 'right' : 'left',
     textAlignVertical: 'bottom',
-    paddingBottom: getHeight(10),
+    paddingBottom: getHeight(dimens.marginS),
   },
   arrowIconContainer: {
     position: 'absolute',
@@ -413,7 +433,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   loader: {
-    paddingVertical: getHeight(20),
+    paddingVertical: getHeight(dimens.marginM),
     alignSelf: 'center',
   },
   divider: {
@@ -427,5 +447,18 @@ const styles = StyleSheet.create({
   placeholder: {
     fontSize: getWidth(fontSize.textM),
     color: colors.grey,
+  },
+  modalInputContainer: {
+    marginTop: getHeight(dimens.paddingS),
+    marginBottom: getHeight(dimens.paddingS),
+    width: '100%',
+  },
+  modalInputLabel: {
+    fontSize: getWidth(fontSize.textM),
+    marginBottom: getHeight(dimens.paddingS),
+  },
+  modalInput: {
+    height: getHeight(dimens.imageS + dimens.marginS),
+    color: colors.black,
   },
 });

@@ -85,19 +85,20 @@ const LoginViewController = () => {
     console.log("response.token", response.token)
     setUserId(response.id);
     setUserProfile({
-      firstName: userDetails.firstname,
-      lastName: userDetails.lastname,
-      phoneNumber: userDetails.phone_number,
-      address: userDetails.address,
-      city: userDetails.city,
-      state: userDetails.state,
-      country: userDetails.country,
-      profilePicture: userDetails.profile_picture
-        ? userDetails.profile_picture
+      firstName: userDetails?.firstname,
+      lastName: userDetails?.lastname,
+      phoneNumber: userDetails?.phone_number,
+      address: userDetails?.address,
+      city: userDetails?.city,
+      state: userDetails?.state,
+      country: userDetails?.country,
+      profilePicture: userDetails?.profile_picture
+        ? userDetails?.profile_picture
         : profilePicture,
-      date_of_birth: userDetails.date_of_birth,
-      idNumber: userDetails.id_number,
-      email: userDetails.email,
+      date_of_birth: userDetails?.date_of_birth,
+      idNumber: userDetails?.id_number,
+      email: userDetails?.email,
+      isPaymentAdded: response.isPayment,
     });
 
     setLocalData('USERPROFILE', {
@@ -114,6 +115,7 @@ const LoginViewController = () => {
       date_of_birth: userDetails.date_of_birth,
       idNumber: userDetails.id_number,
       email: userDetails.email,
+      isPaymentAdded: response.isPayment,
     });
     setLocalData('USER', {
       token: response.token,

@@ -123,8 +123,8 @@ const LoginViewController = () => {
       token: response.token,
       userId: response.id,
       isClient: false,
-  });
-
+    });
+    if (!userDataProvider.firstname || userDataProvider.firstname == '') {
     navigation.reset({
       index: 0,
       routes: [{ name: NavigationRoutes.ProviderHome }],

@@ -153,10 +153,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={'position'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
-    >
+    <>
       {getSummaryHeader()}
       {getPersonalDetail()}
       {SymptomsView()}
@@ -185,7 +182,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         />
       </View>
       {isVisible && paymentModal()}
-    </KeyboardAvoidingView>
+    </>
   );
 };
 export default SummaryView;
@@ -225,7 +222,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   voltaireText: {
-    marginVertical: 5,
+    marginVertical: getHeight(5),
     fontSize: getWidth(fontSize.textM),
     textAlign: 'left',
   },
@@ -241,7 +238,7 @@ const styles = StyleSheet.create({
   },
   instructionContainer: {
     gap: getWidth(dimens.paddingXs),
-    marginBottom: getHeight(dimens.imageS + dimens.marginM),
+    marginBottom: getHeight(dimens.marginS),
   },
 
   instruction: {
@@ -266,18 +263,18 @@ const styles = StyleSheet.create({
   total: {
     fontFamily: fontFamily.medium,
     fontSize: getWidth(fontSize.textM),
-    marginVertical: 4,
+    marginVertical: getHeight(dimens.borderBold + dimens.borderBold),
   },
   Small: {
     fontSize: getWidth(fontSize.textM),
     fontFamily: fontFamily.light,
-    marginVertical: 4,
+    marginVertical: getHeight(dimens.borderBold + dimens.borderBold),
   },
   textSmall: {
     fontSize: getWidth(fontSize.textM),
     fontFamily: fontFamily.light,
     backgroundColor: colors.white,
-    marginTop: 2,
+    marginTop: getHeight(dimens.borderBold),
     textAlign: 'left',
   },
   locationText: {
@@ -296,7 +293,7 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     marginTop: getHeight(-20),
-    paddingLeft: getWidth(10),
+    paddingLeft: getWidth(dimens.marginS),
     fontFamily: fontFamily.regular,
     color: colors.black,
     flex: 1,

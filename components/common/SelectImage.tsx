@@ -3,7 +3,7 @@ import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { colors } from 'designToken/colors';
 import { fontWeight } from 'designToken/fontWeights';
-import { getHeight } from 'libs/StyleHelper';
+import { getHeight, getWidth } from 'libs/StyleHelper';
 import Modal from 'react-native-modal/dist/modal';
 import uploadImage from 'libs/uploadImage';
 
@@ -98,7 +98,7 @@ const SelectImage = ({
           >
             <Text
               style={{
-                fontSize: getHeight(16),
+                fontSize: getWidth(16),
                 color: colors.black,
                 fontWeight: fontWeight.semiBold,
               }}
@@ -115,7 +115,7 @@ const SelectImage = ({
           >
             <Text
               style={{
-                fontSize: getHeight(16),
+                fontSize: getWidth(16),
                 color: colors.black,
                 fontWeight: fontWeight.semiBold,
               }}
@@ -135,7 +135,7 @@ const SelectImage = ({
         >
           <Text
             style={{
-              fontSize: getHeight(16),
+              fontSize: getWidth(16),
               color: colors.invalid,
               fontWeight: fontWeight.semiBold,
             }}

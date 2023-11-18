@@ -59,7 +59,7 @@ const ProviderDetail = () => {
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
         defaultValue={
-          providerProfile?.firstName ? providerProfile.firstName : ''
+          providerProfile?.firstName ? providerProfile?.firstName : ''
         }
         inputValue={providerProfile?.firstName ?? ''}
         errorMessage={firstNameError}
@@ -76,7 +76,7 @@ const ProviderDetail = () => {
         onChangeText={onChangeLastName}
         onBlur={onBlurLastName}
         defaultValue={
-          providerProfile?.firstName ? providerProfile.firstName : ''
+          providerProfile?.firstName ? providerProfile?.firstName : ''
         }
         ref={lastNameRef}
         inputValue={providerProfile?.lastName ?? ''}
@@ -94,8 +94,6 @@ const ProviderDetail = () => {
         onChange={onChangeProviderType}
         renderItem={renderProviderItems}
         errorMessage={providerTypeError}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
       />
 
       <Dropdown
@@ -107,8 +105,6 @@ const ProviderDetail = () => {
         onChange={onChangeSpeciality}
         renderItem={renderSpecialityItems}
         errorMessage={specialityError}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
       />
 
       <View style={styles.iconContainer}>
@@ -167,7 +163,7 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
+    height: getHeight(dimens.imageS + dimens.paddingXs + 8),
     width: getWidth(dimens.imageS + 8),
     resizeMode: 'contain',
     borderRadius: getHeight(dimens.paddingS),

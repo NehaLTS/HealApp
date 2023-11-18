@@ -8,8 +8,10 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import SearchDoctorController from './SearchDoctorController';
+import { useTranslation } from 'react-i18next';
 
 const OrderDetailsController = () => {
+  const { t } = useTranslation();
   const [showSummary, setShowSummary] = useState(false);
   const { treatmentMenu, orderProvider } = ClientOrderServices();
   const userData = getLocalData('USER');
@@ -58,16 +60,18 @@ const OrderDetailsController = () => {
   const handleNextButtonPress = async () => {
     if (
       order.isOrderForOther &&
-      order?.reason?.length > 0 &&
+      (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
       order?.services?.length > 0 &&
-      order?.patient_type?.age?.length > 0
+      order?.patient_type?.age?.length > 0 &&
+      order?.address?.length
     ) {
       setShowSummary(true);
     }
     if (
       order.isOrderForOther === false &&
-      order?.reason?.length > 0 &&
-      order?.services?.length > 0
+      (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
+      order?.services?.length > 0 &&
+      order?.address?.length
     ) {
       setShowSummary(true);
     }

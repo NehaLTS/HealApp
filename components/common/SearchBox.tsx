@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     flexDirection: 'row',
     marginVertical: getHeight(dimens.marginL),
+    zIndex: 1,
   },
   input: {
     fontSize: getHeight(fontSize.textM),

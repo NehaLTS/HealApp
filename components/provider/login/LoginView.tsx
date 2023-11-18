@@ -89,6 +89,7 @@ export default LoginView;
 const styles = StyleSheet.create({
   inputContainer: {
     flex: 0.7,
+    paddingTop: getHeight(dimens.marginS),
   },
   images: {
     width: getWidth(dimens.imageXs),
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     alignSelf: 'center',
-    marginTop: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.marginM - 2),
   },
   password: {
     marginTop: dimens.paddingL,

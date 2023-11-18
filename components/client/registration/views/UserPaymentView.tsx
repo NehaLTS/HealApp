@@ -140,7 +140,7 @@ const UserPaymentView = ({
               errorMessage={cardNumberError}
               inputValue={card}
               returnKeyType={'next'}
-              onSubmitEditing={onClearCard}
+              onSubmitEditing={() => expireDateRef.current.focus()}
               // onClearInputText={() => cardNumberRef?.current?.clear()}
               onClearInputText={onClearCard}
               maxLength={19}

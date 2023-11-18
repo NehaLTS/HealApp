@@ -109,15 +109,15 @@ const UserAddressViewController = () => {
       console.log('response is ', res, "token",token);
 
       setLocalData('USERPROFILE', {
-        firstName: userProfile.firstName,
-        lastName: userProfile.lastName,
-        phoneNumber: userProfile.phoneNumber,
+        firstName: userProfile?.firstName,
+        lastName: userProfile?.lastName,
+        phoneNumber: userProfile?.phoneNumber,
         address: onSearchAddress,
         city: '',
         state: '',
         country: '',
         profilePicture: profilePicture ?? '',
-        date_of_birth: dateOfBirth.toString(),
+        date_of_birth: dateOfBirth?.toString(),
         idNumber: idNumberRef.current.value,
       });
 

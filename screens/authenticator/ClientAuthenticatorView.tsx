@@ -69,7 +69,6 @@ const ClientAuthenticatorView = () => {
               })
             }
           />
-          {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton
             title={t('switch_to_provider')}
             fontSize={getHeight(fontSize.textXl)}
@@ -96,10 +95,11 @@ const styles = StyleSheet.create({
     flex: 0.34,
   },
   logo: {
-    width: getWidth(dimens.imageM - 40),
-    height: getHeight(dimens.imageM),
+    width: getWidth(dimens.imageM),
+    height: getHeight(dimens.imageM - 30),
     alignSelf: 'center',
     resizeMode: 'center',
+    marginBottom: getHeight(30),
   },
   toggleContainer: {
     flexDirection: 'row',

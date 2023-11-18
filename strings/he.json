@@ -142,5 +142,6 @@
   "login_failed": "התחברות נכשלה",
   "check_email_and_password": "אנא בדוק את כתובת הדוא\"ל והסיסמה שלך ונסה שוב",
   "error_occurred_login": "אירעה שגיאה במהלך ההתחברות",
-  "paid_card": "שולם בכרטיס *"
+  "paid_card": "שולם בכרטיס *",
+  "validationOther": "אנא מלאו את הגיל ומספר הטלפון."
 }

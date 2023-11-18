@@ -67,7 +67,7 @@ const Input = forwardRef(
     const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
     const fontSizeAnim = useRef(
       new Animated.Value(
-        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL - 2),
+        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL - 1),
       ),
     ).current;
 

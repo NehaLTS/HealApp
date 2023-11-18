@@ -20,10 +20,10 @@ const ProviderAddressController = () => {
     UseProviderUserContext();
   const { t } = useTranslation();
   useEffect(() => {
-    if (providerProfile.firstName) {
-      phoneRef.current.value = providerProfile.phoneNumber;
-      licenseRef.current.value = providerProfile.licensenumber;
-      addressRef.current.value = providerProfile.address;
+    if (providerProfile?.firstName) {
+      phoneRef.current.value = providerProfile?.phoneNumber;
+      licenseRef.current.value = providerProfile?.licensenumber;
+      addressRef.current.value = providerProfile?.address;
     }
   }, []);
 
