@@ -47,6 +47,7 @@ const forceAlert = () => {
    reqDistance:request}).then((response)=>{
      return response
    })
+   console.log("providerData", JSON.stringify(providerData))
   return providerData
  }
 

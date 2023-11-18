@@ -125,6 +125,8 @@ const LoginViewController = () => {
       isClient: false,
     });
     if (!userDataProvider.firstname || userDataProvider.firstname == '') {
+      console.log('setToken', token, userId);
+
     navigation.reset({
       index: 0,
       routes: [{ name: NavigationRoutes.ProviderHome }],
@@ -144,6 +146,7 @@ const LoginViewController = () => {
     //   });
     // }
   };
+}
   /** To handle User auth via email and password */
   const onPressLoginButton = async (email: string, password: string, device_token:string) => {
     try {

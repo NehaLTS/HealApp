@@ -27,7 +27,7 @@ const SearchDoctor = () => {
   const localData= getLocalData('USER')
   const {setCurrentLocationOfUser} =UseClientUserContext()
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const {handleNextButtonPress, showRateAlert, showLoader}= SearchDoctorController()
+  const {handleNextButtonPress, showRateAlert, showLoader, SearchDoctorLocation}= SearchDoctorController()
   const [providerLocation, setProviderLocation]=useState<{latitude:number, longitude:number}>();
   const [showDoctor,setShowDoctor]= useState(false)
   const [showTimer, setShowTimer]=useState(false)
@@ -81,6 +81,7 @@ const SearchDoctor = () => {
   },[])
   useEffect(()=>{
     createNotificationListeners()
+    SearchDoctorLocation()
     setTimeout(()=>{
       setShowTimer(true)
           }, 10000)
@@ -133,10 +134,12 @@ const SearchDoctor = () => {
       </View>
       <View >
         <Button
-        title={providerLocation!=undefined?"Order":"Cancel"}
+        title={providerLocation!==undefined && providerLocation.latitude!==0.0?"Order":"Cancel"}
         isPrimary
         isSmall
-        onPress={()=>{ handleNextButtonPress}}
+        onPress={()=>{
+          setLoader(true)
+           handleNextButtonPress()}}
         width={100}/>
          <Text style={styles.noFee} title={t("*No fee will be collected")} />
          </View>
@@ -180,3 +183,5 @@ const styles = StyleSheet.create({
     marginBottom:getHeight(30)
   }
 });
+
+

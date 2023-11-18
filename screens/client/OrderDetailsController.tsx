@@ -97,7 +97,6 @@ const OrderDetailsController = () => {
         reason: `${order.reason}`,
        
       });
-      SearchDoctorLocation();
       if(res) navigation.navigate(NavigationRoutes.SearchDoctor)
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)
