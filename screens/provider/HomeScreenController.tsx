@@ -17,11 +17,15 @@ const HomeScreenControlller=()=>{
     }
     const OnPressTakeOrder=()=>{
         setAcceptOrder(true)
-        OrderRequst({ status:"accept",
-        provider_id:'1',
-        order_id: '1',
-        latitude:"30.37775529243538",
-        longitude:"76.77481109532673"}).then((res)=>{console.log("ordereAccepted", res)}) 
+        Geolocation.watchPosition(
+            (position) => {
+                OrderRequst({ status:"accept",
+                provider_id:'1',
+                order_id: '1',
+                latitude:position.coords.latitude.toString(),
+                longitude:position.coords.longitude.toString()}).then((res)=>{console.log("ordereAccepted", res)}) 
+             }, );
+   
  }  
  return {
     OnPressTakeOrder,

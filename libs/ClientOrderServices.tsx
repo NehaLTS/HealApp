@@ -84,9 +84,7 @@ export const ClientOrderServices = () => {
     TotalCost: string;
     menu_id: string;
     reason: string;
-    latitude:string;
-    longitude:string;
-    provider_type_id:string;
+  
   }): Promise<order_provider> =>
     sendRequest(ORDER_PROVIDER, {
       method: POST,

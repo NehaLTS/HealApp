@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   cardDetail: {
-    backgroundColor: colors.grey,
+    backgroundColor: '#F9FDFF',
     borderRadius: getWidth(5),
     shadowColor: colors.black,
     alignItems: 'center',

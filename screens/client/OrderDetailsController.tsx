@@ -7,6 +7,7 @@ import { ClientProfile, OrderDetail } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
+import SearchDoctorController from './SearchDoctorController';
 
 const OrderDetailsController = () => {
   const [showSummary, setShowSummary] = useState(false);
@@ -16,9 +17,10 @@ const OrderDetailsController = () => {
   const navigation = useNavigation();
   const {currentLocationOfUser, orderDetails}= UseClientUserContext()
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
+  const { SearchDoctorLocation}= SearchDoctorController()
+
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
-  // console.log('userProfile', userProfile);
   const [order, setOrder] = useState<OrderDetail>({
     client_id: '',
     patient_type: { type: 'me', age: '' },
@@ -70,9 +72,7 @@ const OrderDetailsController = () => {
       setShowSummary(true);
     }
    
-    console.log("orderDetails", order);
-  
-    if (showSummary === true) {
+    if (showSummary) {
     
       const res = await orderProvider({
         client_id: order?.client_id,
@@ -91,14 +91,10 @@ const OrderDetailsController = () => {
         TotalCost:order.TotalCost,
         menu_id: order.menu_id,
         reason: `${order.reason}`,
-        latitude:currentLocationOfUser.latitude,
-        longitude:currentLocationOfUser.longitude,
-        provider_type_id:"1"
+       
       });
-      // if(res) navigation.navigate(NavigationRoutes.SearchDoctor)
-      navigation.navigate(NavigationRoutes.SearchDoctor)
-
-      // console.log("Order api", res);
+      SearchDoctorLocation();
+      if(res) navigation.navigate(NavigationRoutes.SearchDoctor)
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)
         setShowSummary(true);

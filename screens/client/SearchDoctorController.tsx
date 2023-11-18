@@ -8,8 +8,9 @@ import { useState } from "react";
 const SearchDoctorController = () => {
   const {BookOrderRequest, providerLocationSearch} =ClientOrderServices()
   const localData= getLocalData('USER')
-  const {userId, currentLocationOfUser} =UseClientUserContext()
+  const {currentLocationOfUser} =UseClientUserContext()
   const [showRateAlert, setShowRateAlert] =useState(false)
+  const [showLoader, setShowLoader]=useState(true)
   const permissionHelper = {
     title: 'Location Permission',
     message: 'This app requires access to your location.',
@@ -29,10 +30,7 @@ const forceAlert = () => {
   };
 
  const  handleNextButtonPress=()=>{
-  Alert.alert('', userId.toString())
-  console.log("localData?.providerLocation[0]?.provider_id", localData?.providerLocation[0]?.provider_id)
-  // Alert.alert("localData?.providerLocation[0]?.provider_id", localData?.providerLocation[0]?.provider_id)
-  BookOrderRequest({ provider_id:localData?.providerLocation[0]?.provider_id,
+  BookOrderRequest({ provider_id:localData?.providerLocation?.provider_id,
   order_id:"1",
   latitude:currentLocationOfUser.latitude,
   longitude:currentLocationOfUser.longitude}).then((res)=>{
@@ -42,7 +40,6 @@ const forceAlert = () => {
  }
  const searchProviderNearBy=async (request:string)=>{
 
-  console.log("currentLocationOfUser?.longitudecurrentLocationOfUser?.longitude",currentLocationOfUser?.latitude, currentLocationOfUser?.longitude,  )
   const providerData=  await providerLocationSearch({ name: "Back Pain",
    provider_type_id: "1",
    latitude:currentLocationOfUser?.latitude,
@@ -56,9 +53,12 @@ const forceAlert = () => {
   const SearchDoctorLocation=async ()=>{
     let i :number=1;
     let searchData= await searchProviderNearBy(`${'req'}${i}`)
-
-    console.log("searchData...", JSON.stringify(searchData), i)
-    if(searchData!=null){
+    if(searchData===undefined){
+      setShowLoader(true)
+    }else{
+      setShowLoader(false)
+    }
+    if(searchData.length!==null){
       setLocalData("USER",{providerLocation:searchData})
       if(i!=1){
         setShowRateAlert(true)
@@ -68,7 +68,6 @@ const forceAlert = () => {
        i=1;
     }else{
       i=i+1;
-      console.log("dataWhenNotFind")
       setShowRateAlert(true)
       searchData= searchProviderNearBy(`${'req'}${i}`);
     }
@@ -79,7 +78,8 @@ const forceAlert = () => {
     forceAlert,
     handleNextButtonPress,
     SearchDoctorLocation,
-    showRateAlert
+    showRateAlert,
+    showLoader
   };
 };
 
