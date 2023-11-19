@@ -20,7 +20,7 @@ const LoginViewController = () => {
   const { onFBAuthProcessing } = FacebookAuthProvider();
   const { setUserProfile, setUserId, setToken, userProfile } =
     UseClientUserContext();
-  // const { userData, setUserData } = UseUserContext()
+
   const {
     onSubmitAuthRequest,
     onSubmitFBAuthRequest,

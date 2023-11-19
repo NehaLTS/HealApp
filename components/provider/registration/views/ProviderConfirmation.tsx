@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import Header from 'components/common/Header';
 import Text from 'components/common/Text';
-import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
@@ -13,7 +12,7 @@ import { Image, StyleSheet, View } from 'react-native';
 const ProviderConfirmation = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const { userDataProvider } = UseUserContextProvider();
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -26,9 +25,7 @@ const ProviderConfirmation = () => {
       <View style={styles.imageContainer}>
         <Image
           source={
-            userDataProvider.profile_picture?.length
-              ? { uri: userDataProvider.profile_picture }
-              : require('../../../../assets/icon/provider.png')
+           require('../../../../assets/icon/provider.png')
           }
           style={styles.finalIcon}
         />
