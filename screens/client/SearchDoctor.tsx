@@ -19,7 +19,8 @@ import { Location } from "libs/types/UserType";
 import Geolocation from 'react-native-geolocation-service';
 import SearchDoctorController from "./SearchDoctorController";
 import ArrivalTime from "components/common/ArrivalTime";
-import Loader from "components/common/Loader";
+import {LoaderLarge} from "components/common/Loader";
+import TextButton from "components/common/TextButton";
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -27,11 +28,13 @@ const SearchDoctor = () => {
   const localData= getLocalData('USER')
   const {setCurrentLocationOfUser} =UseClientUserContext()
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const {handleNextButtonPress, showRateAlert, showLoader, SearchDoctorLocation}= SearchDoctorController()
+  const {handleNextButtonPress, showRateAlert, showLoader, SearchDoctorLocation, disabled, calculateTime}= SearchDoctorController()
   const [providerLocation, setProviderLocation]=useState<{latitude:number, longitude:number}>();
   const [showDoctor,setShowDoctor]= useState(false)
   const [showTimer, setShowTimer]=useState(false)
   const [loader, setLoader]= useState(true)
+  const [showCancelButon, setShowCancelButon]= useState(false)
+  const [stausOfArriving, setStausOfArriving]= useState<string>('Estimated arrival')
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -75,16 +78,21 @@ const SearchDoctor = () => {
 
   useEffect(()=>{
     DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
-      setProviderLocation({latitude: parseFloat(event.latitude), longitude: parseFloat(event.longitude)})}
+      setShowTimer(true)
+      setShowCancelButon(true)
+      setStausOfArriving('On the way')
+      setProviderLocation({latitude: parseFloat(event.latitude), longitude: parseFloat(event.longitude)})
+      setTimeout(()=>{
+        setShowCancelButon(false)
+       }, 300000)
+      console.log("doctore Send Event", event)
+    }   
     )
   return DeviceEventEmitter.removeAllListeners('DoctorNotification')
   },[])
   useEffect(()=>{
     createNotificationListeners()
     SearchDoctorLocation()
-    setTimeout(()=>{
-      setShowTimer(true)
-          }, 10000)
     setProviderLocation({latitude: parseFloat(localData?.providerLocation?.latitude??0.0), longitude: parseFloat(localData?.providerLocation?.longitude??0.0)})
   },[])
 
@@ -92,34 +100,52 @@ const SearchDoctor = () => {
     setLoader(false)
    }, 10000)
 
+   const onPressOrder=()=>{
+    setLoader(true)
+    setShowCancelButon(true)
+    setTimeout(()=>{
+      setShowCancelButon(false)
+     }, 300000)
+     handleNextButtonPress()
+    }
   return (
     <View style={styles.mainContainer}>
       <View >
-     {localData&& providerLocation!==undefined &&providerLocation.latitude!==0.0&&showTimer&&<ArrivalTime totalTime={60}/>}
+     {showTimer&&<ArrivalTime totalTime={60}/>}
       <Text style={styles.lookingDoctor} title={providerLocation!==undefined &&providerLocation.latitude===0.0?t("Looking for a doctor"):("Doctor is found!")} />
       </View>
       <View style={styles.mapContainer}>
-      {providerLocation!==undefined&&showLoader&& loader&&<Loader/>}
+      {providerLocation &&providerLocation.latitude===0.0&&<LoaderLarge/>}
        <MapView
         provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        followsUserLocation
         zoomEnabled
         zoomTapEnabled
+followsUserLocation
+showsUserLocation
+
         showsTraffic
         focusable
         showsBuildings
         initialRegion={currentLocation}
         region={currentLocation} 
         style={{flex:1}}> 
-        
+          {/* { currentLocation!==undefined&&currentLocation.latitude!==0.0&& ( 
+            <Marker
+              coordinate={{
+                latitude: currentLocation.latitude,
+                longitude:currentLocation.longitude,
+              }} 
+              title="Your Location">
+                <View style={{height:30, width:30, backgroundColor:'orange', borderRadius:15}}>
+
+                </View>
+              </Marker>)}  */}
           { providerLocation!==undefined&&providerLocation.latitude!==0.0&& ( 
             <Marker
               coordinate={{
                 latitude: providerLocation.latitude,
                 longitude:providerLocation.longitude,
-              }}
-              
+              }} 
               onPress={()=>{
                 setShowDoctor(!showDoctor)
               }}
@@ -128,8 +154,8 @@ const SearchDoctor = () => {
               </Marker>)} 
             </MapView>
            
-          {providerLocation!==undefined && providerLocation.latitude!==0.0? <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20), bottom:getHeight(50)}}>
-              <DoctorDetailCard isPrimary={showRateAlert} showBothCards={showRateAlert&&providerLocation!=undefined} showProvider={providerLocation!=undefined}/>
+          {!loader&& providerLocation!==undefined && providerLocation.latitude!==0.0? <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20), bottom:getHeight(50)}}>
+              <DoctorDetailCard isPrimary={showRateAlert} showBothCards={showRateAlert&&providerLocation!=undefined} status={stausOfArriving} showProvider={providerLocation!=undefined} time={calculateTime}/>
               </View>:null}
       </View>
       <View >
@@ -137,11 +163,16 @@ const SearchDoctor = () => {
         title={providerLocation!==undefined && providerLocation.latitude!==0.0?"Order":"Cancel"}
         isPrimary
         isSmall
-        onPress={()=>{
-          setLoader(true)
-           handleNextButtonPress()}}
+        disabled={disabled}
+        onPress={onPressOrder}
         width={100}/>
-         <Text style={styles.noFee} title={t("*No fee will be collected")} />
+
+          {showCancelButon&& <TextButton
+          style={{alignSelf:'center',fontSize:fontSize.textS}}
+           title={"Cancel"}
+          onPress={()=>{}}
+       />}
+         <Text style={styles.noFee} title={providerLocation!==undefined && providerLocation.latitude!==0.0?t("*No fee will be collected"):showCancelButon?"*You have 3 minutes to cancel an order for free":''} />
          </View>
     </View>
   );

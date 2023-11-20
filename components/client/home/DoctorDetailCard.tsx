@@ -12,10 +12,19 @@ const DoctorDetailCard = ({
   isPrimary,
   showProvider,
   showBothCards,
+  status,
+  time
 }: {
   isPrimary?: boolean;
   showProvider?:boolean;
   showBothCards: boolean;
+  status?:string;
+  time:{
+    hour: number;
+    minutes: number;
+    seconds: number;
+    remainig: number;
+}
 }) => {
   const localData= getLocalData('USER')
   return (
@@ -65,8 +74,8 @@ const DoctorDetailCard = ({
                   />
                   <Text style={styles.title} title={'Call the doctor'} />
                 </View>
-                <Text style={styles.arrivalText} title={'Estimated arrival'} />
-                <Text style={styles.time} title={'60 min'} />
+                <Text style={styles.arrivalText} title={status} />
+                <Text style={styles.time} title={time.minutes} />
               </View>
             </View>
           </View>

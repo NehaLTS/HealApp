@@ -16,7 +16,7 @@ const getToken = async () => {
 
   if (!fcmToken) {
     fcmToken = await messaging().getToken();
-
+   
     console.log('fcmToken is ', fcmToken);
     if (fcmToken) {
       console.log('tokenDecice', fcmToken);
