@@ -1,106 +1,87 @@
 import { colors } from 'designToken/colors';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
+  Easing,
+  Extrapolate,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-  Easing,
-  Extrapolate,
-  interpolateColor,
 } from 'react-native-reanimated';
 
-const InterpolateXInput = [0, 1];
-
-const AnimatedSwitchButton = ({
+const ToggleButton = ({
   onChange,
-  containerStyle,
-  toggleOffColor = colors.secondary,
-  toggleOnColor = colors.secondary,
-  height = getHeight(55),
-  width = getWidth(93),
-}: any) => {
-  const BUTTON_WIDTH = width;
-  const BUTTON_HEIGHT = height;
-  const [toggled, setToggled] = useState(false);
-  const shareValue = useSharedValue(toggled ? 1 : 0);
-  const containerScale = {
-    height: BUTTON_HEIGHT,
-    width: BUTTON_WIDTH,
-  };
-  const switchScale = {
-    height: getHeight(28),
-    width: getHeight(28),
-  };
+  isDisabled,
+  defaultValue,
+}: {
+  onChange: (i: boolean) => void;
+  isDisabled: boolean;
+  defaultValue: boolean;
+}) => {
+  const [isEnabled, setIsEnabled] = useState(defaultValue ?? false);
+  const toggleValue = useSharedValue(defaultValue ? 1 : 0);
 
-  const onChangeToggle = () => {
-    setToggled(!toggled);
-    onChange?.(!toggled);
-  };
+  useEffect(() => {
+    setIsEnabled(defaultValue ?? false);
+    toggleValue.value = withTiming(defaultValue ? 1 : 0, {
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+    });
+  }, [defaultValue, toggleValue]);
 
-  const onPressSwitch = () => {
-    if (shareValue.value === 0) {
-      shareValue.value = withTiming(1, {
-        duration: 500,
-        easing: Easing.bezier(0.4, 0.0, 0.5, 1),
-      });
-      onChangeToggle();
-    } else {
-      shareValue.value = withTiming(0, {
-        duration: 500,
-        easing: Easing.bezier(0.4, 0.0, 0.5, 1),
-      });
-      onChangeToggle();
+  const toggleSwitch = useCallback(() => {
+    if (!isDisabled) {
+      setIsEnabled((prevState) => !prevState);
     }
-  };
+    onChange?.(!isEnabled);
+    toggleValue.value = withTiming(isEnabled ? 0 : 1, {
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+    });
+  }, [isEnabled, isDisabled, onChange, toggleValue]);
 
-  const switchAreaStyles = useAnimatedStyle(() => {
+  const handlePosition = useAnimatedStyle(() => {
+    const translateX = interpolate(
+      toggleValue.value,
+      [0, 1],
+      [0, 35],
+      Extrapolate.CLAMP,
+    );
+
     return {
-      transform: [
-        {
-          translateX: interpolate(
-            shareValue.value,
-            InterpolateXInput,
-            [1, 44],
-            Extrapolate.CLAMP,
-          ),
-        },
-      ],
-      backgroundColor: interpolateColor(shareValue.value, InterpolateXInput, [
-        toggleOffColor,
-        toggleOnColor,
-      ]),
+      transform: [{ translateX }],
     };
   });
 
   return (
     <TouchableOpacity
-      onPress={onPressSwitch}
       activeOpacity={1}
-      style={[styles.containerStyle, containerScale, containerStyle]}
+      onPress={toggleSwitch}
+      style={styles.button}
     >
-      <Animated.View
-        style={[styles.switchButton, switchScale, switchAreaStyles]}
-      />
+      <Animated.View style={[styles.handle, handlePosition]} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: colors.secondary,
-    borderRadius: getWidth(50),
+  button: {
+    width: getWidth(92),
+    height: getHeight(55),
+    borderRadius: getHeight(50),
     borderWidth: getWidth(5),
+    borderColor: colors.secondary,
+    justifyContent: 'center',
+    paddingHorizontal: getWidth(10),
   },
-  switchButton: {
-    position: 'absolute',
-    left: getWidth(5),
-    borderRadius: 50,
+  handle: {
+    width: getWidth(28),
+    height: getWidth(28),
+    borderRadius: getWidth(20),
+    backgroundColor: colors.secondary,
   },
 });
 
-export default AnimatedSwitchButton;
+export default ToggleButton;

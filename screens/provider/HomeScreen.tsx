@@ -1,4 +1,5 @@
 import Button from 'components/common/Button';
+import { RNHeader } from 'components/common/Header';
 import RNModal from 'components/common/Modal';
 import ToggleButton from 'components/common/SwitchButton';
 import Text from 'components/common/Text';
@@ -7,48 +8,110 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
-import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, DeviceEventEmitter, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  Alert,
+  Animated,
+  DeviceEventEmitter,
+  Image,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import avatar from 'assets/icon/avatar.png';
+import logo from 'assets/icon/healLogo.png';
+import SelectImage from 'components/common/SelectImage';
+import { createNotificationListeners } from 'libs/Notification';
 import HomeScreenControlller from './HomeScreenController';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import { ProviderProfile } from 'libs/types/UserType';
 
 const HomeScreen = () => {
-  const [isAvailable, setIsAvailable] = useState(false);
+  const localData = getLocalData('USERPROFILE');
+  const available = getLocalData('USER');
+  const [isAvailable, setIsAvailable] = useState(
+    available?.isProviderAvailable,
+  );
   const [isCancelOrder, setIsCancelOrder] = useState(false);
-  const [notification, setNotification]=useState(false)
-  const  {acceptOrder, OnPressTakeOrder , updateLocation} =HomeScreenControlller()
-   
-   useEffect(()=>{
-    createNotificationListeners()
-   },[])
-  
-   useEffect(() => {
-    DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
-      setNotification(true)
-    })
-   
+  // const [isOrderCanceled, setIsOrderCanceled] = useState(false);
+  const [isVisibleLicense, setIsVisibleLicense] = useState(false);
+  const [notification, setNotification] = useState(false);
+  const [isAddDocument, setIsAddDocument] = useState(false);
+  const [licensePicture, setLicensePicture] = useState('');
+  const [isShowModal, setIsShowModal] = useState(false);
+  const { acceptOrder, OnPressTakeOrder, updateLocation } =
+    HomeScreenControlller();
+
+  useEffect(() => {
+    createNotificationListeners();
+  }, []);
+
+  const getImageUrl = (url: string) => setLicensePicture(url);
+  const onPressUpload = () => {
+    if (licensePicture?.length) {
+      setLocalData('USERPROFILE', {
+        licensepicture: licensePicture,
+      });
+      setIsAvailable(true);
+      setIsAddDocument(false);
+      setIsVisibleLicense(false);
+    }
+  };
+
+  const handleAddDocument = () => {
+    setIsAddDocument(true);
+  };
+  const onConfirmCancelOrder = (pressOn: string) => {
+    if (pressOn === 'yes') {
+      setIsCancelOrder(false);
+    } else {
+      setIsCancelOrder(false);
+      setNotification(false);
+      // setIsOrderCanceled(false);
+    }
+  };
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('DoctorNotification', (event) => {
+      setNotification(true);
+    });
+
     const interval = setInterval(() => {
-      if(acceptOrder){ 
-        Alert.alert('updateLocation api hit after 1 minute')
-      console.log('accept', acceptOrder)
-        updateLocation()
+      if (acceptOrder) {
+        Alert.alert('updateLocation api hit after 1 minute');
+        console.log('accept', acceptOrder);
+        updateLocation();
       }
-      },100000);
-  
+    }, 100000);
+
     return () => {
       clearInterval(interval);
-      DeviceEventEmitter.removeAllListeners('DoctorNotification')
+      DeviceEventEmitter.removeAllListeners('DoctorNotification');
+    };
+  }, [acceptOrder]);
+
+  const onPressToggle = (available: boolean) => {
+    if ((localData as ProviderProfile)?.licensenumber === '') {
+      setIsVisibleLicense(true);
+    } else {
+      setLocalData('USER', {
+        isProviderAvailable: available,
+      });
+      setIsAvailable(available);
     }
-  }, [acceptOrder])
+  };
 
   const getNewOrderView = () => (
     <RNModal
-      isVisible={notification&& isAvailable}
+      isVisible={
+        notification && isAvailable
+        // || isOrderCanceled
+      }
       style={styles.modal}
       backdropOpacity={1}
       backdropColor={colors.transparent}
-      onBackdropPress={() => setIsAvailable(false)}
     >
       <View style={styles.modalView}>
         <Text style={styles.details} title={'Chest pain'} />
@@ -74,13 +137,15 @@ const HomeScreen = () => {
             height={getWidth(36)}
             fontSized={getWidth(fontSize.textL)}
             background={colors.white}
-            onPress={()=>{Alert.alert('hii')
-               OnPressTakeOrder()}}
+            onPress={() => {
+              Alert.alert('hii');
+              OnPressTakeOrder();
+            }}
           />
           <TextButton
             title="Cancel an order"
             fontSize={getWidth(fontSize.textL)}
-            style={{ color: colors.white, alignSelf: 'center' }}
+            style={styles.cancelOrderButton}
             onPress={() => setIsCancelOrder(true)}
           />
         </View>
@@ -97,12 +162,7 @@ const HomeScreen = () => {
     >
       <View style={styles.cancelOrderView}>
         <Text
-          style={{
-            fontSize: getWidth(fontSize.heading),
-            textAlign: 'center',
-            color: colors.primary,
-            fontFamily: fontFamily.medium,
-          }}
+          style={styles.cancelOrderText}
           title={'You want to cancel\nthis order?'}
         />
         <View style={styles.buttonContainer}>
@@ -113,7 +173,7 @@ const HomeScreen = () => {
             width={getWidth(80)}
             height={getWidth(36)}
             fontSized={getWidth(fontSize.textL)}
-            onPress={() => setIsCancelOrder(false)}
+            onPress={() => onConfirmCancelOrder('yes')}
           />
           <Button
             title="No"
@@ -122,27 +182,146 @@ const HomeScreen = () => {
             width={getWidth(80)}
             height={getWidth(36)}
             fontSized={getWidth(fontSize.textL)}
+            onPress={() => onConfirmCancelOrder('no')}
           />
         </View>
       </View>
     </RNModal>
   );
 
-  return (
-    <>
-      <View style={styles.headerContainer}>
-        <Text
-          title={'Not\navailable'}
-          style={[styles.notAvailable, !isAvailable && styles.isAvailable]}
-        />
-        <ToggleButton onChange={setIsAvailable} />
-        <Text
-          title={'Available'}
-          style={[styles.available, isAvailable && styles.isAvailable]}
+  const getMissingDocsView = () => (
+    <RNModal
+      isVisible={isVisibleLicense}
+      style={styles.addDocsModal}
+      backdropOpacity={0.4}
+      animationIn={'zoomInUp'}
+    >
+      <View
+        style={{ ...styles.addDocsView, flex: isAddDocument ? 0.45 : 0.37 }}
+      >
+        {isAddDocument ? (
+          <>
+            <Text style={styles.addDocument} title={'Adding documents'} />
+            <Text title={'Upload license photo'} />
+            <TouchableOpacity
+              activeOpacity={licensePicture ? 1 : 0.5}
+              onPress={() => setIsShowModal(true)}
+            >
+              <Image
+                source={
+                  licensePicture
+                    ? { uri: licensePicture }
+                    : require('assets/icon/licencesIcon.png')
+                }
+                style={styles.selectedImage}
+              />
+            </TouchableOpacity>
+            <SelectImage
+              isShowModal={isShowModal}
+              closeModal={setIsShowModal}
+              imageUri={getImageUrl}
+            />
+          </>
+        ) : (
+          <>
+            <Text
+              style={styles.addDocsText}
+              title={
+                'You still cannot\nreceive patients since some\ndocuments are missing:\n\n(list of what is missing)'
+              }
+            />
+          </>
+        )}
+        <Button
+          title={isAddDocument ? 'Upload' : 'Add missing documents'}
+          style={styles.takeOrderButton}
+          isSmall
+          isPrimary
+          height={getWidth(36)}
+          fontSized={getWidth(fontSize.textL - dimens.borderThin)}
+          onPress={isAddDocument ? onPressUpload : handleAddDocument}
         />
       </View>
-      {getNewOrderView()}
-      {getCancelOrderView()}
+    </RNModal>
+  );
+
+  const headerLeft = () => (
+    <TouchableOpacity>
+      <Image source={logo} style={styles.logo} />
+    </TouchableOpacity>
+  );
+
+  const headerRight = () => (
+    <TouchableHighlight underlayColor="transparent">
+      <Image source={avatar} style={styles.avatar} />
+    </TouchableHighlight>
+  );
+
+  const DetailCard = (title: string, subTitle: string) => (
+    <View style={styles.detailCardContainer}>
+      <Text style={styles.title} title={title} />
+      <Text title={subTitle} />
+    </View>
+  );
+  const FadeInText = ({
+    title,
+    isActive,
+  }: {
+    title: string;
+    isActive: boolean;
+  }) => {
+    const [fadeAnim] = useState(new Animated.Value(0.4));
+    useEffect(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 900,
+        useNativeDriver: false,
+      }).start();
+    }, [fadeAnim]);
+    return (
+      <Animated.Text
+        style={[
+          isActive ? styles.isAvailable : styles.notAvailable,
+          {
+            opacity: fadeAnim,
+          },
+        ]}
+      >
+        {title}
+      </Animated.Text>
+    );
+  };
+
+  return (
+    <>
+      {RNHeader(() => null, headerLeft, headerRight)}
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <FadeInText title={'Not\navailable'} isActive={!isAvailable} />
+          <ToggleButton
+            onChange={onPressToggle}
+            isDisabled={(localData as ProviderProfile)?.licensenumber === ''}
+            defaultValue={isAvailable}
+          />
+          <FadeInText title={'Available'} isActive={isAvailable} />
+        </View>
+        <Text
+          style={styles.switchToggleText}
+          title={
+            isAvailable
+              ? "Now you're available\nto receive orders"
+              : 'Switch toggle to available\nto start to receive orders'
+          }
+        />
+        <View style={styles.cardContainer}>
+          {DetailCard('2', 'Clients today')}
+          {DetailCard('25 min', 'Average arrival time')}
+          {DetailCard('560 ₪', 'My balance')}
+          {getNewOrderView()}
+          {getCancelOrderView()}
+          {getMissingDocsView()}
+        </View>
+      </View>
     </>
   );
 };
@@ -150,19 +329,29 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: getWidth(dimens.marginM),
+  },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    flex: 0.2,
   },
   notAvailable: {
     textAlign: 'center',
     minWidth: '25%',
+    fontFamily: fontFamily.medium,
   },
   modal: {
     justifyContent: 'flex-end',
     padding: 0,
     margin: 0,
+  },
+  addDocsModal: {
+    justifyContent: 'center',
   },
   cancelModal: {
     justifyContent: 'flex-end',
@@ -186,6 +375,7 @@ const styles = StyleSheet.create({
     width: getWidth(150),
     height: getWidth(36),
     alignSelf: 'center',
+    paddingHorizontal: getWidth(dimens.marginM),
   },
   seeMoreButton: {
     color: colors.white,
@@ -214,9 +404,73 @@ const styles = StyleSheet.create({
   },
   available: {
     minWidth: '25%',
+    textAlign: 'center',
   },
   isAvailable: {
     color: colors.secondary,
     fontFamily: fontFamily.semiBold,
+    minWidth: '25%',
+    textAlign: 'center',
+  },
+  cancelOrderText: {
+    fontSize: getWidth(fontSize.heading),
+    textAlign: 'center',
+    color: colors.primary,
+    fontFamily: fontFamily.medium,
+  },
+  cancelOrderButton: {
+    color: colors.white,
+    alignSelf: 'center',
+  },
+  logo: {
+    width: getWidth(dimens.imageS),
+    height: getHeight(40),
+    resizeMode: 'contain',
+  },
+  avatar: {
+    height: getHeight(45),
+    width: getWidth(45),
+    resizeMode: 'contain',
+  },
+  switchToggleText: {
+    textAlign: 'center',
+    flex: 0.12,
+  },
+  detailCardContainer: {
+    width: '100%',
+    padding: getWidth(dimens.marginL),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: getHeight(dimens.marginS),
+    backgroundColor: colors.offWhite,
+  },
+  title: {
+    fontSize: getWidth(fontSize.headingL),
+    color: colors.primary,
+  },
+  cardContainer: {
+    flex: 0.68,
+    gap: getHeight(dimens.marginM + dimens.paddingXs),
+  },
+  addDocsView: {
+    backgroundColor: colors.lightGrey,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: getHeight(dimens.marginL),
+    borderRadius: getHeight(dimens.marginS),
+  },
+  addDocsText: {
+    color: colors.primary,
+    textAlign: 'center',
+    fontFamily: fontFamily.medium,
+  },
+  selectedImage: {
+    height: getHeight(dimens.imageM / 2),
+    width: getHeight(dimens.imageM / 2),
+    resizeMode: 'center',
+    borderRadius: getHeight(dimens.paddingS),
+  },
+  addDocument: {
+    fontSize: getWidth(fontSize.heading - 2),
   },
 });
