@@ -67,7 +67,11 @@ const Input = forwardRef(
     const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
     const fontSizeAnim = useRef(
       new Animated.Value(
-        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL - 1),
+        inputValue
+          ? getWidth(fontSize.textS)
+          : placeholder?.includes('License')
+          ? getWidth(fontSize.textM)
+          : getWidth(fontSize.textL - 1),
       ),
     ).current;
 
@@ -129,6 +133,7 @@ const Input = forwardRef(
         >
           {!inputPlaceholder?.length && (
             <Animated.Text
+              numberOfLines={1}
               adjustsFontSizeToFit
               style={[styles.label, labelStyle, fontSizeStyle]}
             >
@@ -243,6 +248,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
     fontFamily: fontFamily.regular,
     fontSize: getHeight(fontSize.textL),
+    maxWidth: '90%',
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),

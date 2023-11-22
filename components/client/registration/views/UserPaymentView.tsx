@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.borderBold),
   },
   expireDate: {
-    minWidth: '30%',
+    minWidth: '32%',
   },
   loading: {
     left: '44%',

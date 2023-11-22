@@ -232,8 +232,8 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
     height: getHeight(dimens.imageM + dimens.paddingL + dimens.marginS),
     alignItems: 'flex-start',
+    paddingTop: getHeight(8),
     justifyContent: 'center',
-    padddingTop: getHeight(dimens.marginS),
   },
   serviceContainer: {
     backgroundColor: colors.white,
