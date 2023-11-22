@@ -1,39 +1,40 @@
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import Button from "../../component/common/Button";
-import { colors } from "../../designToken/colors";
-import { dimens } from "../../designToken/dimens";
-import { getHeight, getWidth } from "../../libs/StyleHelper";
-import logo from "../../assets/icon/logo.png";
-import IntroController from "./IntroController";
-import { getTexts } from "../../libs/OneSkyHelper";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import Header from "../../component/common/Header";
-import { fontSize } from "../../designToken/fontSizes";
+import { useNavigation } from '@react-navigation/native';
+import logo from 'assets/icon/logo.png';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React, { useLayoutEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, View } from 'react-native';
+import Button from '../../components/common/Button';
+import Header from '../../components/common/Header';
+import { fontSize } from '../../designToken/fontSizes';
+import IntroController from './IntroController';
+import Text from 'components/common/Text';
 
 const IntroScreen = () => {
-  const { continueAsClient } = IntroController();
-  const { languageCode } = useTranslationContext();
-  const { intro } = getTexts(languageCode);
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+  const { continueAsClient, continueAsProvider } = IntroController();
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => <Header isHideTitle />,
+    });
+  }, [navigation]);
   return (
-    <>
-    <Header />
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image source={logo} style={styles.logo} />
-        </View>
-          <Text style={styles.welcomeText}>{intro.welcome_heal}</Text>
-        <View style={styles.buttonContainer}>
-          <Button
-            title={intro.continue_client}
-            isPrimary
-            onPress={continueAsClient}
-          />
-          <Button title={intro.continue_provider} onPress={continueAsClient} />
-        </View>
+    <View style={styles.container}>
+      <Image source={logo} style={styles.logo} />
+      <Text style={styles.welcomeText} title={t('welcome_heal')} />
+      <View style={styles.buttonContainer}>
+        <Button
+          title={t('continue_client')}
+          isPrimary
+          onPress={continueAsClient}
+        />
+        <Button title={t('continue_provider')} onPress={continueAsProvider} />
       </View>
-    </>
+    </View>
   );
 };
 export default IntroScreen;
@@ -41,25 +42,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: getWidth(dimens.marginMd),
-  },
-  logoContainer: {
-    alignSelf: "center",
-    flex: 0.4,
-    justifyContent:'center'
+    paddingHorizontal: getWidth(dimens.marginM),
   },
   logo: {
-  width: getWidth(dimens.imageLg),
-  height: getHeight(dimens.imageLg)
+    width: getWidth(dimens.imageL + dimens.imageS),
+    height: getHeight(dimens.imageL + dimens.imageS + dimens.imageS),
+    alignSelf: 'center',
+    flex: 0.4,
+    justifyContent: 'center',
+    // resizeMode: "contain",
   },
   welcomeText: {
-    fontSize: getHeight(fontSize.headingLg),
-    color: colors.black,
-    alignSelf: "center",
-    flex:0.4
+    fontSize: getHeight(fontSize.headingL),
+    alignSelf: 'center',
+    flex: 0.4,
   },
   buttonContainer: {
-    gap: getHeight(fontSize.headingLg),
+    gap: getHeight(fontSize.headingL),
     flex: 0.2,
   },
 });

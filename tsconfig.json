@@ -1,6 +1,20 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "baseUrl": "./",
+    "paths": {
+      "assets/*": ["./assets/*"],
+      "designToken/*": ["./designToken/*"],
+      "icon/*": ["./assets/icon/*"],
+      "libs/*": ["./libs/*"],
+      "components/*": ["./components/*"],
+      "common/*": ["./components/common/*"],
+      "contexts/*" : ["./contexts/*"],
+      "navigator/*" : ["./navigator/*"],
+      "src/*" : ["./src/*"],
+      "DataStorage/*": ["./src/DataStorage/*"],
+      "LoginViewController": ["./components/client/login/LoginViewController"],
+    }
   },
   "extends": "@tsconfig/react-native/tsconfig.json"
 }

@@ -1,25 +1,51 @@
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { useTranslationContext } from "../../contexts/UseTranslationsContext";
-import { storeData } from "../../src/DataStorage/DataStorage";
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { useTranslationContext } from '../../contexts/UseTranslationsContext';
+import {
+  getLocalData,
+  setLocalData,
+} from '../../libs/datastorage/useLocalStorage';
+import { UserType } from '../../libs/types/UserType';
+import NavigationRoutes from '../../navigator/NavigationRoutes';
 
 const IntroController = () => {
-  const navigation = useNavigation();
-  const [isChangeLanguage, setIsChangeLanguage] = useState(false);
+  const navigation = useNavigation<any>();
+  const [isLanguageChanged, setIsLanguageChanged] = useState(false);
   const { setLanguageCode } = useTranslationContext();
-  const continueAsClient = () => navigation.navigate("SignIn");
-  const onChangeLanguage = () => setIsChangeLanguage(!isChangeLanguage);
+  const continueAsClient = () => {
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: NavigationRoutes.ClientStack,
+          params: { isClient: true },
+        },
+      ],
+    });
+  };
+  const continueAsProvider = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: NavigationRoutes.ProviderStack }],
+    });
+  };
+  const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
+
   const handleLanguageChange = (lng: string) => {
     setLanguageCode(lng);
-    storeData('lng', lng)
-    setIsChangeLanguage(!isChangeLanguage);
+    setLocalData('USER', {
+      user: {
+        language: lng,
+      },
+    }) as unknown as UserType;
   };
 
   return {
-    isChangeLanguage,
+    isLanguageChanged,
     onChangeLanguage,
     continueAsClient,
-    handleLanguageChange
+    handleLanguageChange,
+    continueAsProvider,
   };
 };
 
