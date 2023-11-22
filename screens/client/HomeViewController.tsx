@@ -11,6 +11,7 @@ import {
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Keyboard, Linking } from 'react-native';
+import list from '../../strings/en.json'
 
 interface Location {
   latitude: number;
@@ -27,28 +28,10 @@ const HomeViewController = () => {
   const [location, setLocation] = useState<Location>();
   const [user, setUser] = useState<ClientProfile>();
   const { userProfile, setUserProfile } = UseClientUserContext();
+  const orderList = list.home.providerList
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
-  const providerList = [
-    {
-      name: 'Doctor - home visit',
-    },
-    {
-      name: 'Nurse - home visit',
-    },
-    {
-      name: 'Alternative medicine -\nhome visit',
-    },
-    {
-      name: 'Physio - home visit',
-    },
-    {
-      name: 'Doctor - home visit',
-    },
-    {
-      name: 'Clinics',
-    },
-  ];
+  const providerList = orderList
 
   useEffect(() => {
     getBannerAd();

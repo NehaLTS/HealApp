@@ -67,6 +67,8 @@ export const ClientOrderServices = () => {
     } as unknown as HeadersInit,
   });
 
+
+
   const orderProvider = (body: {
     client_id: string;
     patient_type: string;
@@ -82,10 +84,11 @@ export const ClientOrderServices = () => {
     Instructions_for_arrival: string;
     Payment_mode: string;
     TotalCost: string;
-    menu_id: string;
-    reason: string;
+    latitude: string;
+    longitude: string;
+    provider_type_id: string;
   
-  }): Promise<order_provider> =>
+  }): Promise<any> =>
     sendRequest(ORDER_PROVIDER, {
       method: POST,
       body: body as unknown as BodyInit,

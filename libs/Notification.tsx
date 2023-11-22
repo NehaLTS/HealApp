@@ -2,6 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { DeviceEventEmitter } from 'react-native';
 
+
 const requestPermission = async () => {
   try {
     await messaging().requestPermission();
@@ -38,12 +39,14 @@ export const checkPermission = async () => {
 };
 
 export const createNotificationListeners = () => {
+
   // Handle incoming messages in the foreground
   const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
     const { notification } = remoteMessage;
     console.log('messagesOnMessageTextDatat', remoteMessage.data);
 
-    DeviceEventEmitter.emit('DoctorNotification', remoteMessage.data);
+ setLocalData('ORDER', {eventData:remoteMessage.data, orderStatus: remoteMessage?.notification?.title})   
+   DeviceEventEmitter.emit('DoctorNotification', remoteMessage);
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);
   });

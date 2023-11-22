@@ -10,7 +10,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useEffect, useRef, useState } from 'react';
-import { DeviceEventEmitter, StyleSheet, View } from 'react-native';
+import { Alert, DeviceEventEmitter, StyleSheet, View } from 'react-native';
 import HomeScreenControlller from './HomeScreenController';
 
 const HomeScreen = () => {
@@ -29,9 +29,9 @@ const HomeScreen = () => {
     })
    
     const interval = setInterval(() => {
-      console.log("acceptOrder", acceptOrder)
       if(acceptOrder){ 
-      console.log('accept')
+        Alert.alert('updateLocation api hit after 1 minute')
+      console.log('accept', acceptOrder)
         updateLocation()
       }
       },100000);
@@ -74,7 +74,8 @@ const HomeScreen = () => {
             height={getWidth(36)}
             fontSized={getWidth(fontSize.textL)}
             background={colors.white}
-            onPress={OnPressTakeOrder}
+            onPress={()=>{Alert.alert('hii')
+               OnPressTakeOrder()}}
           />
           <TextButton
             title="Cancel an order"

@@ -27,10 +27,13 @@ import {
   View,
 } from 'react-native';
 import HomeViewController from './HomeViewController';
+import ProviderArrivalInfo from 'components/common/ProviderArrivalInfo';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
+  const localData= getLocalData('ORDER')
   // const [isVisible, setIsVisible] = useState<boolean>(false); TODO: To open add address modal
 
   const {
@@ -158,6 +161,10 @@ const HomeScreen = () => {
           defaultValue={''}
         />
       )} */}
+{console.log('providerData1111', localData)}
+      {localData?.providerDetail&& <ProviderArrivalInfo onPress={()=>{
+        navigation.navigate(NavigationRoutes.SearchDoctor,{providerData:localData?.providerDetail, orderId:localData?.orderId})
+      }}/>}
     </>
   );
 };

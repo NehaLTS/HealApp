@@ -36,7 +36,9 @@ export const AuthServicesProvider = () => {
     const OnProviderCreateSignUp = (body: {
         email: string;
         password: string;
-        device_token:string
+        device_token:string;
+        latitude:string;
+        longitude:string
     }): Promise<UserTypeProvider> =>
         sendRequest(CREATE_SIGNUP_PROVIDER, {
             method: POST,

@@ -148,32 +148,32 @@
   "home": {
     "providerList": [
       {
-        "id": 1,
+        "provider_type_id": 1,
         "image": "assets/icon/doctor.png",
         "name": "Doctor - home visit"
       },
       {
-        "id": 2,
+        "provider_type_id": 2,
         "image": "assets/icon/physio.png",
         "name": "Physio - home visit"
       },
       {
-        "id": 3,
+        "provider_type_id": 3,
         "image": "assets/icon/nurse.png",
         "name": "Nurse - home visit"
       },
       {
-        "id": 4,
+        "provider_type_id": 4,
         "image": "assets/icon/healer.png",
         "name": "Alternative medicine"
       },
       {
-        "id": 5,
+        "provider_type_id": 5,
         "image": "assets/icon/doctor.png",
         "name": "Doctor - home visit"
       },
       {
-        "id": 6,
+        "provider_type_id": 6,
         "image": "assets/icon/healer.png",
         "name": "Alternative medicine"
       }

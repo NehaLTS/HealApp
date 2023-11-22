@@ -42,6 +42,7 @@ const ProviderDetailController = () => {
   const onBlurProviderType = () => validateProviderType();
 
   const onChangeProviderType = (value: ProviderType) => {
+    
     setSelectedProvider(value);
     setProviderTypeError('');
     if (value.specialties) setSpecialityList(value.specialties);

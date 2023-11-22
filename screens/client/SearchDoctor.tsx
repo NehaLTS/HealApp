@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import arrowBack from "assets/icon/arrowBack.png";
 import Button from "components/common/Button";
 import Text from "components/common/Text";
@@ -19,24 +19,25 @@ import { Location } from "libs/types/UserType";
 import Geolocation from 'react-native-geolocation-service';
 import SearchDoctorController from "./SearchDoctorController";
 import ArrivalTime from "components/common/ArrivalTime";
-import {LoaderLarge} from "components/common/Loader";
+import Loader , {LoaderLarge} from "components/common/Loader";
 import TextButton from "components/common/TextButton";
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const localData= getLocalData('USER')
   const {setCurrentLocationOfUser} =UseClientUserContext()
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const {handleNextButtonPress, showRateAlert, showLoader, SearchDoctorLocation, disabled, calculateTime}= SearchDoctorController()
+  const {handleNextButtonPress, showRateAlert, disabled, calculateTime}= SearchDoctorController()
   const [providerLocation, setProviderLocation]=useState<{latitude:number, longitude:number}>();
   const [showDoctor,setShowDoctor]= useState(false)
   const [showTimer, setShowTimer]=useState(false)
   const [loader, setLoader]= useState(true)
   const [showCancelButon, setShowCancelButon]= useState(false)
   const [stausOfArriving, setStausOfArriving]= useState<string>('Estimated arrival')
-
+  const route = useRoute<any>();
+  const providerData = route?.params?.providerData ?? '';
   useLayoutEffect(() => {
+  
     navigation.setOptions({
       headerTitleAlign: "center",
       headerLeft: () => (
@@ -56,8 +57,8 @@ const SearchDoctor = () => {
           setCurrentLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            latitudeDelta: 0.0022,
-            longitudeDelta: 0.0021,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
             timestamp: position.timestamp,
           },
           );
@@ -76,24 +77,39 @@ const SearchDoctor = () => {
     };
   }, []);
 
-  useEffect(()=>{
+
+  const getEventUpdate=()=>{
     DeviceEventEmitter.addListener('DoctorNotification',(event)=>{
+         
+    setShowCancelButon(true)
+    setStausOfArriving('On the way')
+    if(event.title==="Accept Order"){
       setShowTimer(true)
-      setShowCancelButon(true)
-      setStausOfArriving('On the way')
-      setProviderLocation({latitude: parseFloat(event.latitude), longitude: parseFloat(event.longitude)})
-      setTimeout(()=>{
-        setShowCancelButon(false)
-       }, 300000)
-      console.log("doctore Send Event", event)
-    }   
+    }
+    setTimeout(()=>{
+      setShowCancelButon(false)
+     }, 300000)
+      setProviderLocation({latitude: parseFloat(event.data.latitude), longitude: parseFloat(event.data.longitude)})
+       }   
     )
-  return DeviceEventEmitter.removeAllListeners('DoctorNotification')
+  }
+  useEffect(()=>{
+    const interval = setInterval(() => {
+      getEventUpdate()
+      console.log('0000Wich')
+   
+      },3000);
+ 
+    return () => {
+      clearInterval(interval);
+      DeviceEventEmitter.removeAllListeners('DoctorNotification')
+    }
   },[])
+
   useEffect(()=>{
     createNotificationListeners()
-    SearchDoctorLocation()
-    setProviderLocation({latitude: parseFloat(localData?.providerLocation?.latitude??0.0), longitude: parseFloat(localData?.providerLocation?.longitude??0.0)})
+    // SearchDoctorLocation()
+    setProviderLocation({latitude: parseFloat(providerData?.latitude??0.0), longitude: parseFloat(providerData?.longitude??0.0)})
   },[])
 
   setTimeout(()=>{
@@ -111,22 +127,20 @@ const SearchDoctor = () => {
   return (
     <View style={styles.mainContainer}>
       <View >
-     {showTimer&&<ArrivalTime totalTime={60}/>}
+     {showTimer&&<ArrivalTime totalTime={Math.round(calculateTime().minutes)}/>}
       <Text style={styles.lookingDoctor} title={providerLocation!==undefined &&providerLocation.latitude===0.0?t("Looking for a doctor"):("Doctor is found!")} />
       </View>
       <View style={styles.mapContainer}>
-      {providerLocation &&providerLocation.latitude===0.0&&<LoaderLarge/>}
+      {providerLocation &&providerLocation.latitude===0.0|| loader&&<LoaderLarge/>}
        <MapView
         provider={PROVIDER_GOOGLE}
         zoomEnabled
-        zoomTapEnabled
-followsUserLocation
-showsUserLocation
-
+        
+        followsUserLocation 
+        showsUserLocation
         showsTraffic
         focusable
         showsBuildings
-        initialRegion={currentLocation}
         region={currentLocation} 
         style={{flex:1}}> 
           {/* { currentLocation!==undefined&&currentLocation.latitude!==0.0&& ( 
@@ -151,11 +165,12 @@ showsUserLocation
               }}
               
               title="Doctor Location">
+                <Image source={require("../../assets/icon/LocationMarker.png")} resizeMode='contain' width={getWidth(32)} height={getWidth(32)}/>
               </Marker>)} 
             </MapView>
            
-          {!loader&& providerLocation!==undefined && providerLocation.latitude!==0.0? <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20), bottom:getHeight(50)}}>
-              <DoctorDetailCard isPrimary={showRateAlert} showBothCards={showRateAlert&&providerLocation!=undefined} status={stausOfArriving} showProvider={providerLocation!=undefined} time={calculateTime}/>
+          {!loader&& showDoctor&& providerLocation!==undefined && providerLocation.latitude!==0.0? <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20), bottom:getHeight(50)}}>
+              <DoctorDetailCard isPrimary={showRateAlert} showBothCards={showRateAlert&&providerLocation!=undefined} status={stausOfArriving} showProvider={providerLocation!=undefined} time={calculateTime()} providerData={providerData}/>
               </View>:null}
       </View>
       <View >

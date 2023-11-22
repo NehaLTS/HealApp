@@ -7,12 +7,15 @@ import { useState } from 'react';
 import useToast from 'components/common/useToast';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import { setLocalData ,getLocalData} from 'libs/datastorage/useLocalStorage';
-import { useTranslation } from 'react-i18next';
+import { useSSR, useTranslation } from 'react-i18next';
+import { UseUserContextProvider } from 'contexts/useUserContextProvider';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
 const RegistrationViewController = () => {
   const navigation = useNavigation();
   const { OnProviderCreateSignUp } = AuthServicesProvider();
   const { setToken, setUserId } = UseProviderUserContext();
+  const {currentLocationOfUser} = UseClientUserContext()
   const { showToast, renderToast } = useToast();
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -64,7 +67,8 @@ const RegistrationViewController = () => {
         emailRef.current.value,
         passwordRef.current.value,
         deviceToken,
-      );
+        currentLocationOfUser?.latitude,
+        currentLocationOfUser?.longitude);
 
     //  navigation.reset({
     //         index: 0,
@@ -76,6 +80,8 @@ const RegistrationViewController = () => {
     email: string,
     password: string,
     device_token: string,
+    latitude:string,
+     longitude:string
   ) => {
     setIsLoading(true);
     if (email !== undefined && password != undefined) {
@@ -83,6 +89,8 @@ const RegistrationViewController = () => {
         email,
         password,
         device_token,
+        latitude:latitude,
+        longitude:longitude
       });
 
       console.log('response is ', res);
