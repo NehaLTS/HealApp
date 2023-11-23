@@ -75,7 +75,7 @@ const OrderDetailsController = () => {
     ) {
       setShowSummary(true);
     }
-   
+   console.log('currentLocationOfUser.latitude,' ,currentLocationOfUser)
     if (showSummary) {
     const DAAT=  {
       client_id:userId,

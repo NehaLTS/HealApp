@@ -8,14 +8,11 @@ import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
 import { fontFamily } from 'designToken/fontFamily';
 
-const ProviderArrivalInfo = ({onPress}:{ onPress:()=>void}) => {
+const ProviderArrivalInfo = ({ onPress}:{ onPress:()=>void}) => {
 
   return (
-    <>
    
-      <Modal isVisible={true}>
         <TouchableOpacity style={styles.modalView} onPress={onPress}>
-          <View style={styles.innerContainer}>
             <Image
               source={require('../../assets/icon/physio.png')}
               style={styles.icon}
@@ -43,10 +40,7 @@ const ProviderArrivalInfo = ({onPress}:{ onPress:()=>void}) => {
                 <Text style={styles.callButtonText} title={'Call the doctor'} />
               </TouchableOpacity>
             </View>
-          </View>
         </TouchableOpacity>
-      </Modal>
-    </>
   );
 };
 
@@ -68,7 +62,10 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(20),
     padding: getHeight(15),
     elevation: 5,
+    shadowColor:'brown',
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: getWidth(16),
   },
   notificationText: {
     fontSize: getWidth(fontSize.textS),

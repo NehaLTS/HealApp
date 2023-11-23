@@ -1,7 +1,7 @@
 import Loader from 'components/common/Loader';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { setLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +20,7 @@ const ProviderPaymentController = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
   const { t } = useTranslation();
+  const providerServicesData=getLocalData('PROVIDERSERVICES')
 
   const { setCurrentStep, setProviderProfile, providerProfile, userId, token } =
     UseProviderUserContext();
@@ -104,7 +105,7 @@ const ProviderPaymentController = () => {
       });
 
       setIsLoading(true);
-
+console.log('providerServicesData', providerServicesData)
       const res = await OnUpdateProviderUserDetails?.(
         {
           firstname: providerProfile?.firstName ?? '',
@@ -123,6 +124,8 @@ const ProviderPaymentController = () => {
           branch: branchRef.current.value,
           business_registration_number: registrationNumberRef.current.value,
           account: accountRef.current.value,
+          specialty_id:providerProfile.speciality.id,
+        
         },
         token,
       );

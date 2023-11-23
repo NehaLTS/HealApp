@@ -13,14 +13,19 @@ const ProviderServicesController = () => {
   const [services, setServices] = useState<ProviderServices[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
+  const [activeSelected ,setSelectedServices] = useState<ProviderServices[]>([]);
 
+
+ 
   const getProviderServices = async () => {
     setIsLoading(true);
     let response = await onGetProviderService({
       provider_id: providerProfile?.provider?.id,
       specialty_id: providerProfile?.speciality?.id,
     },token);
+    console.log(' response.services', response)
     if (response && response.services) {
+      console.log(' response.services33', response.services)
       setServices(response.services);
     }
     setIsLoading(false);
@@ -31,11 +36,23 @@ const ProviderServicesController = () => {
   }, []);
   const onCheckedPress = (index: number) => {
     let data = [...services];
+
     if (data[index] && data[index]?.isSelected) {
       data[index].isSelected = false;
     } else {
       data[index].isSelected = true;
     }
+    let updatedSelectedMenu: ProviderServices[]
+    if (
+      data.find((selectedItem) => selectedItem.id === data[index].id)
+    ) {
+      updatedSelectedMenu = data.filter(
+        (selectedItem) => selectedItem.id !== data[index].id,
+      );
+    } else {
+      updatedSelectedMenu = [...data];
+    }
+    setSelectedServices(updatedSelectedMenu)
     setServices(data);
   };
 
@@ -45,8 +62,10 @@ const ProviderServicesController = () => {
 
   const onPressNext = () => {
 
-    let selectedServices=services.filter(services => services.isSelected);
-    console.log("selected services ", selectedServices)
+    let selectedServices=activeSelected
+    services.filter(services => services.isSelected);
+    console.log("selected services ", activeSelected)
+    
     setLocalData('PROVIDERSERVICES',selectedServices) ;
     navigation.reset({
       index: 0,

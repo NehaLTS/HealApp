@@ -15,9 +15,10 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Alert,
   I18nManager,
   Image,
   ScrollView,
@@ -162,9 +163,10 @@ const HomeScreen = () => {
         />
       )} */}
 {console.log('providerData1111', localData)}
-      {localData?.providerDetail&& <ProviderArrivalInfo onPress={()=>{
+      {localData?.providerDetail&& 
+      <View style={{ marginVertical:getHeight(20), alignItems:'center', backgroundColor:'transparent'}}><ProviderArrivalInfo onPress={()=>{  
         navigation.navigate(NavigationRoutes.SearchDoctor,{providerData:localData?.providerDetail, orderId:localData?.orderId})
-      }}/>}
+      }}/></View>}
     </>
   );
 };

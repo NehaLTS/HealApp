@@ -61,7 +61,7 @@ export const AuthServicesProvider = () => {
         branch: string;
         business_registration_number: string;
         account: string;
-        
+        specialty_id:string;
     }, accessToken:string): Promise<UserTypeProvider> =>
         sendRequest(UPDATE_SIGNUP_PROVIDER, {
             method: PATCH,

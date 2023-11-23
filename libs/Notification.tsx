@@ -43,7 +43,6 @@ export const createNotificationListeners = () => {
   // Handle incoming messages in the foreground
   const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
     const { notification } = remoteMessage;
-    console.log('messagesOnMessageTextDatat', remoteMessage.data);
 
  setLocalData('ORDER', {eventData:remoteMessage.data, orderStatus: remoteMessage?.notification?.title})   
    DeviceEventEmitter.emit('DoctorNotification', remoteMessage);

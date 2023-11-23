@@ -40,7 +40,7 @@ const forceAlert = () => {
   order_id:orderId,
   latitude:currentLocationOfUser.latitude,
   longitude:currentLocationOfUser.longitude}).then((res)=>{
-    setLocalData('ORDER', {orderCreated:true, providerDetail:providerData, orderId:orderId})
+    setLocalData('ORDER', { providerDetail:providerData, orderId:orderId})
     console.log("orderSendRequest", res)
   })
   setDisable(true)

@@ -28,6 +28,7 @@ const DoctorDetailCard = ({
 }
 providerData:any
 }) => {
+  console.log('ratingData', providerData)
   return (
     <>
       {isPrimary || showBothCards ? (
@@ -65,6 +66,7 @@ providerData:any
                   source={require('../../../assets/icon/star.png')}
                   style={styles.starIcon}
                 />
+                <Text style={styles.rating} title={'4.8'} />
               </View>
               <View style={styles.detailsContainer}>
                 <Text style={styles.moreInfo} title={'More info'} />
@@ -76,7 +78,7 @@ providerData:any
                   <Text style={styles.title} title={'Call the doctor'} />
                 </View>
                 <Text style={styles.arrivalText} title={status} />
-                <Text style={styles.time} title={ `${Math.round(time.minutes)}${' min'}`} />
+                <Text style={styles.time} title={ `${Math.round(time.minutes===0?time.seconds:time.minutes)}${' min'}`} />
               </View>
             </View>
           </View>
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: getHeight(dimens.marginM),
-    elevation: 2,
+    elevation: getWidth(7),
     paddingHorizontal: getWidth(dimens.marginM),
     paddingVertical: getWidth(dimens.imageS + dimens.marginS),
     margin: getWidth(dimens.marginS),
@@ -115,14 +117,15 @@ const styles = StyleSheet.create({
     borderRadius: getWidth(5),
     shadowColor: colors.black,
     alignItems: 'center',
-    elevation: getWidth(dimens.borderBold),
-    paddingVertical: 10,
-    paddingHorizontal:20
+    elevation: getWidth(7),
+    paddingVertical: getHeight(dimens.marginS),
+    paddingHorizontal: getWidth(15),
   },
   doctorTitle: {
-    fontSize: 20,
+    fontSize: getWidth(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
+    width:'100%'
   },
   detailItem: {
     gap: getHeight(dimens.marginM),
@@ -130,8 +133,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
   },
+
   doctorIconContainer: {
     position: 'relative',
+    shadowColor: colors.black,
+    borderRadius: getWidth(50),
+    elevation: getWidth(10),
   },
   doctorIcon: {
     width: getWidth(110),
@@ -140,10 +147,11 @@ const styles = StyleSheet.create({
   },
   starIcon: {
     position: 'absolute',
-    bottom: getHeight(dimens.marginS),
-    right: getHeight(dimens.marginS),
+    bottom: getHeight(dimens.paddingXs),
+    right: getHeight(dimens.paddingXs),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
+    resizeMode: 'contain',
   },
   phoneIcon: {
     width: getWidth(dimens.sideMargin + 5),
@@ -151,11 +159,25 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   arrivalText: {
-    fontFamily: fontFamily.medium,
+    fontFamily: fontFamily.bold,
     fontSize: getWidth(fontSize.textL),
+    marginVertical: getHeight(3),
+  },
+  rating: {
+    position: 'absolute',
+    bottom: getHeight(-18),
+    right: getHeight(dimens.paddingXs + 3),
+    fontSize: getWidth(fontSize.textL),
+  },
+moreInfo: {
+    fontSize: getWidth(fontSize.textL),
+    marginTop: getHeight(dimens.borderBold),
+    textAlign: 'left',
+    marginBottom: getHeight(dimens.marginS + 8),
   },
   time: {
     fontSize: getWidth(fontSize.textM),
+    fontFamily: fontFamily.light,
   },
   cardBoth: {
     backgroundColor: colors.white,
@@ -185,16 +207,8 @@ const styles = StyleSheet.create({
     gap: getWidth(5),
     justifyContent: 'center',
   },
-  starIconText: {
-    fontSize: getWidth(fontSize.textL),
-    alignSelf: 'flex-end',
-    paddingBottom: getHeight(dimens.marginM),
-  },
-  moreInfo: {
-    fontSize: getWidth(fontSize.textL),
-    marginTop: 10,
-    textAlign: 'left',
-  },
+
+
   detailsContainer: {
     gap: 5,
     justifyContent: 'center',
