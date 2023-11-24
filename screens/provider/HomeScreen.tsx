@@ -1,32 +1,40 @@
+import avatar from 'assets/icon/avatar.png';
+import logo from 'assets/icon/healLogo.png';
+import mobile from 'assets/icon/mobile.png';
+import waze from 'assets/icon/waze.png';
 import Button from 'components/common/Button';
 import { RNHeader } from 'components/common/Header';
 import RNModal from 'components/common/Modal';
+import SelectImage from 'components/common/SelectImage';
 import ToggleButton from 'components/common/SwitchButton';
-import Text from 'components/common/Text';
+import Text, { AnimatedText } from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
+import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  Animated,
   DeviceEventEmitter,
   Image,
+  Animated as RNAnimated,
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
-import avatar from 'assets/icon/avatar.png';
-import logo from 'assets/icon/healLogo.png';
-import SelectImage from 'components/common/SelectImage';
-import { createNotificationListeners } from 'libs/Notification';
+import Animated, {
+  FadeInLeft,
+  FadeInUp,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { ProviderProfile } from 'libs/types/UserType';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -35,6 +43,7 @@ const HomeScreen = () => {
     available?.isProviderAvailable,
   );
   const [isCancelOrder, setIsCancelOrder] = useState(false);
+  const [isSeeMore, setIsSeeMore] = useState(false);
   // const [isOrderCanceled, setIsOrderCanceled] = useState(false);
   const [isVisibleLicense, setIsVisibleLicense] = useState(false);
   const [notification, setNotification] = useState(false);
@@ -43,10 +52,11 @@ const HomeScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const { acceptOrder, OnPressTakeOrder, updateLocation } =
     HomeScreenControlller();
-
   useEffect(() => {
     createNotificationListeners();
   }, []);
+
+  const modalHeight = useSharedValue(getHeight(360));
 
   const getImageUrl = (url: string) => setLicensePicture(url);
   const onPressUpload = () => {
@@ -66,10 +76,9 @@ const HomeScreen = () => {
   const onConfirmCancelOrder = (pressOn: string) => {
     if (pressOn === 'yes') {
       setIsCancelOrder(false);
+      setNotification(false);
     } else {
       setIsCancelOrder(false);
-      setNotification(false);
-      // setIsOrderCanceled(false);
     }
   };
 
@@ -102,54 +111,245 @@ const HomeScreen = () => {
       setIsAvailable(available);
     }
   };
+  const onPressSeeMore = () => {
+    if (isSeeMore) {
+      modalHeight.value = withSpring(getHeight(360));
+      setIsSeeMore(false);
+    } else {
+      modalHeight.value = withSpring(getHeight(652));
+      setIsSeeMore(true);
+    }
+  };
 
+  const CountdownTimer = () => {
+    const [seconds, setSeconds] = useState(300);
+    useEffect(() => {
+      const interval = setInterval(() => {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }, [seconds]);
+
+    const formatTime = (time) => {
+      const minutes = Math.floor(time / 60);
+      const remainingSeconds = time % 60;
+      return `${minutes}:${
+        remainingSeconds < 10 ? '0' : ''
+      }${remainingSeconds}`;
+    };
+
+    return (
+      <AnimatedText style={styles.timerText} title={formatTime(seconds)} />
+    );
+  };
+
+  const onPressCancelOrder = () => {
+    setIsCancelOrder(true);
+  };
   const getNewOrderView = () => (
     <RNModal
       isVisible={
-        notification && isAvailable
-        // || isOrderCanceled
+        // notification && isAvailable
+        true
       }
       style={styles.modal}
       backdropOpacity={1}
       backdropColor={colors.transparent}
     >
-      <View style={styles.modalView}>
-        <Text style={styles.details} title={'Chest pain'} />
-        <Text
-          style={styles.details}
-          title={`Ordered: ${' voltaren shot, clacksen shot'}`}
+      {!isSeeMore && (
+        <AnimatedText
+          style={{
+            ...styles.details,
+            fontSize: getHeight(fontSize.heading),
+            textAlign: 'center',
+            marginBottom: getHeight(40),
+            color: colors.black,
+          }}
+          title={'You have a new order!'}
         />
-        <Text
-          style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-          title={`${'Ilana Vexler'}    ${'2'} km, ${'~ 30'} min`}
-        />
-        <TextButton
-          title="See more details"
-          fontSize={getWidth(fontSize.textXl)}
-          style={styles.seeMoreButton}
-        />
-        <View style={styles.footerContainer}>
-          <Button
-            title="Take an order"
-            style={styles.takeOrderButton}
-            isSmall
-            width={getWidth(150)}
-            height={getWidth(36)}
-            fontSized={getWidth(fontSize.textL)}
-            background={colors.white}
-            onPress={() => {
-              Alert.alert('hii');
-              OnPressTakeOrder();
-            }}
+      )}
+      <Animated.View style={{ ...styles.modalView, height: modalHeight }}>
+        {isSeeMore ? (
+          <>
+            <AnimatedText
+              style={{
+                ...styles.details,
+                fontSize: getHeight(fontSize.heading),
+                textAlign: 'center',
+                marginBottom: 0,
+              }}
+              title={'You have a new order!'}
+              entering={FadeInUp.duration(400).delay(400)}
+            />
+            {acceptOrder && (
+              <AnimatedText
+                style={{ ...styles.smallText, marginBottom: getHeight(10) }}
+                title={'*Client has 5 minutes to cancel an order for free'}
+                entering={FadeInLeft.duration(400).delay(500)}
+                numberOfLines={1}
+              />
+            )}
+            <AnimatedText
+              style={{ ...styles.details, marginTop: getHeight(20) }}
+              title={'Chest pain'}
+              entering={FadeInLeft.duration(400).delay(500)}
+            />
+            <AnimatedText
+              style={{
+                ...styles.details,
+                borderBottomWidth: getWidth(0.5),
+                borderColor: colors.offWhite,
+                paddingBottom: getHeight(16),
+                fontSize: getHeight(fontSize.textXl - 1),
+              }}
+              title={`Ordered voltaren shot, clacksen shot`}
+              entering={FadeInLeft.duration(400).delay(600)}
+            />
+            <AnimatedText
+              style={styles.otherDetails}
+              title={`${'Ilana Vexler'}  ${'2'}km, ~${'30'}min`}
+              entering={FadeInLeft.duration(400).delay(700)}
+            />
+            <AnimatedText
+              style={styles.otherDetails}
+              title={'Haifa, Zionut st. 2'}
+              entering={FadeInLeft.duration(400).delay(800)}
+            />
+            <AnimatedText
+              style={{
+                ...styles.otherDetails,
+                borderBottomWidth: getWidth(0.5),
+                borderColor: colors.offWhite,
+                paddingBottom: getHeight(16),
+              }}
+              title={'3 entrance from the right, 3rd floor, ap.6'}
+              entering={FadeInLeft.duration(400).delay(900)}
+            />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: getHeight(14),
+                marginBottom: acceptOrder
+                  ? getHeight(dimens.marginM)
+                  : getHeight(dimens.marginL),
+                alignItems: 'center',
+              }}
+            >
+              <TextButton
+                title={'See on Waze '}
+                fontSize={getHeight(fontSize.textXl)}
+                style={{
+                  ...styles.seeOnWaze,
+                }}
+                onPress={onPressSeeMore}
+                entering={FadeInLeft.duration(400).delay(1000)}
+              />
+              <Animated.Image
+                source={waze}
+                style={{
+                  width: getWidth(18),
+                  height: getHeight(20),
+                  resizeMode: 'center',
+                }}
+                entering={FadeInLeft.duration(400).delay(1180)}
+              />
+            </View>
+            {acceptOrder && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  gap: getHeight(14),
+                  marginBottom: getHeight(dimens.marginL),
+                  alignItems: 'center',
+                }}
+              >
+                <TextButton
+                  title={'Call the client'}
+                  fontSize={getHeight(fontSize.textXl)}
+                  style={styles.seeOnWaze}
+                  entering={FadeInLeft.duration(400).delay(1100)}
+                />
+                <Animated.Image
+                  source={mobile}
+                  style={{
+                    width: getWidth(18),
+                    height: getHeight(20),
+                    resizeMode: 'center',
+                  }}
+                  entering={FadeInLeft.duration(400).delay(1180)}
+                />
+              </View>
+            )}
+          </>
+        ) : (
+          <>
+            <Text style={styles.details} title={'Chest pain'} />
+            <Text
+              style={styles.details}
+              title={`Ordered: ${' voltaren shot, clacksen shot'}`}
+            />
+            <Text
+              style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
+              title={`${'Ilana Vexler'}    ${'2'} km, ${'~ 30'} min`}
+            />
+          </>
+        )}
+        {!acceptOrder && (
+          <TextButton
+            title={isSeeMore ? 'See less details' : 'See more details'}
+            fontSize={getHeight(fontSize.textXl)}
+            style={styles.seeMoreButton}
+            onPress={onPressSeeMore}
           />
+        )}
+        <View
+          style={{
+            ...styles.footerContainer,
+            gap: acceptOrder ? getHeight(10) : getHeight(dimens.marginM),
+          }}
+        >
+          {!acceptOrder && (
+            <Button
+              title="Take an order"
+              style={styles.takeOrderButton}
+              isSmall
+              width={getWidth(150)}
+              height={getWidth(36)}
+              fontSized={getHeight(fontSize.textL)}
+              background={colors.white}
+              onPress={() => {
+                OnPressTakeOrder();
+                modalHeight.value = withSpring(getHeight(652));
+                setIsSeeMore(true);
+              }}
+            />
+          )}
+
+          {acceptOrder && (
+            <>
+              <View style={styles.timerContainer}>
+                <CountdownTimer />
+              </View>
+              <AnimatedText
+                style={styles.smallText}
+                title={'*You have 5 minutes to cancel an order for free'}
+                entering={FadeInLeft.duration(400).delay(500)}
+                numberOfLines={1}
+              />
+            </>
+          )}
           <TextButton
             title="Cancel an order"
             fontSize={getWidth(fontSize.textL)}
             style={styles.cancelOrderButton}
-            onPress={() => setIsCancelOrder(true)}
+            onPress={onPressCancelOrder}
           />
         </View>
-      </View>
+      </Animated.View>
     </RNModal>
   );
 
@@ -270,16 +470,16 @@ const HomeScreen = () => {
     title: string;
     isActive: boolean;
   }) => {
-    const [fadeAnim] = useState(new Animated.Value(0.4));
+    const [fadeAnim] = useState(new RNAnimated.Value(0));
     useEffect(() => {
-      Animated.timing(fadeAnim, {
+      RNAnimated.timing(fadeAnim, {
         toValue: 1,
         duration: 900,
         useNativeDriver: false,
       }).start();
     }, [fadeAnim]);
     return (
-      <Animated.Text
+      <RNAnimated.Text
         style={[
           isActive ? styles.isAvailable : styles.notAvailable,
           {
@@ -288,7 +488,7 @@ const HomeScreen = () => {
         ]}
       >
         {title}
-      </Animated.Text>
+      </RNAnimated.Text>
     );
   };
 
@@ -338,12 +538,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    flex: 0.2,
+    flex: 0.13,
   },
   notAvailable: {
     textAlign: 'center',
     minWidth: '25%',
     fontFamily: fontFamily.medium,
+    fontSize: getHeight(fontSize.textXl),
   },
   modal: {
     justifyContent: 'flex-end',
@@ -362,13 +563,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderTopLeftRadius: getHeight(dimens.marginL),
     borderTopEndRadius: getHeight(dimens.marginL),
-    paddingHorizontal: getWidth(dimens.marginM),
+    paddingHorizontal: getHeight(dimens.marginM),
     paddingTop: getWidth(dimens.paddingL),
   },
   details: {
     color: colors.white,
-    marginBottom: getHeight(dimens.paddingS + dimens.borderBold),
-    fontSize: getWidth(fontSize.textXl),
+    marginBottom: getHeight(dimens.paddingS),
+    fontSize: getHeight(fontSize.textXl),
+  },
+  smallText: {
+    color: colors.white,
+    fontSize: getHeight(fontSize.textM),
+    alignSelf: 'center',
+  },
+  otherDetails: {
+    color: colors.white,
+    marginBottom: getHeight(dimens.paddingS),
+    fontSize: getHeight(fontSize.textL),
+    paddingLeft: getWidth(3),
   },
   takeOrderButton: {
     backgroundColor: colors.white,
@@ -382,12 +594,14 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
     marginTop: getHeight(dimens.marginS),
   },
+  seeOnWaze: {
+    color: colors.white,
+  },
   footerContainer: {
     position: 'absolute',
     bottom: 0,
     alignSelf: 'center',
     marginVertical: getHeight(dimens.paddingL),
-    gap: getHeight(dimens.marginM),
   },
   cancelOrderView: {
     backgroundColor: colors.white,
@@ -411,9 +625,10 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.semiBold,
     minWidth: '25%',
     textAlign: 'center',
+    fontSize: getHeight(fontSize.textXl),
   },
   cancelOrderText: {
-    fontSize: getWidth(fontSize.heading),
+    fontSize: getHeight(fontSize.heading),
     textAlign: 'center',
     color: colors.primary,
     fontFamily: fontFamily.medium,
@@ -434,7 +649,8 @@ const styles = StyleSheet.create({
   },
   switchToggleText: {
     textAlign: 'center',
-    flex: 0.12,
+    flex: 0.14,
+    textAlignVertical: 'center',
   },
   detailCardContainer: {
     width: '100%',
@@ -445,12 +661,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
   },
   title: {
-    fontSize: getWidth(fontSize.headingL),
+    fontSize: getHeight(fontSize.headingL),
     color: colors.primary,
   },
   cardContainer: {
-    flex: 0.68,
+    flex: 0.73,
     gap: getHeight(dimens.marginM + dimens.paddingXs),
+    paddingTop: getHeight(20),
   },
   addDocsView: {
     backgroundColor: colors.lightGrey,
@@ -471,6 +688,20 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.paddingS),
   },
   addDocument: {
-    fontSize: getWidth(fontSize.heading - 2),
+    fontSize: getHeight(fontSize.heading - 2),
+  },
+  timerContainer: {
+    borderWidth: getHeight(1),
+    borderColor: colors.offWhite,
+    borderRadius: getHeight(50),
+    height: getHeight(70),
+    width: getHeight(70),
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: getHeight(10),
+  },
+  timerText: {
+    color: colors.white,
   },
 });

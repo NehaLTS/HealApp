@@ -46,7 +46,7 @@ const ToggleButton = ({
     const translateX = interpolate(
       toggleValue.value,
       [0, 1],
-      [0, 35],
+      [0, 38],
       Extrapolate.CLAMP,
     );
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderWidth: getWidth(5),
     borderColor: colors.secondary,
     justifyContent: 'center',
-    paddingHorizontal: getWidth(10),
+    paddingHorizontal: getWidth(8),
   },
   handle: {
     width: getWidth(28),

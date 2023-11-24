@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import {
   StyleProp,
   TextStyle,
   TouchableOpacity,
+  TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
+import Animated, { AnimatedProps, FadeInLeft } from 'react-native-reanimated';
 import { fontSize } from '../../designToken/fontSizes';
 import { getHeight } from '../../libs/StyleHelper';
 import Text from './Text';
 
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 const TextButton = ({
   title,
   onPress,
@@ -17,6 +20,7 @@ const TextButton = ({
   style,
   isCapitalize,
   containerStyle,
+  ...props
 }: {
   title: string;
   onPress?: () => void;
@@ -25,9 +29,11 @@ const TextButton = ({
   style?: StyleProp<TextStyle>;
   isCapitalize?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
-}) => {
+} & FunctionComponent<AnimatedProps<TouchableOpacity>> &
+  TouchableOpacityProps &
+  any) => {
   return (
-    <TouchableOpacity onPress={onPress} style={containerStyle}>
+    <AnimatedTouchable onPress={onPress} style={containerStyle} {...props}>
       <Text
         style={[
           style,
@@ -36,7 +42,7 @@ const TextButton = ({
         ]}
         title={isCapitalize ? title?.toLocaleUpperCase() : title}
       />
-    </TouchableOpacity>
+    </AnimatedTouchable>
   );
 };
 

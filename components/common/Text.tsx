@@ -10,6 +10,8 @@ import {
   TextStyle,
   TextProps,
 } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { Text as AnimatedTextProps } from 'react-native-reanimated/lib/typescript/Animated';
 
 const Text = ({
   title,
@@ -30,6 +32,26 @@ const Text = ({
 };
 
 export default Text;
+
+export const AnimatedText = ({
+  title,
+  style,
+  children,
+  ...props
+}: {
+  title?: any;
+  style?: StyleProp<TextStyle>;
+  children?: ReactNode;
+} & TextProps &
+  AnimatedTextProps &
+  any) => {
+  return (
+    <Animated.Text adjustsFontSizeToFit {...props} style={[styles.text, style]}>
+      {title}
+      {children}
+    </Animated.Text>
+  );
+};
 
 const styles = StyleSheet.create({
   text: {
