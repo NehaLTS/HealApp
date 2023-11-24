@@ -35,6 +35,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
+import { useTranslation } from 'react-i18next';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -52,6 +53,7 @@ const HomeScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const { acceptOrder, OnPressTakeOrder, updateLocation } =
     HomeScreenControlller();
+  const { t } = useTranslation();
   useEffect(() => {
     createNotificationListeners();
   }, []);
@@ -194,7 +196,7 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, marginTop: getHeight(20) }}
-              title={'Chest pain'}
+              title={t('chest_pain')}
               entering={FadeInLeft.duration(400).delay(500)}
             />
             <AnimatedText
@@ -287,10 +289,10 @@ const HomeScreen = () => {
           </>
         ) : (
           <>
-            <Text style={styles.details} title={'Chest pain'} />
+            <Text style={styles.details} title={t('chest_pain')} />
             <Text
               style={styles.details}
-              title={`Ordered: ${' voltaren shot, clacksen shot'}`}
+              title={`Ordered: ${t(' voltaren_shot')}`}
             />
             <Text
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
@@ -300,7 +302,7 @@ const HomeScreen = () => {
         )}
         {!acceptOrder && (
           <TextButton
-            title={isSeeMore ? 'See less details' : 'See more details'}
+            title={isSeeMore ? t('less_details') : t('see_details')}
             fontSize={getHeight(fontSize.textXl)}
             style={styles.seeMoreButton}
             onPress={onPressSeeMore}
@@ -314,7 +316,7 @@ const HomeScreen = () => {
         >
           {!acceptOrder && (
             <Button
-              title="Take an order"
+              title={t('take_order')}
               style={styles.takeOrderButton}
               isSmall
               width={getWidth(150)}
@@ -336,14 +338,14 @@ const HomeScreen = () => {
               </View>
               <AnimatedText
                 style={styles.smallText}
-                title={'*You have 5 minutes to cancel an order for free'}
+                title={t('you_have_5_minutes')}
                 entering={FadeInLeft.duration(400).delay(500)}
                 numberOfLines={1}
               />
             </>
           )}
           <TextButton
-            title="Cancel an order"
+            title={t('cancel_order')}
             fontSize={getWidth(fontSize.textL)}
             style={styles.cancelOrderButton}
             onPress={onPressCancelOrder}
@@ -361,13 +363,10 @@ const HomeScreen = () => {
       animationIn={'zoomInUp'}
     >
       <View style={styles.cancelOrderView}>
-        <Text
-          style={styles.cancelOrderText}
-          title={'You want to cancel\nthis order?'}
-        />
+        <Text style={styles.cancelOrderText} title={t('you_want_cancel')} />
         <View style={styles.buttonContainer}>
           <Button
-            title="Yes"
+            title={t('yes')}
             style={styles.takeOrderButton}
             isSmall
             width={getWidth(80)}
@@ -376,7 +375,7 @@ const HomeScreen = () => {
             onPress={() => onConfirmCancelOrder('yes')}
           />
           <Button
-            title="No"
+            title={t('no')}
             style={styles.takeOrderButton}
             isSmall
             width={getWidth(80)}
@@ -401,8 +400,8 @@ const HomeScreen = () => {
       >
         {isAddDocument ? (
           <>
-            <Text style={styles.addDocument} title={'Adding documents'} />
-            <Text title={'Upload license photo'} />
+            <Text style={styles.addDocument} title={t('adding_documents')} />
+            <Text title={t('upload_license')} />
             <TouchableOpacity
               activeOpacity={licensePicture ? 1 : 0.5}
               onPress={() => setIsShowModal(true)}
@@ -426,14 +425,12 @@ const HomeScreen = () => {
           <>
             <Text
               style={styles.addDocsText}
-              title={
-                'You still cannot\nreceive patients since some\ndocuments are missing:\n\n(list of what is missing)'
-              }
+              title={t('still_receive_patients_some_documents')}
             />
           </>
         )}
         <Button
-          title={isAddDocument ? 'Upload' : 'Add missing documents'}
+          title={isAddDocument ? t('upload') : t('add_documents')}
           style={styles.takeOrderButton}
           isSmall
           isPrimary
@@ -497,21 +494,17 @@ const HomeScreen = () => {
       {RNHeader(() => null, headerLeft, headerRight)}
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <FadeInText title={'Not\navailable'} isActive={!isAvailable} />
+          <FadeInText title={t('not_available')} isActive={!isAvailable} />
           <ToggleButton
             onChange={onPressToggle}
             isDisabled={(localData as ProviderProfile)?.licensenumber === ''}
             defaultValue={isAvailable}
           />
-          <FadeInText title={'Available'} isActive={isAvailable} />
+          <FadeInText title={t('available')} isActive={isAvailable} />
         </View>
         <Text
           style={styles.switchToggleText}
-          title={
-            isAvailable
-              ? "Now you're available\nto receive orders"
-              : 'Switch toggle to available\nto start to receive orders'
-          }
+          title={isAvailable ? t('now_you_available') : t('switch_toggle')}
         />
         <View style={styles.cardContainer}>
           {DetailCard('2', 'Clients today')}

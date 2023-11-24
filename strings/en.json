@@ -166,6 +166,9 @@
   "available":"Available",
   "now_you_available":"Now you're available\nto receive orders",
   "switch_toggle":"Switch toggle to available\nto start to receive orders",
+  "you_have_5_minutes":"*You have 5 minutes to cancel an order for free",
+  "voltaren_shot":"voltaren shot, clacksen shot",
+  "less_details":"See less details",
 
   "home": {
     "providerList": [

@@ -5,7 +5,14 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import { Image, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const DoctorDetailCard = ({
   isPrimary,
@@ -13,21 +20,22 @@ const DoctorDetailCard = ({
   showBothCards,
   status,
   time,
-  providerData
+  providerData,
 }: {
   isPrimary?: boolean;
-  showProvider?:boolean;
+  showProvider?: boolean;
   showBothCards: boolean;
-  status?:string;
-  time:{
+  status?: string;
+  time: {
     hour: number;
     minutes: number;
     seconds: number;
     remainig: number;
-}
-providerData:any
+  };
+  providerData: any;
 }) => {
-  console.log('ratingData', providerData)
+  const { t } = useTranslation();
+  console.log('ratingData', providerData);
   return (
     <>
       {isPrimary || showBothCards ? (
@@ -38,23 +46,19 @@ providerData:any
           />
           <Text
             style={showBothCards ? styles.titleText : styles.title}
-            title={
-              'Price went up by 50 NIS\nsince we didn’t find an\navailable doctor in your area'
-            }
+            title={t('price_went_up_by_50_NIS')}
           />
         </View>
       ) : null}
 
-      {showProvider||showBothCards ? (
+      {showProvider || showBothCards ? (
         <View style={styles.cardDetail}>
           <Text
             style={styles.doctorTitle}
-            title={`${providerData?.firstname}${", "}${providerData?.name}`}
+            title={`${providerData?.firstname}${', '}${providerData?.name}`}
           />
 
           <View style={{}}>
-          
-       
             <View style={styles.detailItem}>
               <View style={styles.doctorIconContainer}>
                 <Image
@@ -68,20 +72,30 @@ providerData:any
                 <Text style={styles.rating} title={'4.8'} />
               </View>
               <View style={styles.detailsContainer}>
-                <TouchableOpacity style={styles.details} onPress={()=>{Linking.openURL(`tel:${providerData?.phone_number}`)}} >
+                <TouchableOpacity
+                  style={styles.details}
+                  onPress={() => {
+                    Linking.openURL(`tel:${providerData?.phone_number}`);
+                  }}
+                >
                   <Image
                     source={require('../../../assets/icon/phonecall.png')}
                     style={styles.phoneIcon}
                   />
-                  <Text style={styles.title} title={'Call the doctor'} />
+                  <Text style={styles.title} title={t('call_doctor')} />
                 </TouchableOpacity>
                 <Text style={styles.arrivalText} title={status} />
-                <Text style={styles.time} title={ `${Math.round(time.minutes===0?time.seconds:time.minutes)}${' min'}`} />
+                <Text
+                  style={styles.time}
+                  title={`${Math.round(
+                    time.minutes === 0 ? time.seconds : time.minutes,
+                  )}${t(' min')}`}
+                />
               </View>
             </View>
           </View>
         </View>
-      ):null}
+      ) : null}
     </>
   );
 };
@@ -94,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textL),
     marginVertical: getHeight(3),
   },
-rating: {
+  rating: {
     position: 'absolute',
     bottom: getHeight(-16),
     right: getHeight(dimens.paddingXs + 2),
@@ -110,10 +124,10 @@ rating: {
     fontSize: getHeight(fontSize.textM),
     fontFamily: fontFamily.light,
   },
-titleText: {
+  titleText: {
     fontSize: getHeight(fontSize.textM),
   },
-cardDetail: {
+  cardDetail: {
     backgroundColor: '#F9FDFF',
     borderRadius: getWidth(5),
     shadowColor: colors.black,
@@ -148,7 +162,7 @@ cardDetail: {
     fontSize: getHeight(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
-    width:'100%'
+    width: '100%',
   },
   detailItem: {
     gap: getHeight(dimens.marginM),
@@ -209,10 +223,8 @@ cardDetail: {
     justifyContent: 'center',
   },
 
-
   detailsContainer: {
     gap: 5,
     justifyContent: 'center',
   },
-  
 });
