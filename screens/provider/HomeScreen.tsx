@@ -153,10 +153,7 @@ const HomeScreen = () => {
   };
   const getNewOrderView = () => (
     <RNModal
-      isVisible={
-        // notification && isAvailable
-        true
-      }
+      isVisible={notification && isAvailable}
       style={styles.modal}
       backdropOpacity={1}
       backdropColor={colors.transparent}
