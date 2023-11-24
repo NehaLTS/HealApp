@@ -20,6 +20,7 @@ const ArrivalTime=({totalTime, remainingSeconds}:{totalTime:number, remainingSec
  useEffect(()=>{
     minuteRef.current= setInterval(() => {
         console.log('timeLeft.current',timeToArrive)
+       
         if(timeToArrive>0){
         const leftTime= timeToArrive-1;
         setTimeToArrive(leftTime)
@@ -32,12 +33,14 @@ const ArrivalTime=({totalTime, remainingSeconds}:{totalTime:number, remainingSec
 
 
     useEffect(()=>{
+
         timeOutRef.current = setInterval(() => {
             console.log('timeLeft.seconds',seconds)
+            setRemainingTime({minutes:timeToArrive,seconds: seconds})
             if(seconds>0){  
             const leftSeconds= seconds-1;
             setSeconds(leftSeconds)
-            setRemainingTime({minutes:timeToArrive,seconds: seconds})} 
+           } 
             else if(timeToArrive>0){ setSeconds(60)} 
             },1000);
             return ()=>{clearInterval(timeOutRef.current)}  
@@ -45,8 +48,7 @@ const ArrivalTime=({totalTime, remainingSeconds}:{totalTime:number, remainingSec
 
  useUpdateEffect(()=>{
     if(seconds===0&& timeToArrive<0){
-        setProviderStatus('arrived')
-        setLocalData('ORDER', { providerDetail:''})
+       
     clearInterval(timeOutRef.current)
     }
  },[seconds])

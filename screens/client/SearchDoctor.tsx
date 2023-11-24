@@ -52,7 +52,7 @@ const SearchDoctor = () => {
     useState<string>('Estimated arrival');
   const [secondLoader, setSecondLoader] = useState(false);
   const route = useRoute<any>();
-  const { providerStatus, setProviderStatus } = UseClientUserContext();
+  const { providerStatus, setProviderStatus, setRemainingTime } = UseClientUserContext();
   const localData = getLocalData('ORDER');
   const providerData = route?.params?.providerData ?? '';
   const providerRemainigTime = route?.params?.remaining;
@@ -113,7 +113,10 @@ const SearchDoctor = () => {
       }
       if (event.notification.title === 'Arrived') {
         setStausOfArriving('Arrived');
-        setLocalData('ORDER', { providerDetail: [] });
+        setProviderStatus('arrived')
+        setLocalData('ORDER', { providerDetail:''})
+        setRemainingTime({minutes:0,seconds: 0})
+
       }
 
       setTimeout(() => {
@@ -161,7 +164,6 @@ const SearchDoctor = () => {
     if (providerStatus === 'arrived') {
       setStausOfArriving('Arrived');
     }
-    setProviderStatus('');
   }, [providerStatus]);
 
   return (
@@ -295,8 +297,8 @@ const SearchDoctor = () => {
             providerLocation !== undefined &&
             providerLocation.latitude !== 0.0 &&
             !loader
-              ? 'Order'
-              : 'Cancel'
+              ? t('order')
+              : t('cancel')
           }
           isPrimary
           isSmall
@@ -309,7 +311,7 @@ const SearchDoctor = () => {
         {showCancelButon && (
           <TextButton
             style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
-            title={'Cancel'}
+            title={t('cancel')}
             onPress={() => {}}
           />
         )}
