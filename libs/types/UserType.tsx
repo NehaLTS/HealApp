@@ -201,6 +201,10 @@ export interface OrderDetail {
   isOrderForOther: boolean;
 }
 
+export interface RemaingTime{
+  minutes:number
+  seconds:number
+}
 export interface ProviderSpeciality {
   name: HealLanguageType;
   id: string;

@@ -15,43 +15,44 @@ const HomeScreenControlller = () => {
   const { OrderRequst, UpdateProviderLocation } = AuthServicesProvider();
   const updateLocation = () => {
     console.log('updateDtaaApiFunction');
-
-    Geolocation.watchPosition(
-      (position) => {
-        Alert.alert('dataUpdate');
-        const { latitude, longitude } = position.coords;
-        UpdateProviderLocation({
-          provider_id: userId,
-          order_id: order?.eventData?.orderId,
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString(),
-        }).then((res) => {}); // setLocation({ latitude, longitude });
-      },
-      (error) => {
-        console.log('Error getting location: ' + error.message);
-      },
-      {
-        enableHighAccuracy: true,
-      },
-    );
-  };
-  console.log('order?.eventData?.providerId', order?.eventData?.providerId);
-  console.log('order?.eventData?.orderId', order?.eventData?.orderId);
-  const OnPressTakeOrder = () => {
-    setAcceptOrder(true);
-    // Geolocation.watchPosition(
-    //     (position) => {
-    // OrderRequst({ status:"accept",
-    // provider_id:order?.eventData?.providerId,
-    // order_id: order?.eventData?.orderId,
-    // latitude:currentLocationOfUser.latitude.toString(),
-    // longitude:currentLocationOfUser.longitude.toString()}).then((res)=>{
-    //     // console.log("res", res)
-    //     Alert.alert("ordereAccepted", res?.status)
-    // })
-    //  }, );
-  };
-  return {
+        Geolocation.watchPosition(
+            (position) => {
+                
+              const { latitude, longitude } = position.coords;
+              UpdateProviderLocation({provider_id:userId,
+                order_id:order?.eventData?.orderId,
+               latitude:position.coords.latitude.toString(),
+               longitude:position.coords.longitude.toString()}).then((res)=>{
+                Alert.alert('dataUpdate after getihng response', res)
+                })              // setLocation({ latitude, longitude });
+            },
+            (error) => {
+              console.log('Error getting location: ' + error.message);
+            },
+            {
+              enableHighAccuracy: true,
+            },
+          );
+    
+    }
+    console.log('order?.eventData?.providerId',order?.eventData?.providerId)
+    console.log('order?.eventData?.orderId',order?.eventData?.orderId)
+const OnPressTakeOrder=()=>{
+        setAcceptOrder(true)
+        // Geolocation.watchPosition(
+        //     (position) => {
+                OrderRequst({ status:"accept",
+                provider_id:order?.eventData?.providerId,
+                order_id: order?.eventData?.orderId,
+                latitude:currentLocationOfUser.latitude.toString(),
+                longitude:currentLocationOfUser.longitude.toString()}).then((res)=>{
+                    // console.log("res", res)
+                    Alert.alert("ordereAccepted", res?.status)
+                }) 
+            //  }, );
+   
+ }  
+ return {
     OnPressTakeOrder,
     acceptOrder,
     updateLocation,

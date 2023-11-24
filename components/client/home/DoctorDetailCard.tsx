@@ -1,12 +1,11 @@
-import { Image, StyleSheet, View } from 'react-native';
-import React from 'react';
+import Text from 'components/common/Text';
 import { colors } from 'designToken/colors';
-import { fontSize } from 'designToken/fontSizes';
-import { getHeight, getWidth } from 'libs/StyleHelper';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
-import Text from 'components/common/Text';
-import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React from 'react';
+import { Image, Linking, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const DoctorDetailCard = ({
   isPrimary,
@@ -69,14 +68,13 @@ providerData:any
                 <Text style={styles.rating} title={'4.8'} />
               </View>
               <View style={styles.detailsContainer}>
-                <Text style={styles.moreInfo} title={'More info'} />
-                <View style={styles.details}>
+                <TouchableOpacity style={styles.details} onPress={()=>{Linking.openURL(`tel:${providerData?.phone_number}`)}} >
                   <Image
                     source={require('../../../assets/icon/phonecall.png')}
                     style={styles.phoneIcon}
                   />
                   <Text style={styles.title} title={'Call the doctor'} />
-                </View>
+                </TouchableOpacity>
                 <Text style={styles.arrivalText} title={status} />
                 <Text style={styles.time} title={ `${Math.round(time.minutes===0?time.seconds:time.minutes)}${' min'}`} />
               </View>
@@ -91,6 +89,39 @@ providerData:any
 export default DoctorDetailCard;
 
 const styles = StyleSheet.create({
+  arrivalText: {
+    fontFamily: fontFamily.semiBold,
+    fontSize: getHeight(fontSize.textL),
+    marginVertical: getHeight(3),
+  },
+rating: {
+    position: 'absolute',
+    bottom: getHeight(-16),
+    right: getHeight(dimens.paddingXs + 2),
+    fontSize: getHeight(fontSize.textL),
+  },
+  moreInfo: {
+    fontSize: getHeight(fontSize.textL),
+    marginTop: getHeight(dimens.borderBold),
+    textAlign: 'left',
+    marginBottom: getHeight(dimens.marginS + 8),
+  },
+  time: {
+    fontSize: getHeight(fontSize.textM),
+    fontFamily: fontFamily.light,
+  },
+titleText: {
+    fontSize: getHeight(fontSize.textM),
+  },
+cardDetail: {
+    backgroundColor: '#F9FDFF',
+    borderRadius: getWidth(5),
+    shadowColor: colors.black,
+    alignItems: 'center',
+    elevation: getWidth(12),
+    paddingVertical: getHeight(7),
+    paddingHorizontal: getWidth(12),
+  },
   card: {
     backgroundColor: colors.white,
     borderRadius: getWidth(dimens.marginS),
@@ -112,17 +143,9 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageS),
     resizeMode: 'contain',
   },
-  cardDetail: {
-    backgroundColor: '#F9FDFF',
-    borderRadius: getWidth(5),
-    shadowColor: colors.black,
-    alignItems: 'center',
-    elevation: getWidth(7),
-    paddingVertical: getHeight(dimens.marginS),
-    paddingHorizontal: getWidth(15),
-  },
+
   doctorTitle: {
-    fontSize: getWidth(20),
+    fontSize: getHeight(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
     width:'100%'
@@ -158,27 +181,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.sideMargin + 4),
     resizeMode: 'contain',
   },
-  arrivalText: {
-    fontFamily: fontFamily.bold,
-    fontSize: getWidth(fontSize.textL),
-    marginVertical: getHeight(3),
-  },
-  rating: {
-    position: 'absolute',
-    bottom: getHeight(-18),
-    right: getHeight(dimens.paddingXs + 3),
-    fontSize: getWidth(fontSize.textL),
-  },
-moreInfo: {
-    fontSize: getWidth(fontSize.textL),
-    marginTop: getHeight(dimens.borderBold),
-    textAlign: 'left',
-    marginBottom: getHeight(dimens.marginS + 8),
-  },
-  time: {
-    fontSize: getWidth(fontSize.textM),
-    fontFamily: fontFamily.light,
-  },
+
   cardBoth: {
     backgroundColor: colors.white,
     borderRadius: getWidth(dimens.marginS),
@@ -198,9 +201,7 @@ moreInfo: {
     height: getHeight(dimens.marginL),
     resizeMode: 'contain',
   },
-  titleText: {
-    fontSize: getWidth(fontSize.textM),
-  },
+
   details: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -213,4 +214,5 @@ moreInfo: {
     gap: 5,
     justifyContent: 'center',
   },
+  
 });

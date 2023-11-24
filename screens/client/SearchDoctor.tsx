@@ -37,9 +37,13 @@ const SearchDoctor = () => {
   const [stausOfArriving, setStausOfArriving]= useState<string>('Estimated arrival')
   const [secondLoader, setSecondLoader]= useState(false)
   const route = useRoute<any>();
+  const{providerStatus, setProviderStatus}= UseClientUserContext()
+  const localData= getLocalData('ORDER')
   const providerData = route?.params?.providerData ?? '';
+  const providerRemainigTime=route?.params?.remaining
+ 
   useLayoutEffect(() => {
-  
+  console.log('ankita',providerData)
     navigation.setOptions({
       headerTitleAlign: "center",
       headerLeft: () => (
@@ -87,13 +91,16 @@ const SearchDoctor = () => {
          
     setShowCancelButon(true)
     setStausOfArriving('On the way')
+
     if(event.notification.title==="Accept Order"){
       setShowTimer(true)
+      setProviderStatus('On the way')
     }
     if(event.notification.title==="Arrived"){
       setStausOfArriving('Arrived')
       setLocalData('ORDER', {providerDetail:[]})
     }
+ 
     setTimeout(()=>{
       setShowCancelButon(false)
      }, 300000)
@@ -113,14 +120,13 @@ const SearchDoctor = () => {
 
   useEffect(()=>{
     createNotificationListeners()
-    // SearchDoctorLocation()
     setProviderLocation({latitude: parseFloat(providerData?.latitude??0.0), longitude: parseFloat(providerData?.longitude??0.0)})
   },[])
 
   setTimeout(()=>{
     setLoader(false)
     setSecondLoader(false)
-   }, 10000)
+   }, 20000)
 
    const onPressOrder=()=>{
     setSecondLoader(true)
@@ -130,14 +136,24 @@ const SearchDoctor = () => {
      }, 300000)
      handleNextButtonPress()
     }
+
+    useEffect(()=>{
+if(providerStatus==='arrived'){
+  setStausOfArriving('Arrived')}
+  setProviderStatus('')
+    },[providerStatus])
+   
   return (
     <View style={styles.mainContainer}>
       <View >
-     {showTimer&&<ArrivalTime totalTime={Math.round(calculateTime().minutes-1)}/>}
+     {showTimer&&
+     <ArrivalTime totalTime={providerRemainigTime? providerRemainigTime.minutes:Math.round(calculateTime().minutes)} remainingSeconds={providerRemainigTime? providerRemainigTime.seconds:Math.round(calculateTime().seconds)}/>
+     }
       <Text style={styles.lookingDoctor} title={providerLocation!==undefined &&providerLocation.latitude===0.0||loader?t("Looking for a doctor"):stausOfArriving==="Arrived"?('Doctor has arrived'):("Doctor is found!")} />
       </View>
       <View style={styles.mapContainer}>
-      {(providerLocation &&providerLocation.latitude===0.0)||( loader|| secondLoader)&&<LoaderLarge/>}
+      {(providerLocation &&providerLocation.latitude===0.0)||( loader|| secondLoader)&&<LoaderLarge/>
+      }
        <MapView
         provider={PROVIDER_GOOGLE}
         zoomEnabled
@@ -170,9 +186,33 @@ const SearchDoctor = () => {
               onPress={()=>{
                 setShowDoctor(!showDoctor)
               }}
-              title="Healer Location">
-                <Image source={require("../../assets/icon/LocationMarker.png")} resizeMode='contain' width={getWidth(32)} height={getWidth(32)}/>
-              </Marker>)} 
+           >
+<View style={styles.markerContainer}>
+                  <Image
+                    source={require('../../assets/icon/LocationMarker.png')}
+                    resizeMode="contain"
+                    style={styles.locationMarker}
+                  />
+                 {!showDoctor&& <View style={styles.marker}>
+                    <View style={styles.imageContainer}>
+                      <Image
+                        source={require('../../assets/icon/doctorIcon.png')}
+                        style={styles.doctorIcon}
+                      />
+                    </View>
+                    <View style={styles.textContainer}>
+                      <Text
+                        style={styles.doctorName}
+                        title={`${providerData?.firstname}`}
+                      />
+                      <Text
+                        style={styles.doctorName}
+                        title={`${providerData?.name}`}
+                      />
+                    </View>
+                  </View>}
+                </View>             
+                 </Marker>)} 
             </MapView>
            
           {showDoctor&& providerLocation!==undefined && providerLocation.latitude!==0.0? <View style={{ zIndex:2, position:'absolute', left:10,paddingHorizontal:getWidth(20), bottom:getHeight(50)}}>
@@ -190,7 +230,7 @@ const SearchDoctor = () => {
         height={getHeight(dimens.imageS)}
           style={{ alignSelf: 'center', marginBottom: 10 }}/>
           {showCancelButon&& <TextButton
-          style={{alignSelf:'center',fontSize:fontSize.textS}}
+          style={{alignSelf:'center',fontSize:fontSize.textXl}}
            title={"Cancel"}
           onPress={()=>{}}
        />}
@@ -235,7 +275,39 @@ const styles = StyleSheet.create({
     height:getHeight(420),
     width:'100%',
     marginBottom:getHeight(30)
-  }
+  },
+  marker: {
+    backgroundColor: '#F9FDFF',
+    padding: getWidth(dimens.marginS),
+    borderRadius: 8,
+    flexDirection: 'row',
+  },
+  doctorIcon: {
+    width: getWidth(dimens.imageXs),
+    height: getHeight(dimens.imageXs),
+    resizeMode: 'cover',
+    borderRadius: 40,
+  },
+  doctorName: {
+    fontSize: getHeight(fontSize.textS),
+  },
+  imageContainer: {
+    marginRight: getHeight(dimens.paddingXs),
+  },
+  textContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  markerContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'column-reverse',
+  },
+  locationMarker: {
+    width: getWidth(32),
+    height: getWidth(32),
+  },
 });
 
 

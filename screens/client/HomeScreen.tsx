@@ -15,7 +15,7 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -29,12 +29,19 @@ import {
 } from 'react-native';
 import HomeViewController from './HomeViewController';
 import ProviderArrivalInfo from 'components/common/ProviderArrivalInfo';
-import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import useUpdateEffect from 'libs/UseUpdateEffect';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const localData= getLocalData('ORDER')
+  const minuteRef= useRef<NodeJS.Timeout | undefined>()
+  const{providerStatus, remainingTime, setProviderStatus}= UseClientUserContext()
+  const [timeToArrive, setTimeToArrive]= useState(remainingTime?.minutes)
+  const [seconds, setSeconds]= useState(remainingTime?.seconds)
+  const timeOutRef = useRef<NodeJS.Timeout | undefined>()
   // const [isVisible, setIsVisible] = useState<boolean>(false); TODO: To open add address modal
 
   const {
@@ -53,7 +60,8 @@ const HomeScreen = () => {
     onSearch,
     userProfile,
   } = HomeViewController();
-
+ 
+ 
   const headerTitle = () => (
     <View style={styles.headerTitleContainer}>
       <View style={styles.headerTitle}>
@@ -122,6 +130,51 @@ const HomeScreen = () => {
       </View>
     );
   };
+  useUpdateEffect(()=>{
+    setTimeToArrive(remainingTime?.minutes)
+    setSeconds(remainingTime?.seconds)
+ },[remainingTime])
+
+  useEffect(()=>{
+    
+    minuteRef.current= setInterval(() => {
+        console.log('timeLeft.current',timeToArrive)
+        if(timeToArrive>0){
+        const leftTime= timeToArrive-1;
+        // timeLeft.current= leftTime;
+        setTimeToArrive(leftTime)
+        }
+        },60000);
+  return ()=>{
+     clearInterval(minuteRef.current)
+ }
+},[timeToArrive])
+
+useUpdateEffect(()=>{
+  if( timeToArrive<0){
+   
+  clearInterval(minuteRef.current)
+  }
+},[timeToArrive])
+
+useEffect(()=>{
+  timeOutRef.current = setInterval(() => {
+      console.log('timeLeft.seconds',seconds)
+      if(seconds>0){  
+      const leftSeconds= seconds-1;
+      setSeconds(leftSeconds)}
+      else if(timeToArrive>0){ setSeconds(60)} 
+      },1000);
+      return ()=>{clearInterval(timeOutRef.current)}  
+},[seconds])
+
+useUpdateEffect(()=>{
+if(seconds===0&& timeToArrive<0){
+  setProviderStatus('arrived')
+  setLocalData('ORDER', { providerDetail:''})
+clearInterval(timeOutRef.current)
+}
+},[seconds])
 
   return (
     <>
@@ -162,10 +215,10 @@ const HomeScreen = () => {
           defaultValue={''}
         />
       )} */}
-{console.log('providerData1111', localData)}
-      {localData?.providerDetail&& 
-      <View style={{ marginVertical:getHeight(20), alignItems:'center', backgroundColor:'transparent'}}><ProviderArrivalInfo onPress={()=>{  
-        navigation.navigate(NavigationRoutes.SearchDoctor,{providerData:localData?.providerDetail, orderId:localData?.orderId})
+{console.log('providerData1111', localData, providerStatus)}
+      {localData?.providerDetail&&
+      <View style={{ marginVertical:getHeight(20), alignItems:'center', backgroundColor:'transparent'}}><ProviderArrivalInfo time={timeToArrive?.toString()} status={providerStatus}  doctorName= {`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name}`}onPress={()=>{  
+        navigation.navigate(NavigationRoutes.SearchDoctor,{providerData:localData?.providerDetail, orderId:localData?.orderId, remaining:{minutes:timeToArrive, seconds:seconds}})
       }}/></View>}
     </>
   );

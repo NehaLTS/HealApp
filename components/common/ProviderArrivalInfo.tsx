@@ -8,7 +8,7 @@ import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
 import { fontFamily } from 'designToken/fontFamily';
 
-const ProviderArrivalInfo = ({ onPress}:{ onPress:()=>void}) => {
+const ProviderArrivalInfo = ({ onPress, status, doctorName, time}:{ onPress:()=>void, status:string, doctorName:string, time:string}) => {
 
   return (
    
@@ -20,7 +20,7 @@ const ProviderArrivalInfo = ({ onPress}:{ onPress:()=>void}) => {
             <View style={styles.notificationContainer}>
               <Text
                 style={styles.notificationTitle}
-                title={'Elena Miron, family doctor'}
+                title={doctorName}
               />
               <View
                 style={{
@@ -29,8 +29,8 @@ const ProviderArrivalInfo = ({ onPress}:{ onPress:()=>void}) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Text style={styles.notificationText} title={'On the way'} />
-                <Text style={styles.notificationText} title={'Time: 40 min'} />
+                <Text style={styles.notificationText} title={status} />
+                <Text style={styles.notificationText} title={`Time:${time} min`} />
               </View>
               <TouchableOpacity style={styles.callButton}>
                 <Image

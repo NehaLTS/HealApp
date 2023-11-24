@@ -19,7 +19,8 @@ import {
   ProviderProfile,
   ProviderServices,
   onboardStep,
-  currentLocationOfUser
+  currentLocationOfUser,
+  RemaingTime
 } from 'libs/types/UserType';
 import { ClientUserContext } from 'contexts/UseClientUserContext';
 import { ProviderUserContext } from 'contexts/UseProviderUserContext';
@@ -27,6 +28,7 @@ import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import SplashScreen from 'react-native-splash-screen';
 import * as Sentry from '@sentry/react-native';
+import { Alert } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
@@ -41,6 +43,10 @@ const App = () => {
     useState<ProviderServices>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
   const [currentLocationOfUser, setCurrentLocationOfUser]= useState<currentLocationOfUser>(null);
+  const [permissonGrant, setPermissonGrant]=useState(false)
+  const [ providerStatus,setProviderStatus] = useState<string>('');
+  const [remainingTime, setRemainingTime]=useState<RemaingTime>(null)
+ 
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -53,31 +59,31 @@ const App = () => {
     // We recommend adjusting this value in production.
     // tracesSampleRate: 1.0,
   });
+  const getCurrentLocation=()=>{
+    Geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setCurrentLocationOfUser({latitude:latitude.toString() , longitude:longitude.toString()})
+      },
+      (error) => {
+        console.log('Error getting location: ' + error.message);
+      },
+      {
+        enableHighAccuracy: true,
+      },
+    );
+  }
   const requestLocationPermission = async () => {
     try {
       const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (result === RESULTS.GRANTED) {
-        console.log('permissionResult', result);
-
-        Geolocation.watchPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setCurrentLocationOfUser({latitude:latitude.toString() , longitude:longitude.toString()})
-            // setLocation({ latitude, longitude });
-          },
-          (error) => {
-            console.log('Error getting location: ' + error.message);
-          },
-          {
-            enableHighAccuracy: true,
-          },
-        );
+        getCurrentLocation()
       } else {
         const permissionResult = await request(
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         );
         if (permissionResult === RESULTS.GRANTED) {
-          console.log('permissionResult', permissionResult);
+          getCurrentLocation()
         }
       }
     } catch (err) {
@@ -85,12 +91,9 @@ const App = () => {
     }
   };
 
-
- 
-
   useEffect(() => {
     requestLocationPermission();
-  }, []);
+  }, [permissonGrant]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -108,7 +111,11 @@ const App = () => {
             orderDetails,
             setOrderDetails,
             setCurrentLocationOfUser,
-            currentLocationOfUser
+            currentLocationOfUser,
+            setProviderStatus,
+            providerStatus,
+            setRemainingTime,
+            remainingTime
           }}
         >
           <ProviderUserContext.Provider

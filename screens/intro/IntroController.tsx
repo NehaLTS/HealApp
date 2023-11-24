@@ -7,11 +7,13 @@ import {
 } from '../../libs/datastorage/useLocalStorage';
 import { UserType } from '../../libs/types/UserType';
 import NavigationRoutes from '../../navigator/NavigationRoutes';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
 const IntroController = () => {
   const navigation = useNavigation<any>();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
   const { setLanguageCode } = useTranslationContext();
+  const { currentLocationOfUser} = UseClientUserContext();
   const continueAsClient = () => {
     navigation.reset({
       index: 0,
@@ -30,7 +32,6 @@ const IntroController = () => {
     });
   };
   const onChangeLanguage = () => setIsLanguageChanged(!isLanguageChanged);
-
   const handleLanguageChange = (lng: string) => {
     setLanguageCode(lng);
     setLocalData('USER', {

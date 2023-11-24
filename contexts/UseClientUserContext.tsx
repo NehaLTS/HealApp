@@ -1,4 +1,4 @@
-import { ClientProfile, OrderDetail, currentLocationOfUser, onboardStep } from 'libs/types/UserType';
+import { ClientProfile, OrderDetail, RemaingTime, currentLocationOfUser, onboardStep } from 'libs/types/UserType';
 import React, { createContext } from 'react';
 
 export interface ClientUserContextFields {
@@ -15,6 +15,10 @@ export interface ClientUserContextFields {
   setCurrentLocationOfUser:React.Dispatch<React.SetStateAction<currentLocationOfUser>>
   currentLocationOfUser:currentLocationOfUser
   setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>
+  setProviderStatus:React.Dispatch<React.SetStateAction<string>>
+  providerStatus:string
+  setRemainingTime:React.Dispatch<React.SetStateAction<RemaingTime>>
+  remainingTime:RemaingTime
 }
 
 export const ClientUserContext = createContext<ClientUserContextFields>(

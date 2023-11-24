@@ -32,7 +32,7 @@ export const LoaderLarge = () => {
     Animated.loop(
       Animated.timing(spinValue, {
         toValue: 1,
-        duration: 3000,
+        duration: 6500,
         easing: Easing.linear,
         useNativeDriver: true,
       }),

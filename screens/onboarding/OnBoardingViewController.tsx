@@ -1,15 +1,15 @@
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import NavigationRoutes from 'navigator/NavigationRoutes';
-import { useEffect, useRef, useState, useMemo } from 'react';
+import LocalizationController from 'components/common/LocalizationController';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { checkPermission } from 'libs/Notification';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 import {
   ClientProfile,
   ProviderProfile,
   ProviderServices,
 } from 'libs/types/UserType';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import { getLocalData } from 'libs/datastorage/useLocalStorage';
-import { checkPermission } from 'libs/Notification';
-import LocalizationController from 'components/common/LocalizationController';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const OnBoardingViewController = () => {
   const swiperRef = useRef(null);

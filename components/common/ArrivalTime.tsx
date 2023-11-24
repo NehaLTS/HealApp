@@ -1,54 +1,63 @@
 import { colors } from "designToken/colors"
-import React, { useEffect, useRef, useState } from "react"
-import { StyleSheet, View } from "react-native"
-import Text from "./Text"
-import { getHeight, getWidth } from "libs/StyleHelper"
 import { dimens } from "designToken/dimens"
-import { fontSize } from "designToken/fontSizes"
 import { fontFamily } from "designToken/fontFamily"
+import { fontSize } from "designToken/fontSizes"
+import { getHeight, getWidth } from "libs/StyleHelper"
+import { setLocalData } from "libs/datastorage/useLocalStorage"
+import React, { useEffect, useRef, useState } from "react"
+import { Alert, StyleSheet, View } from "react-native"
+import Text from "./Text"
+import useUpdateEffect from "libs/UseUpdateEffect"
+import { UseClientUserContext } from "contexts/UseClientUserContext"
 
-const ArrivalTime=({totalTime}:{totalTime:number})=>{
- const timeLeft= useRef<number>(0)
+const ArrivalTime=({totalTime, remainingSeconds}:{totalTime:number, remainingSeconds:number})=>{
  const [timeToArrive, setTimeToArrive]= useState(totalTime)
- const [seconds, setSeconds]= useState(60)
-useEffect(()=>{
-  
-    const interval = setInterval(() => {
+ const [seconds, setSeconds]= useState(remainingSeconds)
+ const timeOutRef = useRef<NodeJS.Timeout | undefined>()
+ const minuteRef= useRef<NodeJS.Timeout | undefined>()
+ const{setProviderStatus , setRemainingTime}= UseClientUserContext()
+
+ useEffect(()=>{
+    minuteRef.current= setInterval(() => {
         console.log('timeLeft.current',timeToArrive)
         if(timeToArrive>0){
         const leftTime= timeToArrive-1;
-        // timeLeft.current= leftTime;
         setTimeToArrive(leftTime)
         }
         },60000);
-    
-
   return ()=>{
-     clearInterval(interval)
-
+     clearInterval(minuteRef.current)
  }
 },[timeToArrive])
 
-useEffect(()=>{
-  
-        const secondsInterval = setInterval(() => {
-            console.log('timeLeft.seconds',seconds)
-            if(seconds>0){
-            const leftSeconds= seconds-1;
-            // timeLeft.current= leftTime;
-            setSeconds(leftSeconds)
-            }else{
-                if(timeToArrive>0){
-                setSeconds(60)
-                }
-            }
-            },1000);
 
-  return ()=>{
-   
-     clearInterval(secondsInterval)
- }
-},[seconds])
+    useEffect(()=>{
+        timeOutRef.current = setInterval(() => {
+            console.log('timeLeft.seconds',seconds)
+            if(seconds>0){  
+            const leftSeconds= seconds-1;
+            setSeconds(leftSeconds)
+            setRemainingTime({minutes:timeToArrive,seconds: seconds})} 
+            else if(timeToArrive>0){ setSeconds(60)} 
+            },1000);
+            return ()=>{clearInterval(timeOutRef.current)}  
+    },[seconds])
+
+ useUpdateEffect(()=>{
+    if(seconds===0&& timeToArrive<0){
+        setProviderStatus('arrived')
+        setLocalData('ORDER', { providerDetail:''})
+    clearInterval(timeOutRef.current)
+    }
+ },[seconds])
+
+ 
+ useUpdateEffect(()=>{
+    if( timeToArrive<0){
+     
+    clearInterval(minuteRef.current)
+    }
+ },[timeToArrive])
 
 return (
     <View style={styles.mainView}>
