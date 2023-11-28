@@ -1,5 +1,3 @@
-import avatar from 'assets/icon/avatar.png';
-import logo from 'assets/icon/healLogo.png';
 import mobile from 'assets/icon/mobile.png';
 import waze from 'assets/icon/waze.png';
 import Button from 'components/common/Button';
@@ -24,18 +22,19 @@ import {
   Image,
   Animated as RNAnimated,
   StyleSheet,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Animated, {
   FadeInLeft,
   FadeInUp,
+  ZoomIn,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
 import { useTranslation } from 'react-i18next';
+import Checkbox from 'components/common/Checkbox';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -46,6 +45,7 @@ const HomeScreen = () => {
   const [isCancelOrder, setIsCancelOrder] = useState(false);
   const [isSeeMore, setIsSeeMore] = useState(false);
   // const [isOrderCanceled, setIsOrderCanceled] = useState(false);
+  const [isArrived, setIsArrived] = useState(false);
   const [isVisibleLicense, setIsVisibleLicense] = useState(false);
   const [notification, setNotification] = useState(false);
   const [isAddDocument, setIsAddDocument] = useState(false);
@@ -151,6 +151,175 @@ const HomeScreen = () => {
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
   };
+
+  const servicesProvided = [
+    { serviceName: 'Service', price: '50' },
+    { serviceName: 'Service', price: '100' },
+  ];
+  const arrivedView = () => (
+    <>
+      <AnimatedText
+        style={{
+          ...styles.details,
+          marginTop: getHeight(20),
+        }}
+        title={'Patient'}
+        entering={FadeInLeft.duration(400).delay(500)}
+      />
+      <AnimatedText
+        style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
+        title={'Ilana Vexler'}
+        entering={FadeInLeft.duration(400).delay(600)}
+      />
+      <AnimatedText
+        style={styles.serviceProvidedText}
+        title={'Services provided'}
+        entering={FadeInUp.duration(400).delay(700)}
+      />
+      {servicesProvided.map((item, index) => (
+        <View key={index} style={styles.servicesProvided}>
+          <View style={styles.servicesLeftView}>
+            <AnimatedText
+              style={{ ...styles.smallText, minWidth: getWidth(90) }}
+              title={`${item?.serviceName} ${index}`}
+              entering={FadeInLeft.duration(400).delay(800)}
+            />
+            <AnimatedText
+              style={styles.smallText}
+              title={`${item?.price} NIS`}
+              entering={FadeInLeft.duration(400).delay(900)}
+            />
+          </View>
+          <Checkbox isWhite />
+        </View>
+      ))}
+      <TouchableOpacity activeOpacity={0.8} style={styles.addServiceContainer}>
+        <Image
+          source={require('assets/icon/addServiceWhite.png')}
+          style={styles.addIcon}
+        />
+        <Text style={styles.textAdd}>{t('add_another_service')}</Text>
+      </TouchableOpacity>
+      <View style={styles.totalContainer}>
+        <AnimatedText
+          style={styles.smallText}
+          title={'Total'}
+          entering={FadeInLeft.duration(400).delay(500)}
+        />
+        <AnimatedText
+          style={styles.totalAmount}
+          title={'410 NIS'}
+          entering={FadeInLeft.duration(400).delay(500)}
+        />
+      </View>
+    </>
+  );
+
+  const orderDetailView = () => (
+    <>
+      {acceptOrder && (
+        <AnimatedText
+          style={{ ...styles.smallText, marginBottom: getHeight(10) }}
+          title={'*Client has 5 minutes to cancel an order for free'}
+          entering={ZoomIn.duration(400).delay(300)}
+          numberOfLines={1}
+        />
+      )}
+      <AnimatedText
+        style={{ ...styles.details, marginTop: getHeight(20) }}
+        title={t('chest_pain')}
+        entering={FadeInLeft.duration(400).delay(500)}
+      />
+      <AnimatedText
+        style={{
+          ...styles.details,
+          borderBottomWidth: getWidth(0.5),
+          borderColor: colors.offWhite,
+          paddingBottom: getHeight(16),
+          fontSize: getHeight(fontSize.textXl - 1),
+        }}
+        title={`Ordered voltaren shot, clacksen shot`}
+        entering={FadeInLeft.duration(400).delay(600)}
+      />
+      <AnimatedText
+        style={styles.otherDetails}
+        title={`${'Ilana Vexler'}  ${'2'}km, ~${'30'}min`}
+        entering={FadeInLeft.duration(400).delay(700)}
+      />
+      <AnimatedText
+        style={styles.otherDetails}
+        title={'Haifa, Zionut st. 2'}
+        entering={FadeInLeft.duration(400).delay(800)}
+      />
+      <AnimatedText
+        style={{
+          ...styles.otherDetails,
+          borderBottomWidth: getWidth(0.5),
+          borderColor: colors.offWhite,
+          paddingBottom: getHeight(16),
+        }}
+        title={'3 entrance from the right, 3rd floor, ap.6'}
+        entering={FadeInLeft.duration(400).delay(900)}
+      />
+
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: getHeight(14),
+          marginBottom: acceptOrder
+            ? getHeight(dimens.marginM)
+            : getHeight(dimens.marginL),
+          alignItems: 'center',
+        }}
+      >
+        <TextButton
+          title={'See on Waze '}
+          fontSize={getHeight(fontSize.textXl)}
+          style={{
+            ...styles.seeOnWaze,
+          }}
+          onPress={onPressSeeMore}
+          entering={FadeInLeft.duration(400).delay(1000)}
+        />
+        <Animated.Image
+          source={waze}
+          style={{
+            width: getWidth(18),
+            height: getHeight(20),
+            resizeMode: 'center',
+          }}
+          entering={FadeInLeft.duration(400).delay(1180)}
+        />
+      </View>
+      {acceptOrder && (
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: getHeight(14),
+            marginBottom: getHeight(dimens.marginL),
+            alignItems: 'center',
+          }}
+        >
+          <TextButton
+            title={'Call the client'}
+            fontSize={getHeight(fontSize.textXl)}
+            style={styles.seeOnWaze}
+            entering={FadeInLeft.duration(400).delay(1100)}
+          />
+          <Animated.Image
+            source={mobile}
+            style={{
+              width: getWidth(18),
+              height: getHeight(20),
+              resizeMode: 'center',
+            }}
+            entering={FadeInLeft.duration(400).delay(1180)}
+          />
+        </View>
+      )}
+    </>
+  );
+
   const getNewOrderView = () => (
     <RNModal
       isVisible={notification && isAvailable}
@@ -171,119 +340,28 @@ const HomeScreen = () => {
         />
       )}
       <Animated.View style={{ ...styles.modalView, height: modalHeight }}>
-        {isSeeMore ? (
-          <>
-            <AnimatedText
-              style={{
-                ...styles.details,
-                fontSize: getHeight(fontSize.heading),
-                textAlign: 'center',
-                marginBottom: 0,
-              }}
-              title={'You have a new order!'}
-              entering={FadeInUp.duration(400).delay(400)}
-            />
-            {acceptOrder && (
-              <AnimatedText
-                style={{ ...styles.smallText, marginBottom: getHeight(10) }}
-                title={'*Client has 5 minutes to cancel an order for free'}
-                entering={FadeInLeft.duration(400).delay(500)}
-                numberOfLines={1}
-              />
-            )}
-            <AnimatedText
-              style={{ ...styles.details, marginTop: getHeight(20) }}
-              title={t('chest_pain')}
-              entering={FadeInLeft.duration(400).delay(500)}
-            />
-            <AnimatedText
-              style={{
-                ...styles.details,
-                borderBottomWidth: getWidth(0.5),
-                borderColor: colors.offWhite,
-                paddingBottom: getHeight(16),
-                fontSize: getHeight(fontSize.textXl - 1),
-              }}
-              title={`Ordered voltaren shot, clacksen shot`}
-              entering={FadeInLeft.duration(400).delay(600)}
-            />
-            <AnimatedText
-              style={styles.otherDetails}
-              title={`${'Ilana Vexler'}  ${'2'}km, ~${'30'}min`}
-              entering={FadeInLeft.duration(400).delay(700)}
-            />
-            <AnimatedText
-              style={styles.otherDetails}
-              title={'Haifa, Zionut st. 2'}
-              entering={FadeInLeft.duration(400).delay(800)}
-            />
-            <AnimatedText
-              style={{
-                ...styles.otherDetails,
-                borderBottomWidth: getWidth(0.5),
-                borderColor: colors.offWhite,
-                paddingBottom: getHeight(16),
-              }}
-              title={'3 entrance from the right, 3rd floor, ap.6'}
-              entering={FadeInLeft.duration(400).delay(900)}
-            />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: getHeight(14),
-                marginBottom: acceptOrder
-                  ? getHeight(dimens.marginM)
-                  : getHeight(dimens.marginL),
-                alignItems: 'center',
-              }}
-            >
-              <TextButton
-                title={'See on Waze '}
-                fontSize={getHeight(fontSize.textXl)}
-                style={{
-                  ...styles.seeOnWaze,
-                }}
-                onPress={onPressSeeMore}
-                entering={FadeInLeft.duration(400).delay(1000)}
-              />
-              <Animated.Image
-                source={waze}
-                style={{
-                  width: getWidth(18),
-                  height: getHeight(20),
-                  resizeMode: 'center',
-                }}
-                entering={FadeInLeft.duration(400).delay(1180)}
-              />
-            </View>
-            {acceptOrder && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  gap: getHeight(14),
-                  marginBottom: getHeight(dimens.marginL),
-                  alignItems: 'center',
-                }}
-              >
-                <TextButton
-                  title={'Call the client'}
-                  fontSize={getHeight(fontSize.textXl)}
-                  style={styles.seeOnWaze}
-                  entering={FadeInLeft.duration(400).delay(1100)}
-                />
-                <Animated.Image
-                  source={mobile}
-                  style={{
-                    width: getWidth(18),
-                    height: getHeight(20),
-                    resizeMode: 'center',
-                  }}
-                  entering={FadeInLeft.duration(400).delay(1180)}
-                />
-              </View>
-            )}
-          </>
+        {isSeeMore && (
+          <AnimatedText
+            style={{
+              ...styles.details,
+              fontSize: getHeight(fontSize.heading),
+              textAlign: 'center',
+              marginBottom: 0,
+            }}
+            title={
+              isArrived
+                ? 'You arrived'
+                : acceptOrder
+                ? 'Order accepted'
+                : 'You have a new order!'
+            }
+            entering={FadeInUp.duration(400).delay(400)}
+          />
+        )}
+        {isArrived ? (
+          arrivedView()
+        ) : isSeeMore ? (
+          <>{orderDetailView()}</>
         ) : (
           <>
             <Text style={styles.details} title={t('chest_pain')} />
@@ -309,11 +387,12 @@ const HomeScreen = () => {
           style={{
             ...styles.footerContainer,
             gap: acceptOrder ? getHeight(10) : getHeight(dimens.marginM),
+            bottom: isArrived ? getHeight(dimens.marginL) : 0,
           }}
         >
-          {!acceptOrder && (
+          {(!acceptOrder || isArrived) && (
             <Button
-              title={t('take_order')}
+              title={isArrived ? 'Treatment is ended' : t('take_order')}
               style={styles.takeOrderButton}
               isSmall
               width={getWidth(150)}
@@ -328,7 +407,7 @@ const HomeScreen = () => {
             />
           )}
 
-          {acceptOrder && (
+          {acceptOrder && !isArrived && (
             <>
               <View style={styles.timerContainer}>
                 <CountdownTimer />
@@ -336,17 +415,19 @@ const HomeScreen = () => {
               <AnimatedText
                 style={styles.smallText}
                 title={t('you_have_5_minutes')}
-                entering={FadeInLeft.duration(400).delay(500)}
+                entering={ZoomIn.duration(400).delay(400)}
                 numberOfLines={1}
               />
             </>
           )}
-          <TextButton
-            title={t('cancel_order')}
-            fontSize={getWidth(fontSize.textL)}
-            style={styles.cancelOrderButton}
-            onPress={onPressCancelOrder}
-          />
+          {!isArrived && (
+            <TextButton
+              title={t('cancel_order')}
+              fontSize={getWidth(fontSize.textL)}
+              style={styles.cancelOrderButton}
+              onPress={onPressCancelOrder}
+            />
+          )}
         </View>
       </Animated.View>
     </RNModal>
@@ -439,18 +520,6 @@ const HomeScreen = () => {
     </RNModal>
   );
 
-  const headerLeft = () => (
-    <TouchableOpacity>
-      <Image source={logo} style={styles.logo} />
-    </TouchableOpacity>
-  );
-
-  const headerRight = () => (
-    <TouchableHighlight underlayColor="transparent">
-      <Image source={avatar} style={styles.avatar} />
-    </TouchableHighlight>
-  );
-
   const DetailCard = (title: string, subTitle: string) => (
     <View style={styles.detailCardContainer}>
       <Text style={styles.title} title={title} />
@@ -488,7 +557,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      {RNHeader(() => null, headerLeft, headerRight)}
+      {RNHeader()}
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <FadeInText title={t('not_available')} isActive={!isAvailable} />
@@ -589,7 +658,6 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     position: 'absolute',
-    bottom: 0,
     alignSelf: 'center',
     marginVertical: getHeight(dimens.paddingL),
   },
@@ -693,5 +761,49 @@ const styles = StyleSheet.create({
   },
   timerText: {
     color: colors.white,
+  },
+  servicesProvided: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: getHeight(dimens.marginL),
+  },
+  servicesLeftView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  addIcon: {
+    height: getHeight(dimens.marginL),
+    width: getWidth(dimens.marginL),
+    resizeMode: 'contain',
+  },
+  textAdd: {
+    fontSize: getWidth(fontSize.textL),
+    color: colors.white,
+  },
+  addServiceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: getWidth(dimens.imageXs),
+    borderTopWidth: getWidth(1),
+    borderColor: colors.white,
+    paddingVertical: getHeight(24),
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: getWidth(dimens.marginL),
+  },
+  totalAmount: {
+    color: colors.white,
+    fontSize: getHeight(fontSize.textXl),
+  },
+  serviceProvidedText: {
+    fontSize: getHeight(20),
+    textAlign: 'center',
+    marginVertical: getHeight(dimens.marginL),
+    marginBottom: getHeight(dimens.imageXs),
+    color: colors.white,
+    paddingLeft: getWidth(3),
   },
 });

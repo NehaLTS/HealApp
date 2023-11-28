@@ -1,13 +1,20 @@
-import logo from 'assets/icon/logo.png';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useLayoutEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import LocalizationController from './LocalizationController';
 import Text from './Text';
 import { useNavigation } from '@react-navigation/native';
+import avatar from 'assets/icon/avatar.png';
+import logo from 'assets/icon/healLogo.png';
 
 export const defaultHeaderStyle = {
   headerShadowVisible: false,
@@ -123,13 +130,24 @@ export const RNHeader = (
   dependency?: any,
 ) => {
   const navigation = useNavigation();
+  const headerLeftDefault = () => (
+    <TouchableOpacity>
+      <Image source={logo} style={styles.logo} />
+    </TouchableOpacity>
+  );
+
+  const headerRightDefault = () => (
+    <TouchableHighlight underlayColor="transparent">
+      <Image source={avatar} style={styles.avatar} />
+    </TouchableHighlight>
+  );
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: 'center',
-      headerTitle: headerTitle,
-      headerLeft: headerLeft,
+      headerTitle: headerTitle ?? '',
+      headerLeft: headerLeft ?? headerLeftDefault,
       headerStyle: styles.header,
-      headerRight: headerRight,
+      headerRight: headerRight ?? headerRightDefault,
     });
   }, [navigation, dependency]);
 };
@@ -162,9 +180,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   logo: {
-    width: getWidth(dimens.imageS + 30),
-    height: getHeight(dimens.imageS + 20),
-    marginLeft: getWidth(dimens.marginS),
+    width: getWidth(dimens.imageS),
+    height: getHeight(40),
+    resizeMode: 'contain',
+  },
+  avatar: {
+    height: getHeight(45),
+    width: getWidth(45),
+    resizeMode: 'contain',
   },
   title: {
     fontSize: getWidth(fontSize.headingL),
