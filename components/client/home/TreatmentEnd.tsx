@@ -57,13 +57,20 @@ const TreatmentEnd = () => {
           </View>
         </View>
       </View>
-      <Button
-        title={'Approve payment'}
-        isPrimary
-        isSmall
-        style={{ alignSelf: 'center' }}
-        width={'80%'}
-      />
+      <View
+        style={{
+          flex: 0.8,
+          justifyContent: 'flex-end',
+        }}
+      >
+        <Button
+          title={'Approve payment'}
+          isPrimary
+          isSmall
+          style={{ alignSelf: 'center' }}
+          width={'80%'}
+        />
+      </View>
     </>
   );
 };

@@ -52,6 +52,20 @@ const DoctorTipView = () => {
           />
         ))}
       </View>
+      <View
+        style={{
+          flex: 0.8,
+          justifyContent: 'flex-end',
+        }}
+      >
+        <Button
+          title={'Done'}
+          isPrimary
+          isSmall
+          style={{ alignSelf: 'center' }}
+          width={'30%'}
+        />
+      </View>
     </>
   );
 };
