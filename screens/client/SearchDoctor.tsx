@@ -35,30 +35,37 @@ import MapViewDirections from 'react-native-maps-directions';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
+  const route = useRoute<any>();
+  const providerData = route?.params?.providerData ?? '';
+  const providerRemainigTime = route?.params?.remaining;
+  const orderId=route?.params?.orderId ?? '';
+ const  previousScreen=route?.params?.previousScreen
   const { t } = useTranslation();
   const { setCurrentLocationOfUser } = UseClientUserContext();
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const { handleNextButtonPress, showRateAlert, disabled, calculateTime } =
+  const { handleNextButtonPress, showRateAlert, calculateTime } =
     SearchDoctorController();
   const [providerLocation, setProviderLocation] = useState<{
     latitude: number;
     longitude: number;
   }>();
+  const { providerStatus, setProviderStatus, setRemainingTime } = UseClientUserContext();
+  const localData = getLocalData('ORDER');
   const [showDoctor, setShowDoctor] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
   const [loader, setLoader] = useState(true);
+  const [disabled, setDisable]= useState(false)
   const [showCancelButon, setShowCancelButon] = useState(false);
   const [stausOfArriving, setStausOfArriving] =
-    useState<string>('Estimated arrival');
+    useState<string>(previousScreen!=='HOME_CLIENT'?'Estimated arrival':providerStatus);
   const [secondLoader, setSecondLoader] = useState(false);
-  const route = useRoute<any>();
-  const { providerStatus, setProviderStatus, setRemainingTime } = UseClientUserContext();
-  const localData = getLocalData('ORDER');
-  const providerData = route?.params?.providerData ?? '';
-  const providerRemainigTime = route?.params?.remaining;
+ 
+  
+
+ 
 
   useLayoutEffect(() => {
-    console.log('ankita', providerData);
+    console.log('ankita', providerData, localData?.providerDetail);
     navigation.setOptions({
       headerTitleAlign: 'center',
       headerLeft: () => (
@@ -105,18 +112,21 @@ const SearchDoctor = () => {
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
       setShowCancelButon(true);
-      setStausOfArriving('On the way');
-
-      if (event.notification.title === 'Accept Order') {
+console.log('DoctorNotification', JSON.stringify(event))
+      if (event.notification.title === "Accept Order") {
+        setLocalData('ORDER', { providerDetail:providerData, orderId:orderId})
         setShowTimer(true);
+        setDisable(true)
+        setStausOfArriving('On the way');
         setProviderStatus('On the way');
       }
-      if (event.notification.title === 'Arrived') {
+      if (event.notification.title === "Arrived") {
         setStausOfArriving('Arrived');
         setProviderStatus('arrived')
         setLocalData('ORDER', { providerDetail:''})
-        setRemainingTime({minutes:0,seconds: 0})
-
+        setTimeout(() => {
+          setProviderStatus('Estimated arrival')    
+            }, 10000);
       }
 
       setTimeout(() => {
@@ -129,21 +139,23 @@ const SearchDoctor = () => {
     });
   };
   useEffect(() => {
-    const interval = setInterval(() => {
       getEventUpdate();
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-      DeviceEventEmitter.removeAllListeners('DoctorNotification');
-    };
   }, []);
 
   useEffect(() => {
     createNotificationListeners();
+    if(previousScreen==='HOME_CLIENT'){
+      setProviderLocation({
+        latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
+        longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
+      });
+   
+  }else{
     setProviderLocation({
       latitude: parseFloat(providerData?.latitude ?? 0.0),
       longitude: parseFloat(providerData?.longitude ?? 0.0),
     });
+  }
   }, []);
 
   setTimeout(() => {
@@ -151,6 +163,9 @@ const SearchDoctor = () => {
     setSecondLoader(false);
   }, 20000);
 
+ setTimeout(() => {
+    setSecondLoader(false);
+  }, 10000);
   const onPressOrder = () => {
     setSecondLoader(true);
     setShowCancelButon(true);
@@ -160,11 +175,7 @@ const SearchDoctor = () => {
     handleNextButtonPress();
   };
 
-  useEffect(() => {
-    if (providerStatus === 'arrived') {
-      setStausOfArriving('Arrived');
-    }
-  }, [providerStatus]);
+
 
   return (
     <View style={styles.mainContainer}>
@@ -172,14 +183,7 @@ const SearchDoctor = () => {
         {showTimer && (
           <ArrivalTime
             totalTime={
-              providerRemainigTime
-                ? providerRemainigTime.minutes
-                : Math.round(calculateTime().minutes)
-            }
-            remainingSeconds={
-              providerRemainigTime
-                ? providerRemainigTime.seconds
-                : Math.round(calculateTime().seconds)
+              Math.round(calculateTime().minutes)
             }
           />
         )}
@@ -302,7 +306,7 @@ const SearchDoctor = () => {
           }
           isPrimary
           isSmall
-          disabled={disabled}
+          disabled={disabled|| previousScreen==='HOME_CLIENT' }
           onPress={onPressOrder}
           width={'30%'}
           height={getHeight(dimens.imageS)}

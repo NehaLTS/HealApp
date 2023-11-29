@@ -4,6 +4,7 @@ import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
+import Geocoder from 'react-native-geocoding';
 
 const ProviderAddressController = () => {
   const [phoneError, setPhoneError] = useState('');

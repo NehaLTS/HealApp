@@ -2,7 +2,7 @@ import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 
 const OrderFormController = ({
   setOrder,
@@ -129,10 +129,14 @@ const OrderFormController = ({
       updatedActiveButton.push(item.reason_id);
     }
     setActiveButton(updatedActiveButton);
-    const updatedSelectedResourceType = selectedResourceType.includes(item)
-      ? selectedResourceType.filter((selectedItem) => selectedItem !== item)
-      : [...selectedResourceType, item];
-
+    const updatedSelectedResourceType = selectedResourceType.includes((item))
+      ? selectedResourceType.filter((selectedItem) => {
+        if(selectedItem !== item)
+      {
+        return { reason_id:item.reason_id, name:item?.name?.en}
+        // return selectedItem.en
+      }})
+      : [...selectedResourceType, { reason_id:item.reason_id, name:item?.name?.en}];
     setSelectedResourceType(updatedSelectedResourceType);
     setOrder((prevOrder) => ({
       ...prevOrder,

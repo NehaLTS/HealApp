@@ -10,7 +10,11 @@ const httpTimeout = (ms: number, promise: Promise<Response>) => {
         promise.then(resolve, reject);
     });
 };
-
+export const Timeout = (time: number) => {
+    const controller = new AbortController()
+    setTimeout(() => controller.abort(), time * 1000)
+    return controller
+  }
 export const sendRequest = (url: RequestInfo, opts: OptType) => {
     if (opts.body) opts.body = JSON.stringify(opts.body)
     const newUrl = `${BASE_URL}${url}`;
@@ -18,7 +22,7 @@ export const sendRequest = (url: RequestInfo, opts: OptType) => {
 
     return httpTimeout(
         TIME_OUT,
-        fetch(newUrl, { ...opts, headers: { ...DEFAULT_HEADERS, ...opts.headers } }),
+        fetch(newUrl, { ...opts, headers: { ...DEFAULT_HEADERS, ...opts.headers }, signal: Timeout(40).signal}),
     )
         .then((res: any) => {
             console.log("responseProvider", res)

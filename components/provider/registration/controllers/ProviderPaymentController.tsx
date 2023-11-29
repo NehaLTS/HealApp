@@ -1,4 +1,5 @@
 import Loader from 'components/common/Loader';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
@@ -6,6 +7,8 @@ import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
+import Geocoder from 'react-native-geocoding';
+
 
 const ProviderPaymentController = () => {
   const [registrationError, setRegistrationError] = useState('');
@@ -19,6 +22,7 @@ const ProviderPaymentController = () => {
   const accountRef = React.useRef<any>('');
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
+  const {currentLocationOfUser} = UseClientUserContext()
   const { t } = useTranslation();
   const providerServicesData=getLocalData('PROVIDERSERVICES')
 
@@ -87,6 +91,16 @@ const ProviderPaymentController = () => {
   };
 
   const onPressNext = async () => {
+    let latitude:string=''
+    let longitude:string=''
+   
+    Geocoder.from(providerProfile?.address??'').then(json => {
+      var location = json.results[0].geometry.location;
+      latitude=location.lat.toString()
+      longitude=location.lng.toString()
+      console.log("location....",location);
+    }).catch(error => console.warn(error));
+
     if (
       registrationNumberRef.current.value &&
       bankNameRef.current.value &&
@@ -103,9 +117,9 @@ const ProviderPaymentController = () => {
         ...(providerProfile as ProviderProfile),
         bankDetails: bankDetails,
       });
-
       setIsLoading(true);
-console.log('providerServicesData', providerServicesData)
+      console.log('providerServicesData', providerServicesData)
+      console.log("locationUpdate", latitude, latitude!==''?latitude:currentLocationOfUser.latitude )
       const res = await OnUpdateProviderUserDetails?.(
         {
           firstname: providerProfile?.firstName ?? '',
@@ -125,7 +139,8 @@ console.log('providerServicesData', providerServicesData)
           business_registration_number: registrationNumberRef.current.value,
           account: accountRef.current.value,
           specialty_id:providerProfile.speciality.id,
-        
+          latitude:latitude!==''?latitude:currentLocationOfUser.latitude,
+          longitude:longitude!==''?longitude:currentLocationOfUser.longitude
         },
         token,
       );

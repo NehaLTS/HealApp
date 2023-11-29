@@ -88,7 +88,7 @@ const OrderDetailsController = () => {
         ? user?.date_of_birth ?? ''
         : order?.patient_type?.age ?? '',
       services: order.services[0],
-      symptoms: `${order.symptoms}`,
+      symptoms: JSON.stringify(order.reason),
       Additional_notes: order.Additional_notes,
       Estimate_arrival: order.Estimate_arrival,
       Instructions_for_arrival: order?.Instructions_for_arrival,
@@ -102,6 +102,7 @@ const OrderDetailsController = () => {
       provider_type_id:supplier.provider_type_id
      
     }
+    console.log("DAATAAA ",  DAAT,)
       const res = await orderProvider (
         {
         client_id:userId.toString(),
@@ -114,7 +115,7 @@ const OrderDetailsController = () => {
           ? user?.date_of_birth ?? ''
           : order?.patient_type?.age ?? '',
         services: order.services[0].menu_id.toString(),
-        symptoms: "[ { \"id\": \"1\", \"name\": \"Back Pain\" }, { \"id\": \"2\", \"name\": \"Heart Pain\" } ]",
+        symptoms:JSON.stringify(order.reason),
         Additional_notes: order?.Additional_notes,
         Estimate_arrival: order?.Estimate_arrival,
         Instructions_for_arrival: order?.Instructions_for_arrival,
@@ -131,7 +132,7 @@ const OrderDetailsController = () => {
       );
       
       console.log(" RESPINSE ", res)
-console.log("orderList ", DAAT,)
+
       if(res){ navigation.navigate(NavigationRoutes.SearchDoctor, {providerData:res?.closestProvider, orderId:res?.orderId})}
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)

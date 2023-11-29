@@ -1,5 +1,5 @@
 import { sendRequest, sendRequestWitoutToken } from "../api/RequestHandler";
-import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GET_USER_SERVICES, GOOGLE_LOGIN_API_PROVIDER, ORDER_REQUEST, PATCH, POST, PROVIDER_SIGNIN, UPDATE_PROVIDER_LOCATION, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
+import { CREATE_PROVIDER_SEVICES, CREATE_SIGNUP_PROVIDER, FACEBOOK_LOGIN_API, GET, GET_PROVIDER_SERVICE, GET_PROVIDER_TYPES, GET_USER_SERVICES, GOOGLE_LOGIN_API_PROVIDER, ORDER_REQUEST, PATCH, POST, PROVIDER_AVAILABILITY, PROVIDER_SIGNIN, UPDATE_PROVIDER_LOCATION, UPDATE_SIGNUP_PROVIDER } from "../constants/ApiConstants";
 import { UserType, UserTypeProvider } from "../types/UserType";
 import { OrderRequest, PoviderLocation } from "libs/types/ProvierTypes";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
@@ -37,8 +37,6 @@ export const AuthServicesProvider = () => {
         email: string;
         password: string;
         device_token:string;
-        latitude:string;
-        longitude:string
     }): Promise<UserTypeProvider> =>
         sendRequest(CREATE_SIGNUP_PROVIDER, {
             method: POST,
@@ -62,6 +60,8 @@ export const AuthServicesProvider = () => {
         business_registration_number: string;
         account: string;
         specialty_id:string;
+        latitude:string;
+        longitude:string
     }, accessToken:string): Promise<UserTypeProvider> =>
         sendRequest(UPDATE_SIGNUP_PROVIDER, {
             method: PATCH,
@@ -90,6 +90,24 @@ export const AuthServicesProvider = () => {
                } as unknown as HeadersInit
         })
     }
+
+    const providerAvailabilityStatus = (body: {
+        provider_id:string,
+        availability: string,
+    }, accessToken:string): Promise<UserTypeProvider> =>{
+
+        console.log("body is ",body);
+
+       return sendRequest(PROVIDER_AVAILABILITY, {
+            method: PATCH,
+            body: body as unknown as BodyInit,
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': accessToken
+               } as unknown as HeadersInit
+        })
+    }
+
 
        const onGetProviderTypes = (accessToken:string): Promise<any> =>  sendRequest(GET_PROVIDER_TYPES, {
             method: GET,
@@ -153,6 +171,6 @@ export const AuthServicesProvider = () => {
     return {
         OnProviderSignIn, onSubmitGoogleAuthRequestProvider, onSubmitFBAuthRequestProvider,
         OnProviderCreateSignUp, OnUpdateProviderUserDetails, onCreateProviderServices, onGetProviderTypes,onGetProviderService,
-        onGetUserAllServices,OrderRequst,UpdateProviderLocation
+        onGetUserAllServices,OrderRequst,UpdateProviderLocation,providerAvailabilityStatus
     }
 }

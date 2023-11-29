@@ -15,7 +15,6 @@ const RegistrationViewController = () => {
   const navigation = useNavigation();
   const { OnProviderCreateSignUp } = AuthServicesProvider();
   const { setToken, setUserId } = UseProviderUserContext();
-  const {currentLocationOfUser} = UseClientUserContext()
   const { showToast, renderToast } = useToast();
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -66,9 +65,7 @@ const RegistrationViewController = () => {
       onPressSignUpProvider(
         emailRef.current.value,
         passwordRef.current.value,
-        deviceToken,
-        currentLocationOfUser?.latitude,
-        currentLocationOfUser?.longitude);
+        deviceToken);
 
     //  navigation.reset({
     //         index: 0,
@@ -80,8 +77,6 @@ const RegistrationViewController = () => {
     email: string,
     password: string,
     device_token: string,
-    latitude:string,
-     longitude:string
   ) => {
     setIsLoading(true);
     if (email !== undefined && password != undefined) {
@@ -89,8 +84,6 @@ const RegistrationViewController = () => {
         email,
         password,
         device_token,
-        latitude:latitude,
-        longitude:longitude
       });
 
       console.log('response is ', res);

@@ -243,6 +243,7 @@ export interface SearcProviderLocation {
 }
 
 export interface BookOrderRequest {
+  status:string;
   provider_id:string;
   order_id:string;
   latitude:string;

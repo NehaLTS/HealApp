@@ -8,7 +8,7 @@ import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
 import { fontFamily } from 'designToken/fontFamily';
 
-const ProviderArrivalInfo = ({ onPress, status, doctorName, time}:{ onPress:()=>void, status:string, doctorName:string, time:string}) => {
+const ProviderArrivalInfo = ({ onPress, status, doctorName}:{ onPress:()=>void, status:string, doctorName:string,}) => {
 
   return (
    
@@ -30,7 +30,7 @@ const ProviderArrivalInfo = ({ onPress, status, doctorName, time}:{ onPress:()=>
                 }}
               >
                 <Text style={styles.notificationText} title={status} />
-                <Text style={styles.notificationText} title={`Time:${time} min`} />
+                <Text style={styles.notificationText} title={`Time: min`} />
               </View>
               <TouchableOpacity style={styles.callButton}>
                 <Image

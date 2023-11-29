@@ -12,13 +12,12 @@ const HomeScreenControlller = () => {
   const { userId } = UseProviderUserContext();
   const { currentLocationOfUser } = UseClientUserContext();
   const order = getLocalData('ORDER');
-  const { OrderRequst, UpdateProviderLocation } = AuthServicesProvider();
+  const { OrderRequst, UpdateProviderLocation, providerAvailabilityStatus } = AuthServicesProvider();
   const updateLocation = () => {
     console.log('updateDtaaApiFunction');
         Geolocation.watchPosition(
             (position) => {
-                
-              const { latitude, longitude } = position.coords;
+                Alert.alert("WatchPostion")
               UpdateProviderLocation({provider_id:userId,
                 order_id:order?.eventData?.orderId,
                latitude:position.coords.latitude.toString(),
@@ -36,9 +35,9 @@ const HomeScreenControlller = () => {
     
     }
     console.log('order?.eventData?.providerId',order?.eventData?.providerId)
-    console.log('order?.eventData?.orderId',order?.eventData?.orderId)
+    console.log('order?.eventData?.orderId',order)
 const OnPressTakeOrder=()=>{
-        setAcceptOrder(true)
+      
         // Geolocation.watchPosition(
         //     (position) => {
                 OrderRequst({ status:"accept",
@@ -47,15 +46,25 @@ const OnPressTakeOrder=()=>{
                 latitude:currentLocationOfUser.latitude.toString(),
                 longitude:currentLocationOfUser.longitude.toString()}).then((res)=>{
                     // console.log("res", res)
-                    Alert.alert("ordereAccepted", res?.status)
+                
+                    setAcceptOrder(true) 
+                    
+                    Alert.alert("ordereAccepted" +res?.status)
+                }).catch((error)=>{
+                  Alert.alert("Some error is occur", error)
                 }) 
             //  }, );
    
  }  
+
+//  const ProviderAvailability=()=>{
+//   providerAvailabilityStatus( {provider_id:order?.eventData?.providerId})
+//  }
  return {
     OnPressTakeOrder,
     acceptOrder,
     updateLocation,
+    // ProviderAvailability
   };
 };
 

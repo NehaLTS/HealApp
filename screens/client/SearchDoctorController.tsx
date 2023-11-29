@@ -36,26 +36,16 @@ const forceAlert = () => {
 
  const  handleNextButtonPress=()=>{
   console.log('providerData00',providerData)
-  BookOrderRequest({ provider_id:providerData?.provider_id,
+  BookOrderRequest({ 
+    status:'accept',
+    provider_id:providerData?.provider_id,
   order_id:orderId,
   latitude:currentLocationOfUser.latitude,
   longitude:currentLocationOfUser.longitude}).then((res)=>{
-    setLocalData('ORDER', { providerDetail:providerData, orderId:orderId})
+
     console.log("orderSendRequest", res)
   })
   setDisable(true)
- }
- const searchProviderNearBy=async (request:string)=>{
-
-  const providerData=  await providerLocationSearch({ name: "Back Pain",
-   provider_type_id: "1",
-   latitude:currentLocationOfUser?.latitude,
-   longitude:currentLocationOfUser?.longitude,
-   reqDistance:request}).then((response)=>{
-     return response
-   })
-   console.log("providerData", JSON.stringify(providerData))
-  return providerData
  }
 
  const calculateDistance =()=>{

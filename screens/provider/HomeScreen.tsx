@@ -35,6 +35,8 @@ import Animated, {
 import HomeScreenControlller from './HomeScreenController';
 import { useTranslation } from 'react-i18next';
 import Checkbox from 'components/common/Checkbox';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -51,8 +53,10 @@ const HomeScreen = () => {
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [isShowModal, setIsShowModal] = useState(false);
-  const { acceptOrder, OnPressTakeOrder, updateLocation } =
-    HomeScreenControlller();
+  const { acceptOrder, OnPressTakeOrder, updateLocation } = HomeScreenControlller();
+  const { providerAvailabilityStatus } = AuthServicesProvider();
+  const { userId, token } =
+  UseProviderUserContext()
   const { t } = useTranslation();
   useEffect(() => {
     createNotificationListeners();
@@ -107,10 +111,18 @@ const HomeScreen = () => {
     if ((localData as ProviderProfile)?.licensenumber === '') {
       setIsVisibleLicense(true);
     } else {
+      Alert.alert("available"+available)
       setLocalData('USER', {
         isProviderAvailable: available,
       });
       setIsAvailable(available);
+      const availability= available?1:0
+
+        providerAvailabilityStatus( {provider_id:userId, availability:availability.toString()}, token).then((res)=>{
+          console.log("availabitity status",JSON.stringify(res), available )
+        })
+
+      
     }
   };
   const onPressSeeMore = () => {

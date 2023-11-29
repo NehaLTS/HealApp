@@ -29,6 +29,8 @@ import Geolocation from 'react-native-geolocation-service';
 import SplashScreen from 'react-native-splash-screen';
 import * as Sentry from '@sentry/react-native';
 import { Alert } from 'react-native';
+import Geocoder from 'react-native-geocoding';
+
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
@@ -44,7 +46,7 @@ const App = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
   const [currentLocationOfUser, setCurrentLocationOfUser]= useState<currentLocationOfUser>(null);
   const [permissonGrant, setPermissonGrant]=useState(false)
-  const [ providerStatus,setProviderStatus] = useState<string>('');
+  const [ providerStatus,setProviderStatus] = useState<string>('Estimated arrival');
   const [remainingTime, setRemainingTime]=useState<RemaingTime>(null)
  
   /** To Initialize Google SDk */
@@ -59,6 +61,8 @@ const App = () => {
     // We recommend adjusting this value in production.
     // tracesSampleRate: 1.0,
   });
+  Geocoder.init('AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o')
+  
   const getCurrentLocation=()=>{
     Geolocation.watchPosition(
       (position) => {

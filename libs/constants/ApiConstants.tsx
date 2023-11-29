@@ -29,6 +29,7 @@ export const GET_PROVIDER_SERVICE = 'providers/getAllProviderServices'
 export const GET_USER_SERVICES = 'providers/getProviderServices'
 export const ORDER_REQUEST= 'providers/providerClientOrder'
 export const UPDATE_PROVIDER_LOCATION='providers/updateProviderStatus'
+export const PROVIDER_AVAILABILITY='providers/updateProviderAvailability'
 
 
 export const POST = 'POST';
