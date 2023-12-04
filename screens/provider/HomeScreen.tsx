@@ -110,7 +110,7 @@ const HomeScreen = () => {
         console.log('accept', acceptOrder);
         updateLocation();
       }
-    }, 100000);
+    }, 60000);
 
     return () => {
       clearInterval(interval);

@@ -231,15 +231,20 @@ const SearchDoctor = () => {
           showsTraffic
           focusable
           showsBuildings
+          showsIndoors
           initialRegion={currentLocation}
           region={currentLocation}
           style={{ flex: 1 }}
         >
-          {/* {currentLocation!==undefined&&currentLocation.latitude!==0.0&&<MapViewDirections
-    origin={providerLocation}
-    destination={currentLocation}
-    apikey={"AIzaSyDBdv2QXiVFswU6vKCkuwJfSZ1iJobbTVk"}
-  />} */}
+          {currentLocation !== undefined && currentLocation.latitude !== 0.0 && providerLocation && providerLocation.latitude !== 0.0 &&
+            <MapViewDirections
+              strokeWidth={5}
+              splitWaypoints
+              strokeColor={colors.invalid}
+              origin={providerLocation}
+              destination={currentLocation}
+              apikey={"AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o"}
+            />}
           {currentLocation !== undefined &&
             currentLocation.latitude !== 0.0 && (
               <Marker
@@ -307,6 +312,9 @@ const SearchDoctor = () => {
             }}
           >
             <DoctorDetailCard
+              onPressCard={() => {
+                setShowDoctor(!showDoctor);
+              }}
               isPrimary={showRateAlert}
               showBothCards={showRateAlert && providerLocation != undefined}
               status={stausOfArriving}

@@ -141,7 +141,10 @@ const OrderDetailsController = () => {
 
       console.log(" RESPINSE ", res)
 
-      if (res) { navigation.navigate(NavigationRoutes.SearchDoctor, { providerData: res?.closestProvider, orderId: res?.orderId }) }
+      if (res) {
+        navigation.navigate(NavigationRoutes.SearchDoctor, { providerData: res?.closestProvider, orderId: res?.orderId })
+        setIsLoading(false)
+      }
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)
         setShowSummary(true);

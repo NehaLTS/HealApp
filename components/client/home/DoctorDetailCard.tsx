@@ -21,6 +21,7 @@ const DoctorDetailCard = ({
   status,
   time,
   providerData,
+  onPressCard
 }: {
   isPrimary?: boolean;
   showProvider?: boolean;
@@ -33,6 +34,7 @@ const DoctorDetailCard = ({
     remainig: number;
   };
   providerData: any;
+  onPressCard: () => void
 }) => {
   const { t } = useTranslation();
   console.log('ratingData', providerData);
@@ -53,6 +55,13 @@ const DoctorDetailCard = ({
 
       {showProvider || showBothCards ? (
         <View style={styles.cardDetail}>
+          <TouchableOpacity onPress={onPressCard} style={{ alignSelf: 'flex-end' }}>
+            <Image
+              source={require('../../../assets/icon/cancel.png')}
+              style={{ width: getWidth(20), height: getHeight(20), resizeMode: 'contain' }}
+            />
+          </TouchableOpacity>
+
           <Text
             style={styles.doctorTitle}
             title={`${providerData?.firstname}${', '}${providerData?.name}`}
@@ -162,7 +171,8 @@ const styles = StyleSheet.create({
     fontSize: getHeight(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
-    width: '100%',
+    width: '80%',
+    flexWrap: "wrap"
   },
   detailItem: {
     gap: getHeight(dimens.marginM),
