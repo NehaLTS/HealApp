@@ -23,6 +23,7 @@ import OrderDetailsController from './OrderDetailsController';
 import { useTranslation } from 'react-i18next';
 import { getProviderImage } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
+import Loader from 'components/common/Loader';
 
 const OrderDetails = () => {
   const {
@@ -34,6 +35,7 @@ const OrderDetails = () => {
     supplier,
     order,
     setOrder,
+    isLoading
   } = OrderDetailsController();
   const { t } = useTranslation();
   const HeaderTitle = () => (
@@ -69,7 +71,7 @@ const OrderDetails = () => {
   return (
     <>
       {RNHeader(HeaderTitle, HeaderLeft)}
-
+      {isLoading && <Loader />}
       <KeyboardAvoidingView
         behavior={'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
@@ -102,6 +104,7 @@ const OrderDetails = () => {
             style={styles.buttonOrder}
             onPress={handleNextButtonPress}
             width={'30%'}
+            disabled={isLoading}
           />
           {showSummary && (
             <Text title={t('no_fee')} numberOfLines={1} style={styles.text} />

@@ -32,13 +32,14 @@ import ProviderArrivalInfo from 'components/common/ProviderArrivalInfo';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import useUpdateEffect from 'libs/UseUpdateEffect';
+import * as Sentry from '@sentry/react-native'
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation<any>();
-  const localData= getLocalData('ORDER')
-  const{providerStatus, remainingTime}= UseClientUserContext()
-  const [seconds, setSeconds]= useState(remainingTime?.seconds)
+  const localData = getLocalData('ORDER')
+  const { providerStatus, remainingTime } = UseClientUserContext()
+  const [seconds, setSeconds] = useState(remainingTime?.seconds)
   const timeOutRef = useRef<NodeJS.Timeout | undefined>()
   // const [isVisible, setIsVisible] = useState<boolean>(false); TODO: To open add address modal
 
@@ -57,9 +58,13 @@ const HomeScreen = () => {
     isDataNotFound,
     onSearch,
     userProfile,
+    searchedList,
+    searchProviderList,
+    setSearchProviderList
   } = HomeViewController();
- 
- 
+
+  console.log('searchProviderList', searchProviderList)
+  console.log('providersList ********************', providersList)
   const headerTitle = () => (
     <View style={styles.headerTitleContainer}>
       <View style={styles.headerTitle}>
@@ -75,7 +80,7 @@ const HomeScreen = () => {
         title={t('change')}
         fontSize={getWidth(fontSize.textM)}
         style={{ marginBottom: dimens.paddingS }}
-        // onPress={() => setIsVisible(true)}  TODO: Open add address modal
+      // onPress={() => setIsVisible(true)}  TODO: Open add address modal
       />
     </View>
   );
@@ -108,9 +113,20 @@ const HomeScreen = () => {
       </>
     );
   };
+  const getSearchList = () => (
+    searchedList?.map((item: any, index: number) => (
+      <TextButton key={index} fontSize={getWidth(fontSize.textL)} containerStyle={{ marginVertical: getHeight(dimens.paddingXs), width: 'auto' }} title={`\u25CF ${item?.name?.en}`} onPress={() => {
+        setSearchProviderList(item)
+        onSearchDone(item?.name?.en)
+      }} />
+    ))
+  )
+
+  console.log('providersList***********', providersList)
   const getProviderSearchList = () => {
-    return providersList?.map((item: any, index: number) => (
-      <CardView key={index} item={item} index={index} isSearch />
+    return providersList?.map((itemData: any, index: number) => (
+      // console.log('itemData', itemData?.provider_name?.en)
+      <CardView item={itemData} index={index} isSearch />
     ));
   };
   const noSearchedView = () => {
@@ -121,6 +137,7 @@ const HomeScreen = () => {
         <Button
           title={t('back_search')}
           isPrimary
+
           isSmall
           width={'70%'}
           onPress={onPressBack}
@@ -145,6 +162,7 @@ const HomeScreen = () => {
             />
           </TouchableOpacity>
         )}
+        <Button title='testing ' onPress={() => Sentry.captureMessage('testing gurpreet')} />
         <SearchBox
           isTouchStart={isTouchStart && searchSpecialist?.length === 0}
           placeholder={t('what_treatment')}
@@ -152,13 +170,13 @@ const HomeScreen = () => {
           onBlur={onBlur}
           onChangeText={onChange}
           defaultValue={searchSpecialist}
-          onSubmitEditing={onSearchDone}
+        // onSubmitEditing={onSearchDone}
         />
         {searchSpecialist?.length === 0
           ? getProviderList()
-          : isDataNotFound
-          ? getProviderSearchList()
-          : noSearchedView()}
+          : isDataNotFound ?
+            (providersList.length === 0 ? getSearchList() : getProviderSearchList())
+            : noSearchedView()}
       </ScrollView>
       {/* TODO: Address modal use it later
        {isVisible && (     
@@ -169,11 +187,17 @@ const HomeScreen = () => {
           defaultValue={''}
         />
       )} */}
-{console.log('providerData1111', localData, providerStatus)}
-      {localData?.providerDetail&&
-      <View style={{ marginVertical:getHeight(20), alignItems:'center', backgroundColor:'transparent'}}><ProviderArrivalInfo  status={providerStatus}  doctorName= {`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name}`}onPress={()=>{  
-        navigation.navigate(NavigationRoutes.SearchDoctor,{providerData:localData?.providerDetail, orderId:localData?.orderId, previousScreen:"HOME_CLIENT"})
-      }}/></View>}
+      {console.log('providerData1111', localData, providerStatus)}
+      {localData?.providerDetail &&
+        <View style={{ marginVertical: getHeight(20), alignItems: 'center', backgroundColor: 'transparent' }}>
+          <ProviderArrivalInfo
+            status={providerStatus}
+            doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name}`}
+            onPress={() => {
+              navigation.navigate(NavigationRoutes.SearchDoctor,
+                { providerData: localData?.providerDetail, orderId: localData?.orderId, previousScreen: "HOME_CLIENT" })
+            }} />
+        </View>}
     </>
   );
 };

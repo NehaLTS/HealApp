@@ -120,6 +120,29 @@ const OrderFormController = ({
   };
 
   const onSelectReasons = (item: any) => {
+    // const updatedActiveButton = [...activeButton];
+    // const itemIndex = updatedActiveButton.indexOf(item.reason_id);
+
+    // if (itemIndex !== -1) {
+    //   updatedActiveButton.splice(itemIndex, 1);
+    // } else {
+    //   updatedActiveButton.push(item.reason_id);
+    // }
+    // setActiveButton(updatedActiveButton);
+    // const updatedSelectedResourceType = selectedResourceType.includes((item))
+    //   ? selectedResourceType.filter((selectedItem) => {
+    //     if(selectedItem !== item)
+    //   {
+    //     return { reason_id:item.reason_id, name:item?.name?.en}
+    //     // return selectedItem.en
+    //   }})
+    //   : [...selectedResourceType, { reason_id:item.reason_id, name:item?.name?.en}];
+    // setSelectedResourceType(updatedSelectedResourceType);
+    // setOrder((prevOrder) => ({
+    //   ...prevOrder,
+    //   reason: updatedSelectedResourceType,
+    // }));
+
     const updatedActiveButton = [...activeButton];
     const itemIndex = updatedActiveButton.indexOf(item.reason_id);
 
@@ -129,14 +152,10 @@ const OrderFormController = ({
       updatedActiveButton.push(item.reason_id);
     }
     setActiveButton(updatedActiveButton);
-    const updatedSelectedResourceType = selectedResourceType.includes((item))
-      ? selectedResourceType.filter((selectedItem) => {
-        if(selectedItem !== item)
-      {
-        return { reason_id:item.reason_id, name:item?.name?.en}
-        // return selectedItem.en
-      }})
-      : [...selectedResourceType, { reason_id:item.reason_id, name:item?.name?.en}];
+    const updatedSelectedResourceType = selectedResourceType.includes(item)
+      ? selectedResourceType.filter((selectedItem) => selectedItem !== item)
+      : [...selectedResourceType, item];
+
     setSelectedResourceType(updatedSelectedResourceType);
     setOrder((prevOrder) => ({
       ...prevOrder,

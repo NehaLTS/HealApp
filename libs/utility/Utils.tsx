@@ -17,14 +17,14 @@ export const generateRandomName = () => {
 export const getProviderImage = (type: string) => {
   const image = type.includes('Doctor')
     ? doctor
-    : type.includes('Nurse')
-    ? nurse
-    : type.includes('Healer') || type.includes('Alternative')
-    ? healer
-    : type.includes('Physio')
-    ? physio
-    : type.includes('Clinics')
-    ? clinic
-    : doctorOnline;
+    : type?.includes('Nurse')
+      ? nurse
+      : type?.includes('Healer') || type?.includes('Alternative')
+        ? healer
+        : type?.includes('Physio')
+          ? physio
+          : type?.includes('Clinics')
+            ? clinic
+            : doctorOnline;
   return image;
 };

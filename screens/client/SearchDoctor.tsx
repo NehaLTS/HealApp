@@ -29,17 +29,19 @@ import { Location } from 'libs/types/UserType';
 import Geolocation from 'react-native-geolocation-service';
 import SearchDoctorController from './SearchDoctorController';
 import ArrivalTime from 'components/common/ArrivalTime';
-import { LoaderLarge } from 'components/common/Loader';
+import Loader, { LoaderLarge } from 'components/common/Loader';
 import TextButton from 'components/common/TextButton';
 import MapViewDirections from 'react-native-maps-directions';
+import useUpdateEffect from 'libs/UseUpdateEffect';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
   const route = useRoute<any>();
   const providerData = route?.params?.providerData ?? '';
+  console.log('providerData', providerData);
   const providerRemainigTime = route?.params?.remaining;
-  const orderId=route?.params?.orderId ?? '';
- const  previousScreen=route?.params?.previousScreen
+  const orderId = route?.params?.orderId ?? '';
+  const previousScreen = route?.params?.previousScreen
   const { t } = useTranslation();
   const { setCurrentLocationOfUser } = UseClientUserContext();
   const [currentLocation, setCurrentLocation] = useState<Location>();
@@ -54,15 +56,17 @@ const SearchDoctor = () => {
   const [showDoctor, setShowDoctor] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
   const [loader, setLoader] = useState(true);
-  const [disabled, setDisable]= useState(false)
-  const [showCancelButon, setShowCancelButon] = useState(false);
+  const [disabled, setDisable] = useState(false)
+  const [showCancelTextButton, setShowCancelTextButton] = useState(true);
+  const [showCancelButton, setShowCancelButton] = useState(false);
   const [stausOfArriving, setStausOfArriving] =
-    useState<string>(previousScreen!=='HOME_CLIENT'?'Estimated arrival':providerStatus);
+    useState<string>(previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : providerStatus);
   const [secondLoader, setSecondLoader] = useState(false);
- 
-  
+  const [isLoading, setIsLoading] = useState(false);
 
- 
+
+
+
 
   useLayoutEffect(() => {
     console.log('ankita', providerData, localData?.providerDetail);
@@ -111,26 +115,29 @@ const SearchDoctor = () => {
 
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      setShowCancelButon(true);
-console.log('DoctorNotification', JSON.stringify(event))
+      console.log('DoctorNotification', JSON.stringify(event))
       if (event.notification.title === "Accept Order") {
-        setLocalData('ORDER', { providerDetail:providerData, orderId:orderId})
+        setShowCancelTextButton(false);
+
+        setShowCancelButton(true)
+        setLocalData('ORDER', { providerDetail: providerData, orderId: orderId })
         setShowTimer(true);
-        setDisable(true)
         setStausOfArriving('On the way');
         setProviderStatus('On the way');
       }
-      if (event.notification.title === "Arrived") {
+      if (event.notification.title === "Arrived Order") {
+        setShowCancelTextButton(false);
+
         setStausOfArriving('Arrived');
         setProviderStatus('arrived')
-        setLocalData('ORDER', { providerDetail:''})
+        setLocalData('ORDER', { providerDetail: '' })
         setTimeout(() => {
-          setProviderStatus('Estimated arrival')    
-            }, 10000);
+          setProviderStatus('Estimated arrival')
+        }, 10000);
       }
 
       setTimeout(() => {
-        setShowCancelButon(false);
+        setShowCancelButton(false);
       }, 300000);
       setProviderLocation({
         latitude: parseFloat(event.data.latitude),
@@ -139,44 +146,61 @@ console.log('DoctorNotification', JSON.stringify(event))
     });
   };
   useEffect(() => {
-      getEventUpdate();
+    getEventUpdate();
   }, []);
 
   useEffect(() => {
     createNotificationListeners();
-    if(previousScreen==='HOME_CLIENT'){
+    if (previousScreen === 'HOME_CLIENT') {
       setProviderLocation({
         latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
         longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
       });
-   
-  }else{
-    setProviderLocation({
-      latitude: parseFloat(providerData?.latitude ?? 0.0),
-      longitude: parseFloat(providerData?.longitude ?? 0.0),
-    });
-  }
+
+    } else {
+      setProviderLocation({
+        latitude: parseFloat(providerData?.latitude ?? 0.0),
+        longitude: parseFloat(providerData?.longitude ?? 0.0),
+      });
+    }
   }, []);
 
   setTimeout(() => {
     setLoader(false);
+
     setSecondLoader(false);
   }, 20000);
 
- setTimeout(() => {
+  setTimeout(() => {
     setSecondLoader(false);
   }, 10000);
   const onPressOrder = () => {
+    setIsLoading(true)
     setSecondLoader(true);
-    setShowCancelButon(true);
-    setTimeout(() => {
-      setShowCancelButon(false);
-    }, 300000);
     handleNextButtonPress();
   };
 
+  useUpdateEffect(() => {
+    if (secondLoader) {
+      setShowCancelTextButton(true);
+      setTimeout(() => {
+        setShowCancelTextButton(false);
+      }, 180000);
+    }
+  }, [secondLoader])
 
+  const providerStatusOnHeader = (stausOfArriving: string) => {
+    switch (stausOfArriving) {
+      case 'Arrived':
+        return 'has arrived'
+      case 'On the way':
+        return 'on the way'
+      default:
+        return 'is found'
+    }
 
+  }
+  console.log('loader', loader)
   return (
     <View style={styles.mainContainer}>
       <View>
@@ -192,11 +216,9 @@ console.log('DoctorNotification', JSON.stringify(event))
           title={
             (providerLocation !== undefined &&
               providerLocation.latitude === 0.0) ||
-            loader
+              loader
               ? t('looking_doctor')
-              : stausOfArriving === 'Arrived'
-              ? t('doctor_arrived')
-              : t('doctor_found')
+              : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
           }
         />
       </View>
@@ -273,8 +295,8 @@ console.log('DoctorNotification', JSON.stringify(event))
         </MapView>
 
         {showDoctor &&
-        providerLocation !== undefined &&
-        providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
           <View
             style={{
               zIndex: 2,
@@ -295,28 +317,32 @@ console.log('DoctorNotification', JSON.stringify(event))
           </View>
         ) : null}
       </View>
-      <View>
-        <Button
+      {stausOfArriving !== 'Arrived' ? <View>
+        {<Button
           title={
             providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 &&
-            !loader
+              providerLocation.latitude !== 0.0 &&
+              !loader && !showCancelButton
               ? t('order')
               : t('cancel')
           }
           isPrimary
           isSmall
-          disabled={disabled|| previousScreen==='HOME_CLIENT' }
+          disabled={previousScreen === 'HOME_CLIENT' || (
+            isLoading
+          )
+          }
           onPress={onPressOrder}
           width={'30%'}
           height={getHeight(dimens.imageS)}
           style={{ alignSelf: 'center', marginBottom: 10 }}
         />
-        {showCancelButon && (
+        }
+        {showCancelTextButton && !loader && (
           <TextButton
             style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
             title={t('cancel')}
-            onPress={() => {}}
+            onPress={() => { }}
           />
         )}
         <Text
@@ -324,14 +350,14 @@ console.log('DoctorNotification', JSON.stringify(event))
           title={
             (providerLocation !== undefined &&
               providerLocation.latitude === 0.0) ||
-            loader
+              loader
               ? t('no_fee_collected')
-              : showCancelButon
-              ? t('3_minutes_to_cancel')
-              : ''
+              : showCancelTextButton || showCancelButton
+                ? t('3_minutes_to_cancel')
+                : ''
           }
         />
-      </View>
+      </View> : <View style={{ height: getHeight(100) }}></View>}
     </View>
   );
 };

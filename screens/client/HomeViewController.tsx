@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
-import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { deleteLocalData, getLocalData } from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import {
   ClientProfile,
@@ -21,14 +21,26 @@ const HomeViewController = () => {
   const navigation = useNavigation();
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
-  const { getBannerAds, searchProviders } = ClientOrderServices();
+  const { getBannerAds, searchProviders, searchList } = ClientOrderServices();
   const [providersList, setProvidersList] = useState<search_provider[]>([]);
+  const [searchedList, setSearchedList] = useState<any[]>([]);
   const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
   const [user, setUser] = useState<ClientProfile>();
-  const { userProfile, setUserProfile } = UseClientUserContext();
+  const { userProfile, setUserProfile,
+
+    setCurrentStep,
+    setUserId,
+    setToken,
+    setCurrentLocationOfUser,
+    setOrderDetails,
+    setProviderStatus,
+    setRemainingTime,
+  } = UseClientUserContext();
   const orderList = list.home.providerList
+  const [searchProviderList, setSearchProviderList] = useState<any>()
+
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = orderList
@@ -92,9 +104,10 @@ const HomeViewController = () => {
       console.error('An error occurred:', error);
     }
   };
-  const onSearchDone = async () => {
+  const onSearchDone = async (item: string) => {
+    console.log('searchSpecialist in the controller', searchSpecialist)
     const res = await searchProviders({
-      name: searchSpecialist,
+      name: item,
       latitude: '30.377305039494523',
       longitude: '76.78137416040587',
     });
@@ -102,12 +115,26 @@ const HomeViewController = () => {
     if (res?.message) setIsDataNotFound(false);
     else setProvidersList(res);
   };
-  const onChange = (value: string) => {
+  const onChange = async (value: string) => {
+
+    const res = await searchList({
+      name: searchSpecialist?.toLowerCase(),
+    });
+    if (res.length > 0) {
+      setSearchedList(res)
+    }
+    console.log('searchList', res)
+
     setSearchSpecialist(value);
-    setIsDataNotFound(true);
+    // setIsDataNotFound(true);
   };
   const onSearch = () => {
+    setUserProfile(null)
+    setOrderDetails(null)
+    setProviderStatus(null)
+    setRemainingTime(null)
     deleteLocalData();
+
     navigation.navigate(NavigationRoutes.IntroStack);
   };
   const onTouchStart = () => setIsTouchStart(false);
@@ -133,6 +160,9 @@ const HomeViewController = () => {
     isDataNotFound,
     onSearch,
     userProfile,
+    searchedList,
+    searchProviderList,
+    setSearchProviderList
   };
 };
 

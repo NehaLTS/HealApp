@@ -13,11 +13,12 @@ import { useTranslation } from 'react-i18next';
 const OrderDetailsController = () => {
   const { t } = useTranslation();
   const [showSummary, setShowSummary] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { treatmentMenu, orderProvider } = ClientOrderServices();
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation();
-  const {currentLocationOfUser, orderDetails, userProfile:user, userId}= UseClientUserContext()
+  const { currentLocationOfUser, orderDetails, userProfile: user, userId } = UseClientUserContext()
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
 
   const route = useRoute<any>();
@@ -26,7 +27,7 @@ const OrderDetailsController = () => {
   const [order, setOrder] = useState<OrderDetail>({
     client_id: '',
     patient_type: { type: 'me', age: '' },
-    patient_name: '',
+    patient_name: (userProfile as ClientProfile)?.firstName ?? '',
     address: (userProfile as ClientProfile)?.address ?? '',
     city: (userProfile as ClientProfile)?.city ?? '',
     phonenumber: (userProfile as ClientProfile)?.phoneNumber ?? '',
@@ -56,7 +57,39 @@ const OrderDetailsController = () => {
     }
   };
 
-  
+  const symptoms = order.reason.map((item: any) => {
+    return {
+      name: item.name.en, // Assuming you want the English name
+      id: item.reason_id
+    };
+  });
+  const DAAT = {
+    client_id: userId,
+    patient_type: order.patient_type.type ?? "",
+    patient_name: order.patient_name,
+    address: order?.address ?? "",
+    city: order.city,
+    phonenumber: order?.phonenumber,
+    Date_of_birth: !order?.isOrderForOther
+      ? user?.date_of_birth ?? ''
+      : order?.patient_type?.age ?? '',
+    services: order.services[0],
+    symptoms: JSON.stringify(symptoms),
+    Additional_notes: order.Additional_notes,
+    Estimate_arrival: order.Estimate_arrival,
+    Instructions_for_arrival: order?.Instructions_for_arrival,
+    Payment_mode: order.Payment_mode,
+    TotalCost: order?.services.reduce(
+      (total, item) => total + parseInt(item.price, 10),
+      0,
+    ),
+    latitude: currentLocationOfUser?.latitude,
+    longitude: currentLocationOfUser?.longitude,
+    provider_type_id: supplier.provider_type_id
+
+  }
+  console.log("DAATAAA ", DAAT,)
+  // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
     if (
       order.isOrderForOther &&
@@ -75,65 +108,40 @@ const OrderDetailsController = () => {
     ) {
       setShowSummary(true);
     }
-   console.log('currentLocationOfUser.latitude,' ,currentLocationOfUser)
+    console.log('currentLocationOfUser.latitude,', currentLocationOfUser)
     if (showSummary) {
-    const DAAT=  {
-      client_id:userId,
-      patient_type: order.patient_type.type ?? "",
-      patient_name: order.patient_name,
-      address: order?.address ?? "",
-      city: order.city,
-      phonenumber: order?.phonenumber,
-      Date_of_birth: !order?.isOrderForOther
-        ? user?.date_of_birth ?? ''
-        : order?.patient_type?.age ?? '',
-      services: order.services[0],
-      symptoms: JSON.stringify(order.reason),
-      Additional_notes: order.Additional_notes,
-      Estimate_arrival: order.Estimate_arrival,
-      Instructions_for_arrival: order?.Instructions_for_arrival,
-      Payment_mode: order.Payment_mode,
-      TotalCost:order?.services.reduce(
-        (total, item) => total + parseInt(item.price, 10),
-        0,
-      ),
-      latitude:currentLocationOfUser.latitude,
-      longitude:currentLocationOfUser.longitude,
-      provider_type_id:supplier.provider_type_id
-     
-    }
-    console.log("DAATAAA ",  DAAT,)
-      const res = await orderProvider (
+      setIsLoading(true)
+      const res = await orderProvider(
         {
-        client_id:userId.toString(),
-        patient_type: order.patient_type.type ?? "",
-        patient_name: order.patient_name,
-        address: order?.address ?? "",
-        city: order.city,
-        phonenumber: order?.phonenumber,
-        Date_of_birth: !order?.isOrderForOther
-          ? user?.date_of_birth ?? ''
-          : order?.patient_type?.age ?? '',
-        services: order.services[0].menu_id.toString(),
-        symptoms:JSON.stringify(order.reason),
-        Additional_notes: order?.Additional_notes,
-        Estimate_arrival: order?.Estimate_arrival,
-        Instructions_for_arrival: order?.Instructions_for_arrival,
-        Payment_mode: order?.Payment_mode,
-        TotalCost:order?.services.reduce(
-          (total, item) => total + parseInt(item.price, 10),
-          0,
-        ).toString(),
-        latitude:currentLocationOfUser?.latitude,
-        longitude:currentLocationOfUser?.longitude,
-        provider_type_id:supplier?.provider_type_id?.toString()
-       
-      }
+          client_id: userId.toString(),
+          patient_type: order.patient_type.type ?? "",
+          patient_name: order.patient_name,
+          address: order?.address ?? "",
+          city: order.city,
+          phonenumber: order?.phonenumber,
+          Date_of_birth: !order?.isOrderForOther
+            ? user?.date_of_birth ?? ''
+            : order?.patient_type?.age ?? '',
+          services: order.services[0].menu_id.toString(),
+          symptoms: JSON.stringify(symptoms),
+          Additional_notes: order?.Additional_notes,
+          Estimate_arrival: order?.Estimate_arrival,
+          Instructions_for_arrival: order?.Instructions_for_arrival,
+          Payment_mode: order?.Payment_mode,
+          TotalCost: order?.services.reduce(
+            (total, item) => total + parseInt(item.price, 10),
+            0,
+          ).toString(),
+          latitude: currentLocationOfUser?.latitude,
+          longitude: currentLocationOfUser?.longitude,
+          provider_type_id: supplier?.provider_type_id?.toString()
+
+        }
       );
-      
+
       console.log(" RESPINSE ", res)
 
-      if(res){ navigation.navigate(NavigationRoutes.SearchDoctor, {providerData:res?.closestProvider, orderId:res?.orderId})}
+      if (res) { navigation.navigate(NavigationRoutes.SearchDoctor, { providerData: res?.closestProvider, orderId: res?.orderId }) }
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)
         setShowSummary(true);
@@ -151,6 +159,7 @@ const OrderDetailsController = () => {
     supplier,
     order,
     setOrder,
+    isLoading
   };
 };
 

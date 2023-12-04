@@ -20,6 +20,7 @@ import {
   Alert,
   DeviceEventEmitter,
   Image,
+  Linking,
   Animated as RNAnimated,
   StyleSheet,
   TouchableOpacity,
@@ -41,6 +42,7 @@ import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
   const available = getLocalData('USER');
+  const order = getLocalData('ORDER');
   const [isAvailable, setIsAvailable] = useState(
     available?.isProviderAvailable,
   );
@@ -56,13 +58,15 @@ const HomeScreen = () => {
   const { acceptOrder, OnPressTakeOrder, updateLocation } = HomeScreenControlller();
   const { providerAvailabilityStatus } = AuthServicesProvider();
   const { userId, token } =
-  UseProviderUserContext()
+    UseProviderUserContext()
   const { t } = useTranslation();
   useEffect(() => {
     createNotificationListeners();
   }, []);
-
+  console.log('firstname', order);
   const modalHeight = useSharedValue(getHeight(360));
+
+
 
   const getImageUrl = (url: string) => setLicensePicture(url);
   const onPressUpload = () => {
@@ -89,12 +93,20 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
+    let isArrived: string = ''
+
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
+      isArrived = event.notification?.title
+      console.log('providerNotification **** 0000 ***** 00000', event)
       setNotification(true);
+      if (isArrived === "Arrived Order") {
+        Alert.alert('Arrived Order')
+        setIsArrived(true)
+      }
     });
 
     const interval = setInterval(() => {
-      if (acceptOrder) {
+      if (acceptOrder && isArrived !== "Arrived Order") {
         Alert.alert('updateLocation api hit after 1 minute');
         console.log('accept', acceptOrder);
         updateLocation();
@@ -111,18 +123,18 @@ const HomeScreen = () => {
     if ((localData as ProviderProfile)?.licensenumber === '') {
       setIsVisibleLicense(true);
     } else {
-      Alert.alert("available"+available)
+      Alert.alert("available" + available)
       setLocalData('USER', {
         isProviderAvailable: available,
       });
       setIsAvailable(available);
-      const availability= available?1:0
+      const availability = available ? 1 : 0
 
-        providerAvailabilityStatus( {provider_id:userId, availability:availability.toString()}, token).then((res)=>{
-          console.log("availabitity status",JSON.stringify(res), available )
-        })
+      providerAvailabilityStatus({ provider_id: userId, availability: availability.toString() }, token).then((res) => {
+        console.log("availabitity status", JSON.stringify(res), available)
+      })
 
-      
+
     }
   };
   const onPressSeeMore = () => {
@@ -150,9 +162,8 @@ const HomeScreen = () => {
     const formatTime = (time) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${
-        remainingSeconds < 10 ? '0' : ''
-      }${remainingSeconds}`;
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
+        }${remainingSeconds}`;
     };
 
     return (
@@ -180,7 +191,7 @@ const HomeScreen = () => {
       />
       <AnimatedText
         style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-        title={'Ilana Vexler'}
+        title={order?.eventData?.patient_name}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -188,7 +199,7 @@ const HomeScreen = () => {
         title={'Services provided'}
         entering={FadeInUp.duration(400).delay(700)}
       />
-      {servicesProvided.map((item, index) => (
+      {servicesProvided?.map((item, index) => (
         <View key={index} style={styles.servicesProvided}>
           <View style={styles.servicesLeftView}>
             <AnimatedText
@@ -237,11 +248,15 @@ const HomeScreen = () => {
           numberOfLines={1}
         />
       )}
-      <AnimatedText
-        style={{ ...styles.details, marginTop: getHeight(20) }}
-        title={t('chest_pain')}
-        entering={FadeInLeft.duration(400).delay(500)}
-      />
+
+      {JSON.parse(order?.eventData?.symptoms)?.map?.((item: any, index: number) => (
+        <AnimatedText
+          key={index}
+          style={{ ...styles.details, marginTop: getHeight(20) }}
+          title={item?.name}
+          entering={FadeInLeft.duration(400).delay(500)}
+        />
+      ))}
       <AnimatedText
         style={{
           ...styles.details,
@@ -255,12 +270,12 @@ const HomeScreen = () => {
       />
       <AnimatedText
         style={styles.otherDetails}
-        title={`${'Ilana Vexler'}  ${'2'}km, ~${'30'}min`}
+        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname}   ${'2'} km, ~${'30'}min`}
         entering={FadeInLeft.duration(400).delay(700)}
       />
       <AnimatedText
         style={styles.otherDetails}
-        title={'Haifa, Zionut st. 2'}
+        title={order?.eventData?.address}
         entering={FadeInLeft.duration(400).delay(800)}
       />
       <AnimatedText
@@ -314,6 +329,9 @@ const HomeScreen = () => {
         >
           <TextButton
             title={'Call the client'}
+            onPress={() => {
+              Linking.openURL(`tel:${order?.eventData?.phone_number}`);
+            }}
             fontSize={getHeight(fontSize.textXl)}
             style={styles.seeOnWaze}
             entering={FadeInLeft.duration(400).delay(1100)}
@@ -364,8 +382,8 @@ const HomeScreen = () => {
               isArrived
                 ? 'You arrived'
                 : acceptOrder
-                ? 'Order accepted'
-                : 'You have a new order!'
+                  ? 'Order accepted'
+                  : 'You have a new order!'
             }
             entering={FadeInUp.duration(400).delay(400)}
           />
@@ -373,17 +391,24 @@ const HomeScreen = () => {
         {isArrived ? (
           arrivedView()
         ) : isSeeMore ? (
-          <>{orderDetailView()}</>
+          orderDetailView()
         ) : (
           <>
-            <Text style={styles.details} title={t('chest_pain')} />
+            {order?.eventData?.symptoms?.length && JSON.parse?.(order?.eventData?.symptoms)?.map?.((item: any, index: number) => (
+              <AnimatedText
+                key={index}
+                style={{ ...styles.details, marginTop: getHeight(20) }}
+                title={item?.name}
+                entering={FadeInLeft.duration(400).delay(500)}
+              />
+            ))}
             <Text
               style={styles.details}
               title={`Ordered: ${t(' voltaren_shot')}`}
             />
             <Text
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${'Ilana Vexler'}    ${'2'} km, ${'~ 30'} min`}
+              title={`${order?.eventData?.firstname}    ${'2'} km, ${'~ 30'} min`}
             />
           </>
         )}
@@ -412,9 +437,16 @@ const HomeScreen = () => {
               fontSized={getHeight(fontSize.textL)}
               background={colors.white}
               onPress={() => {
-                OnPressTakeOrder();
-                modalHeight.value = withSpring(getHeight(652));
-                setIsSeeMore(true);
+                if (!isArrived) {
+                  OnPressTakeOrder();
+                  modalHeight.value = withSpring(getHeight(652));
+                  setIsSeeMore(true);
+                }
+                else {
+                  setIsAvailable(false)
+                  setLocalData('ORDER', { eventData: null, orderStatus: '' })
+
+                }
               }}
             />
           )}

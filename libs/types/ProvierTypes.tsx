@@ -46,6 +46,7 @@ export interface Reason {
 export interface Name {
   en: string;
   hi?: string;
+  he?:string
 }
 
 export interface TreatmentMenu {
@@ -61,12 +62,15 @@ export interface order_provider {
 
 }
 
+export interface seach_type{
+  provider_id: number;
+  provider_name: Name
 
+}
 export interface search_provider {
   image_url?: string,
-  provider_type_id?: number,
-  name?: string,
-  message?: string
+  type: Array<seach_type>
+
 }
 
 export interface Provider {

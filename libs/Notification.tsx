@@ -1,7 +1,8 @@
 import messaging from '@react-native-firebase/messaging';
+import { sentryTraceGesture } from '@sentry/react-native';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { DeviceEventEmitter } from 'react-native';
-
+import * as Sentry from '@sentry/react-native'
 
 const requestPermission = async () => {
   try {
@@ -17,12 +18,12 @@ const getToken = async () => {
 
   if (!fcmToken) {
     fcmToken = await messaging().getToken();
-   
+
     console.log('fcmToken is ', fcmToken);
     if (fcmToken) {
       console.log('tokenDecice', fcmToken);
       await setLocalData('USER', { deviceToken: fcmToken });
-       
+
     }
   }
 };
@@ -42,10 +43,13 @@ export const createNotificationListeners = () => {
 
   // Handle incoming messages in the foreground
   const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
-    const { notification } = remoteMessage;
 
- setLocalData('ORDER', {eventData:remoteMessage.data, orderStatus: remoteMessage?.notification?.title})   
-   DeviceEventEmitter.emit('DoctorNotification', remoteMessage);
+    const { notification } = remoteMessage;
+    Sentry.captureMessage(`first notification message---- ${remoteMessage}`)
+    //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
+
+    setLocalData('ORDER', { eventData: remoteMessage.data, orderStatus: remoteMessage?.notification?.title })
+    DeviceEventEmitter.emit('DoctorNotification', remoteMessage);
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);
   });
@@ -54,6 +58,11 @@ export const createNotificationListeners = () => {
   const unsubscribeOnNotificationOpened = messaging().onNotificationOpenedApp(
     (remoteMessage) => {
       console.log('messagesOnMessageTextDatat', remoteMessage);
+      Sentry.captureMessage(`second notification message---- ${remoteMessage}`)
+      //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
+
+
+
       DeviceEventEmitter.emit('DoctorNotification', remoteMessage.data);
     },
   );
@@ -64,6 +73,11 @@ export const createNotificationListeners = () => {
     .then((remoteMessage) => {
       if (remoteMessage) {
         const { notification } = remoteMessage;
+
+        //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
+
+        Sentry.captureMessage(`third notification message---- ${remoteMessage}`)
+
         // showAlert(notification.title, notification.body);
       }
     });

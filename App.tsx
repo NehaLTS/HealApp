@@ -44,11 +44,11 @@ const App = () => {
   const [providerServices, setProviderServices] =
     useState<ProviderServices>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
-  const [currentLocationOfUser, setCurrentLocationOfUser]= useState<currentLocationOfUser>(null);
-  const [permissonGrant, setPermissonGrant]=useState(false)
-  const [ providerStatus,setProviderStatus] = useState<string>('Estimated arrival');
-  const [remainingTime, setRemainingTime]=useState<RemaingTime>(null)
- 
+  const [currentLocationOfUser, setCurrentLocationOfUser] = useState<currentLocationOfUser>(null);
+  const [permissonGrant, setPermissonGrant] = useState(false)
+  const [providerStatus, setProviderStatus] = useState<string>('Estimated arrival');
+  const [remainingTime, setRemainingTime] = useState<RemaingTime>(null)
+
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -56,18 +56,15 @@ const App = () => {
   });
 
   Sentry.init({
-    dsn: 'https://5bf4a6ef5ed5d3ff62d62d7de134f8d6@o4506076220817408.ingest.sentry.io/4506076223242240',
-    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-    // We recommend adjusting this value in production.
-    // tracesSampleRate: 1.0,
+    dsn: 'https://8145cfca103e5af396371f473add7b83@o4506268496560128.ingest.sentry.io/4506268523167744',
   });
   Geocoder.init('AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o')
-  
-  const getCurrentLocation=()=>{
+
+  const getCurrentLocation = () => {
     Geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setCurrentLocationOfUser({latitude:latitude.toString() , longitude:longitude.toString()})
+        setCurrentLocationOfUser({ latitude: latitude.toString(), longitude: longitude.toString() })
       },
       (error) => {
         console.log('Error getting location: ' + error.message);

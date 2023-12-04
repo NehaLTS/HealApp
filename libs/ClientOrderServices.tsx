@@ -6,6 +6,7 @@ import {
   GET,
   GET_AD_BANNER,
   GET_LOCATION_SEARCH,
+  GET_SEARCH_LIST,
   GET_SEARCH_PROVIDER,
   GET_TREATMENT_MENU,
   ORDER_PROVIDER,
@@ -25,7 +26,7 @@ import {
 const access_token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODk4NjY5NCwiZXhwIjoxNjk5MDE5MDk0fQ.6nHvRnfJwgmgnCo0zYLf9yO2kvDIxJ0IZALJCB_PHr0';
 export const ClientOrderServices = () => {
-    const { token } =
+  const { token } =
     UseClientUserContext();
   const getBannerAds = (): Promise<Banner[]> =>
     sendRequest(GET_AD_BANNER, {
@@ -33,7 +34,7 @@ export const ClientOrderServices = () => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-         } as unknown as HeadersInit,
+      } as unknown as HeadersInit,
     });
   const searchProviders = (body: {
     name: string;
@@ -46,26 +47,38 @@ export const ClientOrderServices = () => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-          } as unknown as HeadersInit,
+      } as unknown as HeadersInit,
     });
 
-  const providerLocationSearch =(body: {
+  const searchList = (body: {
+    name: string;
+  }): Promise<any> =>
+    sendRequest(GET_SEARCH_LIST, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    });
+
+  const providerLocationSearch = (body: {
     name: string;
     provider_type_id: string;
     longitude: string;
     latitude: string;
-    reqDistance:string
+    reqDistance: string
   }): Promise<any> =>
-  sendRequest(GET_LOCATION_SEARCH, {
-    method: POST,
-    body: body as unknown as BodyInit,
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": getLocalData?.("USER")?.token,
-      // "x-access-token":
-      //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-    } as unknown as HeadersInit,
-  });
+    sendRequest(GET_LOCATION_SEARCH, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": getLocalData?.("USER")?.token,
+        // "x-access-token":
+        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
+      } as unknown as HeadersInit,
+    });
 
 
 
@@ -87,7 +100,7 @@ export const ClientOrderServices = () => {
     latitude: string;
     longitude: string;
     provider_type_id: string;
-  
+
   }): Promise<any> =>
     sendRequest(ORDER_PROVIDER, {
       method: POST,
@@ -95,10 +108,10 @@ export const ClientOrderServices = () => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-              } as unknown as HeadersInit,
+      } as unknown as HeadersInit,
     });
 
-  const handlePayment = (body: {}): void => {};
+  const handlePayment = (body: {}): void => { };
 
   const treatmentMenu = (body: {
     provider_type_id: string;
@@ -109,20 +122,20 @@ export const ClientOrderServices = () => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-            } as unknown as HeadersInit,
+      } as unknown as HeadersInit,
     });
 
-    const BookOrderRequest =(body: BookOrderRequest): Promise<any> =>
+  const BookOrderRequest = (body: BookOrderRequest): Promise<any> =>
     sendRequest(BOOK_ORDER, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        
+
         // "x-access-token":
         //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
       } as unknown as HeadersInit,
-      
+
     });
   return {
     getBannerAds,
@@ -130,6 +143,7 @@ export const ClientOrderServices = () => {
     searchProviders,
     orderProvider,
     providerLocationSearch,
-    BookOrderRequest
+    BookOrderRequest,
+    searchList
   };
 };

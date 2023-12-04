@@ -22,7 +22,7 @@ export const sendRequest = (url: RequestInfo, opts: OptType) => {
 
     return httpTimeout(
         TIME_OUT,
-        fetch(newUrl, { ...opts, headers: { ...DEFAULT_HEADERS, ...opts.headers }, signal: Timeout(40).signal}),
+        fetch(newUrl, { ...opts, headers: { ...DEFAULT_HEADERS, ...opts.headers }}),
     )
         .then((res: any) => {
             console.log("responseProvider", res)
