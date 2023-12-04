@@ -20,7 +20,7 @@ import {
   ProviderServices,
   onboardStep,
   currentLocationOfUser,
-  RemaingTime
+  RemaingTime,
 } from 'libs/types/UserType';
 import { ClientUserContext } from 'contexts/UseClientUserContext';
 import { ProviderUserContext } from 'contexts/UseProviderUserContext';
@@ -30,7 +30,7 @@ import SplashScreen from 'react-native-splash-screen';
 import * as Sentry from '@sentry/react-native';
 import { Alert } from 'react-native';
 import Geocoder from 'react-native-geocoding';
-
+import { useCurrentAddress } from 'libs/useCurrentAddress';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
@@ -44,11 +44,12 @@ const App = () => {
   const [providerServices, setProviderServices] =
     useState<ProviderServices>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
-  const [currentLocationOfUser, setCurrentLocationOfUser] = useState<currentLocationOfUser>(null);
-  const [permissonGrant, setPermissonGrant] = useState(false)
-  const [providerStatus, setProviderStatus] = useState<string>('Estimated arrival');
-  const [remainingTime, setRemainingTime] = useState<RemaingTime>(null)
-
+  const [currentLocationOfUser, setCurrentLocationOfUser] =
+    useState<currentLocationOfUser>(null);
+  const [permissonGrant, setPermissonGrant] = useState(false);
+  const [providerStatus, setProviderStatus] = useState<string>('');
+  const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
+  const { fetchCurrentAddress } = useCurrentAddress();
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -58,13 +59,16 @@ const App = () => {
   Sentry.init({
     dsn: 'https://8145cfca103e5af396371f473add7b83@o4506268496560128.ingest.sentry.io/4506268523167744',
   });
-  Geocoder.init('AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o')
+  Geocoder.init('AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o');
 
   const getCurrentLocation = () => {
     Geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setCurrentLocationOfUser({ latitude: latitude.toString(), longitude: longitude.toString() })
+        setCurrentLocationOfUser({
+          latitude: latitude.toString(),
+          longitude: longitude.toString(),
+        });
       },
       (error) => {
         console.log('Error getting location: ' + error.message);
@@ -73,18 +77,18 @@ const App = () => {
         enableHighAccuracy: true,
       },
     );
-  }
+  };
   const requestLocationPermission = async () => {
     try {
       const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (result === RESULTS.GRANTED) {
-        getCurrentLocation()
+        getCurrentLocation();
       } else {
         const permissionResult = await request(
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         );
         if (permissionResult === RESULTS.GRANTED) {
-          getCurrentLocation()
+          getCurrentLocation();
         }
       }
     } catch (err) {
@@ -95,6 +99,22 @@ const App = () => {
   useEffect(() => {
     requestLocationPermission();
   }, [permissonGrant]);
+
+  React.useEffect(() => {
+    const location = async () => {
+      await fetchCurrentAddress()
+        .then((address: any) => {
+          setCurrentLocationOfUser({
+            ...currentLocationOfUser,
+            address: address.toString() ?? '',
+          });
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    };
+    location();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -116,7 +136,7 @@ const App = () => {
             setProviderStatus,
             providerStatus,
             setRemainingTime,
-            remainingTime
+            remainingTime,
           }}
         >
           <ProviderUserContext.Provider

@@ -19,7 +19,7 @@ const ClientStackNavigator = () => {
         )}
       />
       <Stack.Screen
-        options={defaultHeaderStyle}
+        options={{ headerShown: false }}
         name={NavigationRoutes.ClientHome}
         component={HomeScreen}
         // component={lazy(() => import('..//screens/client/HomeScreen'))}
@@ -36,14 +36,11 @@ const ClientStackNavigator = () => {
         // component={lazy(() => import('../screens/client/OrderDetails'))}
         component={OrderDetails}
       />
-         <Stack.Screen
-          name={NavigationRoutes.SearchDoctor}
-          options={defaultHeaderStyle}
-          component={lazy(
-            () =>
-              import("../screens/client/SearchDoctor")
-          )}
-        />
+      <Stack.Screen
+        name={NavigationRoutes.SearchDoctor}
+        options={defaultHeaderStyle}
+        component={lazy(() => import('../screens/client/SearchDoctor'))}
+      />
     </Stack.Navigator>
   );
 };

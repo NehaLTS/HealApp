@@ -10,6 +10,14 @@ import { Alert } from 'react-native';
 
 const UserAddressViewController = () => {
   const { onUpdateUserProfile } = AuthServicesClient();
+  const {
+    setCurrentStep,
+    setUserProfile,
+    userProfile,
+    userId,
+    token,
+    currentLocationOfUser,
+  } = UseClientUserContext();
   const [isShowModal, setIsShowModal] = useState(false);
   const addressRef = React.useRef<any>('');
   const birthDateRef = React.useRef<any>('');
@@ -20,9 +28,10 @@ const UserAddressViewController = () => {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [onSearchAddress, setOnSearchAddress] = useState('');
-  const { setCurrentStep, setUserProfile, userProfile, userId, token } =
-    UseClientUserContext();
+  const [onSearchAddress, setOnSearchAddress] = useState(
+    currentLocationOfUser?.address ?? '',
+  );
+
   const { t } = useTranslation();
   const [profilePicture, setProfilePicture] = useState(
     userProfile && userProfile.profilePicture ? userProfile.profilePicture : '',
@@ -103,10 +112,10 @@ const UserAddressViewController = () => {
           profilePicture: profilePicture ?? '',
         },
         userId,
-        token
+        token,
       );
 
-      console.log('response is ', res, "token",token);
+      console.log('response is ', res, 'token', token);
 
       setLocalData('USERPROFILE', {
         firstName: userProfile?.firstName,

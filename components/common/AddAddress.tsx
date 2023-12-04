@@ -1,13 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
-import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import Input from './Input';
 import RNModal from './Modal';
 import TextButton from './TextButton';
 import { dimens } from 'designToken/dimens';
+import Text from './Text';
+import location from 'assets/icon/location.png';
+import { useTranslation } from 'react-i18next';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import Loader from './Loader';
 
 const AddAddress = ({
   address,
@@ -20,36 +30,118 @@ const AddAddress = ({
   onClose: () => void;
   defaultValue: string;
 }) => {
-  const [searchAddress, setSearchAddress] = useState('');
+  const { currentLocationOfUser } = UseClientUserContext();
+  const [searchAddress, setSearchAddress] = useState(
+    defaultValue || currentLocationOfUser?.address,
+  );
+  const [addressValue, setAddressValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const { t } = useTranslation();
+  const apiKey = 'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o';
+
+  const handleInputChange = async (text: string) => {
+    setAddressValue(text);
+
+    const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${text}&key=${apiKey}`;
+    setIsLoading(true);
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      if (data.predictions) {
+        setSuggestions(data.predictions);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSuggestionSelect = async (selectedPrediction: any) => {
+    setSearchAddress(selectedPrediction.description);
+    address(selectedPrediction.description);
+    onClose();
+
+    const placeId = selectedPrediction?.place_id;
+    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${apiKey}`;
+
+    try {
+      const response = await fetch(detailsUrl);
+      const data = await response.json();
+      if (
+        data.result &&
+        data.result.geometry &&
+        data.result.geometry.location
+      ) {
+        const { lat, lng } = data.result.geometry.location;
+        console.log('Latitude:', lat, 'Longitude:', lng);
+      } else {
+        console.error('Place details unavailable or incomplete:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching place details:', error);
+    }
+  };
+
   return (
     <RNModal
       style={styles.modal}
       backdropOpacity={1}
       backdropColor={colors.white}
       isVisible={isVisible}
+      animationInTiming={600}
+      backdropTransitionInTiming={400}
+      animationIn={'fadeInUp'}
     >
       <View style={styles.addressView}>
         <Input
-          placeholder={t('address')}
+          inputPlaceholder={'Search address'}
           type={'fullStreetAddress'}
-          inputStyle={[{ minWidth: '82%' }]}
-          onClearInputText={() => setSearchAddress('')}
-          onChangeText={setSearchAddress}
-          inputValue={defaultValue}
-          defaultValue={defaultValue}
-          onSubmitEditing={() => {
-            onClose();
-            address(searchAddress);
-          }}
+          inputStyle={[{ minWidth: '84%' }]}
+          onChangeText={handleInputChange}
+          defaultValue={searchAddress}
           autoFocus
+          isSearch={(searchAddress?.length ?? 0) > 2}
+          onClearInputText={() => setSearchAddress('')}
         />
         <TextButton
-          containerStyle={{ width: '18%', alignItems: 'flex-end' }}
+          containerStyle={styles.closeButton}
           title={t('close')}
           fontSize={getWidth(fontSize.textL)}
           onPress={onClose}
         />
       </View>
+      {suggestions.length > 0 ? (
+        <FlatList
+          keyboardShouldPersistTaps="always"
+          data={suggestions}
+          contentContainerStyle={{ paddingTop: getHeight(dimens.marginS) }}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.addressContainer}
+              onPress={() => handleSuggestionSelect(item)}
+            >
+              <Image source={location} style={styles.location} />
+              <Text style={styles.addressText} title={item?.description} />
+            </TouchableOpacity>
+          )}
+        />
+      ) : addressValue.length === 0 ? (
+        <Text style={styles.addressNotFound} title={'Search your address.'} />
+      ) : addressValue.length > 0 && isLoading ? (
+        <Loader isSmall />
+      ) : (
+        <Text
+          style={styles.addressNotFound}
+          title={
+            'Address not found.\nPlease try again or enter a different address.'
+          }
+        />
+      )}
     </RNModal>
   );
 };
@@ -63,5 +155,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: getHeight(dimens.paddingS),
+  },
+  addressContainer: {
+    marginVertical: getHeight(dimens.marginS),
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: getWidth(dimens.marginS),
+  },
+  location: {
+    width: getWidth(dimens.sideMargin),
+    height: getHeight(dimens.sideMargin),
+    resizeMode: 'center',
+  },
+  addressText: {
+    flexWrap: 'wrap',
+    width: '91%',
+    fontSize: getWidth(fontSize.textM),
+  },
+  closeButton: {
+    width: '16%',
+    alignItems: 'flex-end',
+  },
+  addressNotFound: {
+    fontSize: getWidth(fontSize.textM),
+    textAlign: 'center',
+    marginTop: getHeight(dimens.buttonHeight),
   },
 });

@@ -19,6 +19,7 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { fontFamily } from 'designToken/fontFamily';
+import remove from 'assets/icon/remove.png';
 
 const Input = forwardRef(
   (
@@ -35,6 +36,7 @@ const Input = forwardRef(
       isDescription,
       onSubmitDescription,
       inputPlaceholder,
+      isSearch,
       ...props
     }: {
       placeholder?: string;
@@ -58,6 +60,7 @@ const Input = forwardRef(
       onSubmitDescription?: () => void;
       isDescription?: boolean;
       inputPlaceholder?: string;
+      isSearch?: boolean;
     } & TextInputProps,
     ref,
   ) => {
@@ -174,6 +177,19 @@ const Input = forwardRef(
               />
             </TouchableOpacity>
           )}
+          {isSearch && (
+            <TouchableOpacity
+              style={{
+                marginRight: getWidth(6),
+                borderWidth: getWidth(1),
+                borderRadius: getHeight(20),
+                borderColor: colors.disabled,
+              }}
+              onPress={onClearInputText}
+            >
+              <Image source={remove} style={styles.removeImage} />
+            </TouchableOpacity>
+          )}
           {type === 'dateOfBirth' && (
             <TouchableOpacity
               activeOpacity={0.6}
@@ -210,7 +226,8 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: fontSize.textL,
-    marginLeft: getHeight(dimens.marginS),
+    borderRadius: getWidth(dimens.marginS),
+    paddingLeft: getHeight(dimens.marginS),
     color: colors.black,
     flex: 1,
     textAlignVertical: 'top',
@@ -261,6 +278,11 @@ const styles = StyleSheet.create({
   arrowIcon: {
     height: getHeight(dimens.marginL + dimens.paddingXs),
     width: getWidth(dimens.marginL + dimens.paddingXs),
+    resizeMode: 'center',
+  },
+  removeImage: {
+    height: getHeight(22),
+    width: getHeight(22),
     resizeMode: 'center',
   },
 });

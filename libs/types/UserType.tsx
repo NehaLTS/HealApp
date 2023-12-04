@@ -74,7 +74,6 @@ export interface GoogleLoginResponse {
   user: UserGoogle;
 }
 
-
 export interface AdditionalUserInfo {
   providerId: string;
   profile: Profile;
@@ -144,7 +143,7 @@ export interface ClientProfile {
   date_of_birth?: string;
   idNumber?: number;
   isPaymentAdded?: boolean;
-  deviceToken?:string
+  deviceToken?: string;
   description?: string;
   card_number?: string;
   expire_date?: string;
@@ -201,9 +200,9 @@ export interface OrderDetail {
   isOrderForOther: boolean;
 }
 
-export interface RemaingTime{
-  minutes:number
-  seconds:number
+export interface RemaingTime {
+  minutes: number;
+  seconds: number;
 }
 export interface ProviderSpeciality {
   name: HealLanguageType;
@@ -238,19 +237,26 @@ export type Location = {
 export interface SearcProviderLocation {
   distance: number;
   latitude: string;
-  location_id:string;
-  longitude:string; name: string; price: number, provider_id: number, provider_type_id: number; ratings: number, specialty_id: number
+  location_id: string;
+  longitude: string;
+  name: string;
+  price: number;
+  provider_id: number;
+  provider_type_id: number;
+  ratings: number;
+  specialty_id: number;
 }
 
 export interface BookOrderRequest {
-  status:string;
-  provider_id:string;
-  order_id:string;
-  latitude:string;
-  longitude:string;
+  status: string;
+  provider_id: string;
+  order_id: string;
+  latitude: string;
+  longitude: string;
 }
 
-export interface currentLocationOfUser{
-  latitude:string,
-  longitude:string
+export interface currentLocationOfUser {
+  latitude: string;
+  longitude: string;
+  address?: string;
 }

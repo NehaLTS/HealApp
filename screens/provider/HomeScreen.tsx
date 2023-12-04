@@ -38,6 +38,7 @@ import { useTranslation } from 'react-i18next';
 import Checkbox from 'components/common/Checkbox';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import AddAddress from 'components/common/AddAddress';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -55,18 +56,16 @@ const HomeScreen = () => {
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [isShowModal, setIsShowModal] = useState(false);
-  const { acceptOrder, OnPressTakeOrder, updateLocation } = HomeScreenControlller();
+  const { acceptOrder, OnPressTakeOrder, updateLocation } =
+    HomeScreenControlller();
   const { providerAvailabilityStatus } = AuthServicesProvider();
-  const { userId, token } =
-    UseProviderUserContext()
+  const { userId, token } = UseProviderUserContext();
   const { t } = useTranslation();
   useEffect(() => {
     createNotificationListeners();
   }, []);
   console.log('firstname', order);
   const modalHeight = useSharedValue(getHeight(360));
-
-
 
   const getImageUrl = (url: string) => setLicensePicture(url);
   const onPressUpload = () => {
@@ -93,20 +92,20 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    let isArrived: string = ''
+    let isArrived: string = '';
 
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      isArrived = event.notification?.title
-      console.log('providerNotification **** 0000 ***** 00000', event)
+      isArrived = event.notification?.title;
+      console.log('providerNotification **** 0000 ***** 00000', event);
       setNotification(true);
-      if (isArrived === "Arrived Order") {
-        Alert.alert('Arrived Order')
-        setIsArrived(true)
+      if (isArrived === 'Arrived Order') {
+        Alert.alert('Arrived Order');
+        setIsArrived(true);
       }
     });
 
     const interval = setInterval(() => {
-      if (acceptOrder && isArrived !== "Arrived Order") {
+      if (acceptOrder && isArrived !== 'Arrived Order') {
         Alert.alert('updateLocation api hit after 1 minute');
         console.log('accept', acceptOrder);
         updateLocation();
@@ -123,18 +122,19 @@ const HomeScreen = () => {
     if ((localData as ProviderProfile)?.licensenumber === '') {
       setIsVisibleLicense(true);
     } else {
-      Alert.alert("available" + available)
+      Alert.alert('available' + available);
       setLocalData('USER', {
         isProviderAvailable: available,
       });
       setIsAvailable(available);
-      const availability = available ? 1 : 0
+      const availability = available ? 1 : 0;
 
-      providerAvailabilityStatus({ provider_id: userId, availability: availability.toString() }, token).then((res) => {
-        console.log("availabitity status", JSON.stringify(res), available)
-      })
-
-
+      providerAvailabilityStatus(
+        { provider_id: userId, availability: availability.toString() },
+        token,
+      ).then((res) => {
+        console.log('availabitity status', JSON.stringify(res), available);
+      });
     }
   };
   const onPressSeeMore = () => {
@@ -162,8 +162,9 @@ const HomeScreen = () => {
     const formatTime = (time) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
-        }${remainingSeconds}`;
+      return `${minutes}:${
+        remainingSeconds < 10 ? '0' : ''
+      }${remainingSeconds}`;
     };
 
     return (
@@ -249,14 +250,16 @@ const HomeScreen = () => {
         />
       )}
 
-      {JSON.parse(order?.eventData?.symptoms)?.map?.((item: any, index: number) => (
-        <AnimatedText
-          key={index}
-          style={{ ...styles.details, marginTop: getHeight(20) }}
-          title={item?.name}
-          entering={FadeInLeft.duration(400).delay(500)}
-        />
-      ))}
+      {JSON.parse(order?.eventData?.symptoms)?.map?.(
+        (item: any, index: number) => (
+          <AnimatedText
+            key={index}
+            style={{ ...styles.details, marginTop: getHeight(20) }}
+            title={item?.name}
+            entering={FadeInLeft.duration(400).delay(500)}
+          />
+        ),
+      )}
       <AnimatedText
         style={{
           ...styles.details,
@@ -270,7 +273,9 @@ const HomeScreen = () => {
       />
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname}   ${'2'} km, ~${'30'}min`}
+        title={`${order?.eventData?.firstname}  ${
+          order?.eventData?.lastname
+        }   ${'2'} km, ~${'30'}min`}
         entering={FadeInLeft.duration(400).delay(700)}
       />
       <AnimatedText
@@ -382,8 +387,8 @@ const HomeScreen = () => {
               isArrived
                 ? 'You arrived'
                 : acceptOrder
-                  ? 'Order accepted'
-                  : 'You have a new order!'
+                ? 'Order accepted'
+                : 'You have a new order!'
             }
             entering={FadeInUp.duration(400).delay(400)}
           />
@@ -394,21 +399,26 @@ const HomeScreen = () => {
           orderDetailView()
         ) : (
           <>
-            {order?.eventData?.symptoms?.length && JSON.parse?.(order?.eventData?.symptoms)?.map?.((item: any, index: number) => (
-              <AnimatedText
-                key={index}
-                style={{ ...styles.details, marginTop: getHeight(20) }}
-                title={item?.name}
-                entering={FadeInLeft.duration(400).delay(500)}
-              />
-            ))}
+            {order?.eventData?.symptoms?.length &&
+              JSON.parse?.(order?.eventData?.symptoms)?.map?.(
+                (item: any, index: number) => (
+                  <AnimatedText
+                    key={index}
+                    style={{ ...styles.details, marginTop: getHeight(20) }}
+                    title={item?.name}
+                    entering={FadeInLeft.duration(400).delay(500)}
+                  />
+                ),
+              )}
             <Text
               style={styles.details}
               title={`Ordered: ${t(' voltaren_shot')}`}
             />
             <Text
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.eventData?.firstname}    ${'2'} km, ${'~ 30'} min`}
+              title={`${
+                order?.eventData?.firstname
+              }    ${'2'} km, ${'~ 30'} min`}
             />
           </>
         )}
@@ -441,11 +451,9 @@ const HomeScreen = () => {
                   OnPressTakeOrder();
                   modalHeight.value = withSpring(getHeight(652));
                   setIsSeeMore(true);
-                }
-                else {
-                  setIsAvailable(false)
-                  setLocalData('ORDER', { eventData: null, orderStatus: '' })
-
+                } else {
+                  setIsAvailable(false);
+                  setLocalData('ORDER', { eventData: null, orderStatus: '' });
                 }
               }}
             />

@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: getHeight(dimens.marginL),
     zIndex: 1,
+    marginHorizontal: getWidth(dimens.marginM),
   },
   input: {
     fontSize: getHeight(fontSize.textM),
@@ -79,6 +80,11 @@ const styles = StyleSheet.create({
     marginLeft: getHeight(dimens.marginS),
     marginRight: getHeight(dimens.paddingXs - 2),
     resizeMode: 'contain',
+  },
+  removeImage: {
+    height: getHeight(20),
+    width: getHeight(20),
+    resizeMode: 'center',
   },
 });
 

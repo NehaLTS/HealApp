@@ -128,11 +128,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: getWidth(dimens.marginL),
     marginTop: getHeight(dimens.marginS + 8),
+    marginHorizontal: getWidth(dimens.marginM),
   },
   elevation: {
-    elevation: getHeight(8),
+    elevation: getWidth(dimens.sideMargin),
     shadowColor: colors.black,
-    marginHorizontal: getWidth(dimens.paddingXs),
   },
   specialistIcon: {
     width: getHeight(dimens.imageS),

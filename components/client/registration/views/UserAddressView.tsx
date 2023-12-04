@@ -21,6 +21,7 @@ import RNModal from 'components/common/Modal';
 import { colors } from 'designToken/colors';
 import TextButton from 'components/common/TextButton';
 import Loader from 'components/common/Loader';
+import AddAddress from 'components/common/AddAddress';
 
 const UserAddressView = () => {
   const { t } = useTranslation();
@@ -84,6 +85,7 @@ const UserAddressView = () => {
           onSubmitEditing={() => setIsVisible(false)}
           autoFocus
         />
+
         <TextButton
           containerStyle={{ width: '18%', alignItems: 'flex-end' }}
           title={t('close')}
@@ -120,7 +122,7 @@ const UserAddressView = () => {
         <Input
           placeholder={t('address')}
           inputStyle={styles.input}
-          value={onSearchAddress}
+          defaultValue={onSearchAddress}
           errorMessage={addressError}
           onTouchStart={() => setIsVisible(true)}
           caretHidden
@@ -216,14 +218,20 @@ const UserAddressView = () => {
           width={'30%'}
         />
       </View>
-      <RNModal
+      <AddAddress
+        address={setOnSearchAddress}
+        isVisible={isVisible}
+        onClose={() => setIsVisible(false)}
+        defaultValue={onSearchAddress}
+      />
+      {/* <RNModal
         style={styles.modal}
         backdropOpacity={1}
         backdropColor={colors.white}
         isVisible={isVisible}
       >
         {addAddressView()}
-      </RNModal>
+      </RNModal> */}
     </>
   );
 };

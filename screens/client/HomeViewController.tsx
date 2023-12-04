@@ -1,17 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
-import { deleteLocalData, getLocalData } from 'libs/datastorage/useLocalStorage';
-import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import {
-  ClientProfile,
-  ProviderProfile,
-  UserTypeProvider,
-} from 'libs/types/UserType';
+  deleteLocalData,
+  getLocalData,
+} from 'libs/datastorage/useLocalStorage';
+import { Banner, search_provider } from 'libs/types/ProvierTypes';
+import { ClientProfile } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Keyboard, Linking } from 'react-native';
-import list from '../../strings/en.json'
+import list from '../../strings/en.json';
 
 interface Location {
   latitude: number;
@@ -22,28 +21,33 @@ const HomeViewController = () => {
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
   const { getBannerAds, searchProviders, searchList } = ClientOrderServices();
+  const [isVisible, setIsVisible] = useState(false);
   const [providersList, setProvidersList] = useState<search_provider[]>([]);
   const [searchedList, setSearchedList] = useState<any[]>([]);
   const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [location, setLocation] = useState<Location>();
   const [user, setUser] = useState<ClientProfile>();
-  const { userProfile, setUserProfile,
+  const {
+    userProfile,
+    setUserProfile,
 
     setCurrentStep,
     setUserId,
     setToken,
     setCurrentLocationOfUser,
     setOrderDetails,
-    setProviderStatus,
     setRemainingTime,
+    providerStatus,
+    remainingTime,
+    setProviderStatus,
+    currentLocationOfUser,
   } = UseClientUserContext();
-  const orderList = list.home.providerList
-  const [searchProviderList, setSearchProviderList] = useState<any>()
-
+  const orderList = list.home.providerList;
+  const [searchProviderList, setSearchProviderList] = useState<any>();
 
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
-  const providerList = orderList
+  const providerList = orderList;
 
   useEffect(() => {
     getBannerAd();
@@ -62,7 +66,6 @@ const HomeViewController = () => {
       ...userProfile,
       isPaymentAdded: (user as ClientProfile)?.isPaymentAdded,
     });
-    console.log('user?.isPaymentAdded********', user);
   }, []);
   // const getLocation = () => {
   //   Geolocation.getCurrentPosition(
@@ -105,7 +108,7 @@ const HomeViewController = () => {
     }
   };
   const onSearchDone = async (item: string) => {
-    console.log('searchSpecialist in the controller', searchSpecialist)
+    console.log('searchSpecialist in the controller', searchSpecialist);
     const res = await searchProviders({
       name: item,
       latitude: '30.377305039494523',
@@ -116,23 +119,22 @@ const HomeViewController = () => {
     else setProvidersList(res);
   };
   const onChange = async (value: string) => {
-
     const res = await searchList({
       name: searchSpecialist?.toLowerCase(),
     });
     if (res.length > 0) {
-      setSearchedList(res)
+      setSearchedList(res);
     }
-    console.log('searchList', res)
+    console.log('searchList', res);
 
     setSearchSpecialist(value);
     // setIsDataNotFound(true);
   };
   const onSearch = () => {
-    setUserProfile(null)
-    setOrderDetails(null)
-    setProviderStatus(null)
-    setRemainingTime(null)
+    setUserProfile(null);
+    setOrderDetails(null);
+    setProviderStatus(null);
+    setRemainingTime(null);
     deleteLocalData();
 
     navigation.navigate(NavigationRoutes.IntroStack);
@@ -162,7 +164,14 @@ const HomeViewController = () => {
     userProfile,
     searchedList,
     searchProviderList,
-    setSearchProviderList
+    setSearchProviderList,
+    isVisible,
+    setIsVisible,
+    providerStatus,
+    remainingTime,
+    setProviderStatus,
+    currentLocationOfUser,
+    setCurrentLocationOfUser,
   };
 };
 

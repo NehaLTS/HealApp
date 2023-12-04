@@ -1,24 +1,28 @@
 import { useNavigation } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 import arrowBack from 'assets/icon/arrowBack.png';
 import avatar from 'assets/icon/avatar.png';
 import logo from 'assets/icon/healLogo.png';
 import location from 'assets/icon/location.png';
 import noSearchResult from 'assets/icon/searchFallback.png';
+import AddAddress from 'components/common/AddAddress';
 import Button from 'components/common/Button';
 import CardView from 'components/common/CardView';
-import { RNHeader } from 'components/common/Header';
+import ProviderArrivalInfo from 'components/common/ProviderArrivalInfo';
 import SearchBox from 'components/common/SearchBox';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
+import useUpdateEffect from 'libs/UseUpdateEffect';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Alert,
   I18nManager,
   Image,
   ScrollView,
@@ -28,19 +32,11 @@ import {
   View,
 } from 'react-native';
 import HomeViewController from './HomeViewController';
-import ProviderArrivalInfo from 'components/common/ProviderArrivalInfo';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import useUpdateEffect from 'libs/UseUpdateEffect';
-import * as Sentry from '@sentry/react-native'
+import { DotLoader } from 'components/common/Loader';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
-  const navigation = useNavigation<any>();
-  const localData = getLocalData('ORDER')
-  const { providerStatus, remainingTime } = UseClientUserContext()
-  const [seconds, setSeconds] = useState(remainingTime?.seconds)
-  const timeOutRef = useRef<NodeJS.Timeout | undefined>()
+
   // const [isVisible, setIsVisible] = useState<boolean>(false); TODO: To open add address modal
 
   const {
@@ -60,35 +56,65 @@ const HomeScreen = () => {
     userProfile,
     searchedList,
     searchProviderList,
-    setSearchProviderList
+    isVisible,
+    setIsVisible,
+    providerStatus,
+    remainingTime,
+    setProviderStatus,
+    currentLocationOfUser,
+    setCurrentLocationOfUser,
+    setSearchProviderList,
   } = HomeViewController();
+  const navigation = useNavigation<any>();
+  const localData = getLocalData('ORDER');
+  const [seconds, setSeconds] = useState(remainingTime?.seconds);
+  const timeOutRef = useRef<NodeJS.Timeout | undefined>();
+  const minuteRef = useRef<NodeJS.Timeout | undefined>();
+  const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
+  const [currentAddress, setCurrentAddress] = useState<string>('');
 
-  console.log('searchProviderList', searchProviderList)
-  console.log('providersList ********************', providersList)
+  useUpdateEffect(() => {
+    setCurrentAddress(currentLocationOfUser?.address ?? '');
+  }, [currentLocationOfUser]);
+
   const headerTitle = () => (
     <View style={styles.headerTitleContainer}>
       <View style={styles.headerTitle}>
         <Image source={location} style={styles.location} />
-        <Text
-          numberOfLines={1}
-          style={styles.text}
-          title={t('current_location')}
-        />
+        {currentAddress?.length ? (
+          <Text numberOfLines={1} style={styles.text} title={currentAddress} />
+        ) : (
+          <DotLoader />
+        )}
       </View>
       <TextButton
         isActive
         title={t('change')}
         fontSize={getWidth(fontSize.textM)}
         style={{ marginBottom: dimens.paddingS }}
-      // onPress={() => setIsVisible(true)}  TODO: Open add address modal
+        // onPress={() => setIsVisible(true)}  TODO: Open add address modal
+        onPress={() => setIsVisible(true)}
       />
+      {isVisible && (
+        <AddAddress
+          address={(data) => {
+            setCurrentAddress(data);
+            setCurrentLocationOfUser({
+              ...currentLocationOfUser,
+              address: data,
+            });
+          }}
+          isVisible={isVisible}
+          onClose={() => setIsVisible(false)}
+          defaultValue={currentAddress ?? ''}
+        />
+      )}
     </View>
   );
   const headerLeft = () => (
     <TouchableOpacity
       onPress={onPressBack}
       disabled={searchSpecialist?.length === 0}
-      style={{ padding: getWidth(16), paddingLeft: 0 }}
     >
       <Image
         source={searchSpecialist?.length !== 0 ? arrowBack : logo}
@@ -113,16 +139,24 @@ const HomeScreen = () => {
       </>
     );
   };
-  const getSearchList = () => (
+  const getSearchList = () =>
     searchedList?.map((item: any, index: number) => (
-      <TextButton key={index} fontSize={getWidth(fontSize.textL)} containerStyle={{ marginVertical: getHeight(dimens.paddingXs), width: 'auto' }} title={`\u25CF ${item?.name?.en}`} onPress={() => {
-        setSearchProviderList(item)
-        onSearchDone(item?.name?.en)
-      }} />
-    ))
-  )
+      <TextButton
+        key={index}
+        fontSize={getWidth(fontSize.textL)}
+        containerStyle={{
+          marginVertical: getHeight(dimens.paddingXs),
+          width: 'auto',
+        }}
+        title={`\u25CF ${item?.name?.en}`}
+        onPress={() => {
+          setSearchProviderList(item);
+          onSearchDone(item?.name?.en);
+        }}
+      />
+    ));
 
-  console.log('providersList***********', providersList)
+  console.log('providersList***********', providersList);
   const getProviderSearchList = () => {
     return providersList?.map((itemData: any, index: number) => (
       // console.log('itemData', itemData?.provider_name?.en)
@@ -137,7 +171,6 @@ const HomeScreen = () => {
         <Button
           title={t('back_search')}
           isPrimary
-
           isSmall
           width={'70%'}
           onPress={onPressBack}
@@ -145,24 +178,76 @@ const HomeScreen = () => {
       </View>
     );
   };
+  useUpdateEffect(() => {
+    setTimeToArrive(remainingTime?.minutes);
+    setSeconds(remainingTime?.seconds);
+  }, [remainingTime]);
 
+  useEffect(() => {
+    minuteRef.current = setInterval(() => {
+      console.log('timeLeft.current', timeToArrive);
+      if (timeToArrive > 0) {
+        const leftTime = timeToArrive - 1;
+        // timeLeft.current= leftTime;
+        setTimeToArrive(leftTime);
+      }
+    }, 60000);
+    return () => {
+      clearInterval(minuteRef.current);
+    };
+  }, [timeToArrive]);
+
+  useUpdateEffect(() => {
+    if (timeToArrive < 0) {
+      clearInterval(minuteRef.current);
+    }
+  }, [timeToArrive]);
+
+  useEffect(() => {
+    timeOutRef.current = setInterval(() => {
+      // console.log('timeLeft.seconds', seconds);
+      if (seconds > 0) {
+        const leftSeconds = seconds - 1;
+        setSeconds(leftSeconds);
+      } else if (timeToArrive > 0) {
+        setSeconds(60);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timeOutRef.current);
+    };
+  }, [seconds]);
+
+  useUpdateEffect(() => {
+    if (seconds === 0 && timeToArrive < 0) {
+      setProviderStatus('arrived');
+      setLocalData('ORDER', { providerDetail: '' });
+      clearInterval(timeOutRef.current);
+    }
+  }, [seconds]);
 
   return (
     <>
-      {RNHeader(headerTitle, headerLeft, headerRight, searchSpecialist?.length)}
+      <View style={styles.headerContainer}>
+        {headerLeft()}
+        {headerTitle()}
+        {headerRight()}
+      </View>
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ paddingBottom: 20 }}
       >
         {isTouchStart && searchSpecialist?.length === 0 && (
-          <TouchableOpacity onPress={onPressBanner}>
+          <TouchableOpacity
+            style={{ marginHorizontal: getWidth(dimens.marginM) }}
+            onPress={onPressBanner}
+          >
             <Image
               style={styles.banner}
               source={{ uri: bannerAds?.[0]?.imageurl || '' }}
             />
           </TouchableOpacity>
         )}
-        <Button title='testing ' onPress={() => Sentry.captureMessage('testing gurpreet')} />
         <SearchBox
           isTouchStart={isTouchStart && searchSpecialist?.length === 0}
           placeholder={t('what_treatment')}
@@ -170,34 +255,41 @@ const HomeScreen = () => {
           onBlur={onBlur}
           onChangeText={onChange}
           defaultValue={searchSpecialist}
-        // onSubmitEditing={onSearchDone}
+          // onSubmitEditing={onSearchDone}
         />
         {searchSpecialist?.length === 0
           ? getProviderList()
-          : isDataNotFound ?
-            (providersList.length === 0 ? getSearchList() : getProviderSearchList())
-            : noSearchedView()}
+          : isDataNotFound
+          ? providersList.length === 0
+            ? getSearchList()
+            : getProviderSearchList()
+          : noSearchedView()}
       </ScrollView>
-      {/* TODO: Address modal use it later
-       {isVisible && (     
-        <AddAddress
-          address={() => {}}
-          isVisible={isVisible}
-          onClose={() => setIsVisible(false)}
-          defaultValue={''}
-        />
-      )} */}
-      {console.log('providerData1111', localData, providerStatus)}
-      {localData?.providerDetail &&
-        <View style={{ marginVertical: getHeight(20), alignItems: 'center', backgroundColor: 'transparent' }}>
+      {localData?.providerDetail && (
+        <View
+          style={{
+            marginVertical: getHeight(20),
+            alignItems: 'center',
+            backgroundColor: 'transparent',
+            marginHorizontal: getWidth(dimens.marginM),
+          }}
+        >
           <ProviderArrivalInfo
+            time={timeToArrive?.toString()}
             status={providerStatus}
-            doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name}`}
+            doctorName={`${localData?.providerDetail.firstname}${' '}${
+              localData?.providerDetail.name
+            }`}
             onPress={() => {
-              navigation.navigate(NavigationRoutes.SearchDoctor,
-                { providerData: localData?.providerDetail, orderId: localData?.orderId, previousScreen: "HOME_CLIENT" })
-            }} />
-        </View>}
+              navigation.navigate(NavigationRoutes.SearchDoctor, {
+                providerData: localData?.providerDetail,
+                orderId: localData?.orderId,
+                remaining: { minutes: timeToArrive, seconds: seconds },
+              });
+            }}
+          />
+        </View>
+      )}
     </>
   );
 };
@@ -206,7 +298,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: getWidth(dimens.marginM),
   },
   banner: {
     width: '100%',
@@ -243,10 +334,11 @@ const styles = StyleSheet.create({
     flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
     alignItems: 'center',
     gap: dimens.paddingS,
+    minWidth: '100%',
   },
   headerTitleContainer: {
     alignItems: 'center',
-    paddingTop: getHeight(dimens.marginS + 5),
+    width: '60%',
   },
   noSearchText: {
     textAlign: 'center',
@@ -269,7 +361,7 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   text: {
-    fontSize: fontSize.textM,
+    fontSize: getHeight(fontSize.textM),
   },
   modal: {
     flex: 1,
@@ -279,5 +371,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: getHeight(dimens.paddingS),
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.white,
+    paddingHorizontal: getWidth(dimens.marginM),
+    paddingVertical: getHeight(8),
   },
 });
