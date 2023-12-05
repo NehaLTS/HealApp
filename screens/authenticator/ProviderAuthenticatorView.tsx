@@ -26,9 +26,9 @@ const ProviderAuthenticatorView = () => {
       header: () => <Header isHideTitle />,
     });
   }, [navigation]);
-  useMemo(()=>{
-    checkPermission()
-  },[])
+  useMemo(() => {
+    checkPermission();
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
@@ -67,7 +67,7 @@ const ProviderAuthenticatorView = () => {
             onPress={() =>
               navigation.reset({
                 index: 0,
-                routes: [{ name: NavigationRoutes.ProviderHomes }],
+                routes: [{ name: NavigationRoutes.ProviderHome }],
               })
             }
           />

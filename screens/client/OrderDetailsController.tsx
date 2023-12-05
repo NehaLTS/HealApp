@@ -74,7 +74,7 @@ const OrderDetailsController = () => {
     patient_name: order.patient_name,
     address: order?.address ?? '',
     city: order.city,
-    phonenumber: order?.phonenumber,
+    phone_number: order?.phonenumber,
     Date_of_birth: !order?.isOrderForOther
       ? user?.date_of_birth ?? ''
       : order?.patient_type?.age ?? '',

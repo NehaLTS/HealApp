@@ -5,7 +5,6 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
-import { getTexts } from 'libs/OneSkyHelper';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -32,7 +31,6 @@ const UserPaymentView = ({
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { languageCode } = useTranslationContext();
-  const { registration } = getTexts(languageCode);
   const {
     cardNumberRef,
     expireDateRef,

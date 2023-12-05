@@ -73,9 +73,10 @@ const HomeScreen = () => {
   useEffect(() => {
     createNotificationListeners();
   }, []);
+  // const ser = JSON.stringify(order?.eventData?.services);
   console.log('firstname++++++++++++++++', order);
   const modalHeight = useSharedValue(getHeight(360));
-  console.log('services', services);
+  console.log('services', order?.eventData?.services);
   const getImageUrl = (url: string) => setLicensePicture(url);
   const onPressUpload = () => {
     if (licensePicture?.length) {
@@ -274,17 +275,36 @@ const HomeScreen = () => {
           />
         ),
       )}
-      <AnimatedText
-        style={{
-          ...styles.details,
-          borderBottomWidth: getWidth(0.5),
-          borderColor: colors.offWhite,
-          paddingBottom: getHeight(16),
-          fontSize: getHeight(fontSize.textXl - 1),
-        }}
-        title={`Ordered voltaren shot, clacksen shot`}
-        entering={FadeInLeft.duration(400).delay(600)}
-      />
+      {order?.eventData?.services && (
+        <>
+          <AnimatedText
+            style={{
+              ...styles.details,
+              borderBottomWidth: getWidth(0.5),
+              borderColor: colors.offWhite,
+              paddingBottom: getHeight(16),
+              fontSize: getHeight(fontSize.textXl - 1),
+            }}
+            title={`Ordered: `}
+            entering={FadeInLeft.duration(400).delay(600)}
+          >
+            {JSON.parse?.(order?.eventData?.services)?.map?.(
+              (service: any, index: number) => (
+                <AnimatedText
+                  key={index}
+                  style={styles.details}
+                  title={
+                    order?.eventData?.services?.length > 1
+                      ? `  ${service?.service_name}, `
+                      : service?.service_name
+                  }
+                  entering={FadeInLeft.duration(400).delay(700)}
+                />
+              ),
+            )}
+          </AnimatedText>
+        </>
+      )}
       <AnimatedText
         style={styles.otherDetails}
         title={`${order?.eventData?.firstname}  ${
@@ -412,12 +432,29 @@ const HomeScreen = () => {
                   />
                 ),
               )}
-            {order?.eventData?.symptoms?.length && (
-              <AnimatedText
-                style={styles.details}
-                title={`Ordered: ${t(' voltaren_shot')}`}
-                entering={FadeInLeft.duration(400).delay(600)}
-              />
+            {order?.eventData?.services && (
+              <>
+                <AnimatedText
+                  style={styles.details}
+                  title={`Ordered: `}
+                  entering={FadeInLeft.duration(400).delay(600)}
+                >
+                  {JSON.parse?.(order?.eventData?.services)?.map?.(
+                    (service: any, index: number) => (
+                      <AnimatedText
+                        key={index}
+                        style={styles.details}
+                        title={
+                          order?.eventData?.services?.length > 1
+                            ? `  ${service?.service_name}, `
+                            : service?.service_name
+                        }
+                        entering={FadeInLeft.duration(400).delay(600)}
+                      />
+                    ),
+                  )}
+                </AnimatedText>
+              </>
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}

@@ -77,33 +77,21 @@ const OnBoardingViewController = () => {
     userData: ProviderProfile,
     providerServices: ProviderServices,
   ) => {
+    console.log('userData1111', userData);
     //Handle onboard navigation for the logged In User
+    // if (userData && userData.firstName) {
     if (userData && userData.firstName) {
-      if (providerServices) {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: NavigationRoutes.ProviderStack,
-                params: { screen: NavigationRoutes.ProviderHome },
-              },
-            ],
-          }),
-        );
-      } else {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: NavigationRoutes.ProviderStack,
-                params: { screen: NavigationRoutes.ProviderOnboardDetails },
-              },
-            ],
-          }),
-        );
-      }
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: NavigationRoutes.ProviderStack,
+              params: { screen: NavigationRoutes.ProviderHome },
+            },
+          ],
+        }),
+      );
     } else {
       navigation.dispatch(
         CommonActions.reset({

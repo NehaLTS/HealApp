@@ -31,7 +31,7 @@ const LoginViewController = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showToast, renderToast } = useToast();
   const { t } = useTranslation();
-  const device_Token= getLocalData('USER')?.deviceToken
+  const device_Token = getLocalData('USER')?.deviceToken;
 
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
@@ -72,7 +72,11 @@ const LoginViewController = () => {
 
   const handleSignIn = () => {
     if (!emailError && !passwordError)
-      onPressLoginButton(emailRef.current.value, passwordRef.current.value ,device_Token);
+      onPressLoginButton(
+        emailRef.current.value,
+        passwordRef.current.value,
+        device_Token,
+      );
   };
 
   /** To handle Response from API after authentication request */
@@ -124,39 +128,40 @@ const LoginViewController = () => {
       userId: response.id,
       isClient: false,
     });
-    
+
     if (!userDataProvider.firstname || userDataProvider.firstname == '') {
       console.log('setToken', token, userId);
 
+      // if (!userDataProvider.firstName || userDataProvider.firstName == '') {
+      //   console.log('setToken', token, userId);
 
-    // if (!userDataProvider.firstName || userDataProvider.firstName == '') {
-    //   console.log('setToken', token, userId);
-
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
-    //   });
-    // } else {
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{ name: NavigationRoutes.ProviderHome }],
-    //   });
-    // }
-  }else{
-    navigation.reset({
-      index: 0,
-      routes: [{ name: NavigationRoutes.ProviderHome }],
-      
-    });
-  }
-  ;
-}
+      //   navigation.reset({
+      //     index: 0,
+      //     routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+      //   });
+      // } else {
+      //   navigation.reset({
+      //     index: 0,
+      //     routes: [{ name: NavigationRoutes.ProviderHome }],
+      //   });
+      // }
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ProviderHome }],
+      });
+    }
+  };
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string, device_token:string) => {
+  const onPressLoginButton = async (
+    email: string,
+    password: string,
+    device_token: string,
+  ) => {
     try {
       if (email != '' || password != '') {
         setIsLoading(true);
-        const res = await OnProviderSignIn({ email, password,device_token });
+        const res = await OnProviderSignIn({ email, password, device_token });
         console.log('res is Provider SignIn', res);
 
         if (res?.isSuccessful === true) {
