@@ -66,6 +66,7 @@ const App = () => {
       (position) => {
         const { latitude, longitude } = position.coords;
         setCurrentLocationOfUser({
+          // ...currentLocationOfUser,
           latitude: latitude.toString(),
           longitude: longitude.toString(),
         });
@@ -95,24 +96,25 @@ const App = () => {
       console.log('Error checking location permission: ' + err);
     }
   };
+  const location = async () => {
+    await fetchCurrentAddress()
+      .then((address: any) => {
+        setCurrentLocationOfUser({
+          ...currentLocationOfUser,
+          address: address.toString() ?? '',
+        });
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
 
   useEffect(() => {
     requestLocationPermission();
+    // location();
   }, [permissonGrant]);
 
   React.useEffect(() => {
-    const location = async () => {
-      await fetchCurrentAddress()
-        .then((address: any) => {
-          setCurrentLocationOfUser({
-            ...currentLocationOfUser,
-            address: address.toString() ?? '',
-          });
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    };
     location();
   }, []);
 
@@ -151,6 +153,8 @@ const App = () => {
               setProviderProfile,
               providerServices,
               setProviderServices,
+              setCurrentLocationOfUser,
+              currentLocationOfUser,
             }}
           >
             <NavigationContainer

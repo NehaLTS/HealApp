@@ -18,12 +18,17 @@ const OrderDetailsController = () => {
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation();
-  const { currentLocationOfUser, orderDetails, userProfile: user, userId } = UseClientUserContext()
+  const {
+    currentLocationOfUser,
+    orderDetails,
+    userProfile: user,
+    userId,
+  } = UseClientUserContext();
   const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
 
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
-  console.log("supplier", supplier)
+  console.log('supplier', supplier);
   const [order, setOrder] = useState<OrderDetail>({
     client_id: '',
     patient_type: { type: 'me', age: '' },
@@ -44,10 +49,6 @@ const OrderDetailsController = () => {
     isOrderForOther: false,
   });
 
-  useEffect(() => {
-    treatmentReasons();
-  }, []);
-
   const treatmentReasons = async () => {
     try {
       const res = await treatmentMenu({ provider_type_id: '1' });
@@ -57,17 +58,21 @@ const OrderDetailsController = () => {
     }
   };
 
+  useEffect(() => {
+    treatmentReasons();
+  }, []);
+
   const symptoms = order.reason.map((item: any) => {
     return {
       name: item.name.en, // Assuming you want the English name
-      id: item.reason_id
+      id: item.reason_id,
     };
   });
   const DAAT = {
     client_id: userId,
-    patient_type: order.patient_type.type ?? "",
+    patient_type: order.patient_type.type ?? '',
     patient_name: order.patient_name,
-    address: order?.address ?? "",
+    address: order?.address ?? '',
     city: order.city,
     phonenumber: order?.phonenumber,
     Date_of_birth: !order?.isOrderForOther
@@ -85,10 +90,9 @@ const OrderDetailsController = () => {
     ),
     latitude: currentLocationOfUser?.latitude,
     longitude: currentLocationOfUser?.longitude,
-    provider_type_id: supplier.provider_type_id
-
-  }
-  console.log("DAATAAA ", DAAT,)
+    provider_type_id: supplier?.provider_type_id,
+  };
+  console.log('DAATAAA ', DAAT);
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
     if (
@@ -108,48 +112,47 @@ const OrderDetailsController = () => {
     ) {
       setShowSummary(true);
     }
-    console.log('currentLocationOfUser.latitude,', currentLocationOfUser)
+    console.log('currentLocationOfUser.latitude,', currentLocationOfUser);
     if (showSummary) {
-      setIsLoading(true)
-      const res = await orderProvider(
-        {
-          client_id: userId.toString(),
-          patient_type: order.patient_type.type ?? "",
-          patient_name: order.patient_name,
-          address: order?.address ?? "",
-          city: order.city,
-          phonenumber: order?.phonenumber,
-          Date_of_birth: !order?.isOrderForOther
-            ? user?.date_of_birth ?? ''
-            : order?.patient_type?.age ?? '',
-          services: order.services[0].menu_id.toString(),
-          symptoms: JSON.stringify(symptoms),
-          Additional_notes: order?.Additional_notes,
-          Estimate_arrival: order?.Estimate_arrival,
-          Instructions_for_arrival: order?.Instructions_for_arrival,
-          Payment_mode: order?.Payment_mode,
-          TotalCost: order?.services.reduce(
-            (total, item) => total + parseInt(item.price, 10),
-            0,
-          ).toString(),
-          latitude: currentLocationOfUser?.latitude,
-          longitude: currentLocationOfUser?.longitude,
-          provider_type_id: supplier?.provider_type_id?.toString()
+      setIsLoading(true);
+      const res = await orderProvider({
+        client_id: userId.toString(),
+        patient_type: order.patient_type.type ?? '',
+        patient_name: order.patient_name,
+        address: order?.address ?? '',
+        city: order.city,
+        phonenumber: order?.phonenumber,
+        Date_of_birth: !order?.isOrderForOther
+          ? user?.date_of_birth ?? ''
+          : order?.patient_type?.age ?? '',
+        services: order.services[0].menu_id.toString(),
+        symptoms: JSON.stringify(symptoms),
+        Additional_notes: order?.Additional_notes,
+        Estimate_arrival: order?.Estimate_arrival,
+        Instructions_for_arrival: order?.Instructions_for_arrival,
+        Payment_mode: order?.Payment_mode,
+        TotalCost: order?.services
+          .reduce((total, item) => total + parseInt(item.price, 10), 0)
+          .toString(),
+        latitude: currentLocationOfUser?.latitude,
+        longitude: currentLocationOfUser?.longitude,
+        provider_type_id: supplier?.provider_type_id?.toString(),
+      });
 
-        }
-      );
+      console.log(' RESPINSE+++++', res);
 
-      console.log(" RESPINSE ", res)
-
-      if (res) {
-        navigation.navigate(NavigationRoutes.SearchDoctor, { providerData: res?.closestProvider, orderId: res?.orderId })
-        setIsLoading(false)
+      if (res?.orderId) {
+        setIsLoading(false);
+        navigation.navigate(NavigationRoutes.SearchDoctor, {
+          providerData: res?.closestProvider,
+          orderId: res?.orderId,
+        });
       }
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)
         setShowSummary(true);
       else {
-        Alert.alert("please select reasons and treatment menu");
+        Alert.alert('please select reasons and treatment menu');
       }
     }
   };
@@ -162,7 +165,7 @@ const OrderDetailsController = () => {
     supplier,
     order,
     setOrder,
-    isLoading
+    isLoading,
   };
 };
 

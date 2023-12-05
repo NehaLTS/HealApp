@@ -88,17 +88,17 @@ const CardView = ({ item, index, isSearch }: any) => {
             <Text
               numberOfLines={2}
               style={styles.specialist}
-              title={item.name}
+              title={item?.name}
             />
           </TouchableOpacity>
         ) : (
           <View style={styles.specialistList}>
             <View style={styles.container}>
               <Image
-                source={getProviderImage(item?.name?.en)}
+                source={getProviderImage(item?.name)}
                 style={styles.specialistIcon}
               />
-              <Text style={styles.specialistSearched} title={item?.name?.en} />
+              <Text style={styles.specialistSearched} title={item?.name} />
             </View>
             <Button
               title={t('order')}

@@ -35,21 +35,19 @@ const OrderDetails = () => {
     supplier,
     order,
     setOrder,
-    isLoading
+    isLoading,
   } = OrderDetailsController();
   const { t } = useTranslation();
   const HeaderTitle = () => (
     <View style={styles.servicesContainer}>
       <Image
-        source={getProviderImage(
-          supplier?.name?.length ? supplier?.name : supplier?.name?.en,
-        )}
+        source={getProviderImage(supplier?.name)}
         style={styles.specialistIcon}
       />
       <Text
         numberOfLines={2}
         style={styles.specialist}
-        title={supplier?.name?.length ? supplier?.name : supplier?.name?.en}
+        title={supplier?.name}
       />
     </View>
   );

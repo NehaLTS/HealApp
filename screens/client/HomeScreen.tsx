@@ -36,9 +36,6 @@ import { DotLoader } from 'components/common/Loader';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
-
-  // const [isVisible, setIsVisible] = useState<boolean>(false); TODO: To open add address modal
-
   const {
     providerList,
     bannerAds,
@@ -47,6 +44,7 @@ const HomeScreen = () => {
     onTouchStart,
     onBlur,
     onChange,
+    handleKeyPress,
     searchSpecialist,
     onPressBanner,
     providersList,
@@ -64,6 +62,7 @@ const HomeScreen = () => {
     currentLocationOfUser,
     setCurrentLocationOfUser,
     setSearchProviderList,
+    setProvidersList,
   } = HomeViewController();
   const navigation = useNavigation<any>();
   const localData = getLocalData('ORDER');
@@ -92,7 +91,6 @@ const HomeScreen = () => {
         title={t('change')}
         fontSize={getWidth(fontSize.textM)}
         style={{ marginBottom: dimens.paddingS }}
-        // onPress={() => setIsVisible(true)}  TODO: Open add address modal
         onPress={() => setIsVisible(true)}
       />
       {isVisible && (
@@ -145,7 +143,7 @@ const HomeScreen = () => {
         key={index}
         fontSize={getWidth(fontSize.textL)}
         containerStyle={{
-          marginVertical: getHeight(dimens.paddingXs),
+          marginVertical: getHeight(dimens.paddingXs + 2),
           width: 'auto',
         }}
         title={`\u25CF ${item?.name?.en}`}
@@ -156,11 +154,14 @@ const HomeScreen = () => {
       />
     ));
 
-  console.log('providersList***********', providersList);
+  const transformedData = providersList?.map?.((entry) => ({
+    name: entry?.provider_name?.en,
+    provider_type_id: entry?.provider_type_id,
+    speciality_name: entry?.speciality_name,
+  }));
   const getProviderSearchList = () => {
-    return providersList?.map((itemData: any, index: number) => (
-      // console.log('itemData', itemData?.provider_name?.en)
-      <CardView item={itemData} index={index} isSearch />
+    return transformedData?.map((itemData: any, index: number) => (
+      <CardView item={itemData} index={index} key={index} isSearch />
     ));
   };
   const noSearchedView = () => {
@@ -225,7 +226,7 @@ const HomeScreen = () => {
       clearInterval(timeOutRef.current);
     }
   }, [seconds]);
-
+  console.log('isDataNotFound', isDataNotFound);
   return (
     <>
       <View style={styles.headerContainer}>
@@ -236,6 +237,7 @@ const HomeScreen = () => {
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ paddingBottom: 20 }}
+        keyboardShouldPersistTaps="always"
       >
         {isTouchStart && searchSpecialist?.length === 0 && (
           <TouchableOpacity
@@ -255,15 +257,20 @@ const HomeScreen = () => {
           onBlur={onBlur}
           onChangeText={onChange}
           defaultValue={searchSpecialist}
-          // onSubmitEditing={onSearchDone}
+          inputMode={'search'}
+          onKeyPress={handleKeyPress}
         />
-        {searchSpecialist?.length === 0
-          ? getProviderList()
-          : isDataNotFound
-          ? providersList.length === 0
-            ? getSearchList()
-            : getProviderSearchList()
-          : noSearchedView()}
+        {searchSpecialist?.length === 0 ? (
+          getProviderList()
+        ) : isDataNotFound ? (
+          <View style={{ paddingHorizontal: getWidth(dimens.marginM) }}>
+            {providersList.length === 0 && transformedData?.length === 0
+              ? getSearchList()
+              : getProviderSearchList()}
+          </View>
+        ) : (
+          noSearchedView()
+        )}
       </ScrollView>
       {localData?.providerDetail && (
         <View

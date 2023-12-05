@@ -14,7 +14,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { ProviderProfile } from 'libs/types/UserType';
+import { ProviderProfile, ProviderServices } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -29,6 +29,7 @@ import {
 import Animated, {
   FadeInLeft,
   FadeInUp,
+  FadeOutLeft,
   ZoomIn,
   useSharedValue,
   withSpring,
@@ -38,7 +39,7 @@ import { useTranslation } from 'react-i18next';
 import Checkbox from 'components/common/Checkbox';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import AddAddress from 'components/common/AddAddress';
+import AddNewService from 'components/common/AddNewService';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -48,8 +49,8 @@ const HomeScreen = () => {
     available?.isProviderAvailable,
   );
   const [isCancelOrder, setIsCancelOrder] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [isSeeMore, setIsSeeMore] = useState(false);
-  // const [isOrderCanceled, setIsOrderCanceled] = useState(false);
   const [isArrived, setIsArrived] = useState(false);
   const [isVisibleLicense, setIsVisibleLicense] = useState(false);
   const [notification, setNotification] = useState(false);
@@ -60,13 +61,21 @@ const HomeScreen = () => {
     HomeScreenControlller();
   const { providerAvailabilityStatus } = AuthServicesProvider();
   const { userId, token } = UseProviderUserContext();
+  const [services, setServices] = useState<ProviderServices[]>([
+    {
+      name: { en: '', hi: '', he: '' },
+      description: { en: '', hi: '', he: '' },
+      price: '',
+      id: -1,
+    },
+  ]);
   const { t } = useTranslation();
   useEffect(() => {
     createNotificationListeners();
   }, []);
-  console.log('firstname', order);
+  console.log('firstname++++++++++++++++', order);
   const modalHeight = useSharedValue(getHeight(360));
-
+  console.log('services', services);
   const getImageUrl = (url: string) => setLicensePicture(url);
   const onPressUpload = () => {
     if (licensePicture?.length) {
@@ -176,10 +185,6 @@ const HomeScreen = () => {
     setIsCancelOrder(true);
   };
 
-  const servicesProvided = [
-    { serviceName: 'Service', price: '50' },
-    { serviceName: 'Service', price: '100' },
-  ];
   const arrivedView = () => (
     <>
       <AnimatedText
@@ -192,7 +197,7 @@ const HomeScreen = () => {
       />
       <AnimatedText
         style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-        title={order?.eventData?.patient_name}
+        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname}`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -200,12 +205,12 @@ const HomeScreen = () => {
         title={'Services provided'}
         entering={FadeInUp.duration(400).delay(700)}
       />
-      {servicesProvided?.map((item, index) => (
+      {services?.map((item, index) => (
         <View key={index} style={styles.servicesProvided}>
           <View style={styles.servicesLeftView}>
             <AnimatedText
               style={{ ...styles.smallText, minWidth: getWidth(90) }}
-              title={`${item?.serviceName} ${index}`}
+              title={`${item?.name?.en ?? ''} ${index}`}
               entering={FadeInLeft.duration(400).delay(800)}
             />
             <AnimatedText
@@ -217,7 +222,11 @@ const HomeScreen = () => {
           <Checkbox isWhite />
         </View>
       ))}
-      <TouchableOpacity activeOpacity={0.8} style={styles.addServiceContainer}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={styles.addServiceContainer}
+        onPress={() => setIsVisible(true)}
+      >
         <Image
           source={require('assets/icon/addServiceWhite.png')}
           style={styles.addIcon}
@@ -236,6 +245,11 @@ const HomeScreen = () => {
           entering={FadeInLeft.duration(400).delay(500)}
         />
       </View>
+      <AddNewService
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        newService={setServices}
+      />
     </>
   );
 
@@ -275,13 +289,14 @@ const HomeScreen = () => {
         style={styles.otherDetails}
         title={`${order?.eventData?.firstname}  ${
           order?.eventData?.lastname
-        }   ${'2'} km, ~${'30'}min`}
-        entering={FadeInLeft.duration(400).delay(700)}
-      />
-      <AnimatedText
-        style={styles.otherDetails}
-        title={order?.eventData?.address}
-        entering={FadeInLeft.duration(400).delay(800)}
+        }    ${
+          order?.eventData?.distance !== 'undefined'
+            ? order?.eventData?.time
+            : 0
+        } km, ~${
+          order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
+        } min`}
+        entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
         style={{
@@ -290,10 +305,9 @@ const HomeScreen = () => {
           borderColor: colors.offWhite,
           paddingBottom: getHeight(16),
         }}
-        title={'3 entrance from the right, 3rd floor, ap.6'}
-        entering={FadeInLeft.duration(400).delay(900)}
+        title={order?.eventData?.address}
+        entering={FadeInLeft.duration(400).delay(800)}
       />
-
       <View
         style={{
           flexDirection: 'row',
@@ -362,18 +376,6 @@ const HomeScreen = () => {
       backdropOpacity={1}
       backdropColor={colors.transparent}
     >
-      {!isSeeMore && (
-        <AnimatedText
-          style={{
-            ...styles.details,
-            fontSize: getHeight(fontSize.heading),
-            textAlign: 'center',
-            marginBottom: getHeight(40),
-            color: colors.black,
-          }}
-          title={'You have a new order!'}
-        />
-      )}
       <Animated.View style={{ ...styles.modalView, height: modalHeight }}>
         {isSeeMore && (
           <AnimatedText
@@ -410,15 +412,27 @@ const HomeScreen = () => {
                   />
                 ),
               )}
-            <Text
-              style={styles.details}
-              title={`Ordered: ${t(' voltaren_shot')}`}
-            />
-            <Text
+            {order?.eventData?.symptoms?.length && (
+              <AnimatedText
+                style={styles.details}
+                title={`Ordered: ${t(' voltaren_shot')}`}
+                entering={FadeInLeft.duration(400).delay(600)}
+              />
+            )}
+            <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${
-                order?.eventData?.firstname
-              }    ${'2'} km, ${'~ 30'} min`}
+              title={`${order?.eventData?.firstname}  ${
+                order?.eventData?.lastname
+              }    ${
+                order?.eventData?.distance !== 'undefined'
+                  ? order?.eventData?.time
+                  : 0
+              } km, ~${
+                order?.eventData?.time !== 'undefined'
+                  ? order?.eventData?.time
+                  : 0
+              } min`}
+              entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
         )}
@@ -428,6 +442,7 @@ const HomeScreen = () => {
             fontSize={getHeight(fontSize.textXl)}
             style={styles.seeMoreButton}
             onPress={onPressSeeMore}
+            entering={FadeInLeft.duration(400).delay(800)}
           />
         )}
         <View
@@ -624,10 +639,22 @@ const HomeScreen = () => {
           style={styles.switchToggleText}
           title={isAvailable ? t('now_you_available') : t('switch_toggle')}
         />
+
         <View style={styles.cardContainer}>
-          {DetailCard('2', 'Clients today')}
-          {DetailCard('25 min', 'Average arrival time')}
-          {DetailCard('560 ₪', 'My balance')}
+          {isAvailable ? (
+            <Text
+              style={styles.middleOrderText}
+              title={
+                notification ? 'You have a new order!' : 'No orders ...yet'
+              }
+            />
+          ) : (
+            <>
+              {DetailCard('2', 'Clients today')}
+              {DetailCard('25 min', 'Average arrival time')}
+              {DetailCard('560 ₪', 'My balance')}
+            </>
+          )}
           {getNewOrderView()}
           {getCancelOrderView()}
           {getMissingDocsView()}
@@ -762,6 +789,11 @@ const styles = StyleSheet.create({
     flex: 0.14,
     textAlignVertical: 'center',
   },
+  middleOrderText: {
+    fontSize: getHeight(fontSize.heading),
+    flex: 0.5,
+    verticalAlign: 'middle',
+  },
   detailCardContainer: {
     width: '100%',
     padding: getWidth(dimens.marginL),
@@ -778,6 +810,7 @@ const styles = StyleSheet.create({
     flex: 0.73,
     gap: getHeight(dimens.marginM + dimens.paddingXs),
     paddingTop: getHeight(20),
+    alignItems: 'center',
   },
   addDocsView: {
     backgroundColor: colors.lightGrey,

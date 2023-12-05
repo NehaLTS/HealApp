@@ -9,7 +9,12 @@ import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import { ClientProfile } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
-import { Keyboard, Linking } from 'react-native';
+import {
+  Keyboard,
+  Linking,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+} from 'react-native';
 import list from '../../strings/en.json';
 
 interface Location {
@@ -45,7 +50,6 @@ const HomeViewController = () => {
   } = UseClientUserContext();
   const orderList = list.home.providerList;
   const [searchProviderList, setSearchProviderList] = useState<any>();
-
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = orderList;
 
@@ -100,15 +104,33 @@ const HomeViewController = () => {
   const getBannerAd = async () => {
     try {
       const res = await getBannerAds();
-      console.log('banner ads', res);
+      // console.log('banner ads', res);
       setBannerAds(res);
     } catch (error) {
       // Handle any errors that occurred during the execution of getBannerAds
       console.error('An error occurred:', error);
     }
   };
+
+  const handleKeyPress = (
+    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
+  ) => {
+    if (e.nativeEvent.key === 'Backspace') {
+      setIsDataNotFound(true);
+      setProvidersList([]);
+    }
+  };
+  const onChange = async (value: string) => {
+    setSearchSpecialist(value);
+    const res = await searchList({
+      name: searchSpecialist,
+    });
+    if (res.length > 0) {
+      setSearchedList(res);
+    }
+  };
+
   const onSearchDone = async (item: string) => {
-    console.log('searchSpecialist in the controller', searchSpecialist);
     const res = await searchProviders({
       name: item,
       latitude: '30.377305039494523',
@@ -118,18 +140,7 @@ const HomeViewController = () => {
     if (res?.message) setIsDataNotFound(false);
     else setProvidersList(res);
   };
-  const onChange = async (value: string) => {
-    const res = await searchList({
-      name: searchSpecialist?.toLowerCase(),
-    });
-    if (res.length > 0) {
-      setSearchedList(res);
-    }
-    console.log('searchList', res);
 
-    setSearchSpecialist(value);
-    // setIsDataNotFound(true);
-  };
   const onSearch = () => {
     setUserProfile(null);
     setOrderDetails(null);
@@ -143,6 +154,7 @@ const HomeViewController = () => {
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
     Keyboard.dismiss();
+    setProvidersList([]);
     setSearchSpecialist('');
     setIsTouchStart(true);
   };
@@ -172,6 +184,8 @@ const HomeViewController = () => {
     setProviderStatus,
     currentLocationOfUser,
     setCurrentLocationOfUser,
+    setProvidersList,
+    handleKeyPress,
   };
 };
 

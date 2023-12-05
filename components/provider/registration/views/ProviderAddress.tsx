@@ -11,6 +11,7 @@ import RNModal from 'components/common/Modal';
 import { useTranslation } from 'react-i18next';
 import ProviderAddressController from '../controllers/ProviderAddressController';
 import Button from 'components/common/Button';
+import AddAddress from 'components/common/AddAddress';
 
 const ProviderAddress = () => {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ const ProviderAddress = () => {
     setIsShowAddressodal,
     onPressNext,
     onPressBack,
+    isVisible,
+    setIsVisible,
   } = ProviderAddressController();
 
   const addAddressView = () => {
@@ -105,7 +108,6 @@ const ProviderAddress = () => {
           returnKeyType={'next'}
           onSubmitEditing={() => {
             setIsShowAddressodal(true);
-            addressRef?.current?.focus();
           }}
           onClearInputText={() => phoneRef.current.clear()}
           inputStyle={styles.inputPhone}
@@ -132,11 +134,10 @@ const ProviderAddress = () => {
 
         <Input
           placeholder={t('address')}
-          ref={addressRef}
           inputStyle={styles.input}
-          value={onSearchAddress}
+          defaultValue={onSearchAddress}
           errorMessage={addressError}
-          onTouchStart={() => setIsShowAddressodal(true)}
+          onTouchStart={() => setIsVisible(true)}
           caretHidden
           inputValue={onSearchAddress}
           onClearInputText={() => setOnSearchAddress('')}
@@ -153,15 +154,20 @@ const ProviderAddress = () => {
           width={'30%'}
         />
       </View>
-
-      <RNModal
+      <AddAddress
+        address={setOnSearchAddress}
+        isVisible={isVisible}
+        onClose={() => setIsVisible(false)}
+        defaultValue={onSearchAddress}
+      />
+      {/* <RNModal
         style={styles.modal}
         backdropOpacity={1}
         backdropColor={colors.white}
         isVisible={isShowAddressodal}
       >
         {addAddressView()}
-      </RNModal>
+      </RNModal> */}
     </>
   );
 };

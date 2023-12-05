@@ -41,7 +41,7 @@ const SearchDoctor = () => {
   console.log('providerData', providerData);
   const providerRemainigTime = route?.params?.remaining;
   const orderId = route?.params?.orderId ?? '';
-  const previousScreen = route?.params?.previousScreen
+  const previousScreen = route?.params?.previousScreen;
   const { t } = useTranslation();
   const { setCurrentLocationOfUser } = UseClientUserContext();
   const [currentLocation, setCurrentLocation] = useState<Location>();
@@ -51,22 +51,20 @@ const SearchDoctor = () => {
     latitude: number;
     longitude: number;
   }>();
-  const { providerStatus, setProviderStatus, setRemainingTime } = UseClientUserContext();
+  const { providerStatus, setProviderStatus, setRemainingTime } =
+    UseClientUserContext();
   const localData = getLocalData('ORDER');
   const [showDoctor, setShowDoctor] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
   const [loader, setLoader] = useState(true);
-  const [disabled, setDisable] = useState(false)
+  const [disabled, setDisable] = useState(false);
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
   const [showCancelButton, setShowCancelButton] = useState(false);
-  const [stausOfArriving, setStausOfArriving] =
-    useState<string>(previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : providerStatus);
+  const [stausOfArriving, setStausOfArriving] = useState<string>(
+    previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : providerStatus,
+  );
   const [secondLoader, setSecondLoader] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-
-
-
 
   useLayoutEffect(() => {
     console.log('ankita', providerData, localData?.providerDetail);
@@ -115,24 +113,27 @@ const SearchDoctor = () => {
 
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      console.log('DoctorNotification', JSON.stringify(event))
-      if (event.notification.title === "Accept Order") {
+      console.log('DoctorNotification', JSON.stringify(event));
+      if (event.notification.title === 'Accept Order') {
         setShowCancelTextButton(false);
 
-        setShowCancelButton(true)
-        setLocalData('ORDER', { providerDetail: providerData, orderId: orderId })
+        setShowCancelButton(true);
+        setLocalData('ORDER', {
+          providerDetail: providerData,
+          orderId: orderId,
+        });
         setShowTimer(true);
         setStausOfArriving('On the way');
         setProviderStatus('On the way');
       }
-      if (event.notification.title === "Arrived Order") {
+      if (event.notification.title === 'Arrived Order') {
         setShowCancelTextButton(false);
 
         setStausOfArriving('Arrived');
-        setProviderStatus('arrived')
-        setLocalData('ORDER', { providerDetail: '' })
+        setProviderStatus('arrived');
+        setLocalData('ORDER', { providerDetail: '' });
         setTimeout(() => {
-          setProviderStatus('Estimated arrival')
+          setProviderStatus('Estimated arrival');
         }, 10000);
       }
 
@@ -156,7 +157,6 @@ const SearchDoctor = () => {
         latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
         longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
       });
-
     } else {
       setProviderLocation({
         latitude: parseFloat(providerData?.latitude ?? 0.0),
@@ -175,7 +175,7 @@ const SearchDoctor = () => {
     setSecondLoader(false);
   }, 10000);
   const onPressOrder = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     setSecondLoader(true);
     handleNextButtonPress();
   };
@@ -187,36 +187,31 @@ const SearchDoctor = () => {
         setShowCancelTextButton(false);
       }, 180000);
     }
-  }, [secondLoader])
+  }, [secondLoader]);
 
   const providerStatusOnHeader = (stausOfArriving: string) => {
     switch (stausOfArriving) {
       case 'Arrived':
-        return 'has arrived'
+        return 'has arrived';
       case 'On the way':
-        return 'on the way'
+        return 'on the way';
       default:
-        return 'is found'
+        return 'is found';
     }
-
-  }
-  console.log('loader', loader)
+  };
+  console.log('loader', loader);
   return (
     <View style={styles.mainContainer}>
       <View>
         {showTimer && (
-          <ArrivalTime
-            totalTime={
-              Math.round(calculateTime().minutes)
-            }
-          />
+          <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
         )}
         <Text
           style={styles.lookingDoctor}
           title={
             (providerLocation !== undefined &&
               providerLocation.latitude === 0.0) ||
-              loader
+            loader
               ? t('looking_doctor')
               : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
           }
@@ -300,8 +295,8 @@ const SearchDoctor = () => {
         </MapView>
 
         {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+        providerLocation !== undefined &&
+        providerLocation.latitude !== 0.0 ? (
           <View
             style={{
               zIndex: 2,
@@ -325,47 +320,50 @@ const SearchDoctor = () => {
           </View>
         ) : null}
       </View>
-      {stausOfArriving !== 'Arrived' ? <View>
-        {<Button
-          title={
-            providerLocation !== undefined &&
-              providerLocation.latitude !== 0.0 &&
-              !loader && !showCancelButton
-              ? t('order')
-              : t('cancel')
+      {stausOfArriving !== 'Arrived' ? (
+        <View>
+          {
+            <Button
+              title={
+                providerLocation !== undefined &&
+                providerLocation.latitude !== 0.0 &&
+                !loader &&
+                !showCancelButton
+                  ? t('order')
+                  : t('cancel')
+              }
+              isPrimary
+              isSmall
+              disabled={previousScreen === 'HOME_CLIENT' || isLoading}
+              onPress={onPressOrder}
+              width={'30%'}
+              height={getHeight(dimens.imageS)}
+              style={{ alignSelf: 'center', marginBottom: 10 }}
+            />
           }
-          isPrimary
-          isSmall
-          disabled={previousScreen === 'HOME_CLIENT' || (
-            isLoading
-          )
-          }
-          onPress={onPressOrder}
-          width={'30%'}
-          height={getHeight(dimens.imageS)}
-          style={{ alignSelf: 'center', marginBottom: 10 }}
-        />
-        }
-        {showCancelTextButton && !loader && (
-          <TextButton
-            style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
-            title={t('cancel')}
-            onPress={() => { }}
-          />
-        )}
-        <Text
-          style={styles.noFee}
-          title={
-            (providerLocation !== undefined &&
-              providerLocation.latitude === 0.0) ||
+          {showCancelTextButton && !loader && (
+            <TextButton
+              style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
+              title={t('cancel')}
+              onPress={() => {}}
+            />
+          )}
+          <Text
+            style={styles.noFee}
+            title={
+              (providerLocation !== undefined &&
+                providerLocation.latitude === 0.0) ||
               loader
-              ? t('no_fee_collected')
-              : showCancelTextButton || showCancelButton
+                ? t('no_fee_collected')
+                : showCancelTextButton || showCancelButton
                 ? t('3_minutes_to_cancel')
                 : ''
-          }
-        />
-      </View> : <View style={{ height: getHeight(100) }}></View>}
+            }
+          />
+        </View>
+      ) : (
+        <View style={{ height: getHeight(100) }}></View>
+      )}
     </View>
   );
 };

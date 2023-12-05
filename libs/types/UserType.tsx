@@ -219,7 +219,7 @@ export interface ProviderBankDetails {
 export interface ProviderServices {
   id: number;
   name: HealLanguageType;
-  price: number;
+  price: string | number;
   description?: HealLanguageType;
   currency?: string;
   isSelected?: boolean;

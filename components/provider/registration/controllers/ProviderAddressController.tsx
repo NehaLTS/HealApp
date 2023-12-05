@@ -10,16 +10,24 @@ const ProviderAddressController = () => {
   const [phoneError, setPhoneError] = useState('');
   const [addressError, setAddressError] = useState('');
   const [licenseError, setLicenseError] = useState('');
-  const [onSearchAddress, setOnSearchAddress] = useState('');
+
   const [licensePicture, setLicensePicture] = useState('');
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowAddressodal, setIsShowAddressodal] = useState(false);
   const phoneRef = React.useRef<any>('');
   const licenseRef = React.useRef<any>('');
   const addressRef = React.useRef<any>('');
-  const { setCurrentStep, setProviderProfile, providerProfile } =
-    UseProviderUserContext();
+  const {
+    setCurrentStep,
+    setProviderProfile,
+    providerProfile,
+    currentLocationOfUser,
+  } = UseProviderUserContext();
   const { t } = useTranslation();
+  const [isVisible, setIsVisible] = useState(false);
+  const [onSearchAddress, setOnSearchAddress] = useState(
+    currentLocationOfUser?.address ?? '',
+  );
   useEffect(() => {
     if (providerProfile?.firstName) {
       phoneRef.current.value = providerProfile?.phoneNumber;
@@ -112,6 +120,8 @@ const ProviderAddressController = () => {
     setIsShowAddressodal,
     onPressNext,
     onPressBack,
+    isVisible,
+    setIsVisible,
   };
 };
 

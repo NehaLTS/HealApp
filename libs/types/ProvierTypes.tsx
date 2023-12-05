@@ -11,13 +11,12 @@ export interface Name {
 export interface Specialty {
   id?: number;
   name: Name;
-  " id"?: number;
 }
 
 export interface Service {
   name: Name;
   description: Name;
-  price: string
+  price: string;
 }
 export interface providerList {
   id: number;
@@ -43,12 +42,6 @@ export interface Reason {
   name: Name;
 }
 
-export interface Name {
-  en: string;
-  hi?: string;
-  he?:string
-}
-
 export interface TreatmentMenu {
   menu_id: number;
   name: Name;
@@ -57,20 +50,20 @@ export interface TreatmentMenu {
 }
 
 export interface order_provider {
-  isSuccessful: boolean,
-  msg: string
-
+  isSuccessful: boolean;
+  msg: string;
 }
 
-export interface seach_type{
+export interface seach_type {
   provider_id: number;
-  provider_name: Name
-
+  provider_name: Name;
 }
 export interface search_provider {
-  image_url?: string,
-  type: Array<seach_type>
-
+  provider_name?: Name;
+  provider_type_id?: any;
+  speciality_name: any;
+  image_url?: string;
+  type: Array<seach_type>;
 }
 
 export interface Provider {
@@ -81,18 +74,17 @@ export interface Provider {
   distance: string;
 }
 
-export interface OrderRequest{
-    status:string;
-    provider_id:string;
-    latitude:string;
-    longitude:string;
-    order_id: string
+export interface OrderRequest {
+  status: string;
+  provider_id: string;
+  latitude: string;
+  longitude: string;
+  order_id: string;
 }
 
 export interface PoviderLocation {
-  provider_id:string;
-  latitude:string;
-  order_id:string;
-  longitude:string;
-
+  provider_id: string;
+  latitude: string;
+  order_id: string;
+  longitude: string;
 }
