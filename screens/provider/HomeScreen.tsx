@@ -45,7 +45,6 @@ import messaging from '@react-native-firebase/messaging';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
-
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
   const available = getLocalData('USER');
@@ -53,19 +52,38 @@ const HomeScreen = () => {
   const [isAvailable, setIsAvailable] = useState(
     available?.isProviderAvailable,
   );
-  const [isCancelOrder, setIsCancelOrder] = useState(false);
+
+  const [isCancelOrder, setIsCancelOrder] = useState(
+    order?.isCancelOrder ?? false,
+  );
   const [isVisible, setIsVisible] = useState(false);
-  const [isSeeMore, setIsSeeMore] = useState(false);
-  const [isArrived, setIsArrived] = useState(false);
+  const [isSeeMore, setIsSeeMore] = useState(order?.isSeeMore ?? false);
+  const [isArrived, setIsArrived] = useState(order?.isArrived ?? false);
   const [isVisibleLicense, setIsVisibleLicense] = useState(false);
-  const [notification, setNotification] = useState(false);
+  const [notification, setNotification] = useState(
+    order?.isNotification ?? false,
+  );
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
+  const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
   const [isShowModal, setIsShowModal] = useState(false);
-  const { acceptOrder, setAcceptOrder, OnPressTakeOrder, updateLocation, providerLocation } =
-    HomeScreenControlller();
-  const { currentLocationOfUser } = UseClientUserContext();
-
+  const {
+    acceptOrder,
+    setAcceptOrder,
+    OnPressTakeOrder,
+    updateLocation,
+    providerLocation,
+  } = HomeScreenControlller();
+  const modalHeight = useSharedValue(getHeight(order?.modalHeight ?? 360));
+  console.log('acceptOrder', acceptOrder);
+  console.log('isArrived', isArrived);
+  console.log('orderStatus', orderStatus);
+  console.log('isSeeMore', isSeeMore);
+  console.log(
+    'modalHeight11',
+    modalHeight.value?.toString(),
+    order?.modalHeight,
+  );
   const { providerAvailabilityStatus } = AuthServicesProvider();
   const { userId, token } = UseProviderUserContext();
   const [services, setServices] = useState<ProviderServices[]>([
@@ -82,7 +100,7 @@ const HomeScreen = () => {
   }, []);
   // const ser = JSON.stringify(order?.eventData?.services);
   console.log('firstname++++++++++++++++', order);
-  const modalHeight = useSharedValue(getHeight(360));
+
   console.log('services', order?.eventData?.services);
   const getImageUrl = (url: string) => setLicensePicture(url);
   const onPressUpload = () => {
@@ -91,6 +109,7 @@ const HomeScreen = () => {
         licensepicture: licensePicture,
       });
       setIsAvailable(true);
+      setLocalData('USER', { isProviderAvailable: true });
       setIsAddDocument(false);
       setIsVisibleLicense(false);
     }
@@ -103,8 +122,10 @@ const HomeScreen = () => {
     if (pressOn === 'yes') {
       setIsCancelOrder(false);
       setNotification(false);
+      setLocalData('ORDER', { isNotification: false, isCancelOrder: false });
     } else {
       setIsCancelOrder(false);
+      setLocalData('ORDER', { isCancelOrder: false });
     }
   };
 
@@ -118,38 +139,45 @@ const HomeScreen = () => {
       },
       topic: 'weather',
     };
-
-
-  }
+  };
 
   useEffect(() => {
-    let eventTitle: string = '';
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      eventTitle = event.notification?.title;
+      // console.log('acceptOrder', acceptOrder);
+      // console.log('isArrived', isArrived);
+      // console.log('orderStatus', orderStatus);
+      // console.log('isSeeMore', isSeeMore);
+      Alert.alert('modalHeightTUUUIU' + modalHeight.value);
+      setOrderStatus(event.notification?.title);
       console.log('providerNotification **** 0000 ***** 00000', event);
       setNotification(true);
-      if (eventTitle === "Arrived Order") {
-
+      setLocalData('ORDER', {
+        isNotification: true,
+        orderStatus: event.notification?.title,
+      });
+      if (
+        event.notification?.title === 'Arrived Order' ||
+        orderStatus === 'Arrived Order'
+      ) {
         setIsArrived(true);
+        setLocalData('ORDER', { isArrived: true });
       }
     });
     // messaging().subscribeToTopic('healApp').then((res) => console.log('Subscribed fom the topic!', res));
     // if (acceptOrder) {
     // subscribrToTopicMessaging()
     // }
-    console.log('eventTitle..isArrived', eventTitle, isArrived)
+    console.log('order status **********', orderStatus, isArrived);
     if (acceptOrder && !isArrived) {
       Alert.alert('updateLocation api hit after 1 minute');
       console.log('accept', acceptOrder);
       updateLocation();
     }
 
-
     return () => {
-
       DeviceEventEmitter.removeAllListeners('DoctorNotification');
     };
-  }, [acceptOrder]);
+  }, [acceptOrder || isArrived || orderStatus]);
 
   const onPressToggle = (available: boolean) => {
     if ((localData as ProviderProfile)?.licensenumber === '') {
@@ -172,11 +200,19 @@ const HomeScreen = () => {
   };
   const onPressSeeMore = () => {
     if (isSeeMore) {
-      setIsSeeMore(false);
       modalHeight.value = withSpring(getHeight(360));
+      setIsSeeMore(false);
+      setLocalData('ORDER', {
+        isSeeMore: false,
+        modalHeight: 360,
+      });
     } else {
-      setIsSeeMore(true);
       modalHeight.value = withSpring(getHeight(652));
+      setIsSeeMore(true);
+      setLocalData('ORDER', {
+        isSeeMore: true,
+        modalHeight: 652,
+      });
     }
   };
 
@@ -195,8 +231,9 @@ const HomeScreen = () => {
     const formatTime = (time) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
-        }${remainingSeconds}`;
+      return `${minutes}:${
+        remainingSeconds < 10 ? '0' : ''
+      }${remainingSeconds}`;
     };
 
     return (
@@ -204,16 +241,25 @@ const HomeScreen = () => {
     );
   };
 
-
-
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
-    setAcceptOrder(false)
-    setIsArrived(false)
+    setAcceptOrder(false);
+    setIsArrived(false);
     setIsAvailable(false);
     setNotification(false);
-    setIsSeeMore(false)
+    setIsSeeMore(false);
     modalHeight.value = withSpring(getHeight(360));
+    setLocalData('USER', { isProviderAvailable: false });
+    setLocalData('ORDER', {
+      modalHeight: 360,
+      isCancelOrder: true,
+      isArrived: false,
+      orderAccepted: false,
+      eventData: '',
+      orderStatus: '',
+      isSeeMore: false,
+      isNotification: false,
+    });
   };
 
   const arrivedView = () => (
@@ -295,16 +341,18 @@ const HomeScreen = () => {
         />
       )}
 
-      {order && order?.eventData?.symptoms?.length > 0 && JSON?.parse(order?.eventData?.symptoms)?.map?.(
-        (item: any, index: number) => (
-          <AnimatedText
-            key={index}
-            style={{ ...styles.details, marginTop: getHeight(20) }}
-            title={item?.name}
-            entering={FadeInLeft.duration(400).delay(500)}
-          />
-        ),
-      )}
+      {order &&
+        order?.eventData?.symptoms?.length > 0 &&
+        JSON?.parse(order?.eventData?.symptoms)?.map?.(
+          (item: any, index: number) => (
+            <AnimatedText
+              key={index}
+              style={{ ...styles.details, marginTop: getHeight(20) }}
+              title={item?.name}
+              entering={FadeInLeft.duration(400).delay(500)}
+            />
+          ),
+        )}
       {order?.eventData?.services && (
         <>
           <AnimatedText
@@ -324,8 +372,13 @@ const HomeScreen = () => {
                   key={index}
                   style={styles.details}
                   title={
-                    order?.eventData?.services?.length > 1
-                      ? `  ${service?.service_name}, `
+                    JSON.parse?.(order?.eventData?.services)?.length > 1
+                      ? `${
+                          index !==
+                          JSON.parse?.(order?.eventData?.services)?.length - 1
+                            ? ` ${service?.service_name}, `
+                            : ` ${service?.service_name}`
+                        }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -337,12 +390,15 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
-          }    ${order?.eventData?.distance !== 'undefined'
+        title={`${order?.eventData?.firstname}  ${
+          order?.eventData?.lastname
+        }    ${
+          order?.eventData?.distance !== 'undefined'
             ? order?.eventData?.time
             : 0
-          } km, ~${order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
-          } min`}
+        } km, ~${
+          order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
+        } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -417,12 +473,24 @@ const HomeScreen = () => {
   );
   const getNewOrderView = () => (
     <RNModal
+      coverScreen
       isVisible={notification && isAvailable}
       style={styles.modal}
-      backdropOpacity={1}
+      backdropOpacity={0.5}
       backdropColor={colors.transparent}
     >
-      <Animated.View style={{ ...styles.modalView, height: modalHeight }}>
+      <Animated.View
+        style={{
+          ...styles.modalView,
+          height: modalHeight.value,
+        }}
+      >
+        {console.log(
+          'height: modalHeight',
+          modalHeight?.value?.toString(),
+          'isSeeMore',
+          isSeeMore,
+        )}
         {isSeeMore && (
           <AnimatedText
             style={{
@@ -435,8 +503,8 @@ const HomeScreen = () => {
               isArrived
                 ? 'You arrived'
                 : acceptOrder
-                  ? 'Order accepted'
-                  : 'You have a new order!'
+                ? 'Order accepted'
+                : 'You have a new order!'
             }
             entering={FadeInUp.duration(400).delay(400)}
           />
@@ -471,11 +539,18 @@ const HomeScreen = () => {
                         key={index}
                         style={styles.details}
                         title={
-                          order?.eventData?.services?.length > 1
-                            ? `  ${service?.service_name}, `
+                          JSON.parse?.(order?.eventData?.services)?.length > 1
+                            ? `${
+                                index !==
+                                JSON.parse?.(order?.eventData?.services)
+                                  ?.length -
+                                  1
+                                  ? ` ${service?.service_name}, `
+                                  : ` ${service?.service_name}`
+                              }`
                             : service?.service_name
                         }
-                        entering={FadeInLeft.duration(400).delay(600)}
+                        entering={FadeInLeft.duration(400).delay(700)}
                       />
                     ),
                   )}
@@ -484,14 +559,17 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
-                }    ${order?.eventData?.distance !== 'undefined'
+              title={`${order?.eventData?.firstname}  ${
+                order?.eventData?.lastname
+              }    ${
+                order?.eventData?.distance !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-                } km, ~${order?.eventData?.time !== 'undefined'
+              } km, ~${
+                order?.eventData?.time !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-                } min`}
+              } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -526,15 +604,27 @@ const HomeScreen = () => {
                   OnPressTakeOrder();
                   modalHeight.value = withSpring(getHeight(652));
                   setIsSeeMore(true);
+                  setLocalData('ORDER', {
+                    modalHeight: 652,
+                    isSeeMore: true,
+                  });
                 } else {
-                  setAcceptOrder(false)
-                  setIsArrived(false)
+                  setAcceptOrder(false);
+                  setIsArrived(false);
                   setIsAvailable(false);
                   setNotification(false);
-                  setIsSeeMore(false)
                   modalHeight.value = withSpring(getHeight(360));
-                  setLocalData('ORDER', { eventData: '', orderStatus: '' });
-
+                  setIsSeeMore(false);
+                  setLocalData('USER', { isProviderAvailable: false });
+                  setLocalData('ORDER', {
+                    modalHeight: 360,
+                    eventData: '',
+                    orderStatus: '',
+                    isSeeMore: false,
+                    isNotification: false,
+                    isArrived: false,
+                    orderAccepted: false,
+                  });
                 }
               }}
             />
@@ -556,7 +646,7 @@ const HomeScreen = () => {
           {!isArrived && (
             <TextButton
               title={t('cancel_order')}
-              fontSize={getWidth(fontSize.textL)}
+              fontSize={getHeight(fontSize.textL)}
               style={styles.cancelOrderButton}
               onPress={onPressCancelOrder}
             />
@@ -603,7 +693,7 @@ const HomeScreen = () => {
     <RNModal
       isVisible={isVisibleLicense}
       style={styles.addDocsModal}
-      backdropOpacity={0.4}
+      backdropOpacity={1}
       animationIn={'zoomInUp'}
     >
       <View
@@ -705,7 +795,6 @@ const HomeScreen = () => {
           style={styles.switchToggleText}
           title={isAvailable ? t('now_you_available') : t('switch_toggle')}
         />
-
         {/* <MapView
           provider={PROVIDER_GOOGLE}
           zoomEnabled
@@ -788,6 +877,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: 0,
     margin: 0,
+    flex: 1,
   },
   addDocsModal: {
     justifyContent: 'center',
