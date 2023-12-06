@@ -5,7 +5,7 @@ import { FacebookAuthProvider } from '../../../libs/authsevices/FcebookAuthProvi
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { setLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { UserType } from 'libs/types/UserType';
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import NavigationRoutes from 'navigator/NavigationRoutes';
@@ -23,12 +23,14 @@ const LoginViewController = () => {
   } = AuthServicesProvider();
   const { userDataProvider, setUserDataProvider } = UseUserContextProvider();
   const { t, i18n } = useTranslation();
+  const device_Token = getLocalData('USER')?.deviceToken;
+
   /** To handle Response from API after authentication request */
   const handleAuthResponse = () => {
     navigation.navigate(NavigationRoutes.ClientHome);
   };
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string, device_token:string) => {
+  const onPressLoginButton = async (email: string, password: string, device_token: string) => {
     try {
       const res = await OnProviderSignIn({ email, password, device_token });
       setUserDataProvider({
@@ -73,6 +75,7 @@ const LoginViewController = () => {
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
           googleId,
+          device_token: device_Token
         });
         setUserDataProvider?.({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
@@ -101,7 +104,7 @@ const LoginViewController = () => {
         // const facebookId = "sharm@hmail.com"
         const email = userData?.user?.email;
         const facebookId = userData?.user?.providerData[0]?.uid;
-        const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
+        const res = await onSubmitFBAuthRequestProvider({ email, facebookId, device_token: device_Token });
         setUserDataProvider({ ...userDataProvider, token: res.token });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {

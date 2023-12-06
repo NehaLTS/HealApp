@@ -40,6 +40,11 @@ import Checkbox from 'components/common/Checkbox';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import AddNewService from 'components/common/AddNewService';
+import AddAddress from 'components/common/AddAddress';
+import messaging from '@react-native-firebase/messaging';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -57,8 +62,10 @@ const HomeScreen = () => {
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [isShowModal, setIsShowModal] = useState(false);
-  const { acceptOrder, OnPressTakeOrder, updateLocation } =
+  const { acceptOrder, setAcceptOrder, OnPressTakeOrder, updateLocation, providerLocation } =
     HomeScreenControlller();
+  const { currentLocationOfUser } = UseClientUserContext();
+
   const { providerAvailabilityStatus } = AuthServicesProvider();
   const { userId, token } = UseProviderUserContext();
   const [services, setServices] = useState<ProviderServices[]>([
@@ -101,29 +108,45 @@ const HomeScreen = () => {
     }
   };
 
-  useEffect(() => {
-    let isArrived: string = '';
+  const subscribrToTopicMessaging = () => {
+    // const admin = require('firebase-admin');
 
+    const message = {
+      data: {
+        type: 'warning',
+        content: 'A new weather warning has been created!',
+      },
+      topic: 'weather',
+    };
+
+
+  }
+
+  useEffect(() => {
+    let eventTitle: string = '';
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      isArrived = event.notification?.title;
+      eventTitle = event.notification?.title;
       console.log('providerNotification **** 0000 ***** 00000', event);
       setNotification(true);
-      if (isArrived === 'Arrived Order') {
-        Alert.alert('Arrived Order');
+      if (eventTitle === "Arrived Order") {
+
         setIsArrived(true);
       }
     });
+    // messaging().subscribeToTopic('healApp').then((res) => console.log('Subscribed fom the topic!', res));
+    // if (acceptOrder) {
+    // subscribrToTopicMessaging()
+    // }
+    console.log('eventTitle..isArrived', eventTitle, isArrived)
+    if (acceptOrder && !isArrived) {
+      Alert.alert('updateLocation api hit after 1 minute');
+      console.log('accept', acceptOrder);
+      updateLocation();
+    }
 
-    const interval = setInterval(() => {
-      if (acceptOrder && isArrived !== 'Arrived Order') {
-        Alert.alert('updateLocation api hit after 1 minute');
-        console.log('accept', acceptOrder);
-        updateLocation();
-      }
-    }, 60000);
 
     return () => {
-      clearInterval(interval);
+
       DeviceEventEmitter.removeAllListeners('DoctorNotification');
     };
   }, [acceptOrder]);
@@ -149,11 +172,11 @@ const HomeScreen = () => {
   };
   const onPressSeeMore = () => {
     if (isSeeMore) {
-      modalHeight.value = withSpring(getHeight(360));
       setIsSeeMore(false);
+      modalHeight.value = withSpring(getHeight(360));
     } else {
-      modalHeight.value = withSpring(getHeight(652));
       setIsSeeMore(true);
+      modalHeight.value = withSpring(getHeight(652));
     }
   };
 
@@ -172,9 +195,8 @@ const HomeScreen = () => {
     const formatTime = (time) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${
-        remainingSeconds < 10 ? '0' : ''
-      }${remainingSeconds}`;
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
+        }${remainingSeconds}`;
     };
 
     return (
@@ -182,8 +204,16 @@ const HomeScreen = () => {
     );
   };
 
+
+
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
+    setAcceptOrder(false)
+    setIsArrived(false)
+    setIsAvailable(false);
+    setNotification(false);
+    setIsSeeMore(false)
+    modalHeight.value = withSpring(getHeight(360));
   };
 
   const arrivedView = () => (
@@ -265,7 +295,7 @@ const HomeScreen = () => {
         />
       )}
 
-      {JSON.parse(order?.eventData?.symptoms)?.map?.(
+      {order && order?.eventData?.symptoms?.length > 0 && JSON?.parse(order?.eventData?.symptoms)?.map?.(
         (item: any, index: number) => (
           <AnimatedText
             key={index}
@@ -307,15 +337,12 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.eventData?.firstname}  ${
-          order?.eventData?.lastname
-        }    ${
-          order?.eventData?.distance !== 'undefined'
+        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
+          }    ${order?.eventData?.distance !== 'undefined'
             ? order?.eventData?.time
             : 0
-        } km, ~${
-          order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
-        } min`}
+          } km, ~${order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
+          } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -388,7 +415,6 @@ const HomeScreen = () => {
       )}
     </>
   );
-
   const getNewOrderView = () => (
     <RNModal
       isVisible={notification && isAvailable}
@@ -409,8 +435,8 @@ const HomeScreen = () => {
               isArrived
                 ? 'You arrived'
                 : acceptOrder
-                ? 'Order accepted'
-                : 'You have a new order!'
+                  ? 'Order accepted'
+                  : 'You have a new order!'
             }
             entering={FadeInUp.duration(400).delay(400)}
           />
@@ -458,17 +484,14 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.eventData?.firstname}  ${
-                order?.eventData?.lastname
-              }    ${
-                order?.eventData?.distance !== 'undefined'
+              title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
+                }    ${order?.eventData?.distance !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-              } km, ~${
-                order?.eventData?.time !== 'undefined'
+                } km, ~${order?.eventData?.time !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-              } min`}
+                } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -504,8 +527,14 @@ const HomeScreen = () => {
                   modalHeight.value = withSpring(getHeight(652));
                   setIsSeeMore(true);
                 } else {
+                  setAcceptOrder(false)
+                  setIsArrived(false)
                   setIsAvailable(false);
-                  setLocalData('ORDER', { eventData: null, orderStatus: '' });
+                  setNotification(false);
+                  setIsSeeMore(false)
+                  modalHeight.value = withSpring(getHeight(360));
+                  setLocalData('ORDER', { eventData: '', orderStatus: '' });
+
                 }
               }}
             />
@@ -677,6 +706,40 @@ const HomeScreen = () => {
           title={isAvailable ? t('now_you_available') : t('switch_toggle')}
         />
 
+        {/* <MapView
+          provider={PROVIDER_GOOGLE}
+          zoomEnabled
+          showsTraffic
+          focusable
+          showsBuildings
+          showsIndoors
+          initialRegion={providerLocation}
+          region={providerLocation}
+          style={{ flex: 1 }}
+        >
+
+
+          {providerLocation
+            &&
+            (
+              <Marker
+                coordinate={{
+                  latitude: providerLocation ? providerLocation?.latitude : parseFloat(currentLocationOfUser?.latitude),
+                  longitude: providerLocation ? providerLocation?.longitude : parseFloat(currentLocationOfUser?.longitude)
+                }}
+              >
+
+                <Image
+                  source={require('../../assets/icon/LocationMarker.png')}
+                  resizeMode="contain"
+                  style={styles.locationMarker}
+                />
+
+
+
+              </Marker>
+            )}
+        </MapView> */}
         <View style={styles.cardContainer}>
           {isAvailable ? (
             <Text
@@ -927,5 +990,9 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.imageXs),
     color: colors.white,
     paddingLeft: getWidth(3),
+  },
+  locationMarker: {
+    width: getWidth(32),
+    height: getWidth(32),
   },
 });

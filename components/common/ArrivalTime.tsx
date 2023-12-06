@@ -1,97 +1,53 @@
-import { colors } from 'designToken/colors';
-import { dimens } from 'designToken/dimens';
-import { fontFamily } from 'designToken/fontFamily';
-import { fontSize } from 'designToken/fontSizes';
-import { getHeight, getWidth } from 'libs/StyleHelper';
-import { setLocalData } from 'libs/datastorage/useLocalStorage';
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import Text from './Text';
-import useUpdateEffect from 'libs/UseUpdateEffect';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { colors } from "designToken/colors"
+import { dimens } from "designToken/dimens"
+import { fontFamily } from "designToken/fontFamily"
+import { fontSize } from "designToken/fontSizes"
+import { getHeight, getWidth } from "libs/StyleHelper"
+import { setLocalData } from "libs/datastorage/useLocalStorage"
+import React, { useEffect, useRef, useState } from "react"
+import { Alert, StyleSheet, View } from "react-native"
+import Text from "./Text"
+import useUpdateEffect from "libs/UseUpdateEffect"
+import { UseClientUserContext } from "contexts/UseClientUserContext"
 
-const ArrivalTime = ({
-  totalTime,
-  remainingSeconds,
-}: {
-  totalTime: number;
-  remainingSeconds: number;
-}) => {
-  const [timeToArrive, setTimeToArrive] = useState(totalTime);
-  const [seconds, setSeconds] = useState(remainingSeconds);
-  const timeOutRef = useRef<NodeJS.Timeout | undefined>();
-  const minuteRef = useRef<NodeJS.Timeout | undefined>();
-  const { setProviderStatus, setRemainingTime } = UseClientUserContext();
+const ArrivalTime = ({ totalTime }: { totalTime: number }) => {
+  const [time, setTime] = useState({ minutes: totalTime, seconds: 60 });
 
   useEffect(() => {
-    minuteRef.current = setInterval(() => {
-      console.log('timeLeft.current', timeToArrive);
-
-      if (timeToArrive > 0) {
-        const leftTime = timeToArrive - 1;
-        setTimeToArrive(leftTime);
-      }
-    }, 60000);
-    return () => {
-      clearInterval(minuteRef.current);
-    };
-  }, [timeToArrive]);
-
-  useEffect(() => {
-    timeOutRef.current = setInterval(() => {
-      // console.log('timeLeft.seconds',seconds)
-      setRemainingTime({ minutes: timeToArrive, seconds: seconds });
-      if (seconds > 0) {
-        const leftSeconds = seconds - 1;
-        setSeconds(leftSeconds);
-      } else if (timeToArrive > 0) {
-        setSeconds(60);
+    const timer = setTimeout(() => {
+      if (time.seconds === 0) {
+        if (time.minutes === 0) {
+          // Timer has reached zero
+          clearTimeout(timer);
+          return;
+        } else {
+          setTime({ minutes: time.minutes - 1, seconds: 59 });
+        }
+      } else {
+        setTime({ minutes: time.minutes, seconds: time.seconds - 1 });
       }
     }, 1000);
-    return () => {
-      clearInterval(timeOutRef.current);
-    };
-  }, [seconds]);
 
-  useUpdateEffect(() => {
-    if (seconds === 0 && timeToArrive < 0) {
-      clearInterval(timeOutRef.current);
-    }
-  }, [seconds]);
+    // Cleanup the timer on component unmount
+    return () => clearTimeout(timer);
+  }, [time]);
 
-  useUpdateEffect(() => {
-    if (timeToArrive < 0) {
-      clearInterval(minuteRef.current);
-    }
-  }, [timeToArrive]);
+
+
 
   return (
     <View style={styles.mainView}>
       <View style={styles.timeBoxView}>
-        <Text
-          title={`${
-            timeToArrive <= 0
-              ? '00'
-              : timeToArrive < 10
-              ? `${0}${timeToArrive}`
-              : timeToArrive
-          }`}
-          style={styles.timeText}
-        />
+        <Text title={`${time.minutes <= 0 ? '00' : time.minutes < 10 ? `${0}${time.minutes}` : time.minutes}`} style={styles.timeText} />
       </View>
       <View style={styles.timeBoxView}>
-        <Text
-          title={`${
-            seconds == 0 ? '00' : seconds < 10 ? `${0}${seconds}` : seconds
-          }`}
-          style={styles.timeText}
-        />
+        <Text title={`${time.seconds == 0 ? '00' : time.seconds < 10 ? `${0}${time.seconds}` : time.seconds}`} style={styles.timeText} />
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default ArrivalTime;
+export default ArrivalTime
 
 const styles = StyleSheet.create({
   mainView: {

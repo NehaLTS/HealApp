@@ -34,7 +34,7 @@ const LoginViewController = () => {
   const passwordRef = React.useRef<any>('');
   const { showToast, renderToast } = useToast();
   const { t } = useTranslation();
-  const device_Token= getLocalData('USER')?.deviceToken
+  const device_Token = getLocalData('USER')?.deviceToken
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -140,11 +140,11 @@ const LoginViewController = () => {
   };
 
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string, device_token:string) => {
+  const onPressLoginButton = async (email: string, password: string, device_token: string) => {
     try {
       if (email != '' || password != '') {
         setIsLoading(true);
-        const res = await onSubmitAuthRequest({ email, password, device_token});
+        const res = await onSubmitAuthRequest({ email, password, device_token });
         console.log('sign in client by email and password', res);
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
@@ -172,7 +172,7 @@ const LoginViewController = () => {
         const email = userData?.user?.email ?? '';
         const googleId = userData.user?.uid ?? '';
         /** To handle Google auth request to API */
-        const res = await onSubmitGoogleAuthRequest({ email, googleId });
+        const res = await onSubmitGoogleAuthRequest({ email, googleId, device_token: device_Token });
 
         setIsLoading(false);
         if (res?.isSuccessful === true) {
@@ -196,9 +196,9 @@ const LoginViewController = () => {
 
     onFBAuthProcessing().then(async (userData) => {
       try {
-        const email = userData.user.email;
+        const email = userData.user.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
-        const res = await onSubmitFBAuthRequest({ email, facebookId });
+        const res = await onSubmitFBAuthRequest({ email, facebookId, device_token: device_Token });
         setIsLoading(false);
 
         if (res?.isSuccessful === true) {

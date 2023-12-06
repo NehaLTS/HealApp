@@ -39,6 +39,8 @@ export const checkPermission = async () => {
   }
 };
 
+
+
 export const createNotificationListeners = () => {
 
   // Handle incoming messages in the foreground
@@ -53,7 +55,9 @@ export const createNotificationListeners = () => {
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);
   });
-
+  messaging()
+    .subscribeToTopic('weather')
+    .then(() => console.log('Subscribed to topic!'));
   // Handle notification when app is in the background
   const unsubscribeOnNotificationOpened = messaging().onNotificationOpenedApp(
     (remoteMessage) => {

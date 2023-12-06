@@ -82,7 +82,7 @@ const LoginViewController = () => {
   /** To handle Response from API after authentication request */
   const handleAuthResponse = (response: any, profilePicture?: string) => {
     let userDataProvider = response.user;
-
+    setIsLoading(true)
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
@@ -134,11 +134,11 @@ const LoginViewController = () => {
 
       // if (!userDataProvider.firstName || userDataProvider.firstName == '') {
       //   console.log('setToken', token, userId);
-
-      //   navigation.reset({
-      //     index: 0,
-      //     routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
-      //   });
+      setIsLoading(false)
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
+      });
       // } else {
       //   navigation.reset({
       //     index: 0,
@@ -146,10 +146,12 @@ const LoginViewController = () => {
       //   });
       // }
     } else {
+      setIsLoading(false)
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ProviderHome }],
       });
+
     }
   };
   /** To handle User auth via email and password */
@@ -191,10 +193,13 @@ const LoginViewController = () => {
         console.log('vbxcvbnxvb', userData);
         const email = userData?.user?.email ?? '';
         const googleId = userData.user.providerData[0].uid;
+
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
           googleId,
+          device_token: device_Token
+
         });
         // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
@@ -222,7 +227,9 @@ const LoginViewController = () => {
       try {
         const email = userData?.user?.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
-        const res = await onSubmitFBAuthRequestProvider({ email, facebookId });
+        const res = await onSubmitFBAuthRequestProvider({
+          email, facebookId, device_token: device_Token
+        });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {
           handleAuthResponse(res, '');

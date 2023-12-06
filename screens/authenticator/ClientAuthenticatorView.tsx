@@ -14,7 +14,8 @@ import React, { useLayoutEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import ClientAuthenticatorViewController from './ClientAuthenticatorViewController';
-import { checkPermission } from 'libs/notification/Notification';
+import { checkPermission } from 'libs/Notification';
+
 
 
 const ClientAuthenticatorView = () => {
@@ -28,9 +29,9 @@ const ClientAuthenticatorView = () => {
     });
   }, [navigation]);
 
-  useMemo(()=>{
+  useMemo(() => {
     checkPermission()
-  },[])
+  }, [])
 
   return (
     <View style={styles.mainContainer}>

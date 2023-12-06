@@ -70,10 +70,15 @@ const DoctorDetailCard = ({
           <View style={{}}>
             <View style={styles.detailItem}>
               <View style={styles.doctorIconContainer}>
-                <Image
-                  source={require('../../../assets/icon/doctorIcon.png')}
+                {providerData && providerData?.profile_picture ? <Image
+                  source={{ uri: providerData?.profile_picture }}
                   style={styles.doctorIcon}
                 />
+                  : <Image
+                    source={require('../../../assets/icon/doctorIcon.png')}
+                    style={styles.doctorIcon}
+                  />}
+
                 <Image
                   source={require('../../../assets/icon/star.png')}
                   style={styles.starIcon}

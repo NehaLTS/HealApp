@@ -97,10 +97,10 @@ const HomeScreen = () => {
         <AddAddress
           address={(data) => {
             setCurrentAddress(data);
-            setCurrentLocationOfUser({
-              ...currentLocationOfUser,
-              address: data,
-            });
+            // setCurrentLocationOfUser({
+            //   ...currentLocationOfUser,
+            //   address: data,
+            // });
           }}
           isVisible={isVisible}
           onClose={() => setIsVisible(false)}
@@ -179,45 +179,45 @@ const HomeScreen = () => {
       </View>
     );
   };
-  useUpdateEffect(() => {
-    setTimeToArrive(remainingTime?.minutes);
-    setSeconds(remainingTime?.seconds);
-  }, [remainingTime]);
+  // useUpdateEffect(() => {
+  //   setTimeToArrive(remainingTime?.minutes);
+  //   setSeconds(remainingTime?.seconds);
+  // }, [remainingTime]);
 
-  useEffect(() => {
-    minuteRef.current = setInterval(() => {
-      console.log('timeLeft.current', timeToArrive);
-      if (timeToArrive > 0) {
-        const leftTime = timeToArrive - 1;
-        // timeLeft.current= leftTime;
-        setTimeToArrive(leftTime);
-      }
-    }, 60000);
-    return () => {
-      clearInterval(minuteRef.current);
-    };
-  }, [timeToArrive]);
+  // useEffect(() => {
+  //   minuteRef.current = setInterval(() => {
+  //     console.log('timeLeft.current', timeToArrive);
+  //     if (timeToArrive > 0) {
+  //       const leftTime = timeToArrive - 1;
+  //       // timeLeft.current= leftTime;
+  //       setTimeToArrive(leftTime);
+  //     }
+  //   }, 60000);
+  //   return () => {
+  //     clearInterval(minuteRef.current);
+  //   };
+  // }, [timeToArrive]);
 
-  useUpdateEffect(() => {
-    if (timeToArrive < 0) {
-      clearInterval(minuteRef.current);
-    }
-  }, [timeToArrive]);
+  // useUpdateEffect(() => {
+  //   if (timeToArrive < 0) {
+  //     clearInterval(minuteRef.current);
+  //   }
+  // }, [timeToArrive]);
 
-  useEffect(() => {
-    timeOutRef.current = setInterval(() => {
-      // console.log('timeLeft.seconds', seconds);
-      if (seconds > 0) {
-        const leftSeconds = seconds - 1;
-        setSeconds(leftSeconds);
-      } else if (timeToArrive > 0) {
-        setSeconds(60);
-      }
-    }, 1000);
-    return () => {
-      clearInterval(timeOutRef.current);
-    };
-  }, [seconds]);
+  // useEffect(() => {
+  //   timeOutRef.current = setInterval(() => {
+  //     // console.log('timeLeft.seconds', seconds);
+  //     if (seconds > 0) {
+  //       const leftSeconds = seconds - 1;
+  //       setSeconds(leftSeconds);
+  //     } else if (timeToArrive > 0) {
+  //       setSeconds(60);
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timeOutRef.current);
+  //   };
+  // }, [seconds]);
 
   useUpdateEffect(() => {
     if (seconds === 0 && timeToArrive < 0) {
@@ -282,11 +282,9 @@ const HomeScreen = () => {
           }}
         >
           <ProviderArrivalInfo
-            time={timeToArrive?.toString()}
             status={providerStatus}
-            doctorName={`${localData?.providerDetail.firstname}${' '}${
-              localData?.providerDetail.name
-            }`}
+            doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name
+              }`}
             onPress={() => {
               navigation.navigate(NavigationRoutes.SearchDoctor, {
                 providerData: localData?.providerDetail,

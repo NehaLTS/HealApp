@@ -14,7 +14,8 @@ import React, { useLayoutEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import ProviderAuthenticatorViewController from './ProviderAuthenticatorViewController';
-import { checkPermission } from 'libs/notification/Notification';
+import { checkPermission } from 'libs/Notification';
+
 
 const ProviderAuthenticatorView = () => {
   const navigation = useNavigation();

@@ -58,6 +58,7 @@ const OrderDetailsController = () => {
     }
   };
 
+  console.log('currentLocationOfUser', currentLocationOfUser);
   useEffect(() => {
     treatmentReasons();
   }, []);
@@ -143,6 +144,16 @@ const OrderDetailsController = () => {
 
       if (res?.orderId) {
         setIsLoading(false);
+
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [{
+        //     name: NavigationRoutes.SearchDoctor, params: {
+        //       providerData: res?.closestProvider,
+        //       orderId: res?.orderId,
+        //     },
+        //   }],
+        // });
         navigation.navigate(NavigationRoutes.SearchDoctor, {
           providerData: res?.closestProvider,
           orderId: res?.orderId,

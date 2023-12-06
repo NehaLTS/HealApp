@@ -45,7 +45,7 @@ const SearchDoctor = () => {
   const { t } = useTranslation();
   const { setCurrentLocationOfUser } = UseClientUserContext();
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const { handleNextButtonPress, showRateAlert, calculateTime } =
+  const { handleNextButtonPress, showRateAlert, calculateTime, calculateDistance } =
     SearchDoctorController();
   const [providerLocation, setProviderLocation] = useState<{
     latitude: number;
@@ -113,8 +113,9 @@ const SearchDoctor = () => {
 
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      console.log('DoctorNotification', JSON.stringify(event));
-      if (event.notification.title === 'Accept Order') {
+      calculateDistance()
+      console.log('DoctorNotification', JSON.stringify(event))
+      if (event.notification.title === "Accept Order") {
         setShowCancelTextButton(false);
 
         setShowCancelButton(true);
@@ -147,7 +148,9 @@ const SearchDoctor = () => {
     });
   };
   useEffect(() => {
-    getEventUpdate();
+    if (stausOfArriving !== 'Arrived') {
+      getEventUpdate();
+    }
   }, []);
 
   useEffect(() => {
@@ -204,14 +207,18 @@ const SearchDoctor = () => {
     <View style={styles.mainContainer}>
       <View>
         {showTimer && (
-          <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
+          <ArrivalTime
+            totalTime={
+              Math.round(calculateTime().minutes)
+            }
+          />
         )}
         <Text
           style={styles.lookingDoctor}
           title={
             (providerLocation !== undefined &&
               providerLocation.latitude === 0.0) ||
-            loader
+              loader
               ? t('looking_doctor')
               : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
           }
@@ -231,11 +238,13 @@ const SearchDoctor = () => {
           region={currentLocation}
           style={{ flex: 1 }}
         >
-          {currentLocation !== undefined && currentLocation.latitude !== 0.0 && providerLocation && providerLocation.latitude !== 0.0 &&
+          {currentLocation !== undefined && currentLocation.latitude !== 0.0 && providerLocation && providerLocation.latitude !== 0.0 && !loader &&
             <MapViewDirections
               strokeWidth={5}
               splitWaypoints
               strokeColor={colors.invalid}
+              geodesic
+              optimizeWaypoints
               origin={providerLocation}
               destination={currentLocation}
               apikey={"AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o"}
@@ -272,10 +281,16 @@ const SearchDoctor = () => {
                   {!showDoctor && (
                     <View style={styles.marker}>
                       <View style={styles.imageContainer}>
-                        <Image
-                          source={require('../../assets/icon/doctorIcon.png')}
+                        {providerData && providerData?.profile_picture ? <Image
+                          source={{ uri: providerData?.profile_picture }}
                           style={styles.doctorIcon}
                         />
+                          : <Image
+                            source={require('../../assets/icon/doctorIcon.png')}
+                            style={styles.doctorIcon}
+                          />}
+
+
                       </View>
                       <View style={styles.textContainer}>
                         <Text
@@ -295,8 +310,8 @@ const SearchDoctor = () => {
         </MapView>
 
         {showDoctor &&
-        providerLocation !== undefined &&
-        providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
           <View
             style={{
               zIndex: 2,
@@ -326,9 +341,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                providerLocation.latitude !== 0.0 &&
-                !loader &&
-                !showCancelButton
+                  providerLocation.latitude !== 0.0 &&
+                  !loader &&
+                  !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -345,7 +360,7 @@ const SearchDoctor = () => {
             <TextButton
               style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
               title={t('cancel')}
-              onPress={() => {}}
+              onPress={() => { }}
             />
           )}
           <Text
@@ -353,11 +368,11 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              loader
+                loader
                 ? t('no_fee_collected')
                 : showCancelTextButton || showCancelButton
-                ? t('3_minutes_to_cancel')
-                : ''
+                  ? t('3_minutes_to_cancel')
+                  : ''
             }
           />
         </View>

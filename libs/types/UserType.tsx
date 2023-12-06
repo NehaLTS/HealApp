@@ -253,6 +253,8 @@ export interface BookOrderRequest {
   order_id: string;
   latitude: string;
   longitude: string;
+  distance: string,
+  time: string
 }
 
 export interface currentLocationOfUser {

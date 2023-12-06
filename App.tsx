@@ -65,6 +65,7 @@ const App = () => {
     Geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        Alert.alert('location' + latitude + longitude)
         setCurrentLocationOfUser({
           // ...currentLocationOfUser,
           latitude: latitude.toString(),
@@ -114,9 +115,9 @@ const App = () => {
     // location();
   }, [permissonGrant]);
 
-  React.useEffect(() => {
-    location();
-  }, []);
+  // React.useEffect(() => {
+  //   location();
+  // }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
