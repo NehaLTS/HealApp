@@ -22,9 +22,9 @@ const ProviderPaymentController = () => {
   const accountRef = React.useRef<any>('');
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
-  const {currentLocationOfUser} = UseClientUserContext()
+  const { currentLocationOfUser } = UseClientUserContext()
   const { t } = useTranslation();
-  const providerServicesData=getLocalData('PROVIDERSERVICES')
+  const providerServicesData = getLocalData('PROVIDERSERVICES')
 
   const { setCurrentStep, setProviderProfile, providerProfile, userId, token } =
     UseProviderUserContext();
@@ -91,14 +91,14 @@ const ProviderPaymentController = () => {
   };
 
   const onPressNext = async () => {
-    let latitude:string=''
-    let longitude:string=''
-   
-    Geocoder.from(providerProfile?.address??'').then(json => {
+    let latitude: string = ''
+    let longitude: string = ''
+
+    Geocoder.from(providerProfile?.address ?? '').then(json => {
       var location = json.results[0].geometry.location;
-      latitude=location.lat.toString()
-      longitude=location.lng.toString()
-      console.log("location....",location);
+      latitude = location.lat.toString()
+      longitude = location.lng.toString()
+      console.log("location....", location);
     }).catch(error => console.warn(error));
 
     if (
@@ -119,7 +119,7 @@ const ProviderPaymentController = () => {
       });
       setIsLoading(true);
       console.log('providerServicesData', providerServicesData)
-      console.log("locationUpdate", latitude, latitude!==''?latitude:currentLocationOfUser.latitude )
+      console.log("locationUpdate", latitude, latitude !== '' ? latitude : currentLocationOfUser.latitude)
       const res = await OnUpdateProviderUserDetails?.(
         {
           firstname: providerProfile?.firstName ?? '',
@@ -128,6 +128,7 @@ const ProviderPaymentController = () => {
           city: '',
           state: '',
           country: '',
+          heal_id: "1",
           phone_number: providerProfile?.phoneNumber ?? '',
           profile_picture: providerProfile?.profilePicture ?? '',
           provider_id: userId ?? '',
@@ -138,9 +139,10 @@ const ProviderPaymentController = () => {
           branch: branchRef.current.value,
           business_registration_number: registrationNumberRef.current.value,
           account: accountRef.current.value,
-          specialty_id:providerProfile.speciality.id,
-          latitude:latitude!==''?latitude:currentLocationOfUser.latitude,
-          longitude:longitude!==''?longitude:currentLocationOfUser.longitude
+          specialty_id: providerProfile.speciality.id,
+          latitude: latitude !== '' ? latitude : currentLocationOfUser.latitude,
+          longitude: longitude !== '' ? longitude : currentLocationOfUser.longitude
+
         },
         token,
       );

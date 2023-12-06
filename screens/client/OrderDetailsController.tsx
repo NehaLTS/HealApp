@@ -158,6 +158,9 @@ const OrderDetailsController = () => {
           providerData: res?.closestProvider,
           orderId: res?.orderId,
         });
+      } else {
+        Alert.alert(res.message)
+        setIsLoading(false);
       }
     } else {
       if (orderDetails.services.length && orderDetails.reason.length)

@@ -17,6 +17,7 @@ const ProviderDetailController = () => {
   const [specialityList, setSpecialityList] = useState<ProviderSpeciality[]>(
     [],
   );
+  console.log('specialityList', providerTypeList);
   const [idPicture, setIdPicture] = useState('');
   const { t } = useTranslation();
   const { onGetProviderTypes } = AuthServicesProvider();
@@ -26,7 +27,8 @@ const ProviderDetailController = () => {
   const [selectedProvider, setSelectedProvider] = useState<ProviderType>();
   const [selectedSpecialty, setSelectedSpeciality] =
     useState<ProviderSpeciality>();
-
+  console.log('selectedProvider', selectedProvider);
+  console.log('selectedSpecialty', selectedSpecialty);
   const onBlurFirstName = () => validateFirstName();
 
   const onChangeFirstName = (value: string) => {
@@ -42,7 +44,7 @@ const ProviderDetailController = () => {
   const onBlurProviderType = () => validateProviderType();
 
   const onChangeProviderType = (value: ProviderType) => {
-    
+
     setSelectedProvider(value);
     setProviderTypeError('');
     if (value.specialties) setSpecialityList(value.specialties);
@@ -64,8 +66,8 @@ const ProviderDetailController = () => {
   useEffect(() => {
     getProviderTypes();
     if (providerProfile?.firstName) {
-      firstNameRef.current.value = providerProfile.firstName??'';
-      lastNameRef.current.value = providerProfile.lastName??'';
+      firstNameRef.current.value = providerProfile.firstName ?? '';
+      lastNameRef.current.value = providerProfile.lastName ?? '';
 
       //TODO: SAGAR to check these are not getting SET when back press
       // setSelectedProvider(providerProfile.provider);

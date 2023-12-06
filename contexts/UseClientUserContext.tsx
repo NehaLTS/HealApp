@@ -9,16 +9,14 @@ export interface ClientUserContextFields {
   // setUserId: () => {}
   token: string
   setToken: React.Dispatch<React.SetStateAction<string>>
-  userProfile:ClientProfile
+  userProfile: ClientProfile
   setUserProfile: React.Dispatch<React.SetStateAction<ClientProfile>>
-  orderDetails:OrderDetail
-  setCurrentLocationOfUser:React.Dispatch<React.SetStateAction<currentLocationOfUser>>
-  currentLocationOfUser:currentLocationOfUser
+  orderDetails: OrderDetail
+  setCurrentLocationOfUser: React.Dispatch<React.SetStateAction<currentLocationOfUser>>
+  currentLocationOfUser: currentLocationOfUser
   setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>
-  setProviderStatus:React.Dispatch<React.SetStateAction<string>>
-  providerStatus:string
-  setRemainingTime:React.Dispatch<React.SetStateAction<RemaingTime>>
-  remainingTime:RemaingTime
+  setRemainingTime: React.Dispatch<React.SetStateAction<RemaingTime>>
+  remainingTime: RemaingTime
 }
 
 export const ClientUserContext = createContext<ClientUserContextFields>(

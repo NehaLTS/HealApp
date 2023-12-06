@@ -136,8 +136,6 @@ const App = () => {
             setOrderDetails,
             setCurrentLocationOfUser,
             currentLocationOfUser,
-            setProviderStatus,
-            providerStatus,
             setRemainingTime,
             remainingTime,
           }}

@@ -17,8 +17,10 @@ import {
   PermissionsAndroid,
   Platform,
   StyleSheet,
+  ToastAndroid,
   TouchableOpacity,
   View,
+
 } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import DoctorDetailCard from 'components/client/home/DoctorDetailCard';
@@ -33,6 +35,7 @@ import Loader, { LoaderLarge } from 'components/common/Loader';
 import TextButton from 'components/common/TextButton';
 import MapViewDirections from 'react-native-maps-directions';
 import useUpdateEffect from 'libs/UseUpdateEffect';
+import useToast from 'components/common/useToast';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -51,7 +54,7 @@ const SearchDoctor = () => {
     latitude: number;
     longitude: number;
   }>();
-  const { providerStatus, setProviderStatus, setRemainingTime } =
+  const { setRemainingTime } =
     UseClientUserContext();
   const localData = getLocalData('ORDER');
   const [showDoctor, setShowDoctor] = useState(false);
@@ -61,10 +64,11 @@ const SearchDoctor = () => {
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
   const [showCancelButton, setShowCancelButton] = useState(false);
   const [stausOfArriving, setStausOfArriving] = useState<string>(
-    previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : providerStatus,
+    previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : localData?.orderStatus,
   );
   const [secondLoader, setSecondLoader] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { showToast, renderToast } = useToast();
 
   useLayoutEffect(() => {
     console.log('ankita', providerData, localData?.providerDetail);
@@ -114,27 +118,30 @@ const SearchDoctor = () => {
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
       calculateDistance()
+      setLocalData('ORDER', {
+        orderStatus: event.notification.title === "Accept Order" ? "On the way" : event.notification.title === 'Arrived Order' ? 'Arrived' : 'Estimated arrival'
+      });
       console.log('DoctorNotification', JSON.stringify(event))
       if (event.notification.title === "Accept Order") {
+        showToast('Order Accepted!', 'Your order is accepted!', '')
         setShowCancelTextButton(false);
-
         setShowCancelButton(true);
         setLocalData('ORDER', {
           providerDetail: providerData,
+
           orderId: orderId,
         });
         setShowTimer(true);
         setStausOfArriving('On the way');
-        setProviderStatus('On the way');
       }
       if (event.notification.title === 'Arrived Order') {
         setShowCancelTextButton(false);
-
+        setLocalData('ORDER', {
+          orderStatus: ''
+        });
         setStausOfArriving('Arrived');
-        setProviderStatus('arrived');
         setLocalData('ORDER', { providerDetail: '' });
         setTimeout(() => {
-          setProviderStatus('Estimated arrival');
         }, 10000);
       }
 
@@ -180,7 +187,12 @@ const SearchDoctor = () => {
   const onPressOrder = () => {
     setIsLoading(true);
     setSecondLoader(true);
-    handleNextButtonPress();
+    if (!showCancelButton) {
+      handleNextButtonPress();
+    }
+    else {
+      navigation.goBack()
+    }
   };
 
   useUpdateEffect(() => {
@@ -205,6 +217,7 @@ const SearchDoctor = () => {
   console.log('loader', loader);
   return (
     <View style={styles.mainContainer}>
+      {renderToast()}
       <View>
         {showTimer && (
           <ArrivalTime
@@ -349,7 +362,6 @@ const SearchDoctor = () => {
               }
               isPrimary
               isSmall
-              disabled={previousScreen === 'HOME_CLIENT' || isLoading}
               onPress={onPressOrder}
               width={'30%'}
               height={getHeight(dimens.imageS)}
@@ -360,7 +372,7 @@ const SearchDoctor = () => {
             <TextButton
               style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
               title={t('cancel')}
-              onPress={() => { }}
+              onPress={() => { setLocalData('ORDER', { providerDetail: '' }); }}
             />
           )}
           <Text

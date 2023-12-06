@@ -81,6 +81,7 @@ const LoginViewController = () => {
 
   /** To handle Response from API after authentication request */
   const handleAuthResponse = (response: any, profilePicture?: string) => {
+    console.log('response', response);
     let userDataProvider = response.user;
     setIsLoading(true)
     setToken(response.token);
@@ -128,6 +129,7 @@ const LoginViewController = () => {
       userId: response.id,
       isClient: false,
     });
+    // setLocalData('PROVIDERSERVICES',);
 
     if (!userDataProvider.firstname || userDataProvider.firstname == '') {
       console.log('setToken', token, userId);

@@ -48,6 +48,7 @@ export const AuthServicesProvider = () => {
         firstname: string;
         lastname: string;
         address: string;
+        heal_id: string;
         city: string;
         state: string;
         country: string;

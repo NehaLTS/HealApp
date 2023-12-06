@@ -56,7 +56,7 @@ const HomeScreen = () => {
     searchProviderList,
     isVisible,
     setIsVisible,
-    providerStatus,
+
     remainingTime,
     setProviderStatus,
     currentLocationOfUser,
@@ -282,7 +282,7 @@ const HomeScreen = () => {
           }}
         >
           <ProviderArrivalInfo
-            status={providerStatus}
+            status={localData.orderStatus}
             doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name
               }`}
             onPress={() => {
