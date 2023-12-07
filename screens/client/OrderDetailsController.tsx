@@ -159,7 +159,7 @@ const OrderDetailsController = () => {
           orderId: res?.orderId,
         });
       } else {
-        Alert.alert(res.message)
+        Alert.alert(res?.message)
         setIsLoading(false);
       }
     } else {

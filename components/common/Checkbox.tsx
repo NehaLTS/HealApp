@@ -5,8 +5,8 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { dimens } from 'designToken/dimens';
 import { colors } from 'designToken/colors';
 
-const Checkbox = ({ isWhite }: { isWhite?: boolean }) => {
-  const [activeCheckbox, setActiveCheckbox] = React.useState(false);
+const Checkbox = ({ isWhite, isChecked }: { isWhite?: boolean, isChecked?: boolean }) => {
+  const [activeCheckbox, setActiveCheckbox] = React.useState(isChecked ?? false);
   return (
     <TouchableOpacity
       style={{ ...styles.checkboxContainer }}

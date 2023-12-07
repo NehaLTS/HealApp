@@ -68,7 +68,7 @@ const HomeScreenControlller = () => {
 
     Geolocation.watchPosition(
       (position) => {
-        Alert.alert('WatchPostion');
+        // Alert.alert('WatchPostion');
         // setProviderLocation({
         //   latitude: position.coords.latitude,
         //   longitude: position.coords.longitude,
@@ -84,9 +84,9 @@ const HomeScreenControlller = () => {
           latitude: position.coords.latitude.toString(),
           longitude: position.coords.longitude.toString(),
         }).then((res) => {
-          Alert.alert(
-            'dataUpdate after getihng response' + JSON.stringify(res),
-          );
+          // Alert.alert(
+          //   'dataUpdate after getihng response' + JSON.stringify(res),
+          // );
         }); // setLocation({ latitude, longitude });
       },
       (error) => {
@@ -94,6 +94,14 @@ const HomeScreenControlller = () => {
       },
       {
         enableHighAccuracy: true,
+        distanceFilter: 10, // Minimum distance (in meters) to trigger an update
+        interval: 10000, // Minimum time interval (in milliseconds) to trigger an update
+        fastestInterval: 5000, // Maximum time interval (in milliseconds) between updates
+        showLocationDialog: true, // Show a dialog if location services are not enabled
+        forceRequestLocation: true, // Force a location request, even if permissions are not granted
+        forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
+        useSignificantChanges: false,
+        showsBackgroundLocationIndicator: true
       },
     );
   };
@@ -117,7 +125,7 @@ const HomeScreenControlller = () => {
             orderAccepted: true,
           });
         }
-        Alert.alert('ordereAccepted' + res?.status);
+        // Alert.alert('ordereAccepted' + res?.status);
       })
       .catch((error) => {
         Alert.alert('Some error is occur', error);

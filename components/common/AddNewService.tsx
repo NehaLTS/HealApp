@@ -163,6 +163,7 @@ const AddNewService = ({
             onBlur={onBlurDescription}
             onChangeText={onChangeDescription}
             ref={descriptionRef}
+            multiline
             defaultValue={service?.description?.en}
             inputValue={service?.description?.en ?? ''}
             errorMessage={descriptionError}
