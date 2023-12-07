@@ -56,7 +56,6 @@ const HomeScreen = () => {
     searchProviderList,
     isVisible,
     setIsVisible,
-
     remainingTime,
     setProviderStatus,
     currentLocationOfUser,
@@ -123,18 +122,21 @@ const HomeScreen = () => {
   );
 
   const headerRight = () => (
-    <>
-      <TouchableHighlight underlayColor="transparent" onPress={onSearch}>
+    <View style={{ position: 'relative', zIndex: 999 }}>
+      <TouchableHighlight
+        underlayColor="transparent"
+        onPress={() => setDropdownVisible(!dropdownVisible)}
+      >
         <Image source={avatar} style={styles.avatar} />
-        {dropdownVisible && (
-          <View style={styles.dropdown}>
-            <TextButton title={'Logout'} onPress={onSearch} />
-          </View>
-        )}
       </TouchableHighlight>
-    </>
+      {dropdownVisible && (
+        <View style={styles.dropdown}>
+          <TextButton title={'Logout'} onPress={onSearch} fontSize={18} />
+        </View>
+      )}
+    </View>
   );
-
+  console.log('ankitaaa', onSearch);
   const getProviderList = () => {
     return (
       <>
@@ -393,15 +395,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
     paddingVertical: getHeight(8),
+    zIndex: 91,
   },
   dropdown: {
     position: 'absolute',
-    top: 70,
-    right: 10,
+    top: 50,
+    right: 1,
     backgroundColor: colors.offWhite,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: colors.primary,
     padding: 10,
+    width: 100,
+    zIndex: 9999,
   },
 });
