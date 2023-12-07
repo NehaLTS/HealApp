@@ -67,7 +67,7 @@ const HomeScreen = () => {
   const [licensePicture, setLicensePicture] = useState('');
   const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
   const [isShowModal, setIsShowModal] = useState(false);
-  const [totalPricesOfServices, setTotalPricesOfServices] = useState('')
+  const [totalPricesOfServices, setTotalPricesOfServices] = useState('');
   const {
     acceptOrder,
     setAcceptOrder,
@@ -96,7 +96,7 @@ const HomeScreen = () => {
       id: order?.eventData?.services?.menu_id ?? -1,
     },
   ]);
-  const [showServices, setShowServices] = useState(false)
+  const [showServices, setShowServices] = useState(false);
   const { t } = useTranslation();
   useEffect(() => {
     createNotificationListeners();
@@ -145,7 +145,6 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
       // console.log('acceptOrder', acceptOrder);
       // console.log('isArrived', isArrived);
@@ -153,21 +152,20 @@ const HomeScreen = () => {
       // console.log('isSeeMore', isSeeMore);
       // setServices(order?.eventData?.services ?? [])
       if (event.notification?.title === 'Send Order') {
-        setServices(event?.data?.services ?? [])
+        setServices(event?.data?.services ?? []);
         setLocalData('ORDER', {
           services: event?.data?.services,
           providerDetail: {
             firstname: event?.data?.firstname,
             lastname: event?.data?.lastname,
             providerId: event?.data?.providerId,
-          }
-        })
+          },
+        });
         setTimeout(() => {
-          setShowServices(true)
+          setShowServices(true);
         }, 1000);
 
-        console.log("event?.data?.services", event?.data?.services)
-
+        console.log('event?.data?.services', event?.data?.services);
       }
       setOrderStatus(event.notification?.title);
       console.log('providerNotification **** 0000 ***** 00000', event);
@@ -180,7 +178,7 @@ const HomeScreen = () => {
         event.notification?.title === 'Arrived Order' ||
         orderStatus === 'Arrived Order'
       ) {
-        setTotalPricesOfServices(totalPrice())
+        setTotalPricesOfServices(totalPrice());
         setIsArrived(true);
         setLocalData('ORDER', { isArrived: true });
       }
@@ -251,8 +249,9 @@ const HomeScreen = () => {
     const formatTime = (time) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
-        }${remainingSeconds}`;
+      return `${minutes}:${
+        remainingSeconds < 10 ? '0' : ''
+      }${remainingSeconds}`;
     };
 
     return (
@@ -269,12 +268,12 @@ const HomeScreen = () => {
         const servicePrice = parseFloat(service.service_price) || 0;
         return total + servicePrice;
       }, 0);
-      console.log('totalPrice', JSON.stringify(totalServicePrice))
-      return JSON.stringify(totalServicePrice)
+      console.log('totalPrice', JSON.stringify(totalServicePrice));
+      return JSON.stringify(totalServicePrice);
     } else {
-      return ''
+      return '';
     }
-  }
+  };
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
     setAcceptOrder(false);
@@ -306,19 +305,21 @@ const HomeScreen = () => {
         title={'Patient'}
         entering={FadeInLeft.duration(400).delay(500)}
       />
-      {order?.providerDetail?.length || order?.providerDetail !== null &&
-        <AnimatedText
-          style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-          title={`${order?.providerDetail?.firstname}  ${order?.providerDetail?.lastname}`}
-          entering={FadeInLeft.duration(400).delay(600)}
-        />}
+      {order?.providerDetail?.length ||
+        (order?.providerDetail !== null && (
+          <AnimatedText
+            style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
+            title={`${order?.providerDetail?.firstname}  ${order?.providerDetail?.lastname}`}
+            entering={FadeInLeft.duration(400).delay(600)}
+          />
+        ))}
       <AnimatedText
         style={styles.serviceProvidedText}
         title={'Services provided'}
         entering={FadeInUp.duration(400).delay(700)}
       />
       {console.log('service in retunr', order?.services)}
-      {showServices &&
+      {showServices && (
         <>
           {order?.services?.length &&
             JSON.parse?.(order?.services)?.map?.((item, index) => (
@@ -339,7 +340,7 @@ const HomeScreen = () => {
               </View>
             ))}
         </>
-      }
+      )}
       <TouchableOpacity
         activeOpacity={0.8}
         style={styles.addServiceContainer}
@@ -414,11 +415,12 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     JSON.parse?.(order?.eventData?.services)?.length > 1
-                      ? `${index !==
-                        JSON.parse?.(order?.eventData?.services)?.length - 1
-                        ? ` ${service?.service_name}, `
-                        : ` ${service?.service_name}`
-                      }`
+                      ? `${
+                          index !==
+                          JSON.parse?.(order?.eventData?.services)?.length - 1
+                            ? ` ${service?.service_name}, `
+                            : ` ${service?.service_name}`
+                        }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -430,12 +432,15 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
-          }    ${order?.eventData?.distance !== 'undefined'
+        title={`${order?.eventData?.firstname}  ${
+          order?.eventData?.lastname
+        }    ${
+          order?.eventData?.distance !== 'undefined'
             ? order?.eventData?.time
             : 0
-          } km, ~${order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
-          } min`}
+        } km, ~${
+          order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
+        } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -540,8 +545,8 @@ const HomeScreen = () => {
               isArrived
                 ? 'You arrived'
                 : acceptOrder
-                  ? 'Order accepted'
-                  : 'You have a new order!'
+                ? 'Order accepted'
+                : 'You have a new order!'
             }
             entering={FadeInUp.duration(400).delay(400)}
           />
@@ -577,13 +582,14 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           JSON.parse?.(order?.eventData?.services)?.length > 1
-                            ? `${index !==
-                              JSON.parse?.(order?.eventData?.services)
-                                ?.length -
-                              1
-                              ? ` ${service?.service_name}, `
-                              : ` ${service?.service_name}`
-                            }`
+                            ? `${
+                                index !==
+                                JSON.parse?.(order?.eventData?.services)
+                                  ?.length -
+                                  1
+                                  ? ` ${service?.service_name}, `
+                                  : ` ${service?.service_name}`
+                              }`
                             : service?.service_name
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -595,14 +601,17 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
-                }    ${order?.eventData?.distance !== 'undefined'
+              title={`${order?.eventData?.firstname}  ${
+                order?.eventData?.lastname
+              }    ${
+                order?.eventData?.distance !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-                } km, ~${order?.eventData?.time !== 'undefined'
+              } km, ~${
+                order?.eventData?.time !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-                } min`}
+              } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -658,7 +667,7 @@ const HomeScreen = () => {
                     isArrived: false,
                     orderAccepted: false,
                     services: '',
-                    providerDetail: null
+                    providerDetail: null,
                   });
                 }
               }}
@@ -869,7 +878,11 @@ const HomeScreen = () => {
             <Text
               style={styles.middleOrderText}
               title={
-                notification ? 'You have a new order!' : 'No orders ...yet'
+                isCancelOrder
+                  ? 'The order is cancelled'
+                  : notification
+                  ? 'You have a new order!'
+                  : 'No orders ...yet'
               }
             />
           ) : (

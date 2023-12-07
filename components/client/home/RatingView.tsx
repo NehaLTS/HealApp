@@ -1,12 +1,13 @@
-import { StyleSheet, Image, View } from 'react-native';
-import React from 'react';
-import { getHeight, getWidth } from 'libs/StyleHelper';
+import Button from 'components/common/Button';
+import Input from 'components/common/Input';
 import Text from 'components/common/Text';
+import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
-import Input from 'components/common/Input';
-import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import React from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 
 const RatingView = () => {
   const renderStars = (numStars: number) => {
@@ -55,6 +56,15 @@ const RatingView = () => {
         placeholderTextColor={colors.grey}
         style={styles.placeholder}
       />
+      <View style={styles.buttonContainer}>
+        <Button
+          title={'Next'}
+          isPrimary
+          isSmall
+          width={'30%'}
+          style={{ alignSelf: 'center', marginBottom: 70 }}
+        />
+      </View>
     </>
   );
 };
@@ -90,7 +100,6 @@ const styles = StyleSheet.create({
     height: '40%',
     backgroundColor: colors.white,
   },
-
   placeholder: {
     marginTop: getHeight(-80),
     paddingLeft: getWidth(dimens.marginS),
@@ -114,5 +123,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: getHeight(dimens.marginS + 5),
     fontSize: getHeight(fontSize.textL),
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });

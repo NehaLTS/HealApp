@@ -24,7 +24,7 @@ const TreatmentEnd = () => {
           />
           <Text style={styles.rating} title={'4.8'} />
         </View>
-        <View>
+        <View style={{ justifyContent: 'center' }}>
           <Text
             title={'Elena Miron,\nFamily doctor'}
             style={{ fontSize: getHeight(fontSize.textXl) }}
@@ -80,7 +80,7 @@ export default TreatmentEnd;
 const styles = StyleSheet.create({
   doctorIcon: {
     width: getWidth(110),
-    height: getHeight(110),
+    height: getHeight(120),
     resizeMode: 'contain',
   },
   doctorCard: {
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   heartIcon: {
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
-    resizeMode: 'center',
+    resizeMode: 'contain',
   },
   text: {
     fontSize: getHeight(fontSize.textM),
@@ -118,10 +118,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    gap: getHeight(dimens.marginS),
+    gap: getWidth(dimens.marginS),
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 25,
+    backgroundColor: 'red',
   },
   doctorIconContainer: {
     position: 'relative',
