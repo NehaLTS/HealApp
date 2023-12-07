@@ -71,6 +71,7 @@ const HomeScreen = () => {
   const minuteRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
   const [currentAddress, setCurrentAddress] = useState<string>('');
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
   useUpdateEffect(() => {
     setCurrentAddress(currentLocationOfUser?.address ?? '');
@@ -122,9 +123,16 @@ const HomeScreen = () => {
   );
 
   const headerRight = () => (
-    <TouchableHighlight underlayColor="transparent" onPress={onSearch}>
-      <Image source={avatar} style={styles.avatar} />
-    </TouchableHighlight>
+    <>
+      <TouchableHighlight underlayColor="transparent" onPress={onSearch}>
+        <Image source={avatar} style={styles.avatar} />
+        {dropdownVisible && (
+          <View style={styles.dropdown}>
+            <TextButton title={'Logout'} onPress={onSearch} />
+          </View>
+        )}
+      </TouchableHighlight>
+    </>
   );
 
   const getProviderList = () => {
@@ -283,8 +291,9 @@ const HomeScreen = () => {
         >
           <ProviderArrivalInfo
             status={localData.orderStatus}
-            doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name
-              }`}
+            doctorName={`${localData?.providerDetail.firstname}${' '}${
+              localData?.providerDetail.name
+            }`}
             onPress={() => {
               navigation.navigate(NavigationRoutes.SearchDoctor, {
                 providerData: localData?.providerDetail,
@@ -384,5 +393,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
     paddingVertical: getHeight(8),
+  },
+  dropdown: {
+    position: 'absolute',
+    top: 70,
+    right: 10,
+    backgroundColor: colors.offWhite,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    padding: 10,
   },
 });

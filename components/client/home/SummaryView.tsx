@@ -103,6 +103,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
             style={styles.textSmall}
           />
         ))}
+        <Text title={order?.Additional_notes} style={styles.textSmall} />
       </View>
     </View>
   );

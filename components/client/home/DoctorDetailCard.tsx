@@ -21,7 +21,7 @@ const DoctorDetailCard = ({
   status,
   time,
   providerData,
-  onPressCard
+  onPressCard,
 }: {
   isPrimary?: boolean;
   showProvider?: boolean;
@@ -34,7 +34,7 @@ const DoctorDetailCard = ({
     remainig: number;
   };
   providerData: any;
-  onPressCard: () => void
+  onPressCard: () => void;
 }) => {
   const { t } = useTranslation();
   console.log('ratingData', providerData);
@@ -55,29 +55,32 @@ const DoctorDetailCard = ({
 
       {showProvider || showBothCards ? (
         <View style={styles.cardDetail}>
-          <TouchableOpacity onPress={onPressCard} style={{ alignSelf: 'flex-end' }}>
-            <Image
-              source={require('../../../assets/icon/cancel.png')}
-              style={{ width: getWidth(20), height: getHeight(20), resizeMode: 'contain' }}
+          <View style={styles.container}>
+            <Text
+              style={styles.doctorTitle}
+              title={`${providerData?.firstname}${', '}${providerData?.name}`}
             />
-          </TouchableOpacity>
-
-          <Text
-            style={styles.doctorTitle}
-            title={`${providerData?.firstname}${', '}${providerData?.name}`}
-          />
-
+            <TouchableOpacity onPress={onPressCard}>
+              <Image
+                source={require('../../../assets/icon/cancel.png')}
+                style={styles.cancel}
+              />
+            </TouchableOpacity>
+          </View>
           <View style={{}}>
             <View style={styles.detailItem}>
               <View style={styles.doctorIconContainer}>
-                {providerData && providerData?.profile_picture ? <Image
-                  source={{ uri: providerData?.profile_picture }}
-                  style={styles.doctorIcon}
-                />
-                  : <Image
+                {providerData && providerData?.profile_picture ? (
+                  <Image
+                    source={{ uri: providerData?.profile_picture }}
+                    style={styles.doctorIcon}
+                  />
+                ) : (
+                  <Image
                     source={require('../../../assets/icon/doctorIcon.png')}
                     style={styles.doctorIcon}
-                  />}
+                  />
+                )}
 
                 <Image
                   source={require('../../../assets/icon/star.png')}
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     alignItems: 'center',
     elevation: getWidth(12),
-    paddingVertical: getHeight(7),
+    paddingVertical: getHeight(12),
     paddingHorizontal: getWidth(12),
   },
   card: {
@@ -176,8 +179,8 @@ const styles = StyleSheet.create({
     fontSize: getHeight(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
-    width: '80%',
-    flexWrap: "wrap"
+    width: '98%',
+    flexWrap: 'wrap',
   },
   detailItem: {
     gap: getHeight(dimens.marginM),
@@ -241,5 +244,17 @@ const styles = StyleSheet.create({
   detailsContainer: {
     gap: 5,
     justifyContent: 'center',
+  },
+  cancel: {
+    width: getWidth(dimens.marginL),
+    height: getHeight(25),
+    resizeMode: 'contain',
+    position: 'absolute',
+    top: -27,
+    right: -18,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

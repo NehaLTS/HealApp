@@ -190,6 +190,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   numberInput: {
-    marginTop: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.marginS),
   },
 });

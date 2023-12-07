@@ -68,7 +68,7 @@ const OrderDetails = () => {
 
   return (
     <>
-      {RNHeader(HeaderTitle, HeaderLeft)}
+      {RNHeader(HeaderTitle, HeaderLeft, () => null)}
       {isLoading && <Loader />}
       <KeyboardAvoidingView
         behavior={'height'}

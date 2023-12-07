@@ -56,7 +56,7 @@ export const LoaderLarge = () => {
     <View
       style={{
         position: 'absolute',
-        top: '12%',
+        bottom: '18%',
         zIndex: 1,
         width: '100%',
         alignItems: 'center',

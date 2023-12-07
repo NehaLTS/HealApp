@@ -40,10 +40,10 @@ const styles = StyleSheet.create({
     columnGap: getHeight(dimens.sideMargin),
     alignSelf: 'center',
     paddingVertical: getHeight(dimens.paddingXs),
-    flex: 0.05,
+    // flex: 0.05,
     alignItems: 'center',
     marginBottom: getHeight(dimens.paddingS),
-    paddingTop: getHeight(dimens.paddingXs + dimens.borderThin),
+    // paddingTop: getHeight(dimens.paddingXs + dimens.borderThin),
   },
   activeButtonText: {
     fontSize: getWidth(fontSize.textM),

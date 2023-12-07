@@ -20,7 +20,6 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
-
 } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import DoctorDetailCard from 'components/client/home/DoctorDetailCard';
@@ -36,6 +35,7 @@ import TextButton from 'components/common/TextButton';
 import MapViewDirections from 'react-native-maps-directions';
 import useUpdateEffect from 'libs/UseUpdateEffect';
 import useToast from 'components/common/useToast';
+import { RNHeader } from 'components/common/Header';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -48,14 +48,17 @@ const SearchDoctor = () => {
   const { t } = useTranslation();
   const { setCurrentLocationOfUser } = UseClientUserContext();
   const [currentLocation, setCurrentLocation] = useState<Location>();
-  const { handleNextButtonPress, showRateAlert, calculateTime, calculateDistance } =
-    SearchDoctorController();
+  const {
+    handleNextButtonPress,
+    showRateAlert,
+    calculateTime,
+    calculateDistance,
+  } = SearchDoctorController();
   const [providerLocation, setProviderLocation] = useState<{
     latitude: number;
     longitude: number;
   }>();
-  const { setRemainingTime } =
-    UseClientUserContext();
+  const { setRemainingTime } = UseClientUserContext();
   const localData = getLocalData('ORDER');
   const [showDoctor, setShowDoctor] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
@@ -64,26 +67,19 @@ const SearchDoctor = () => {
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
   const [showCancelButton, setShowCancelButton] = useState(false);
   const [stausOfArriving, setStausOfArriving] = useState<string>(
-    previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : localData?.orderStatus,
+    previousScreen !== 'HOME_CLIENT'
+      ? 'Estimated arrival'
+      : localData?.orderStatus,
   );
   const [secondLoader, setSecondLoader] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { showToast, renderToast } = useToast();
 
-  useLayoutEffect(() => {
-    console.log('ankita', providerData, localData?.providerDetail);
-    navigation.setOptions({
-      headerTitleAlign: 'center',
-      headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={arrowBack} style={styles.arrowBack} />
-        </TouchableOpacity>
-      ),
-      headerStyle: styles.header,
-      headerRight: null,
-    });
-  }, [navigation]);
-
+  const headerLeft = () => (
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Image source={arrowBack} style={styles.arrowBack} />
+    </TouchableOpacity>
+  );
   useEffect(() => {
     let watchId: any;
 
@@ -117,13 +113,18 @@ const SearchDoctor = () => {
 
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      calculateDistance()
+      calculateDistance();
       setLocalData('ORDER', {
-        orderStatus: event.notification.title === "Accept Order" ? "On the way" : event.notification.title === 'Arrived Order' ? 'Arrived' : 'Estimated arrival'
+        orderStatus:
+          event.notification.title === 'Accept Order'
+            ? 'On the way'
+            : event.notification.title === 'Arrived Order'
+            ? 'Arrived'
+            : 'Estimated arrival',
       });
-      console.log('DoctorNotification', JSON.stringify(event))
-      if (event.notification.title === "Accept Order") {
-        showToast('Order Accepted!', 'Your order is accepted!', '')
+      console.log('DoctorNotification', JSON.stringify(event));
+      if (event.notification.title === 'Accept Order') {
+        showToast('Order Accepted!', 'Your order is accepted!', '');
         setShowCancelTextButton(false);
         setShowCancelButton(true);
         setLocalData('ORDER', {
@@ -137,12 +138,11 @@ const SearchDoctor = () => {
       if (event.notification.title === 'Arrived Order') {
         setShowCancelTextButton(false);
         setLocalData('ORDER', {
-          orderStatus: ''
+          orderStatus: '',
         });
         setStausOfArriving('Arrived');
         setLocalData('ORDER', { providerDetail: '' });
-        setTimeout(() => {
-        }, 10000);
+        setTimeout(() => {}, 10000);
       }
 
       setTimeout(() => {
@@ -189,9 +189,8 @@ const SearchDoctor = () => {
     setSecondLoader(true);
     if (!showCancelButton) {
       handleNextButtonPress();
-    }
-    else {
-      navigation.goBack()
+    } else {
+      navigation.goBack();
     }
   };
 
@@ -216,182 +215,193 @@ const SearchDoctor = () => {
   };
   console.log('loader', loader);
   return (
-    <View style={styles.mainContainer}>
-      {renderToast()}
-      <View>
-        {showTimer && (
-          <ArrivalTime
-            totalTime={
-              Math.round(calculateTime().minutes)
-            }
-          />
-        )}
-        <Text
-          style={styles.lookingDoctor}
-          title={
-            (providerLocation !== undefined &&
-              providerLocation.latitude === 0.0) ||
-              loader
-              ? t('looking_doctor')
-              : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
-          }
-        />
-      </View>
-      <View style={styles.mapContainer}>
-        {(providerLocation && providerLocation.latitude === 0.0) ||
-          ((loader || secondLoader) && <LoaderLarge />)}
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          zoomEnabled
-          showsTraffic
-          focusable
-          showsBuildings
-          showsIndoors
-          initialRegion={currentLocation}
-          region={currentLocation}
-          style={{ flex: 1 }}
-        >
-          {currentLocation !== undefined && currentLocation.latitude !== 0.0 && providerLocation && providerLocation.latitude !== 0.0 && !loader &&
-            <MapViewDirections
-              strokeWidth={5}
-              splitWaypoints
-              strokeColor={colors.invalid}
-              geodesic
-              optimizeWaypoints
-              origin={providerLocation}
-              destination={currentLocation}
-              apikey={"AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o"}
-            />}
-          {currentLocation !== undefined &&
-            currentLocation.latitude !== 0.0 && (
-              <Marker
-                coordinate={{
-                  latitude: currentLocation.latitude,
-                  longitude: currentLocation.longitude,
-                }}
-                pinColor={colors.primary}
-                title="Your Location"
-              ></Marker>
-            )}
-          {providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 &&
-            !loader && (
-              <Marker
-                coordinate={{
-                  latitude: providerLocation.latitude,
-                  longitude: providerLocation.longitude,
-                }}
-                onPress={() => {
-                  setShowDoctor(!showDoctor);
-                }}
-              >
-                <View style={styles.markerContainer}>
-                  <Image
-                    source={require('../../assets/icon/LocationMarker.png')}
-                    resizeMode="contain"
-                    style={styles.locationMarker}
-                  />
-                  {!showDoctor && (
-                    <View style={styles.marker}>
-                      <View style={styles.imageContainer}>
-                        {providerData && providerData?.profile_picture ? <Image
-                          source={{ uri: providerData?.profile_picture }}
-                          style={styles.doctorIcon}
-                        />
-                          : <Image
-                            source={require('../../assets/icon/doctorIcon.png')}
-                            style={styles.doctorIcon}
-                          />}
-
-
-                      </View>
-                      <View style={styles.textContainer}>
-                        <Text
-                          style={styles.doctorName}
-                          title={`${providerData?.firstname}`}
-                        />
-                        <Text
-                          style={styles.doctorName}
-                          title={`${providerData?.name}`}
-                        />
-                      </View>
-                    </View>
-                  )}
-                </View>
-              </Marker>
-            )}
-        </MapView>
-
-        {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
-          <View
-            style={{
-              zIndex: 2,
-              position: 'absolute',
-              left: 10,
-              paddingHorizontal: getWidth(20),
-              bottom: getHeight(50),
-            }}
-          >
-            <DoctorDetailCard
-              onPressCard={() => {
-                setShowDoctor(!showDoctor);
-              }}
-              isPrimary={showRateAlert}
-              showBothCards={showRateAlert && providerLocation != undefined}
-              status={stausOfArriving}
-              showProvider={providerLocation != undefined}
-              time={calculateTime()}
-              providerData={providerData}
-            />
-          </View>
-        ) : null}
-      </View>
-      {stausOfArriving !== 'Arrived' ? (
+    <>
+      {RNHeader(
+        () => null,
+        headerLeft,
+        () => null,
+      )}
+      <View style={styles.mainContainer}>
+        {renderToast()}
         <View>
-          {
-            <Button
-              title={
-                providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !loader &&
-                  !showCancelButton
-                  ? t('order')
-                  : t('cancel')
-              }
-              isPrimary
-              isSmall
-              onPress={onPressOrder}
-              width={'30%'}
-              height={getHeight(dimens.imageS)}
-              style={{ alignSelf: 'center', marginBottom: 10 }}
-            />
-          }
-          {showCancelTextButton && !loader && (
-            <TextButton
-              style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
-              title={t('cancel')}
-              onPress={() => { setLocalData('ORDER', { providerDetail: '' }); }}
-            />
+          {showTimer && (
+            <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
           )}
           <Text
-            style={styles.noFee}
+            style={styles.lookingDoctor}
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-                loader
-                ? t('no_fee_collected')
-                : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+              loader
+                ? t('looking_doctor')
+                : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
             }
           />
         </View>
-      ) : (
-        <View style={{ height: getHeight(100) }}></View>
-      )}
-    </View>
+        <View style={styles.mapContainer}>
+          {(providerLocation && providerLocation.latitude === 0.0) ||
+            ((loader || secondLoader) && <LoaderLarge />)}
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            zoomEnabled
+            showsTraffic
+            focusable
+            showsBuildings
+            showsIndoors
+            initialRegion={currentLocation}
+            region={currentLocation}
+            style={{ flex: 1 }}
+          >
+            {currentLocation !== undefined &&
+              currentLocation.latitude !== 0.0 &&
+              providerLocation &&
+              providerLocation.latitude !== 0.0 &&
+              !loader && (
+                <MapViewDirections
+                  strokeWidth={5}
+                  splitWaypoints
+                  strokeColor={colors.invalid}
+                  geodesic
+                  optimizeWaypoints
+                  origin={providerLocation}
+                  destination={currentLocation}
+                  apikey={'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o'}
+                />
+              )}
+            {currentLocation !== undefined &&
+              currentLocation.latitude !== 0.0 && (
+                <Marker
+                  coordinate={{
+                    latitude: currentLocation.latitude,
+                    longitude: currentLocation.longitude,
+                  }}
+                  pinColor={colors.primary}
+                  title="Your Location"
+                ></Marker>
+              )}
+            {providerLocation !== undefined &&
+              providerLocation.latitude !== 0.0 &&
+              !loader && (
+                <Marker
+                  coordinate={{
+                    latitude: providerLocation.latitude,
+                    longitude: providerLocation.longitude,
+                  }}
+                  onPress={() => {
+                    setShowDoctor(!showDoctor);
+                  }}
+                >
+                  <View style={styles.markerContainer}>
+                    <Image
+                      source={require('../../assets/icon/LocationMarker.png')}
+                      resizeMode="contain"
+                      style={styles.locationMarker}
+                    />
+                    {!showDoctor && (
+                      <View style={styles.marker}>
+                        <View style={styles.imageContainer}>
+                          {providerData && providerData?.profile_picture ? (
+                            <Image
+                              source={{ uri: providerData?.profile_picture }}
+                              style={styles.doctorIcon}
+                            />
+                          ) : (
+                            <Image
+                              source={require('../../assets/icon/doctorIcon.png')}
+                              style={styles.doctorIcon}
+                            />
+                          )}
+                        </View>
+                        <View style={styles.textContainer}>
+                          <Text
+                            style={styles.doctorName}
+                            title={`${providerData?.firstname}`}
+                          />
+                          <Text
+                            style={styles.doctorName}
+                            title={`${providerData?.name}`}
+                          />
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                </Marker>
+              )}
+          </MapView>
+
+          {showDoctor &&
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
+            <View
+              style={{
+                zIndex: 2,
+                position: 'absolute',
+                left: 10,
+                paddingHorizontal: getWidth(20),
+                bottom: getHeight(50),
+              }}
+            >
+              <DoctorDetailCard
+                onPressCard={() => {
+                  setShowDoctor(!showDoctor);
+                }}
+                isPrimary={showRateAlert}
+                showBothCards={showRateAlert && providerLocation != undefined}
+                status={stausOfArriving}
+                showProvider={providerLocation != undefined}
+                time={calculateTime()}
+                providerData={providerData}
+              />
+            </View>
+          ) : null}
+        </View>
+
+        {stausOfArriving !== 'Arrived' ? (
+          <View>
+            {
+              <Button
+                title={
+                  providerLocation !== undefined &&
+                  providerLocation.latitude !== 0.0 &&
+                  !loader &&
+                  !showCancelButton
+                    ? t('order')
+                    : t('cancel')
+                }
+                isPrimary
+                isSmall
+                disabled={previousScreen === 'HOME_CLIENT' || isLoading}
+                onPress={onPressOrder}
+                width={'30%'}
+                height={getHeight(dimens.imageS)}
+                style={{ alignSelf: 'center', marginBottom: 10 }}
+              />
+            }
+            {showCancelTextButton && !loader && (
+              <TextButton
+                style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
+                title={t('cancel')}
+                onPress={() => {}}
+              />
+            )}
+            <Text
+              style={styles.noFee}
+              title={
+                (providerLocation !== undefined &&
+                  providerLocation.latitude === 0.0) ||
+                loader
+                  ? t('no_fee_collected')
+                  : showCancelTextButton || showCancelButton
+                  ? t('3_minutes_to_cancel')
+                  : ''
+              }
+            />
+          </View>
+        ) : (
+          <View style={{ height: getHeight(100) }}></View>
+        )}
+      </View>
+    </>
   );
 };
 
@@ -402,7 +412,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    // justifyContent: 'space-evenly',
   },
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),
@@ -427,9 +437,9 @@ const styles = StyleSheet.create({
     marginTop: getWidth(4),
   },
   mapContainer: {
-    height: getHeight(420),
+    height: getHeight(500),
     width: '100%',
-    marginBottom: getHeight(30),
+    marginBottom: getHeight(40),
   },
   marker: {
     backgroundColor: '#F9FDFF',
@@ -441,7 +451,7 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.imageXs),
     height: getHeight(dimens.imageXs),
     resizeMode: 'cover',
-    borderRadius: 40,
+    borderRadius: getHeight(dimens.imageXs),
   },
   doctorName: {
     fontSize: getHeight(fontSize.textS),
@@ -460,7 +470,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column-reverse',
   },
   locationMarker: {
-    width: getWidth(32),
-    height: getWidth(32),
+    width: getWidth(dimens.marginL + dimens.borderBold),
+    height: getWidth(dimens.marginL + dimens.borderBold),
   },
 });

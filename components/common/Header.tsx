@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   title: {
-    fontSize: getWidth(fontSize.headingL),
+    fontSize: getHeight(fontSize.headingL),
   },
   headerRight: {
     padding: getHeight(dimens.sideMargin),
