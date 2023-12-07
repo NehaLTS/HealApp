@@ -1,3 +1,4 @@
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
@@ -28,6 +29,7 @@ const OrderFormController = ({
     order?.patient_type?.type === 'me',
   );
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isShowIcon, setIsShowIcon] = useState(false);
   const [otherReasons, setOtherReasons] = useState(order?.Additional_notes);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
@@ -40,7 +42,7 @@ const OrderFormController = ({
   );
   const ageRef = React.useRef<any>('');
   const phoneRef = React.useRef<any>('');
-
+  const { currentLocationOfUser } = UseClientUserContext();
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
@@ -103,7 +105,7 @@ const OrderFormController = ({
       !phoneError?.length &&
       !ageError?.length &&
       (phoneRef?.current?.value?.length || order?.phonenumber) &&
-      ageRef?.current?.value?.length
+      (ageRef?.current?.value?.length || order?.patient_type?.age)
     ) {
       setOrder({
         ...order,
@@ -116,6 +118,7 @@ const OrderFormController = ({
           : order?.phonenumber,
       });
       setIsSubmitDetail(true);
+      setIsShowIcon(true);
     }
   };
 
@@ -254,6 +257,10 @@ const OrderFormController = ({
     onSubmitDescription,
     phoneError,
     ageError,
+    setIsSubmitDetail,
+    isShowIcon,
+    setIsShowIcon,
+    currentLocationOfUser,
   };
 };
 

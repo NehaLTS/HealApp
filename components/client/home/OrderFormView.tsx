@@ -14,6 +14,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
+  Alert,
   I18nManager,
   Image,
   StyleSheet,
@@ -56,6 +57,10 @@ const OrderFormView = ({
     phoneError,
     ageError,
     setOtherReasons,
+    setIsSubmitDetail,
+    isShowIcon,
+    setIsShowIcon,
+    currentLocationOfUser,
   } = OrderFormController({ setOrder, order });
   const { t } = useTranslation();
 
@@ -148,6 +153,10 @@ const OrderFormView = ({
           defaultValue={otherReasons ?? ''}
           onChangeText={(value: string) => setOtherReasons(value)}
           onSubmitDescription={onSubmitDescription}
+          onSubmitEditing={onSubmitDescription}
+          returnKeyType="done"
+          blurOnSubmit
+          autoFocus
         />
       </Modal>
     </>
@@ -200,10 +209,19 @@ const OrderFormView = ({
     <>
       <Text title={t('address')} style={styles.addressText} />
       <View style={styles.locationContainer}>
-        <Image
-          source={require('../../../assets/icon/location.png')}
-          style={styles.locationIcon}
-        />
+        <TouchableOpacity
+          onPress={() =>
+            setOrder({
+              ...order,
+              address: currentLocationOfUser?.address?.toString() ?? '',
+            })
+          }
+        >
+          <Image
+            source={require('../../../assets/icon/location.png')}
+            style={styles.locationIcon}
+          />
+        </TouchableOpacity>
         <Text style={styles.streetAddress} title={order?.address ?? ''} />
         <TextButton
           title={t('edit')}
@@ -244,11 +262,30 @@ const OrderFormView = ({
           fontSized={getWidth(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
           onPress={() => {
-            if (!order?.isOrderForOther) onMeTogglePress('other');
+            if (!order?.isOrderForOther) {
+              onMeTogglePress('other');
+            }
+            // console.log('order?.isOrderForOther', order?.isOrderForOther);
+            // console.log('order?.Date_of_birth', order?.patient_type?.age);
+            // if (order?.isOrderForOther && order?.patient_type?.age) {
+            //   setIsSubmitDetail(!isSubmitDetail);
+            // }
           }}
           lineHeight={20}
           style={{ paddingHorizontal: getWidth(10) }}
         />
+        {isShowIcon && (
+          <TouchableOpacity onPress={() => setIsSubmitDetail(false)}>
+            <Image
+              source={require('assets/icon/edit.png')}
+              style={{
+                width: getWidth(25),
+                height: getHeight(25),
+                resizeMode: 'center',
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );
@@ -379,6 +416,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     gap: getWidth(dimens.paddingL + dimens.borderBold),
+    alignItems: 'center',
   },
   locationIcon: {
     width: getWidth(dimens.sideMargin),

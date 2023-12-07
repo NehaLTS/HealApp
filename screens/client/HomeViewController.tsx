@@ -16,6 +16,7 @@ import {
   TextInputKeyPressEventData,
 } from 'react-native';
 import list from '../../strings/en.json';
+import { useCurrentAddress } from 'libs/useCurrentAddress';
 
 interface Location {
   latitude: number;
@@ -31,7 +32,6 @@ const HomeViewController = () => {
   const [searchedList, setSearchedList] = useState<any[]>([]);
   const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
-  const [location, setLocation] = useState<Location>();
   const [user, setUser] = useState<ClientProfile>();
   const {
     userProfile,
@@ -53,7 +53,22 @@ const HomeViewController = () => {
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = orderList;
 
+  const { fetchCurrentAddress } = useCurrentAddress();
+  const location = async () => {
+    await fetchCurrentAddress()
+      .then((address: any) => {
+        setCurrentLocationOfUser({
+          ...currentLocationOfUser,
+          address: address.toString() ?? '',
+        });
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
+
   useEffect(() => {
+    location();
     getBannerAd();
     // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
     //   if (status === RESULTS.GRANTED) {

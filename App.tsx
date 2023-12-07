@@ -96,27 +96,11 @@ const App = () => {
       console.log('Error checking location permission: ' + err);
     }
   };
-  const location = async () => {
-    await fetchCurrentAddress()
-      .then((address: any) => {
-        setCurrentLocationOfUser({
-          ...currentLocationOfUser,
-          address: address.toString() ?? '',
-        });
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  };
 
   useEffect(() => {
     requestLocationPermission();
     // location();
   }, [permissonGrant]);
-
-  // React.useEffect(() => {
-  //   location();
-  // }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

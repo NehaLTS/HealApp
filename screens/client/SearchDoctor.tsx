@@ -119,8 +119,8 @@ const SearchDoctor = () => {
           event.notification.title === 'Accept Order'
             ? 'On the way'
             : event.notification.title === 'Arrived Order'
-              ? 'Arrived'
-              : 'Estimated arrival',
+            ? 'Arrived'
+            : 'Estimated arrival',
       });
       console.log('DoctorNotification', JSON.stringify(event));
       if (event.notification.title === 'Accept Order') {
@@ -189,10 +189,9 @@ const SearchDoctor = () => {
     setSecondLoader(true);
     if (!showCancelButton) {
       handleNextButtonPress();
-    }
-    else {
+    } else {
       setLocalData('ORDER', { providerDetail: '' });
-      navigation.goBack()
+      navigation.goBack();
     }
   };
 
@@ -226,22 +225,20 @@ const SearchDoctor = () => {
       <View style={styles.mainContainer}>
         {renderToast()}
         <View>
-          {
-            showTimer && (
-              <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
-            )
-          }
+          {showTimer && (
+            <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
+          )}
           <Text
             style={styles.lookingDoctor}
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-                loader
+              loader
                 ? t('looking_doctor')
                 : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
             }
           />
-        </View >
+        </View>
         <View style={styles.mapContainer}>
           {(providerLocation && providerLocation.latitude === 0.0) ||
             ((loader || secondLoader) && <LoaderLarge />)}
@@ -334,8 +331,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-            providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -360,53 +357,51 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-        {
-          stausOfArriving !== 'Arrived' ? (
-            <View>
-              {
-                <Button
-                  title={
-                    providerLocation !== undefined &&
-                      providerLocation.latitude !== 0.0 &&
-                      !loader &&
-                      !showCancelButton
-                      ? t('order')
-                      : t('cancel')
-                  }
-                  isPrimary
-                  isSmall
-                  disabled={previousScreen === 'HOME_CLIENT' || isLoading}
-                  onPress={onPressOrder}
-                  width={'30%'}
-                  height={getHeight(dimens.imageS)}
-                  style={{ alignSelf: 'center', marginBottom: 10 }}
-                />
-              }
-              {showCancelTextButton && !loader && (
-                <TextButton
-                  style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
-                  title={t('cancel')}
-                  onPress={() => { }}
-                />
-              )}
-              <Text
-                style={styles.noFee}
+        {stausOfArriving !== 'Arrived' ? (
+          <View>
+            {
+              <Button
                 title={
-                  (providerLocation !== undefined &&
-                    providerLocation.latitude === 0.0) ||
-                    loader
-                    ? t('no_fee_collected')
-                    : showCancelTextButton || showCancelButton
-                      ? t('3_minutes_to_cancel')
-                      : ''
+                  providerLocation !== undefined &&
+                  providerLocation.latitude !== 0.0 &&
+                  !loader &&
+                  !showCancelButton
+                    ? t('order')
+                    : t('cancel')
                 }
+                isPrimary
+                isSmall
+                disabled={previousScreen === 'HOME_CLIENT' || isLoading}
+                onPress={onPressOrder}
+                width={'30%'}
+                height={getHeight(dimens.imageS)}
+                style={{ alignSelf: 'center', marginBottom: 10 }}
               />
-            </View>
-          ) : (
-            <View style={{ height: getHeight(100) }}></View>
-          )
-        }
-      </View >
+            }
+            {showCancelTextButton && !loader && (
+              <TextButton
+                style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
+                title={t('cancel')}
+                onPress={() => {}}
+              />
+            )}
+            <Text
+              style={styles.noFee}
+              title={
+                (providerLocation !== undefined &&
+                  providerLocation.latitude === 0.0) ||
+                loader
+                  ? t('no_fee_collected')
+                  : showCancelTextButton || showCancelButton
+                  ? t('3_minutes_to_cancel')
+                  : ''
+              }
+            />
+          </View>
+        ) : (
+          <View style={{ height: getHeight(100) }}></View>
+        )}
+      </View>
     </>
   );
 };

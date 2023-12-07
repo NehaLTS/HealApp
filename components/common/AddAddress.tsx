@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -37,8 +38,17 @@ const AddAddress = ({
   const [addressValue, setAddressValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const inputRef = React.useRef<any>('');
   const { t } = useTranslation();
   const apiKey = 'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o';
+
+  // const abc = () => {
+  //   inputRef.current?.focus();
+  // };
+  // useEffect(() => {
+  //   // inputRef.current?.focus();
+  //   abc();
+  // }, []);
 
   const handleInputChange = async (text: string) => {
     setAddressValue(text);
@@ -95,15 +105,18 @@ const AddAddress = ({
       animationInTiming={600}
       backdropTransitionInTiming={400}
       animationIn={'fadeInUp'}
+      onShow={() => inputRef.current.focus()}
     >
       <View style={styles.addressView}>
         <Input
+          ref={inputRef}
+          onLayout={() => inputRef.current.focus()}
           inputPlaceholder={'Search address'}
           type={'fullStreetAddress'}
           inputStyle={[{ minWidth: '84%' }]}
           onChangeText={handleInputChange}
           defaultValue={searchAddress}
-          autoFocus
+          autoFocus={true}
           isSearch={(searchAddress?.length ?? 0) > 2}
           onClearInputText={() => setSearchAddress('')}
         />

@@ -8,8 +8,9 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
+  BackHandler,
   I18nManager,
   Image,
   KeyboardAvoidingView,
@@ -59,16 +60,32 @@ const OrderDetails = () => {
           paddingLeft: getWidth(0),
           zIndex: 1,
         }}
-        onPress={() => navigation.navigate(NavigationRoutes.ClientHome)}
+        onPress={() => {
+          if (showSummary) {
+            setShowSummary(false);
+          } else {
+            navigation.navigate(NavigationRoutes.ClientHome);
+          }
+        }}
       >
         <Image source={arrowBack} style={styles.arrowBack} />
       </TouchableOpacity>
     );
   };
+  useEffect(() => {
+    if (showSummary) {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        setShowSummary(false);
+        return true;
+      });
+    }
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', () => false);
+  }, [showSummary]);
 
   return (
     <>
-      {RNHeader(HeaderTitle, HeaderLeft, () => null)}
+      {RNHeader(HeaderTitle, HeaderLeft, () => null, showSummary)}
       {isLoading && <Loader />}
       <KeyboardAvoidingView
         behavior={'height'}

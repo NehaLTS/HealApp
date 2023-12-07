@@ -168,6 +168,9 @@ const AddNewService = ({
             inputValue={service?.description?.en ?? ''}
             errorMessage={descriptionError}
             onClearInputText={() => descriptionRef.current.clear()}
+            multiline
+            numberOfLines={10}
+            returnKeyType="done"
           />
           <Button
             title={t('save')}
