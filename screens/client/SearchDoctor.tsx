@@ -36,6 +36,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import useUpdateEffect from 'libs/UseUpdateEffect';
 import useToast from 'components/common/useToast';
 import { RNHeader } from 'components/common/Header';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -119,8 +120,8 @@ const SearchDoctor = () => {
           event.notification.title === 'Accept Order'
             ? 'On the way'
             : event.notification.title === 'Arrived Order'
-            ? 'Arrived'
-            : 'Estimated arrival',
+              ? 'Arrived'
+              : 'Estimated arrival',
       });
       console.log('DoctorNotification', JSON.stringify(event));
       if (event.notification.title === 'Accept Order') {
@@ -178,8 +179,7 @@ const SearchDoctor = () => {
   setTimeout(() => {
     setLoader(false);
 
-    setSecondLoader(false);
-  }, 20000);
+  }, 10000);
 
   setTimeout(() => {
     setSecondLoader(false);
@@ -187,7 +187,7 @@ const SearchDoctor = () => {
   const onPressOrder = () => {
     setIsLoading(true);
     setSecondLoader(true);
-    if (!showCancelButton) {
+    if (!showCancelButton && !loader) {
       handleNextButtonPress();
     } else {
       setLocalData('ORDER', { providerDetail: '' });
@@ -233,7 +233,7 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              loader
+                loader
                 ? t('looking_doctor')
                 : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
             }
@@ -253,7 +253,7 @@ const SearchDoctor = () => {
             region={currentLocation}
             style={{ flex: 1 }}
           >
-            {currentLocation !== undefined &&
+            {/* {currentLocation !== undefined &&
               currentLocation.latitude !== 0.0 &&
               providerLocation &&
               providerLocation.latitude !== 0.0 &&
@@ -261,6 +261,7 @@ const SearchDoctor = () => {
                 <MapViewDirections
                   strokeWidth={5}
                   splitWaypoints
+                  
                   strokeColor={colors.invalid}
                   geodesic
                   optimizeWaypoints
@@ -268,7 +269,7 @@ const SearchDoctor = () => {
                   destination={currentLocation}
                   apikey={'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o'}
                 />
-              )}
+              )} */}
             {currentLocation !== undefined &&
               currentLocation.latitude !== 0.0 && (
                 <Marker
@@ -331,8 +332,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -363,15 +364,15 @@ const SearchDoctor = () => {
               <Button
                 title={
                   providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !loader &&
-                  !showCancelButton
+                    providerLocation.latitude !== 0.0 &&
+                    !loader &&
+                    !showCancelButton
                     ? t('order')
                     : t('cancel')
                 }
                 isPrimary
                 isSmall
-                disabled={previousScreen === 'HOME_CLIENT' || isLoading}
+
                 onPress={onPressOrder}
                 width={'30%'}
                 height={getHeight(dimens.imageS)}
@@ -382,24 +383,39 @@ const SearchDoctor = () => {
               <TextButton
                 style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
                 title={t('cancel')}
-                onPress={() => {}}
+                onPress={() => { }}
               />
             )}
+
             <Text
               style={styles.noFee}
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                loader
+                  loader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>
         ) : (
-          <View style={{ height: getHeight(100) }}></View>
+          <View style={{ height: getHeight(100) }}>
+
+            <Button
+              title={
+                "Next"
+              }
+              isPrimary
+              isSmall
+
+              onPress={() => { navigation.navigate(NavigationRoutes.TreatmentCompleted) }}
+              width={'30%'}
+              height={getHeight(dimens.imageS)}
+              style={{ alignSelf: 'center', marginBottom: 10 }}
+            />
+          </View>
         )}
       </View>
     </>

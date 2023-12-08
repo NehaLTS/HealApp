@@ -5,6 +5,7 @@ import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { useState } from "react";
 import haversine from "haversine";
 import { useRoute } from "@react-navigation/native";
+import * as Sentry from '@sentry/react-native'
 
 const SearchDoctorController = () => {
   const { BookOrderRequest, providerLocationSearch } = ClientOrderServices()
@@ -46,8 +47,12 @@ const SearchDoctorController = () => {
       distance: Math.round(calculateDistance()).toString(),
       time: Math.round(calculateTime().minutes).toString()
     }).then((res) => {
+      Sentry.captureMessage(`orderSendResponse ${JSON.stringify(res)}`)
+      Alert.alert("orderSendResponse" + JSON.stringify(res))
 
       console.log("orderSendRequest", res)
+    }).catch((error) => {
+      Alert.alert("error", error)
     })
     setDisable(true)
   }

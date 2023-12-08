@@ -7,7 +7,6 @@ import { ClientProfile, OrderDetail } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import SearchDoctorController from './SearchDoctorController';
 import { useTranslation } from 'react-i18next';
 
 const OrderDetailsController = () => {
@@ -79,7 +78,7 @@ const OrderDetailsController = () => {
     Date_of_birth: !order?.isOrderForOther
       ? user?.date_of_birth ?? ''
       : order?.patient_type?.age ?? '',
-    services: order.services[0],
+    services: order.services,
     symptoms: JSON.stringify(symptoms),
     Additional_notes: order.Additional_notes,
     Estimate_arrival: order.Estimate_arrival,
