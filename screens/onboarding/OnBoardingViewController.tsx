@@ -75,11 +75,16 @@ const OnBoardingViewController = () => {
 
   const parseProviderResponse = async (
     userData: ProviderProfile,
-    providerServices: ProviderServices,
+    providerServices: any,
   ) => {
+    console.log('providerServices', JSON.stringify(providerServices));
     //Handle onboard navigation for the logged In User
     if (userData && userData.firstName) {
-      if (providerServices) {
+      if (
+        providerServices !== null ||
+        providerServices !== undefined ||
+        providerServices
+      ) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

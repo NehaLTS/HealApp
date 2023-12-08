@@ -47,7 +47,6 @@ const App = () => {
   const [currentLocationOfUser, setCurrentLocationOfUser] =
     useState<currentLocationOfUser>(null);
   const [permissonGrant, setPermissonGrant] = useState(false);
-  const [providerStatus, setProviderStatus] = useState<string>('');
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
   const { fetchCurrentAddress } = useCurrentAddress();
   /** To Initialize Google SDk */

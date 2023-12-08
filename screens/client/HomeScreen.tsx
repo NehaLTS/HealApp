@@ -51,16 +51,12 @@ const HomeScreen = () => {
     onSearchDone,
     isDataNotFound,
     onSearch,
-    userProfile,
     searchedList,
-    searchProviderList,
     isVisible,
     setIsVisible,
     remainingTime,
     currentLocationOfUser,
-    setCurrentLocationOfUser,
     setSearchProviderList,
-    setProvidersList,
   } = HomeViewController();
   const navigation = useNavigation<any>();
   const localData = getLocalData('ORDER');
@@ -135,7 +131,6 @@ const HomeScreen = () => {
       )}
     </View>
   );
-  console.log('ankitaaa', onSearch);
   const getProviderList = () => {
     return (
       <>

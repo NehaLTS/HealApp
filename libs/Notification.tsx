@@ -45,9 +45,7 @@ export const createNotificationListeners = () => {
   const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
     const { notification } = remoteMessage;
     Sentry.captureMessage(
-      `first notification ${providerProfile?.firstName}---- ${JSON.stringify(
-        remoteMessage,
-      )}`,
+      `first notification ---- ${JSON.stringify(remoteMessage)}`,
     );
     //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
 
@@ -67,9 +65,7 @@ export const createNotificationListeners = () => {
     (remoteMessage) => {
       console.log('messagesOnMessageTextDatat', remoteMessage);
       Sentry.captureMessage(
-        `second notification ${providerProfile?.firstName}---- ${JSON.stringify(
-          remoteMessage,
-        )}`,
+        `second notification ---- ${JSON.stringify(remoteMessage)}`,
       );
       //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
 
@@ -87,9 +83,7 @@ export const createNotificationListeners = () => {
         //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
 
         Sentry.captureMessage(
-          `third notification ${
-            providerProfile?.firstName
-          }---- ${JSON.stringify(remoteMessage)}`,
+          `third notification ---- ${JSON.stringify(remoteMessage)}`,
         );
 
         // showAlert(notification.title, notification.body);

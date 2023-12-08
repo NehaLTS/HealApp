@@ -40,6 +40,10 @@ const OnBoardingView = () => {
 
   const getLocalUserData = async () => {
     const userResponse = await getLocalData('USER');
+    const userData: ProviderProfile = (await getLocalData(
+      'USERPROFILE',
+    )) as ProviderProfile;
+    const providerServices = getLocalData('PROVIDERSERVICES');
     console.log('token is ', userResponse?.token);
 
     const userLanguage = userResponse?.user?.language ?? 'en';
@@ -60,18 +64,11 @@ const OnBoardingView = () => {
           setUserId('4');
         }
 
-        const userData: ProviderProfile = (await getLocalData(
-          'USERPROFILE',
-        )) as ProviderProfile;
-
         console.log('useprofile is ', userData);
 
-        const providerServices = getLocalData('PROVIDERSERVICES');
-
         console.log('provider services', providerServices);
-
         if (userData && userData.firstName) {
-          if (!providerServices) {
+          if (!providerServices?.length) {
             if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
               setCurrentStep('services');
             } else {
@@ -82,7 +79,7 @@ const OnBoardingView = () => {
 
         setProviderProfile(userData as ProviderProfile);
 
-        parseProviderResponse(userData, providerServices as ProviderServices);
+        parseProviderResponse(userData, providerServices);
       }
     }
 

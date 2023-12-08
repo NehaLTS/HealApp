@@ -5,6 +5,7 @@ import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderServices } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
+import * as Sentry from '@sentry/react-native';
 
 const ProviderServicesController = () => {
   const { onGetProviderService, AddProviderServices } = AuthServicesProvider();
@@ -30,6 +31,11 @@ const ProviderServicesController = () => {
     );
     if (response && response.services) {
       setServices(response.services);
+      Sentry.captureMessage(
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
+          providerProfile?.firstName ?? ''
+        }---- ${response.services}`,
+      );
     }
     setIsLoading(false);
   };
@@ -76,6 +82,16 @@ const ProviderServicesController = () => {
       token,
     );
     if (response?.isSuccessful) {
+      Sentry.captureMessage(
+        `Provider flow SELECTED SERVICES API HITfor:-${
+          providerProfile?.firstName ?? ''
+        }---- ${response}`,
+      );
+      Sentry.captureMessage(
+        `Provider flow SELECTED SERVICES for:-${
+          providerProfile?.firstName ?? ''
+        }---- ${selectedServices}`,
+      );
       setLocalData('PROVIDERSERVICES', selectedServices);
       navigation.reset({
         index: 0,

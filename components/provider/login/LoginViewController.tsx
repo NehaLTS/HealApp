@@ -129,6 +129,8 @@ const LoginViewController = () => {
       userId: response.id,
       isClient: false,
     });
+    console.log('before local save', JSON.parse(response?.user?.services));
+    setLocalData('PROVIDERSERVICES', JSON.parse(response?.user?.services));
     // setLocalData('PROVIDERSERVICES',);
 
     if (!userDataProvider.firstname || userDataProvider.firstname == '') {
@@ -168,7 +170,6 @@ const LoginViewController = () => {
         console.log('res is Provider SignIn', res);
 
         if (res?.isSuccessful === true) {
-          setLocalData('PROVIDERSERVICES', res?.user?.services);
           handleAuthResponse(res, '');
         } else {
           showToast(

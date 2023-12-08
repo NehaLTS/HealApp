@@ -8,6 +8,7 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import * as Sentry from '@sentry/react-native';
 
 const OrderDetailsController = () => {
   const { t } = useTranslation();
@@ -92,6 +93,9 @@ const OrderDetailsController = () => {
     longitude: currentLocationOfUser?.longitude,
     provider_type_id: supplier?.provider_type_id,
   };
+  Sentry.captureMessage(
+    `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${DAAT}`,
+  );
   console.log('DAATAAA ', DAAT);
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
@@ -139,6 +143,11 @@ const OrderDetailsController = () => {
         provider_type_id: supplier?.provider_type_id?.toString(),
       });
 
+      Sentry.captureMessage(
+        `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${
+          user?.firstName ?? ''
+        }---- ${res}`,
+      );
       console.log(' RESPINSE+++++', res);
 
       if (res?.orderId) {
@@ -158,7 +167,12 @@ const OrderDetailsController = () => {
           orderId: res?.orderId,
         });
       } else {
-        Alert.alert(res?.message)
+        Sentry.captureMessage(
+          `Client flow ON PRESS END ORDER API ERROR for:-${
+            user?.firstName ?? ''
+          }---- ${res?.message}`,
+        );
+        Alert.alert(res?.message);
         setIsLoading(false);
       }
     } else {

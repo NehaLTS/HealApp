@@ -19,7 +19,6 @@ import list from '../../strings/en.json';
 import { useCurrentAddress } from 'libs/useCurrentAddress';
 import * as Sentry from '@sentry/react-native';
 
-
 interface Location {
   latitude: number;
   longitude: number;
@@ -45,7 +44,6 @@ const HomeViewController = () => {
     setCurrentLocationOfUser,
     setOrderDetails,
     setRemainingTime,
-
     remainingTime,
     currentLocationOfUser,
   } = UseClientUserContext();
@@ -63,6 +61,11 @@ const HomeViewController = () => {
           longitude: address.longitude,
           address: address.address.toString() ?? '',
         });
+        Sentry.captureMessage(
+          `Client Flow currentLocationOfUser FOR:-${
+            userProfile?.firstName ?? ''
+          }---- ${address.toString()}`,
+        );
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -72,7 +75,7 @@ const HomeViewController = () => {
   useEffect(() => {
     location();
     getBannerAd();
-    console.log("SetCuree", currentLocationOfUser)
+    console.log('SetCuree', currentLocationOfUser);
     // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
     //   if (status === RESULTS.GRANTED) {
     //     // Location permission is already granted
@@ -141,9 +144,15 @@ const HomeViewController = () => {
   const onChange = async (value: string) => {
     setSearchSpecialist(value);
     const res = await searchList({
-      name: searchSpecialist,
+      name: value,
     });
     if (res.length > 0) {
+      Sentry.captureMessage(
+        `Client Flow ON CHANGE SEARCH API  FOR:-${
+          userProfile?.firstName ?? ''
+        }---- ${res}`,
+      );
+
       setSearchedList(res);
     }
   };
@@ -160,9 +169,7 @@ const HomeViewController = () => {
       Sentry.captureMessage(
         `On Search response gave Message' for:-${userProfile?.firstName}---- ${res?.message}`,
       );
-    }
-    else {
-
+    } else {
       Sentry.captureMessage(
         `Search response' for:-${userProfile?.firstName}---- ${res}`,
       );
@@ -171,11 +178,7 @@ const HomeViewController = () => {
   };
 
   const onSearch = () => {
-    setUserProfile(null);
-    setOrderDetails(null);
-    setRemainingTime(null);
     deleteLocalData();
-
     navigation.navigate(NavigationRoutes.IntroStack);
   };
   const onTouchStart = () => setIsTouchStart(false);
@@ -188,30 +191,26 @@ const HomeViewController = () => {
   };
 
   return {
-    bannerAds,
     providerList,
+    bannerAds,
     isTouchStart,
     onPressBack,
     onTouchStart,
     onBlur,
-    searchSpecialist,
     onChange,
+    handleKeyPress,
+    searchSpecialist,
     onPressBanner,
     providersList,
     onSearchDone,
     isDataNotFound,
     onSearch,
-    userProfile,
     searchedList,
-    searchProviderList,
-    setSearchProviderList,
     isVisible,
     setIsVisible,
     remainingTime,
     currentLocationOfUser,
-    setCurrentLocationOfUser,
-    setProvidersList,
-    handleKeyPress,
+    setSearchProviderList,
   };
 };
 

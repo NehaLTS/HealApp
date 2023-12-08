@@ -84,9 +84,9 @@ const HomeScreen = () => {
   }, []);
   // const ser = JSON.stringify(order?.eventData?.services);
   console.log('firstname++++++++++++++++', order);
-  Sentry.captureMessage(
-    `Provider notification order data for:-${providerProfile?.firstName}---- ${order}`,
-  );
+  // Sentry.captureMessage(
+  //   `Provider notification order data for:-${providerProfile?.firstName}---- ${order}`,
+  // );
 
   console.log('services', order?.eventData?.services);
   const getImageUrl = (url: string) => setLicensePicture(url);
