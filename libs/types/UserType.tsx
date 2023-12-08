@@ -223,6 +223,7 @@ export interface ProviderServices {
   description?: HealLanguageType;
   currency?: string;
   isSelected?: boolean;
+  heal_id: string;
 }
 
 export type Location = {
@@ -253,8 +254,8 @@ export interface BookOrderRequest {
   order_id: string;
   latitude: string;
   longitude: string;
-  distance: string,
-  time: string
+  distance: string;
+  time: string;
 }
 
 export interface currentLocationOfUser {

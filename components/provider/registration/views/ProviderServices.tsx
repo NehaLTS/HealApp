@@ -23,8 +23,9 @@ const ProviderServices = () => {
     services,
     isLoading,
     isPrescriptionSelected,
-    onCheckedPress,
+    onSelectServices,
     onPrescriptionSelected,
+    activeCheckbox,
   } = ProviderServicesController();
 
   const getFooterView = () => (
@@ -54,22 +55,18 @@ const ProviderServices = () => {
                 <Text style={styles.serviceText} title={item.name.en} />
                 <View style={styles.serviceRight}>
                   <Text style={styles.serviceText} title={'$ ' + item.price} />
-                  <TouchableOpacity onPress={() => onCheckedPress(index)}>
-                    {!item.isSelected ? (
-                      <View style={styles.checkbox} />
-                    ) : (
-                      <View
-                        style={[
-                          styles.checkbox,
-                          { alignItems: 'center', justifyContent: 'center' },
-                        ]}
-                      >
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => onSelectServices(item)}
+                  >
+                    <View style={styles.checkbox}>
+                      {activeCheckbox?.includes(Number(item?.heal_id)) && (
                         <Image
                           source={require('assets/icon/check.png')}
                           style={styles.checkIcon}
                         />
-                      </View>
-                    )}
+                      )}
+                    </View>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -190,6 +187,8 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginL - 3),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.black,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textServices: {
     fontSize: getWidth(fontSize.textM),
@@ -229,7 +228,7 @@ const styles = StyleSheet.create({
   },
   checkIcon: {
     width: getWidth(dimens.marginS + dimens.paddingXs),
-    height: getHeight(dimens.marginS),
+    height: getHeight(dimens.marginS + 2),
     resizeMode: 'center',
   },
 });

@@ -1,4 +1,4 @@
-import mobile from 'assets/icon/mobile.png';
+import * as Sentry from '@sentry/react-native';
 import waze from 'assets/icon/waze.png';
 import Button from 'components/common/Button';
 import { RNHeader } from 'components/common/Header';
@@ -7,20 +7,23 @@ import SelectImage from 'components/common/SelectImage';
 import ToggleButton from 'components/common/SwitchButton';
 import Text, { AnimatedText } from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
+import ArrivedView from 'components/provider/order/ArrivedView';
+import TakeOrderView from 'components/provider/order/TakeOrderView';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { ProviderProfile, ProviderServices } from 'libs/types/UserType';
+import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  Alert,
   DeviceEventEmitter,
   Image,
-  Linking,
   Animated as RNAnimated,
   StyleSheet,
   TouchableOpacity,
@@ -29,21 +32,10 @@ import {
 import Animated, {
   FadeInLeft,
   FadeInUp,
-  FadeOutLeft,
-  ZoomIn,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
-import { useTranslation } from 'react-i18next';
-import Checkbox from 'components/common/Checkbox';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import AddNewService from 'components/common/AddNewService';
-import AddAddress from 'components/common/AddAddress';
-import messaging from '@react-native-firebase/messaging';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -76,18 +68,8 @@ const HomeScreen = () => {
     providerLocation,
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(getHeight(order?.modalHeight ?? 360));
-  console.log('acceptOrder', acceptOrder);
-  console.log('isArrived', isArrived);
-  console.log('orderStatus', orderStatus);
-  console.log('isSeeMore', isSeeMore);
-  console.log(
-    'modalHeight11',
-    modalHeight.value?.toString(),
-    order?.modalHeight,
-  );
-
   const { providerAvailabilityStatus } = AuthServicesProvider();
-  const { userId, token } = UseProviderUserContext();
+  const { userId, token, providerProfile } = UseProviderUserContext();
   const [services, setServices] = useState<any[]>([
     {
       name: order?.eventData?.services?.service_name ?? '',
@@ -103,6 +85,9 @@ const HomeScreen = () => {
   }, []);
   // const ser = JSON.stringify(order?.eventData?.services);
   console.log('firstname++++++++++++++++', order);
+  Sentry.captureMessage(
+    `Provider notification order data for:-${providerProfile?.firstName}---- ${order}`,
+  );
 
   console.log('services', order?.eventData?.services);
   const getImageUrl = (url: string) => setLicensePicture(url);
@@ -151,7 +136,13 @@ const HomeScreen = () => {
       // console.log('orderStatus', orderStatus);
       // console.log('isSeeMore', isSeeMore);
       // setServices(order?.eventData?.services ?? [])
+      Sentry.captureMessage(
+        `Provider notification event first time for:-${providerProfile?.firstName}---- ${event}`,
+      );
       if (event.notification?.title === 'Send Order') {
+        Sentry.captureMessage(
+          `Provider notification event 'Send Order': true for:-${providerProfile?.firstName}---- ${event.notification?.title}`,
+        );
         setServices(event?.data?.services ?? []);
         setLocalData('ORDER', {
           services: event?.data?.services,
@@ -178,6 +169,11 @@ const HomeScreen = () => {
         event.notification?.title === 'Arrived Order' ||
         orderStatus === 'Arrived Order'
       ) {
+        Sentry.captureMessage(
+          `Provider notification event 'Arrived Order': true for:-${
+            providerProfile?.firstName
+          }---- ${event.notification?.title || orderStatus}`,
+        );
         setTotalPricesOfServices(totalPrice());
         setIsArrived(true);
         setLocalData('ORDER', { isArrived: true });
@@ -212,6 +208,9 @@ const HomeScreen = () => {
         { provider_id: userId, availability: availability.toString() },
         token,
       ).then((res) => {
+        Sentry.captureMessage(
+          `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
+        );
         console.log('availabitity status', JSON.stringify(res), available);
       });
     }
@@ -234,30 +233,6 @@ const HomeScreen = () => {
     }
   };
 
-  const CountdownTimer = () => {
-    const [seconds, setSeconds] = useState(300);
-    useEffect(() => {
-      const interval = setInterval(() => {
-        if (seconds > 0) {
-          setSeconds(seconds - 1);
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }, [seconds]);
-
-    const formatTime = (time) => {
-      const minutes = Math.floor(time / 60);
-      const remainingSeconds = time % 60;
-      return `${minutes}:${
-        remainingSeconds < 10 ? '0' : ''
-      }${remainingSeconds}`;
-    };
-
-    return (
-      <AnimatedText style={styles.timerText} title={formatTime(seconds)} />
-    );
-  };
   const totalPrice = () => {
     if (order && order?.services?.length > 0) {
       const servicesArray = JSON.parse(order?.services);
@@ -294,95 +269,39 @@ const HomeScreen = () => {
       isNotification: false,
     });
   };
-
-  const arrivedView = () => (
-    <>
-      <AnimatedText
-        style={{
-          ...styles.details,
-          marginTop: getHeight(20),
-        }}
-        title={'Patient'}
-        entering={FadeInLeft.duration(400).delay(500)}
-      />
-      {order?.providerDetail?.length ||
-        (order?.providerDetail !== null && (
-          <AnimatedText
-            style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-            title={`${order?.providerDetail?.firstname}  ${order?.providerDetail?.lastname}`}
-            entering={FadeInLeft.duration(400).delay(600)}
-          />
-        ))}
-      <AnimatedText
-        style={styles.serviceProvidedText}
-        title={'Services provided'}
-        entering={FadeInUp.duration(400).delay(700)}
-      />
-      {console.log('service in retunr', order?.services)}
-      {showServices && (
-        <>
-          {order?.services?.length &&
-            JSON.parse?.(order?.services)?.map?.((item, index) => (
-              <View key={index} style={styles.servicesProvided}>
-                <View style={styles.servicesLeftView}>
-                  <AnimatedText
-                    style={{ ...styles.smallText, minWidth: getWidth(90) }}
-                    title={`${item?.service_name ?? ''}`}
-                    entering={FadeInLeft.duration(400).delay(800)}
-                  />
-                  <AnimatedText
-                    style={styles.smallText}
-                    title={`${item?.service_price} NIS`}
-                    entering={FadeInLeft.duration(400).delay(900)}
-                  />
-                </View>
-                <Checkbox isWhite isChecked={true} />
-              </View>
-            ))}
-        </>
-      )}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        style={styles.addServiceContainer}
-        onPress={() => setIsVisible(true)}
-      >
-        <Image
-          source={require('assets/icon/addServiceWhite.png')}
-          style={styles.addIcon}
-        />
-        <Text style={styles.textAdd}>{t('add_another_service')}</Text>
-      </TouchableOpacity>
-      <View style={styles.totalContainer}>
-        <AnimatedText
-          style={styles.smallText}
-          title={'Total'}
-          entering={FadeInLeft.duration(400).delay(500)}
-        />
-        <AnimatedText
-          style={styles.totalAmount}
-          title={`${totalPricesOfServices} NIS`}
-          entering={FadeInLeft.duration(400).delay(500)}
-        />
-      </View>
-      <AddNewService
-        isVisible={isVisible}
-        setIsVisible={setIsVisible}
-        newService={setServices}
-      />
-    </>
-  );
+  const onPressTreatmentEnd = () => {
+    if (!isArrived) {
+      OnPressTakeOrder();
+      modalHeight.value = withSpring(getHeight(652));
+      setIsSeeMore(true);
+      setLocalData('ORDER', {
+        modalHeight: 652,
+        isSeeMore: true,
+      });
+    } else {
+      setAcceptOrder(false);
+      setIsArrived(false);
+      setIsAvailable(false);
+      setNotification(false);
+      modalHeight.value = withSpring(getHeight(360));
+      setIsSeeMore(false);
+      setLocalData('USER', { isProviderAvailable: false });
+      setLocalData('ORDER', {
+        modalHeight: 360,
+        eventData: '',
+        orderStatus: '',
+        isSeeMore: false,
+        isNotification: false,
+        isArrived: false,
+        orderAccepted: false,
+        services: '',
+        providerDetail: null,
+      });
+    }
+  };
 
   const orderDetailView = () => (
     <>
-      {acceptOrder && (
-        <AnimatedText
-          style={{ ...styles.smallText, marginBottom: getHeight(10) }}
-          title={'*Client has 5 minutes to cancel an order for free'}
-          entering={ZoomIn.duration(400).delay(300)}
-          numberOfLines={1}
-        />
-      )}
-
       {order &&
         order?.eventData?.symptoms?.length > 0 &&
         JSON?.parse(order?.eventData?.symptoms)?.map?.(
@@ -469,7 +388,6 @@ const HomeScreen = () => {
           style={{
             ...styles.seeOnWaze,
           }}
-          onPress={onPressSeeMore}
           entering={FadeInLeft.duration(400).delay(1000)}
         />
         <Animated.Image
@@ -482,35 +400,6 @@ const HomeScreen = () => {
           entering={FadeInLeft.duration(400).delay(1180)}
         />
       </View>
-      {acceptOrder && (
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: getHeight(14),
-            marginBottom: getHeight(dimens.marginL),
-            alignItems: 'center',
-          }}
-        >
-          <TextButton
-            title={'Call the client'}
-            onPress={() => {
-              Linking.openURL(`tel:${order?.eventData?.phone_number}`);
-            }}
-            fontSize={getHeight(fontSize.textXl)}
-            style={styles.seeOnWaze}
-            entering={FadeInLeft.duration(400).delay(1100)}
-          />
-          <Animated.Image
-            source={mobile}
-            style={{
-              width: getWidth(18),
-              height: getHeight(20),
-              resizeMode: 'center',
-            }}
-            entering={FadeInLeft.duration(400).delay(1180)}
-          />
-        </View>
-      )}
     </>
   );
   const getNewOrderView = () => (
@@ -524,15 +413,9 @@ const HomeScreen = () => {
       <Animated.View
         style={{
           ...styles.modalView,
-          height: modalHeight.value,
+          height: modalHeight,
         }}
       >
-        {console.log(
-          'height: modalHeight',
-          modalHeight?.value?.toString(),
-          'isSeeMore',
-          isSeeMore,
-        )}
         {isSeeMore && (
           <AnimatedText
             style={{
@@ -551,9 +434,7 @@ const HomeScreen = () => {
             entering={FadeInUp.duration(400).delay(400)}
           />
         )}
-        {isArrived ? (
-          arrivedView()
-        ) : isSeeMore ? (
+        {isSeeMore ? (
           orderDetailView()
         ) : (
           <>
@@ -616,15 +497,13 @@ const HomeScreen = () => {
             />
           </>
         )}
-        {!acceptOrder && (
-          <TextButton
-            title={isSeeMore ? t('less_details') : t('see_details')}
-            fontSize={getHeight(fontSize.textXl)}
-            style={styles.seeMoreButton}
-            onPress={onPressSeeMore}
-            entering={FadeInLeft.duration(400).delay(800)}
-          />
-        )}
+        <TextButton
+          title={isSeeMore ? t('less_details') : t('see_details')}
+          fontSize={getHeight(fontSize.textXl)}
+          style={styles.seeMoreButton}
+          onPress={onPressSeeMore}
+          entering={FadeInLeft.duration(400).delay(800)}
+        />
         <View
           style={{
             ...styles.footerContainer,
@@ -632,69 +511,22 @@ const HomeScreen = () => {
             bottom: isArrived ? getHeight(dimens.marginL) : 0,
           }}
         >
-          {(!acceptOrder || isArrived) && (
-            <Button
-              title={isArrived ? 'Treatment is ended' : t('take_order')}
-              style={styles.takeOrderButton}
-              isSmall
-              width={getWidth(150)}
-              height={getWidth(36)}
-              fontSized={getHeight(fontSize.textL)}
-              background={colors.white}
-              onPress={() => {
-                if (!isArrived) {
-                  OnPressTakeOrder();
-                  modalHeight.value = withSpring(getHeight(652));
-                  setIsSeeMore(true);
-                  setLocalData('ORDER', {
-                    modalHeight: 652,
-                    isSeeMore: true,
-                  });
-                } else {
-                  setAcceptOrder(false);
-                  setIsArrived(false);
-                  setIsAvailable(false);
-                  setNotification(false);
-                  modalHeight.value = withSpring(getHeight(360));
-                  setIsSeeMore(false);
-                  setLocalData('USER', { isProviderAvailable: false });
-                  setLocalData('ORDER', {
-                    modalHeight: 360,
-                    eventData: '',
-                    orderStatus: '',
-                    isSeeMore: false,
-                    isNotification: false,
-                    isArrived: false,
-                    orderAccepted: false,
-                    services: '',
-                    providerDetail: null,
-                  });
-                }
-              }}
-            />
-          )}
-
-          {acceptOrder && !isArrived && (
-            <>
-              <View style={styles.timerContainer}>
-                <CountdownTimer />
-              </View>
-              <AnimatedText
-                style={styles.smallText}
-                title={t('you_have_5_minutes')}
-                entering={ZoomIn.duration(400).delay(400)}
-                numberOfLines={1}
-              />
-            </>
-          )}
-          {!isArrived && (
-            <TextButton
-              title={t('cancel_order')}
-              fontSize={getHeight(fontSize.textL)}
-              style={styles.cancelOrderButton}
-              onPress={onPressCancelOrder}
-            />
-          )}
+          <Button
+            title={t('take_order')}
+            style={styles.takeOrderButton}
+            isSmall
+            width={getWidth(150)}
+            height={getWidth(36)}
+            fontSized={getHeight(fontSize.textL)}
+            background={colors.white}
+            onPress={onPressTreatmentEnd}
+          />
+          <TextButton
+            title={t('cancel_order')}
+            fontSize={getHeight(fontSize.textL)}
+            style={styles.cancelOrderButton}
+            onPress={onPressCancelOrder}
+          />
         </View>
       </Animated.View>
     </RNModal>
@@ -839,40 +671,6 @@ const HomeScreen = () => {
           style={styles.switchToggleText}
           title={isAvailable ? t('now_you_available') : t('switch_toggle')}
         />
-        {/* <MapView
-          provider={PROVIDER_GOOGLE}
-          zoomEnabled
-          showsTraffic
-          focusable
-          showsBuildings
-          showsIndoors
-          initialRegion={providerLocation}
-          region={providerLocation}
-          style={{ flex: 1 }}
-        >
-
-
-          {providerLocation
-            &&
-            (
-              <Marker
-                coordinate={{
-                  latitude: providerLocation ? providerLocation?.latitude : parseFloat(currentLocationOfUser?.latitude),
-                  longitude: providerLocation ? providerLocation?.longitude : parseFloat(currentLocationOfUser?.longitude)
-                }}
-              >
-
-                <Image
-                  source={require('../../assets/icon/LocationMarker.png')}
-                  resizeMode="contain"
-                  style={styles.locationMarker}
-                />
-
-
-
-              </Marker>
-            )}
-        </MapView> */}
         <View style={styles.cardContainer}>
           {isAvailable ? (
             <Text
@@ -897,6 +695,19 @@ const HomeScreen = () => {
           {getMissingDocsView()}
         </View>
       </View>
+      <ArrivedView
+        order={order}
+        isModalVisible={isArrived}
+        onPressAddService={() => setIsVisible(true)}
+        totalPricesOfServices={totalPricesOfServices}
+        onPressTreatmentEnd={onPressTreatmentEnd}
+      />
+      <TakeOrderView
+        order={order}
+        onPressSeeMore={onPressSeeMore}
+        isModalVisible={acceptOrder}
+        onPressCancelOrder={onPressCancelOrder}
+      />
     </>
   );
 };

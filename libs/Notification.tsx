@@ -2,7 +2,8 @@ import messaging from '@react-native-firebase/messaging';
 import { sentryTraceGesture } from '@sentry/react-native';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { DeviceEventEmitter } from 'react-native';
-import * as Sentry from '@sentry/react-native'
+import * as Sentry from '@sentry/react-native';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
 const requestPermission = async () => {
   try {
@@ -12,6 +13,7 @@ const requestPermission = async () => {
     console.log('Permission rejected');
   }
 };
+const { providerProfile } = UseProviderUserContext();
 
 const getToken = async () => {
   let fcmToken = await getLocalData('USER')?.deviceToken;
@@ -23,7 +25,6 @@ const getToken = async () => {
     if (fcmToken) {
       console.log('tokenDecice', fcmToken);
       await setLocalData('USER', { deviceToken: fcmToken });
-
     }
   }
 };
@@ -39,18 +40,21 @@ export const checkPermission = async () => {
   }
 };
 
-
-
 export const createNotificationListeners = () => {
-
   // Handle incoming messages in the foreground
   const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
-
     const { notification } = remoteMessage;
-    Sentry.captureMessage(`first notification message---- ${remoteMessage}`)
+    Sentry.captureMessage(
+      `first notification ${providerProfile?.firstName}---- ${JSON.stringify(
+        remoteMessage,
+      )}`,
+    );
     //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
 
-    setLocalData('ORDER', { eventData: remoteMessage.data, orderStatus: remoteMessage?.notification?.title })
+    setLocalData('ORDER', {
+      eventData: remoteMessage.data,
+      orderStatus: remoteMessage?.notification?.title,
+    });
     DeviceEventEmitter.emit('DoctorNotification', remoteMessage);
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);
@@ -62,10 +66,12 @@ export const createNotificationListeners = () => {
   const unsubscribeOnNotificationOpened = messaging().onNotificationOpenedApp(
     (remoteMessage) => {
       console.log('messagesOnMessageTextDatat', remoteMessage);
-      Sentry.captureMessage(`second notification message---- ${remoteMessage}`)
+      Sentry.captureMessage(
+        `second notification ${providerProfile?.firstName}---- ${JSON.stringify(
+          remoteMessage,
+        )}`,
+      );
       //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
-
-
 
       DeviceEventEmitter.emit('DoctorNotification', remoteMessage.data);
     },
@@ -80,7 +86,11 @@ export const createNotificationListeners = () => {
 
         //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
 
-        Sentry.captureMessage(`third notification message---- ${remoteMessage}`)
+        Sentry.captureMessage(
+          `third notification ${
+            providerProfile?.firstName
+          }---- ${JSON.stringify(remoteMessage)}`,
+        );
 
         // showAlert(notification.title, notification.body);
       }

@@ -83,7 +83,7 @@ const LoginViewController = () => {
   const handleAuthResponse = (response: any, profilePicture?: string) => {
     console.log('response', response);
     let userDataProvider = response.user;
-    setIsLoading(true)
+    setIsLoading(true);
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
@@ -136,7 +136,7 @@ const LoginViewController = () => {
 
       // if (!userDataProvider.firstName || userDataProvider.firstName == '') {
       //   console.log('setToken', token, userId);
-      setIsLoading(false)
+      setIsLoading(false);
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
@@ -148,12 +148,11 @@ const LoginViewController = () => {
       //   });
       // }
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ProviderHome }],
       });
-
     }
   };
   /** To handle User auth via email and password */
@@ -169,6 +168,7 @@ const LoginViewController = () => {
         console.log('res is Provider SignIn', res);
 
         if (res?.isSuccessful === true) {
+          setLocalData('PROVIDERSERVICES', res?.user?.services);
           handleAuthResponse(res, '');
         } else {
           showToast(
@@ -200,8 +200,7 @@ const LoginViewController = () => {
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
           googleId,
-          device_token: device_Token
-
+          device_token: device_Token,
         });
         // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
@@ -230,7 +229,9 @@ const LoginViewController = () => {
         const email = userData?.user?.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
         const res = await onSubmitFBAuthRequestProvider({
-          email, facebookId, device_token: device_Token
+          email,
+          facebookId,
+          device_token: device_Token,
         });
         setLocalData('USER', res);
         if (res?.isSuccessful === true) {

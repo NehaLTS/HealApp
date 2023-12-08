@@ -5,7 +5,6 @@ import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderServices } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 
 const ProviderServicesController = () => {
   const { onGetProviderService, AddProviderServices } = AuthServicesProvider();
@@ -14,10 +13,12 @@ const ProviderServicesController = () => {
   const [services, setServices] = useState<ProviderServices[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
-  const [activeSelected, setSelectedServices] = useState<ProviderServices[]>(
+  const [selectedServices, setSelectedServices] = useState<ProviderServices[]>(
     [],
   );
-  console.log('activeSelected', activeSelected);
+
+  const [activeCheckbox, setActiveCheckbox] = useState<number[]>([]);
+  const service = JSON.stringify(selectedServices);
   const getProviderServices = async () => {
     setIsLoading(true);
     let response = await onGetProviderService(
@@ -27,9 +28,7 @@ const ProviderServicesController = () => {
       },
       token,
     );
-    console.log(' response.services', response);
     if (response && response.services) {
-      console.log(' response.services33', response.services);
       setServices(response.services);
     }
     setIsLoading(false);
@@ -38,56 +37,30 @@ const ProviderServicesController = () => {
   useEffect(() => {
     getProviderServices();
   }, []);
-  const onCheckedPress = (index: number) => {
-    let data = [...services];
-    if (data[index] && data[index]?.isSelected) {
-      data[index].isSelected = false;
+
+  const onSelectServices = (item: any) => {
+    const updatedActiveCheckbox = [...activeCheckbox];
+    const itemIndex = updatedActiveCheckbox.indexOf(item?.heal_id);
+    let updatedSelectedMenu: any[];
+    if (itemIndex !== -1) {
+      updatedActiveCheckbox.splice(itemIndex, 1);
     } else {
-      data[index].isSelected = true;
+      updatedActiveCheckbox.push(item.heal_id);
     }
-    // Alert.alert('0' + index + '' + data[index]?.isSelected);
-    let updatedSelectedMenu: ProviderServices[];
-    if (data.find((selectedItem) => selectedItem.id === data[index].id)) {
-      updatedSelectedMenu = data.filter((selectedItem) => {
-        return selectedItem.id !== data[index].id;
-      });
+    setActiveCheckbox(updatedActiveCheckbox);
+    if (
+      selectedServices.find(
+        (selectedItem) => selectedItem.heal_id === item.heal_id,
+      )
+    ) {
+      updatedSelectedMenu = selectedServices.filter(
+        (selectedItem) => selectedItem.heal_id !== item.heal_id,
+      );
     } else {
-      updatedSelectedMenu = [...data];
+      updatedSelectedMenu = [...selectedServices, item];
     }
-    console.log('updatedSelectedMenu', updatedSelectedMenu);
     setSelectedServices(updatedSelectedMenu);
-    setServices(data);
   };
-
-  // const onCheckedPress = (index: number) => {
-  //   setServices((prevServices) => {
-  //     const updatedServices = [...prevServices];
-  //     const selectedItem = updatedServices[index];
-
-  //     if (selectedItem && selectedItem.isSelected) {
-  //       selectedItem.isSelected = false;
-  //     } else {
-  //       selectedItem.isSelected = true;
-  //     }
-
-  //     Alert.alert('0' + index + '' + selectedItem?.isSelected);
-
-  //     let updatedSelectedMenu: ProviderServices[];
-
-  //     if (prevServices.find((item) => item.id === selectedItem.id)) {
-  //       updatedSelectedMenu = prevServices.filter(
-  //         (item) => item.id !== selectedItem.id,
-  //       );
-  //     } else {
-  //       updatedSelectedMenu = [...prevServices];
-  //     }
-
-  //     console.log('updatedSelectedMenu', updatedSelectedMenu);
-  //     setSelectedServices(updatedSelectedMenu);
-
-  //     return updatedServices;
-  //   });
-  // };
 
   const onPrescriptionSelected = (isSelected: boolean) =>
     setIsPrescriptionSelected(isSelected);
@@ -95,25 +68,20 @@ const ProviderServicesController = () => {
   const onPressBack = () => setCurrentStep('payment');
 
   const onPressNext = async () => {
-    // let response = await AddProviderServices(
-    //   {
-    //     heal_id: activeSelected[0].id,
-    //     provider_id: providerProfile?.provider?.id,
-    //   },
-    //   token,
-    // );
-    // if (response) {
-    // console.log('sendRespomnse', response);
-    // }
-    let selectedServices = activeSelected;
-    services.filter((services) => services.isSelected);
-    console.log('selected services ', activeSelected);
-
-    setLocalData('PROVIDERSERVICES', selectedServices);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: NavigationRoutes.ProviderConfirmation }],
-    });
+    let response = await AddProviderServices(
+      {
+        heal_id: service,
+        provider_id: providerProfile?.provider?.id,
+      },
+      token,
+    );
+    if (response?.isSuccessful) {
+      setLocalData('PROVIDERSERVICES', selectedServices);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+      });
+    }
   };
   return {
     onPressBack,
@@ -121,8 +89,9 @@ const ProviderServicesController = () => {
     services,
     isLoading,
     isPrescriptionSelected,
-    onCheckedPress,
+    onSelectServices,
     onPrescriptionSelected,
+    activeCheckbox,
   };
 };
 

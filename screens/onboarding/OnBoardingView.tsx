@@ -34,7 +34,7 @@ const OnBoardingView = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-  //  deleteLocalData();
+    //  deleteLocalData();
     getLocalUserData();
   }, []);
 
@@ -66,11 +66,9 @@ const OnBoardingView = () => {
 
         console.log('useprofile is ', userData);
 
-        const providerServices: ProviderServices = (await getLocalData(
-          'PROVIDERSERVICES',
-        )) as ProviderServices;
+        const providerServices = getLocalData('PROVIDERSERVICES');
 
-        console.log('provider services ', providerServices);
+        console.log('provider services', providerServices);
 
         if (userData && userData.firstName) {
           if (!providerServices) {
