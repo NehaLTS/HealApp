@@ -73,9 +73,13 @@ const ProviderServicesController = () => {
   const onPressBack = () => setCurrentStep('payment');
 
   const onPressNext = async () => {
+
+    const concatenatedIds = selectedServices.map(item => item.heal_id).join(', ');
+    console.log("concatenatedIds", concatenatedIds, " selectedServices", selectedServices)
+
     let response = await AddProviderServices(
       {
-        heal_id: service,
+        heal_id: concatenatedIds,
         provider_id: providerProfile?.provider?.id,
       },
       token,
