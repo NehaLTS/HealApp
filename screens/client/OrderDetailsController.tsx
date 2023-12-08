@@ -144,9 +144,8 @@ const OrderDetailsController = () => {
       });
 
       Sentry.captureMessage(
-        `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${
-          user?.firstName ?? ''
-        }---- ${res}`,
+        `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${user?.firstName ?? ''
+        }---- ${JSON.stringify(res)}`,
       );
       console.log(' RESPINSE+++++', res);
 
@@ -162,15 +161,17 @@ const OrderDetailsController = () => {
         //     },
         //   }],
         // });
+        Sentry.captureMessage(
+          `First order button for Search the  Provider:-${user?.firstName}---- ${JSON.stringify(res)}}`,
+        );
         navigation.navigate(NavigationRoutes.SearchDoctor, {
           providerData: res?.closestProvider,
           orderId: res?.orderId,
         });
       } else {
         Sentry.captureMessage(
-          `Client flow ON PRESS END ORDER API ERROR for:-${
-            user?.firstName ?? ''
-          }---- ${res?.message}`,
+          `Client flow ON PRESS END ORDER API ERROR for:-${user?.firstName ?? ''
+          }---- ${JSON.stringify(res?.message)}`,
         );
         Alert.alert(res?.message);
         setIsLoading(false);

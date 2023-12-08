@@ -61,9 +61,9 @@ const HomeViewController = () => {
           longitude: address.longitude,
           address: address.address.toString() ?? '',
         });
+
         Sentry.captureMessage(
-          `Client Flow currentLocationOfUser FOR:-${
-            userProfile?.firstName ?? ''
+          `Client Flow currentLocationOfUser FOR:-${userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
         );
       })
@@ -146,15 +146,17 @@ const HomeViewController = () => {
     const res = await searchList({
       name: value?.toLowerCase(),
     });
+    console.log("data on search response", JSON.stringify(res))
     if (res.length > 0) {
       Sentry.captureMessage(
-        `Client Flow ON CHANGE SEARCH API  FOR:-${
-          userProfile?.firstName ?? ''
+        `Client Flow ON CHANGE SEARCH API  FOR:-${userProfile?.firstName ?? ''
         }---- ${res}`,
       );
       console.log('search result', res);
 
       setSearchedList(res);
+    } else {
+      setSearchedList([])
     }
   };
 
@@ -168,11 +170,12 @@ const HomeViewController = () => {
     if (res?.message) {
       setIsDataNotFound(false);
       Sentry.captureMessage(
-        `On Search response gave Message' for:-${userProfile?.firstName}---- ${res?.message}`,
+        `On Search response gave Message' for:-${userProfile?.firstName}---- ${JSON.stringify(res?.message)}`,
       );
     } else {
+      console.log("search response", res)
       Sentry.captureMessage(
-        `Search response' for:-${userProfile?.firstName}---- ${res}`,
+        `Search response' for:-${userProfile?.firstName}---- ${JSON.stringify(res)}`,
       );
       setProvidersList(res);
     }

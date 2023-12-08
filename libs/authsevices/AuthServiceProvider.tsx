@@ -20,10 +20,11 @@ import {
 import { UserType, UserTypeProvider } from '../types/UserType';
 import { OrderRequest, PoviderLocation } from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
 export const AuthServicesProvider = () => {
-  //   const { token } =
-  //     UseProviderUserContext();
+  const { token } =
+    UseProviderUserContext();
 
   const OnProviderSignIn = (body: {
     email: string;
@@ -181,6 +182,7 @@ export const AuthServicesProvider = () => {
       body: body as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
+        'x-access-token': token,
         //  'x-access-token': userDataProvider?.token 'x-access-token' :   userDataProvider?.token
       } as unknown as HeadersInit,
     });
@@ -191,6 +193,7 @@ export const AuthServicesProvider = () => {
       body: body as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
+        'x-access-token': token,
         //  'x-access-token': userDataProvider?.token  'x-access-token' :   userDataProvider?.token
       } as unknown as HeadersInit,
     });

@@ -74,7 +74,7 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": getLocalData?.("USER")?.token,
+        "x-access-token": token,
         // "x-access-token":
         //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
       } as unknown as HeadersInit,
@@ -131,7 +131,7 @@ export const ClientOrderServices = () => {
       body: body as unknown as BodyInit,
       headers: {
         "Content-Type": "application/json",
-
+        "x-access-token": token,
         // "x-access-token":
         //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
       } as unknown as HeadersInit,

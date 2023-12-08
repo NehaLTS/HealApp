@@ -32,8 +32,7 @@ const ProviderServicesController = () => {
     if (response && response.services) {
       setServices(response.services);
       Sentry.captureMessage(
-        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
-          providerProfile?.firstName ?? ''
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${providerProfile?.firstName ?? ''
         }---- ${response.services}`,
       );
     }
@@ -83,13 +82,11 @@ const ProviderServicesController = () => {
     );
     if (response?.isSuccessful) {
       Sentry.captureMessage(
-        `Provider flow SELECTED SERVICES API HITfor:-${
-          providerProfile?.firstName ?? ''
-        }---- ${response}`,
+        `Provider flow SELECTED SERVICES API HITfor:-${providerProfile?.firstName ?? ''
+        }---- ${JSON.stringify(response)}`,
       );
       Sentry.captureMessage(
-        `Provider flow SELECTED SERVICES for:-${
-          providerProfile?.firstName ?? ''
+        `Provider flow SELECTED SERVICES for:-${providerProfile?.firstName ?? ''
         }---- ${selectedServices}`,
       );
       setLocalData('PROVIDERSERVICES', selectedServices);

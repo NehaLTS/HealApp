@@ -176,7 +176,7 @@ const ProviderPaymentController = () => {
           },
         });
 
-        if (providerProfile?.provider?.name.en === ('Doctor' || 'Nurse')) {
+        if (providerProfile?.provider?.name?.en === 'Doctor' || providerProfile?.provider?.name?.en === 'Nurse') {
           setCurrentStep('services');
         } else {
           setCurrentStep('addServices');

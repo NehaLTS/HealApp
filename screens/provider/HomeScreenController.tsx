@@ -106,13 +106,12 @@ const HomeScreenControlller = () => {
       },
       {
         enableHighAccuracy: true,
-        distanceFilter: 10, // Minimum distance (in meters) to trigger an update
-        interval: 10000, // Minimum time interval (in milliseconds) to trigger an update
-        fastestInterval: 5000, // Maximum time interval (in milliseconds) between updates
+        distanceFilter: 4, // Minimum distance (in meters) to trigger an update
+        interval: 1000, // Minimum time interval (in milliseconds) to trigger an update
+        fastestInterval: 500, // Maximum time interval (in milliseconds) between updates
         showLocationDialog: true, // Show a dialog if location services are not enabled
         forceRequestLocation: true, // Force a location request, even if permissions are not granted
         forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
-        useSignificantChanges: false,
         showsBackgroundLocationIndicator: true,
       },
     );
