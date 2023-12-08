@@ -8,7 +8,7 @@ import { fontFamily } from 'designToken/fontFamily';
 import { colors } from 'designToken/colors';
 import Button from 'components/common/Button';
 
-const TreatmentEnd = () => {
+const TreatmentEnd = ({ onPress }: { onPress: () => void }) => {
   return (
     <>
       <Text title={'Treatment is ended'} style={styles.treatmentText} />
@@ -69,6 +69,7 @@ const TreatmentEnd = () => {
           isSmall
           style={{ alignSelf: 'center' }}
           width={'80%'}
+          onPress={onPress}
         />
       </View>
     </>

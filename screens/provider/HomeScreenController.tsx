@@ -91,6 +91,7 @@ const HomeScreenControlller = () => {
           Sentry.captureMessage(
             `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
           );
+          Alert.alert("Api update Location hit")
           console.log('gurepeet', res);
           // Alert.alert(
           //   'dataUpdate after getihng response' + JSON.stringify(res),
@@ -144,7 +145,8 @@ const HomeScreenControlller = () => {
             `Provider notification event 'order accept response failed' for:-${providerProfile?.firstName}---- ${res}`,
           );
         }
-        // Alert.alert('ordereAccepted' + res?.status);
+
+        Alert.alert('ordereAccepted' + res?.status);
       })
       .catch((error) => {
         Sentry.captureMessage(

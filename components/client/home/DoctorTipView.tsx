@@ -9,7 +9,7 @@ import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
 import Button from 'components/common/Button';
 
-const DoctorTipView = () => {
+const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
   const tipAmounts = ['5 NIS', '10 NIS', '15 NIS', 'Other'];
 
   return (
@@ -64,6 +64,7 @@ const DoctorTipView = () => {
           isSmall
           style={{ alignSelf: 'center' }}
           width={'30%'}
+          onPress={onPress}
         />
       </View>
     </>

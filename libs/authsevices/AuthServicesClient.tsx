@@ -12,7 +12,7 @@ import {
   POST,
   UPDATE_SIGNUP,
 } from "../constants/ApiConstants";
-import { ClientProfile, UserType } from "../types/UserType";
+import { ClientProfile, UserType, paymentApproved } from "../types/UserType";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { getLocalData } from "libs/datastorage/useLocalStorage";
@@ -130,6 +130,17 @@ export const AuthServicesClient = () => {
       return res;
     });
 
+  const paymentApproved = (body: paymentApproved, token: string): Promise<any> =>
+    sendRequest(GET_CREATE_CARD_DETAILS, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    }).then((res) => {
+      return res;
+    });
   return {
     onSubmitAuthRequest,
     onSubmitGoogleAuthRequest,
@@ -138,5 +149,6 @@ export const AuthServicesClient = () => {
     onUpdateUserProfile,
     onCreateCreditCardDetails,
     onGetCreditCard,
+    paymentApproved
   };
 };

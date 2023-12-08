@@ -9,7 +9,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
-const RatingView = () => {
+const RatingView = ({ onPress }: { onPress: () => void }) => {
   const renderStars = (numStars: number) => {
     const stars = Array.from({ length: numStars }).map((_, index) => (
       <Image

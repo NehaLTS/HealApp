@@ -263,3 +263,11 @@ export interface currentLocationOfUser {
   longitude: string;
   address?: string;
 }
+
+export interface paymentApproved {
+  order_id: string;
+  currency: string;
+  total_price: string;
+  services: string;
+  treatment_completed: string;
+}

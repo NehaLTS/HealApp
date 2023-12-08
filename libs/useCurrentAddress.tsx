@@ -56,7 +56,8 @@ const useCurrentAddress = () => {
           const { latitude, longitude } = location.coords;
           const address = await getCurrentAddressFromAPI(latitude, longitude);
           if (address !== null) {
-            resolve(address); // Resolve the Promise with the address
+            const fulAddres = { address: address, latitude: latitude, longitude: longitude }
+            resolve(fulAddres); // Resolve the Promise with the address
           }
         }
       } catch (error) {

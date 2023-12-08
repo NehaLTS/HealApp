@@ -57,7 +57,6 @@ const HomeScreen = () => {
     isVisible,
     setIsVisible,
     remainingTime,
-    setProviderStatus,
     currentLocationOfUser,
     setCurrentLocationOfUser,
     setSearchProviderList,
@@ -231,7 +230,6 @@ const HomeScreen = () => {
 
   useUpdateEffect(() => {
     if (seconds === 0 && timeToArrive < 0) {
-      setProviderStatus('arrived');
       setLocalData('ORDER', { providerDetail: '' });
       clearInterval(timeOutRef.current);
     }
@@ -282,7 +280,7 @@ const HomeScreen = () => {
           noSearchedView()
         )}
       </ScrollView>
-      {localData?.providerDetail && (
+      {/* {localData?.providerDetail && (
         <View
           style={{
             marginVertical: getHeight(20),
@@ -293,9 +291,8 @@ const HomeScreen = () => {
         >
           <ProviderArrivalInfo
             status={localData.orderStatus}
-            doctorName={`${localData?.providerDetail.firstname}${' '}${
-              localData?.providerDetail.name
-            }`}
+            doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name
+              }`}
             onPress={() => {
               navigation.navigate(NavigationRoutes.SearchDoctor, {
                 providerData: localData?.providerDetail,
@@ -305,7 +302,7 @@ const HomeScreen = () => {
             }}
           />
         </View>
-      )}
+      )} */}
     </>
   );
 };

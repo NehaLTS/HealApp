@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 import list from '../../strings/en.json';
 import { useCurrentAddress } from 'libs/useCurrentAddress';
+import * as Sentry from '@sentry/react-native';
+
 
 interface Location {
   latitude: number;
@@ -43,9 +45,8 @@ const HomeViewController = () => {
     setCurrentLocationOfUser,
     setOrderDetails,
     setRemainingTime,
-    providerStatus,
+
     remainingTime,
-    setProviderStatus,
     currentLocationOfUser,
   } = UseClientUserContext();
   const orderList = list.home.providerList;
@@ -58,8 +59,9 @@ const HomeViewController = () => {
     await fetchCurrentAddress()
       .then((address: any) => {
         setCurrentLocationOfUser({
-          ...currentLocationOfUser,
-          address: address.toString() ?? '',
+          latitude: address.latitude,
+          longitude: address.longitude,
+          address: address.address.toString() ?? '',
         });
       })
       .catch((error) => {
@@ -70,6 +72,7 @@ const HomeViewController = () => {
   useEffect(() => {
     location();
     getBannerAd();
+    console.log("SetCuree", currentLocationOfUser)
     // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
     //   if (status === RESULTS.GRANTED) {
     //     // Location permission is already granted
@@ -152,14 +155,24 @@ const HomeViewController = () => {
       longitude: '76.78137416040587',
     });
     console.log('onSearchDone', res);
-    if (res?.message) setIsDataNotFound(false);
-    else setProvidersList(res);
+    if (res?.message) {
+      setIsDataNotFound(false);
+      Sentry.captureMessage(
+        `On Search response gave Message' for:-${userProfile?.firstName}---- ${res?.message}`,
+      );
+    }
+    else {
+
+      Sentry.captureMessage(
+        `Search response' for:-${userProfile?.firstName}---- ${res}`,
+      );
+      setProvidersList(res);
+    }
   };
 
   const onSearch = () => {
     setUserProfile(null);
     setOrderDetails(null);
-    setProviderStatus(null);
     setRemainingTime(null);
     deleteLocalData();
 
@@ -194,9 +207,7 @@ const HomeViewController = () => {
     setSearchProviderList,
     isVisible,
     setIsVisible,
-    providerStatus,
     remainingTime,
-    setProviderStatus,
     currentLocationOfUser,
     setCurrentLocationOfUser,
     setProvidersList,
