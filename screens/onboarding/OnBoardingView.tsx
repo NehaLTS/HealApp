@@ -64,11 +64,11 @@ const OnBoardingView = () => {
           setUserId('4');
         }
 
-        console.log('useprofile is ', userData);
+        console.log('useprofile is', userData);
 
-        console.log('provider services', providerServices);
+        console.log('provider services', providerServices?.['0']);
         if (userData && userData.firstName) {
-          if (!providerServices?.length) {
+          if (!providerServices?.['0']) {
             if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
               setCurrentStep('services');
             } else {
@@ -79,7 +79,7 @@ const OnBoardingView = () => {
 
         setProviderProfile(userData as ProviderProfile);
 
-        parseProviderResponse(userData, providerServices);
+        parseProviderResponse(userData, providerServices?.['0']);
       }
     }
 

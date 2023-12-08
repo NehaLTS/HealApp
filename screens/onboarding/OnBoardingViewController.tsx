@@ -10,6 +10,7 @@ import {
 } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Alert } from 'react-native';
 
 const OnBoardingViewController = () => {
   const swiperRef = useRef(null);
@@ -77,14 +78,9 @@ const OnBoardingViewController = () => {
     userData: ProviderProfile,
     providerServices: any,
   ) => {
-    console.log('providerServices', JSON.stringify(providerServices));
     //Handle onboard navigation for the logged In User
     if (userData && userData.firstName) {
-      if (
-        providerServices !== null ||
-        providerServices !== undefined ||
-        providerServices
-      ) {
+      if (providerServices) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,

@@ -144,7 +144,7 @@ const HomeViewController = () => {
   const onChange = async (value: string) => {
     setSearchSpecialist(value);
     const res = await searchList({
-      name: value,
+      name: value?.toLowerCase(),
     });
     if (res.length > 0) {
       Sentry.captureMessage(
@@ -152,6 +152,7 @@ const HomeViewController = () => {
           userProfile?.firstName ?? ''
         }---- ${res}`,
       );
+      console.log('search result', res);
 
       setSearchedList(res);
     }
@@ -159,7 +160,7 @@ const HomeViewController = () => {
 
   const onSearchDone = async (item: string) => {
     const res = await searchProviders({
-      name: item,
+      name: item?.toLowerCase(),
       latitude: '30.377305039494523',
       longitude: '76.78137416040587',
     });

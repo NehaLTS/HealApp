@@ -5,6 +5,7 @@ import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { FacebookAuthProvider } from 'libs/authsevices/FcebookAuthProvider';
 import { GoogleAuthProvider } from 'libs/authsevices/GoogleAuthProvider';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import { ProviderProfile } from 'libs/types/UserType';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useState } from 'react';
@@ -106,7 +107,7 @@ const LoginViewController = () => {
     });
 
     // setUserDataProvider({ ...userDataProvider, token: response?.token, isSuccessful: response?.isSuccessful });
-    setLocalData('USERPROVIDERPROFILE', {
+    setLocalData('USERPROFILE', {
       firstName: userDataProvider?.firstname,
       lastName: userDataProvider?.lastname,
       phoneNumber: userDataProvider?.phone_number,
@@ -123,7 +124,7 @@ const LoginViewController = () => {
       provider_type_id: userDataProvider?.provider_type_id,
       licensepicture: userDataProvider?.license_photo,
       isSuccessful: userDataProvider?.isSuccessful,
-    });
+    } as unknown as ProviderProfile);
     setLocalData('USER', {
       token: response.token,
       userId: response.id,
