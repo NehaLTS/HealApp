@@ -80,7 +80,7 @@ const HomeScreenControlller = () => {
         // Call the function to send the FCM message
         // sendFCMMessage();
         Sentry.captureMessage(
-          `Provider notification event update location api for:-${providerProfile?.firstName}---- `,
+          `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
         );
         UpdateProviderLocation({
           provider_id: userId,

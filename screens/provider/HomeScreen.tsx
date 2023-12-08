@@ -238,11 +238,14 @@ const HomeScreen = () => {
       const servicesArray = JSON.parse(order?.services);
 
       // Calculate the total service price
-      const totalServicePrice = servicesArray.reduce((total, service) => {
-        // Ensure that the service_price is a number before adding it to the total
-        const servicePrice = parseFloat(service.service_price) || 0;
-        return total + servicePrice;
-      }, 0);
+      const totalServicePrice = servicesArray.reduce(
+        (total: number, service: { service_price: string }) => {
+          // Ensure that the service_price is a number before adding it to the total
+          const servicePrice = parseFloat(service.service_price) || 0;
+          return total + servicePrice;
+        },
+        0,
+      );
       console.log('totalPrice', JSON.stringify(totalServicePrice));
       return JSON.stringify(totalServicePrice);
     } else {
@@ -268,6 +271,9 @@ const HomeScreen = () => {
       isSeeMore: false,
       isNotification: false,
     });
+    Sentry.captureMessage(
+      `Provider notification event CANCEL ORDER BUTTON PRESSED for:-${providerProfile?.firstName}----`,
+    );
   };
   const onPressTreatmentEnd = () => {
     if (!isArrived) {
@@ -297,6 +303,9 @@ const HomeScreen = () => {
         services: '',
         providerDetail: null,
       });
+      Sentry.captureMessage(
+        `Provider notification event TREATMENT END BUTTON PRESSED for:-${providerProfile?.firstName}----`,
+      );
     }
   };
 
