@@ -49,7 +49,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Your description for camera usage</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Heal App requires Location permission to get your Current Address.</string>
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>Heal App requires Location permission to get your Current Address.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Your description for photo library usage</string>
 	<key>UIBackgroundModes</key>

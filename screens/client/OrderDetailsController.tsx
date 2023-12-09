@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react-native';
+import { checkLocationPermission } from 'libs/utility/Utils';
 
 const OrderDetailsController = () => {
   const { t } = useTranslation();
@@ -99,7 +100,11 @@ const OrderDetailsController = () => {
   console.log('DAATAAA ', DAAT);
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
-    if (
+
+ let isLocationPermissionOn=await checkLocationPermission();
+    if(isLocationPermissionOn){
+
+       if (
       order.isOrderForOther &&
       (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
       order?.services?.length > 0 &&
@@ -183,6 +188,11 @@ const OrderDetailsController = () => {
         Alert.alert('please select reasons and treatment menu');
       }
     }
+
+    }else{
+      Alert.alert("Please Enable Location Permission")
+    }
+
   };
   return {
     handleNextButtonPress,

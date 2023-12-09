@@ -31,6 +31,7 @@ import * as Sentry from '@sentry/react-native';
 import { Alert } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import { useCurrentAddress } from 'libs/useCurrentAddress';
+import { Platform } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
@@ -80,12 +81,21 @@ const App = () => {
   };
   const requestLocationPermission = async () => {
     try {
-      const result = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      const result = await check(
+        Platform.OS === 'android'
+          ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+          : PERMISSIONS.IOS.LOCATION_ALWAYS,
+      );
+
+
+      console.log("permisison check platform ",result)
       if (result === RESULTS.GRANTED) {
         getCurrentLocation();
       } else {
         const permissionResult = await request(
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          Platform.OS === 'android'
+            ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+            : PERMISSIONS.IOS.LOCATION_ALWAYS,
         );
         if (permissionResult === RESULTS.GRANTED) {
           getCurrentLocation();
