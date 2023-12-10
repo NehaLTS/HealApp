@@ -12,7 +12,6 @@ import ProviderArrivalInfo from 'components/common/ProviderArrivalInfo';
 import SearchBox from 'components/common/SearchBox';
 import Text from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
@@ -33,6 +32,7 @@ import {
 } from 'react-native';
 import HomeViewController from './HomeViewController';
 import { DotLoader } from 'components/common/Loader';
+import { Order } from 'libs/types/OrderTypes';
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -59,13 +59,28 @@ const HomeScreen = () => {
     setSearchProviderList,
   } = HomeViewController();
   const navigation = useNavigation<any>();
-  const localData = getLocalData('ORDER');
+
   const [seconds, setSeconds] = useState(remainingTime?.seconds);
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
   const minuteRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
   const [currentAddress, setCurrentAddress] = useState<string>('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [currentOrder, setCurrentOrder] = useState<Order>();
+
+
+
+   useEffect(() => {
+    getCurrentOrder();
+  }, []);
+
+  const getCurrentOrder = async () => {
+    const order:Order= await getLocalData('ORDER') as Order;
+
+    console.log("order details is ",order)
+    setCurrentOrder(order);
+
+  }
 
   useUpdateEffect(() => {
     setCurrentAddress(currentLocationOfUser?.address ?? '');
@@ -225,7 +240,9 @@ const HomeScreen = () => {
 
   useUpdateEffect(() => {
     if (seconds === 0 && timeToArrive < 0) {
-      setLocalData('ORDER', { providerDetail: '' });
+
+      //TODO: VANDANA WHY WE NEED THIS
+      // setLocalData('ORDER', { providerDetail: '' });
       clearInterval(timeOutRef.current);
     }
   }, [seconds]);
@@ -275,7 +292,7 @@ const HomeScreen = () => {
           noSearchedView()
         )}
       </ScrollView>
-      {/* {localData?.providerDetail && (
+      {currentOrder?.orderId && (
         <View
           style={{
             marginVertical: getHeight(20),
@@ -285,19 +302,18 @@ const HomeScreen = () => {
           }}
         >
           <ProviderArrivalInfo
-            status={localData.orderStatus}
-            doctorName={`${localData?.providerDetail.firstname}${' '}${localData?.providerDetail.name
-              }`}
-            onPress={() => {
+            status={currentOrder.orderStatus}
+            doctorName={currentOrder.providerDetails.providerName}
+              onPress={() => {
               navigation.navigate(NavigationRoutes.SearchDoctor, {
-                providerData: localData?.providerDetail,
-                orderId: localData?.orderId,
-                remaining: { minutes: timeToArrive, seconds: seconds },
+                currentOrder: currentOrder,
+                // orderId: localData?.orderId,
+                 remaining: { minutes: timeToArrive, seconds: seconds },
               });
             }}
           />
         </View>
-      )} */}
+      )}
     </>
   );
 };

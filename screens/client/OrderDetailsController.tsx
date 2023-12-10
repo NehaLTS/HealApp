@@ -100,99 +100,65 @@ const OrderDetailsController = () => {
   console.log('DAATAAA ', DAAT);
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
+    let isLocationPermissionOn = await checkLocationPermission();
+    if (isLocationPermissionOn) {
+      if (
+        order.isOrderForOther &&
+        (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
+        order?.services?.length > 0 &&
+        order?.patient_type?.age?.length > 0 &&
+        order?.address?.length
+      ) {
+        setShowSummary(true);
+      }
+      if (
+        order.isOrderForOther === false &&
+        (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
+        order?.services?.length > 0 &&
+        order?.address?.length
+      ) {
+        setShowSummary(true);
+      }
+      console.log('currentLocationOfUser.latitude,', currentLocationOfUser);
+      if (showSummary) {
+        let orderDetails = {
+          client_id: userId.toString(),
+          patient_type: order.patient_type.type ?? '',
+          patient_name: order.patient_name,
+          address: order?.address ?? '',
+          city: order.city,
+          phonenumber: order?.phonenumber,
+          Date_of_birth: !order?.isOrderForOther
+            ? user?.date_of_birth ?? ''
+            : order?.patient_type?.age ?? '',
+          services: order.services[0].menu_id.toString(),
+          symptoms: JSON.stringify(symptoms),
+          Additional_notes: order?.Additional_notes,
+          Estimate_arrival: order?.Estimate_arrival,
+          Instructions_for_arrival: order?.Instructions_for_arrival,
+          Payment_mode: order?.Payment_mode,
+          TotalCost: order?.services
+            .reduce((total, item) => total + parseInt(item.price, 10), 0)
+            .toString(),
+          latitude: currentLocationOfUser?.latitude,
+          longitude: currentLocationOfUser?.longitude,
+          provider_type_id: supplier?.provider_type_id?.toString(),
+        };
 
- let isLocationPermissionOn=await checkLocationPermission();
-    if(isLocationPermissionOn){
-
-       if (
-      order.isOrderForOther &&
-      (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
-      order?.services?.length > 0 &&
-      order?.patient_type?.age?.length > 0 &&
-      order?.address?.length
-    ) {
-      setShowSummary(true);
-    }
-    if (
-      order.isOrderForOther === false &&
-      (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
-      order?.services?.length > 0 &&
-      order?.address?.length
-    ) {
-      setShowSummary(true);
-    }
-    console.log('currentLocationOfUser.latitude,', currentLocationOfUser);
-    if (showSummary) {
-      setIsLoading(true);
-      const res = await orderProvider({
-        client_id: userId.toString(),
-        patient_type: order.patient_type.type ?? '',
-        patient_name: order.patient_name,
-        address: order?.address ?? '',
-        city: order.city,
-        phonenumber: order?.phonenumber,
-        Date_of_birth: !order?.isOrderForOther
-          ? user?.date_of_birth ?? ''
-          : order?.patient_type?.age ?? '',
-        services: order.services[0].menu_id.toString(),
-        symptoms: JSON.stringify(symptoms),
-        Additional_notes: order?.Additional_notes,
-        Estimate_arrival: order?.Estimate_arrival,
-        Instructions_for_arrival: order?.Instructions_for_arrival,
-        Payment_mode: order?.Payment_mode,
-        TotalCost: order?.services
-          .reduce((total, item) => total + parseInt(item.price, 10), 0)
-          .toString(),
-        latitude: currentLocationOfUser?.latitude,
-        longitude: currentLocationOfUser?.longitude,
-        provider_type_id: supplier?.provider_type_id?.toString(),
-      });
-
-      Sentry.captureMessage(
-        `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${user?.firstName ?? ''
-        }---- ${JSON.stringify(res)}`,
-      );
-      console.log(' RESPINSE+++++', res);
-
-      if (res?.orderId) {
-        setIsLoading(false);
-
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [{
-        //     name: NavigationRoutes.SearchDoctor, params: {
-        //       providerData: res?.closestProvider,
-        //       orderId: res?.orderId,
-        //     },
-        //   }],
-        // });
-        Sentry.captureMessage(
-          `First order button for Search the  Provider:-${user?.firstName}---- ${JSON.stringify(res)}}`,
-        );
         navigation.navigate(NavigationRoutes.SearchDoctor, {
-          providerData: res?.closestProvider,
-          orderId: res?.orderId,
+          orderDetails: orderDetails,
+          previousScreen: 'Create Order',
         });
       } else {
-        Sentry.captureMessage(
-          `Client flow ON PRESS END ORDER API ERROR for:-${user?.firstName ?? ''
-          }---- ${JSON.stringify(res?.message)}`,
-        );
-        Alert.alert(res?.message);
-        setIsLoading(false);
+        if (orderDetails.services.length && orderDetails.reason.length)
+          setShowSummary(true);
+        else {
+          Alert.alert('please select reasons and treatment menu');
+        }
       }
     } else {
-      if (orderDetails.services.length && orderDetails.reason.length)
-        setShowSummary(true);
-      else {
-        Alert.alert('please select reasons and treatment menu');
-      }
+      Alert.alert('Please Enable Location Permission');
     }
-
-    }else{
-      Alert.alert("Please Enable Location Permission")
-    }
-
   };
   return {
     handleNextButtonPress,

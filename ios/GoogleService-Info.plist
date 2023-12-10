@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>843919956986-2f9q7sgfse8h8nu4lhsh0k6pc65lrit7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.843919956986-2f9q7sgfse8h8nu4lhsh0k6pc65lrit7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>843919956986-uihe6m9jv9bjbr8294e8o1360pvr76u8.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAupUF1Tkkev_nPo_GJbgJ_cNlrjzlYN2w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>843919956986</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.heal.app</string>
+	<key>PROJECT_ID</key>
+	<string>heal-app-ccd03</string>
+	<key>STORAGE_BUCKET</key>
+	<string>heal-app-ccd03.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:843919956986:ios:f5c5fbc350a2c9698fe243</string>
+</dict>
+</plist>

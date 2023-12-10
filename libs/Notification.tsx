@@ -47,8 +47,8 @@ export const createNotificationListeners = () => {
     Sentry.captureMessage(
       `first notification ---- ${JSON.stringify(remoteMessage)}`,
     );
-    //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
-
+  
+    //TODO: VANDANA WHY ARE WE SAVING HERE LOCAL DATA
     setLocalData('ORDER', {
       eventData: remoteMessage.data,
       orderStatus: remoteMessage?.notification?.title,

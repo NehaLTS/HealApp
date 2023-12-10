@@ -19,10 +19,22 @@ const config = {
   client_id: "110506724703725934792",
   messagingSenderId: '843919956986',
   storageBucket: 'heal-app-ccd03.appspot.com',
+  authDomain: 'heal-app-ccd03.firebaseapp.com'
 }
-if (!fb.apps.length) {
-  fb.initializeApp(config)
+
+
+let app;
+if (fb.apps.length === 0) {
+   fb.initializeApp(config )
+} else {
+    fb.app()
 }
+
+// if (!fb.apps.length) {
+
+//   console.log("init firebase ")
+//   fb.initializeApp(config)
+// }
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);

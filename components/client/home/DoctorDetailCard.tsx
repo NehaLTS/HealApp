@@ -4,6 +4,7 @@ import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
+import { PROVIDERDETAILS } from 'libs/types/OrderTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -33,7 +34,7 @@ const DoctorDetailCard = ({
     seconds: number;
     remainig: number;
   };
-  providerData: any;
+  providerData: PROVIDERDETAILS;
   onPressCard: () => void;
 }) => {
   const { t } = useTranslation();
@@ -58,7 +59,7 @@ const DoctorDetailCard = ({
           <View style={styles.container}>
             <Text
               style={styles.doctorTitle}
-              title={`${providerData?.firstname}${', '}${providerData?.name}`}
+              title={`${providerData?.providerName}}`}
             />
             <TouchableOpacity onPress={onPressCard}>
               <Image
@@ -70,9 +71,9 @@ const DoctorDetailCard = ({
           <View style={{}}>
             <View style={styles.detailItem}>
               <View style={styles.doctorIconContainer}>
-                {providerData && providerData?.profile_picture ? (
+                {providerData && providerData?.providerProfilePicture ? (
                   <Image
-                    source={{ uri: providerData?.profile_picture }}
+                    source={{ uri: providerData?.providerProfilePicture }}
                     style={styles.doctorIcon}
                   />
                 ) : (
@@ -92,7 +93,7 @@ const DoctorDetailCard = ({
                 <TouchableOpacity
                   style={styles.details}
                   onPress={() => {
-                    Linking.openURL(`tel:${providerData?.phone_number}`);
+                    Linking.openURL(`tel:${providerData?.phoneNumber}`);
                   }}
                 >
                   <Image

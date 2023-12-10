@@ -2,6 +2,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import "React/RCTI18nUtil.h"
+#import <Firebase.h>
 
 @implementation AppDelegate
 
@@ -14,6 +15,7 @@
   
   [[RCTI18nUtil sharedInstance] allowRTL:YES];
 
+  [FIRApp configure];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

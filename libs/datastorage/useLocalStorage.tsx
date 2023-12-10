@@ -1,10 +1,11 @@
+import { Order } from 'libs/types/OrderTypes';
 import { ClientProfile, ProviderProfile, ProviderServices, UserType, UserTypeProvider } from '../types/UserType';
 import { MMKV } from 'react-native-mmkv'
 const dataStorage = new MMKV()
 
 
 type StorageKeys = 'USERPROFILE' | 'USER' | 'PROVIDERSERVICES'| 'ORDER'
-type StorageObject = { USERPROFILE: ClientProfile | UserTypeProvider | ProviderProfile, USER: any,  PROVIDERSERVICES:ProviderServices[], ORDER:any}
+type StorageObject = { USERPROFILE: ClientProfile | UserTypeProvider | ProviderProfile, USER: any,  PROVIDERSERVICES:ProviderServices[], ORDER:Order}
 
 export const setLocalData = <K extends StorageKeys>(key: K, object: Partial<StorageObject[K]>) => {
   const data = getLocalData(key) || {}

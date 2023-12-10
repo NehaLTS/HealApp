@@ -132,9 +132,7 @@ export const ClientOrderServices = () => {
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
-        // "x-access-token":
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
-      } as unknown as HeadersInit,
+        } as unknown as HeadersInit,
 
     });
   return {
