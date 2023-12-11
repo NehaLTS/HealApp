@@ -61,9 +61,8 @@ const SearchDoctorController = () => {
       )}`,
     );
     console.log(' RESPINSE+++++', res);
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 10000);
+
+
 
     if (res?.orderId) {
       Sentry.captureMessage(
@@ -87,7 +86,9 @@ const SearchDoctorController = () => {
         orderStatus: '',
         orderServices: '',
       });
-
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 10000);
       setProviderLocation({
         latitude: parseFloat(res.closestProvider.latitude),
         longitude: parseFloat(res.closestProvider.longitude),

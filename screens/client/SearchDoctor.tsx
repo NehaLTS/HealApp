@@ -42,14 +42,14 @@ const SearchDoctor = () => {
   const navigation = useNavigation();
 
 
-   const route = useRoute<any>();
+  const route = useRoute<any>();
   // const providerData = route?.params?.providerData ?? '';
   // console.log('providerData', providerData);
   // const providerRemainigTime = route?.params?.remaining;
   // const orderId = route?.params?.orderId ?? '';
 
 
-    //TODO: Vandana why this is used?
+  //TODO: Vandana why this is used?
   const previousScreen = route?.params?.previousScreen;
 
 
@@ -60,26 +60,24 @@ const SearchDoctor = () => {
     handleNextButtonPress,
     showRateAlert,
     calculateTime,
-    calculateDistance,
     currentOrder,
     showLoader,
-     providerLocation, 
-     setProviderLocation,
-     showTimer,
-     stausOfArriving
+    providerLocation,
+    setProviderLocation,
+    showTimer,
+    stausOfArriving
   } = SearchDoctorController();
- 
+
   const { setRemainingTime } = UseClientUserContext();
   const localData = getLocalData('ORDER');
   const [showDoctor, setShowDoctor] = useState(false);
- 
+
   // const [loader, setLoader] = useState(true);
   const [disabled, setDisable] = useState(false);
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
   const [showCancelButton, setShowCancelButton] = useState(false);
- 
+
   const [secondLoader, setSecondLoader] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { showToast, renderToast } = useToast();
 
   const headerLeft = () => (
@@ -118,7 +116,7 @@ const SearchDoctor = () => {
     };
   }, []);
 
- 
+
   // useEffect(() => {
   //   if (stausOfArriving !== 'Arrived') {
   //     getEventUpdate();
@@ -128,32 +126,37 @@ const SearchDoctor = () => {
   useEffect(() => {
     createNotificationListeners();
 
-  //TODO: Vandana why this is used?
+    //TODO: Vandana why this is used?
     if (previousScreen === 'HOME_CLIENT') {
       setProviderLocation({
         latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
         longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
       });
-    } 
-    
+    }
+
   }, []);
 
 
 
-  setTimeout(() => {
-    setSecondLoader(false);
-  }, 10000);
+  const cancelTheOrder = () => {
+    //  setLocalData('ORDER', currentOrder);
+    navigation.goBack();
+  }
+
   const onPressOrder = () => {
-    setIsLoading(true);
+
     setSecondLoader(true);
     if (!showCancelButton && !showLoader) {
       handleNextButtonPress();
     } else {
 
       //TODO : Vandana why we are setting Local data here
-    //  setLocalData('ORDER', currentOrder);
-      navigation.goBack();
+      //  setLocalData('ORDER', currentOrder);
+      cancelTheOrder()
     }
+    setTimeout(() => {
+      setSecondLoader(false);
+    }, 10000);
   };
 
   useUpdateEffect(() => {
@@ -194,7 +197,7 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
             }
@@ -265,7 +268,7 @@ const SearchDoctor = () => {
                         <View style={styles.imageContainer}>
                           {currentOrder && currentOrder.providerDetails?.providerProfilePicture ? (
                             <Image
-                              source={{ uri: currentOrder.providerDetails?.providerProfilePicture  }}
+                              source={{ uri: currentOrder.providerDetails?.providerProfilePicture }}
                               style={styles.doctorIcon}
                             />
                           ) : (
@@ -293,8 +296,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -319,16 +322,15 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-         {!showLoader ?
-         stausOfArriving !== 'Arrived' ? (
+        {stausOfArriving !== 'Arrived' ? (
           <View>
             {
               <Button
                 title={
                   providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !showLoader &&
-                  !showCancelButton
+                    providerLocation.latitude !== 0.0 &&
+                    !showLoader &&
+                    !showCancelButton
                     ? t('order')
                     : t('cancel')
                 }
@@ -344,7 +346,7 @@ const SearchDoctor = () => {
               <TextButton
                 style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
                 title={t('cancel')}
-                onPress={() => {}}
+                onPress={cancelTheOrder}
               />
             )}
 
@@ -353,11 +355,11 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                showLoader
+                  showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>
@@ -375,8 +377,8 @@ const SearchDoctor = () => {
               style={{ alignSelf: 'center', marginBottom: 10 }}
             />
           </View>
-        ):<></>}
-      
+        )}
+
       </View>
     </>
   );

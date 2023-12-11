@@ -70,14 +70,14 @@ const HomeScreen = () => {
 
 
 
-   useEffect(() => {
+  useEffect(() => {
     getCurrentOrder();
   }, []);
 
   const getCurrentOrder = async () => {
-    const order:Order= await getLocalData('ORDER') as Order;
+    const order: Order = await getLocalData('ORDER') as Order;
 
-    console.log("order details is ",order)
+    console.log("order details is ", order)
     setCurrentOrder(order);
 
   }
@@ -238,14 +238,14 @@ const HomeScreen = () => {
   //   };
   // }, [seconds]);
 
-  useUpdateEffect(() => {
-    if (seconds === 0 && timeToArrive < 0) {
+  // useUpdateEffect(() => {
+  //   if (seconds === 0 && timeToArrive < 0) {
 
-      //TODO: VANDANA WHY WE NEED THIS
-      // setLocalData('ORDER', { providerDetail: '' });
-      clearInterval(timeOutRef.current);
-    }
-  }, [seconds]);
+  //     //TODO: VANDANA WHY WE NEED THIS
+  //     // setLocalData('ORDER', { providerDetail: '' });
+  //     clearInterval(timeOutRef.current);
+  //   }
+  // }, [seconds]);
   console.log('isDataNotFound', isDataNotFound);
   return (
     <>
@@ -302,13 +302,13 @@ const HomeScreen = () => {
           }}
         >
           <ProviderArrivalInfo
-            status={currentOrder.orderStatus}
+            status={currentOrder?.orderStatus ?? ''}
             doctorName={currentOrder.providerDetails.providerName}
-              onPress={() => {
+            onPress={() => {
               navigation.navigate(NavigationRoutes.SearchDoctor, {
                 currentOrder: currentOrder,
                 // orderId: localData?.orderId,
-                 remaining: { minutes: timeToArrive, seconds: seconds },
+
               });
             }}
           />

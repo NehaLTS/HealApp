@@ -9,6 +9,7 @@ import { enableScreens } from 'react-native-screens';
 import './i18n.tsx';
 import fb from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
+import notifee, { EventType } from '@notifee/react-native';
 enableScreens(true)
 
 const config = {
@@ -22,12 +23,45 @@ const config = {
   authDomain: 'heal-app-ccd03.firebaseapp.com'
 }
 
+// notifee.onBackgroundEvent(async ({ type, detail }) => {
+//   const { notification, pressAction } = detail;
+
+//   console.log('object', type, 'hello', detail);
+//   if (type === EventType.ACTION_PRESS && pressAction.id === 'location') {
+//     // Update external API
+//     await fetch(`https://my-api.com/chat/${notification.data.chatId}/read`, {
+//       method: 'POST',
+//     });
+
+//     // Create a trigger to keep the notification persistent
+//     const trigger = notifee.triggerForegroundEvent(notification.id, {
+//       // Define the condition to remove the trigger (e.g., when certain action happens)
+//       condition: notifee.TriggerCondition.PAST_TRIGGER_DATE,
+//     });
+
+//     // Update the existing notification with the trigger
+//     const updatedNotification = {
+//       ...notification,
+//       android: {
+//         ...notification.android,
+//         priority: notifee.AndroidNotificationPriority.HIGH,
+//       },
+//     };
+
+//     await notifee.updateNotification(notification.id, updatedNotification);
+
+//   }
+// });
+
+
+
+
 
 let app;
 if (fb.apps.length === 0) {
-   fb.initializeApp(config )
+  fb.initializeApp(config)
 } else {
-    fb.app()
+  fb.app()
 }
 
 // if (!fb.apps.length) {
