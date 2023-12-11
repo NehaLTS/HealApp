@@ -16,3 +16,9 @@ export interface PROVIDERDETAILS {
   currentLatitude: string;
   currentLongitude: string;
 }
+
+export interface OrderServices {
+  serviceId: string;
+  serviceName: string;
+  servicePrice: string;
+}
