@@ -66,9 +66,12 @@ const OrderDetailsController = () => {
   };
 
   useEffect(() => {
-    if (treatmentsMenu !== null) {
-      const checkExisting = treatmentsMenu.treatmentMenu.some((item) => {
-        return item?.provider_type_id;
+    if (
+      treatmentsMenu !== null &&
+      treatmentsMenu?.treatmentMenu !== undefined
+    ) {
+      const checkExisting = treatmentsMenu?.treatmentMenu?.some((item) => {
+        return item.provider_type_id;
       });
       if (checkExisting) {
         setTreatmentReason(treatmentsMenu);

@@ -254,19 +254,20 @@ export interface BookOrderRequest {
   provider_id: string;
   order_id: string;
   distance: string;
+  time: string;
 }
 
 export interface OrderPayment {
-  order_id: string,
-  client_id: string,
-  total_price: string,
-  currency: string
+  order_id: string;
+  client_id: string;
+  total_price: string;
+  currency: string;
 }
 
 export interface ProviderRating {
-  provider_id: string,
-  client_id: string,
-  ratings: string,
+  provider_id: string;
+  client_id: string;
+  ratings: string;
 }
 
 export interface currentLocationOfUser {

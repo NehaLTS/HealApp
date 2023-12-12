@@ -191,6 +191,7 @@ const SearchDoctorController = () => {
       provider_id: currentOrder?.providerDetails.providerId,
       order_id: currentOrder.orderId,
       distance: Math.round(calculateDistance()).toString(),
+      time: Math.round(calculateTime().minutes).toString(),
     });
 
     if (orderBookResponse) {
