@@ -10,10 +10,63 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { dimens } from 'designToken/dimens';
 import { RNHeader } from 'components/common/Header';
 import { colors } from 'designToken/colors';
+import { ClientOrderServices } from 'libs/ClientOrderServices';
+import Loader from 'components/common/Loader';
 
 const TreatmentCompletedScreen = () => {
   const [showViews, setShowViews] = useState('Treatmen_End');
   const navigation = useNavigation();
+  const { OrderPayment, ProviderRating } = ClientOrderServices()
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  const onApprovePayment = async () => {
+    try {
+      setIsLoading(true)
+      await OrderPayment({
+        order_id: "1",
+        client_id: "1",
+        total_price: "200",
+        currency: "nis"
+      })
+        .then((res) => {
+          console.log('object', res);
+          if (res.isSucessfull) {
+            setShowViews('Rating_View')
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch {
+      console.error('Error:');
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const onApproveRating = async () => {
+    try {
+      setIsLoading(true)
+      await ProviderRating({
+        provider_id: "1",
+        client_id: "1",
+        ratings: "5"
+      })
+        .then((res) => {
+          console.log('object', res);
+          if (res.isSucessfull) {
+            setShowViews('Tip_View')
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } catch {
+      console.error('Error:');
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const headerLeft = () => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -23,22 +76,19 @@ const TreatmentCompletedScreen = () => {
   return (
     <>
       {RNHeader(() => null, headerLeft)}
+      {isLoading && <Loader />}
       <View style={styles.container}>
         {showViews === 'Treatmen_End' && (
           <TreatmentEnd
-            onPress={() => {
-              setShowViews('Rating_View');
-            }}
+            onPress={onApprovePayment}
           />
         )}
         {showViews === 'Rating_View' && (
           <RatingView
-            onPress={() => {
-              setShowViews('Tip_View');
-            }}
+            onPress={onApproveRating}
           />
         )}
-        {showViews === 'Tip_View' && <DoctorTipView onPress={() => {}} />}
+        {showViews === 'Tip_View' && <DoctorTipView onPress={() => { }} />}
       </View>
     </>
   );

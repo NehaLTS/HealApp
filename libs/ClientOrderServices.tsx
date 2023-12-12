@@ -9,8 +9,11 @@ import {
   GET_SEARCH_LIST,
   GET_SEARCH_PROVIDER,
   GET_TREATMENT_MENU,
+  ORDER_PAYMENT,
   ORDER_PROVIDER,
+  PATCH,
   POST,
+  PROVIDER_RATING,
 } from './constants/ApiConstants';
 import { getLocalData } from './datastorage/useLocalStorage';
 import {
@@ -19,7 +22,7 @@ import {
   search_provider,
   treatment,
 } from './types/ProvierTypes';
-import { BookOrderRequest } from './types/UserType';
+import { BookOrderRequest, OrderPayment, ProviderRating } from './types/UserType';
 import { Order } from './types/OrderTypes';
 const access_token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODk4NjY5NCwiZXhwIjoxNjk5MDE5MDk0fQ.6nHvRnfJwgmgnCo0zYLf9yO2kvDIxJ0IZALJCB_PHr0';
@@ -103,7 +106,7 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     });
 
-  const handlePayment = (body: {}): void => {};
+  const handlePayment = (body: {}): void => { };
 
   const treatmentMenu = (body: {
     provider_type_id: string;
@@ -126,6 +129,27 @@ export const ClientOrderServices = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
+
+  const OrderPayment = (body: OrderPayment): Promise<any> =>
+    sendRequest(ORDER_PAYMENT, {
+      method: PATCH,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
+  const ProviderRating = (body: ProviderRating): Promise<any> =>
+    sendRequest(PROVIDER_RATING, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
   return {
     getBannerAds,
     treatmentMenu,
@@ -134,5 +158,7 @@ export const ClientOrderServices = () => {
     providerLocationSearch,
     BookOrderRequest,
     searchList,
+    OrderPayment,
+    ProviderRating
   };
 };

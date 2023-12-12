@@ -256,6 +256,19 @@ export interface BookOrderRequest {
   distance: string;
 }
 
+export interface OrderPayment {
+  order_id: string,
+  client_id: string,
+  total_price: string,
+  currency: string
+}
+
+export interface ProviderRating {
+  provider_id: string,
+  client_id: string,
+  ratings: string,
+}
+
 export interface currentLocationOfUser {
   latitude: string;
   longitude: string;

@@ -88,3 +88,11 @@ export interface PoviderLocation {
   order_id: string;
   longitude: string;
 }
+
+export interface TreatementEnded {
+  order_id: string;
+  currency: string;
+  total_price: string;
+  services: string;
+  treatment_completed: string;
+}
