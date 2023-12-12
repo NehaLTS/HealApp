@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 
 const OnBoardingViewController = () => {
-  const swiperRef = useRef(null);
+  const swiperRef = useRef<any>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigation = useNavigation();
   const { setUserProfile, setUserId, setToken } = UseClientUserContext();

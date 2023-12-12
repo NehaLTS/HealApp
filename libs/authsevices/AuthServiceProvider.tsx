@@ -14,11 +14,12 @@ import {
   POST,
   PROVIDER_AVAILABILITY,
   PROVIDER_SIGNIN,
+  TREATMENT_COMPLETED,
   UPDATE_PROVIDER_LOCATION,
   UPDATE_SIGNUP_PROVIDER,
 } from '../constants/ApiConstants';
 import { UserType, UserTypeProvider } from '../types/UserType';
-import { OrderRequest, PoviderLocation } from 'libs/types/ProvierTypes';
+import { OrderRequest, PoviderLocation, TreatementEnded } from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
@@ -209,6 +210,16 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
+  const TreatementEnded = (body: TreatementEnded): Promise<any> =>
+    sendRequestWitoutToken(TREATMENT_COMPLETED, {
+      method: PATCH,
+      body: body as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
+
   return {
     OnProviderSignIn,
     onSubmitGoogleAuthRequestProvider,
@@ -223,5 +234,6 @@ export const AuthServicesProvider = () => {
     UpdateProviderLocation,
     providerAvailabilityStatus,
     AddProviderServices,
+    TreatementEnded
   };
 };

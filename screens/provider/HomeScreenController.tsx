@@ -32,7 +32,7 @@ const HomeScreenControlller = () => {
     timestamp: 0,
   });
 
-  const { OrderRequst, UpdateProviderLocation, providerAvailabilityStatus } =
+  const { OrderRequst, UpdateProviderLocation, providerAvailabilityStatus, TreatementEnded, } =
     AuthServicesProvider();
 
   const sendFCMMessage = async () => {
@@ -177,6 +177,7 @@ const HomeScreenControlller = () => {
     providerLocation,
     setAcceptOrder,
     onLogoutButtonPress,
+    TreatementEnded
     // ProviderAvailability
   };
 };

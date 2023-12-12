@@ -186,7 +186,7 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : `${'Doctor'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
@@ -255,8 +255,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                          currentOrder.providerDetails
-                            ?.providerProfilePicture ? (
+                            currentOrder.providerDetails
+                              ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -289,8 +289,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -319,15 +319,27 @@ const SearchDoctor = () => {
           <View>
             <Button
               title={
-                (providerLocation !== undefined &&
-                  providerLocation.latitude === 0.0) ||
-                showLoader
-                  ? t('no_fee_collected')
-                  : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                providerLocation !== undefined &&
+                  providerLocation.latitude !== 0.0 &&
+                  !showLoader &&
+                  !showCancelButton
+                  ? t('order')
+                  : t('cancel')
               }
+              isPrimary
+              isSmall
+              onPress={onPressOrder}
+              width={'30%'}
+              height={getHeight(dimens.imageS)}
+              style={{ alignSelf: 'center', marginBottom: 10 }}
             />
+            {showCancelTextButton && !showLoader && (
+              <TextButton
+                style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
+                title={t('cancel')}
+                onPress={() => { }}
+              />
+            )}
           </View>
         ) : (
           <View style={{ height: getHeight(100) }}>

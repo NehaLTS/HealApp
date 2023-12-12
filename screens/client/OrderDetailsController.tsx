@@ -68,7 +68,7 @@ const OrderDetailsController = () => {
   useEffect(() => {
     if (treatmentsMenu !== null) {
       const checkExisting = treatmentsMenu.treatmentMenu.some((item) => {
-        return item.provider_type_id;
+        return item?.provider_type_id;
       });
       if (checkExisting) {
         setTreatmentReason(treatmentsMenu);
@@ -83,8 +83,8 @@ const OrderDetailsController = () => {
 
   const symptoms = order.reason.map((item: any) => {
     return {
-      name: item.name.en, // Assuming you want the English name
-      id: item.reason_id,
+      name: item?.name.en, // Assuming you want the English name
+      id: item?.reason_id,
     };
   });
 
@@ -93,7 +93,7 @@ const OrderDetailsController = () => {
     let isLocationPermissionOn = await checkLocationPermission();
     if (isLocationPermissionOn) {
       if (
-        order.isOrderForOther &&
+        order?.isOrderForOther &&
         (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
         order?.services?.length > 0 &&
         order?.patient_type?.age?.length > 0 &&

@@ -78,6 +78,7 @@ const HomeScreen = () => {
     updateLocation,
     providerLocation,
     onLogoutButtonPress,
+    TreatementEnded
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(getHeight(order?.modalHeight ?? 360));
   const { providerAvailabilityStatus } = AuthServicesProvider();
@@ -193,8 +194,7 @@ const HomeScreen = () => {
         orderStatus === 'Arrived Order'
       ) {
         Sentry.captureMessage(
-          `Provider notification event 'Arrived Order': true for:-${
-            providerProfile?.firstName
+          `Provider notification event 'Arrived Order': true for:-${providerProfile?.firstName
           }---- ${event.notification?.title || orderStatus}`,
         );
         setTotalPricesOfServices(totalPrice());
@@ -278,7 +278,7 @@ const HomeScreen = () => {
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
   };
-  const onPressTreatmentEnd = () => {
+  const onPressTreatmentEnd = async () => {
     if (!isArrived) {
       OnPressTakeOrder();
       modalHeight.value = withSpring(getHeight(652));
@@ -288,27 +288,44 @@ const HomeScreen = () => {
         isSeeMore: true,
       });
     } else {
-      setAcceptOrder(false);
-      setIsArrived(false);
-      setIsAvailable(false);
-      setNotification(false);
-      modalHeight.value = withSpring(getHeight(360));
-      setIsSeeMore(false);
-      setLocalData('USER', { isProviderAvailable: false });
-      setLocalData('ORDER', {
-        modalHeight: 360,
-        eventData: '',
-        orderStatus: '',
-        isSeeMore: false,
-        isNotification: false,
-        isArrived: false,
-        orderAccepted: false,
-        services: '',
-        providerDetail: null,
-      });
-      Sentry.captureMessage(
-        `Provider notification event TREATMENT END BUTTON PRESSED for:-${providerProfile?.firstName}----`,
-      );
+
+      await TreatementEnded(
+        {
+          order_id: "1",
+          currency: "nis",
+          total_price: "200",
+          services: "bsvds",
+          treatment_completed: "completed"
+        }
+      ).then((res) => {
+        console.log('Treatement Ended response', res);
+        if (res?.isSuccessful) {
+          setAcceptOrder(false);
+          setIsArrived(false);
+          setIsAvailable(false);
+          setNotification(false);
+          modalHeight.value = withSpring(getHeight(360));
+          setIsSeeMore(false);
+          setLocalData('USER', { isProviderAvailable: false });
+          setLocalData('ORDER', {
+            modalHeight: 360,
+            eventData: '',
+            orderStatus: '',
+            isSeeMore: false,
+            isNotification: false,
+            isArrived: false,
+            orderAccepted: false,
+            services: '',
+            providerDetail: null,
+          });
+          Sentry.captureMessage(
+            `Provider notification event TREATMENT END BUTTON PRESSED for:-${providerProfile?.firstName}----`,
+          );
+          setShowTreatmentFinished(true)
+        }
+      }).catch((err) => console.error('treatement ended error', err))
+
+
     }
   };
 
@@ -346,12 +363,11 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     JSON.parse?.(order?.eventData?.services)?.length > 1
-                      ? `${
-                          index !==
-                          JSON.parse?.(order?.eventData?.services)?.length - 1
-                            ? ` ${service?.service_name}, `
-                            : ` ${service?.service_name}`
-                        }`
+                      ? `${index !==
+                        JSON.parse?.(order?.eventData?.services)?.length - 1
+                        ? ` ${service?.service_name}, `
+                        : ` ${service?.service_name}`
+                      }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -363,15 +379,12 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.eventData?.firstname}  ${
-          order?.eventData?.lastname
-        }    ${
-          order?.eventData?.distance !== 'undefined'
+        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
+          }    ${order?.eventData?.distance !== 'undefined'
             ? order?.eventData?.time
             : 0
-        } km, ~${
-          order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
-        } min`}
+          } km, ~${order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
+          } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -468,14 +481,13 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           JSON.parse?.(order?.eventData?.services)?.length > 1
-                            ? `${
-                                index !==
-                                JSON.parse?.(order?.eventData?.services)
-                                  ?.length -
-                                  1
-                                  ? ` ${service?.service_name}, `
-                                  : ` ${service?.service_name}`
-                              }`
+                            ? `${index !==
+                              JSON.parse?.(order?.eventData?.services)
+                                ?.length -
+                              1
+                              ? ` ${service?.service_name}, `
+                              : ` ${service?.service_name}`
+                            }`
                             : service?.service_name
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -487,17 +499,14 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.eventData?.firstname}  ${
-                order?.eventData?.lastname
-              }    ${
-                order?.eventData?.distance !== 'undefined'
+              title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
+                }    ${order?.eventData?.distance !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-              } km, ~${
-                order?.eventData?.time !== 'undefined'
+                } km, ~${order?.eventData?.time !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-              } min`}
+                } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -769,8 +778,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? 'The order is cancelled'
                       : notification
-                      ? 'You have a new order!'
-                      : 'No orders ...yet'
+                        ? 'You have a new order!'
+                        : 'No orders ...yet'
                   }
                 />
               </>
