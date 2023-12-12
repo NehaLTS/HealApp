@@ -1,75 +1,48 @@
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
+import BackgroundFetch from 'react-native-background-fetch';
 import notifee from '@notifee/react-native';
-import React, { useEffect, useState } from 'react';
-import { Button, SafeAreaView, Text } from 'react-native';
-
 const App = () => {
-  const [count, setCount] = useState(0);
-  const backgroundEventSubscription = React.useRef<any>(null);
-
-  // Function to display a notification
-  async function onDisplayNotification() {
-    const channelId = await notifee.createChannel({
-      id: 'default',
-      name: 'Default Channel',
-    });
-
-    await notifee.requestPermission();
-
-    const notificationId = await notifee.displayNotification({
-      id: '123',
-      title: 'Notification Title',
-      body: 'Main body content of the notification',
-      android: {
-        channelId,
-      },
-    });
-
-    // Sometime later...
-    await notifee.displayNotification({
-      id: '124', // Use a different ID for the updated notification
-      title: 'Updated Notification Title',
-      body: 'Updated main body content of the notification' + count.toString(),
-      android: {
-        channelId,
-      },
-    });
-  }
-
   useEffect(() => {
-    backgroundEventSubscription.current = notifee.onBackgroundEvent(
-      async ({ type, detail }) => {
-        const { notification } = detail;
-
-        setCount((prevCount) => prevCount + 1);
-        await onDisplayNotification();
-        console.log('Notification Background Event:', notification);
+    // Configure and register your background task
+    BackgroundFetch.configure(
+      {
+        minimumFetchInterval: 1, // in minutes
+        stopOnTerminate: false, // continue background task even if the app is terminated
+        startOnBoot: true, // start background task when the device is rebooted
+      },
+      async (taskId) => {
+        // Fetch the current location or perform any background task
+        const currentLocation = await fetchCurrentLocation();
+        // Display a notification with the current location
+        await notifee.displayNotification({
+          title: 'Location Update',
+          body: `Current Location: ${currentLocation}`,
+        });
+        // Don't forget to call finish to indicate the task is done.
+        BackgroundFetch.finish(taskId);
+      },
+      (error) => {
+        console.log('[BackgroundFetch] failed to start', error);
       }
     );
-
-    // Set up a periodic interval to trigger notifications in the foreground
-    const interval = setInterval(() => {
-      setCount((prevCount) => prevCount + 1);
-      onDisplayNotification();
-    }, 10000);
-
-    // Cleanup: clear the interval and remove the background event subscription
+    // Optional: Start the background task immediately
+    BackgroundFetch.start();
     return () => {
-      clearInterval(interval);
-
-      // Check if the subscription exists before trying to remove
-      // if (backgroundEventSubscription.current) {
-      //   backgroundEventSubscription.current.remove();
-      // }
+      // Unregister the task when the component unmounts
+      BackgroundFetch.stop();
     };
-  }, [count]);
-
+  }, []);
+  const fetchCurrentLocation = async () => {
+    // Implement logic to fetch current location here
+    // You might want to use a location library or the device's native APIs
+    // Return a string representation of the location
+    return 'Latitude: xx.xxxxx, Longitude: yy.yyyyy';
+  };
   return (
-    <SafeAreaView>
-      <Text>hello</Text>
-      <Text style={{ fontSize: 30 }}>{count.toString()}</Text>
-      <Button title='Trigger Notification' onPress={onDisplayNotification} />
-    </SafeAreaView>
+    <View>
+      <Text>Your App Content Goes Here</Text>
+    </View>
   );
 };
-
 export default App;

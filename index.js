@@ -39,33 +39,24 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   }
 });
 
-// notifee.onBackgroundEvent(async ({ type, detail }) => {
-//   const { notification, pressAction } = detail;
 
-//   console.log('object', type, 'hello', detail);
-//   if (type === EventType.ACTION_PRESS && pressAction.id === 'location') {
-//     // Update external API
-//     await fetch(`https://my-api.com/chat/${notification.data.chatId}/read`, {
-//       method: 'POST',
-//     });
+// notifee.registerForegroundService(async (notification) => {
+//   // Simulate a background task using setTimeout
+//   console.log('Foreground Service is running');
 
-//     // Create a trigger to keep the notification persistent
-//     const trigger = notifee.triggerForegroundEvent(notification.id, {
-//       // Define the condition to remove the trigger (e.g., when certain action happens)
-//       condition: notifee.TriggerCondition.PAST_TRIGGER_DATE,
-//     });
+//   // for (let i = 0; i < 5; i++) {
+//   await new Promise((resolve) => setTimeout(resolve, 1000));
+//   // setCount((prevCount) => prevCount + 1);
+//   // }
 
-//     // Update the existing notification with the trigger
-//     const updatedNotification = {
-//       ...notification,
-//       android: {
-//         ...notification.android,
-//         priority: notifee.AndroidNotificationPriority.HIGH,
-//       },
-//     };
-
-//     await notifee.updateNotification(notification.id, updatedNotification);
-//   }
+//   await notifee.displayNotification({
+//     id: notification.id,
+//     title: 'Task Completed',
+//     body: `Task completed with count: ${count}`,
+//     android: {
+//       channelId: notification?.android?.channelId,
+//     },
+//   });
 // });
 
 let app;
