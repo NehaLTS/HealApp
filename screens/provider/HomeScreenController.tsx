@@ -1,16 +1,24 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import {
+  deleteLocalData,
+  getLocalData,
+  setLocalData,
+} from 'libs/datastorage/useLocalStorage';
 import { Location } from 'libs/types/UserType';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { cleanSingle } from 'react-native-image-crop-picker';
 import * as Sentry from '@sentry/react-native';
+import { useNavigation } from '@react-navigation/native';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const HomeScreenControlller = () => {
   const order = getLocalData('ORDER');
+  const navigation = useNavigation();
+
   const [acceptOrder, setAcceptOrder] = useState(order?.orderAccepted ?? false);
   const { userId, providerProfile } = UseProviderUserContext();
   const { currentLocationOfUser } = UseClientUserContext();
@@ -91,7 +99,7 @@ const HomeScreenControlller = () => {
           Sentry.captureMessage(
             `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
           );
-          Alert.alert("Api update Location hit")
+          Alert.alert('Api update Location hit');
           console.log('gurepeet', res);
           // Alert.alert(
           //   'dataUpdate after getihng response' + JSON.stringify(res),
@@ -155,7 +163,10 @@ const HomeScreenControlller = () => {
       });
     //  }, );
   };
-
+  const onLogoutButtonPress = () => {
+    deleteLocalData();
+    navigation.navigate(NavigationRoutes.IntroStack);
+  };
   //  const ProviderAvailability=()=>{
   //   providerAvailabilityStatus( {provider_id:order?.eventData?.providerId})
   //  }
@@ -165,6 +176,7 @@ const HomeScreenControlller = () => {
     updateLocation,
     providerLocation,
     setAcceptOrder,
+    onLogoutButtonPress,
     // ProviderAvailability
   };
 };

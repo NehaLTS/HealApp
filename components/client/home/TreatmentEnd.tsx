@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 25,
-    backgroundColor: 'red',
   },
   doctorIconContainer: {
     position: 'relative',

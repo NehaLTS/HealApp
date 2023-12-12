@@ -21,12 +21,17 @@ import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import avatar from 'assets/icon/avatar.png';
+import logo from 'assets/icon/healLogo.png';
+
 import {
+  Alert,
   DeviceEventEmitter,
   Image,
   Animated as RNAnimated,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Animated, {
@@ -36,6 +41,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
+import Modal from 'components/common/Modal';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -60,12 +66,18 @@ const HomeScreen = () => {
   const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
   const [isShowModal, setIsShowModal] = useState(false);
   const [totalPricesOfServices, setTotalPricesOfServices] = useState('');
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [showTreatmentFinished, setShowTreatmentFinished] = useState(false);
+  const [showStillAvailable, setShowStillAvailable] = useState(false);
+  console.log('showStillAvailable', showStillAvailable);
+  console.log('showTreatmentFinished', showTreatmentFinished);
   const {
     acceptOrder,
     setAcceptOrder,
     OnPressTakeOrder,
     updateLocation,
     providerLocation,
+    onLogoutButtonPress,
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(getHeight(order?.modalHeight ?? 360));
   const { providerAvailabilityStatus } = AuthServicesProvider();
@@ -647,10 +659,90 @@ const HomeScreen = () => {
     );
   };
 
+  const headerRight = () => (
+    <View style={{ position: 'relative', zIndex: 999 }}>
+      <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)}>
+        <Image source={avatar} style={styles.avatar} />
+      </TouchableOpacity>
+      {dropdownVisible && (
+        <View style={styles.dropdown}>
+          <TextButton
+            title={'Logout'}
+            onPress={onLogoutButtonPress}
+            fontSize={18}
+            style={styles.logout}
+          />
+        </View>
+      )}
+    </View>
+  );
+  const headerLeft = () => (
+    <TouchableOpacity>
+      <Image source={logo} style={styles.logo} />
+    </TouchableOpacity>
+  );
+  const treatmentFinished = () => (
+    <>
+      <Text
+        title={
+          'Treatment is finished!\n Do you want to stay\n available for further orders?'
+        }
+        style={styles.end}
+      />
+      <Button
+        title={'Confirm'}
+        isPrimary
+        isSmall
+        style={{ alignSelf: 'center' }}
+        width={'30%'}
+        fontSized={getHeight(15)}
+        height={40}
+        onPress={() => {
+          setShowStillAvailable(true);
+          setShowTreatmentFinished(false);
+        }}
+      />
+    </>
+  );
+  const stillAvailable = () => (
+    <>
+      <Text
+        title={
+          'Great! You stay on duty.\nWe’ll inform you when is the next\norder comes next.'
+        }
+        style={styles.end}
+      />
+      <Button
+        title={'Ok'}
+        isPrimary
+        isSmall
+        style={{ alignSelf: 'center' }}
+        width={'20%'}
+        fontSized={15}
+        height={40}
+        onPress={() => {
+          setShowStillAvailable(false);
+        }}
+      />
+    </>
+  );
+  const outsideClick = () => {
+    if (dropdownVisible) {
+      setDropdownVisible(false);
+    }
+  };
   return (
     <>
-      {RNHeader()}
-      <View style={styles.container}>
+      <View style={styles.header}>
+        {headerLeft()}
+        {headerRight()}
+      </View>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.container}
+        onPress={outsideClick}
+      >
+        {/* <View> */}
         <View style={styles.headerContainer}>
           <FadeInText title={t('not_available')} isActive={!isAvailable} />
           <ToggleButton
@@ -660,22 +752,33 @@ const HomeScreen = () => {
           />
           <FadeInText title={t('available')} isActive={isAvailable} />
         </View>
-        <Text
-          style={styles.switchToggleText}
-          title={isAvailable ? t('now_you_available') : t('switch_toggle')}
-        />
+        {!showTreatmentFinished && !showStillAvailable && (
+          <Text
+            style={styles.switchToggleText}
+            title={isAvailable ? t('now_you_available') : t('switch_toggle')}
+          />
+        )}
+
         <View style={styles.cardContainer}>
           {isAvailable ? (
-            <Text
-              style={styles.middleOrderText}
-              title={
-                isCancelOrder
-                  ? 'The order is cancelled'
-                  : notification
-                  ? 'You have a new order!'
-                  : 'No orders ...yet'
-              }
-            />
+            !showTreatmentFinished && !showStillAvailable ? (
+              <>
+                <Text
+                  style={styles.middleOrderText}
+                  title={
+                    isCancelOrder
+                      ? 'The order is cancelled'
+                      : notification
+                      ? 'You have a new order!'
+                      : 'No orders ...yet'
+                  }
+                />
+              </>
+            ) : showTreatmentFinished ? (
+              treatmentFinished()
+            ) : (
+              stillAvailable()
+            )
           ) : (
             <>
               {DetailCard('2', 'Clients today')}
@@ -683,24 +786,29 @@ const HomeScreen = () => {
               {DetailCard('560 ₪', 'My balance')}
             </>
           )}
+
           {getNewOrderView()}
           {getCancelOrderView()}
           {getMissingDocsView()}
         </View>
-      </View>
-      <ArrivedView
-        order={order}
-        isModalVisible={isArrived}
-        onPressAddService={() => setIsVisible(true)}
-        totalPricesOfServices={totalPricesOfServices}
-        onPressTreatmentEnd={onPressTreatmentEnd}
-      />
-      <TakeOrderView
-        order={order}
-        onPressSeeMore={onPressSeeMore}
-        isModalVisible={acceptOrder}
-        onPressCancelOrder={onPressCancelOrder}
-      />
+        {/* </View> */}
+        <ArrivedView
+          order={order}
+          isModalVisible={isArrived}
+          onPressAddService={() => setIsVisible(true)}
+          totalPricesOfServices={totalPricesOfServices}
+          onPressTreatmentEnd={onPressTreatmentEnd}
+          onPress={() => {
+            setShowTreatmentFinished(true);
+          }}
+        />
+        <TakeOrderView
+          order={order}
+          onPressSeeMore={onPressSeeMore}
+          isModalVisible={acceptOrder}
+          onPressCancelOrder={onPressCancelOrder}
+        />
+      </TouchableOpacity>
     </>
   );
 };
@@ -718,6 +826,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 0.13,
+    zIndex: 999,
   },
   notAvailable: {
     textAlign: 'center',
@@ -936,5 +1045,37 @@ const styles = StyleSheet.create({
   locationMarker: {
     width: getWidth(32),
     height: getWidth(32),
+  },
+  dropdown: {
+    position: 'absolute',
+    top: getHeight(48),
+    right: getHeight(7),
+    backgroundColor: colors.offWhite,
+    borderRadius: getHeight(5),
+    borderWidth: getHeight(1),
+    borderColor: colors.primary,
+    padding: getHeight(10),
+    width: getHeight(100),
+    zIndex: 9999,
+  },
+  end: {
+    fontSize: getHeight(fontSize.textL),
+    textAlign: 'center',
+    fontFamily: fontFamily.light,
+    marginBottom: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.marginM),
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    width: '100%',
+    justifyContent: 'space-between',
+    zIndex: 91,
+    paddingHorizontal: getHeight(20),
+    paddingVertical: getWidth(10),
+  },
+  logout: {
+    textAlign: 'center',
   },
 });

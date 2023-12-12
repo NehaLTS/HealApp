@@ -14,7 +14,7 @@ const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
 
   return (
     <>
-      <View style={{ alignItems: 'center' }}>
+      <View style={styles.imagecontainer}>
         <Image
           source={require('../../../assets/icon/doctorIcon.png')}
           style={styles.doctorIcon}
@@ -130,5 +130,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: getHeight(dimens.marginS + 5),
     fontSize: getHeight(fontSize.textL),
+  },
+  imagecontainer: {
+    alignItems: 'center',
+    marginTop: getHeight(dimens.marginL),
   },
 });

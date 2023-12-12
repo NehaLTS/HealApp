@@ -317,34 +317,7 @@ const SearchDoctor = () => {
 
         {providerStatus !== 'Arrived' ? (
           <View>
-            {
-              <Button
-                title={
-                  providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !showLoader &&
-                  !showCancelButton
-                    ? t('order')
-                    : t('cancel')
-                }
-                isPrimary
-                isSmall
-                onPress={onPressOrder}
-                width={'30%'}
-                height={getHeight(dimens.imageS)}
-                style={{ alignSelf: 'center', marginBottom: 10 }}
-              />
-            }
-            {showCancelTextButton && !showLoader && (
-              <TextButton
-                style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
-                title={t('cancel')}
-                onPress={() => {}}
-              />
-            )}
-
-            <Text
-              style={styles.noFee}
+            <Button
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||

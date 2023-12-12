@@ -130,24 +130,13 @@ export const RNHeader = (
   dependency?: any,
 ) => {
   const navigation = useNavigation();
-  const headerLeftDefault = () => (
-    <TouchableOpacity>
-      <Image source={logo} style={styles.logo} />
-    </TouchableOpacity>
-  );
-
-  const headerRightDefault = () => (
-    <TouchableHighlight underlayColor="transparent">
-      <Image source={avatar} style={styles.avatar} />
-    </TouchableHighlight>
-  );
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitleAlign: 'center',
       headerTitle: headerTitle ?? '',
-      headerLeft: headerLeft ?? headerLeftDefault,
+      headerLeft: headerLeft,
       headerStyle: styles.header,
-      headerRight: headerRight ?? headerRightDefault,
+      headerRight: headerRight,
     });
   }, [navigation, dependency]);
 };

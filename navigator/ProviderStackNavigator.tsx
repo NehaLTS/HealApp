@@ -38,8 +38,8 @@ const ProviderStackNavigator = () => {
 
         <Stack.Screen
           name={NavigationRoutes.ProviderHome}
-          component={lazy(() => import("../screens/provider/HomeScreen"))}
-          options={defaultHeaderStyle}
+          component={lazy(() => import('../screens/provider/HomeScreen'))}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name={NavigationRoutes.ProviderConfirmation}

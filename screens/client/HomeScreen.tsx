@@ -28,12 +28,12 @@ import {
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import HomeViewController from './HomeViewController';
 import { DotLoader } from 'components/common/Loader';
 import { Order } from 'libs/types/OrderTypes';
-
 const HomeScreen = () => {
   const { t } = useTranslation();
   const {
@@ -50,7 +50,7 @@ const HomeScreen = () => {
     providersList,
     onSearchDone,
     isDataNotFound,
-    onSearch,
+    onLogoutButtonPress,
     searchedList,
     isVisible,
     setIsVisible,
@@ -59,28 +59,22 @@ const HomeScreen = () => {
     setSearchProviderList,
   } = HomeViewController();
   const navigation = useNavigation<any>();
-
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
   const [currentAddress, setCurrentAddress] = useState<string>('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<Order>();
-
   useEffect(() => {
     getCurrentOrder();
   }, []);
-
   const getCurrentOrder = async () => {
     const order: Order = (await getLocalData('ORDER')) as Order;
-
     console.log('order details is ', order);
     setCurrentOrder(order);
   };
-
   useUpdateEffect(() => {
     setCurrentAddress(currentLocationOfUser?.address ?? '');
   }, [currentLocationOfUser]);
-
   const headerTitle = () => (
     <View style={styles.headerTitleContainer}>
       <View style={styles.headerTitle}>
@@ -125,7 +119,6 @@ const HomeScreen = () => {
       />
     </TouchableOpacity>
   );
-
   const headerRight = () => (
     <View style={{ position: 'relative', zIndex: 999 }}>
       <TouchableHighlight
@@ -136,7 +129,11 @@ const HomeScreen = () => {
       </TouchableHighlight>
       {dropdownVisible && (
         <View style={styles.dropdown}>
-          <TextButton title={'Logout'} onPress={onSearch} fontSize={18} />
+          <TextButton
+            title={'Logout'}
+            onPress={onLogoutButtonPress}
+            fontSize={18}
+          />
         </View>
       )}
     </View>
@@ -167,7 +164,6 @@ const HomeScreen = () => {
         }}
       />
     ));
-
   const transformedData = providersList?.map?.((entry) => ({
     name: entry?.provider_name?.en,
     provider_type_id: entry?.provider_type_id,
@@ -193,7 +189,6 @@ const HomeScreen = () => {
       </View>
     );
   };
-
   console.log('isDataNotFound', isDataNotFound);
   return (
     <>
@@ -202,44 +197,47 @@ const HomeScreen = () => {
         {headerTitle()}
         {headerRight()}
       </View>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        keyboardShouldPersistTaps="always"
-      >
-        {isTouchStart && searchSpecialist?.length === 0 && (
-          <TouchableOpacity
-            style={{ marginHorizontal: getWidth(dimens.marginM) }}
-            onPress={onPressBanner}
-          >
-            <Image
-              style={styles.banner}
-              source={{ uri: bannerAds?.[0]?.imageurl || '' }}
-            />
-          </TouchableOpacity>
-        )}
-        <SearchBox
-          isTouchStart={isTouchStart && searchSpecialist?.length === 0}
-          placeholder={t('what_treatment')}
-          onTouchStart={onTouchStart}
-          onBlur={onBlur}
-          onChangeText={onChange}
-          defaultValue={searchSpecialist}
-          inputMode={'search'}
-          onKeyPress={handleKeyPress}
-        />
-        {searchSpecialist?.length === 0 ? (
-          getProviderList()
-        ) : isDataNotFound ? (
-          <View style={{ paddingHorizontal: getWidth(dimens.marginM) }}>
-            {providersList.length === 0 && transformedData?.length === 0
-              ? getSearchList()
-              : getProviderSearchList()}
-          </View>
-        ) : (
-          noSearchedView()
-        )}
-      </ScrollView>
+      <TouchableWithoutFeedback onPress={onPressBack}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={{ paddingBottom: 20 }}
+          keyboardShouldPersistTaps="always"
+        >
+          {isTouchStart && searchSpecialist?.length === 0 && (
+            <TouchableOpacity
+              style={{ marginHorizontal: getWidth(dimens.marginM) }}
+              onPress={onPressBanner}
+            >
+              <Image
+                style={styles.banner}
+                source={{ uri: bannerAds?.[0]?.imageurl || '' }}
+              />
+            </TouchableOpacity>
+          )}
+          <SearchBox
+            isTouchStart={isTouchStart && searchSpecialist?.length === 0}
+            placeholder={t('what_treatment')}
+            onTouchStart={onTouchStart}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            defaultValue={searchSpecialist}
+            inputMode={'search'}
+            onKeyPress={handleKeyPress}
+          />
+          {searchSpecialist?.length === 0 ? (
+            getProviderList()
+          ) : isDataNotFound ? (
+            <View style={{ paddingHorizontal: getWidth(dimens.marginM) }}>
+              {providersList.length === 0 && transformedData?.length === 0
+                ? getSearchList()
+                : getProviderSearchList()}
+            </View>
+          ) : (
+            noSearchedView()
+          )}
+        </ScrollView>
+      </TouchableWithoutFeedback>
+
       {currentOrder?.orderId && (
         <View
           style={{
@@ -353,14 +351,14 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    top: 50,
-    right: 1,
+    top: getHeight(50),
+    right: getHeight(1),
     backgroundColor: colors.offWhite,
-    borderRadius: 5,
+    borderRadius: getHeight(5),
     borderWidth: 1,
     borderColor: colors.primary,
-    padding: 10,
-    width: 100,
+    padding: getHeight(10),
+    width: getHeight(100),
     zIndex: 9999,
   },
 });

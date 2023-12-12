@@ -7,7 +7,14 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 const RatingView = ({ onPress }: { onPress: () => void }) => {
   const renderStars = (numStars: number) => {
@@ -23,48 +30,56 @@ const RatingView = ({ onPress }: { onPress: () => void }) => {
 
   return (
     <>
-      <View style={{ alignItems: 'center' }}>
-        <Image
-          source={require('../../../assets/icon/doctorIcon.png')}
-          style={styles.doctorIcon}
-        />
-        <Image
-          source={require('../../../assets/icon/star.png')}
-          style={styles.star}
-        />
-        <Text style={styles.rating} title={'4.8'} />
-      </View>
-      <View style={styles.container}>
-        <Text
-          title={'Elena Miron, family doctor'}
-          style={styles.familyDoctorText}
-        />
-        <Text
-          title={'How do you rate our doctor?'}
-          style={{ fontSize: getHeight(18) }}
-        />
-        <View style={styles.image}>{renderStars(5)}</View>
-      </View>
+      <KeyboardAvoidingView
+        behavior={'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
+      >
+        <ScrollView>
+          <View style={styles.imagecontainer}>
+            <Image
+              source={require('../../../assets/icon/doctorIcon.png')}
+              style={styles.doctorIcon}
+            />
+            <Image
+              source={require('../../../assets/icon/star.png')}
+              style={styles.star}
+            />
+            <Text style={styles.rating} title={'4.8'} />
+          </View>
+          <View style={styles.container}>
+            <Text
+              title={'Elena Miron, family doctor'}
+              style={styles.familyDoctorText}
+            />
+            <Text
+              title={'How do you rate our doctor?'}
+              style={{ fontSize: getHeight(18) }}
+            />
+            <View style={styles.image}>{renderStars(5)}</View>
+          </View>
 
-      <Text
-        title={'Something else you want to tell us?'}
-        style={styles.tellText}
-      />
-      <Input
-        inputPlaceholder={'What did you like about our services?'}
-        inputStyle={styles.description}
-        placeholderTextColor={colors.grey}
-        style={styles.placeholder}
-      />
-      <View style={styles.buttonContainer}>
-        <Button
-          title={'Next'}
-          isPrimary
-          isSmall
-          width={'30%'}
-          style={{ alignSelf: 'center', marginBottom: 70 }}
-        />
-      </View>
+          <Text
+            title={'Something else you want to tell us?'}
+            style={styles.tellText}
+          />
+          <Input
+            inputPlaceholder={'What did you like about our services?'}
+            inputStyle={styles.description}
+            placeholderTextColor={colors.grey}
+            style={styles.placeholder}
+          />
+          <View style={styles.buttonContainer}>
+            <Button
+              title={'Next'}
+              isPrimary
+              isSmall
+              width={'30%'}
+              style={{ alignSelf: 'center', marginBottom: 70 }}
+              onPress={onPress}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -94,17 +109,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: getHeight(dimens.marginM),
     marginTop: getHeight(dimens.marginM),
-    marginBottom: getHeight(dimens.imageS),
+    marginBottom: getHeight(dimens.imageXs),
   },
   description: {
     height: '40%',
     backgroundColor: colors.white,
   },
   placeholder: {
-    marginTop: getHeight(-80),
+    marginTop: getHeight(-60),
     paddingLeft: getWidth(dimens.marginS),
     fontFamily: fontFamily.regular,
     flex: 1,
+    color: colors.black,
   },
   rating: {
     position: 'absolute',
@@ -127,5 +143,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  imagecontainer: {
+    alignItems: 'center',
+    marginTop: getHeight(dimens.marginL),
   },
 });

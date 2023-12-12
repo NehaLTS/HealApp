@@ -34,6 +34,8 @@ const HomeViewController = () => {
   const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [user, setUser] = useState<ClientProfile>();
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
   const {
     userProfile,
     setUserProfile,
@@ -63,7 +65,8 @@ const HomeViewController = () => {
         });
 
         Sentry.captureMessage(
-          `Client Flow currentLocationOfUser FOR:-${userProfile?.firstName ?? ''
+          `Client Flow currentLocationOfUser FOR:-${
+            userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
         );
       })
@@ -146,17 +149,18 @@ const HomeViewController = () => {
     const res = await searchList({
       name: value?.toLowerCase(),
     });
-    console.log("data on search response", JSON.stringify(res))
+    console.log('data on search response', JSON.stringify(res));
     if (res.length > 0) {
       Sentry.captureMessage(
-        `Client Flow ON CHANGE SEARCH API  FOR:-${userProfile?.firstName ?? ''
+        `Client Flow ON CHANGE SEARCH API  FOR:-${
+          userProfile?.firstName ?? ''
         }---- ${res}`,
       );
       console.log('search result', res);
 
       setSearchedList(res);
     } else {
-      setSearchedList([])
+      setSearchedList([]);
     }
   };
 
@@ -170,18 +174,22 @@ const HomeViewController = () => {
     if (res?.message) {
       setIsDataNotFound(false);
       Sentry.captureMessage(
-        `On Search response gave Message' for:-${userProfile?.firstName}---- ${JSON.stringify(res?.message)}`,
+        `On Search response gave Message' for:-${
+          userProfile?.firstName
+        }---- ${JSON.stringify(res?.message)}`,
       );
     } else {
-      console.log("search response", res)
+      console.log('search response', res);
       Sentry.captureMessage(
-        `Search response' for:-${userProfile?.firstName}---- ${JSON.stringify(res)}`,
+        `Search response' for:-${userProfile?.firstName}---- ${JSON.stringify(
+          res,
+        )}`,
       );
       setProvidersList(res);
     }
   };
 
-  const onSearch = () => {
+  const onLogoutButtonPress = () => {
     deleteLocalData();
     navigation.navigate(NavigationRoutes.IntroStack);
   };
@@ -192,6 +200,14 @@ const HomeViewController = () => {
     setProvidersList([]);
     setSearchSpecialist('');
     setIsTouchStart(true);
+
+    if (searchSpecialist.length > 0) {
+      setIsTouchStart(false);
+    }
+
+    if (dropdownVisible) {
+      setDropdownVisible(false);
+    }
   };
 
   return {
@@ -208,13 +224,15 @@ const HomeViewController = () => {
     providersList,
     onSearchDone,
     isDataNotFound,
-    onSearch,
+    onLogoutButtonPress,
     searchedList,
     isVisible,
     setIsVisible,
     remainingTime,
     currentLocationOfUser,
     setSearchProviderList,
+    dropdownVisible,
+    setDropdownVisible,
   };
 };
 
