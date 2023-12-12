@@ -32,6 +32,7 @@ import { Alert } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import { useCurrentAddress } from 'libs/useCurrentAddress';
 import { Platform } from 'react-native';
+import { treatment } from 'libs/types/ProvierTypes';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => {
     useState<currentLocationOfUser>(null);
   const [permissonGrant, setPermissonGrant] = useState(false);
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
+  const [treatmentsMenu, setTreatmentsMenu] = useState<treatment>(null);
   const { fetchCurrentAddress } = useCurrentAddress();
   /** To Initialize Google SDk */
   GoogleSignin.configure({
@@ -87,8 +89,7 @@ const App = () => {
           : PERMISSIONS.IOS.LOCATION_ALWAYS,
       );
 
-
-      console.log("permisison check platform ",result)
+      console.log('permisison check platform ', result);
       if (result === RESULTS.GRANTED) {
         getCurrentLocation();
       } else {
@@ -130,6 +131,8 @@ const App = () => {
             currentLocationOfUser,
             setRemainingTime,
             remainingTime,
+            treatmentsMenu,
+            setTreatmentsMenu,
           }}
         >
           <ProviderUserContext.Provider

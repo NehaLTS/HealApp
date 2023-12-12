@@ -144,7 +144,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    DeviceEventEmitter.addListener('DoctorNotification', (event) => {
+    DeviceEventEmitter.addListener('OrderListener', (event) => {
       // console.log('acceptOrder', acceptOrder);
       // console.log('isArrived', isArrived);
       // console.log('orderStatus', orderStatus);
@@ -167,7 +167,6 @@ const HomeScreen = () => {
           },
         });
 
-
         console.log('event?.data?.services', event?.data?.services);
       }
       setOrderStatus(event.notification?.title);
@@ -182,7 +181,8 @@ const HomeScreen = () => {
         orderStatus === 'Arrived Order'
       ) {
         Sentry.captureMessage(
-          `Provider notification event 'Arrived Order': true for:-${providerProfile?.firstName
+          `Provider notification event 'Arrived Order': true for:-${
+            providerProfile?.firstName
           }---- ${event.notification?.title || orderStatus}`,
         );
         setTotalPricesOfServices(totalPrice());
@@ -201,7 +201,7 @@ const HomeScreen = () => {
     }
 
     return () => {
-      DeviceEventEmitter.removeAllListeners('DoctorNotification');
+      DeviceEventEmitter.removeAllListeners('OrderListener');
     };
   }, [acceptOrder || isArrived || orderStatus]);
 
@@ -334,11 +334,12 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     JSON.parse?.(order?.eventData?.services)?.length > 1
-                      ? `${index !==
-                        JSON.parse?.(order?.eventData?.services)?.length - 1
-                        ? ` ${service?.service_name}, `
-                        : ` ${service?.service_name}`
-                      }`
+                      ? `${
+                          index !==
+                          JSON.parse?.(order?.eventData?.services)?.length - 1
+                            ? ` ${service?.service_name}, `
+                            : ` ${service?.service_name}`
+                        }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -350,12 +351,15 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
-          }    ${order?.eventData?.distance !== 'undefined'
+        title={`${order?.eventData?.firstname}  ${
+          order?.eventData?.lastname
+        }    ${
+          order?.eventData?.distance !== 'undefined'
             ? order?.eventData?.time
             : 0
-          } km, ~${order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
-          } min`}
+        } km, ~${
+          order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
+        } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -419,9 +423,7 @@ const HomeScreen = () => {
             textAlign: 'center',
             marginBottom: 0,
           }}
-          title={
-            'You have a new order!'
-          }
+          title={'You have a new order!'}
           entering={FadeInUp.duration(400).delay(400)}
         />
 
@@ -454,13 +456,14 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           JSON.parse?.(order?.eventData?.services)?.length > 1
-                            ? `${index !==
-                              JSON.parse?.(order?.eventData?.services)
-                                ?.length -
-                              1
-                              ? ` ${service?.service_name}, `
-                              : ` ${service?.service_name}`
-                            }`
+                            ? `${
+                                index !==
+                                JSON.parse?.(order?.eventData?.services)
+                                  ?.length -
+                                  1
+                                  ? ` ${service?.service_name}, `
+                                  : ` ${service?.service_name}`
+                              }`
                             : service?.service_name
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -472,14 +475,17 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.eventData?.firstname}  ${order?.eventData?.lastname
-                }    ${order?.eventData?.distance !== 'undefined'
+              title={`${order?.eventData?.firstname}  ${
+                order?.eventData?.lastname
+              }    ${
+                order?.eventData?.distance !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-                } km, ~${order?.eventData?.time !== 'undefined'
+              } km, ~${
+                order?.eventData?.time !== 'undefined'
                   ? order?.eventData?.time
                   : 0
-                } min`}
+              } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -666,8 +672,8 @@ const HomeScreen = () => {
                 isCancelOrder
                   ? 'The order is cancelled'
                   : notification
-                    ? 'You have a new order!'
-                    : 'No orders ...yet'
+                  ? 'You have a new order!'
+                  : 'No orders ...yet'
               }
             />
           ) : (

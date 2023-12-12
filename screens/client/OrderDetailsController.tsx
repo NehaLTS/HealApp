@@ -24,8 +24,10 @@ const OrderDetailsController = () => {
     orderDetails,
     userProfile: user,
     userId,
+    treatmentsMenu,
+    setTreatmentsMenu,
   } = UseClientUserContext();
-  const [treatmentReason, setTreatmentReason] = useState<treatment[]>();
+  const [treatmentReason, setTreatmentReason] = useState<treatment>();
 
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
@@ -48,20 +50,35 @@ const OrderDetailsController = () => {
     menu_id: '',
     reason: [],
     isOrderForOther: false,
+    provider_type_id: 0,
   });
 
   const treatmentReasons = async () => {
     try {
-      const res = await treatmentMenu({ provider_type_id: '1' });
+      const res = await treatmentMenu({
+        provider_type_id: supplier?.provider_type_id?.toString(),
+      });
       setTreatmentReason(res);
+      setTreatmentsMenu(res);
     } catch (error) {
       console.error(error);
     }
   };
 
-  console.log('currentLocationOfUser', currentLocationOfUser);
   useEffect(() => {
-    treatmentReasons();
+    if (treatmentsMenu !== null) {
+      const checkExisting = treatmentsMenu.treatmentMenu.some((item) => {
+        return item.provider_type_id;
+      });
+      if (checkExisting) {
+        setTreatmentReason(treatmentsMenu);
+      } else {
+        treatmentReasons();
+      }
+      // if(treatmentsMenu.)
+    } else {
+      treatmentReasons();
+    }
   }, []);
 
   const symptoms = order.reason.map((item: any) => {
@@ -70,34 +87,7 @@ const OrderDetailsController = () => {
       id: item.reason_id,
     };
   });
-  const DAAT = {
-    client_id: userId,
-    patient_type: order.patient_type.type ?? '',
-    patient_name: order.patient_name,
-    address: order?.address ?? '',
-    city: order.city,
-    phone_number: order?.phonenumber,
-    Date_of_birth: !order?.isOrderForOther
-      ? user?.date_of_birth ?? ''
-      : order?.patient_type?.age ?? '',
-    services: order.services,
-    symptoms: JSON.stringify(symptoms),
-    Additional_notes: order.Additional_notes,
-    Estimate_arrival: order.Estimate_arrival,
-    Instructions_for_arrival: order?.Instructions_for_arrival,
-    Payment_mode: order.Payment_mode,
-    TotalCost: order?.services.reduce(
-      (total, item) => total + parseInt(item.price, 10),
-      0,
-    ),
-    latitude: currentLocationOfUser?.latitude,
-    longitude: currentLocationOfUser?.longitude,
-    provider_type_id: supplier?.provider_type_id,
-  };
-  Sentry.captureMessage(
-    `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${DAAT}`,
-  );
-  console.log('DAATAAA ', DAAT);
+
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
     let isLocationPermissionOn = await checkLocationPermission();
@@ -144,7 +134,10 @@ const OrderDetailsController = () => {
           longitude: currentLocationOfUser?.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
         };
-
+        Sentry.captureMessage(
+          `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${orderDetails}`,
+        );
+        console.log('DAATAAA ', orderDetails);
         navigation.navigate(NavigationRoutes.SearchDoctor, {
           orderDetails: orderDetails,
           previousScreen: 'Create Order',

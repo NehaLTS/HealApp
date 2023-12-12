@@ -41,17 +41,14 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 const SearchDoctor = () => {
   const navigation = useNavigation();
 
-
-   const route = useRoute<any>();
+  const route = useRoute<any>();
   // const providerData = route?.params?.providerData ?? '';
   // console.log('providerData', providerData);
   // const providerRemainigTime = route?.params?.remaining;
   // const orderId = route?.params?.orderId ?? '';
 
-
-    //TODO: Vandana why this is used?
+  //TODO: Vandana why this is used?
   const previousScreen = route?.params?.previousScreen;
-
 
   const { t } = useTranslation();
   const { setCurrentLocationOfUser } = UseClientUserContext();
@@ -63,23 +60,22 @@ const SearchDoctor = () => {
     calculateDistance,
     currentOrder,
     showLoader,
-     providerLocation, 
-     setProviderLocation,
-     showTimer,
-     stausOfArriving
+    providerLocation,
+    setProviderLocation,
+    showTimer,
+    providerStatus,
   } = SearchDoctorController();
- 
+
   const { setRemainingTime } = UseClientUserContext();
   const localData = getLocalData('ORDER');
   const [showDoctor, setShowDoctor] = useState(false);
- 
+
   // const [loader, setLoader] = useState(true);
   const [disabled, setDisable] = useState(false);
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
   const [showCancelButton, setShowCancelButton] = useState(false);
- 
+
   const [secondLoader, setSecondLoader] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { showToast, renderToast } = useToast();
 
   const headerLeft = () => (
@@ -118,7 +114,6 @@ const SearchDoctor = () => {
     };
   }, []);
 
- 
   // useEffect(() => {
   //   if (stausOfArriving !== 'Arrived') {
   //     getEventUpdate();
@@ -128,32 +123,29 @@ const SearchDoctor = () => {
   useEffect(() => {
     createNotificationListeners();
 
-  //TODO: Vandana why this is used?
+    //TODO: Vandana why this is used?
+    //NOTE: We need to show provider location which is store in local at else provider is not shown when we coming from HOME
     if (previousScreen === 'HOME_CLIENT') {
       setProviderLocation({
         latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
         longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
       });
-    } 
-    
+    }
   }, []);
 
-
-
-  setTimeout(() => {
-    setSecondLoader(false);
-  }, 10000);
   const onPressOrder = () => {
-    setIsLoading(true);
     setSecondLoader(true);
     if (!showCancelButton && !showLoader) {
       handleNextButtonPress();
     } else {
-
       //TODO : Vandana why we are setting Local data here
-    //  setLocalData('ORDER', currentOrder);
+      //NOTE: Here we want to empty local data
+      //  setLocalData('ORDER', currentOrder);
       navigation.goBack();
     }
+    setTimeout(() => {
+      setSecondLoader(false);
+    }, 10000);
   };
 
   useUpdateEffect(() => {
@@ -165,8 +157,8 @@ const SearchDoctor = () => {
     }
   }, [secondLoader]);
 
-  const providerStatusOnHeader = (stausOfArriving: string) => {
-    switch (stausOfArriving) {
+  const providerStatusOnHeader = (statusOfArriving: string) => {
+    switch (statusOfArriving) {
       case 'Arrived':
         return 'has arrived';
       case 'On the way':
@@ -196,7 +188,7 @@ const SearchDoctor = () => {
                 providerLocation.latitude === 0.0) ||
               showLoader
                 ? t('looking_doctor')
-                : `${'Doctor'}${' '}${providerStatusOnHeader(stausOfArriving)}`
+                : `${'Doctor'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
           />
         </View>
@@ -204,7 +196,6 @@ const SearchDoctor = () => {
           {(providerLocation && providerLocation.latitude === 0.0) ||
             ((showLoader || secondLoader) && <LoaderLarge />)}
           <MapView
-            // provider={PROVIDER_GOOGLE}
             zoomEnabled
             showsTraffic
             focusable
@@ -263,9 +254,14 @@ const SearchDoctor = () => {
                     {!showDoctor && (
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
-                          {currentOrder && currentOrder.providerDetails?.providerProfilePicture ? (
+                          {currentOrder &&
+                          currentOrder.providerDetails
+                            ?.providerProfilePicture ? (
                             <Image
-                              source={{ uri: currentOrder.providerDetails?.providerProfilePicture  }}
+                              source={{
+                                uri: currentOrder.providerDetails
+                                  ?.providerProfilePicture,
+                              }}
                               style={styles.doctorIcon}
                             />
                           ) : (
@@ -281,7 +277,7 @@ const SearchDoctor = () => {
                             title={`${currentOrder.providerDetails?.providerName}`}
                           />
                           <Text
-                            style={styles.doctorName}
+                            style={styles.doctoraddress}
                             title={`${currentOrder.providerDetails?.providerAddress}`}
                           />
                         </View>
@@ -310,7 +306,7 @@ const SearchDoctor = () => {
                 }}
                 isPrimary={showRateAlert}
                 showBothCards={showRateAlert && providerLocation != undefined}
-                status={stausOfArriving}
+                status={providerStatus}
                 showProvider={providerLocation != undefined}
                 time={calculateTime()}
                 providerData={currentOrder.providerDetails}
@@ -319,8 +315,7 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-         {!showLoader ?
-         stausOfArriving !== 'Arrived' ? (
+        {providerStatus !== 'Arrived' ? (
           <View>
             {
               <Button
@@ -375,8 +370,7 @@ const SearchDoctor = () => {
               style={{ alignSelf: 'center', marginBottom: 10 }}
             />
           </View>
-        ):<></>}
-      
+        )}
       </View>
     </>
   );
@@ -423,6 +417,7 @@ const styles = StyleSheet.create({
     padding: getWidth(dimens.marginS),
     borderRadius: 8,
     flexDirection: 'row',
+    width: '68%',
   },
   doctorIcon: {
     width: getWidth(dimens.imageXs),
@@ -433,8 +428,14 @@ const styles = StyleSheet.create({
   doctorName: {
     fontSize: getHeight(fontSize.textS),
   },
+  doctoraddress: {
+    fontSize: getHeight(fontSize.textS),
+    width: '50%',
+  },
   imageContainer: {
     marginRight: getHeight(dimens.paddingXs),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textContainer: {
     flexDirection: 'column',

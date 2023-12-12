@@ -59,7 +59,7 @@ const DoctorDetailCard = ({
           <View style={styles.container}>
             <Text
               style={styles.doctorTitle}
-              title={`${providerData?.providerName}}`}
+              title={`${providerData?.providerName}`}
             />
             <TouchableOpacity onPress={onPressCard}>
               <Image
@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
     height: getHeight(25),
     resizeMode: 'contain',
     position: 'absolute',
-    top: -27,
-    right: -18,
+    top: -24,
+    right: -14,
   },
   container: {
     flexDirection: 'row',

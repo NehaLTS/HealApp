@@ -3,7 +3,8 @@ export interface Order {
   providerDetails: PROVIDERDETAILS;
   orderPrice: string;
   orderStatus: string | null;
-  orderServices: string;
+  orderServices: Array<OrderServices>;
+  message?: string;
 }
 
 export interface PROVIDERDETAILS {

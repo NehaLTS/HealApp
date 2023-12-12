@@ -197,6 +197,7 @@ export interface OrderDetail {
   TotalCost: string;
   menu_id: string;
   reason: any[];
+  provider_type_id: number;
   isOrderForOther: boolean;
 }
 
@@ -249,13 +250,10 @@ export interface SearcProviderLocation {
 }
 
 export interface BookOrderRequest {
-  status: string;
+  orderStatus: string;
   provider_id: string;
   order_id: string;
-  latitude: string;
-  longitude: string;
   distance: string;
-  time: string;
 }
 
 export interface currentLocationOfUser {

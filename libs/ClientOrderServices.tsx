@@ -1,6 +1,6 @@
-import { UseClientUserContext } from "contexts/UseClientUserContext";
-import { BodyInit, HeadersInit } from "./api/ApiTypes";
-import { sendRequest } from "./api/RequestHandler";
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { BodyInit, HeadersInit } from './api/ApiTypes';
+import { sendRequest } from './api/RequestHandler';
 import {
   BOOK_ORDER,
   GET,
@@ -11,29 +11,26 @@ import {
   GET_TREATMENT_MENU,
   ORDER_PROVIDER,
   POST,
-} from "./constants/ApiConstants";
-import { getLocalData } from "./datastorage/useLocalStorage";
+} from './constants/ApiConstants';
+import { getLocalData } from './datastorage/useLocalStorage';
 import {
   Banner,
-
   order_provider,
   search_provider,
   treatment,
 } from './types/ProvierTypes';
-import {
-  BookOrderRequest
-} from './types/UserType'
+import { BookOrderRequest } from './types/UserType';
+import { Order } from './types/OrderTypes';
 const access_token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODk4NjY5NCwiZXhwIjoxNjk5MDE5MDk0fQ.6nHvRnfJwgmgnCo0zYLf9yO2kvDIxJ0IZALJCB_PHr0';
 export const ClientOrderServices = () => {
-  const { token } =
-    UseClientUserContext();
+  const { token } = UseClientUserContext();
   const getBannerAds = (): Promise<Banner[]> =>
     sendRequest(GET_AD_BANNER, {
       method: GET,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+        'Content-Type': 'application/json',
+        'x-access-token': token,
       } as unknown as HeadersInit,
     });
   const searchProviders = (body: {
@@ -45,20 +42,18 @@ export const ClientOrderServices = () => {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+        'Content-Type': 'application/json',
+        'x-access-token': token,
       } as unknown as HeadersInit,
     });
 
-  const searchList = (body: {
-    name: string;
-  }): Promise<any> =>
+  const searchList = (body: { name: string }): Promise<any> =>
     sendRequest(GET_SEARCH_LIST, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+        'Content-Type': 'application/json',
+        'x-access-token': token,
       } as unknown as HeadersInit,
     });
 
@@ -67,20 +62,18 @@ export const ClientOrderServices = () => {
     provider_type_id: string;
     longitude: string;
     latitude: string;
-    reqDistance: string
+    reqDistance: string;
   }): Promise<any> =>
     sendRequest(GET_LOCATION_SEARCH, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+        'Content-Type': 'application/json',
+        'x-access-token': token,
         // "x-access-token":
         //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODkwMDAyNiwiZXhwIjoxNjk4OTMyNDI2fQ.zBxGmTVHvOSwYAOdiHgZTUKyVu2CVZFg4xac5RtKo48",
       } as unknown as HeadersInit,
     });
-
-
 
   const orderProvider = (body: {
     client_id: string;
@@ -100,28 +93,27 @@ export const ClientOrderServices = () => {
     latitude: string;
     longitude: string;
     provider_type_id: string;
-
-  }): Promise<any> =>
+  }): Promise<Order> =>
     sendRequest(ORDER_PROVIDER, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+        'Content-Type': 'application/json',
+        'x-access-token': token,
       } as unknown as HeadersInit,
     });
 
-  const handlePayment = (body: {}): void => { };
+  const handlePayment = (body: {}): void => {};
 
   const treatmentMenu = (body: {
     provider_type_id: string;
-  }): Promise<treatment[]> =>
+  }): Promise<treatment> =>
     sendRequest(GET_TREATMENT_MENU, {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
+        'Content-Type': 'application/json',
+        'x-access-token': token,
       } as unknown as HeadersInit,
     });
 
@@ -130,10 +122,9 @@ export const ClientOrderServices = () => {
       method: POST,
       body: body as unknown as BodyInit,
       headers: {
-        "Content-Type": "application/json",
-        "x-access-token": token,
-        } as unknown as HeadersInit,
-
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
     });
   return {
     getBannerAds,
@@ -142,6 +133,6 @@ export const ClientOrderServices = () => {
     orderProvider,
     providerLocationSearch,
     BookOrderRequest,
-    searchList
+    searchList,
   };
 };

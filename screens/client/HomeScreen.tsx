@@ -60,27 +60,22 @@ const HomeScreen = () => {
   } = HomeViewController();
   const navigation = useNavigation<any>();
 
-  const [seconds, setSeconds] = useState(remainingTime?.seconds);
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
-  const minuteRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
   const [currentAddress, setCurrentAddress] = useState<string>('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<Order>();
 
-
-
-   useEffect(() => {
+  useEffect(() => {
     getCurrentOrder();
   }, []);
 
   const getCurrentOrder = async () => {
-    const order:Order= await getLocalData('ORDER') as Order;
+    const order: Order = (await getLocalData('ORDER')) as Order;
 
-    console.log("order details is ",order)
+    console.log('order details is ', order);
     setCurrentOrder(order);
-
-  }
+  };
 
   useUpdateEffect(() => {
     setCurrentAddress(currentLocationOfUser?.address ?? '');
@@ -198,54 +193,7 @@ const HomeScreen = () => {
       </View>
     );
   };
-  // useUpdateEffect(() => {
-  //   setTimeToArrive(remainingTime?.minutes);
-  //   setSeconds(remainingTime?.seconds);
-  // }, [remainingTime]);
 
-  // useEffect(() => {
-  //   minuteRef.current = setInterval(() => {
-  //     console.log('timeLeft.current', timeToArrive);
-  //     if (timeToArrive > 0) {
-  //       const leftTime = timeToArrive - 1;
-  //       // timeLeft.current= leftTime;
-  //       setTimeToArrive(leftTime);
-  //     }
-  //   }, 60000);
-  //   return () => {
-  //     clearInterval(minuteRef.current);
-  //   };
-  // }, [timeToArrive]);
-
-  // useUpdateEffect(() => {
-  //   if (timeToArrive < 0) {
-  //     clearInterval(minuteRef.current);
-  //   }
-  // }, [timeToArrive]);
-
-  // useEffect(() => {
-  //   timeOutRef.current = setInterval(() => {
-  //     // console.log('timeLeft.seconds', seconds);
-  //     if (seconds > 0) {
-  //       const leftSeconds = seconds - 1;
-  //       setSeconds(leftSeconds);
-  //     } else if (timeToArrive > 0) {
-  //       setSeconds(60);
-  //     }
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(timeOutRef.current);
-  //   };
-  // }, [seconds]);
-
-  useUpdateEffect(() => {
-    if (seconds === 0 && timeToArrive < 0) {
-
-      //TODO: VANDANA WHY WE NEED THIS
-      // setLocalData('ORDER', { providerDetail: '' });
-      clearInterval(timeOutRef.current);
-    }
-  }, [seconds]);
   console.log('isDataNotFound', isDataNotFound);
   return (
     <>
@@ -302,13 +250,11 @@ const HomeScreen = () => {
           }}
         >
           <ProviderArrivalInfo
-            status={currentOrder.orderStatus}
+            status={currentOrder.orderStatus ?? ''}
             doctorName={currentOrder.providerDetails.providerName}
-              onPress={() => {
+            onPress={() => {
               navigation.navigate(NavigationRoutes.SearchDoctor, {
                 currentOrder: currentOrder,
-                // orderId: localData?.orderId,
-                 remaining: { minutes: timeToArrive, seconds: seconds },
               });
             }}
           />

@@ -8,6 +8,13 @@ import { useRoute } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import { Order } from 'libs/types/OrderTypes';
 import useToast from 'components/common/useToast';
+import {
+  ARRIVED,
+  ON_THE_WAY,
+  ORDER_ACCEPTED,
+  ORDER_CREATED,
+  ORDER_STARTED,
+} from 'libs/constants/Constant';
 
 const SearchDoctorController = () => {
   const route = useRoute<any>();
@@ -15,7 +22,7 @@ const SearchDoctorController = () => {
     ClientOrderServices();
   const { currentLocationOfUser } = UseClientUserContext();
   const [showRateAlert, setShowRateAlert] = useState(false);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(true);
   const [disabled, setDisable] = useState(false);
   const [providerLocation, setProviderLocation] = useState<{
     latitude: number;
@@ -26,7 +33,7 @@ const SearchDoctorController = () => {
   const [showTimer, setShowTimer] = useState(false);
 
   const previousScreen = route?.params?.previousScreen;
-  const [stausOfArriving, setStausOfArriving] = useState<string>(
+  const [providerStatus, setProviderStatus] = useState<string>(
     previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : '',
   );
   const [currentOrder, setCurrentOrder] = useState<Order>(
@@ -61,36 +68,36 @@ const SearchDoctorController = () => {
       )}`,
     );
     console.log(' RESPINSE+++++', res);
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 10000);
 
     if (res?.orderId) {
       Sentry.captureMessage(
         `First order button for Search the  Provider:-${JSON.stringify(res)}}`,
       );
-
+      console.log(' RESPINSE+++++', res);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 10000);
+      setShowRateAlert(false);
       setCurrentOrder({
         orderId: res?.orderId,
         providerDetails: {
-          providerId: res.closestProvider.provider_id,
-          providerName:
-            res.closestProvider.firstname + ' ' + res.closestProvider.lastname,
-          providerAddress: res.closestProvider.address,
-          providerProfilePicture: res.closestProvider.profile_picture,
-          providerRating: res.closestProvider.ratings,
-          phoneNumber: res.closestProvider.phone_number,
-          currentLatitude: res.closestProvider.latitude,
-          currentLongitude: res.closestProvider.longitude,
+          providerId: res.providerDetails.providerId,
+          providerName: res.providerDetails.providerName,
+          providerAddress: res.providerDetails.providerAddress,
+          providerProfilePicture: res.providerDetails.providerProfilePicture,
+          providerRating: res.providerDetails.providerRating,
+          phoneNumber: res.providerDetails.phoneNumber,
+          currentLatitude: res.providerDetails.currentLatitude,
+          currentLongitude: res.providerDetails.currentLongitude,
         },
-        orderPrice: res.closestProvider.price,
-        orderStatus: '',
-        orderServices: '',
+        orderPrice: res.orderPrice,
+        orderStatus: res.orderStatus,
+        orderServices: res.orderServices,
       });
 
       setProviderLocation({
-        latitude: parseFloat(res.closestProvider.latitude),
-        longitude: parseFloat(res.closestProvider.longitude),
+        latitude: parseFloat(res.providerDetails.currentLatitude),
+        longitude: parseFloat(res.providerDetails.currentLongitude),
       });
     } else {
       Sentry.captureMessage(
@@ -104,12 +111,39 @@ const SearchDoctorController = () => {
     console.log('orderId..', res.orderId);
   };
 
+  const setStatusOnEventFire = (evenTitle: string) => {
+    switch (evenTitle) {
+      case ORDER_ACCEPTED:
+        showToast('Order Accepted!', 'Your order is accepted!', '');
+        setLocalData('ORDER', { orderStatus: ORDER_ACCEPTED });
+        setProviderStatus('On the way');
+        setShowTimer(true);
+        break;
+      case ON_THE_WAY:
+        break;
+      case ARRIVED:
+        setLocalData('ORDER', {
+          orderStatus: ARRIVED,
+        });
+        // setShowCancelTextButton(false);
+        setProviderStatus(ARRIVED);
+        break;
+      default:
+        setProviderStatus('Estimated arrival');
+        break;
+    }
+  };
+
   /**
    * Listener to get event updates
    */
   const getEventUpdate = () => {
-    DeviceEventEmitter.addListener('DoctorNotification', (event) => {
-      calculateDistance();
+    DeviceEventEmitter.addListener('OrderListener', (event) => {
+      setStatusOnEventFire(event.notification.title);
+      setProviderLocation({
+        latitude: parseFloat(event.data.latitude),
+        longitude: parseFloat(event.data.longitude),
+      });
       // setLocalData('ORDER', {
       //   orderStatus:
       //     event.notification.title === 'Accept Order'
@@ -119,37 +153,6 @@ const SearchDoctorController = () => {
       //       : 'Estimated arrival',
       // });
       console.log('DoctorNotification', JSON.stringify(event));
-      if (event.notification.title === 'Accept Order') {
-        console.log('called here 222222');
-        showToast('Order Accepted!', 'Your order is accepted!', '');
-        // setShowCancelTextButton(false);
-        // setShowCancelButton(true);
-
-        setLocalData('ORDER', { orderStatus: 'Accepted By Provider' });
-
-        //TODO:Vandana why and how to set data here
-
-        // setLocalData('ORDER', {
-        // providerName: providerData.firstname+' '+providerData.lastname,
-        // providerAddress: providerData.address,
-        // orderPrice: providerData.price,
-        // orderStatus: 'Started',
-        // providerProfilePicture: providerData.profile_picture,
-        // providerRating: providerData.ratings,
-        // orderServices: '',
-        //   orderId: orderId,
-        // });
-        setShowTimer(true);
-        setStausOfArriving('On the way');
-      }
-      if (event.notification.title === 'Arrived Order') {
-        console.log('called here 11111');
-        setLocalData('ORDER', {
-          orderStatus: 'Arrived',
-        });
-        // setShowCancelTextButton(false);
-        setStausOfArriving('Arrived');
-      }
 
       // setTimeout(() => {
       //   setShowCancelButton(false);
@@ -184,13 +187,10 @@ const SearchDoctorController = () => {
 
     //TODO:Vandana why we are passing status as accept here
     const orderBookResponse = await BookOrderRequest({
-      status: 'accept',
+      orderStatus: ORDER_STARTED,
       provider_id: currentOrder?.providerDetails.providerId,
       order_id: currentOrder.orderId,
-      latitude: currentLocationOfUser.latitude,
-      longitude: currentLocationOfUser.longitude,
       distance: Math.round(calculateDistance()).toString(),
-      time: Math.round(calculateTime().minutes).toString(),
     });
 
     if (orderBookResponse) {
@@ -249,7 +249,7 @@ const SearchDoctorController = () => {
     providerLocation,
     setProviderLocation,
     showTimer,
-    stausOfArriving,
+    providerStatus,
   };
 };
 

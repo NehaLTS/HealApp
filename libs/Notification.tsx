@@ -47,13 +47,13 @@ export const createNotificationListeners = () => {
     Sentry.captureMessage(
       `first notification ---- ${JSON.stringify(remoteMessage)}`,
     );
-  
+
     //TODO: VANDANA WHY ARE WE SAVING HERE LOCAL DATA
     setLocalData('ORDER', {
       eventData: remoteMessage.data,
       orderStatus: remoteMessage?.notification?.title,
     });
-    DeviceEventEmitter.emit('DoctorNotification', remoteMessage);
+    DeviceEventEmitter.emit('OrderListener', remoteMessage);
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);
   });
@@ -69,7 +69,7 @@ export const createNotificationListeners = () => {
       );
       //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
 
-      DeviceEventEmitter.emit('DoctorNotification', remoteMessage.data);
+      DeviceEventEmitter.emit('OrderListener', remoteMessage.data);
     },
   );
 

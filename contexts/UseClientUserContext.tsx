@@ -1,4 +1,11 @@
-import { ClientProfile, OrderDetail, RemaingTime, currentLocationOfUser, onboardStep } from 'libs/types/UserType';
+import { treatment } from 'libs/types/ProvierTypes';
+import {
+  ClientProfile,
+  OrderDetail,
+  RemaingTime,
+  currentLocationOfUser,
+  onboardStep,
+} from 'libs/types/UserType';
 import React, { createContext } from 'react';
 
 export interface ClientUserContextFields {
@@ -7,16 +14,20 @@ export interface ClientUserContextFields {
   userId: string;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
   // setUserId: () => {}
-  token: string
-  setToken: React.Dispatch<React.SetStateAction<string>>
-  userProfile: ClientProfile
-  setUserProfile: React.Dispatch<React.SetStateAction<ClientProfile>>
-  orderDetails: OrderDetail
-  setCurrentLocationOfUser: React.Dispatch<React.SetStateAction<currentLocationOfUser>>
-  currentLocationOfUser: currentLocationOfUser
-  setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>
-  setRemainingTime: React.Dispatch<React.SetStateAction<RemaingTime>>
-  remainingTime: RemaingTime
+  token: string;
+  setToken: React.Dispatch<React.SetStateAction<string>>;
+  userProfile: ClientProfile;
+  setUserProfile: React.Dispatch<React.SetStateAction<ClientProfile>>;
+  orderDetails: OrderDetail;
+  setCurrentLocationOfUser: React.Dispatch<
+    React.SetStateAction<currentLocationOfUser>
+  >;
+  currentLocationOfUser: currentLocationOfUser;
+  setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>;
+  setRemainingTime: React.Dispatch<React.SetStateAction<RemaingTime>>;
+  remainingTime: RemaingTime;
+  treatmentsMenu: treatment;
+  setTreatmentsMenu: React.Dispatch<React.SetStateAction<treatment>>;
 }
 
 export const ClientUserContext = createContext<ClientUserContextFields>(
