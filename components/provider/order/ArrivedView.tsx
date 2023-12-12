@@ -17,12 +17,14 @@ const ArrivedView = ({
   onPressAddService,
   totalPricesOfServices,
   onPressTreatmentEnd,
+  onPress,
 }: {
   order: any;
   isModalVisible: boolean;
   onPressAddService: () => void;
   totalPricesOfServices: string;
   onPressTreatmentEnd: () => void;
+  onPress: () => void;
 }) => {
   return (
     <RNModal
