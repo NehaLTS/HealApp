@@ -172,6 +172,7 @@ export interface ProviderProfile {
   licensenumber?: string;
   licensepicture?: string;
   bankDetails?: ProviderBankDetails;
+  services?:ProviderServices[]
 }
 
 export interface ProviderType {

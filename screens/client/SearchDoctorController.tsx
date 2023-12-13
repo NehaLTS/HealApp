@@ -185,6 +185,8 @@ const SearchDoctorController = () => {
   const handleNextButtonPress = async () => {
     console.log('  orderData..', currentOrder);
 
+    //disable order button here Gurpreet
+
     //TODO:Vandana why we are passing status as accept here
     const orderBookResponse = await BookOrderRequest({
       orderStatus: ORDER_STARTED,
@@ -200,9 +202,14 @@ const SearchDoctorController = () => {
       );
       Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
-    }
-    setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
+
+      //Gurpreet to change it to cancel button
+
+
+       setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
   };
+    }
+   
 
   const calculateDistance = () => {
     const userCurrentLocation = {

@@ -1,6 +1,7 @@
 import { sendRequest, sendRequestWitoutToken } from '../api/RequestHandler';
 import {
   ADD_PROVIDER_SERVICE,
+  CREATE_HEALPROVIDER_SERVICES,
   CREATE_PROVIDER_SEVICES,
   CREATE_SIGNUP_PROVIDER,
   FACEBOOK_LOGIN_API,
@@ -200,7 +201,7 @@ export const AuthServicesProvider = () => {
     });
 
   const AddProviderServices = (body: any, accessToken: string): Promise<any> =>
-    sendRequestWitoutToken(ADD_PROVIDER_SERVICE, {
+    sendRequestWitoutToken(CREATE_HEALPROVIDER_SERVICES, {
       method: PATCH,
       body: body as unknown as BodyInit,
       headers: {

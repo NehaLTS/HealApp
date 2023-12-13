@@ -31,6 +31,9 @@ export const ORDER_REQUEST = 'providers/providerClientOrder';
 export const UPDATE_PROVIDER_LOCATION = 'providers/updateProviderStatus';
 export const PROVIDER_AVAILABILITY = 'providers/updateProviderAvailability';
 export const ADD_PROVIDER_SERVICE = 'providers/updateServicesStatus';
+export const CREATE_HEALPROVIDER_SERVICES = 'providers/selectProviderServices';
+
+
 export const ORDER_PAYMENT = 'providers/payLoadOrder';
 export const PROVIDER_RATING = 'providers/createProviderRatings';
 export const TREATMENT_COMPLETED = 'providers/completedTreatment';

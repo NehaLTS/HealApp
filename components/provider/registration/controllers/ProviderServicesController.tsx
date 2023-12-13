@@ -10,7 +10,7 @@ import * as Sentry from '@sentry/react-native';
 const ProviderServicesController = () => {
   const { onGetProviderService, AddProviderServices } = AuthServicesProvider();
   const navigation = useNavigation();
-  const { providerProfile, setCurrentStep, token } = UseProviderUserContext();
+  const { providerProfile, setCurrentStep, token,userId } = UseProviderUserContext();
   const [services, setServices] = useState<ProviderServices[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
@@ -80,7 +80,7 @@ const ProviderServicesController = () => {
     let response = await AddProviderServices(
       {
         heal_id: concatenatedIds,
-        provider_id: providerProfile?.provider?.id,
+        provider_id: userId,
       },
       token,
     );
