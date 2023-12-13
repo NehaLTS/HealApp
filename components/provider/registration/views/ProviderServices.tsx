@@ -30,7 +30,7 @@ const ProviderServices = () => {
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
-      <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} />
+      {/* <Button title={t('back')} isSmall width={'30%'} onPress={onPressBack} /> */}
       <Button
         title={t('next')}
         isPrimary

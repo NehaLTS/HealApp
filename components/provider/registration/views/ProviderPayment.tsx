@@ -150,18 +150,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(dimens.marginL),
   },
   inputBank: {
     minWidth: '48%',
-    // marginTop: getHeight(dimens.paddingXs),
   },
   inputBranch: {
     minWidth: '48%',
-    // marginTop: getHeight(dimens.paddingXs),
   },
   input: {
-    marginTop: getHeight(dimens.marginL - 2),
+    marginTop: getHeight(dimens.marginL),
   },
   iconContainer: {
     flexDirection: 'row',
@@ -191,6 +189,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   numberInput: {
-    // marginTop: getHeight(dimens.marginS),
+    marginTop: getHeight(10),
   },
 });

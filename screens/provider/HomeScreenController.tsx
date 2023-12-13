@@ -19,7 +19,9 @@ const HomeScreenControlller = () => {
   const order = getLocalData('PROVIDERORDER');
   const navigation = useNavigation();
 
-  const [acceptOrder, setAcceptOrder] = useState(order?.extraData?.orderAccepted ?? false);
+  const [acceptOrder, setAcceptOrder] = useState(
+    order?.extraData?.orderAccepted ?? false,
+  );
   const { userId, providerProfile } = UseProviderUserContext();
   const { currentLocationOfUser } = UseClientUserContext();
   const token = getLocalData('USER')?.deviceToken;
@@ -32,8 +34,12 @@ const HomeScreenControlller = () => {
     timestamp: 0,
   });
 
-  const { OrderRequst, UpdateProviderLocation, providerAvailabilityStatus, TreatementEnded, } =
-    AuthServicesProvider();
+  const {
+    OrderRequst,
+    UpdateProviderLocation,
+    providerAvailabilityStatus,
+    TreatementEnded,
+  } = AuthServicesProvider();
 
   const sendFCMMessage = async () => {
     const url =
@@ -75,7 +81,7 @@ const HomeScreenControlller = () => {
   const updateLocation = () => {
     console.log('updateDtaaApiFunction');
 
-    Geolocation.getCurrentPosition(
+    Geolocation.watchPosition(
       (position) => {
         // Alert.alert('WatchPostion');
         // setProviderLocation({
@@ -91,8 +97,6 @@ const HomeScreenControlller = () => {
           `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
         );
         setTimeout(() => {
-
-
           UpdateProviderLocation({
             provider_id: userId,
             order_id: order?.orderId ?? '1',
@@ -127,7 +131,6 @@ const HomeScreenControlller = () => {
         showsBackgroundLocationIndicator: true,
       },
     );
-
   };
   console.log('order?.eventData?.providerId', userId);
   console.log('order?.eventData?.orderId', order);
@@ -152,9 +155,9 @@ const HomeScreenControlller = () => {
 
           setLocalData('PROVIDERORDER', {
             extraData: {
-              orderAccepted: true
-            }
-          })
+              orderAccepted: true,
+            },
+          });
         } else {
           Sentry.captureMessage(
             `Provider notification event 'order accept response failed' for:-${providerProfile?.firstName}---- ${res}`,
@@ -185,7 +188,7 @@ const HomeScreenControlller = () => {
     providerLocation,
     setAcceptOrder,
     onLogoutButtonPress,
-    TreatementEnded
+    TreatementEnded,
     // ProviderAvailability
   };
 };

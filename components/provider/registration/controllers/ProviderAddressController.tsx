@@ -57,7 +57,6 @@ const ProviderAddressController = () => {
   };
 
   const onPressNext = () => {
-    console.log('licenseRef.current.value', licenseRef.current.value);
     if (phoneRef.current.value && onSearchAddress) {
       // If license number is added without a license picture
       if (licenseRef.current.value && !licensePicture) {

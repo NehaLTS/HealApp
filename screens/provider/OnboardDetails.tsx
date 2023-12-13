@@ -4,7 +4,7 @@ import Header from 'components/common/Header';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { getWidth } from 'libs/StyleHelper';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import ProviderDetail from 'components/provider/registration/views/ProviderDetail';
@@ -14,7 +14,6 @@ import ProviderServices from 'components/provider/registration/views/ProviderSer
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import ProviderAddServices from 'components/provider/registration/views/ProviderAddServices';
 
-//TODO: static strings are changed after setup i18
 const OnboardDetails = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -25,12 +24,20 @@ const OnboardDetails = () => {
     });
   }, [navigation]);
 
-  const { currentStep } = UseProviderUserContext();
+  const { currentStep, providerProfile } = UseProviderUserContext();
   return (
     <View style={styles.container}>
       <Stepper
         currentStep={currentStep}
-        totalStep={['details', 'address', 'payment', 'services', 'addServices']}
+        totalStep={[
+          'details',
+          'address',
+          'payment',
+          providerProfile?.provider?.name?.en === 'Doctor' ||
+          providerProfile?.provider?.name?.en === 'Nurse'
+            ? 'services'
+            : 'addServices',
+        ]}
       />
       {currentStep === 'details' && <ProviderDetail />}
       {currentStep === 'address' && <ProviderAddress />}

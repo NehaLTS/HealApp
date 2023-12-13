@@ -50,9 +50,8 @@ const ProviderAddress = () => {
     <View style={styles.iconContainer}>
       <Text style={styles.text}>{t('upload_license')}</Text>
       <TouchableOpacity
-        disabled={!licenseRef.current?.value?.length}
-        activeOpacity={licensePicture ? 1 : 0.5}
-        style={{ opacity: !licenseRef.current?.value?.length ? 0.5 : 1 }}
+        activeOpacity={1}
+        style={{ opacity: 1 }}
         onPress={() => setIsShowModal(true)}
       >
         <Image

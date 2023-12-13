@@ -198,7 +198,11 @@ const ProviderAddServices = () => {
               <Text style={styles.text} title={t('provide_another_service')} />
             </View>
           )}
-          <TouchableOpacity onPress={toggleModal} style={styles.container}>
+          <TouchableOpacity
+            onPress={toggleModal}
+            style={styles.container}
+            activeOpacity={1}
+          >
             <Image
               source={require('../../../../assets/icon/add.png')}
               style={styles.addicon}

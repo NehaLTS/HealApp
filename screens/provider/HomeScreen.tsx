@@ -57,8 +57,12 @@ const HomeScreen = () => {
     order?.extraData?.isCancelOrder ?? false,
   );
   const [isVisible, setIsVisible] = useState(false);
-  const [isSeeMore, setIsSeeMore] = useState(order?.extraData?.isSeeMore ?? false);
-  const [isArrived, setIsArrived] = useState(order?.extraData?.isArrived ?? false);
+  const [isSeeMore, setIsSeeMore] = useState(
+    order?.extraData?.isSeeMore ?? false,
+  );
+  const [isArrived, setIsArrived] = useState(
+    order?.extraData?.isArrived ?? false,
+  );
   const [isVisibleLicense, setIsVisibleLicense] = useState(false);
   const [notification, setNotification] = useState(
     order?.extraData?.isNotification ?? false,
@@ -81,12 +85,17 @@ const HomeScreen = () => {
     updateLocation,
     providerLocation,
     onLogoutButtonPress,
-    TreatementEnded
+    TreatementEnded,
   } = HomeScreenControlller();
-  const modalHeight = useSharedValue(getHeight(order?.extraData?.modalHeight ?? 360));
+  const modalHeight = useSharedValue(
+    getHeight(order?.extraData?.modalHeight ?? 360),
+  );
   const { providerAvailabilityStatus } = AuthServicesProvider();
   const { userId, token, providerProfile } = UseProviderUserContext();
-  const eventServices = order && order?.OrderReceive && order?.OrderReceive?.services ? JSON.parse(order?.OrderReceive?.services) : ''
+  const eventServices =
+    order && order?.OrderReceive && order?.OrderReceive?.services
+      ? JSON.parse(order?.OrderReceive?.services)
+      : '';
   const [services, setServices] = useState<any[]>([
     {
       name: eventServices?.service_name ?? '',
@@ -143,16 +152,16 @@ const HomeScreen = () => {
           isNotification: false,
         },
         orderStatus: '',
-        OrderReceive: {} as ProviderOrderReceive
-      })
+        OrderReceive: {} as ProviderOrderReceive,
+      });
     } else {
       setIsCancelOrder(false);
 
       setLocalData('PROVIDERORDER', {
         extraData: {
-          isCancelOrder: false
-        }
-      })
+          isCancelOrder: false,
+        },
+      });
     }
   };
 
@@ -171,7 +180,10 @@ const HomeScreen = () => {
   useEffect(() => {
     DeviceEventEmitter.addListener('ProviderOrderListener', (event) => {
       // console.log('acceptOrder', acceptOrder);
-      console.log('providerNotification **** 0000 ***** 00000', JSON.stringify(event))
+      console.log(
+        'providerNotification **** 0000 ***** 00000',
+        JSON.stringify(event),
+      );
       // console.log('isArrived', isArrived);
       // console.log('orderStatus', orderStatus);
       // console.log('isSeeMore', isSeeMore);
@@ -179,14 +191,14 @@ const HomeScreen = () => {
       // Sentry.captureMessage(
       //   `Provider notification event first time for:-${providerProfile?.firstName}---- ${event}`,
       // );
-      if (event.data?.status === "Payment Done") {
+      if (event.data?.status === 'Payment Done') {
         setIsCancelOrder(false);
         setAcceptOrder(false);
         setIsArrived(false);
         setIsAvailable(false);
         setNotification(false);
         setIsSeeMore(false);
-        setShowTreatmentFinished(false)
+        setShowTreatmentFinished(false);
         modalHeight.value = withSpring(getHeight(360));
         setLocalData('USER', { isProviderAvailable: false });
 
@@ -200,15 +212,15 @@ const HomeScreen = () => {
             isNotification: false,
           },
           orderStatus: '',
-          OrderReceive: {} as ProviderOrderReceive
-        })
+          OrderReceive: {} as ProviderOrderReceive,
+        });
         showToast('Payment Done!', 'Your Payment is done ', '');
       }
-      if (event.data?.status === "Order created") {
+      if (event.data?.status === 'Order created') {
         // Sentry.captureMessage(
         //   `Provider notification event 'Send Order': true for:-${providerProfile?.firstName}---- ${event.notification?.title}`,
         // );
-        setServices(event?.data?.services ?? [])
+        setServices(event?.data?.services ?? []);
         setLocalData('PROVIDERORDER', {
           OrderReceive: {
             address: event.data.address,
@@ -219,42 +231,38 @@ const HomeScreen = () => {
             distance: event.data.distance,
             symptoms: event.data.symptoms,
             services: event.data.services,
-            time: event.data.time
+            time: event.data.time,
           },
           latitude: event.data.latitude,
           longitude: event.data.longitude,
-          orderId: event.data.orderId
-        })
+          orderId: event.data.orderId,
+        });
 
         console.log('event?.data?.services', event?.data?.services);
       }
       setOrderStatus(event.data?.staus);
       // console.log('providerNotification **** 0000 ***** 00000', event);
-      setNotification(true)
+      setNotification(true);
 
       setLocalData('PROVIDERORDER', {
         extraData: {
-          isNotification: true
+          isNotification: true,
         },
-        orderStatus: event.data.status
-      })
-      if (
-        event.data.status === 'Arrived' ||
-        orderStatus === 'Arrived Order'
-      ) {
+        orderStatus: event.data.status,
+      });
+      if (event.data.status === 'Arrived' || orderStatus === 'Arrived Order') {
         // Sentry.captureMessage(
         //   `Provider notification event 'Arrived Order': true for:-${providerProfile?.firstName
         //   }---- ${event.data?.staus || orderStatus}`,
         // );
-        setTotalPricesOfServices(totalPrice())
+        setTotalPricesOfServices(totalPrice());
         setIsArrived(true);
         setLocalData('PROVIDERORDER', {
           orderStatus: event.data.status,
           extraData: {
             isArrived: true,
-            totalPrice: totalPrice()
-          }
-
+            totalPrice: totalPrice(),
+          },
         });
       }
     });
@@ -262,7 +270,7 @@ const HomeScreen = () => {
     // if (acceptOrder) {
     // subscribrToTopicMessaging()
     // }
-    console.log('PROVIDERORDER', JSON.stringify(order))
+    console.log('PROVIDERORDER', JSON.stringify(order));
     console.log('order status **********', orderStatus, isArrived);
     if (acceptOrder && !isArrived) {
       console.log('accept', acceptOrder);
@@ -275,25 +283,26 @@ const HomeScreen = () => {
   }, [acceptOrder || isArrived || orderStatus]);
 
   const onPressToggle = (available: boolean) => {
-    if ((localData as ProviderProfile)?.licensenumber === '') {
-      setIsVisibleLicense(true);
-    } else {
-      setLocalData('USER', {
-        isProviderAvailable: available,
-      });
-      setIsAvailable(available);
-      const availability = available ? 1 : 0;
+    console.log('available', available);
+    // if ((localData as ProviderProfile)?.licensenumber === '') {
+    //   setIsVisibleLicense(true);
+    // } else {
+    setLocalData('USER', {
+      isProviderAvailable: available,
+    });
+    setIsAvailable(available);
+    const availability = available ? 1 : 0;
 
-      providerAvailabilityStatus(
-        { provider_id: userId, availability: availability.toString() },
-        token,
-      ).then((res) => {
-        Sentry.captureMessage(
-          `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
-        );
-        console.log('availabitity status', JSON.stringify(res), available);
-      });
-    }
+    providerAvailabilityStatus(
+      { provider_id: userId, availability: availability.toString() },
+      token,
+    ).then((res) => {
+      Sentry.captureMessage(
+        `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
+      );
+      console.log('availabitity status', JSON.stringify(res), available);
+    });
+    // }
   };
   const onPressSeeMore = () => {
     if (isSeeMore) {
@@ -304,8 +313,8 @@ const HomeScreen = () => {
         extraData: {
           isSeeMore: false,
           modalHeight: 360,
-        }
-      })
+        },
+      });
     } else {
       modalHeight.value = withSpring(getHeight(652));
       setIsSeeMore(true);
@@ -314,8 +323,8 @@ const HomeScreen = () => {
         extraData: {
           isSeeMore: true,
           modalHeight: 652,
-        }
-      })
+        },
+      });
     }
   };
 
@@ -351,54 +360,52 @@ const HomeScreen = () => {
         extraData: {
           modalHeight: 652,
           isSeeMore: true,
-        }
-      })
+        },
+      });
     } else {
-
-      await TreatementEnded(
-        {
-          order_id: order?.orderId ?? '1',
-          currency: "NIS",
-          total_price: totalPrice(),
-          services: order?.OrderReceive?.services,
-          treatment_completed: "completed"
-        }
-      ).then((res) => {
-        console.log('Treatement Ended response', res);
-        if (res?.isSuccessful) {
-          setShowTreatmentFinished(true)
-          setAcceptOrder(false);
-          setIsArrived(false);
-          // setIsAvailable(false);
-          setNotification(false);
-          modalHeight.value = withSpring(getHeight(360));
-          setIsSeeMore(false);
-          setLocalData('USER', { isProviderAvailable: false });
-          setLocalData('PROVIDERORDER', {
-            extraData: {
-              modalHeight: 360,
-              isSeeMore: false,
-              isNotification: false,
-              isArrived: false,
-              orderAccepted: false,
-            },
-            orderStatus: '',
-            OrderReceive: {} as ProviderOrderReceive
-          });
-          Sentry.captureMessage(
-            `Provider notification event TREATMENT END BUTTON PRESSED for:-${providerProfile?.firstName}----`,
-          );
-
-        }
-      }).catch((err) => console.error('treatement ended error', err))
-
-
+      await TreatementEnded({
+        order_id: order?.orderId ?? '1',
+        currency: 'NIS',
+        total_price: totalPrice(),
+        services: order?.OrderReceive?.services,
+        treatment_completed: 'completed',
+      })
+        .then((res) => {
+          console.log('Treatement Ended response', res);
+          if (res?.isSuccessful) {
+            setShowTreatmentFinished(true);
+            setAcceptOrder(false);
+            setIsArrived(false);
+            // setIsAvailable(false);
+            setNotification(false);
+            modalHeight.value = withSpring(getHeight(360));
+            setIsSeeMore(false);
+            setLocalData('USER', { isProviderAvailable: false });
+            setLocalData('PROVIDERORDER', {
+              extraData: {
+                modalHeight: 360,
+                isSeeMore: false,
+                isNotification: false,
+                isArrived: false,
+                orderAccepted: false,
+              },
+              orderStatus: '',
+              OrderReceive: {} as ProviderOrderReceive,
+            });
+            Sentry.captureMessage(
+              `Provider notification event TREATMENT END BUTTON PRESSED for:-${providerProfile?.firstName}----`,
+            );
+          }
+        })
+        .catch((err) => console.error('treatement ended error', err));
     }
   };
 
   const orderDetailView = () => (
     <>
-      {order && order?.OrderReceive && order?.OrderReceive?.symptoms &&
+      {order &&
+        order?.OrderReceive &&
+        order?.OrderReceive?.symptoms &&
         order?.OrderReceive?.symptoms?.length > 0 &&
         JSON?.parse(order?.OrderReceive?.symptoms)?.map?.(
           (item: any, index: number) => (
@@ -430,11 +437,11 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     eventServices?.length > 1
-                      ? `${index !==
-                        eventServices?.length - 1
-                        ? ` ${service?.service_name}, `
-                        : ` ${service?.service_name}`
-                      }`
+                      ? `${
+                          index !== eventServices?.length - 1
+                            ? ` ${service?.service_name}, `
+                            : ` ${service?.service_name}`
+                        }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -446,12 +453,17 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-          }    ${order?.OrderReceive?.distance !== 'undefined'
+        title={`${order?.OrderReceive?.firstname}  ${
+          order?.OrderReceive?.lastname
+        }    ${
+          order?.OrderReceive?.distance !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-          } km, ~${order?.OrderReceive?.time !== 'undefined' ? order?.OrderReceive?.time : 0
-          } min`}
+        } km, ~${
+          order?.OrderReceive?.time !== 'undefined'
+            ? order?.OrderReceive?.time
+            : 0
+        } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -548,13 +560,11 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           eventServices?.length > 1
-                            ? `${index !==
-                              eventServices
-                                ?.length -
-                              1
-                              ? ` ${service?.service_name}, `
-                              : ` ${service?.service_name}`
-                            }`
+                            ? `${
+                                index !== eventServices?.length - 1
+                                  ? ` ${service?.service_name}, `
+                                  : ` ${service?.service_name}`
+                              }`
                             : service?.service_name
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -566,14 +576,17 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-                }    ${order?.OrderReceive?.distance !== 'undefined'
+              title={`${order?.OrderReceive?.firstname}  ${
+                order?.OrderReceive?.lastname
+              }    ${
+                order?.OrderReceive?.distance !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-                } km, ~${order?.OrderReceive?.time !== 'undefined'
+              } km, ~${
+                order?.OrderReceive?.time !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-                } min`}
+              } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -648,9 +661,9 @@ const HomeScreen = () => {
 
   const getMissingDocsView = () => (
     <RNModal
-      isVisible={isVisibleLicense}
+      // isVisible={isVisibleLicense}
+      isVisible={false}
       style={styles.addDocsModal}
-      backdropOpacity={1}
       animationIn={'zoomInUp'}
     >
       <View
@@ -845,8 +858,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? 'The order is cancelled'
                       : notification
-                        ? 'You have a new order!'
-                        : 'No orders ...yet'
+                      ? 'You have a new order!'
+                      : 'No orders ...yet'
                   }
                 />
               </>
@@ -874,7 +887,6 @@ const HomeScreen = () => {
           onPressAddService={() => setIsVisible(true)}
           totalPricesOfServices={totalPricesOfServices}
           onPressTreatmentEnd={onPressTreatmentEnd}
-
         />
 
         <TakeOrderView
