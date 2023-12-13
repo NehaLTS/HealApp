@@ -213,14 +213,11 @@ const SearchDoctorController = () => {
       Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
     } else {
-
       //Gurpreet to change it to cancel button
       setIsBookOrder(false);
     }
     setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
   };
-    }
-   
 
   const calculateDistance = () => {
     const userCurrentLocation = {
@@ -256,7 +253,7 @@ const SearchDoctorController = () => {
   };
 
   return {
-    permissionHelper,
+    permissionHelper: permissionHelper,
     forceAlert,
     handleNextButtonPress,
     showRateAlert,
