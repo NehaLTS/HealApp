@@ -34,6 +34,7 @@ import {
 import HomeViewController from './HomeViewController';
 import { DotLoader } from 'components/common/Loader';
 import { Order } from 'libs/types/OrderTypes';
+import StarRating from 'components/common/StarRating';
 const HomeScreen = () => {
   const { t } = useTranslation();
   const {
@@ -241,10 +242,12 @@ const HomeScreen = () => {
       {currentOrder?.orderId && (
         <View
           style={{
-            marginVertical: getHeight(20),
+            margin: getHeight(20),
             alignItems: 'center',
-            backgroundColor: 'transparent',
             marginHorizontal: getWidth(dimens.marginM),
+            borderRadius: getHeight(20),
+            elevation: getHeight(15),
+            marginTop: 0,
           }}
         >
           <ProviderArrivalInfo

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import DoctorTipView from 'components/client/home/DoctorTipView';
 import RatingView from 'components/client/home/RatingView';
 import TreatmentEnd from 'components/client/home/TreatmentEnd';
@@ -12,27 +12,33 @@ import { RNHeader } from 'components/common/Header';
 import { colors } from 'designToken/colors';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import Loader from 'components/common/Loader';
+import { Order } from 'libs/types/OrderTypes';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 
 const TreatmentCompletedScreen = () => {
   const [showViews, setShowViews] = useState('Treatmen_End');
   const navigation = useNavigation();
-  const { OrderPayment, ProviderRating } = ClientOrderServices()
-  const [isLoading, setIsLoading] = React.useState(false)
+  const { OrderPayment, ProviderRating } = ClientOrderServices();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [rating, setRating] = useState(0);
+  const route = useRoute<any>();
+
+  const currentOrder: Order = getLocalData('ORDER') as Order;
+
+  //const currentOrder = route?.params?.currentOrder as Order;
+  console.log('currentOrder 66666', currentOrder);
 
   const onApprovePayment = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       await OrderPayment({
-        order_id: "1",
-        client_id: "1",
-        total_price: "200",
-        currency: "nis"
+        order_id: currentOrder?.orderId,
       })
         .then((res) => {
           console.log('object', res);
-          if (res.isSucessfull) {
-            setShowViews('Rating_View')
-          }
+          // if (res.isSucessfull) {
+          setShowViews('Rating_View');
+          // }
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -40,22 +46,22 @@ const TreatmentCompletedScreen = () => {
     } catch {
       console.error('Error:');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const onApproveRating = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       await ProviderRating({
-        provider_id: "1",
-        client_id: "1",
-        ratings: "5"
+        provider_id: '1',
+        client_id: '1',
+        ratings: rating?.toString(),
       })
         .then((res) => {
           console.log('object', res);
           if (res.isSucessfull) {
-            setShowViews('Tip_View')
+            setShowViews('Tip_View');
           }
         })
         .catch((error) => {
@@ -64,9 +70,9 @@ const TreatmentCompletedScreen = () => {
     } catch {
       console.error('Error:');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const headerLeft = () => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -81,14 +87,13 @@ const TreatmentCompletedScreen = () => {
         {showViews === 'Treatmen_End' && (
           <TreatmentEnd
             onPress={onApprovePayment}
+            currentOrder={currentOrder}
           />
         )}
         {showViews === 'Rating_View' && (
-          <RatingView
-            onPress={onApproveRating}
-          />
+          <RatingView onPress={onApproveRating} rating={setRating} />
         )}
-        {showViews === 'Tip_View' && <DoctorTipView onPress={() => { }} />}
+        {showViews === 'Tip_View' && <DoctorTipView onPress={() => {}} />}
       </View>
     </>
   );

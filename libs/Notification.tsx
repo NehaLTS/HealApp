@@ -49,10 +49,11 @@ export const createNotificationListeners = () => {
     );
 
     //TODO: VANDANA WHY ARE WE SAVING HERE LOCAL DATA
-    setLocalData('ORDER', {
-      eventData: remoteMessage.data,
-      orderStatus: remoteMessage?.notification?.title,
-    });
+    // setLocalData('ORDER', {
+    //   eventData: remoteMessage.data,
+    //   orderStatus: remoteMessage?.notification?.title,
+    // });
+
     DeviceEventEmitter.emit('OrderListener', remoteMessage);
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);

@@ -1,4 +1,5 @@
 import { Alert, Linking, DeviceEventEmitter } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
@@ -14,7 +15,9 @@ import {
   ORDER_ACCEPTED,
   ORDER_CREATED,
   ORDER_STARTED,
+  TREATMENTCOMPLETED,
 } from 'libs/constants/Constant';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const SearchDoctorController = () => {
   const route = useRoute<any>();
@@ -29,6 +32,8 @@ const SearchDoctorController = () => {
     longitude: number;
   }>();
   const { showToast } = useToast();
+  const navigation = useNavigation<any>();
+  const [isBookOrder, setIsBookOrder] = useState(false);
 
   const [showTimer, setShowTimer] = useState(false);
 
@@ -128,6 +133,11 @@ const SearchDoctorController = () => {
         // setShowCancelTextButton(false);
         setProviderStatus(ARRIVED);
         break;
+
+      case TREATMENTCOMPLETED:
+        navigation.navigate(NavigationRoutes.TreatmentCompleted);
+        break;
+
       default:
         setProviderStatus('Estimated arrival');
         break;
@@ -139,28 +149,27 @@ const SearchDoctorController = () => {
    */
   const getEventUpdate = () => {
     DeviceEventEmitter.addListener('OrderListener', (event) => {
-      setStatusOnEventFire(event.notification.title);
-      setProviderLocation({
-        latitude: parseFloat(event.data.latitude),
-        longitude: parseFloat(event.data.longitude),
-      });
-      // setLocalData('ORDER', {
-      //   orderStatus:
-      //     event.notification.title === 'Accept Order'
-      //       ? 'On the way'
-      //       : event.notification.title === 'Arrived Order'
-      //       ? 'Arrived'
-      //       : 'Estimated arrival',
-      // });
+      //setStatusOnEventFire(event.notification.title);
+
+      if (event.data && event.data.status)
+        setStatusOnEventFire(event.data.status);
+
+      if (event.data && event.data.latitude) {
+        setProviderLocation({
+          latitude: parseFloat(event.data.latitude),
+          longitude: parseFloat(event.data.longitude),
+        });
+      }
+
       console.log('DoctorNotification', JSON.stringify(event));
 
       // setTimeout(() => {
       //   setShowCancelButton(false);
       // }, 300000);
-      setProviderLocation({
-        latitude: parseFloat(event.data.latitude),
-        longitude: parseFloat(event.data.longitude),
-      });
+      // setProviderLocation({
+      //   latitude: parseFloat(event.data.latitude),
+      //   longitude: parseFloat(event.data.longitude),
+      // });
     });
   };
 
@@ -196,17 +205,19 @@ const SearchDoctorController = () => {
       time: Math.round(calculateTime().minutes).toString(),
     });
 
-    if (orderBookResponse) {
+    console.log('gurpreet', orderBookResponse);
+    if (orderBookResponse?.isSuccessful) {
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
       Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
+    } else {
 
       //Gurpreet to change it to cancel button
-
-
-       setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
+      setIsBookOrder(false);
+    }
+    setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
   };
     }
    
@@ -258,6 +269,8 @@ const SearchDoctorController = () => {
     setProviderLocation,
     showTimer,
     providerStatus,
+    isBookOrder,
+    setIsBookOrder,
   };
 };
 

@@ -1,5 +1,6 @@
 import Button from 'components/common/Button';
 import Input from 'components/common/Input';
+import StarRating from 'components/common/StarRating';
 import Text from 'components/common/Text';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
@@ -16,25 +17,21 @@ import {
   View,
 } from 'react-native';
 
-const RatingView = ({ onPress }: { onPress: () => void }) => {
-  const renderStars = (numStars: number) => {
-    const stars = Array.from({ length: numStars }).map((_, index) => (
-      <Image
-        key={index}
-        source={require('../../../assets/icon/ratingStar.png')}
-        style={styles.starIcon}
-      />
-    ));
-    return stars;
-  };
-
+const RatingView = ({
+  onPress,
+  rating,
+}: {
+  onPress: () => void;
+  rating: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   return (
     <>
       <KeyboardAvoidingView
         behavior={'height'}
+        style={{ flex: 1 }}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
       >
-        <ScrollView>
+        <ScrollView style={{ flex: 1 }}>
           <View style={styles.imagecontainer}>
             <Image
               source={require('../../../assets/icon/doctorIcon.png')}
@@ -55,7 +52,9 @@ const RatingView = ({ onPress }: { onPress: () => void }) => {
               title={'How do you rate our doctor?'}
               style={{ fontSize: getHeight(18) }}
             />
-            <View style={styles.image}>{renderStars(5)}</View>
+            <View style={styles.image}>
+              <StarRating getRating={rating} />
+            </View>
           </View>
 
           <Text
@@ -68,13 +67,14 @@ const RatingView = ({ onPress }: { onPress: () => void }) => {
             placeholderTextColor={colors.grey}
             style={styles.placeholder}
           />
+
           <View style={styles.buttonContainer}>
             <Button
               title={'Next'}
               isPrimary
               isSmall
               width={'30%'}
-              style={{ alignSelf: 'center', marginBottom: 70 }}
+              style={{ alignSelf: 'center' }}
               onPress={onPress}
             />
           </View>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.imageXs),
   },
   description: {
-    height: '40%',
+    height: getHeight(90),
     backgroundColor: colors.white,
   },
   placeholder: {
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    marginTop: getHeight(50),
   },
   imagecontainer: {
     alignItems: 'center',

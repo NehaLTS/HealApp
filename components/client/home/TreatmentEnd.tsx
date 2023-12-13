@@ -7,8 +7,15 @@ import { fontSize } from 'designToken/fontSizes';
 import { fontFamily } from 'designToken/fontFamily';
 import { colors } from 'designToken/colors';
 import Button from 'components/common/Button';
+import { Order } from 'libs/types/OrderTypes';
 
-const TreatmentEnd = ({ onPress }: { onPress: () => void }) => {
+const TreatmentEnd = ({
+  onPress,
+  currentOrder,
+}: {
+  onPress: () => void;
+  currentOrder: Order;
+}) => {
   return (
     <>
       <Text title={'Treatment is ended'} style={styles.treatmentText} />
@@ -22,11 +29,14 @@ const TreatmentEnd = ({ onPress }: { onPress: () => void }) => {
             source={require('../../../assets/icon/star.png')}
             style={styles.starIcon}
           />
-          <Text style={styles.rating} title={'4.8'} />
+          <Text
+            style={styles.rating}
+            title={currentOrder?.providerDetails?.providerRating}
+          />
         </View>
         <View style={{ justifyContent: 'center' }}>
           <Text
-            title={'Elena Miron,\nFamily doctor'}
+            title={currentOrder?.providerDetails?.providerName}
             style={{ fontSize: getHeight(fontSize.textXl) }}
           />
           <View style={styles.container}>
@@ -48,11 +58,16 @@ const TreatmentEnd = ({ onPress }: { onPress: () => void }) => {
         <View style={{ gap: 10 }}>
           <Text title={'Order summary'} style={styles.order} />
           <View style={{ gap: 8 }}>
-            <Text title={'Basic - 500 NIS'} style={styles.text} />
-            <Text title={'Voltaren shot - 100 NIS'} style={styles.text} />
+            {currentOrder?.orderServices.map((item, index) => (
+              <Text
+                key={index}
+                title={`${item?.serviceName} - ${item?.servicePrice}`}
+                style={styles.text}
+              />
+            ))}
             <View style={{ flexDirection: 'row' }}>
               <Text title={'Total'} style={styles.total} />
-              <Text title={' - 600 NIS'} style={styles.text} />
+              <Text title={currentOrder?.orderPrice} style={styles.text} />
             </View>
           </View>
         </View>

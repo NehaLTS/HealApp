@@ -91,6 +91,8 @@ const OrderDetailsController = () => {
     };
   });
 
+  const concatenatedIds = order.services.map((item) => item.menu_id).join(',');
+
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
     let isLocationPermissionOn = await checkLocationPermission();
@@ -124,7 +126,9 @@ const OrderDetailsController = () => {
           Date_of_birth: !order?.isOrderForOther
             ? user?.date_of_birth ?? ''
             : order?.patient_type?.age ?? '',
-          services: order.services[0].menu_id.toString(),
+          // services: order.services[0].menu_id.toString(),
+
+          services: concatenatedIds.toString(),
           symptoms: JSON.stringify(symptoms),
           Additional_notes: order?.Additional_notes,
           Estimate_arrival: order?.Estimate_arrival,

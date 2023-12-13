@@ -16,6 +16,7 @@ import {
   Image,
   PermissionsAndroid,
   Platform,
+  ScrollView,
   StyleSheet,
   ToastAndroid,
   TouchableOpacity,
@@ -64,6 +65,8 @@ const SearchDoctor = () => {
     setProviderLocation,
     showTimer,
     providerStatus,
+    isBookOrder,
+    setIsBookOrder,
   } = SearchDoctorController();
 
   const { setRemainingTime } = UseClientUserContext();
@@ -135,6 +138,7 @@ const SearchDoctor = () => {
 
   const onPressOrder = () => {
     setSecondLoader(true);
+    setIsBookOrder(true);
     if (!showCancelButton && !showLoader) {
       handleNextButtonPress();
     } else {
@@ -175,7 +179,13 @@ const SearchDoctor = () => {
         headerLeft,
         () => null,
       )}
-      <View style={styles.mainContainer}>
+      <ScrollView
+        style={styles.mainContainer}
+        contentContainerStyle={{
+          alignItems: 'center',
+          paddingBottom: getHeight(20),
+        }}
+      >
         {renderToast()}
         <View>
           {showTimer && (
@@ -315,7 +325,7 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-        {providerStatus !== 'Arrived' ? (
+        {providerStatus !== 'Arrived' || !showTimer ? (
           <View>
             <Button
               title={
@@ -332,6 +342,7 @@ const SearchDoctor = () => {
               width={'30%'}
               height={getHeight(dimens.imageS)}
               style={{ alignSelf: 'center', marginBottom: 10 }}
+              disabled={isBookOrder}
             />
             {showCancelTextButton && !showLoader && (
               <TextButton
@@ -355,7 +366,7 @@ const SearchDoctor = () => {
           </View>
         ) : (
           <View style={{ height: getHeight(100) }}>
-            <Button
+            {/* <Button
               title={'Next'}
               isPrimary
               isSmall
@@ -365,10 +376,10 @@ const SearchDoctor = () => {
               width={'30%'}
               height={getHeight(dimens.imageS)}
               style={{ alignSelf: 'center', marginBottom: 10 }}
-            />
+            /> */}
           </View>
         )}
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -379,8 +390,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: colors.white,
-    alignItems: 'center',
-    // justifyContent: 'space-evenly',
   },
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),

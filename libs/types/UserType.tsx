@@ -260,9 +260,6 @@ export interface BookOrderRequest {
 
 export interface OrderPayment {
   order_id: string;
-  client_id: string;
-  total_price: string;
-  currency: string;
 }
 
 export interface ProviderRating {
