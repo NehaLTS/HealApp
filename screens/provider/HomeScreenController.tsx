@@ -96,23 +96,22 @@ const HomeScreenControlller = () => {
         Sentry.captureMessage(
           `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
         );
-        setTimeout(() => {
-          UpdateProviderLocation({
-            provider_id: userId,
-            order_id: order?.orderId ?? '1',
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString(),
-          }).then((res) => {
-            Sentry.captureMessage(
-              `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
-            );
-            Alert.alert('Api update Location hit');
-            console.log('gurepeet', res);
-            // Alert.alert(
-            //   'dataUpdate after getihng response' + JSON.stringify(res),
-            // );
-          });
-        }, 5000); // setLocation({ latitude, longitude });
+
+        UpdateProviderLocation({
+          provider_id: userId,
+          order_id: order?.orderId ?? '1',
+          latitude: position.coords.latitude.toString(),
+          longitude: position.coords.longitude.toString(),
+        }).then((res) => {
+          Sentry.captureMessage(
+            `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
+          );
+          Alert.alert('Api update Location hit');
+          console.log('gurepeet', res);
+          // Alert.alert(
+          //   'dataUpdate after getihng response' + JSON.stringify(res),
+          // );
+        });
       },
       (error) => {
         Sentry.captureMessage(
