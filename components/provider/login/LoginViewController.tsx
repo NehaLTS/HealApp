@@ -82,15 +82,14 @@ const LoginViewController = () => {
 
   /** To handle Response from API after authentication request */
   const handleAuthResponse = (response: any, profilePicture?: string) => {
-    console.log('response', response);
+    console.log('response ** ', JSON.stringify(response));
     let userDataProvider = response.user;
-    setIsLoading(true);
     setToken(response.token);
     setUserId(response.id);
     setProviderProfile({
-      firstName: userDataProvider?.firstname,
-      lastName: userDataProvider?.lastname,
-      phoneNumber: userDataProvider?.phone_number,
+      firstName: userDataProvider?.firstName,
+      lastName: userDataProvider?.lastName,
+      phoneNumber: userDataProvider?.phoneNumber,
       address: userDataProvider?.address,
       city: userDataProvider?.city,
       state: userDataProvider?.state,
@@ -98,19 +97,19 @@ const LoginViewController = () => {
       profilePicture: userDataProvider.profile_picture
         ? userDataProvider.profile_picture
         : profilePicture,
-      provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
-      licensenumber: userDataProvider?.license,
-      provider_type_id: userDataProvider?.provider_type_id,
-      licensepicture: userDataProvider?.license_photo,
-      isSuccessful: userDataProvider?.isSuccessful,
+      licensenumber: userDataProvider?.licensenumber,
+      bankDetails: userDataProvider.bankDetails,
+      services: userDataProvider.services,
+      idPicture: userDataProvider.idPicture,
+      provider: userDataProvider.provider,
+      speciality: userDataProvider.speciality,
+      licensepicture: userDataProvider?.licensepicture,
     });
-
-    // setUserDataProvider({ ...userDataProvider, token: response?.token, isSuccessful: response?.isSuccessful });
     setLocalData('USERPROFILE', {
-      firstName: userDataProvider?.firstname,
-      lastName: userDataProvider?.lastname,
-      phoneNumber: userDataProvider?.phone_number,
+      firstName: userDataProvider?.firstName,
+      lastName: userDataProvider?.lastName,
+      phoneNumber: userDataProvider?.phoneNumber,
       address: userDataProvider?.address,
       city: userDataProvider?.city,
       state: userDataProvider?.state,
@@ -118,40 +117,31 @@ const LoginViewController = () => {
       profilePicture: userDataProvider.profile_picture
         ? userDataProvider.profile_picture
         : profilePicture,
-      provider_id: userDataProvider?.provider_id,
       email: userDataProvider?.email,
-      licensenumber: userDataProvider?.license,
-      provider_type_id: userDataProvider?.provider_type_id,
-      licensepicture: userDataProvider?.license_photo,
-      isSuccessful: userDataProvider?.isSuccessful,
+      licensenumber: userDataProvider?.licensenumber,
+      bankDetails: userDataProvider.bankDetails,
+      idPicture: userDataProvider.idPicture,
+      provider: userDataProvider.provider,
+      speciality: userDataProvider.speciality,
+      licensepicture: userDataProvider?.licensepicture,
+      isSuccessful: true,
     } as unknown as ProviderProfile);
+
     setLocalData('USER', {
       token: response.token,
       userId: response.id,
       isClient: false,
     });
-    console.log('before local save', JSON.parse(response?.user?.services));
-    setLocalData('PROVIDERSERVICES', JSON.parse(response?.user?.services));
-    // setLocalData('PROVIDERSERVICES',);
 
-    if (!userDataProvider.firstname || userDataProvider.firstname == '') {
-      console.log('setToken', token, userId);
+    console.log('before local save', userDataProvider?.services);
+    setLocalData('PROVIDERSERVICES', userDataProvider?.services);
 
-      // if (!userDataProvider.firstName || userDataProvider.firstName == '') {
-      //   console.log('setToken', token, userId);
-      setIsLoading(false);
+    if (!userDataProvider.firstName || userDataProvider.firstName == '') {
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ProviderOnboardDetails }],
       });
-      // } else {
-      //   navigation.reset({
-      //     index: 0,
-      //     routes: [{ name: NavigationRoutes.ProviderHome }],
-      //   });
-      // }
     } else {
-      setIsLoading(false);
       navigation.reset({
         index: 0,
         routes: [{ name: NavigationRoutes.ProviderHome }],
@@ -171,6 +161,7 @@ const LoginViewController = () => {
         console.log('res is Provider SignIn', res);
 
         if (res?.isSuccessful === true) {
+          setIsLoading(false);
           handleAuthResponse(res, '');
         } else {
           showToast(
@@ -183,6 +174,7 @@ const LoginViewController = () => {
         showToast('', t('email_or_password'), 'warning');
       }
     } catch (error) {
+      console.log('error is ', error);
       Alert.alert(t('error_occurred_login'));
     }
 
