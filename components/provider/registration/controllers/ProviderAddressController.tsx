@@ -43,9 +43,9 @@ const ProviderAddressController = () => {
     validatePhoneNumber();
   };
 
-  const onChangeLicenseNumber = (value: string) =>
-    (licenseRef.current.value = value);
-
+  const onChangeLicenseNumber = (value: string) => {
+    licenseRef.current.value = value;
+  };
   const onBlurAddress = () => validateAddress();
 
   const onChangeAddress = (value: string) => {
@@ -57,8 +57,17 @@ const ProviderAddressController = () => {
   };
 
   const onPressNext = () => {
+    console.log('licenseRef.current.value', licenseRef.current.value);
     if (phoneRef.current.value && onSearchAddress) {
-      if (licenseRef.current.value && licensePicture) {
+      // If license number is added without a license picture
+      if (licenseRef.current.value && !licensePicture) {
+        Alert.alert(t('select_license_picture'));
+      } else {
+        // Check if license number is provided without a license picture
+        // if (licenseRef.current.value && !licensePicture) {
+        //   Alert.alert(t('select_license_picture'));
+        // } else {
+        // All conditions met, update provider profile and proceed to 'payment'
         setProviderProfile({
           ...(providerProfile as ProviderProfile),
           address: onSearchAddress,
@@ -67,13 +76,31 @@ const ProviderAddressController = () => {
           licensepicture: licensePicture,
         });
         setCurrentStep('payment');
-      } else {
-        Alert.alert(t('select_license_picture'));
+        // }
       }
     } else {
+      // Address or phone number missing, show respective errors
       if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
       if (!onSearchAddress) setAddressError(t('address_required'));
     }
+
+    // if (phoneRef.current.value && onSearchAddress) {
+    //   // if (licenseRef.current.value && licensePicture) {
+    //     setProviderProfile({
+    //       ...(providerProfile as ProviderProfile),
+    //       address: onSearchAddress,
+    //       phoneNumber: phoneRef.current.value,
+    //       licensenumber: licenseRef.current.value,
+    //       licensepicture: licensePicture,
+    //     });
+    //     setCurrentStep('payment');
+    //   // } else {
+    //   //   Alert.alert(t('select_license_picture'));
+    //   // }
+    // } else {
+    //   if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
+    //   if (!onSearchAddress) setAddressError(t('address_required'));
+    // }
   };
 
   const onPressBack = () => setCurrentStep('details');

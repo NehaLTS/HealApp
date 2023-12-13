@@ -133,7 +133,7 @@ const ProviderPayment = () => {
       </View>
 
       <View style={styles.footerContainer}>
-        {/* <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} /> */}
+        <Button title={t('back')} isSmall onPress={onPressBack} width={'30%'} />
         <Button
           title={t('next')}
           isPrimary
@@ -154,14 +154,14 @@ const styles = StyleSheet.create({
   },
   inputBank: {
     minWidth: '48%',
-    marginTop: getHeight(dimens.paddingXs),
+    // marginTop: getHeight(dimens.paddingXs),
   },
   inputBranch: {
     minWidth: '48%',
-    marginTop: getHeight(dimens.paddingXs),
+    // marginTop: getHeight(dimens.paddingXs),
   },
   input: {
-    marginTop: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.marginL - 2),
   },
   iconContainer: {
     flexDirection: 'row',
@@ -186,10 +186,11 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     flex: 0.8,
-    justifyContent: 'flex-end',
-    alignSelf: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   numberInput: {
-    marginTop: getHeight(dimens.marginS),
+    // marginTop: getHeight(dimens.marginS),
   },
 });

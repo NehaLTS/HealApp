@@ -8,7 +8,7 @@ import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Image,
@@ -43,19 +43,47 @@ const ProviderAddServices = () => {
     priceError,
     descriptionError,
     onApprove,
+    onOpenModal,
   } = ProviderAddServicesController();
+  const [expandedServices, setExpandedServices] = useState([]);
 
+  const toggleDescription = (index: number) => {
+    const updatedExpandedServices = [...expandedServices];
+    updatedExpandedServices[index] = !updatedExpandedServices[index];
+    setExpandedServices(updatedExpandedServices);
+  };
   const getAllServices = () => {
-    return services.map((item, index) => (
-      <View key={index} style={[styles.serviceContainer, styles.elevation]}>
-        <Text
-          style={[
-            { marginBottom: getHeight(14), fontFamily: fontFamily.medium },
-          ]}
-        >{`${item.name.en} $ ${item.price}`}</Text>
-        <Text style={styles.textView}>{item.description?.en}</Text>
-      </View>
-    ));
+    return services.map((item, index) => {
+      const description = item?.description?.en || '';
+      const showReadMore = description?.length > 100;
+      let displayedDescription = description?.slice(0, 100);
+      const isExpanded = expandedServices[index] || false;
+
+      if (isExpanded) {
+        displayedDescription = description;
+      }
+
+      return (
+        <View key={index} style={[styles.serviceContainer, styles.elevation]}>
+          <Text
+            style={[
+              { marginBottom: getHeight(14), fontFamily: fontFamily.medium },
+            ]}
+          >{`${item.name.en} $ ${item.price}`}</Text>
+          <Text style={styles.textView}>{displayedDescription}</Text>
+          {showReadMore && (
+            <TextButton
+              title={isExpanded ? 'Read Less' : 'Read More'}
+              onPress={() => toggleDescription(index)}
+              fontSize={getWidth(fontSize.textL)}
+              containerStyle={{ paddingTop: getHeight(8) }}
+              isActive
+              style={{ fontFamily: fontFamily.medium }}
+            />
+          )}
+        </View>
+      );
+    });
   };
 
   const getFooterView = () => (
@@ -98,12 +126,12 @@ const ProviderAddServices = () => {
             onBlur={onBlurServiceName}
             onChangeText={onChangeServiceName}
             ref={serviceNameRef}
-            defaultValue={service?.name?.en}
-            inputValue={service?.name?.en ?? ''}
+            defaultValue={serviceNameRef?.current?.value ?? ''}
+            inputValue={serviceNameRef?.current?.value ?? ''}
             errorMessage={serviceError}
             returnKeyType={'next'}
-            onSubmitEditing={() => priceRef.current.focus()}
-            onClearInputText={() => serviceNameRef.current.clear()}
+            onSubmitEditing={() => priceRef?.current?.focus()}
+            onClearInputText={() => serviceNameRef?.current?.clear()}
           />
           <Input
             placeholder={t('price')}
@@ -111,12 +139,12 @@ const ProviderAddServices = () => {
             onBlur={onBlurPriceName}
             onChangeText={onChangePriceName}
             ref={priceRef}
-            defaultValue={service?.price}
-            inputValue={service?.price ?? ''}
+            defaultValue={priceRef?.current?.value ?? ''}
+            inputValue={priceRef?.current?.value ?? ''}
             errorMessage={priceError}
             keyboardType="numeric"
             returnKeyType={'next'}
-            onSubmitEditing={() => descriptionRef.current.focus()}
+            onSubmitEditing={() => descriptionRef?.current?.focus()}
             onClearInputText={() => priceRef.current.clear()}
           />
           <Input
@@ -125,10 +153,14 @@ const ProviderAddServices = () => {
             onBlur={onBlurDescription}
             onChangeText={onChangeDescription}
             ref={descriptionRef}
-            defaultValue={service?.description?.en}
-            inputValue={service?.description?.en ?? ''}
+            defaultValue={descriptionRef?.current?.value ?? ''}
+            inputValue={descriptionRef?.current?.value ?? ''}
             errorMessage={descriptionError}
             onClearInputText={() => descriptionRef.current.clear()}
+            numberOfLines={5}
+            multiline
+            returnKeyType="done"
+            blurOnSubmit
           />
           <Button
             title={t('save')}
@@ -158,7 +190,7 @@ const ProviderAddServices = () => {
     <>
       {isLoading && <Loader />}
       <View style={styles.inputContainer}>
-        <ScrollView>
+        <ScrollView contentContainerStyle={{ paddingBottom: getHeight(20) }}>
           {services && services?.length > 0 ? (
             getAllServices()
           ) : (
@@ -245,16 +277,15 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
   },
   inputContainer: {
-    flex: 0.79,
+    flex: 0.85,
   },
   footerContainer: {
     flexDirection: 'row',
     alignSelf: 'center',
     flex: 0.1,
-    justifyContent: 'space-between',
   },
   approve: {
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
     width: '100%',
   },
   skip: {

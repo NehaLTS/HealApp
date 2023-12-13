@@ -37,8 +37,8 @@ const UserAddressViewController = () => {
     userProfile && userProfile.profilePicture ? userProfile.profilePicture : '',
   );
 
-  const validateAddress = () => {
-    if (onSearchAddress?.length < 4) setAddressError(t('fill_address'));
+  const validateAddress = (value: string) => {
+    if (value?.length < 4) setAddressError(t('fill_address'));
     else setAddressError('');
   };
 
@@ -49,13 +49,12 @@ const UserAddressViewController = () => {
     else setIdNumberError('');
   };
 
-  const onBlurAddress = () => validateAddress();
-
   const onBlurIdNumber = () => validateIdNumber();
 
   const onChangeAddress = (value: string) => {
-    addressRef.current.value = value;
-    onBlurAddress();
+    setOnSearchAddress(value);
+    validateAddress(value);
+    console.log('value', value);
   };
 
   const onChangeIdNumber = (value: string) => {
@@ -155,7 +154,6 @@ const UserAddressViewController = () => {
     dateOfBirth,
     setDateOfBirth,
     idNumberRef,
-    onBlurAddress,
     profilePicture,
     setProfilePicture,
     onBlurIdNumber,
@@ -173,6 +171,7 @@ const UserAddressViewController = () => {
     isVisible,
     onSearchAddress,
     isLoader,
+    setDateOfBirthError,
   };
 };
 

@@ -22,6 +22,7 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Alert,
   I18nManager,
   Image,
   ScrollView,
@@ -222,12 +223,12 @@ const HomeScreen = () => {
           <SearchBox
             isTouchStart={isTouchStart && searchSpecialist?.length === 0}
             placeholder={t('what_treatment')}
-            onTouchStart={onTouchStart}
             onBlur={onBlur}
             onChangeText={onChange}
             defaultValue={searchSpecialist}
             inputMode={'search'}
             onKeyPress={handleKeyPress}
+            onFocus={onTouchStart}
           />
           {searchSpecialist?.length === 0 ? (
             getProviderList()

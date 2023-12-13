@@ -176,7 +176,10 @@ const ProviderPaymentController = () => {
           },
         });
 
-        if (providerProfile?.provider?.name?.en === 'Doctor' || providerProfile?.provider?.name?.en === 'Nurse') {
+        if (
+          providerProfile?.provider?.name?.en === 'Doctor' ||
+          providerProfile?.provider?.name?.en === 'Nurse'
+        ) {
           setCurrentStep('services');
         } else {
           setCurrentStep('addServices');
@@ -201,7 +204,7 @@ const ProviderPaymentController = () => {
   };
 
   const onPressBack = () => {
-    // setCurrentStep((prev) => prev.slice(0, prev.length - 1));
+    setCurrentStep('address');
   };
 
   return {

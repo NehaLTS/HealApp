@@ -20,13 +20,20 @@ const ProviderAddServicesController = () => {
     AuthServicesProvider();
   const [isLoading, setIsLoading] = useState(false);
   const [services, setServices] = useState<ProviderServices[]>([]);
-  const [service, setService] = useState<ProviderServices>();
+  const [service, setService] = useState<ProviderServices | null>();
   const { t } = useTranslation();
   const [serviceError, setServiceError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
 
-  const toggleModal = () => setModalVisible(!isModalVisible);
+  const toggleModal = () => {
+    setService(null);
+    setModalVisible(false);
+  };
+  const onOpenModal = () => {
+    setModalVisible(true);
+  };
+  console.log('service', service);
   const onBlurServiceName = () => validateServiceName();
   const onChangeServiceName = (value: string) =>
     (serviceNameRef.current.value = value);
@@ -37,17 +44,17 @@ const ProviderAddServicesController = () => {
     (descriptionRef.current.value = value);
 
   const validateServiceName = () => {
-    if (!serviceNameRef.current.value) {
+    if (!serviceNameRef?.current?.value) {
       setServiceError(t('service_required'));
     } else setServiceError('');
   };
   const validatePrice = () => {
-    if (!priceRef.current.value) {
+    if (!priceRef?.current?.value) {
       setPriceError(t('price_required'));
     } else setPriceError('');
   };
   const validateDescription = () => {
-    if (!descriptionRef.current.value) {
+    if (!descriptionRef?.current?.value) {
       setDescriptionError(t('description_required'));
     } else setDescriptionError('');
   };
@@ -70,9 +77,9 @@ const ProviderAddServicesController = () => {
 
   const saveService = async () => {
     if (
-      serviceNameRef.current.value &&
-      descriptionRef.current.value &&
-      priceRef.current.value
+      serviceNameRef?.current?.value &&
+      descriptionRef.current?.value &&
+      priceRef?.current?.value
     ) {
       let data = {
         name: { en: serviceNameRef.current.value, hi: '', he: '' },
@@ -80,8 +87,9 @@ const ProviderAddServicesController = () => {
         price: priceRef.current.value,
         id: -1,
       };
+      console.log('data', data);
 
-      setService({ ...(service as ProviderServices), ...data });
+      setService(data);
       setServices([...services, data]);
 
       setIsLoading(true);
@@ -132,6 +140,7 @@ const ProviderAddServicesController = () => {
     priceError,
     descriptionError,
     onApprove,
+    onOpenModal,
   };
 };
 

@@ -32,7 +32,6 @@ const UserAddressView = () => {
     dateOfBirth,
     setDateOfBirth,
     idNumberRef,
-    onBlurAddress,
     profilePicture,
     onBlurIdNumber,
     onChangeAddress,
@@ -49,6 +48,7 @@ const UserAddressView = () => {
     isVisible,
     onSearchAddress,
     isLoader,
+    setDateOfBirthError,
   } = UserAddressViewController();
   const currentDate = new Date();
 
@@ -71,30 +71,6 @@ const UserAddressView = () => {
     currentDate.getMonth(),
     currentDate.getDate(),
   );
-  const addAddressView = () => {
-    return (
-      <View style={styles.addressView}>
-        <Input
-          placeholder={t('address')}
-          type={'fullStreetAddress'}
-          inputStyle={[{ minWidth: '82%' }]}
-          onClearInputText={() => addressRef.current.clear()}
-          onChangeText={setOnSearchAddress}
-          inputValue={onSearchAddress}
-          value={onSearchAddress}
-          onSubmitEditing={() => setIsVisible(false)}
-          autoFocus
-        />
-
-        <TextButton
-          containerStyle={{ width: '18%', alignItems: 'flex-end' }}
-          title={t('close')}
-          fontSize={getWidth(fontSize.textL)}
-          onPress={() => setIsVisible(false)}
-        />
-      </View>
-    );
-  };
 
   return (
     <>
@@ -105,6 +81,7 @@ const UserAddressView = () => {
           open={open}
           date={date}
           onConfirm={(date) => {
+            if (date) setDateOfBirthError('');
             setDateOfBirth(date.toString());
             setDate(date);
             setOpen(false);
@@ -219,19 +196,11 @@ const UserAddressView = () => {
         />
       </View>
       <AddAddress
-        address={setOnSearchAddress}
+        address={onChangeAddress}
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
         defaultValue={onSearchAddress}
       />
-      {/* <RNModal
-        style={styles.modal}
-        backdropOpacity={1}
-        backdropColor={colors.white}
-        isVisible={isVisible}
-      >
-        {addAddressView()}
-      </RNModal> */}
     </>
   );
 };

@@ -42,37 +42,17 @@ const ProviderAddress = () => {
     setIsVisible,
   } = ProviderAddressController();
 
-  const addAddressView = () => {
-    return (
-      <View style={styles.addressView}>
-        <Input
-          placeholder={t('address')}
-          type={'fullStreetAddress'}
-          inputStyle={[{ minWidth: '82%' }]}
-          onClearInputText={() => addressRef.current.clear()}
-          onChangeText={onChangeAddress}
-          inputValue={onSearchAddress}
-          value={onSearchAddress}
-          onSubmitEditing={() => setIsShowAddressodal(false)}
-          autoFocus
-        />
-        <TextButton
-          containerStyle={{ width: '18%', alignItems: 'flex-end' }}
-          title={t('close')}
-          fontSize={fontSize.textL}
-          onPress={() => setIsShowAddressodal(false)}
-        />
-      </View>
-    );
-  };
-
+  console.log(
+    'licenseRef.current?.value?.length',
+    licenseRef.current?.value?.length,
+  );
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
       <Text style={styles.text}>{t('upload_license')}</Text>
       <TouchableOpacity
-        disabled={!licenseRef.current?.value}
+        disabled={!licenseRef.current?.value?.length}
         activeOpacity={licensePicture ? 1 : 0.5}
-        style={{ opacity: !licenseRef.current?.value ? 0.5 : 1 }}
+        style={{ opacity: !licenseRef.current?.value?.length ? 0.5 : 1 }}
         onPress={() => setIsShowModal(true)}
       >
         <Image
@@ -106,9 +86,6 @@ const ProviderAddress = () => {
           inputValue={providerProfile?.phoneNumber ?? ''}
           errorMessage={phoneError}
           returnKeyType={'next'}
-          onSubmitEditing={() => {
-            setIsShowAddressodal(true);
-          }}
           onClearInputText={() => phoneRef.current.clear()}
           inputStyle={styles.inputPhone}
           maxLength={10}
@@ -125,9 +102,6 @@ const ProviderAddress = () => {
           defaultValue={''}
           inputValue={providerProfile?.licensenumber ?? ''}
           returnKeyType={'done'}
-          onSubmitEditing={() => {
-            setIsShowModal(true);
-          }}
           onClearInputText={() => licenseRef.current.clear()}
           maxLength={10}
         />
@@ -160,14 +134,6 @@ const ProviderAddress = () => {
         onClose={() => setIsVisible(false)}
         defaultValue={onSearchAddress}
       />
-      {/* <RNModal
-        style={styles.modal}
-        backdropOpacity={1}
-        backdropColor={colors.white}
-        isVisible={isShowAddressodal}
-      >
-        {addAddressView()}
-      </RNModal> */}
     </>
   );
 };

@@ -124,11 +124,11 @@ const ProviderServices = () => {
 
   return (
     <>
+      {isLoading && <Loader />}
       <View style={styles.inputContainer}>
         <Text style={styles.textAuthority} title={t('authority')} />
         {addPrescriptionView()}
         {getServicesView()}
-        {isLoading && <Loader />}
       </View>
       {getFooterView()}
     </>
@@ -204,10 +204,10 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     width: '100%',
     flex: 0.1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
   outerCircle: {
     width: getWidth(dimens.marginL),

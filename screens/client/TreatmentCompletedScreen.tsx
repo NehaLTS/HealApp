@@ -13,7 +13,7 @@ import { colors } from 'designToken/colors';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import Loader from 'components/common/Loader';
 import { Order } from 'libs/types/OrderTypes';
-import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 
 const TreatmentCompletedScreen = () => {
   const [showViews, setShowViews] = useState('Treatmen_End');
@@ -38,6 +38,14 @@ const TreatmentCompletedScreen = () => {
           console.log('object', res);
           // if (res.isSucessfull) {
           setShowViews('Rating_View');
+          setLocalData('ORDER', {
+            orderId: '',
+            providerDetails: undefined,
+            orderPrice: '',
+            orderStatus: '',
+            orderServices: [],
+            message: '',
+          });
           // }
         })
         .catch((error) => {

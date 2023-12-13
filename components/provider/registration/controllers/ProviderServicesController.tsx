@@ -6,11 +6,13 @@ import { ProviderServices } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
+import { Alert } from 'react-native';
 
 const ProviderServicesController = () => {
   const { onGetProviderService, AddProviderServices } = AuthServicesProvider();
   const navigation = useNavigation();
-  const { providerProfile, setCurrentStep, token,userId } = UseProviderUserContext();
+  const { providerProfile, setCurrentStep, token, userId } =
+    UseProviderUserContext();
   const [services, setServices] = useState<ProviderServices[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
@@ -32,7 +34,8 @@ const ProviderServicesController = () => {
     if (response && response.services) {
       setServices(response.services);
       Sentry.captureMessage(
-        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${providerProfile?.firstName ?? ''
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
+          providerProfile?.firstName ?? ''
         }---- ${response.services}`,
       );
     }
@@ -73,31 +76,41 @@ const ProviderServicesController = () => {
   const onPressBack = () => setCurrentStep('payment');
 
   const onPressNext = async () => {
+    if (selectedServices?.length) {
+      setIsLoading(true);
+      const concatenatedIds = selectedServices
+        .map((item) => item.heal_id)
+        .join(', ');
 
-    const concatenatedIds = selectedServices.map(item => item.heal_id).join(', ');
-    console.log("concatenatedIds", concatenatedIds, " selectedServices", selectedServices)
-
-    let response = await AddProviderServices(
-      {
-        heal_id: concatenatedIds,
-        provider_id: userId,
-      },
-      token,
-    );
-    if (response?.isSuccessful) {
-      Sentry.captureMessage(
-        `Provider flow SELECTED SERVICES API HITfor:-${providerProfile?.firstName ?? ''
-        }---- ${JSON.stringify(response)}`,
+      let response = await AddProviderServices(
+        {
+          heal_id: concatenatedIds,
+          provider_id: userId,
+        },
+        token,
       );
-      Sentry.captureMessage(
-        `Provider flow SELECTED SERVICES for:-${providerProfile?.firstName ?? ''
-        }---- ${selectedServices}`,
-      );
-      setLocalData('PROVIDERSERVICES', selectedServices);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: NavigationRoutes.ProviderConfirmation }],
-      });
+      if (response?.isSuccessful) {
+        Sentry.captureMessage(
+          `Provider flow SELECTED SERVICES API HITfor:-${
+            providerProfile?.firstName ?? ''
+          }---- ${JSON.stringify(response)}`,
+        );
+        Sentry.captureMessage(
+          `Provider flow SELECTED SERVICES for:-${
+            providerProfile?.firstName ?? ''
+          }---- ${selectedServices}`,
+        );
+        setLocalData('PROVIDERSERVICES', selectedServices);
+        setIsLoading(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+        });
+      } else {
+        setIsLoading(false);
+      }
+    } else {
+      Alert.alert('Please select services you provide.');
     }
   };
   return {
