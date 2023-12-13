@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginS),
   },
   editProfile: {
-    height: getHeight(dimens.imageS + dimens.marginS),
+    height: getHeight(dimens.imageS + 8),
     width: getWidth(dimens.imageS + dimens.marginS),
     resizeMode: 'contain',
   },

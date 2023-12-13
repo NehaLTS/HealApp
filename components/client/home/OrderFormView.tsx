@@ -29,7 +29,7 @@ const OrderFormView = ({
   setOrder,
   order,
 }: {
-  treatmentReason: treatment[];
+  treatmentReason: treatment;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
 }) => {
@@ -102,7 +102,7 @@ const OrderFormView = ({
                 isPrimary={activeButton?.includes?.(item?.reason_id)}
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
-                fontSized={getWidth(fontSize?.textM)}
+                fontSized={getHeight(fontSize?.textM)}
                 height={getHeight(dimens?.marginL)}
                 borderRadius={getWidth(dimens?.marginS)}
                 lineHeight={dimens?.sideMargin + dimens?.borderBold}
@@ -141,7 +141,6 @@ const OrderFormView = ({
         backdropColor={colors.white}
         isVisible={isModalVisible}
         onBackdropPress={() => setIsModalVisible(false)}
-        style={{ flex: 0.93 }}
       >
         <Input
           placeholder={t('describe_symptoms')}
@@ -181,7 +180,7 @@ const OrderFormView = ({
                   />
                 )}
               </View>
-              <Text style={{ fontSize: getWidth(fontSize.textM + 1) }}>
+              <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
                 {item?.name?.en.charAt(0).toUpperCase() +
                   item?.name?.en.slice(1)}
               </Text>
@@ -225,7 +224,7 @@ const OrderFormView = ({
         <Text style={styles.streetAddress} title={order?.address ?? ''} />
         <TextButton
           title={t('edit')}
-          fontSize={getWidth(fontSize.textM)}
+          fontSize={getHeight(fontSize.textM)}
           onPress={() => setIsVisible(true)}
         />
       </View>
@@ -241,7 +240,7 @@ const OrderFormView = ({
           isPrimary={!order?.isOrderForOther}
           isSmall
           width={'12%'}
-          fontSized={getWidth(fontSize.textL)}
+          fontSized={getHeight(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
           onPress={() => {
             if (order?.isOrderForOther) onMeTogglePress('me');
@@ -259,7 +258,7 @@ const OrderFormView = ({
           isPrimary={order?.isOrderForOther}
           isSmall
           width={'45%'}
-          fontSized={getWidth(fontSize.textL)}
+          fontSized={getHeight(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
           onPress={() => {
             if (!order?.isOrderForOther) {
@@ -362,21 +361,21 @@ export default OrderFormView;
 
 const styles = StyleSheet.create({
   headingText: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getHeight(dimens.paddingS),
   },
   addressText: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
     marginTop: getHeight(dimens.paddingL),
   },
   reasonText: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getWidth(dimens.paddingS),
     marginTop: getHeight(dimens.paddingS + dimens.borderBold),
   },
   textSmall: {
-    fontSize: getWidth(fontSize.textS - 1),
+    fontSize: getHeight(11),
   },
   checkBox: {
     width: getWidth(dimens.sideMargin + dimens.borderBold),
@@ -461,7 +460,7 @@ const styles = StyleSheet.create({
   },
   streetAddress: {
     paddingHorizontal: getWidth(dimens.sideMargin),
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     flex: 0.97,
     textAlign: 'left',
   },
@@ -483,20 +482,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   placeholder: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     color: colors.grey,
   },
   modalInputContainer: {
-    marginTop: getHeight(dimens.paddingS),
-    marginBottom: getHeight(dimens.paddingS),
     width: '100%',
   },
-  modalInputLabel: {
-    fontSize: getWidth(fontSize.textM),
-    marginBottom: getHeight(dimens.paddingS),
-  },
+
   modalInput: {
-    height: getHeight(dimens.imageS + dimens.marginS),
+    height: getHeight(dimens.imageS),
     color: colors.black,
   },
 });

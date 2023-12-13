@@ -140,12 +140,12 @@ const ProviderAddServices = () => {
               marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
             }}
             onPress={saveService}
-            fontSized={getWidth(15)}
+            fontSized={getHeight(15)}
             height={getHeight(45)}
           />
           <TextButton
             style={styles.skip}
-            fontSize={getWidth(fontSize.textXl)}
+            fontSize={getHeight(fontSize.textXl)}
             title={t('cancel')}
             onPress={toggleModal}
           />
@@ -163,18 +163,16 @@ const ProviderAddServices = () => {
             getAllServices()
           ) : (
             <View style={styles.textContainer}>
-              <Text style={styles.text}>{t('provide_another_service')}</Text>
+              <Text style={styles.text} title={t('provide_another_service')} />
             </View>
           )}
-          <View style={styles.container}>
-            <TouchableOpacity onPress={toggleModal}>
-              <Image
-                source={require('../../../../assets/icon/add.png')}
-                style={styles.addicon}
-              />
-            </TouchableOpacity>
-            <Text style={styles.textAdd}>{t('add_another_service')}</Text>
-          </View>
+          <TouchableOpacity onPress={toggleModal} style={styles.container}>
+            <Image
+              source={require('../../../../assets/icon/add.png')}
+              style={styles.addicon}
+            />
+            <Text style={styles.textAdd} title={t('add_another_service')} />
+          </TouchableOpacity>
         </ScrollView>
       </View>
       {getFooterView()}
@@ -193,15 +191,15 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
   },
   addService: {
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getHeight(dimens.marginM),
   },
   textView: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
   },
   container: {
     flex: 0.27,
@@ -216,7 +214,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   textAdd: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
   },
   modalContent: {
     backgroundColor: colors.modal,
@@ -230,10 +228,10 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: getHeight(dimens.sideMargin + dimens.marginS),
-    height: getHeight(dimens.imageM + dimens.paddingL + dimens.marginS),
+    height: getHeight(dimens.imageM + dimens.paddingL + 10),
     alignItems: 'flex-start',
+    paddingTop: getHeight(dimens.marginS),
     justifyContent: 'center',
-    padddingTop: getHeight(dimens.marginS),
   },
   serviceContainer: {
     backgroundColor: colors.white,

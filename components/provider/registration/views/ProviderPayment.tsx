@@ -170,13 +170,13 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin),
   },
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingXs + 9),
-    width: getWidth(dimens.imageS + 8),
-    resizeMode: 'contain',
+    height: getHeight(dimens.imageS + 8),
+    width: getWidth(dimens.imageS + 2),
     borderRadius: getHeight(dimens.paddingS),
+    resizeMode: 'contain',
   },
   text: {
-    fontSize: fontSize.textL,
+    fontSize: getHeight(fontSize.textL),
     marginTop: getHeight(dimens.marginS),
   },
   editImage: {

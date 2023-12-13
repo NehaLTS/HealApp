@@ -74,7 +74,7 @@ const TreatmentEnd = ({
       </View>
       <View
         style={{
-          flex: 0.8,
+          flex: 0.7,
           justifyContent: 'flex-end',
         }}
       >

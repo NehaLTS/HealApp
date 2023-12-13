@@ -58,12 +58,13 @@ const HomeScreen = () => {
     remainingTime,
     currentLocationOfUser,
     setSearchProviderList,
+    setDropdownVisible,
+    dropdownVisible,
   } = HomeViewController();
   const navigation = useNavigation<any>();
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
   const [currentAddress, setCurrentAddress] = useState<string>('');
-  const [dropdownVisible, setDropdownVisible] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<Order>();
   useEffect(() => {
     getCurrentOrder();
@@ -198,9 +199,12 @@ const HomeScreen = () => {
         {headerTitle()}
         {headerRight()}
       </View>
-      <TouchableWithoutFeedback onPress={onPressBack}>
+      <TouchableOpacity
+        onPress={onPressBack}
+        style={styles.container}
+        activeOpacity={1}
+      >
         <ScrollView
-          style={styles.container}
           contentContainerStyle={{ paddingBottom: 20 }}
           keyboardShouldPersistTaps="always"
         >
@@ -237,7 +241,7 @@ const HomeScreen = () => {
             noSearchedView()
           )}
         </ScrollView>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
 
       {currentOrder?.orderId && (
         <View
@@ -350,11 +354,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
     paddingVertical: getHeight(8),
-    zIndex: 91,
+    zIndex: 99999,
   },
   dropdown: {
     position: 'absolute',
-    top: getHeight(50),
+    top: getHeight(45),
     right: getHeight(1),
     backgroundColor: colors.offWhite,
     borderRadius: getHeight(5),

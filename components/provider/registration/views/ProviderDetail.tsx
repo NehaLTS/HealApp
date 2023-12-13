@@ -146,7 +146,7 @@ export default ProviderDetail;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: fontSize.textL,
+    fontSize: getHeight(fontSize.textL),
     color: colors.black,
     textAlign: 'center',
   },
@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingXs + 8),
-    width: getWidth(dimens.imageS + 8),
-    resizeMode: 'contain',
+    height: getHeight(dimens.imageS + 8),
+    width: getWidth(dimens.imageS + 2),
     borderRadius: getHeight(dimens.paddingS),
+    resizeMode: 'contain',
   },
   box: {
     borderWidth: getHeight(dimens.borderBold),
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
   },
   placeholderStyle: {
-    fontSize: fontSize.textL,
+    fontSize: getHeight(fontSize.textL),
     fontFamily: fontFamily.regular,
     color: colors.black,
   },
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   textItem: {
     flex: 1,
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     color: colors.black,
     padding: getHeight(dimens.marginS),
     paddingLeft: getHeight(dimens.paddingS + dimens.borderBold),
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.regular,
   },
   iconStyle: {
-    width: getWidth(dimens.marginM),
+    width: getHeight(dimens.marginM),
     height: getHeight(dimens.marginM),
   },
   errorMessage: {

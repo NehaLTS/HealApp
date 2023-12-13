@@ -192,7 +192,11 @@ const HomeViewController = () => {
   const onLogoutButtonPress = () => {
     deleteLocalData();
     navigation.navigate(NavigationRoutes.IntroStack);
+    if (dropdownVisible) {
+      setDropdownVisible(false);
+    }
   };
+
   const onTouchStart = () => setIsTouchStart(false);
   const onBlur = () => setIsTouchStart(true);
   const onPressBack = () => {
@@ -200,11 +204,9 @@ const HomeViewController = () => {
     setProvidersList([]);
     setSearchSpecialist('');
     setIsTouchStart(true);
-
     if (searchSpecialist.length > 0) {
       setIsTouchStart(false);
     }
-
     if (dropdownVisible) {
       setDropdownVisible(false);
     }

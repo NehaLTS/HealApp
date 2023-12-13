@@ -114,7 +114,7 @@ const ProviderServices = () => {
         onPress={() => onPrescriptionSelected(true)}
         isChecked={isPrescriptionSelected}
       />
-      <Text style={styles.textServices} title={t('no')} />
+      <Text style={styles.textNo} title={t('no')} />
       <RadioButton
         onPress={() => onPrescriptionSelected(false)}
         isChecked={!isPrescriptionSelected}
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     textAlign: 'left',
   },
   select: {
@@ -153,16 +153,16 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.paddingS),
   },
   textS: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getHeight(dimens.sideMargin),
     marginTop: getHeight(dimens.imageXs),
     textAlign: 'left',
   },
   textAuthority: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
   },
   serviceText: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
   },
   servicesContainer: {
     borderWidth: getWidth(dimens.borderBold),
@@ -191,8 +191,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textServices: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     textAlign: 'center',
+  },
+  textNo: {
+    fontSize: getHeight(fontSize.textM),
+    textAlign: 'center',
+    marginLeft: getWidth(15),
   },
   inputContainer: {
     flex: 0.79,

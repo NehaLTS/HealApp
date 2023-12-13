@@ -73,15 +73,8 @@ const TreatmentCompletedScreen = () => {
       setIsLoading(false);
     }
   };
-
-  const headerLeft = () => (
-    <TouchableOpacity onPress={() => navigation.goBack()}>
-      <Image source={arrowBack} style={styles.arrowBack} />
-    </TouchableOpacity>
-  );
   return (
     <>
-      {RNHeader(() => null, headerLeft)}
       {isLoading && <Loader />}
       <View style={styles.container}>
         {showViews === 'Treatmen_End' && (

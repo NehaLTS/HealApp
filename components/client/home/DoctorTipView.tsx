@@ -133,6 +133,6 @@ const styles = StyleSheet.create({
   },
   imagecontainer: {
     alignItems: 'center',
-    marginTop: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.imageXs),
   },
 });

@@ -15,7 +15,6 @@ import RegistrationViewController from '../controllers/RegistrationViewControlle
 
 const RegistrationView = () => {
   const {
-    
     handleSignUp,
     isLoading,
     renderToast,
@@ -28,8 +27,8 @@ const RegistrationView = () => {
     passwordRef,
     passwordError,
   } = RegistrationViewController();
-  const deviceToken= getLocalData('USER')?.deviceToken
-  
+  const deviceToken = getLocalData('USER')?.deviceToken;
+
   return (
     <>
       {renderToast()}
@@ -63,7 +62,7 @@ const RegistrationView = () => {
           onClearInputText={() => passwordRef.current.clear()}
         />
         <TextButton
-          fontSize={getWidth(fontSize.textS)}
+          fontSize={getHeight(fontSize.textS)}
           isActive
           style={styles.forgotPassword}
           title={t('forgot_password')}
@@ -118,7 +117,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: colors.invalid,
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
   },
   loading: {
     left: '44%',

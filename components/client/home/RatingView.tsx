@@ -26,12 +26,8 @@ const RatingView = ({
 }) => {
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={'height'}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
-      >
-        <ScrollView style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior={'height'} keyboardVerticalOffset={20}>
+        <ScrollView>
           <View style={styles.imagecontainer}>
             <Image
               source={require('../../../assets/icon/doctorIcon.png')}
@@ -68,16 +64,14 @@ const RatingView = ({
             style={styles.placeholder}
           />
 
-          <View style={styles.buttonContainer}>
-            <Button
-              title={'Next'}
-              isPrimary
-              isSmall
-              width={'30%'}
-              style={{ alignSelf: 'center' }}
-              onPress={onPress}
-            />
-          </View>
+          <Button
+            title={'Next'}
+            isPrimary
+            isSmall
+            width={'30%'}
+            style={{ alignSelf: 'center', marginTop: '36%' }}
+            onPress={onPress}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </>
@@ -141,12 +135,11 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textL),
   },
   buttonContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginTop: getHeight(50),
+    marginTop: 70,
+    backgroundColor: 'yellow',
   },
   imagecontainer: {
     alignItems: 'center',
-    marginTop: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.imageXs),
   },
 });

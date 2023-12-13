@@ -18,7 +18,7 @@ const OrderDetailsController = () => {
   const { treatmentMenu, orderProvider } = ClientOrderServices();
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const {
     currentLocationOfUser,
     orderDetails,
@@ -27,7 +27,10 @@ const OrderDetailsController = () => {
     treatmentsMenu,
     setTreatmentsMenu,
   } = UseClientUserContext();
-  const [treatmentReason, setTreatmentReason] = useState<treatment>();
+  const [treatmentReason, setTreatmentReason] = useState<treatment>({
+    treatmentMenu: [],
+    reason: [],
+  });
 
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';

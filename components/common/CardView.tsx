@@ -27,13 +27,18 @@ const CardView = ({ item, index, isSearch }: any) => {
   const onPaymentAdd = () => setIsAddPayment(true);
   const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
+
   const onPressOrder = () => {
-    if (userProfile?.isPaymentAdded) {
-      navigation.navigate(NavigationRoutes.OrderDetails, {
-        supplier: item,
-      });
+    if (item?.name === 'Alternative medicine') {
+      navigation.navigate(NavigationRoutes.HealerHome);
     } else {
-      setModalVisible(true);
+      if (userProfile?.isPaymentAdded) {
+        navigation.navigate(NavigationRoutes.OrderDetails, {
+          supplier: item,
+        });
+      } else {
+        setModalVisible(true);
+      }
     }
   };
   // console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);

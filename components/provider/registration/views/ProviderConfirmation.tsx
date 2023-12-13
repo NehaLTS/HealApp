@@ -16,7 +16,7 @@ const ProviderConfirmation = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { userDataProvider } = UseUserContextProvider();
-const {onPressNext} =ProviderConfirmationController()
+  const { onPressNext } = ProviderConfirmationController();
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => <Header title="Registration" />,
@@ -41,19 +41,18 @@ const {onPressNext} =ProviderConfirmationController()
         <Text style={styles.number}>+972-555-00-11</Text>
       </View>
       <Button
-            title={"next"}
-            isPrimary
-            isSmall
-            width={getWidth(85)}
-            style={{
-              alignSelf: 'center',
-             
-            }}
-            onPress={onPressNext}
-            fontSized={getWidth(15)}
-            height={getHeight(34)}
-          />   
-           </View>
+        title={'Next'}
+        isPrimary
+        isSmall
+        width={getWidth(85)}
+        style={{
+          alignSelf: 'center',
+        }}
+        onPress={onPressNext}
+        fontSized={getWidth(15)}
+        height={getHeight(34)}
+      />
+    </View>
   );
 };
 
@@ -61,17 +60,16 @@ export default ProviderConfirmation;
 
 const styles = StyleSheet.create({
   textContainer: {
-    backgroundColor: colors.modal,
     padding: getHeight(dimens.marginM + dimens.borderBold),
     marginHorizontal: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.marginL + dimens.marginM),
   },
   text: {
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
   },
   number: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     textAlign: 'center',
     marginTop: getHeight(dimens.marginS),
   },
@@ -82,7 +80,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   queryText: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     marginTop: getHeight(dimens.paddingL),
     textAlign: 'center',
   },

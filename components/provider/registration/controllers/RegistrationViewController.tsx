@@ -6,7 +6,7 @@ import React from 'react';
 import { useState } from 'react';
 import useToast from 'components/common/useToast';
 import { emailPattern, passwordPattern } from 'libs/utility/Utils';
-import { setLocalData ,getLocalData} from 'libs/datastorage/useLocalStorage';
+import { setLocalData, getLocalData } from 'libs/datastorage/useLocalStorage';
 import { useSSR, useTranslation } from 'react-i18next';
 import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
@@ -21,7 +21,7 @@ const RegistrationViewController = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const emailRef = React.useRef<any>('');
   const passwordRef = React.useRef<any>('');
-  const deviceToken= getLocalData('USER')?.deviceToken
+  const deviceToken = getLocalData('USER')?.deviceToken;
   const { t } = useTranslation();
 
   const onChangeEmail = (value: string) => {
@@ -51,7 +51,7 @@ const RegistrationViewController = () => {
 
   const validatePassword = () => {
     if (!passwordRef.current.value) {
-      setPasswordError(t('Provider_required'));
+      setPasswordError(t('password_required'));
     } else if (passwordRef.current.value.length < 5) {
       setPasswordError(t('must_be_8_characters'));
     } else if (!isValidPassword(passwordRef.current.value)) {
@@ -65,7 +65,8 @@ const RegistrationViewController = () => {
       onPressSignUpProvider(
         emailRef.current.value,
         passwordRef.current.value,
-        deviceToken);
+        deviceToken,
+      );
 
     //  navigation.reset({
     //         index: 0,

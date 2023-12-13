@@ -47,8 +47,8 @@ const LoginViewController = () => {
     passwordRef.current.value = value;
     validatePassword();
   };
-  const onBlurPassword = () => (value: string) => {
-    passwordRef.current.value = value;
+
+  const onBlurPassword = () => {
     validatePassword();
   };
   const validateEmail = () => {

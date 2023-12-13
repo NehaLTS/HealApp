@@ -88,13 +88,14 @@ const OrderDetails = () => {
       {RNHeader(HeaderTitle, HeaderLeft, () => null, showSummary)}
       {isLoading && <Loader />}
       <KeyboardAvoidingView
-        behavior={'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
         style={styles.mainContainer}
-        contentContainerStyle={{ height: '100%' }}
+        contentContainerStyle={{
+          backgroundColor: colors.white,
+        }}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
+          style={{ height: '100%' }}
           contentContainerStyle={{
             paddingVertical: getHeight(dimens.marginL),
           }}
@@ -107,7 +108,7 @@ const OrderDetails = () => {
             />
           ) : (
             <OrderFormView
-              treatmentReason={treatmentReason ?? []}
+              treatmentReason={treatmentReason}
               setOrder={setOrder}
               order={order}
             />
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
+    height: '100%',
   },
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),

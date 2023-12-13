@@ -193,10 +193,10 @@ const styles = StyleSheet.create({
   },
 
   selectedImage: {
-    height: getHeight(dimens.imageS + dimens.paddingXs + 8),
-    width: getWidth(dimens.imageS + 8),
-    resizeMode: 'contain',
+    height: getHeight(dimens.imageS + 8),
+    width: getWidth(dimens.imageS + 2),
     borderRadius: getHeight(dimens.paddingS),
+    resizeMode: 'contain',
   },
   editImage: {
     height: getHeight(dimens.paddingL + dimens.borderBold),
