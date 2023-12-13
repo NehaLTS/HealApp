@@ -14,6 +14,8 @@ import { ClientOrderServices } from 'libs/ClientOrderServices';
 import Loader from 'components/common/Loader';
 import { Order } from 'libs/types/OrderTypes';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const TreatmentCompletedScreen = () => {
   const [showViews, setShowViews] = useState('Treatmen_End');
@@ -22,6 +24,7 @@ const TreatmentCompletedScreen = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [rating, setRating] = useState(0);
   const route = useRoute<any>();
+  const { userId } = UseClientUserContext()
 
   const currentOrder: Order = getLocalData('ORDER') as Order;
 
@@ -38,14 +41,7 @@ const TreatmentCompletedScreen = () => {
           console.log('object', res);
           // if (res.isSucessfull) {
           setShowViews('Rating_View');
-          setLocalData('ORDER', {
-            orderId: '',
-            providerDetails: undefined,
-            orderPrice: '',
-            orderStatus: '',
-            orderServices: [],
-            message: '',
-          });
+
           // }
         })
         .catch((error) => {
@@ -60,30 +56,41 @@ const TreatmentCompletedScreen = () => {
 
   const onApproveRating = async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(false)
+      console.log("currentOrder.providerDetails.providerId", currentOrder)
       await ProviderRating({
-        provider_id: '1',
-        client_id: '1',
+        provider_id: '6',
+        client_id: userId,
         ratings: rating?.toString(),
       })
         .then((res) => {
           console.log('object', res);
-          if (res.isSucessfull) {
+
+          if (res.msg === "successfully created") {
             setShowViews('Tip_View');
+            setLocalData('ORDER', {
+              orderId: '',
+              providerDetails: undefined,
+              orderPrice: '',
+              orderStatus: '',
+              orderServices: [],
+              message: '',
+            });
           }
+
         })
         .catch((error) => {
           console.error('Error:', error);
         });
     } catch {
-      console.error('Error:');
+      console.error('Error catch:');
     } finally {
       setIsLoading(false);
     }
   };
   return (
     <>
-      {isLoading && <Loader />}
+      {/* {isLoading && <Loader />} */}
       <View style={styles.container}>
         {showViews === 'Treatmen_End' && (
           <TreatmentEnd
@@ -94,7 +101,12 @@ const TreatmentCompletedScreen = () => {
         {showViews === 'Rating_View' && (
           <RatingView onPress={onApproveRating} rating={setRating} />
         )}
-        {showViews === 'Tip_View' && <DoctorTipView onPress={() => {}} />}
+        {showViews === 'Tip_View' && <DoctorTipView onPress={() => {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: NavigationRoutes.ClientHome }],
+          });
+        }} />}
       </View>
     </>
   );

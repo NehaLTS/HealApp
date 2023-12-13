@@ -44,9 +44,8 @@ const TakeOrderView = ({
     const formatTime = (time: number) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${
-        remainingSeconds < 10 ? '0' : ''
-      }${remainingSeconds}`;
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
+        }${remainingSeconds}`;
     };
 
     return (
@@ -85,8 +84,8 @@ const TakeOrderView = ({
         />
 
         {order &&
-          order?.eventData?.symptoms?.length > 0 &&
-          JSON?.parse(order?.eventData?.symptoms)?.map?.(
+          order?.OrderReceive?.symptoms?.length > 0 &&
+          JSON?.parse(order?.OrderReceive?.symptoms)?.map?.(
             (item: any, index: number) => (
               <AnimatedText
                 key={index}
@@ -96,7 +95,7 @@ const TakeOrderView = ({
               />
             ),
           )}
-        {order?.eventData?.services && (
+        {order?.OrderReceive?.services && (
           <>
             <AnimatedText
               style={{
@@ -109,19 +108,18 @@ const TakeOrderView = ({
               title={`Ordered: `}
               entering={FadeInLeft.duration(400).delay(600)}
             >
-              {JSON.parse?.(order?.eventData?.services)?.map?.(
+              {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
                 (service: any, index: number) => (
                   <AnimatedText
                     key={index}
                     style={styles.details}
                     title={
-                      JSON.parse?.(order?.eventData?.services)?.length > 1
-                        ? `${
-                            index !==
-                            JSON.parse?.(order?.eventData?.services)?.length - 1
-                              ? ` ${service?.service_name}, `
-                              : ` ${service?.service_name}`
-                          }`
+                      JSON.parse?.(order?.OrderReceive?.services)?.length > 1
+                        ? `${index !==
+                          JSON.parse?.(order?.OrderReceive?.services)?.length - 1
+                          ? ` ${service?.service_name}, `
+                          : ` ${service?.service_name}`
+                        }`
                         : service?.service_name
                     }
                     entering={FadeInLeft.duration(400).delay(700)}
@@ -133,15 +131,12 @@ const TakeOrderView = ({
         )}
         <AnimatedText
           style={styles.otherDetails}
-          title={`${order?.eventData?.firstname}  ${
-            order?.eventData?.lastname
-          }    ${
-            order?.eventData?.distance !== 'undefined'
-              ? order?.eventData?.time
+          title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+            }    ${order?.OrderReceive?.distance !== 'undefined'
+              ? order?.OrderReceive?.time
               : 0
-          } km, ~${
-            order?.eventData?.time !== 'undefined' ? order?.eventData?.time : 0
-          } min`}
+            } km, ~${order?.OrderReceive?.time !== 'undefined' ? order?.OrderReceive?.time : 0
+            } min`}
           entering={FadeInLeft.duration(400).delay(600)}
         />
         <AnimatedText
@@ -151,7 +146,7 @@ const TakeOrderView = ({
             borderColor: colors.offWhite,
             paddingBottom: getHeight(16),
           }}
-          title={order?.eventData?.address}
+          title={order?.OrderReceive?.address}
           entering={FadeInLeft.duration(400).delay(800)}
         />
         <View
@@ -191,7 +186,7 @@ const TakeOrderView = ({
           <TextButton
             title={'Call the client'}
             onPress={() => {
-              Linking.openURL(`tel:${order?.eventData?.phone_number}`);
+              Linking.openURL(`tel:${order?.OrderReceive?.phone_number}`);
             }}
             fontSize={getHeight(fontSize.textXl)}
             style={styles.seeOnWaze}

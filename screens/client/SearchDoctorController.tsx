@@ -148,9 +148,7 @@ const SearchDoctorController = () => {
    * Listener to get event updates
    */
   const getEventUpdate = () => {
-    DeviceEventEmitter.addListener('OrderListener', (event) => {
-      //setStatusOnEventFire(event.notification.title);
-
+    DeviceEventEmitter.addListener('ClientOrderListener', (event) => {
       if (event.data && event.data.status)
         setStatusOnEventFire(event.data.status);
 
@@ -160,7 +158,14 @@ const SearchDoctorController = () => {
           longitude: parseFloat(event.data.longitude),
         });
       }
-
+      // setLocalData('ORDER', {
+      //   orderStatus:
+      //     event.notification.title === 'Accept Order'
+      //       ? 'On the way'
+      //       : event.notification.title === 'Arrived Order'
+      //       ? 'Arrived'
+      //       : 'Estimated arrival',
+      // });
       console.log('DoctorNotification', JSON.stringify(event));
 
       // setTimeout(() => {

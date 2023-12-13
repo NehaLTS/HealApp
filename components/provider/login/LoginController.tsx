@@ -36,10 +36,10 @@ const LoginViewController = () => {
       setUserDataProvider({
         ...userDataProvider,
         token: res?.token,
-        isSuccessful: res?.isSuccessful,
+        isSuccessful: res?.isSuccessfull,
       });
       setLocalData('USER', res);
-      if (res?.isSuccessful === true) {
+      if (res?.isSuccessfull === true) {
         handleAuthResponse();
       } else {
         Alert.alert(

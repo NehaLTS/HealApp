@@ -23,3 +23,51 @@ export interface OrderServices {
   serviceName: string;
   servicePrice: string;
 }
+export interface ProviderOrder {
+  latitude?: string;
+  longitude?: string;
+  OrderReceive?: ProviderOrderReceive
+  onPaymentAprroved?: boolean;
+  orderId?: string;
+  orderStatus?: string;
+  extraData?: extraProps
+}
+
+export interface ProviderOrderReceive {
+  address: string;
+
+  distance: string;
+  firstname: string;
+  lastname: string;
+  phone_number: string;
+  symptoms: any;
+  providerId: string;
+  services: any;
+  time: string;
+}
+
+export interface ClientOrder {
+  latitude?: string;
+  longitude?: string;
+  orderId?: string;
+  orderStatus?: string;
+  treatementEnd?: OnTreatementEnd
+}
+
+
+export interface OnTreatementEnd {
+  firstname: string;
+  lastname: string;
+  services: string;
+  total: string;
+  currency: string;
+}
+export interface extraProps {
+  isArrived?: boolean;
+  isNotification?: boolean;
+  isSeeMore?: boolean,
+  modalHeight?: number,
+  isCancelOrder?: boolean,
+  orderAccepted?: boolean,
+  totalPrice?: string
+}

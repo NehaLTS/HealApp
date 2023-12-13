@@ -17,14 +17,14 @@ const ArrivedView = ({
   onPressAddService,
   totalPricesOfServices,
   onPressTreatmentEnd,
-  onPress,
+
 }: {
   order: any;
   isModalVisible: boolean;
   onPressAddService: () => void;
   totalPricesOfServices: string;
   onPressTreatmentEnd: () => void;
-  onPress: () => void;
+
 }) => {
   return (
     <RNModal
@@ -58,11 +58,11 @@ const ArrivedView = ({
           title={'Patient'}
           entering={FadeInLeft.duration(400).delay(500)}
         />
-        {order?.providerDetail?.length ||
-          (order?.providerDetail !== null && (
+        {order?.order?.OrderReceive?.length ||
+          (order?.OrderReceive !== null && (
             <AnimatedText
               style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-              title={`${order?.providerDetail?.firstname}  ${order?.providerDetail?.lastname}`}
+              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname}`}
               entering={FadeInLeft.duration(400).delay(600)}
             />
           ))}
@@ -71,8 +71,8 @@ const ArrivedView = ({
           title={'Services provided'}
           entering={FadeInUp.duration(400).delay(700)}
         />
-        {order?.services?.length &&
-          JSON.parse?.(order?.services)?.map?.((item: any, index: number) => (
+        {order && order?.OrderReceive && order?.OrderReceive?.services?.length &&
+          JSON.parse?.(order?.OrderReceive?.services)?.map?.((item: any, index: number) => (
             <View key={index} style={styles.servicesProvided}>
               <View style={styles.servicesLeftView}>
                 <AnimatedText

@@ -172,13 +172,12 @@ export interface ProviderProfile {
   licensenumber?: string;
   licensepicture?: string;
   bankDetails?: ProviderBankDetails;
-  services?:ProviderServices[]
+  services?: ProviderServices[]
 }
 
 export interface ProviderType {
   name: HealLanguageType;
   id: string;
-  specialties?: ProviderSpeciality[];
 }
 
 export interface OrderDetail {

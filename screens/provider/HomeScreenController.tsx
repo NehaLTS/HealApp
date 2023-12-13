@@ -16,10 +16,10 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 
 const HomeScreenControlller = () => {
-  const order = getLocalData('ORDER');
+  const order = getLocalData('PROVIDERORDER');
   const navigation = useNavigation();
 
-  const [acceptOrder, setAcceptOrder] = useState(order?.orderAccepted ?? false);
+  const [acceptOrder, setAcceptOrder] = useState(order?.extraData?.orderAccepted ?? false);
   const { userId, providerProfile } = UseProviderUserContext();
   const { currentLocationOfUser } = UseClientUserContext();
   const token = getLocalData('USER')?.deviceToken;
@@ -75,7 +75,7 @@ const HomeScreenControlller = () => {
   const updateLocation = () => {
     console.log('updateDtaaApiFunction');
 
-    Geolocation.watchPosition(
+    Geolocation.getCurrentPosition(
       (position) => {
         // Alert.alert('WatchPostion');
         // setProviderLocation({
@@ -90,21 +90,25 @@ const HomeScreenControlller = () => {
         Sentry.captureMessage(
           `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
         );
-        UpdateProviderLocation({
-          provider_id: userId,
-          order_id: order?.eventData?.orderId,
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString(),
-        }).then((res) => {
-          Sentry.captureMessage(
-            `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
-          );
-          Alert.alert('Api update Location hit');
-          console.log('gurepeet', res);
-          // Alert.alert(
-          //   'dataUpdate after getihng response' + JSON.stringify(res),
-          // );
-        }); // setLocation({ latitude, longitude });
+        setTimeout(() => {
+
+
+          UpdateProviderLocation({
+            provider_id: userId,
+            order_id: order?.orderId ?? '1',
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          }).then((res) => {
+            Sentry.captureMessage(
+              `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
+            );
+            Alert.alert('Api update Location hit');
+            console.log('gurepeet', res);
+            // Alert.alert(
+            //   'dataUpdate after getihng response' + JSON.stringify(res),
+            // );
+          });
+        }, 5000); // setLocation({ latitude, longitude });
       },
       (error) => {
         Sentry.captureMessage(
@@ -123,8 +127,9 @@ const HomeScreenControlller = () => {
         showsBackgroundLocationIndicator: true,
       },
     );
+
   };
-  console.log('order?.eventData?.providerId', order?.eventData?.providerId);
+  console.log('order?.eventData?.providerId', userId);
   console.log('order?.eventData?.orderId', order);
   const OnPressTakeOrder = () => {
     // Geolocation.watchPosition(
@@ -132,8 +137,8 @@ const HomeScreenControlller = () => {
     setAcceptOrder(true);
     OrderRequst({
       status: 'accept',
-      provider_id: order?.eventData?.providerId,
-      order_id: order?.eventData?.orderId,
+      provider_id: userId,
+      order_id: order?.orderId ?? '1',
       latitude: currentLocationOfUser?.latitude?.toString() ?? '',
       longitude: currentLocationOfUser?.longitude?.toString() ?? '',
     })
@@ -144,9 +149,12 @@ const HomeScreenControlller = () => {
             `Provider notification event 'order accept response' for:-${providerProfile?.firstName}---- ${res}`,
           );
           setAcceptOrder(true);
-          setLocalData('ORDER', {
-            orderAccepted: true,
-          });
+
+          setLocalData('PROVIDERORDER', {
+            extraData: {
+              orderAccepted: true
+            }
+          })
         } else {
           Sentry.captureMessage(
             `Provider notification event 'order accept response failed' for:-${providerProfile?.firstName}---- ${res}`,

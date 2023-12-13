@@ -47,14 +47,21 @@ export const createNotificationListeners = () => {
     Sentry.captureMessage(
       `first notification ---- ${JSON.stringify(remoteMessage)}`,
     );
+    if (notification?.title === "Provider Notification") {
+      DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
+      console.log("ProviderOrderListener")
+    } else if (notification?.title === "Client Notification") {
+      console.log("ClientORder")
+      DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
+    } else {
 
-    //TODO: VANDANA WHY ARE WE SAVING HERE LOCAL DATA
-    // setLocalData('ORDER', {
-    //   eventData: remoteMessage.data,
-    //   orderStatus: remoteMessage?.notification?.title,
-    // });
+      DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
+      DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
+    }
 
-    DeviceEventEmitter.emit('OrderListener', remoteMessage);
+
+
+
     console.log('messagesOnMessageremoteMessage', remoteMessage);
     // showAlert(notification.title, notification.body);
   });
@@ -69,8 +76,15 @@ export const createNotificationListeners = () => {
         `second notification ---- ${JSON.stringify(remoteMessage)}`,
       );
       //GURPREET TO ADD NOTIFICATION CAPTURE MESSAGE
+      if (remoteMessage.notification?.title === "Provider Notification") {
+        DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
+      } else if (remoteMessage.notification?.title === "Client Notification") {
+        DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
+      } else {
+        DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
+        DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
+      }
 
-      DeviceEventEmitter.emit('OrderListener', remoteMessage.data);
     },
   );
 
