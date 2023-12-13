@@ -32,7 +32,7 @@ export const UPDATE_PROVIDER_LOCATION = 'providers/updateProviderStatus';
 export const PROVIDER_AVAILABILITY = 'providers/updateProviderAvailability';
 export const ADD_PROVIDER_SERVICE = 'providers/updateServicesStatus';
 export const CREATE_HEALPROVIDER_SERVICES = 'providers/selectProviderServices';
-
+export const PROVIDER_USER_DETAILS = 'users/getProviderDetails';
 
 export const ORDER_PAYMENT = 'providers/payLoadOrder';
 export const PROVIDER_RATING = 'providers/createProviderRatings';

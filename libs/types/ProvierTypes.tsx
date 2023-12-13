@@ -96,3 +96,11 @@ export interface TreatementEnded {
   services: string;
   treatment_completed: string;
 }
+
+
+export interface ProviderHomeDetails {
+  total_clients: string;
+  avg_arrival_time: string;
+  wallet_amount: string;
+ 
+}

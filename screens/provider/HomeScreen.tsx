@@ -86,6 +86,7 @@ const HomeScreen = () => {
     providerLocation,
     onLogoutButtonPress,
     TreatementEnded,
+    providerDaySummary
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(
     getHeight(order?.extraData?.modalHeight ?? 360),
@@ -870,9 +871,9 @@ const HomeScreen = () => {
             )
           ) : (
             <>
-              {DetailCard('2', 'Clients today')}
-              {DetailCard('25 min', 'Average arrival time')}
-              {DetailCard('560 ₪', 'My balance')}
+              {DetailCard(providerDaySummary?providerDaySummary.total_clients:'0', 'Clients today')}
+              {DetailCard(providerDaySummary?providerDaySummary.avg_arrival_time:'0 mins', 'Average arrival time')}
+              {DetailCard(providerDaySummary?providerDaySummary.wallet_amount:'0 ₪', 'My balance')}
             </>
           )}
 

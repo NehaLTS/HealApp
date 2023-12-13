@@ -15,12 +15,13 @@ import {
   POST,
   PROVIDER_AVAILABILITY,
   PROVIDER_SIGNIN,
+  PROVIDER_USER_DETAILS,
   TREATMENT_COMPLETED,
   UPDATE_PROVIDER_LOCATION,
   UPDATE_SIGNUP_PROVIDER,
 } from '../constants/ApiConstants';
 import { UserType, UserTypeProvider } from '../types/UserType';
-import { OrderRequest, PoviderLocation, TreatementEnded } from 'libs/types/ProvierTypes';
+import { OrderRequest, PoviderLocation, ProviderHomeDetails, TreatementEnded } from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
@@ -64,6 +65,20 @@ export const AuthServicesProvider = () => {
       method: POST,
       body: body as unknown as BodyInit,
     });
+
+const getProviderDaySummary = (body: {
+    provider_id: string;
+    created_date_time: string;
+  }, accessToken: string,): Promise<ProviderHomeDetails> =>
+    sendRequest(PROVIDER_USER_DETAILS, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': accessToken,
+      } as unknown as HeadersInit,
+    });
+
   const OnUpdateProviderUserDetails = (
     body: {
       firstname: string;
@@ -235,6 +250,7 @@ export const AuthServicesProvider = () => {
     UpdateProviderLocation,
     providerAvailabilityStatus,
     AddProviderServices,
-    TreatementEnded
+    TreatementEnded,
+    getProviderDaySummary
   };
 };

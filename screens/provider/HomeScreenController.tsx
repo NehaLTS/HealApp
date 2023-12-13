@@ -10,10 +10,10 @@ import { Location } from 'libs/types/UserType';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { cleanSingle } from 'react-native-image-crop-picker';
 import * as Sentry from '@sentry/react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';
+import { ProviderHomeDetails } from 'libs/types/ProvierTypes';
 
 const HomeScreenControlller = () => {
   const order = getLocalData('PROVIDERORDER');
@@ -22,10 +22,11 @@ const HomeScreenControlller = () => {
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
   );
-  const { userId, providerProfile } = UseProviderUserContext();
+  const { userId, providerProfile,token } = UseProviderUserContext();
   const { currentLocationOfUser } = UseClientUserContext();
-  const token = getLocalData('USER')?.deviceToken;
-  const [authToken, setAuthToken] = useState(null);
+  const [providerDaySummary, setProviderDaySummary] =
+    useState<ProviderHomeDetails>();
+
   const [providerLocation, setProviderLocation] = useState<Location>({
     latitude: 0.0,
     longitude: 0.0,
@@ -39,6 +40,7 @@ const HomeScreenControlller = () => {
     UpdateProviderLocation,
     providerAvailabilityStatus,
     TreatementEnded,
+    getProviderDaySummary,
   } = AuthServicesProvider();
 
   const sendFCMMessage = async () => {
@@ -76,6 +78,19 @@ const HomeScreenControlller = () => {
     } catch (error) {
       console.error('Error sending FCM Message:', error);
     }
+  };
+
+  useEffect(() => {
+    getSummaryofDay();
+  }, []);
+
+  const getSummaryofDay = async () => {
+    let daySummary = await getProviderDaySummary({
+      provider_id: userId,
+      created_date_time: new Date().toDateString(),
+    },token);
+
+    setProviderDaySummary(daySummary);
   };
 
   const updateLocation = () => {
@@ -188,7 +203,7 @@ const HomeScreenControlller = () => {
     setAcceptOrder,
     onLogoutButtonPress,
     TreatementEnded,
-    // ProviderAvailability
+    providerDaySummary,
   };
 };
 
