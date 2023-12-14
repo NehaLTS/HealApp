@@ -34,6 +34,7 @@ const OrderDetailsController = () => {
 
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
+  const heardDetail = route?.params?.selectedHealerServices ?? '';
   console.log('supplier', supplier);
   const [order, setOrder] = useState<OrderDetail>({
     client_id: '',
@@ -57,10 +58,14 @@ const OrderDetailsController = () => {
   });
 
   const treatmentReasons = async () => {
+
+    const PROVIDER_TYPE_ID = supplier.name === 'Alternative medicine' ? "1" : supplier?.provider_type_id.toString()
+
     try {
       const res = await treatmentMenu({
-        provider_type_id: supplier?.provider_type_id?.toString(),
+        provider_type_id: PROVIDER_TYPE_ID,
       });
+      console.log("TreatmentRespons", res)
       setTreatmentReason(res);
       setTreatmentsMenu(res);
     } catch (error) {
@@ -73,6 +78,7 @@ const OrderDetailsController = () => {
       treatmentsMenu !== null &&
       treatmentsMenu?.treatmentMenu !== undefined
     ) {
+      console.log("treatmentsMenu", treatmentsMenu)
       const checkExisting = treatmentsMenu?.treatmentMenu?.some((item) => {
         return item.provider_type_id;
       });
@@ -101,11 +107,11 @@ const OrderDetailsController = () => {
     let isLocationPermissionOn = await checkLocationPermission();
     if (isLocationPermissionOn) {
       if (
-        order?.isOrderForOther &&
-        (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
-        order?.services?.length > 0 &&
-        order?.patient_type?.age?.length > 0 &&
-        order?.address?.length
+        (order?.isOrderForOther &&
+          (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
+          order?.services?.length > 0 &&
+          order?.patient_type?.age?.length > 0 &&
+          order?.address?.length && supplier.name !== 'Alternative medicine') || supplier.name === 'Alternative medicine' && order?.reason?.length > 0 || order?.Additional_notes?.length
       ) {
         setShowSummary(true);
       }
@@ -113,7 +119,7 @@ const OrderDetailsController = () => {
         order.isOrderForOther === false &&
         (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
         order?.services?.length > 0 &&
-        order?.address?.length
+        order?.address?.length && supplier.name !== 'Alternative medicine' || supplier.name === 'Alternative medicine' && order?.reason?.length > 0 || order?.Additional_notes?.length
       ) {
         setShowSummary(true);
       }
@@ -151,10 +157,15 @@ const OrderDetailsController = () => {
         navigation.navigate(NavigationRoutes.SearchDoctor, {
           orderDetails: orderDetails,
           previousScreen: 'Create Order',
+          heardDetail: heardDetail
         });
       } else {
-        if (orderDetails.services.length && orderDetails.reason.length)
+
+        if (supplier.name !== 'Alternative medicine' && orderDetails.services.length && orderDetails.reason.length || supplier.name === 'Alternative medicine' && orderDetails.reason.length) {
+
           setShowSummary(true);
+
+        }
         else {
           Alert.alert('please select reasons and treatment menu');
         }
@@ -173,6 +184,7 @@ const OrderDetailsController = () => {
     order,
     setOrder,
     isLoading,
+    heardDetail
   };
 };
 

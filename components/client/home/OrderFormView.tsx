@@ -28,10 +28,14 @@ const OrderFormView = ({
   treatmentReason,
   setOrder,
   order,
+  hideTreatmentMenu,
+  onPressWhenHealer
 }: {
   treatmentReason: treatment;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
+  hideTreatmentMenu: boolean
+  onPressWhenHealer: () => void
 }) => {
   const {
     activeButton,
@@ -61,7 +65,8 @@ const OrderFormView = ({
     isShowIcon,
     setIsShowIcon,
     currentLocationOfUser,
-  } = OrderFormController({ setOrder, order });
+  } = OrderFormController({ setOrder, order, onPressWhenHealer });
+
   const { t } = useTranslation();
 
   const showFilledData = () => {
@@ -106,6 +111,7 @@ const OrderFormView = ({
                 height={getHeight(dimens?.marginL)}
                 borderRadius={getWidth(dimens?.marginS)}
                 lineHeight={dimens?.sideMargin + dimens?.borderBold}
+
               />
             ),
           )
@@ -164,7 +170,7 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-      0 ? (
+        0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             <TouchableOpacity
@@ -250,9 +256,8 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
-                  order?.phonenumber
-                }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
+              }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}
@@ -346,7 +351,8 @@ const OrderFormView = ({
         </View>
       )}
       {getReasonsView()}
-      {getTreatmentsView()}
+
+      {!hideTreatmentMenu && getTreatmentsView()}
       <AddAddress
         address={onChangeAddress}
         isVisible={isVisible}

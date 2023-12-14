@@ -8,9 +8,11 @@ import { Alert, StyleSheet } from 'react-native';
 const OrderFormController = ({
   setOrder,
   order,
+  onPressWhenHealer
 }: {
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
+  onPressWhenHealer: () => void
 }) => {
   const uniqueReasonIds: number[] = [];
   order?.reason.forEach((item) => {
@@ -46,11 +48,13 @@ const OrderFormController = ({
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
+  const [moveNext, setMoveNext] = useState<Boolean>(false)
   function calculateBirthDate(age: number) {
     const currentDate = new Date();
     const birthYear = currentDate.getFullYear() - age;
     const birthDate = new Date(birthYear, 0, 1, 0, 0, 0, 0);
     birthDate.setMinutes(birthDate.getMinutes() + 330);
+
     const options = {
       weekday: 'short',
       month: 'short',
@@ -164,6 +168,10 @@ const OrderFormController = ({
       ...prevOrder,
       reason: updatedSelectedResourceType,
     }));
+    console.log("updatedSelectedResourceType", updatedSelectedResourceType)
+    // if (updatedSelectedResourceType.length > 0) {
+    //   onPressWhenHealer()
+    // }
   };
 
   const onMeTogglePress = (item: string) => {

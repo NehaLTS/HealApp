@@ -1,5 +1,5 @@
 import Text from 'components/common/Text';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
@@ -10,44 +10,41 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import downArrow from '../../assets/icon/downArrow.png';
 import arrowBack from '../../assets/icon/arrowBack.png';
 import physio from '../../assets/icon/physio.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import { getProviderImage } from 'libs/utility/Utils';
+import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import Loader from 'components/common/Loader';
 
-const HealerHomeView = (item: any) => {
-  const cardData = [
-    {
-      id: 1,
-      title: 'Shiatsu ',
-    },
-    {
-      id: 2,
-      title: 'Shiatsu ',
-    },
-    {
-      id: 3,
-      title: 'Shiatsu ',
-    },
-    {
-      id: 4,
-      title: 'Shiatsu ',
-    },
-    {
-      id: 5,
-      title: 'Shiatsu ',
-    },
-    {
-      id: 6,
-      title: 'Shiatsu ',
-    },
-    {
-      id: 7,
-      title: 'Shiatsu ',
-    },
-  ];
+const HealerHomeView = () => {
+  const route = useRoute<any>();
+  const [isSelected, setIsSelected] = useState<number>(-1)
   const navigation = useNavigation();
+  const { healerServices } = AuthServicesClient()
+  const { token } = UseClientUserContext()
+  const [healerServcesData, setHealerServicesData] = useState<any>([])
+  const [showLoader, setShowLoader] = useState<boolean>(true)
+
+  useEffect(() => {
+    healerServices(token).then((res) => {
+      console.log("healerServices", res)
+      setHealerServicesData(res)
+      setShowLoader(false)
+    }
+
+    ).catch((error) => {
+      console.log("hearlerError", error)
+
+    })
+  }, [])
+
+
 
   const headerLeft = () => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -56,11 +53,11 @@ const HealerHomeView = (item: any) => {
   );
   const headerTitle = () => (
     <TouchableOpacity>
-      <Image source={physio} style={styles.physio} />
+      <Image source={getProviderImage(route?.params?.supplier?.name)} style={styles.physio} />
     </TouchableOpacity>
   );
   const headerRight = () => (
-    <Text title={item?.name} style={styles.physioText} />
+    <Text title={route?.params?.supplier.name} style={styles.physioText} />
   );
   return (
     <>
@@ -75,12 +72,24 @@ const HealerHomeView = (item: any) => {
           style={styles.heading}
         />
         <ScrollView style={{ width: '100%' }}>
-          {cardData.map((card) => (
-            <View key={card.id} style={styles.cardContainer}>
-              <Text title={card.title} style={styles.text} />
-              <Image source={downArrow} style={styles.downArrow} />
-            </View>
-          ))}
+          {showLoader ? <Loader />
+            :
+            <>
+              {healerServcesData.map((card, index) => (
+                <TouchableOpacity key={card.provider_type_id} style={[styles.cardContainer, { backgroundColor: index === isSelected ? colors.secondary : colors.white }]} onPress={() => {
+                  setIsSelected(index)
+                  console.log("Healercard", card)
+                  navigation.navigate(NavigationRoutes.OrderDetails, {
+                    supplier: route?.params?.supplier,
+                    selectedHealerServices: card
+                  });
+                }}>
+                  <Text title={card.specialty} style={styles.text} />
+                  {/* <Image source={downArrow} style={styles.downArrow} /> */}
+                </TouchableOpacity>
+              ))}
+            </>
+          }
         </ScrollView>
       </View>
     </>

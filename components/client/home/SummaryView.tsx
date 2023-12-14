@@ -21,18 +21,22 @@ import {
 import SummaryViewController from './SummaryViewController';
 import { useTranslation } from 'react-i18next';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { healerType } from 'libs/types/OrderTypes';
 interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
   order: OrderDetail;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
+  healerDetail?: healerType
+  isHealer?: boolean
 }
-const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
+const SummaryView = ({ setShowSummary, order, setOrder, healerDetail, isHealer }: SummaryViewProps) => {
   const {
     isVisible,
     calculateAgeFromDate,
     totalPrice,
     setIsVisible,
     arrivalRef,
+
   } = SummaryViewController({ order });
   const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
@@ -74,11 +78,10 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
             !order?.isOrderForOther
               ? userProfile?.date_of_birth ?? ''
               : order?.patient_type?.age,
-          )} y.o, ${
-            !order?.isOrderForOther
-              ? userProfile?.phoneNumber
-              : order?.phonenumber
-          }`}
+          )} y.o, ${!order?.isOrderForOther
+            ? userProfile?.phoneNumber
+            : order?.phonenumber
+            }`}
           style={styles.textSmall}
         />
       </View>
@@ -166,7 +169,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
       {getSummaryHeader()}
       {getPersonalDetail()}
       {SymptomsView()}
-      {getServicesView()}
+      {isHealer ? <></> : getServicesView()}
       {getCardView()}
       <Text title={t('arrival')} style={styles.text} />
       <Text title={t('60_min')} style={styles.textSmall} />

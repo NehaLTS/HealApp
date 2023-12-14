@@ -16,7 +16,6 @@ interface GeocodeResult {
 }
 
 const useCurrentAddress = () => {
-  const { setCurrentLocationOfUser } = UseClientUserContext();
 
   const getCurrentLocation = (): Promise<Position> => {
     return new Promise((resolve, reject) => {

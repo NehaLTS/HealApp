@@ -37,6 +37,7 @@ const OrderDetails = () => {
     order,
     setOrder,
     isLoading,
+    heardDetail
   } = OrderDetailsController();
   const { t } = useTranslation();
   const HeaderTitle = () => (
@@ -105,14 +106,19 @@ const OrderDetails = () => {
               setShowSummary={setShowSummary}
               order={order}
               setOrder={setOrder}
+              healerDetail={heardDetail}
+              isHealer={supplier.name == "Alternative medicine"}
             />
           ) : (
             <OrderFormView
               treatmentReason={treatmentReason}
               setOrder={setOrder}
               order={order}
+              hideTreatmentMenu={supplier.name === "Alternative medicine"}
+              onPressWhenHealer={() => handleNextButtonPress()}
             />
           )}
+          {/* {supplier.name == "Alternative medicine" && !showSummary ? <></> : */}
           <Button
             title={showSummary ? t('order') : t('next')}
             isPrimary
@@ -122,9 +128,11 @@ const OrderDetails = () => {
             width={'30%'}
             disabled={isLoading}
           />
+          {/* } */}
           {showSummary && (
             <Text title={t('no_fee')} numberOfLines={1} style={styles.text} />
           )}
+
         </ScrollView>
       </KeyboardAvoidingView>
     </>

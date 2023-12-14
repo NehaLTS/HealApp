@@ -1,7 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import { sentryTraceGesture } from '@sentry/react-native';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { DeviceEventEmitter } from 'react-native';
+import { DeviceEventEmitter, Vibration, Platform } from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
@@ -58,8 +58,6 @@ export const createNotificationListeners = () => {
       DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
       DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
     }
-
-
 
 
     console.log('messagesOnMessageremoteMessage', remoteMessage);

@@ -87,7 +87,7 @@ const DoctorDetailCard = ({
                   source={require('../../../assets/icon/star.png')}
                   style={styles.starIcon}
                 />
-                <Text style={styles.rating} title={'4.8'} />
+                <Text style={styles.rating} title={providerData.providerRating} />
               </View>
               <View style={styles.detailsContainer}>
                 <TouchableOpacity

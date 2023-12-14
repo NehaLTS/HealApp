@@ -14,6 +14,7 @@ export const GET_SEARCH_LIST = 'providers/getSearchServices';
 export const ORDER_PROVIDER = 'users/createClientOrder';
 export const GET_LOCATION_SEARCH = 'users/getProviderFromSearch';
 export const BOOK_ORDER = 'providers/providerOrder';
+export const HEALER_SERVICES = 'users/getHealerData';
 // export const SEARCH_API = 'location/getSearchProviderType'
 
 //Provider API

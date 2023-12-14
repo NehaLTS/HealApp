@@ -4,8 +4,10 @@ import {
   CREATE_SIGNUP,
   CREDITED_CARD_DETAILS,
   FACEBOOK_LOGIN_API,
+  GET,
   GET_CREATE_CARD_DETAILS,
   GOOGLE_LOGIN_API,
+  HEALER_SERVICES,
   LOGIN_API,
   PATCH,
   PAYMENT_ACCESS_TOKEN,
@@ -16,6 +18,7 @@ import { ClientProfile, UserType, paymentApproved } from "../types/UserType";
 import { BodyInit, HeadersInit } from "../api/ApiTypes";
 import { UseClientUserContext } from "contexts/UseClientUserContext";
 import { getLocalData } from "libs/datastorage/useLocalStorage";
+import { healerType } from "libs/types/OrderTypes";
 
 export const AuthServicesClient = () => {
 
@@ -141,6 +144,17 @@ export const AuthServicesClient = () => {
     }).then((res) => {
       return res;
     });
+
+  const healerServices = (token: string): Promise<healerType[]> =>
+    sendRequest(HEALER_SERVICES, {
+      method: GET,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    }).then((res) => {
+      return res;
+    });
   return {
     onSubmitAuthRequest,
     onSubmitGoogleAuthRequest,
@@ -149,6 +163,7 @@ export const AuthServicesClient = () => {
     onUpdateUserProfile,
     onCreateCreditCardDetails,
     onGetCreditCard,
-    paymentApproved
+    paymentApproved,
+    healerServices
   };
 };

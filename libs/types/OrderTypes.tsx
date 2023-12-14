@@ -71,3 +71,8 @@ export interface extraProps {
   orderAccepted?: boolean,
   totalPrice?: string
 }
+export interface healerType {
+  price: string,
+  provider_type_id: string,
+  specialty: string
+}
