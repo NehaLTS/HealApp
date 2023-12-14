@@ -17,14 +17,12 @@ const ArrivedView = ({
   onPressAddService,
   totalPricesOfServices,
   onPressTreatmentEnd,
-
 }: {
   order: any;
   isModalVisible: boolean;
   onPressAddService: () => void;
   totalPricesOfServices: string;
   onPressTreatmentEnd: () => void;
-
 }) => {
   return (
     <RNModal
@@ -71,28 +69,33 @@ const ArrivedView = ({
           title={'Services provided'}
           entering={FadeInUp.duration(400).delay(700)}
         />
-        {order && order?.OrderReceive && order?.OrderReceive?.services?.length &&
-          JSON.parse?.(order?.OrderReceive?.services)?.map?.((item: any, index: number) => (
-            <View key={index} style={styles.servicesProvided}>
-              <View style={styles.servicesLeftView}>
-                <AnimatedText
-                  style={{ ...styles.smallText, minWidth: getWidth(90) }}
-                  title={`${item?.service_name ?? ''}`}
-                  entering={FadeInLeft.duration(400).delay(800)}
-                />
-                <AnimatedText
-                  style={styles.smallText}
-                  title={`${item?.service_price} NIS`}
-                  entering={FadeInLeft.duration(400).delay(900)}
-                />
+        {order &&
+          order?.OrderReceive &&
+          order?.OrderReceive?.services?.length &&
+          JSON.parse?.(order?.OrderReceive?.services)?.map?.(
+            (item: any, index: number) => (
+              <View key={index} style={styles.servicesProvided}>
+                <View style={styles.servicesLeftView}>
+                  <AnimatedText
+                    style={{ ...styles.smallText, minWidth: getWidth(90) }}
+                    title={`${item?.service_name ?? ''}`}
+                    entering={FadeInLeft.duration(400).delay(800)}
+                  />
+                  <AnimatedText
+                    style={styles.smallText}
+                    title={`${item?.service_price} NIS`}
+                    entering={FadeInLeft.duration(400).delay(900)}
+                  />
+                </View>
+                <Checkbox isWhite isChecked={true} />
               </View>
-              <Checkbox isWhite isChecked={true} />
-            </View>
-          ))}
+            ),
+          )}
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.addServiceContainer}
           onPress={onPressAddService}
+          disabled={true}
         >
           <Image
             source={require('assets/icon/addServiceWhite.png')}

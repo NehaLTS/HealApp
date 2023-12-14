@@ -110,7 +110,7 @@ const SearchDoctorController = () => {
           res?.message,
         )}`,
       );
-      Alert.alert(res?.message);
+      Alert.alert('No Nearby Doctor found. Sorry Please try again later');
     }
 
     console.log('orderId..', res.orderId);

@@ -86,7 +86,7 @@ const HomeScreen = () => {
     providerLocation,
     onLogoutButtonPress,
     TreatementEnded,
-    providerDaySummary
+    providerDaySummary,
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(
     getHeight(order?.extraData?.modalHeight ?? 360),
@@ -727,25 +727,10 @@ const HomeScreen = () => {
     title: string;
     isActive: boolean;
   }) => {
-    const [fadeAnim] = useState(new RNAnimated.Value(0));
-    useEffect(() => {
-      RNAnimated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 900,
-        useNativeDriver: false,
-      }).start();
-    }, [fadeAnim]);
     return (
-      <RNAnimated.Text
-        style={[
-          isActive ? styles.isAvailable : styles.notAvailable,
-          {
-            opacity: fadeAnim,
-          },
-        ]}
-      >
+      <Text style={[isActive ? styles.isAvailable : styles.notAvailable]}>
         {title}
-      </RNAnimated.Text>
+      </Text>
     );
   };
 
@@ -871,9 +856,20 @@ const HomeScreen = () => {
             )
           ) : (
             <>
-              {DetailCard(providerDaySummary?providerDaySummary.total_clients:'0', 'Clients today')}
-              {DetailCard(providerDaySummary?providerDaySummary.avg_arrival_time:'0 mins', 'Average arrival time')}
-              {DetailCard(providerDaySummary?providerDaySummary.wallet_amount:'0 ₪', 'My balance')}
+              {DetailCard(
+                providerDaySummary ? providerDaySummary.total_clients : '0',
+                'Clients today',
+              )}
+              {DetailCard(
+                providerDaySummary
+                  ? providerDaySummary.avg_arrival_time
+                  : '0 mins',
+                'Average arrival time',
+              )}
+              {DetailCard(
+                providerDaySummary ? providerDaySummary.wallet_amount : '0 ₪',
+                'My balance',
+              )}
             </>
           )}
 

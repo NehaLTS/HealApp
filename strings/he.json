@@ -171,5 +171,7 @@
 "less_details": "ראה פחות פרטים",
 "found": "נמצא",
 "on_way": "בדרך",
-"arrived": "הגיע"
+"arrived": "הגיע",
+"cvv_invalid":"cvv לא חוקי"
+
 }

@@ -179,7 +179,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
             })
           }
           style={styles.placeholder}
-          numberOfLines={2}
+          multiline
         />
       </View>
       {isVisible && paymentModal()}
@@ -218,12 +218,12 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     flexDirection: 'row',
-    gap: getWidth(dimens.marginS + 5),
+    gap: getWidth(dimens.marginS + dimens.marginS),
     marginBottom: 10,
     alignItems: 'center',
   },
   voltaireText: {
-    marginVertical: getHeight(5),
+    marginVertical: getHeight(3),
     fontSize: getWidth(fontSize.textM),
     textAlign: 'left',
   },
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   placeholder: {
-    marginTop: getHeight(-20),
+    // marginTop: getHeight(-20),
     paddingLeft: getWidth(dimens.marginS),
     fontFamily: fontFamily.regular,
     color: colors.black,

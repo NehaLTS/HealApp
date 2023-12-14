@@ -196,7 +196,7 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-                showLoader
+              showLoader
                 ? t('looking_doctor')
                 : `${'Doctor'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
@@ -265,8 +265,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                            currentOrder.providerDetails
-                              ?.providerProfilePicture ? (
+                          currentOrder.providerDetails
+                            ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -299,8 +299,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-            providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -330,9 +330,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !showLoader &&
-                  !showCancelButton
+                providerLocation.latitude !== 0.0 &&
+                !showLoader &&
+                !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -346,9 +346,10 @@ const SearchDoctor = () => {
             />
             {showCancelTextButton && !showLoader && (
               <TextButton
-                style={{ alignSelf: 'center', fontSize: fontSize.textXl }}
+                style={{ alignSelf: 'center' }}
                 title={t('cancel')}
-                onPress={() => { }}
+                onPress={() => {}}
+                fontSize={getHeight(fontSize.textXl)}
               />
             )}
             <Text
@@ -356,11 +357,11 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                  showLoader
+                showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                    ? t('3_minutes_to_cancel')
-                    : ''
+                  ? t('3_minutes_to_cancel')
+                  : ''
               }
             />
           </View>
@@ -419,17 +420,18 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(40),
   },
   marker: {
-    backgroundColor: '#F9FDFF',
+    backgroundColor: colors.offWhite,
     padding: getWidth(dimens.marginS),
     borderRadius: 8,
     flexDirection: 'row',
-    width: '68%',
+    width: '66%',
+    gap: getHeight(10),
   },
   doctorIcon: {
-    width: getWidth(dimens.imageXs),
-    height: getHeight(dimens.imageXs),
+    width: getWidth(dimens.imageS),
+    height: getHeight(dimens.imageS),
     resizeMode: 'cover',
-    borderRadius: getHeight(dimens.imageXs),
+    borderRadius: getHeight(dimens.imageS),
   },
   doctorName: {
     fontSize: getHeight(fontSize.textS),

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const UserPaymentViewController = ({ item }: any) => {
-  const { userId, userProfile, setUserProfile ,token} = UseClientUserContext();
+  const { userId, userProfile, setUserProfile, token } = UseClientUserContext();
   const { onCreateCreditCardDetails } = AuthServicesClient();
   const cardNumberRef = React.useRef<any>('');
   const expireDateRef = React.useRef<any>('');
@@ -42,10 +42,13 @@ const UserPaymentViewController = ({ item }: any) => {
     } else setCardExpiryError('');
   };
   const validateCvv = () => {
-    if (!cvv?.length) setCvvError(t('cvv_required'));
-    else if (cvv?.length !== 3) {
-      setCvvError(t('cvv_number_short'));
-    } else setCvvError('');
+    const trimmedCvv = cvv.trim();
+    const cvvPattern = /^[0-9]{3}$/;
+    if (!cvvPattern.test(trimmedCvv)) {
+      setCvvError(t('cvv_invalid'));
+    } else {
+      setCvvError('');
+    }
   };
 
   const trimPaymentValue = (value: string) => value.replace(/[^0-9]/g, '');
@@ -121,14 +124,16 @@ const UserPaymentViewController = ({ item }: any) => {
   const onPressStartUsingHeal = async (isFromHome: boolean) => {
     if (card?.length === 19 && expiry?.length === 5 && cvv?.length === 3) {
       setIsLoader(true);
-      const res = await onCreateCreditCardDetails({
-        credit_card_number: card ?? '',
-        expire_date: expiry ?? '',
-        cvv: cvv ?? '',
+      const res = await onCreateCreditCardDetails(
+        {
+          credit_card_number: card ?? '',
+          expire_date: expiry ?? '',
+          cvv: cvv ?? '',
 
-        client_id: getLocalData?.('USER')?.userId,
-      },
-      token);
+          client_id: getLocalData?.('USER')?.userId,
+        },
+        token,
+      );
 
       if (res?.isSuccessful) {
         //TODO: Vandana to save in Local data with isPaymentAdded as true

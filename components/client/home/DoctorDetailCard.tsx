@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
     height: getHeight(25),
     resizeMode: 'contain',
     position: 'absolute',
-    top: -24,
-    right: -14,
+    top: getHeight(-20),
+    right: getHeight(0),
   },
   container: {
     flexDirection: 'row',

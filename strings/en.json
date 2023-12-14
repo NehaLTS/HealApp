@@ -172,6 +172,7 @@
   "found": " is found",
   "on_way": "on the way",
   "arrived": "arrived",
+  "cvv_invalid":"cvv invalid",
 
   "home": {
     "providerList": [

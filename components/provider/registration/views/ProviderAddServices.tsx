@@ -166,14 +166,14 @@ const ProviderAddServices = () => {
             title={t('save')}
             isPrimary
             isSmall
-            width={getWidth(80)}
+            width={getWidth(70)}
             style={{
               alignSelf: 'center',
               marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
             }}
             onPress={saveService}
             fontSized={getHeight(15)}
-            height={getHeight(45)}
+            height={getHeight(40)}
           />
           <TextButton
             style={styles.skip}
@@ -199,7 +199,7 @@ const ProviderAddServices = () => {
             </View>
           )}
           <TouchableOpacity
-            onPress={toggleModal}
+            onPress={onOpenModal}
             style={styles.container}
             activeOpacity={1}
           >
