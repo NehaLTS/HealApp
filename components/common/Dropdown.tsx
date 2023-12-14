@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.offWhite,
     height: getHeight(dimens.imageS),
     borderColor: colors.primary,
-    marginTop: getHeight(dimens.marginM + dimens.paddingXs),
+    marginTop: getHeight(30),
     paddingHorizontal: getHeight(dimens.paddingS + dimens.borderBold),
   },
   box: {

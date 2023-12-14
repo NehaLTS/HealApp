@@ -48,10 +48,8 @@ const App = () => {
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
   const [currentLocationOfUser, setCurrentLocationOfUser] =
     useState<currentLocationOfUser>(null);
-  const [permissonGrant, setPermissonGrant] = useState(false);
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
   const [treatmentsMenu, setTreatmentsMenu] = useState<treatment>(null);
-  const { fetchCurrentAddress } = useCurrentAddress();
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -109,8 +107,7 @@ const App = () => {
 
   useEffect(() => {
     requestLocationPermission();
-    // location();
-  }, [permissonGrant]);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

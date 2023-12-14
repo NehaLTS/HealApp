@@ -36,20 +36,23 @@ const ProviderAddressController = () => {
     }
   }, []);
 
-  const onBlurPhoneNumber = () => validatePhoneNumber();
+  const onBlurPhoneNumber = () => {};
 
   const onChangePhoneNumber = (value: string) => {
     phoneRef.current.value = value;
-    validatePhoneNumber();
+    validatePhoneNumber(value);
   };
 
   const onChangeLicenseNumber = (value: string) => {
     licenseRef.current.value = value;
+    validateLicense(value);
   };
-  const onBlurAddress = () => validateAddress();
+  const onBlurAddress = () => {};
 
   const onChangeAddress = (value: string) => {
-    (addressRef.current.value = value), setOnSearchAddress(value);
+    addressRef.current.value = value;
+    setOnSearchAddress(value);
+    validateAddress(value);
   };
 
   const getImageUrl = (url: string) => {
@@ -58,15 +61,14 @@ const ProviderAddressController = () => {
 
   const onPressNext = () => {
     if (phoneRef.current.value && onSearchAddress) {
-      // If license number is added without a license picture
       if (licenseRef.current.value && !licensePicture) {
         Alert.alert(t('select_license_picture'));
+      } else if (
+        !licenseRef.current.value ||
+        (licenseRef.current.value === undefined && licensePicture)
+      ) {
+        setLicenseError(t('License number required'));
       } else {
-        // Check if license number is provided without a license picture
-        // if (licenseRef.current.value && !licensePicture) {
-        //   Alert.alert(t('select_license_picture'));
-        // } else {
-        // All conditions met, update provider profile and proceed to 'payment'
         setProviderProfile({
           ...(providerProfile as ProviderProfile),
           address: onSearchAddress,
@@ -75,52 +77,32 @@ const ProviderAddressController = () => {
           licensepicture: licensePicture,
         });
         setCurrentStep('payment');
-        // }
       }
     } else {
-      // Address or phone number missing, show respective errors
       if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
       if (!onSearchAddress) setAddressError(t('address_required'));
     }
-
-    // if (phoneRef.current.value && onSearchAddress) {
-    //   // if (licenseRef.current.value && licensePicture) {
-    //     setProviderProfile({
-    //       ...(providerProfile as ProviderProfile),
-    //       address: onSearchAddress,
-    //       phoneNumber: phoneRef.current.value,
-    //       licensenumber: licenseRef.current.value,
-    //       licensepicture: licensePicture,
-    //     });
-    //     setCurrentStep('payment');
-    //   // } else {
-    //   //   Alert.alert(t('select_license_picture'));
-    //   // }
-    // } else {
-    //   if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
-    //   if (!onSearchAddress) setAddressError(t('address_required'));
-    // }
   };
 
   const onPressBack = () => setCurrentStep('details');
   const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
-  const validatePhoneNumber = () => {
-    if (!phoneRef.current.value) {
+  const validatePhoneNumber = (value: string) => {
+    if (!value?.length) {
       setPhoneError(t('phone_number_required'));
-    } else if (!isValidPhoneNumber(phoneRef.current.value)) {
+    } else if (!isValidPhoneNumber(value)) {
       setPhoneError(t('number_not_valid'));
     } else setPhoneError('');
   };
 
-  const validateAddress = () => {
-    if (onSearchAddress?.length === 0) {
-      setAddressError(t('address_required'));
-    } else if (onSearchAddress?.length < 4) {
-      setAddressError(t('fill_address'));
-    } else {
-      setAddressError('');
-    }
+  const validateAddress = (value: string) => {
+    if (value?.length < 4) setAddressError(t('fill_address'));
+    else setAddressError('');
+  };
+
+  const validateLicense = (value: string) => {
+    if (value?.length < 4) setLicenseError(t('License number required'));
+    else setLicenseError('');
   };
 
   return {

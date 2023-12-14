@@ -180,39 +180,36 @@ const LoginViewController = () => {
 
     setIsLoading(false);
   };
+
   /** To handle Google login  button click*/
   const onHandleGoogleLogin = async () => {
     setIsLoading(true);
-    /** To process Google login from firestore */
-    onGoogleAuthProcessing().then(async (userData) => {
-      try {
-        console.log('vbxcvbnxvb', userData);
-        const email = userData?.user?.email ?? '';
-        const googleId = userData.user.providerData[0].uid;
+    try {
+      let userData = await onGoogleAuthProcessing();
+      console.log('vbxcvbnxvb', userData);
+      const email = userData?.user?.email ?? '';
+      const googleId = userData.user.providerData[0].uid;
 
-        /** To handle Google auth request to API */
+      /** To handle Google auth request to API */
+      if (email && googleId) {
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
           googleId,
           device_token: device_Token,
         });
-        // setLocalData('USER', res);
         if (res?.isSuccessful === true) {
-          setIsLoading(false);
           handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
-          setIsLoading(false);
           Alert.alert(t('login_failed'), t('check_email_and_password'));
         }
-      } catch (err) {
-        setIsLoading(false);
-        console.log('Error occurred!');
       }
-    });
-    setTimeout(() => {
+    } catch (err) {
+      console.log('Error occurred!');
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
+
   /** To handle Facebook login  button click*/
   const onHandleFacebookLogin = () => {
     setIsLoading(true);

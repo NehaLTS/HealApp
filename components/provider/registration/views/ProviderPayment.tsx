@@ -189,6 +189,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   numberInput: {
-    marginTop: getHeight(10),
+    // marginTop: getHeight(10),
   },
 });

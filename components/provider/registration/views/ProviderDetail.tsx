@@ -226,6 +226,6 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.borderBold + dimens.borderBold),
   },
   input: {
-    marginTop: getHeight(dimens.marginS),
+    // marginTop: getHeight(dimens.marginS),
   },
 });

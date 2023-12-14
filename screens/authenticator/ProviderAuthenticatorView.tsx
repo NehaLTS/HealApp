@@ -16,7 +16,6 @@ import { Image, StyleSheet, View } from 'react-native';
 import ProviderAuthenticatorViewController from './ProviderAuthenticatorViewController';
 import { checkPermission } from 'libs/Notification';
 
-
 const ProviderAuthenticatorView = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -72,7 +71,6 @@ const ProviderAuthenticatorView = () => {
               })
             }
           />
-          {/* <Text style={styles.guestText} title={t("guest_entrance")} /> */}
           <TextButton
             title={t('switch_to_client')}
             fontSize={getHeight(fontSize.textXl)}

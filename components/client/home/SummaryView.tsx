@@ -99,7 +99,15 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         {order?.reason.map((item, index) => (
           <Text
             key={index}
-            title={item.length <= 1 ? item.name.en : `${item.name.en},`}
+            title={
+              order?.reason?.length > 1
+                ? `${
+                    index !== order?.reason?.length - 1
+                      ? `${item?.name?.en}, `
+                      : `${item?.name?.en}`
+                  }`
+                : item?.name?.en
+            }
             style={styles.textSmall}
           />
         ))}
@@ -154,7 +162,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
   );
 
   return (
-    <>
+    <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={100}>
       {getSummaryHeader()}
       {getPersonalDetail()}
       {SymptomsView()}
@@ -183,7 +191,7 @@ const SummaryView = ({ setShowSummary, order, setOrder }: SummaryViewProps) => {
         />
       </View>
       {isVisible && paymentModal()}
-    </>
+    </KeyboardAvoidingView>
   );
 };
 export default SummaryView;

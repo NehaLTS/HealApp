@@ -103,6 +103,7 @@ const ProviderAddress = () => {
           returnKeyType={'done'}
           onClearInputText={() => licenseRef.current.clear()}
           maxLength={10}
+          errorMessage={licenseError}
         />
 
         <Input
@@ -128,7 +129,7 @@ const ProviderAddress = () => {
         />
       </View>
       <AddAddress
-        address={setOnSearchAddress}
+        address={onChangeAddress}
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
         defaultValue={onSearchAddress}
@@ -187,6 +188,6 @@ const styles = StyleSheet.create({
     flex: 0.75,
   },
   inputPhone: {
-    marginTop: getHeight(dimens.marginS),
+    // marginTop: getHeight(dimens.marginS),
   },
 });

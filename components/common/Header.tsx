@@ -1,20 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
+import logo from 'assets/icon/healLogo.png';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useLayoutEffect, useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, { useLayoutEffect } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import LocalizationController from './LocalizationController';
 import Text from './Text';
-import { useNavigation } from '@react-navigation/native';
-import avatar from 'assets/icon/avatar.png';
-import logo from 'assets/icon/healLogo.png';
 
 export const defaultHeaderStyle = {
   headerShadowVisible: false,
@@ -147,6 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.white,
     width: '100%',
+    paddingLeft: getWidth(16),
   },
   language: {
     alignSelf: 'flex-end',
@@ -169,9 +163,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   logo: {
-    width: getWidth(dimens.imageS),
-    height: getHeight(40),
+    width: getWidth(dimens.imageS - 4),
+    height: getHeight(43),
     resizeMode: 'contain',
+    backgroundColor: 'red',
   },
   avatar: {
     height: getHeight(45),
