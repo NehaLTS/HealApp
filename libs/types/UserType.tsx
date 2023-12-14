@@ -136,7 +136,7 @@ export interface ClientProfile {
   profilePicture?: string;
   phoneNumber: string;
   email?: string;
-  address?: string;
+  address?: currentLocationOfUser;
   city?: string;
   state?: string;
   country?: string;
@@ -165,7 +165,7 @@ export interface ProviderProfile {
   speciality: ProviderSpeciality;
   phoneNumber: string;
   email?: string;
-  address?: string;
+  address?: currentLocationOfUser;
   city?: string;
   state?: string;
   country?: string;

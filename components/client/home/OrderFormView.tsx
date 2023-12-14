@@ -227,6 +227,7 @@ const OrderFormView = ({
             style={styles.locationIcon}
           />
         </TouchableOpacity>
+        {console.log("adresssON OrdeVeie", order)}
         <Text style={styles.streetAddress} title={order?.address ?? ''} />
         <TextButton
           title={t('edit')}

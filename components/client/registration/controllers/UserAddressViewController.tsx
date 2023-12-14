@@ -1,7 +1,7 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
-import { ClientProfile } from 'libs/types/UserType';
+import { ClientProfile, currentLocationOfUser } from 'libs/types/UserType';
 // import uploadImage from 'libs/uploadImage';
 import { generateRandomName, numericPattern } from 'libs/utility/Utils';
 import React, { useState, useTransition } from 'react';
@@ -31,6 +31,9 @@ const UserAddressViewController = () => {
   const [onSearchAddress, setOnSearchAddress] = useState(
     currentLocationOfUser?.address ?? '',
   );
+  const [geomatricAddress, setGeomatricAddress] = useState(
+    currentLocationOfUser ?? '',
+  );
 
   const { t } = useTranslation();
   const [profilePicture, setProfilePicture] = useState(
@@ -51,10 +54,11 @@ const UserAddressViewController = () => {
 
   const onBlurIdNumber = () => validateIdNumber();
 
-  const onChangeAddress = (value: string) => {
-    setOnSearchAddress(value);
-    validateAddress(value);
-    console.log('value', value);
+  const onChangeAddress = (value: string, latitude: string, longitude: string) => {
+    setOnSearchAddress(value ?? '');
+    validateAddress(value ?? '');
+    setGeomatricAddress({ latitude, longitude })
+    console.log('valueChnage latitude', value, latitude, longitude);
   };
 
   const onChangeIdNumber = (value: string) => {
@@ -82,14 +86,14 @@ const UserAddressViewController = () => {
   const onPressNext = async () => {
     console.log('userId is ', userId);
     if (
-      onSearchAddress?.length !== 0 &&
+      onSearchAddress &&
       dateOfBirth.toString() &&
       idNumberRef.current.value
     ) {
       setIsLoader(true);
       setUserProfile({
         ...(userProfile as ClientProfile),
-        address: onSearchAddress,
+        address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
         date_of_birth: dateOfBirth.toString(),
         idNumber: idNumberRef.current.value,
         city: '',
@@ -102,7 +106,7 @@ const UserAddressViewController = () => {
       const res = await onUpdateUserProfile?.(
         {
           ...userProfile,
-          address: onSearchAddress,
+          address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
           date_of_birth: dateOfBirth.toString(),
           idNumber: idNumberRef.current.value,
           city: '',
@@ -120,7 +124,7 @@ const UserAddressViewController = () => {
         firstName: userProfile?.firstName,
         lastName: userProfile?.lastName,
         phoneNumber: userProfile?.phoneNumber,
-        address: onSearchAddress,
+        address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
         city: '',
         state: '',
         country: '',
@@ -137,7 +141,7 @@ const UserAddressViewController = () => {
         Alert.alert(t('error_occurred'));
       }
     } else {
-      if (onSearchAddress?.length === 0) setAddressError(t('address_required'));
+      if (onSearchAddress) setAddressError(t('address_required'));
       if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
       if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
     }

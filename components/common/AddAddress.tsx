@@ -19,19 +19,23 @@ import location from 'assets/icon/location.png';
 import { useTranslation } from 'react-i18next';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import Loader from './Loader';
+// import { getGemomatrichLocationFromPlaceId } from 'libs/utility/Utils';
 
 const AddAddress = ({
   address,
   isVisible,
   onClose,
   defaultValue,
+
 }: {
-  address: (address: string) => void;
+  address: (address: string, latitude: string, longitude: string) => void;
   isVisible: boolean;
   onClose: () => void;
   defaultValue: string;
+
+
 }) => {
-  const { currentLocationOfUser } = UseClientUserContext();
+  const { currentLocationOfUser, setUserProfile } = UseClientUserContext();
   const [searchAddress, setSearchAddress] = useState(
     defaultValue || currentLocationOfUser?.address,
   );
@@ -72,10 +76,11 @@ const AddAddress = ({
 
   const handleSuggestionSelect = async (selectedPrediction: any) => {
     setSearchAddress(selectedPrediction.description);
-    address(selectedPrediction.description);
-    onClose();
+    console.log("setSearchAddress", selectedPrediction.description)
 
+    onClose();
     const placeId = selectedPrediction?.place_id;
+
     const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${apiKey}`;
 
     try {
@@ -87,13 +92,23 @@ const AddAddress = ({
         data.result.geometry.location
       ) {
         const { lat, lng } = data.result.geometry.location;
+        const geomatricLocation = { latitude: lat, longitude: lng }
+        address(selectedPrediction.description, lat.toString(), lng.toString());
+
         console.log('Latitude:', lat, 'Longitude:', lng);
+        return geomatricLocation
       } else {
         console.error('Place details unavailable or incomplete:', data);
+
       }
     } catch (error) {
       console.error('Error fetching place details:', error);
     }
+    // getGemomatrichLocationFromPlaceId(placeId).then((res) => {
+    //   address(selectedPrediction.description, res?.latitude.toString(), res?.longitude.toString());
+    // })
+
+
   };
 
   return (

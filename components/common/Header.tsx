@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.imageS - 4),
     height: getHeight(43),
     resizeMode: 'contain',
-    backgroundColor: 'red',
   },
   avatar: {
     height: getHeight(45),

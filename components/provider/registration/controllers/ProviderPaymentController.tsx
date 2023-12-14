@@ -129,7 +129,7 @@ const ProviderPaymentController = () => {
         {
           firstname: providerProfile?.firstName ?? '',
           lastname: providerProfile?.lastName ?? '',
-          address: providerProfile?.address ?? '',
+          address: providerProfile?.address?.address ?? '',
           city: '',
           state: '',
           country: '',
@@ -158,7 +158,7 @@ const ProviderPaymentController = () => {
         setLocalData('USERPROFILE', {
           firstName: providerProfile.firstName ?? '',
           lastName: providerProfile.lastName ?? '',
-          address: providerProfile.address ?? '',
+          address: providerProfile?.address,
           city: '',
           state: '',
           country: '',

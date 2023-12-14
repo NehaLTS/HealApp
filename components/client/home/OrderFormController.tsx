@@ -224,7 +224,8 @@ const OrderFormController = ({
     }));
   };
 
-  const onChangeAddress = (address: string) => {
+  const onChangeAddress = (address: string, latitude: string, longitude: string) => {
+    console.log("onChangeAddress", address)
     setOrder({
       ...order,
       address: address,

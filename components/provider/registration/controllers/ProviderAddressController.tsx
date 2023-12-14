@@ -1,5 +1,5 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import { ProviderProfile } from 'libs/types/UserType';
+import { ProviderProfile, currentLocationOfUser } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,9 @@ const ProviderAddressController = () => {
   const [onSearchAddress, setOnSearchAddress] = useState(
     currentLocationOfUser?.address ?? '',
   );
+  const [geomatricAddress, setGeomatricAddress] = useState(
+    currentLocationOfUser ?? '',
+  );
   useEffect(() => {
     if (providerProfile?.firstName) {
       phoneRef.current.value = providerProfile?.phoneNumber;
@@ -36,7 +39,7 @@ const ProviderAddressController = () => {
     }
   }, []);
 
-  const onBlurPhoneNumber = () => {};
+  const onBlurPhoneNumber = () => { };
 
   const onChangePhoneNumber = (value: string) => {
     phoneRef.current.value = value;
@@ -47,12 +50,14 @@ const ProviderAddressController = () => {
     licenseRef.current.value = value;
     validateLicense(value);
   };
-  const onBlurAddress = () => {};
+  const onBlurAddress = () => { };
 
-  const onChangeAddress = (value: string) => {
+  const onChangeAddress = (value: string, latitude: string, longitude: string) => {
     addressRef.current.value = value;
-    setOnSearchAddress(value);
-    validateAddress(value);
+    setOnSearchAddress(value ?? '');
+    validateAddress(value ?? '');
+    setGeomatricAddress({ latitude, longitude })
+    console.log('valueChnage latitude', value, latitude, longitude)
   };
 
   const getImageUrl = (url: string) => {
@@ -71,7 +76,7 @@ const ProviderAddressController = () => {
       } else {
         setProviderProfile({
           ...(providerProfile as ProviderProfile),
-          address: onSearchAddress,
+          address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
           phoneNumber: phoneRef.current.value,
           licensenumber: licenseRef.current.value,
           licensepicture: licensePicture,

@@ -20,18 +20,18 @@ export const getProviderImage = (type: string) => {
   const image = type.includes('Doctor')
     ? doctor
     : type?.includes('Nurse')
-    ? nurse
-    : type?.includes('Healer') || type?.includes('Alternative')
-    ? healer
-    : type?.includes('Physio')
-    ? physio
-    : type?.includes('Clinics')
-    ? clinic
-    : doctorOnline;
+      ? nurse
+      : type?.includes('Healer') || type?.includes('Alternative')
+        ? healer
+        : type?.includes('Physio')
+          ? physio
+          : type?.includes('Clinics')
+            ? clinic
+            : doctorOnline;
   return image;
 };
 
-export const checkLocationPermission = () :Promise<boolean>=> {
+export const checkLocationPermission = (): Promise<boolean> => {
   return check(
     Platform.OS === 'android'
       ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
@@ -53,9 +53,35 @@ export const checkLocationPermission = () :Promise<boolean>=> {
     })
     .catch((error) => {
 
-      console.log("permission check error ",error)
+      console.log("permission check error ", error)
       return false;
     });
 
-    
+
 };
+
+// export const getGemomatrichLocationFromPlaceId = async (placeId: any) => {
+
+//   const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${apiKey}`;
+
+//   try {
+//     const response = await fetch(detailsUrl);
+//     const data = await response.json();
+//     if (
+//       data.result &&
+//       data.result.geometry &&
+//       data.result.geometry.location
+//     ) {
+//       const { lat, lng } = data.result.geometry.location;
+//       const geomatricLocation = { latitude: lat, longitude: lng }
+
+//       console.log('Latitude:', lat, 'Longitude:', lng);
+//       return geomatricLocation
+//     } else {
+//       console.error('Place details unavailable or incomplete:', data);
+
+//     }
+//   } catch (error) {
+//     console.error('Error fetching place details:', error);
+//   }
+// }

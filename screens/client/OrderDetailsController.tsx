@@ -3,7 +3,7 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { treatment } from 'libs/types/ProvierTypes';
-import { ClientProfile, OrderDetail } from 'libs/types/UserType';
+import { ClientProfile, OrderDetail, currentLocationOfUser } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -74,6 +74,7 @@ const OrderDetailsController = () => {
   };
 
   useEffect(() => {
+    console.log("(userProfile as ClientProfile)?.address?.address", (userProfile as ClientProfile), order)
     if (
       treatmentsMenu !== null &&
       treatmentsMenu?.treatmentMenu !== undefined
@@ -123,7 +124,7 @@ const OrderDetailsController = () => {
       ) {
         setShowSummary(true);
       }
-      console.log('currentLocationOfUser.latitude,', currentLocationOfUser);
+      console.log('currentLocationOfUser.latitude,', currentLocationOfUser, "user", user);
       if (showSummary) {
         let orderDetails = {
           client_id: userId.toString(),
@@ -146,8 +147,8 @@ const OrderDetailsController = () => {
           TotalCost: order?.services
             .reduce((total, item) => total + parseInt(item.price, 10), 0)
             .toString(),
-          latitude: currentLocationOfUser?.latitude,
-          longitude: currentLocationOfUser?.longitude,
+          latitude: user.address?.latitude ?? currentLocationOfUser.latitude,
+          longitude: user.address?.longitude ?? currentLocationOfUser.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
         };
         Sentry.captureMessage(

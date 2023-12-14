@@ -132,7 +132,7 @@ const ProviderAddress = () => {
         address={onChangeAddress}
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
-        defaultValue={onSearchAddress}
+        defaultValue={onSearchAddress ?? ''}
       />
     </>
   );

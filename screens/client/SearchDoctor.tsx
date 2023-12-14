@@ -196,7 +196,7 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : `${'Doctor'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
@@ -211,8 +211,20 @@ const SearchDoctor = () => {
             focusable
             showsBuildings
             showsIndoors
-            initialRegion={currentLocation}
-            region={currentLocation}
+            initialRegion={providerLocation ? {
+              ...providerLocation,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+              title: 'provider',
+              timestamp: '',
+            } : currentLocation}
+            region={providerLocation ? {
+              ...providerLocation,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+              title: 'provider',
+              timestamp: '',
+            } : currentLocation}
             style={{ flex: 1 }}
           >
             {/* {currentLocation !== undefined &&
@@ -265,8 +277,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                          currentOrder.providerDetails
-                            ?.providerProfilePicture ? (
+                            currentOrder.providerDetails
+                              ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -299,8 +311,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -330,9 +342,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                providerLocation.latitude !== 0.0 &&
-                !showLoader &&
-                !showCancelButton
+                  providerLocation.latitude !== 0.0 &&
+                  !showLoader &&
+                  !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -348,7 +360,7 @@ const SearchDoctor = () => {
               <TextButton
                 style={{ alignSelf: 'center' }}
                 title={t('cancel')}
-                onPress={() => {}}
+                onPress={() => { }}
                 fontSize={getHeight(fontSize.textXl)}
               />
             )}
@@ -357,11 +369,11 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                showLoader
+                  showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>

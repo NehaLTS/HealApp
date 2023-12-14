@@ -1,5 +1,6 @@
 import mobile from 'assets/icon/mobile.png';
 import waze from 'assets/icon/waze.png';
+import Button from 'components/common/Button';
 import RNModal from 'components/common/Modal';
 import { AnimatedText } from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
@@ -22,11 +23,14 @@ const TakeOrderView = ({
   onPressSeeMore,
   onPressCancelOrder,
   isModalVisible,
+  onPressUpdateArrive
+
 }: {
   order: any;
   onPressSeeMore: () => void;
   onPressCancelOrder: () => void;
   isModalVisible: boolean;
+  onPressUpdateArrive: () => void
 }) => {
   const { t } = useTranslation();
   const [seconds, setSeconds] = React.useState(300);
@@ -226,6 +230,17 @@ const TakeOrderView = ({
             style={styles.cancelOrderButton}
             onPress={onPressCancelOrder}
           />
+          <Button
+            title={"Update you arrived"}
+            style={styles.takeOrderButton}
+            isSmall
+            width={getWidth(150)}
+            height={getWidth(36)}
+            fontSized={getHeight(fontSize.textL)}
+            background={colors.white}
+            onPress={onPressUpdateArrive}
+          />
+
         </View>
         {/* )} */}
       </Animated.View>

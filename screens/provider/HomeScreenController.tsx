@@ -22,8 +22,7 @@ const HomeScreenControlller = () => {
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
   );
-  const { userId, providerProfile,token } = UseProviderUserContext();
-  const { currentLocationOfUser } = UseClientUserContext();
+  const { userId, providerProfile, token } = UseProviderUserContext();
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
 
@@ -88,63 +87,111 @@ const HomeScreenControlller = () => {
     let daySummary = await getProviderDaySummary({
       provider_id: userId,
       created_date_time: new Date().toDateString(),
-    },token);
+    }, token);
 
     setProviderDaySummary(daySummary);
   };
 
-  const updateLocation = () => {
-    console.log('updateDtaaApiFunction');
-
-    Geolocation.watchPosition(
-      (position) => {
-        // Alert.alert('WatchPostion');
-        // setProviderLocation({
-        //   latitude: position.coords.latitude,
-        //   longitude: position.coords.longitude,
-        //   latitudeDelta: 0.02,
-        //   longitudeDelta: 0.02,
-        //   timestamp: position.timestamp
-        // })
-        // Call the function to send the FCM message
-        // sendFCMMessage();
-        Sentry.captureMessage(
-          `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
-        );
-
-        UpdateProviderLocation({
-          provider_id: userId,
-          order_id: order?.orderId ?? '1',
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString(),
-        }).then((res) => {
+  const updateLocation = (mannualUpdate?: boolean) => {
+    if (mannualUpdate) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          // Alert.alert('WatchPostion');
+          // setProviderLocation({
+          //   latitude: position.coords.latitude,
+          //   longitude: position.coords.longitude,
+          //   latitudeDelta: 0.02,
+          //   longitudeDelta: 0.02,
+          //   timestamp: position.timestamp
+          // })
+          // Call the function to send the FCM message
+          // sendFCMMessage();
           Sentry.captureMessage(
-            `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
+            `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
           );
-          Alert.alert('Api update Location hit');
-          console.log('gurepeet', res);
-          // Alert.alert(
-          //   'dataUpdate after getihng response' + JSON.stringify(res),
-          // );
-        });
-      },
-      (error) => {
-        Sentry.captureMessage(
-          `Provider notification event 'update location api error' for:-${providerProfile?.firstName}---- ${error.message}`,
-        );
-        console.log('Error getting location: ' + error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        distanceFilter: 4, // Minimum distance (in meters) to trigger an update
-        interval: 1000, // Minimum time interval (in milliseconds) to trigger an update
-        fastestInterval: 500, // Maximum time interval (in milliseconds) between updates
-        showLocationDialog: true, // Show a dialog if location services are not enabled
-        forceRequestLocation: true, // Force a location request, even if permissions are not granted
-        forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
-        showsBackgroundLocationIndicator: true,
-      },
-    );
+
+          UpdateProviderLocation({
+            provider_id: userId,
+            order_id: order?.orderId ?? '1',
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          }).then((res) => {
+            Sentry.captureMessage(
+              `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
+            );
+            console.log('gurepeet', res);
+            // Alert.alert(
+            //   'dataUpdate after getihng response' + JSON.stringify(res),
+            // );
+          });
+        },
+        (error) => {
+          Sentry.captureMessage(
+            `Provider notification event 'update location api error' for:-${providerProfile?.firstName}---- ${error.message}`,
+          );
+          console.log('Error getting location: ' + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          distanceFilter: 4, // Minimum distance (in meters) to trigger an update
+          showLocationDialog: true, // Show a dialog if location services are not enabled
+          forceRequestLocation: true, // Force a location request, even if permissions are not granted
+          forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
+        },
+      );
+
+    } else {
+      console.log('updateDtaaApiFunction');
+
+      Geolocation.watchPosition(
+        (position) => {
+          // Alert.alert('WatchPostion');
+          // setProviderLocation({
+          //   latitude: position.coords.latitude,
+          //   longitude: position.coords.longitude,
+          //   latitudeDelta: 0.02,
+          //   longitudeDelta: 0.02,
+          //   timestamp: position.timestamp
+          // })
+          // Call the function to send the FCM message
+          // sendFCMMessage();
+          Sentry.captureMessage(
+            `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
+          );
+
+          UpdateProviderLocation({
+            provider_id: userId,
+            order_id: order?.orderId ?? '1',
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+          }).then((res) => {
+            Sentry.captureMessage(
+              `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
+            );
+            console.log('gurepeet', res);
+            // Alert.alert(
+            //   'dataUpdate after getihng response' + JSON.stringify(res),
+            // );
+          });
+        },
+        (error) => {
+          Sentry.captureMessage(
+            `Provider notification event 'update location api error' for:-${providerProfile?.firstName}---- ${error.message}`,
+          );
+          console.log('Error getting location: ' + error.message);
+        },
+        {
+          enableHighAccuracy: true,
+          distanceFilter: 4, // Minimum distance (in meters) to trigger an update
+          interval: 1000, // Minimum time interval (in milliseconds) to trigger an update
+          fastestInterval: 500, // Maximum time interval (in milliseconds) between updates
+          showLocationDialog: true, // Show a dialog if location services are not enabled
+          forceRequestLocation: true, // Force a location request, even if permissions are not granted
+          forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
+          showsBackgroundLocationIndicator: true,
+        },
+      );
+    }
   };
   console.log('order?.eventData?.providerId', userId);
   console.log('order?.eventData?.orderId', order);
@@ -156,8 +203,8 @@ const HomeScreenControlller = () => {
       status: 'accept',
       provider_id: userId,
       order_id: order?.orderId ?? '1',
-      latitude: currentLocationOfUser?.latitude?.toString() ?? '',
-      longitude: currentLocationOfUser?.longitude?.toString() ?? '',
+      latitude: providerProfile?.address?.latitude?.toString() ?? '',
+      longitude: providerProfile?.address?.longitude?.toString() ?? '',
     })
       .then((res) => {
         console.log('ordereAcceptedRes', res);

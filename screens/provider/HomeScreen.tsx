@@ -877,6 +877,7 @@ const HomeScreen = () => {
           onPressSeeMore={onPressSeeMore}
           isModalVisible={acceptOrder}
           onPressCancelOrder={onPressCancelOrder}
+          onPressUpdateArrive={() => updateLocation(true)}
         />
       </TouchableOpacity>
       {renderToast()}
