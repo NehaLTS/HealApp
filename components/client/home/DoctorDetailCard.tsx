@@ -87,9 +87,19 @@ const DoctorDetailCard = ({
                   source={require('../../../assets/icon/star.png')}
                   style={styles.starIcon}
                 />
-                <Text style={styles.rating} title={providerData.providerRating} />
+                <Text
+                  style={styles.rating}
+                  title={providerData.providerRating}
+                />
               </View>
               <View style={styles.detailsContainer}>
+                <Text style={styles.arrivalText} title={status} />
+                <Text
+                  style={styles.time}
+                  title={`${Math.round(
+                    time.minutes === 0 ? time.seconds : time.minutes,
+                  )}${t(' min')}`}
+                />
                 <TouchableOpacity
                   style={styles.details}
                   onPress={() => {
@@ -102,13 +112,6 @@ const DoctorDetailCard = ({
                   />
                   <Text style={styles.title} title={t('call_doctor')} />
                 </TouchableOpacity>
-                <Text style={styles.arrivalText} title={status} />
-                <Text
-                  style={styles.time}
-                  title={`${Math.round(
-                    time.minutes === 0 ? time.seconds : time.minutes,
-                  )}${t(' min')}`}
-                />
               </View>
             </View>
           </View>
@@ -124,7 +127,6 @@ const styles = StyleSheet.create({
   arrivalText: {
     fontFamily: fontFamily.semiBold,
     fontSize: getHeight(fontSize.textL),
-    marginVertical: getHeight(3),
   },
   rating: {
     position: 'absolute',
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
   time: {
     fontSize: getHeight(fontSize.textM),
     fontFamily: fontFamily.light,
+    marginBottom: getHeight(dimens.marginS),
   },
   titleText: {
     fontSize: getHeight(fontSize.textM),
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
     margin: getWidth(dimens.marginS),
   },
   title: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
   },
   warningIcon: {
     width: getWidth(dimens.imageS + 3),
@@ -180,21 +183,21 @@ const styles = StyleSheet.create({
     fontSize: getHeight(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
-    width: '98%',
+    width: '86%',
     flexWrap: 'wrap',
   },
   detailItem: {
     gap: getHeight(dimens.marginM),
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: getHeight(10),
   },
 
   doctorIconContainer: {
     position: 'relative',
     shadowColor: colors.black,
     borderRadius: getWidth(50),
-    elevation: getWidth(10),
+    elevation: getWidth(15),
   },
   doctorIcon: {
     width: getWidth(110),
@@ -214,7 +217,6 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.sideMargin + 4),
     resizeMode: 'contain',
   },
-
   cardBoth: {
     backgroundColor: colors.white,
     borderRadius: getWidth(dimens.marginS),
@@ -234,25 +236,23 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginL),
     resizeMode: 'contain',
   },
-
   details: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: getWidth(5),
     justifyContent: 'center',
   },
-
   detailsContainer: {
-    gap: 5,
+    gap: getWidth(5),
     justifyContent: 'center',
   },
   cancel: {
     width: getWidth(dimens.marginL),
-    height: getHeight(25),
+    height: getHeight(28),
     resizeMode: 'contain',
     position: 'absolute',
-    top: getHeight(-20),
-    right: getHeight(0),
+    top: getHeight(-13),
+    right: getHeight(-25),
   },
   container: {
     flexDirection: 'row',

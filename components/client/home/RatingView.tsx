@@ -26,7 +26,7 @@ const RatingView = ({
 }) => {
   return (
     <>
-      <KeyboardAvoidingView behavior={'height'} keyboardVerticalOffset={20}>
+      <KeyboardAvoidingView behavior={'height'} keyboardVerticalOffset={10}>
         <ScrollView>
           <View style={styles.imagecontainer}>
             <Image
@@ -62,6 +62,7 @@ const RatingView = ({
             inputStyle={styles.description}
             placeholderTextColor={colors.grey}
             style={styles.placeholder}
+            multiline
           />
 
           <Button
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   placeholder: {
-    marginTop: getHeight(-60),
+    marginTop: getHeight(-10),
     paddingLeft: getWidth(dimens.marginS),
     fontFamily: fontFamily.regular,
     flex: 1,

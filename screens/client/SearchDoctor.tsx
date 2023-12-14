@@ -427,9 +427,9 @@ const styles = StyleSheet.create({
     marginTop: getWidth(4),
   },
   mapContainer: {
-    height: getHeight(500),
+    height: getHeight(480),
     width: '100%',
-    marginBottom: getHeight(40),
+    marginBottom: getHeight(50),
   },
   marker: {
     backgroundColor: colors.offWhite,

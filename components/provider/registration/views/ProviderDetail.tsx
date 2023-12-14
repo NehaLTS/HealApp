@@ -66,7 +66,6 @@ const ProviderDetail = () => {
         returnKeyType={'next'}
         onSubmitEditing={() => lastNameRef.current.focus()}
         onClearInputText={() => firstNameRef.current.clear()}
-        inputStyle={styles.input}
       />
 
       <Input
@@ -119,9 +118,21 @@ const ProviderDetail = () => {
                 ? { uri: idPicture }
                 : require('../../../../assets/icon/uploadProfile.png')
             }
-            style={styles.selectedImage}
+            style={idPicture ? styles.selectedImage : styles.editProfile}
           />
         </TouchableOpacity>
+        {idPicture && (
+          <TouchableOpacity
+            activeOpacity={idPicture ? 1 : 0.5}
+            onPress={() => setIsShowModal(true)}
+            style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}
+          >
+            <Image
+              source={require('assets/icon/circumEditBlue.png')}
+              style={styles.editImage}
+            />
+          </TouchableOpacity>
+        )}
         <SelectImage
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
@@ -227,5 +238,20 @@ const styles = StyleSheet.create({
   },
   input: {
     // marginTop: getHeight(dimens.marginS),
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: getWidth(dimens.marginS),
+  },
+  editImage: {
+    height: getHeight(dimens.paddingL + 2),
+    width: getWidth(dimens.paddingL),
+    // paddingLeft: getWidth(5)
+  },
+  editProfile: {
+    height: getHeight(dimens.imageS + 8),
+    width: getWidth(dimens.imageS + dimens.marginS),
+    resizeMode: 'contain',
   },
 });

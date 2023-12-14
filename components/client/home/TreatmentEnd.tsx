@@ -37,7 +37,11 @@ const TreatmentEnd = ({
         <View style={{ justifyContent: 'center' }}>
           <Text
             title={currentOrder?.providerDetails?.providerName}
-            style={{ fontSize: getHeight(fontSize.textXl) }}
+            style={{
+              fontSize: getHeight(fontSize.textXl),
+              width: '70%',
+              flexWrap: 'wrap',
+            }}
           />
           <View style={styles.container}>
             <Image
@@ -49,13 +53,18 @@ const TreatmentEnd = ({
         </View>
       </View>
 
-      <View style={styles.imageContainer}>
+      <View style={styles.Container}>
         <Image
           source={require('../../../assets/icon/cardboard.png')}
           style={styles.doctorCard}
         />
 
-        <View style={{ gap: 10 }}>
+        <View
+          style={{
+            gap: 10,
+            marginLeft: getWidth(20),
+          }}
+        >
           <Text title={'Order summary'} style={styles.order} />
           <View style={{ gap: 8 }}>
             {currentOrder?.orderServices.map((item, index) => (
@@ -66,7 +75,7 @@ const TreatmentEnd = ({
               />
             ))}
             <View style={{ flexDirection: 'row' }}>
-              <Text title={'Total'} style={styles.total} />
+              <Text title={'Total - '} style={styles.total} />
               <Text title={currentOrder?.orderPrice} style={styles.text} />
             </View>
           </View>
@@ -103,16 +112,22 @@ const styles = StyleSheet.create({
     width: getWidth(100),
     height: getHeight(110),
     resizeMode: 'contain',
-    marginLeft: getWidth(25),
+    // marginLeft: getWidth(25),
   },
   starIcon: {
     position: 'absolute',
     bottom: getHeight(dimens.marginS),
-    right: getHeight(dimens.marginS),
+    right: getHeight(dimens.marginS + 8),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
   },
   imageContainer: {
+    flexDirection: 'row',
+    gap: getHeight(dimens.imageXs),
+    justifyContent: 'center',
+    marginBottom: getHeight(dimens.imageS + dimens.marginL),
+  },
+  Container: {
     flexDirection: 'row',
     gap: getHeight(dimens.imageXs),
     justifyContent: 'center',
@@ -135,12 +150,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     gap: getWidth(dimens.marginS),
-    justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 25,
   },
   doctorIconContainer: {
     position: 'relative',
+    width: '45%',
+    alignItems: 'center',
+    marginLeft: getHeight(20),
   },
   order: {
     fontSize: getHeight(20),
@@ -148,12 +164,12 @@ const styles = StyleSheet.create({
   rating: {
     position: 'absolute',
     bottom: getHeight(-11),
-    right: getHeight(dimens.paddingXs + 2),
+    right: getHeight(dimens.paddingXs),
     fontSize: getHeight(fontSize.textM),
     color: colors.secondary,
   },
   total: {
     fontFamily: fontFamily.medium,
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
   },
 });

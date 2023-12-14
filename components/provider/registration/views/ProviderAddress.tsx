@@ -60,9 +60,21 @@ const ProviderAddress = () => {
               ? { uri: licensePicture }
               : require('../../../../assets/icon/licencesIcon.png')
           }
-          style={styles.selectedImage}
+          style={licensePicture ? styles.selectedImage : styles.editProfile}
         />
       </TouchableOpacity>
+      {licensePicture && (
+        <TouchableOpacity
+          activeOpacity={licensePicture ? 1 : 0.5}
+          onPress={() => setIsShowModal(true)}
+          style={[styles.imageContainer, { paddingLeft: getWidth(5) }]}
+        >
+          <Image
+            source={require('assets/icon/circumEditBlue.png')}
+            style={styles.editImage}
+          />
+        </TouchableOpacity>
+      )}
       <SelectImage
         isShowModal={isShowModal}
         closeModal={setIsShowModal}
@@ -164,9 +176,19 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.paddingS),
     resizeMode: 'contain',
   },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: getWidth(dimens.marginS),
+  },
   editImage: {
-    height: getHeight(dimens.paddingL + dimens.borderBold),
+    height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
+  },
+  editProfile: {
+    height: getHeight(dimens.imageS + 8),
+    width: getWidth(dimens.imageS + dimens.marginS),
+    resizeMode: 'contain',
   },
   modal: {
     flex: 1,

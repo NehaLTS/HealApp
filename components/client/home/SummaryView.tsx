@@ -26,17 +26,22 @@ interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
   order: OrderDetail;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
-  healerDetail?: healerType
-  isHealer?: boolean
+  healerDetail?: healerType;
+  isHealer?: boolean;
 }
-const SummaryView = ({ setShowSummary, order, setOrder, healerDetail, isHealer }: SummaryViewProps) => {
+const SummaryView = ({
+  setShowSummary,
+  order,
+  setOrder,
+  healerDetail,
+  isHealer,
+}: SummaryViewProps) => {
   const {
     isVisible,
     calculateAgeFromDate,
     totalPrice,
     setIsVisible,
     arrivalRef,
-
   } = SummaryViewController({ order });
   const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
@@ -78,10 +83,11 @@ const SummaryView = ({ setShowSummary, order, setOrder, healerDetail, isHealer }
             !order?.isOrderForOther
               ? userProfile?.date_of_birth ?? ''
               : order?.patient_type?.age,
-          )} y.o, ${!order?.isOrderForOther
-            ? userProfile?.phoneNumber
-            : order?.phonenumber
-            }`}
+          )} y.o, ${
+            !order?.isOrderForOther
+              ? userProfile?.phoneNumber
+              : order?.phonenumber
+          }`}
           style={styles.textSmall}
         />
       </View>
@@ -98,7 +104,7 @@ const SummaryView = ({ setShowSummary, order, setOrder, healerDetail, isHealer }
   const SymptomsView = () => (
     <View style={styles.symptomsContainer}>
       <Text title={t('symptoms')} style={styles.symptomsText} />
-      <View style={{ flexDirection: 'row', gap: 6 }}>
+      <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
         {order?.reason.map((item, index) => (
           <Text
             key={index}
