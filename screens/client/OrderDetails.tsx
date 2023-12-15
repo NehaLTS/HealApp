@@ -8,7 +8,7 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BackHandler,
   I18nManager,
@@ -25,6 +25,8 @@ import { useTranslation } from 'react-i18next';
 import { getProviderImage } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import Loader from 'components/common/Loader';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { Order } from 'libs/types/OrderTypes';
 
 const OrderDetails = () => {
   const {
@@ -40,6 +42,12 @@ const OrderDetails = () => {
     heardDetail,
   } = OrderDetailsController();
   const { t } = useTranslation();
+  const [pendingOrder, setPendingOrder] = useState<string>('');
+  useEffect(() => {
+    const pendingOrder: Order = getLocalData('ORDER') as Order;
+    setPendingOrder(pendingOrder?.orderId);
+  }, []);
+  console.log('pendingOrder', pendingOrder);
   const HeaderTitle = () => (
     <View style={styles.servicesContainer}>
       <Image
@@ -127,7 +135,7 @@ const OrderDetails = () => {
             style={styles.buttonOrder}
             onPress={handleNextButtonPress}
             width={'30%'}
-            disabled={isLoading}
+            disabled={isLoading || pendingOrder !== undefined || pendingOrder}
           />
           {/* } */}
           {showSummary && (
