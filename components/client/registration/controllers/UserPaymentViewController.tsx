@@ -103,7 +103,7 @@ const UserPaymentViewController = ({ item }: any) => {
   };
 
   const onPressNext = async () => {
-    if (card?.length && expiry?.length && cvv?.length) {
+    if (card?.length === 19 && expiry?.length === 5 && cvv?.length === 3) {
       setUserProfile({
         ...userProfile,
         card_number: card,

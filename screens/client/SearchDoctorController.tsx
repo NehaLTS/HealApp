@@ -86,20 +86,15 @@ const SearchDoctorController = () => {
     setShowLoader(true);
 
     let orderDetails = route?.params?.orderDetails;
-    let heardDetail = route?.params?.heardDetail ?? ''
-    const res = await orderProvider({ ...orderDetails, services: heardDetail ? "1" : orderDetails.services });
-    Sentry.captureMessage(
-      `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(
-        res,
-      )}`,
-    );
+    let heardDetail = route?.params?.heardDetail ?? '';
+    const res = await orderProvider({
+      ...orderDetails,
+      services: heardDetail ? '1' : orderDetails.services,
+    });
+
     console.log(' RESPINSE+++++', res);
 
     if (res?.orderId) {
-      Sentry.captureMessage(
-        `First order button for Search the  Provider:-${JSON.stringify(res)}}`,
-      );
-      console.log(' RESPINSE+++++', res);
       setTimeout(() => {
         setShowLoader(false);
       }, 10000);
@@ -126,15 +121,16 @@ const SearchDoctorController = () => {
         longitude: parseFloat(res.providerDetails.currentLongitude),
       });
     } else {
-      Sentry.captureMessage(
-        `Client flow ON PRESS END ORDER API ERROR for:- ${JSON.stringify(
-          res?.message,
-        )}`,
-      );
-      Alert.alert('No Nearby Doctor found. Sorry Please try again later');
+      setShowLoader(false);
+      Alert.alert('No Nearby Doctor found', 'Sorry Please try again later', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]);
     }
-
-    console.log('orderId..', res.orderId);
   };
 
   const setStatusOnEventFire = (evenTitle: string) => {

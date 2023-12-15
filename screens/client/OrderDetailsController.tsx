@@ -3,7 +3,11 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { treatment } from 'libs/types/ProvierTypes';
-import { ClientProfile, OrderDetail, currentLocationOfUser } from 'libs/types/UserType';
+import {
+  ClientProfile,
+  OrderDetail,
+  currentLocationOfUser,
+} from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -31,7 +35,7 @@ const OrderDetailsController = () => {
     treatmentMenu: [],
     reason: [],
   });
-
+  console.log('userProfile0', userProfile);
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
   const heardDetail = route?.params?.selectedHealerServices ?? '';
@@ -40,7 +44,7 @@ const OrderDetailsController = () => {
     client_id: '',
     patient_type: { type: 'me', age: '' },
     patient_name: (userProfile as ClientProfile)?.firstName ?? '',
-    address: (userProfile as ClientProfile)?.address ?? '',
+    address: (userProfile as ClientProfile)?.address?.address ?? '',
     city: (userProfile as ClientProfile)?.city ?? '',
     phonenumber: (userProfile as ClientProfile)?.phoneNumber ?? '',
     Date_of_birth: '',
@@ -58,14 +62,16 @@ const OrderDetailsController = () => {
   });
 
   const treatmentReasons = async () => {
-
-    const PROVIDER_TYPE_ID = supplier.name === 'Alternative medicine' ? "1" : supplier?.provider_type_id.toString()
+    const PROVIDER_TYPE_ID =
+      supplier.name === 'Alternative medicine'
+        ? '1'
+        : supplier?.provider_type_id.toString();
 
     try {
       const res = await treatmentMenu({
         provider_type_id: PROVIDER_TYPE_ID,
       });
-      console.log("TreatmentRespons", res)
+      console.log('TreatmentRespons', res);
       setTreatmentReason(res);
       setTreatmentsMenu(res);
     } catch (error) {
@@ -74,12 +80,16 @@ const OrderDetailsController = () => {
   };
 
   useEffect(() => {
-    console.log("(userProfile as ClientProfile)?.address?.address", (userProfile as ClientProfile), order)
+    console.log(
+      '(userProfile as ClientProfile)?.address?.address',
+      userProfile as ClientProfile,
+      order,
+    );
     if (
       treatmentsMenu !== null &&
       treatmentsMenu?.treatmentMenu !== undefined
     ) {
-      console.log("treatmentsMenu", treatmentsMenu)
+      console.log('treatmentsMenu', treatmentsMenu);
       const checkExisting = treatmentsMenu?.treatmentMenu?.some((item) => {
         return item.provider_type_id;
       });
@@ -102,29 +112,59 @@ const OrderDetailsController = () => {
   });
 
   const concatenatedIds = order.services.map((item) => item.menu_id).join(',');
-
+  const TotalCost = order?.services
+    .reduce((total, item) => total + parseInt(item.price, 10), 0)
+    .toString();
   // console.log('order.  transformedItems', symptoms)
   const handleNextButtonPress = async () => {
+    console.log('order111', order);
     let isLocationPermissionOn = await checkLocationPermission();
     if (isLocationPermissionOn) {
       if (
-        (order?.isOrderForOther &&
+        (order.isOrderForOther === false &&
           (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
           order?.services?.length > 0 &&
-          order?.patient_type?.age?.length > 0 &&
-          order?.address?.length && supplier.name !== 'Alternative medicine') || supplier.name === 'Alternative medicine' && order?.reason?.length > 0 || order?.Additional_notes?.length
+          order?.address?.length &&
+          supplier.name !== 'Alternative medicine') ||
+        (supplier.name === 'Alternative medicine' &&
+          order?.reason?.length > 0) ||
+        order?.Additional_notes?.length
       ) {
         setShowSummary(true);
-      }
-      if (
-        order.isOrderForOther === false &&
-        (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
-        order?.services?.length > 0 &&
-        order?.address?.length && supplier.name !== 'Alternative medicine' || supplier.name === 'Alternative medicine' && order?.reason?.length > 0 || order?.Additional_notes?.length
+      } else if (
+        (order?.isOrderForOther &&
+          order?.patient_type?.age !== '' &&
+          (order?.reason?.length > 0 || order?.Additional_notes?.length) &&
+          order?.services?.length > 0 &&
+          order?.address?.length &&
+          supplier.name !== 'Alternative medicine') ||
+        (supplier.name === 'Alternative medicine' &&
+          order?.reason?.length > 0) ||
+        order?.Additional_notes?.length
       ) {
         setShowSummary(true);
+      } else if (
+        (order.isOrderForOther === false &&
+          supplier.name !== 'Alternative medicine' &&
+          orderDetails?.services?.length &&
+          orderDetails?.reason?.length) ||
+        (supplier.name === 'Alternative medicine' &&
+          orderDetails?.reason?.length)
+      ) {
+        setShowSummary(true);
+      } else {
+        if (
+          !order?.address?.length ||
+          !order?.reason?.length ||
+          !order?.services?.length
+        ) {
+          Alert.alert(
+            `please select${!order?.address?.length ? ' address,' : ''} ${
+              !order.reason?.length ? 'reasons' : ''
+            } ${!order?.services?.length ? 'treatment menu' : ''}`,
+          );
+        }
       }
-      console.log('currentLocationOfUser.latitude,', currentLocationOfUser, "user", user);
       if (showSummary) {
         let orderDetails = {
           client_id: userId.toString(),
@@ -144,32 +184,20 @@ const OrderDetailsController = () => {
           Estimate_arrival: order?.Estimate_arrival,
           Instructions_for_arrival: order?.Instructions_for_arrival,
           Payment_mode: order?.Payment_mode,
-          TotalCost: order?.services
-            .reduce((total, item) => total + parseInt(item.price, 10), 0)
-            .toString(),
+          TotalCost: TotalCost,
           latitude: user.address?.latitude ?? currentLocationOfUser.latitude,
           longitude: user.address?.longitude ?? currentLocationOfUser.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
         };
-        Sentry.captureMessage(
-          `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${orderDetails}`,
-        );
         console.log('DAATAAA ', orderDetails);
         navigation.navigate(NavigationRoutes.SearchDoctor, {
           orderDetails: orderDetails,
           previousScreen: 'Create Order',
-          heardDetail: heardDetail
+          heardDetail: heardDetail,
         });
-      } else {
-
-        if (supplier.name !== 'Alternative medicine' && orderDetails.services.length && orderDetails.reason.length || supplier.name === 'Alternative medicine' && orderDetails.reason.length) {
-
-          setShowSummary(true);
-
-        }
-        else {
-          Alert.alert('please select reasons and treatment menu');
-        }
+      }
+      if (order?.isOrderForOther && order?.patient_type?.age === '') {
+        Alert.alert('Please submit Age and phone number.');
       }
     } else {
       Alert.alert('Please Enable Location Permission');
@@ -185,7 +213,7 @@ const OrderDetailsController = () => {
     order,
     setOrder,
     isLoading,
-    heardDetail
+    heardDetail,
   };
 };
 

@@ -70,6 +70,7 @@ const HomeScreen = () => {
     setSearchProviderList,
     setDropdownVisible,
     dropdownVisible,
+    setSearchSpecialist,
   } = HomeViewController();
   const navigation = useNavigation<any>();
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
@@ -160,7 +161,7 @@ const HomeScreen = () => {
       />
       {isVisible && (
         <AddAddress
-          address={(data) => {
+          address={(data, latitude, longitude) => {
             setCurrentAddress(data);
             // setCurrentLocationOfUser({
             //   ...currentLocationOfUser,
@@ -225,6 +226,7 @@ const HomeScreen = () => {
         }}
         title={`\u25CF ${item?.name?.en}`}
         onPress={() => {
+          setSearchSpecialist(item?.name?.en);
           setSearchProviderList(item);
           onSearchDone(item?.name?.en);
         }}
@@ -235,6 +237,12 @@ const HomeScreen = () => {
     provider_type_id: entry?.provider_type_id,
     speciality_name: entry?.speciality_name,
   }));
+  const reasonSelected = providersList?.map?.((entry) => ({
+    name: entry?.speciality_name,
+    reason_id: entry?.type,
+  }));
+
+  console.log('reasonSelected', providersList);
   const getProviderSearchList = () => {
     return transformedData?.map((itemData: any, index: number) => (
       <CardView item={itemData} index={index} key={index} isSearch />
@@ -269,7 +277,10 @@ const HomeScreen = () => {
         activeOpacity={1}
       >
         <ScrollView
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={{
+            paddingBottom: getHeight(20),
+            height: '100%',
+          }}
           keyboardShouldPersistTaps="always"
         >
           {isTouchStart && searchSpecialist?.length === 0 && (
@@ -279,7 +290,11 @@ const HomeScreen = () => {
             >
               <Image
                 style={styles.banner}
-                source={{ uri: bannerAds?.[0]?.imageurl || '' }}
+                source={{
+                  uri:
+                    bannerAds?.[0]?.imageurl ??
+                    'https://png.pngtree.com/background/20210709/original/pngtree-sky-beautiful-scenery-wood-hd-photo-picture-image_368833.jpg',
+                }}
               />
             </TouchableOpacity>
           )}
@@ -320,7 +335,7 @@ const HomeScreen = () => {
         >
           <ProviderArrivalInfo
             status={
-              `${'Doctor'}${' '}${providerStatusOnHeader(
+              `${'Provider'}${' '}${providerStatusOnHeader(
                 currentOrder?.orderStatus ?? '',
               )}` ?? ''
             }
@@ -335,6 +350,33 @@ const HomeScreen = () => {
                   currentOrder: currentOrder,
                 });
               }
+            }}
+            onCancelOrder={() => {
+              setCurrentOrder({
+                orderId: '',
+                providerDetails: {
+                  providerId: '',
+                  providerName: '',
+                  providerAddress: '',
+                  providerProfilePicture: '',
+                  providerRating: '',
+                  phoneNumber: '',
+                  currentLatitude: '',
+                  currentLongitude: '',
+                },
+                orderPrice: '',
+                orderStatus: '',
+                orderServices: [],
+                message: '',
+              });
+              setLocalData('ORDER', {
+                orderId: '',
+                providerDetails: undefined,
+                orderPrice: '',
+                orderStatus: '',
+                orderServices: [],
+                message: '',
+              });
             }}
           />
         </View>

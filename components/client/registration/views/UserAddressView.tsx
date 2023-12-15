@@ -96,7 +96,6 @@ const UserAddressView = () => {
       )}
       <View style={styles.inputContainer}>
         {isLoader && <Loader />}
-        {console.log("Adrees", onSearchAddress)}
         <Input
           placeholder={t('address')}
           inputStyle={styles.input}
@@ -112,8 +111,8 @@ const UserAddressView = () => {
           keyboardType="numeric"
           errorMessage={dateOfBirthError}
           inputStyle={styles.inputDOB}
-          onBlur={() => { }}
-          onChangeText={() => { }}
+          onBlur={() => {}}
+          onChangeText={() => {}}
           onClearInputText={() => birthDateRef.current.clear()}
           ref={birthDateRef}
           defaultValue={formattedDate === 'Invalid-Date' ? '' : formattedDate}

@@ -29,21 +29,17 @@ const OnBoardingView = () => {
     setDefaultLanguage,
   } = OnBoardingViewController();
   const navigation = useNavigation();
+
+  const { t } = useTranslation();
+  const userResponse = getLocalData('USER');
+  const userData: ProviderProfile = getLocalData(
+    'USERPROFILE',
+  ) as ProviderProfile;
+  const providerServices = getLocalData('PROVIDERSERVICES');
   const { setToken, setUserId, setProviderProfile, setCurrentStep } =
     UseProviderUserContext();
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    //  deleteLocalData();
-    getLocalUserData();
-  }, []);
 
   const getLocalUserData = async () => {
-    const userResponse = await getLocalData('USER');
-    const userData: ProviderProfile = (await getLocalData(
-      'USERPROFILE',
-    )) as ProviderProfile;
-    const providerServices = getLocalData('PROVIDERSERVICES');
     console.log('token is ', userResponse?.token);
 
     const userLanguage = userResponse?.user?.language ?? 'en';
@@ -85,6 +81,10 @@ const OnBoardingView = () => {
 
     SplashScreen?.hide();
   };
+  useEffect(() => {
+    //  deleteLocalData();
+    getLocalUserData();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({

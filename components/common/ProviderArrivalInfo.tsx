@@ -8,29 +8,56 @@ import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 const ProviderArrivalInfo = ({
   onPress,
+  onCancelOrder,
   status,
   doctorName,
 }: {
   onPress: () => void;
+  onCancelOrder: () => void;
   status: string;
   doctorName: string;
 }) => {
   return (
     <TouchableOpacity style={styles.modalView} onPress={onPress}>
-      <View style={styles.modalContainer}>
-        <Image
-          source={require('../../assets/icon/physio.png')}
-          style={styles.icon}
-        />
-        <View style={styles.notificationContainer}>
-          <Text style={styles.notificationTitle} title={doctorName} />
-          <Text style={styles.notificationText} title={`Status:  ${status}`} />
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          gap: getWidth(10),
+          justifyContent: 'space-between',
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <Image
+            source={require('../../assets/icon/physio.png')}
+            style={styles.icon}
+          />
+          <View style={styles.notificationContainer}>
+            <Text style={styles.notificationTitle} title={doctorName} />
+            <Text
+              style={styles.notificationText}
+              title={`Status:  ${status}`}
+            />
+          </View>
         </View>
+        <TouchableOpacity style={styles.callButton}>
+          <Image
+            source={require('../../assets/icon/phonecall.png')}
+            style={styles.phoneIcon}
+          />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.callButton}>
-        <Image
-          source={require('../../assets/icon/phonecall.png')}
-          style={styles.phoneIcon}
+      <TouchableOpacity
+        style={{
+          alignSelf: 'center',
+          paddingHorizontal: getWidth(5),
+          zIndex: 1,
+        }}
+        onPress={onCancelOrder}
+      >
+        <Text
+          style={{ color: colors.white, fontFamily: fontFamily.medium }}
+          title={'Cancel Order'}
         />
       </TouchableOpacity>
     </TouchableOpacity>
@@ -59,10 +86,8 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     width: '100%',
     paddingVertical: getHeight(15),
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: getWidth(10),
-    justifyContent: 'space-between',
+    gap: getHeight(6),
+    paddingBottom: getHeight(6),
   },
   notificationText: {
     fontFamily: fontFamily.medium,

@@ -29,7 +29,6 @@ const CardView = ({ item, index, isSearch }: any) => {
   const { t } = useTranslation();
 
   const onPressOrder = () => {
-
     if (userProfile?.isPaymentAdded) {
       if (item?.name === 'Alternative medicine') {
         navigation.navigate(NavigationRoutes.HealerHome, {
@@ -43,7 +42,6 @@ const CardView = ({ item, index, isSearch }: any) => {
     } else {
       setModalVisible(true);
     }
-
   };
   // console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);
   const paymentModal = () => (

@@ -80,10 +80,6 @@ const HomeScreenControlller = () => {
     }
   };
 
-  useEffect(() => {
-    getSummaryofDay();
-  }, []);
-
   const getSummaryofDay = async () => {
     let daySummary = await getProviderDaySummary(
       {
@@ -92,9 +88,16 @@ const HomeScreenControlller = () => {
       },
       token,
     );
+    console.log('daySummary', daySummary);
 
-    setProviderDaySummary(daySummary);
+    if (daySummary !== undefined) {
+      setProviderDaySummary(daySummary);
+    }
   };
+
+  useEffect(() => {
+    getSummaryofDay();
+  }, []);
 
   const updateLocation = (mannualUpdate?: boolean) => {
     if (mannualUpdate) {

@@ -1,7 +1,8 @@
 import * as Sentry from '@sentry/react-native';
+import avatar from 'assets/icon/avatar.png';
+import logo from 'assets/icon/healLogo.png';
 import waze from 'assets/icon/waze.png';
 import Button from 'components/common/Button';
-import { RNHeader } from 'components/common/Header';
 import RNModal from 'components/common/Modal';
 import SelectImage from 'components/common/SelectImage';
 import ToggleButton from 'components/common/SwitchButton';
@@ -21,17 +22,14 @@ import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import avatar from 'assets/icon/avatar.png';
-import logo from 'assets/icon/healLogo.png';
 
+import useToast from 'components/common/useToast';
+import { ProviderOrderReceive } from 'libs/types/OrderTypes';
 import {
-  Alert,
   DeviceEventEmitter,
   Image,
-  Animated as RNAnimated,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import Animated, {
@@ -41,9 +39,6 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
-import Modal from 'components/common/Modal';
-import { ProviderOrderReceive } from 'libs/types/OrderTypes';
-import useToast from 'components/common/useToast';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -53,9 +48,7 @@ const HomeScreen = () => {
     available?.isProviderAvailable,
   );
 
-  const [isCancelOrder, setIsCancelOrder] = useState(
-    order?.extraData?.isCancelOrder ?? false,
-  );
+  const [isCancelOrder, setIsCancelOrder] = useState();
   const [isVisible, setIsVisible] = useState(false);
   const [isSeeMore, setIsSeeMore] = useState(
     order?.extraData?.isSeeMore ?? false,
@@ -67,6 +60,8 @@ const HomeScreen = () => {
   const [notification, setNotification] = useState(
     order?.extraData?.isNotification ?? false,
   );
+  console.log('notification', notification);
+  console.log(' isNotification ', order?.extraData?.isNotification);
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
@@ -137,11 +132,11 @@ const HomeScreen = () => {
       setIsCancelOrder(false);
       setAcceptOrder(false);
       setIsArrived(false);
-      setIsAvailable(false);
+      // setIsAvailable(false);
       setNotification(false);
       setIsSeeMore(false);
       modalHeight.value = withSpring(getHeight(360));
-      setLocalData('USER', { isProviderAvailable: false });
+      // setLocalData('USER', { isProviderAvailable: false });
 
       setLocalData('PROVIDERORDER', {
         extraData: {
@@ -166,21 +161,10 @@ const HomeScreen = () => {
     }
   };
 
-  const subscribrToTopicMessaging = () => {
-    // const admin = require('firebase-admin');
-
-    const message = {
-      data: {
-        type: 'warning',
-        content: 'A new weather warning has been created!',
-      },
-      topic: 'weather',
-    };
-  };
-
   useEffect(() => {
+    // onConfirmCancelOrder('yes');
     DeviceEventEmitter.addListener('ProviderOrderListener', (event) => {
-      // console.log('acceptOrder', acceptOrder);
+      console.log('status of event', event?.data?.status);
       console.log(
         'providerNotification **** 0000 ***** 00000',
         JSON.stringify(event),
@@ -193,34 +177,31 @@ const HomeScreen = () => {
       //   `Provider notification event first time for:-${providerProfile?.firstName}---- ${event}`,
       // );
       if (event.data?.status === 'Payment Done') {
-        setIsCancelOrder(false);
-        setAcceptOrder(false);
-        setIsArrived(false);
-        setIsAvailable(false);
+        // setIsCancelOrder(false);
+        // setAcceptOrder(false);
+        // setIsArrived(false);
+        // setIsAvailable(false);
         setNotification(false);
-        setIsSeeMore(false);
-        setShowTreatmentFinished(false);
-        modalHeight.value = withSpring(getHeight(360));
-        setLocalData('USER', { isProviderAvailable: false });
+        // setIsSeeMore(false);
+        // setShowTreatmentFinished(false);
+        // modalHeight.value = withSpring(getHeight(360));
+        // setLocalData('USER', { isProviderAvailable: false });
 
-        setLocalData('PROVIDERORDER', {
-          extraData: {
-            modalHeight: 360,
-            isCancelOrder: true,
-            isArrived: false,
-            orderAccepted: false,
-            isSeeMore: false,
-            isNotification: false,
-          },
-          orderStatus: '',
-          OrderReceive: {} as ProviderOrderReceive,
-        });
+        // setLocalData('PROVIDERORDER', {
+        //   extraData: {
+        //     modalHeight: 360,
+        //     isCancelOrder: true,
+        //     isArrived: false,
+        //     orderAccepted: false,
+        //     isSeeMore: false,
+        //     isNotification: false,
+        //   },
+        //   orderStatus: '',
+        //   OrderReceive: {} as ProviderOrderReceive,
+        // });
         showToast('Payment Done!', 'Your Payment is done ', '');
       }
       if (event.data?.status === 'Order created') {
-        // Sentry.captureMessage(
-        //   `Provider notification event 'Send Order': true for:-${providerProfile?.firstName}---- ${event.notification?.title}`,
-        // );
         setServices(event?.data?.services ?? []);
         setLocalData('PROVIDERORDER', {
           OrderReceive: {
@@ -240,22 +221,17 @@ const HomeScreen = () => {
         });
 
         console.log('event?.data?.services', event?.data?.services);
+        setNotification(true);
       }
-      setOrderStatus(event.data?.staus);
-      // console.log('providerNotification **** 0000 ***** 00000', event);
-      setNotification(true);
+      setOrderStatus(event.data?.status);
 
       setLocalData('PROVIDERORDER', {
-        extraData: {
-          isNotification: true,
-        },
+        // extraData: {
+        //   isNotification: true,
+        // },
         orderStatus: event.data.status,
       });
       if (event.data.status === 'Arrived' || orderStatus === 'Arrived Order') {
-        // Sentry.captureMessage(
-        //   `Provider notification event 'Arrived Order': true for:-${providerProfile?.firstName
-        //   }---- ${event.data?.staus || orderStatus}`,
-        // );
         setTotalPricesOfServices(totalPrice());
         setIsArrived(true);
         setLocalData('PROVIDERORDER', {
@@ -267,10 +243,7 @@ const HomeScreen = () => {
         });
       }
     });
-    // messaging().subscribeToTopic('healApp').then((res) => console.log('Subscribed fom the topic!', res));
-    // if (acceptOrder) {
-    // subscribrToTopicMessaging()
-    // }
+
     console.log('PROVIDERORDER', JSON.stringify(order));
     console.log('order status **********', orderStatus, isArrived);
     if (acceptOrder && !isArrived) {
@@ -374,7 +347,7 @@ const HomeScreen = () => {
         .then((res) => {
           console.log('Treatement Ended response', res);
           if (res?.isSuccessful) {
-            onPressToggle(false);
+            // onPressToggle(false);
             setShowTreatmentFinished(true);
             setAcceptOrder(false);
             setIsArrived(false);
@@ -382,7 +355,7 @@ const HomeScreen = () => {
             setNotification(false);
             modalHeight.value = withSpring(getHeight(360));
             setIsSeeMore(false);
-            setLocalData('USER', { isProviderAvailable: false });
+            // setLocalData('USER', { isProviderAvailable: false });
             setLocalData('PROVIDERORDER', {
               extraData: {
                 modalHeight: 360,

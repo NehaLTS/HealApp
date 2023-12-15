@@ -46,24 +46,27 @@ const UserAddressViewController = () => {
   };
 
   // Function to validate the ID number
-  const validateIdNumber = () => {
-    if (!numericPattern.test(idNumberRef.current.value))
-      setIdNumberError(t('id_contain_numbers'));
+  const validateIdNumber = (value: string) => {
+    if (!numericPattern.test(value)) setIdNumberError(t('id_contain_numbers'));
     else setIdNumberError('');
   };
 
-  const onBlurIdNumber = () => validateIdNumber();
+  const onBlurIdNumber = () => {};
 
-  const onChangeAddress = (value: string, latitude: string, longitude: string) => {
+  const onChangeAddress = (
+    value: string,
+    latitude: string,
+    longitude: string,
+  ) => {
     setOnSearchAddress(value ?? '');
     validateAddress(value ?? '');
-    setGeomatricAddress({ latitude, longitude })
+    setGeomatricAddress({ latitude, longitude });
     console.log('valueChnage latitude', value, latitude, longitude);
   };
 
   const onChangeIdNumber = (value: string) => {
     idNumberRef.current.value = value;
-    onBlurIdNumber();
+    validateIdNumber(value);
   };
 
   const getImageUrl = (url: string) => {
@@ -93,7 +96,11 @@ const UserAddressViewController = () => {
       setIsLoader(true);
       setUserProfile({
         ...(userProfile as ClientProfile),
-        address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
+        address: {
+          address: onSearchAddress,
+          latitude: geomatricAddress.latitude,
+          longitude: geomatricAddress.longitude,
+        },
         date_of_birth: dateOfBirth.toString(),
         idNumber: idNumberRef.current.value,
         city: '',
@@ -106,7 +113,11 @@ const UserAddressViewController = () => {
       const res = await onUpdateUserProfile?.(
         {
           ...userProfile,
-          address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
+          address: {
+            address: onSearchAddress,
+            latitude: geomatricAddress.latitude,
+            longitude: geomatricAddress.longitude,
+          },
           date_of_birth: dateOfBirth.toString(),
           idNumber: idNumberRef.current.value,
           city: '',
@@ -124,7 +135,11 @@ const UserAddressViewController = () => {
         firstName: userProfile?.firstName,
         lastName: userProfile?.lastName,
         phoneNumber: userProfile?.phoneNumber,
-        address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
+        address: {
+          address: onSearchAddress,
+          latitude: geomatricAddress.latitude,
+          longitude: geomatricAddress.longitude,
+        },
         city: '',
         state: '',
         country: '',
@@ -141,7 +156,7 @@ const UserAddressViewController = () => {
         Alert.alert(t('error_occurred'));
       }
     } else {
-      if (onSearchAddress) setAddressError(t('address_required'));
+      if (!onSearchAddress?.length) setAddressError(t('address_required'));
       if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
       if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
     }

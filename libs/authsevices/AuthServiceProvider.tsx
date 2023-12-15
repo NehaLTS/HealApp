@@ -21,13 +21,17 @@ import {
   UPDATE_SIGNUP_PROVIDER,
 } from '../constants/ApiConstants';
 import { UserType, UserTypeProvider } from '../types/UserType';
-import { OrderRequest, PoviderLocation, ProviderHomeDetails, TreatementEnded } from 'libs/types/ProvierTypes';
+import {
+  OrderRequest,
+  PoviderLocation,
+  ProviderHomeDetails,
+  TreatementEnded,
+} from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
 export const AuthServicesProvider = () => {
-  const { token } =
-    UseProviderUserContext();
+  const { token } = UseProviderUserContext();
 
   const OnProviderSignIn = (body: {
     email: string;
@@ -66,10 +70,13 @@ export const AuthServicesProvider = () => {
       body: body as unknown as BodyInit,
     });
 
-const getProviderDaySummary = (body: {
-    provider_id: string;
-    created_date_time: string;
-  }, accessToken: string,): Promise<ProviderHomeDetails> =>
+  const getProviderDaySummary = (
+    body: {
+      provider_id: string;
+      created_date_time: string;
+    },
+    accessToken: string,
+  ): Promise<ProviderHomeDetails> =>
     sendRequest(PROVIDER_USER_DETAILS, {
       method: POST,
       body: body as unknown as BodyInit,
@@ -251,6 +258,6 @@ const getProviderDaySummary = (body: {
     providerAvailabilityStatus,
     AddProviderServices,
     TreatementEnded,
-    getProviderDaySummary
+    getProviderDaySummary,
   };
 };

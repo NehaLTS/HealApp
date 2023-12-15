@@ -148,10 +148,10 @@
   "more_info": "More info",
   "call_doctor": "Call the doctor",
   "min": "min",
-  "looking_doctor": "Looking for a doctor",
-  "doctor_found": "Doctor is found!",
+  "looking_doctor": "Looking for a provider",
+  "doctor_found": "Provider is found!",
   "no_fee_collected": "*No fee will be collected",
-  "doctor_arrived": "Doctor has arrived",
+  "doctor_arrived": "Provider has arrived",
   "3_minutes_to_cancel": "*You have 3 minutes to cancel an order for free",
   "chest_pain": "Chest pain",
   "see_details": "See more details",
@@ -172,7 +172,7 @@
   "found": " is found",
   "on_way": "on the way",
   "arrived": "arrived",
-  "cvv_invalid":"cvv invalid",
+  "cvv_invalid": "cvv invalid",
 
   "home": {
     "providerList": [
@@ -196,7 +196,6 @@
         "image": "assets/icon/healer.png",
         "name": "Alternative medicine"
       }
-     
     ]
   }
 }

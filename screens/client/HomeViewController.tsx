@@ -235,6 +235,7 @@ const HomeViewController = () => {
     setSearchProviderList,
     dropdownVisible,
     setDropdownVisible,
+    setSearchSpecialist,
   };
 };
 

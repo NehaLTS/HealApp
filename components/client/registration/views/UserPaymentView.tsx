@@ -147,9 +147,11 @@ const UserPaymentView = ({
               <Input
                 keyboardType="numeric"
                 placeholder={t('mm_yy')}
-                inputStyle={styles.expireDate}
+                inputStyle={{
+                  ...styles.expireDate,
+                  marginBottom: cvvError ? getHeight(25) : 0,
+                }}
                 onBlur={onBlurExpireDate}
-                // onClearInputText={() => expireDateRef.current.clear()}
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
                 errorMessage={cardExpiryError}
@@ -158,6 +160,7 @@ const UserPaymentView = ({
                 returnKeyType={'next'}
                 onSubmitEditing={() => cvvRef.current.focus()}
                 maxLength={5}
+                isHideCross
               />
               <Input
                 keyboardType="numeric"
@@ -171,6 +174,10 @@ const UserPaymentView = ({
                 inputValue={cvv ?? ''}
                 maxLength={3}
                 returnKeyType={'done'}
+                isHideCross
+                inputStyle={{
+                  marginBottom: cardExpiryError ? getHeight(20) : 0,
+                }}
               />
             </View>
           </>

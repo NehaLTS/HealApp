@@ -20,14 +20,14 @@ export const getProviderImage = (type: string) => {
   const image = type.includes('Doctor')
     ? doctor
     : type?.includes('Nurse')
-      ? nurse
-      : type?.includes('Healer') || type?.includes('Alternative')
-        ? healer
-        : type?.includes('Physio')
-          ? physio
-          : type?.includes('Clinics')
-            ? clinic
-            : doctorOnline;
+    ? nurse
+    : type?.includes('Healer') || type?.includes('Alternative')
+    ? healer
+    : type?.includes('Physio')
+    ? physio
+    : type?.includes('Clinics')
+    ? clinic
+    : doctorOnline;
   return image;
 };
 
@@ -52,12 +52,9 @@ export const checkLocationPermission = (): Promise<boolean> => {
       }
     })
     .catch((error) => {
-
-      console.log("permission check error ", error)
+      console.log('permission check error ', error);
       return false;
     });
-
-
 };
 
 // export const getGemomatrichLocationFromPlaceId = async (placeId: any) => {

@@ -30,12 +30,14 @@ const OrderFormView = ({
   order,
   hideTreatmentMenu,
   onPressWhenHealer,
+  supplier,
 }: {
   treatmentReason: treatment;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
   hideTreatmentMenu: boolean;
   onPressWhenHealer: () => void;
+  supplier: any;
 }) => {
   const {
     activeButton,
@@ -69,6 +71,7 @@ const OrderFormView = ({
   } = OrderFormController({ setOrder, order, onPressWhenHealer });
 
   const { t } = useTranslation();
+  console.log('currentLocationOfUser', order?.reason);
 
   const showFilledData = () => {
     return (
@@ -110,7 +113,11 @@ const OrderFormView = ({
                 key={index}
                 title={item.name?.en}
                 isSmall
-                isPrimary={activeButton?.includes?.(item?.reason_id)}
+                isPrimary={
+                  activeButton?.includes?.(item?.reason_id)
+                  // ||
+                  // item.name?.en === supplier?.speciality_name
+                }
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
                 fontSized={getHeight(fontSize?.textM)}
@@ -361,6 +368,7 @@ const OrderFormView = ({
             keyboardType="numeric"
             inputStyle={styles.inputStyle}
             returnKeyType={'done'}
+            onSubmitEditing={onSubmitDetail}
           />
           <TouchableOpacity
             style={styles.arrowIconContainer}

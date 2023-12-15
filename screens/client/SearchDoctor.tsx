@@ -1,49 +1,36 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import arrowBack from 'assets/icon/arrowBack.png';
+import DoctorDetailCard from 'components/client/home/DoctorDetailCard';
+import ArrivalTime from 'components/common/ArrivalTime';
 import Button from 'components/common/Button';
+import { RNHeader } from 'components/common/Header';
+import { LoaderLarge } from 'components/common/Loader';
 import Text from 'components/common/Text';
+import TextButton from 'components/common/TextButton';
+import useToast from 'components/common/useToast';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
+import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import useUpdateEffect from 'libs/UseUpdateEffect';
+import { ARRIVED, providerStatusOnHeader } from 'libs/constants/Constant';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { Location } from 'libs/types/UserType';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Alert,
-  DeviceEventEmitter,
-  Dimensions,
   Image,
-  PermissionsAndroid,
-  Platform,
   ScrollView,
   StyleSheet,
-  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import DoctorDetailCard from 'components/client/home/DoctorDetailCard';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import { createNotificationListeners } from 'libs/Notification';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { Location } from 'libs/types/UserType';
 import Geolocation from 'react-native-geolocation-service';
+import MapView, { Marker } from 'react-native-maps';
 import SearchDoctorController from './SearchDoctorController';
-import ArrivalTime from 'components/common/ArrivalTime';
-import Loader, { LoaderLarge } from 'components/common/Loader';
-import TextButton from 'components/common/TextButton';
-import MapViewDirections from 'react-native-maps-directions';
-import useUpdateEffect from 'libs/UseUpdateEffect';
-import useToast from 'components/common/useToast';
-import { RNHeader } from 'components/common/Header';
-import NavigationRoutes from 'navigator/NavigationRoutes';
-import {
-  ARRIVED,
-  ON_THE_WAY,
-  ORDER_ACCEPTED,
-  providerStatusOnHeader,
-} from 'libs/constants/Constant';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -192,9 +179,9 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-                showLoader
+              showLoader
                 ? t('looking_doctor')
-                : `${'Doctor'}${' '}${providerStatusOnHeader(providerStatus)}`
+                : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
           />
         </View>
@@ -207,20 +194,28 @@ const SearchDoctor = () => {
             focusable
             showsBuildings
             showsIndoors
-            initialRegion={providerLocation ? {
-              ...providerLocation,
-              latitudeDelta: 0.02,
-              longitudeDelta: 0.02,
-              title: 'provider',
-              timestamp: '',
-            } : currentLocation}
-            region={providerLocation ? {
-              ...providerLocation,
-              latitudeDelta: 0.02,
-              longitudeDelta: 0.02,
-              title: 'provider',
-              timestamp: '',
-            } : currentLocation}
+            initialRegion={
+              providerLocation
+                ? {
+                    ...providerLocation,
+                    latitudeDelta: 0.02,
+                    longitudeDelta: 0.02,
+                    title: 'provider',
+                    timestamp: '',
+                  }
+                : currentLocation
+            }
+            region={
+              providerLocation
+                ? {
+                    ...providerLocation,
+                    latitudeDelta: 0.02,
+                    longitudeDelta: 0.02,
+                    title: 'provider',
+                    timestamp: '',
+                  }
+                : currentLocation
+            }
             style={{ flex: 1 }}
           >
             {/* {currentLocation !== undefined &&
@@ -273,8 +268,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                            currentOrder.providerDetails
-                              ?.providerProfilePicture ? (
+                          currentOrder.providerDetails
+                            ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -307,8 +302,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-            providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -324,7 +319,7 @@ const SearchDoctor = () => {
                 }}
                 isPrimary={showRateAlert}
                 showBothCards={showRateAlert && providerLocation != undefined}
-                status={`${'Doctor'}${' '}${providerStatusOnHeader(
+                status={`${'Provider'}${' '}${providerStatusOnHeader(
                   providerStatus,
                 )}`}
                 showProvider={providerLocation != undefined}
@@ -340,9 +335,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !showLoader &&
-                  !showCancelButton
+                providerLocation.latitude !== 0.0 &&
+                !showLoader &&
+                !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -358,7 +353,7 @@ const SearchDoctor = () => {
               <TextButton
                 style={{ alignSelf: 'center' }}
                 title={t('cancel')}
-                onPress={() => { }}
+                onPress={() => {}}
                 fontSize={getHeight(fontSize.textXl)}
               />
             )}
@@ -367,11 +362,11 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                  showLoader
+                showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                    ? t('3_minutes_to_cancel')
-                    : ''
+                  ? t('3_minutes_to_cancel')
+                  : ''
               }
             />
           </View>

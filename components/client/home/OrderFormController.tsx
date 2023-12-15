@@ -8,11 +8,11 @@ import { Alert, StyleSheet } from 'react-native';
 const OrderFormController = ({
   setOrder,
   order,
-  onPressWhenHealer
+  onPressWhenHealer,
 }: {
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
-  onPressWhenHealer: () => void
+  onPressWhenHealer: () => void;
 }) => {
   const uniqueReasonIds: number[] = [];
   order?.reason.forEach((item) => {
@@ -49,7 +49,7 @@ const OrderFormController = ({
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
-  const [moveNext, setMoveNext] = useState<Boolean>(false)
+  const [moveNext, setMoveNext] = useState<Boolean>(false);
   function calculateBirthDate(age: number) {
     const currentDate = new Date();
     const birthYear = currentDate.getFullYear() - age;
@@ -169,7 +169,7 @@ const OrderFormController = ({
       ...prevOrder,
       reason: updatedSelectedResourceType,
     }));
-    console.log("updatedSelectedResourceType", updatedSelectedResourceType)
+    console.log('updatedSelectedResourceType', updatedSelectedResourceType);
     // if (updatedSelectedResourceType.length > 0) {
     //   onPressWhenHealer()
     // }
@@ -225,8 +225,12 @@ const OrderFormController = ({
     }));
   };
 
-  const onChangeAddress = (address: string, latitude: string, longitude: string) => {
-    console.log("onChangeAddress", address)
+  const onChangeAddress = (
+    address: string,
+    latitude: string,
+    longitude: string,
+  ) => {
+    console.log('onChangeAddress', address);
     setOrder({
       ...order,
       address: address,

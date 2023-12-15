@@ -37,6 +37,7 @@ const Input = forwardRef(
       onSubmitDescription,
       inputPlaceholder,
       isSearch,
+      isHideCross,
       ...props
     }: {
       placeholder?: string;
@@ -61,6 +62,7 @@ const Input = forwardRef(
       isDescription?: boolean;
       inputPlaceholder?: string;
       isSearch?: boolean;
+      isHideCross?: boolean;
     } & TextInputProps,
     ref,
   ) => {
@@ -169,14 +171,16 @@ const Input = forwardRef(
               />
             </TouchableOpacity>
           )}
-          {errorMessage && type !== ('password' && 'dateOfBirth') && (
-            <TouchableOpacity onPress={onClearInputText}>
-              <Image
-                source={require('../../assets/icon/error.png')}
-                style={styles.errorImage}
-              />
-            </TouchableOpacity>
-          )}
+          {errorMessage &&
+            type !== ('password' && 'dateOfBirth') &&
+            !isHideCross && (
+              <TouchableOpacity onPress={onClearInputText}>
+                <Image
+                  source={require('../../assets/icon/error.png')}
+                  style={styles.errorImage}
+                />
+              </TouchableOpacity>
+            )}
           {isSearch && (
             <TouchableOpacity
               style={{
