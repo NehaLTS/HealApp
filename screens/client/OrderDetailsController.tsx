@@ -40,7 +40,7 @@ const OrderDetailsController = () => {
     client_id: '',
     patient_type: { type: 'me', age: '' },
     patient_name: (userProfile as ClientProfile)?.firstName ?? '',
-    address: (userProfile as ClientProfile)?.address ?? '',
+    address: userLocation.onboardingLocation?.address ?? '',
     city: (userProfile as ClientProfile)?.city ?? '',
     phonenumber: (userProfile as ClientProfile)?.phoneNumber ?? '',
     Date_of_birth: '',

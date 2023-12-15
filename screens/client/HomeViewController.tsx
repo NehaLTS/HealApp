@@ -4,6 +4,7 @@ import { ClientOrderServices } from 'libs/ClientOrderServices';
 import {
   deleteLocalData,
   getLocalData,
+  setLocalData,
 } from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import { ClientProfile } from 'libs/types/UserType';
@@ -53,6 +54,7 @@ const HomeViewController = () => {
   const [searchProviderList, setSearchProviderList] = useState<any>();
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = orderList;
+  const locationData = getLocalData('LOCATION')
 
   const { fetchCurrentAddress } = useCurrentAddress();
   const location = async () => {
@@ -69,7 +71,13 @@ const HomeViewController = () => {
             },
             onboardingLocation: prevState?.onboardingLocation
           }));
-
+        setLocalData('LOCATION', {
+          currentLocation: {
+            latitude: address.latitude,
+            longitude: address.longitude,
+            address: address.address ?? '',
+          },
+        })
         Sentry.captureMessage(
           `Client Flow userLocation FOR:-${userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
@@ -81,6 +89,7 @@ const HomeViewController = () => {
   };
 
   useEffect(() => {
+    setUserLocation({ ...locationData })
     location();
     getBannerAd();
     console.log('SetCuree', userLocation);

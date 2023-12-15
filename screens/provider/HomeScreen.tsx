@@ -70,6 +70,8 @@ const HomeScreen = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [showTreatmentFinished, setShowTreatmentFinished] = useState(false);
   const [showStillAvailable, setShowStillAvailable] = useState(false);
+  const locationData = getLocalData('LOCATION')
+
   const { showToast, renderToast } = useToast();
   console.log('showStillAvailable', showStillAvailable);
   console.log('showTreatmentFinished', showTreatmentFinished);
@@ -87,7 +89,7 @@ const HomeScreen = () => {
     getHeight(order?.extraData?.modalHeight ?? 360),
   );
   const { providerAvailabilityStatus } = AuthServicesProvider();
-  const { userId, token, providerProfile } = UseProviderUserContext();
+  const { userId, token, providerProfile, setUserLocation } = UseProviderUserContext();
   const eventServices =
     order && order?.OrderReceive && order?.OrderReceive?.services
       ? JSON.parse(order?.OrderReceive?.services)
@@ -102,6 +104,7 @@ const HomeScreen = () => {
   ]);
   const { t } = useTranslation();
   useEffect(() => {
+    setUserLocation({ ...locationData })
     createNotificationListeners();
   }, []);
   // const ser = JSON.stringify(order?.eventData?.services);
@@ -412,11 +415,10 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     eventServices?.length > 1
-                      ? `${
-                          index !== eventServices?.length - 1
-                            ? ` ${service?.service_name}, `
-                            : ` ${service?.service_name}`
-                        }`
+                      ? `${index !== eventServices?.length - 1
+                        ? ` ${service?.service_name}, `
+                        : ` ${service?.service_name}`
+                      }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -428,17 +430,14 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.OrderReceive?.firstname}  ${
-          order?.OrderReceive?.lastname
-        }    ${
-          order?.OrderReceive?.distance !== 'undefined'
+        title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+          }    ${order?.OrderReceive?.distance !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-        } km, ~${
-          order?.OrderReceive?.time !== 'undefined'
+          } km, ~${order?.OrderReceive?.time !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-        } min`}
+          } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -535,11 +534,10 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           eventServices?.length > 1
-                            ? `${
-                                index !== eventServices?.length - 1
-                                  ? ` ${service?.service_name}, `
-                                  : ` ${service?.service_name}`
-                              }`
+                            ? `${index !== eventServices?.length - 1
+                              ? ` ${service?.service_name}, `
+                              : ` ${service?.service_name}`
+                            }`
                             : service?.service_name
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -551,17 +549,14 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
-              title={`${order?.OrderReceive?.firstname}  ${
-                order?.OrderReceive?.lastname
-              }    ${
-                order?.OrderReceive?.distance !== 'undefined'
+              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+                }    ${order?.OrderReceive?.distance !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-              } km, ~${
-                order?.OrderReceive?.time !== 'undefined'
+                } km, ~${order?.OrderReceive?.time !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-              } min`}
+                } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -818,8 +813,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? 'The order is cancelled'
                       : notification
-                      ? 'You have a new order!'
-                      : 'No orders ...yet'
+                        ? 'You have a new order!'
+                        : 'No orders ...yet'
                   }
                 />
               </>
@@ -831,17 +826,17 @@ const HomeScreen = () => {
           ) : (
             <>
               {DetailCard(
-                providerDaySummary ? providerDaySummary.total_clients : '0',
+                providerDaySummary?.providerDetails?.orderDetails?.total_clients.toString() ?? '0',
                 'Clients today',
               )}
               {DetailCard(
-                providerDaySummary
-                  ? providerDaySummary.avg_arrival_time
-                  : '0 mins',
+
+                providerDaySummary?.providerDetails?.orderDetails?.avg_arrival_time.toString()
+                ?? '0 mins',
                 'Average arrival time',
               )}
               {DetailCard(
-                providerDaySummary ? providerDaySummary.wallet_amount : '0 ₪',
+                providerDaySummary?.providerDetails?.walletDetails?.wallet_amount.toString() ?? '0 ₪',
                 'My balance',
               )}
             </>
@@ -865,7 +860,18 @@ const HomeScreen = () => {
           onPressSeeMore={onPressSeeMore}
           isModalVisible={acceptOrder}
           onPressCancelOrder={onPressCancelOrder}
-          onPressUpdateArrive={() => updateLocation(true)}
+          onPressUpdateArrive={() => {
+            updateLocation(true)
+            setIsArrived(true);
+            setLocalData('PROVIDERORDER', {
+              orderStatus: "Arrived",
+              extraData: {
+                isArrived: true,
+                totalPrice: totalPrice(),
+              },
+            });
+          }
+          }
         />
       </TouchableOpacity>
       {renderToast()}

@@ -1,4 +1,5 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
@@ -242,10 +243,18 @@ const OrderFormController = ({
       ...prevState,
       onboardingLocation: {
         latitude: latitude,
-        longitude: longitude
+        longitude: longitude,
+        address: address
       },
       currentLocation: prevState?.currentLocation
     }))
+    setLocalData('LOCATION', {
+      onboardingLocation: {
+        latitude: latitude,
+        longitude: longitude,
+        address: address
+      }
+    })
   };
 
   const onSubmitDescription = () => {

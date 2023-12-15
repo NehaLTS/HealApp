@@ -112,7 +112,12 @@ const UserAddressViewController = () => {
         },
         currentLocation: prevState?.currentLocation
       }));
+      setLocalData('LOCATION', {
+        onboardingLocation: {
+          address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
 
+        }
+      })
 
 
       //Update User Profile
