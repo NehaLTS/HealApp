@@ -9,7 +9,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import Button from './Button';
 import Animated, {
@@ -27,7 +27,7 @@ const CardView = ({ item, index, isSearch }: any) => {
   const onPaymentAdd = () => setIsAddPayment(true);
   const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
-
+  console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);
   const onPressOrder = () => {
     if (userProfile?.isPaymentAdded) {
       if (item?.name === 'Alternative medicine') {

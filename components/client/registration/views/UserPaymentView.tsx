@@ -21,12 +21,16 @@ import UserPaymentViewController from '../controllers/UserPaymentViewController'
 //TODO: * are changed after setup i18 and static data i changes after binding data
 const UserPaymentView = ({
   isFromHome,
+  isFromSummary,
   item,
   onPress,
+  onPressCancel,
 }: {
   isFromHome?: boolean;
+  isFromSummary?: boolean;
   item?: any;
   onPress?: () => void;
+  onPressCancel?: () => void;
 }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -158,7 +162,9 @@ const UserPaymentView = ({
                 defaultValue={expiry}
                 inputValue={expiry}
                 returnKeyType={'next'}
-                onSubmitEditing={() => cvvRef.current.focus()}
+                onSubmitEditing={() => {
+                  if (!cardExpiryError) cvvRef.current.focus();
+                }}
                 maxLength={5}
                 isHideCross
               />
@@ -212,13 +218,28 @@ const UserPaymentView = ({
                 width={'30%'}
               />
             )} */}
-            <Button
-              title={t('next')}
-              isPrimary
-              onPress={onPressNext}
-              isSmall
-              width={'30%'}
-            />
+            <View>
+              <Button
+                title={t('next')}
+                isPrimary
+                onPress={onPressNext}
+                isSmall
+                width={'30%'}
+              />
+              {isFromSummary && (
+                <TextButton
+                  title={t('cancel')}
+                  isSmall
+                  style={{
+                    paddingHorizontal: getWidth(10),
+                    alignSelf: 'center',
+                    marginTop: getHeight(16),
+                    zIndex: 11,
+                  }}
+                  onPress={() => onPressCancel?.()}
+                />
+              )}
+            </View>
           </>
         ) : (
           <Button
@@ -234,6 +255,7 @@ const UserPaymentView = ({
           />
         )}
       </View>
+
       {!isCardDetails && !isFromHome && (
         <TextButton
           fontSize={getWidth(fontSize.textXl)}

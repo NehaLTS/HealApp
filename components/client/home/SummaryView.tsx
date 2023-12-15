@@ -57,6 +57,8 @@ const SummaryView = ({
         <UserPaymentView
           isFromHome={true}
           onPress={() => setIsVisible(false)}
+          onPressCancel={() => setIsVisible(false)}
+          isFromSummary
         />
       </View>
     </Modal>

@@ -237,10 +237,6 @@ const HomeScreen = () => {
     provider_type_id: entry?.provider_type_id,
     speciality_name: entry?.speciality_name,
   }));
-  const reasonSelected = providersList?.map?.((entry) => ({
-    name: entry?.speciality_name,
-    reason_id: entry?.type,
-  }));
 
   console.log('reasonSelected', providersList);
   const getProviderSearchList = () => {
