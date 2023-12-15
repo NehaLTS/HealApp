@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontFamily: fontFamily.medium,
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     color: colors.white,
   },
   icon: {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   notificationTitle: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     fontFamily: fontFamily.medium,
     color: colors.white,
     flexWrap: 'wrap',

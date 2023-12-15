@@ -27,14 +27,11 @@ const AddAddress = ({
   isVisible,
   onClose,
   defaultValue,
-
 }: {
   address: (address: string, latitude: string, longitude: string) => void;
   isVisible: boolean;
   onClose: () => void;
   defaultValue: string;
-
-
 }) => {
   const { userLocation, setUserProfile } = UseClientUserContext();
   const [searchAddress, setSearchAddress] = useState(
@@ -77,7 +74,7 @@ const AddAddress = ({
 
   const handleSuggestionSelect = async (selectedPrediction: any) => {
     setSearchAddress(selectedPrediction.description);
-    console.log("setSearchAddress", selectedPrediction.description)
+    console.log('setSearchAddress', selectedPrediction.description);
 
     onClose();
     const placeId = selectedPrediction?.place_id;
@@ -93,14 +90,13 @@ const AddAddress = ({
         data.result.geometry.location
       ) {
         const { lat, lng } = data.result.geometry.location;
-        const geomatricLocation = { latitude: lat, longitude: lng }
+        const geomatricLocation = { latitude: lat, longitude: lng };
         address(selectedPrediction.description, lat.toString(), lng.toString());
 
         console.log('Latitude:', lat, 'Longitude:', lng);
-        return geomatricLocation
+        return geomatricLocation;
       } else {
         console.error('Place details unavailable or incomplete:', data);
-
       }
     } catch (error) {
       console.error('Error fetching place details:', error);
@@ -108,8 +104,6 @@ const AddAddress = ({
     // getGemomatrichLocationFromPlaceId(placeId).then((res) => {
     //   address(selectedPrediction.description, res?.latitude.toString(), res?.longitude.toString());
     // })
-
-
   };
 
   return (
@@ -139,7 +133,7 @@ const AddAddress = ({
         <TextButton
           containerStyle={styles.closeButton}
           title={t('close')}
-          fontSize={getWidth(fontSize.textL)}
+          fontSize={getHeight(fontSize.textL)}
           onPress={onClose}
         />
       </View>
@@ -199,14 +193,14 @@ const styles = StyleSheet.create({
   addressText: {
     flexWrap: 'wrap',
     width: '91%',
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
   },
   closeButton: {
     width: '16%',
     alignItems: 'flex-end',
   },
   addressNotFound: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     textAlign: 'center',
     marginTop: getHeight(dimens.buttonHeight),
   },

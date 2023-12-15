@@ -182,12 +182,12 @@ const AddNewService = ({
               marginVertical: getHeight(dimens.sideMargin + dimens.marginS),
             }}
             onPress={saveService}
-            fontSized={getWidth(15)}
+            fontSized={getHeight(15)}
             height={getHeight(45)}
           />
           <TextButton
             style={styles.skip}
-            fontSize={getWidth(fontSize.textXl)}
+            fontSize={getHeight(fontSize.textXl)}
             title={t('cancel')}
             onPress={() => setIsVisible(false)}
           />
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   textAdd: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
   },
   modalContent: {
     backgroundColor: colors.modal,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   },
   addService: {
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getHeight(dimens.marginM),
   },
   skip: {

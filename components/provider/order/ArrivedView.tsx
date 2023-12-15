@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   textAdd: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     color: colors.white,
   },
   smallText: {

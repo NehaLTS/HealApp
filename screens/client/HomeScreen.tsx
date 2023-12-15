@@ -155,7 +155,7 @@ const HomeScreen = () => {
       <TextButton
         isActive
         title={t('change')}
-        fontSize={getWidth(fontSize.textM)}
+        fontSize={getHeight(fontSize.textM)}
         style={{ marginBottom: dimens.paddingS }}
         onPress={() => setIsVisible(true)}
       />
@@ -199,7 +199,7 @@ const HomeScreen = () => {
           <TextButton
             title={'Logout'}
             onPress={onLogoutButtonPress}
-            fontSize={18}
+            fontSize={getHeight(18)}
           />
         </View>
       )}
@@ -219,7 +219,7 @@ const HomeScreen = () => {
     searchedList?.map((item: any, index: number) => (
       <TextButton
         key={index}
-        fontSize={getWidth(fontSize.textL)}
+        fontSize={getHeight(fontSize.textL)}
         containerStyle={{
           marginVertical: getHeight(dimens.paddingXs + 2),
           width: 'auto',
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
   },
   searchHeading: {
     alignSelf: 'center',
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
   },
   logo: {
     width: getWidth(dimens.imageS),

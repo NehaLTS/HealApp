@@ -112,7 +112,7 @@ const CardView = ({ item, index, isSearch }: any) => {
               isPrimary
               isSmall
               width={84}
-              fontSized={15}
+              fontSized={getHeight(15)}
               height={36}
               onPress={onPressOrder}
             />
@@ -148,20 +148,20 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   specialist: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     flex: 1,
     textAlign: 'left',
   },
   specialistSearched: {
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     fontFamily: fontFamily.medium,
   },
   specialistList: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: getWidth(dimens.paddingL),
+    marginBottom: getHeight(dimens.paddingL),
   },
   container: {
     flexDirection: 'row',

@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     paddingTop: getHeight(10),
   },
   activeButtonText: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     color: colors.black,
   },
   activeButtonView: {

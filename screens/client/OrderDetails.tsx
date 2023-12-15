@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   specialist: {
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     textAlign: 'left',
   },
   buttonOrder: {
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginL),
   },
   text: {
-    fontSize: getWidth(fontSize.textS),
+    fontSize: getHeight(fontSize.textS),
     marginTop: getWidth(4),
     textAlign: 'center',
   },

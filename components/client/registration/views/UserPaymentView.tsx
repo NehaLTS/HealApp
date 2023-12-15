@@ -156,6 +156,7 @@ const UserPaymentView = ({
                   marginBottom: cvvError ? getHeight(25) : 0,
                 }}
                 onBlur={onBlurExpireDate}
+                onClearInputText={() => expireDateRef.current.clear()}
                 onChangeText={onChangeExpireDate}
                 ref={expireDateRef}
                 errorMessage={cardExpiryError}
@@ -184,6 +185,7 @@ const UserPaymentView = ({
                 inputStyle={{
                   marginBottom: cardExpiryError ? getHeight(20) : 0,
                 }}
+                onClearInputText={() => cvvRef.current.clear()}
               />
             </View>
           </>
@@ -258,7 +260,7 @@ const UserPaymentView = ({
 
       {!isCardDetails && !isFromHome && (
         <TextButton
-          fontSize={getWidth(fontSize.textXl)}
+          fontSize={getHeight(fontSize.textXl)}
           containerStyle={{ flex: 0.08 }}
           style={styles.skipLaterText}
           title={t('skip_for_later')}
@@ -309,13 +311,13 @@ const styles = StyleSheet.create({
   skipLaterText: {
     color: colors.black,
     textAlign: 'center',
-    fontSize: getWidth(fontSize.textXl),
+    fontSize: getHeight(fontSize.textXl),
     marginBottom: getHeight(dimens.marginL),
     verticalAlign: 'middle',
     height: '100%',
   },
   text: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     color: colors.black,
     paddingTop: getHeight(dimens.paddingXs),
   },
@@ -388,7 +390,7 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   title: {
-    fontSize: getWidth(fontSize.headingL),
+    fontSize: getHeight(fontSize.headingL),
     textAlign: 'center',
   },
 });

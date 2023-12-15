@@ -37,13 +37,13 @@ const styles = StyleSheet.create({
     paddingBottom: getHeight(32),
   },
   activeButtonText: {
-    fontSize: getWidth(fontSize.textMd),
+    fontSize: getHeight(fontSize.textM),
     color: colors.black,
   },
   activeButtonView: {
     height: getHeight(30),
     width: getWidth(30),
-    borderRadius: getWidth(dimens.marginSm),
+    borderRadius: getHeight(dimens.marginS),
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -62,7 +62,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           onClearInputText={() => passwordRef.current.clear()}
         />
         <TextButton
-          fontSize={getWidth(fontSize.textS)}
+          fontSize={getHeight(fontSize.textS)}
           isActive
           style={styles.forgotPassword}
           title={t('forgot_password')}

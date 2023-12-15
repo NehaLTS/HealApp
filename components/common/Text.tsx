@@ -56,7 +56,7 @@ export const AnimatedText = ({
 const styles = StyleSheet.create({
   text: {
     color: colors.black,
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     fontFamily: fontFamily.regular,
   },
 });

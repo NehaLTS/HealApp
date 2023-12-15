@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   lookingDoctor: {
-    fontSize: getWidth(20),
+    fontSize: getHeight(20),
     fontFamily: fontFamily.semiBold,
     marginBottom: getHeight(dimens.marginM),
   },
@@ -420,11 +420,11 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.light,
   },
   text: {
-    fontSize: getWidth(fontSize.textS),
+    fontSize: getHeight(fontSize.textS),
     marginTop: getWidth(4),
   },
   mapContainer: {
-    height: getHeight(480),
+    height: getHeight(500),
     width: '100%',
     marginBottom: getHeight(50),
   },
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
     padding: getWidth(dimens.marginS),
     borderRadius: 8,
     flexDirection: 'row',
-    width: '66%',
+    width: '100%',
     gap: getHeight(10),
   },
   doctorIcon: {
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
   },
   doctoraddress: {
     fontSize: getHeight(fontSize.textS),
-    width: '50%',
+    width: '60%',
   },
   imageContainer: {
     marginRight: getHeight(dimens.paddingXs),

@@ -617,7 +617,7 @@ const HomeScreen = () => {
             isSmall
             width={getWidth(80)}
             height={getWidth(36)}
-            fontSized={getWidth(fontSize.textL)}
+            fontSized={getHeight(fontSize.textL)}
             onPress={() => onConfirmCancelOrder('yes')}
           />
           <Button
@@ -626,7 +626,7 @@ const HomeScreen = () => {
             isSmall
             width={getWidth(80)}
             height={getWidth(36)}
-            fontSized={getWidth(fontSize.textL)}
+            fontSized={getHeight(fontSize.textL)}
             onPress={() => onConfirmCancelOrder('no')}
           />
         </View>
@@ -681,7 +681,7 @@ const HomeScreen = () => {
           isSmall
           isPrimary
           height={getWidth(36)}
-          fontSized={getWidth(fontSize.textL - dimens.borderThin)}
+          fontSized={getHeight(fontSize.textL - dimens.borderThin)}
           onPress={isAddDocument ? onPressUpload : handleAddDocument}
         />
       </View>
@@ -718,7 +718,7 @@ const HomeScreen = () => {
           <TextButton
             title={'Logout'}
             onPress={onLogoutButtonPress}
-            fontSize={18}
+            fontSize={getHeight(18)}
             style={styles.logout}
           />
         </View>
@@ -767,7 +767,7 @@ const HomeScreen = () => {
         isSmall
         style={{ alignSelf: 'center' }}
         width={'20%'}
-        fontSized={15}
+        fontSized={getHeight(15)}
         height={40}
         onPress={() => {
           setShowStillAvailable(false);
@@ -1074,7 +1074,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   textAdd: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     color: colors.white,
   },
   addServiceContainer: {

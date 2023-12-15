@@ -98,7 +98,7 @@ const SelectImage = ({
           >
             <Text
               style={{
-                fontSize: getWidth(16),
+                fontSize: getHeight(16),
                 color: colors.black,
                 fontWeight: fontWeight.semiBold,
               }}
@@ -115,7 +115,7 @@ const SelectImage = ({
           >
             <Text
               style={{
-                fontSize: getWidth(16),
+                fontSize: getHeight(16),
                 color: colors.black,
                 fontWeight: fontWeight.semiBold,
               }}
@@ -135,7 +135,7 @@ const SelectImage = ({
         >
           <Text
             style={{
-              fontSize: getWidth(16),
+              fontSize: getHeight(16),
               color: colors.invalid,
               fontWeight: fontWeight.semiBold,
             }}

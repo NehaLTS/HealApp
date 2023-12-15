@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     minWidth: '24%',
   },
   input: {
-    fontSize: fontSize.textL,
+    fontSize: getHeight(fontSize.textL),
     borderRadius: getWidth(dimens.marginS),
     paddingLeft: getHeight(dimens.marginS),
     color: colors.black,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
-    fontSize: getWidth(fontSize.textS),
+    fontSize: getHeight(fontSize.textS),
     textAlign: 'left',
   },
   label: {

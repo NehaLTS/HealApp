@@ -75,7 +75,7 @@ const ProviderAddServices = () => {
             <TextButton
               title={isExpanded ? 'Read Less' : 'Read More'}
               onPress={() => toggleDescription(index)}
-              fontSize={getWidth(fontSize.textL)}
+              fontSize={getHeight(fontSize.textL)}
               containerStyle={{ paddingTop: getHeight(8) }}
               isActive
               style={{ fontFamily: fontFamily.medium }}
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
   },
   modalContent: {
-    backgroundColor: colors.modal,
+    backgroundColor: colors.offWhite,
     borderRadius: getWidth(dimens.marginS),
     marginBottom: getHeight(dimens.imageS + dimens.imageXs),
     paddingTop: getHeight(dimens.sideMargin),

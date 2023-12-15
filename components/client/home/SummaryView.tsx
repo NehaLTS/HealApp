@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     gap: getHeight(dimens.imageS),
   },
   summaryText: {
-    fontSize: fontSize.textXl,
+    fontSize: getHeight(fontSize.textXl),
     fontFamily: fontFamily.medium,
   },
   locationIcon: {
@@ -222,14 +222,14 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   text: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     fontFamily: fontFamily.medium,
   },
   changeText: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
   },
   symptomsText: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     fontFamily: fontFamily.medium,
   },
   symptomsContainer: {
@@ -243,11 +243,12 @@ const styles = StyleSheet.create({
   },
   voltaireText: {
     marginVertical: getHeight(3),
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     textAlign: 'left',
+    fontFamily: fontFamily.light,
   },
   payForIt: {
-    fontSize: getWidth(fontSize.textS),
+    fontSize: getHeight(fontSize.textS),
     marginTop: getHeight(dimens.borderBold),
   },
   cardDetail: {
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   },
 
   instruction: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     marginTop: getWidth(dimens.marginM),
     fontFamily: fontFamily.medium,
     textAlign: 'left',
@@ -282,23 +283,23 @@ const styles = StyleSheet.create({
   },
   total: {
     fontFamily: fontFamily.medium,
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     marginVertical: getHeight(dimens.borderBold + dimens.borderBold),
   },
   Small: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     fontFamily: fontFamily.light,
     marginVertical: getHeight(dimens.borderBold + dimens.borderBold),
   },
   textSmall: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     fontFamily: fontFamily.light,
     backgroundColor: colors.white,
     marginTop: getHeight(dimens.borderBold),
     textAlign: 'left',
   },
   locationText: {
-    fontSize: getWidth(fontSize.textM),
+    fontSize: getHeight(fontSize.textM),
     width: '60%',
     flexWrap: 'wrap',
     textAlign: 'left',

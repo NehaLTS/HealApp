@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.sideMargin + dimens.paddingS),
   },
   selectedTextStyle: {
-    fontSize: getWidth(fontSize.textL),
+    fontSize: getHeight(fontSize.textL),
     color: colors.black,
     fontFamily: fontFamily.regular,
     minWidth: '100%',
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: colors.invalid,
     paddingTop: getHeight(dimens.paddingXs),
-    fontSize: getWidth(fontSize.textS),
+    fontSize: getHeight(fontSize.textS),
     textAlign: 'left',
   },
   iconStyle: {
@@ -98,6 +98,6 @@ const styles = StyleSheet.create({
   placeholder: {
     color: colors.black,
     textAlign: 'left',
-    fontSize: getWidth(15),
+    fontSize: getHeight(15),
   },
 });
