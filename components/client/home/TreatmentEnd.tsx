@@ -52,19 +52,20 @@ const TreatmentEnd = ({
           </View>
         </View>
       </View>
-
       <View style={styles.Container}>
-        <Image
-          source={require('../../../assets/icon/cardboard.png')}
-          style={styles.doctorCard}
-        />
-
         <View
           style={{
-            gap: 10,
+            width: '30%',
+            alignItems: 'center',
             marginLeft: getWidth(20),
           }}
         >
+          <Image
+            source={require('../../../assets/icon/cardboard.png')}
+            style={styles.doctorCard}
+          />
+        </View>
+        <View style={{ gap: getWidth(10) }}>
           <Text title={'Order summary'} style={styles.order} />
           <View style={{ gap: 8 }}>
             {currentOrder?.orderServices.map((item, index) => (
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   },
   doctorIconContainer: {
     position: 'relative',
-    width: '45%',
+    width: '30%',
     alignItems: 'center',
     marginLeft: getHeight(20),
   },
