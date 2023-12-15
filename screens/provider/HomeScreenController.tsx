@@ -80,7 +80,13 @@ const HomeScreenControlller = () => {
     }
   };
 
+  useEffect(() => {
+    getSummaryofDay();
+  }, []);
+
   const getSummaryofDay = async () => {
+
+    console.log("new Date().toDateString()", new Date().toDateString())
     let daySummary = await getProviderDaySummary(
       {
         provider_id: userId,
@@ -88,16 +94,10 @@ const HomeScreenControlller = () => {
       },
       token,
     );
-    console.log('daySummary', daySummary);
+    console.log("daySummary123", daySummary)
 
-    if (daySummary !== undefined) {
-      setProviderDaySummary(daySummary);
-    }
+    setProviderDaySummary(daySummary);
   };
-
-  useEffect(() => {
-    getSummaryofDay();
-  }, []);
 
   const updateLocation = (mannualUpdate?: boolean) => {
     if (mannualUpdate) {
@@ -206,11 +206,11 @@ const HomeScreenControlller = () => {
     //     (position) => {
     setAcceptOrder(true);
     OrderRequst({
-      status: 'accept',
+      orderStatus: 'accept',
       provider_id: userId,
       order_id: order?.orderId ?? '1',
-      latitude: userLocation.onboardingLocation?.latitude ?? userLocation.currentLocation?.latitude ?? '',
-      longitude: userLocation.onboardingLocation?.longitude ?? userLocation.onboardingLocation?.longitude ?? '',
+      latitude: userLocation.onboardingLocation?.latitude?.toString() ?? userLocation.currentLocation?.latitude ?? '',
+      longitude: userLocation.onboardingLocation?.longitude?.toString() ?? userLocation.currentLocation?.longitude ?? '',
     })
       .then((res) => {
         console.log('ordereAcceptedRes', res);

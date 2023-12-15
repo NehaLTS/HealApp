@@ -75,7 +75,7 @@ export interface Provider {
 }
 
 export interface OrderRequest {
-  status: string;
+  orderStatus: string;
   provider_id: string;
   latitude: string;
   longitude: string;
@@ -99,8 +99,21 @@ export interface TreatementEnded {
 
 
 export interface ProviderHomeDetails {
-  total_clients: string;
-  avg_arrival_time: string;
-  wallet_amount: string;
- 
+  isSuccessful: boolean,
+  providerDetails: ProviderHomeOrderDetail
+}
+
+export interface ProviderHomeOrderDetail {
+  orderDetails: ProviderOrderDetail,
+  walletDetails: WalletDetail
+}
+
+export interface ProviderOrderDetail {
+  provider_id: number,
+  total_clients: number,
+  avg_arrival_time: number
+}
+
+export interface WalletDetail {
+  wallet_amount: number
 }

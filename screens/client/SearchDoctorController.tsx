@@ -87,6 +87,7 @@ const SearchDoctorController = () => {
 
     let orderDetails = route?.params?.orderDetails;
     let heardDetail = route?.params?.heardDetail ?? ''
+    console.log("search orderDetails", orderDetails)
     const res = await orderProvider({ ...orderDetails, services: heardDetail ? "1" : orderDetails.services });
     Sentry.captureMessage(
       `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(

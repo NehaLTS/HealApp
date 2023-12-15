@@ -1,4 +1,5 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderProfile, userLocation } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
@@ -89,6 +90,12 @@ const ProviderAddressController = () => {
           },
           currentLocation: prevState?.currentLocation
         }));
+        setLocalData('LOCATION', {
+          onboardingLocation: {
+            address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
+
+          }
+        })
       }
     } else {
       if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));

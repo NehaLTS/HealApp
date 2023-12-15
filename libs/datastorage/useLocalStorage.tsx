@@ -5,6 +5,8 @@ import {
   ProviderProfile,
   ProviderServices,
   UserTypeProvider,
+  userLocation,
+  userlocationType,
 } from '../types/UserType';
 const dataStorage = new MMKV();
 
@@ -13,13 +15,15 @@ type StorageKeys =
   | 'USER'
   | 'PROVIDERSERVICES'
   | 'ORDER'
-  | 'PROVIDERORDER';
+  | 'PROVIDERORDER'
+  | 'LOCATION';
 type StorageObject = {
   USERPROFILE: ClientProfile | UserTypeProvider | ProviderProfile;
   USER: any;
   PROVIDERSERVICES: ProviderServices[];
   ORDER: Order | ClientOrder;
   PROVIDERORDER: ProviderOrder;
+  LOCATION: userLocation
 };
 
 export const setLocalData = <K extends StorageKeys>(
