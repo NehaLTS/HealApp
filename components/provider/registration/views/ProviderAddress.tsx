@@ -115,7 +115,6 @@ const ProviderAddress = () => {
           returnKeyType={'done'}
           onClearInputText={() => licenseRef.current.clear()}
           maxLength={10}
-          errorMessage={licenseError}
         />
 
         <Input

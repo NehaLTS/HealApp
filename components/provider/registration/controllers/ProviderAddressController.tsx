@@ -39,25 +39,28 @@ const ProviderAddressController = () => {
     }
   }, []);
 
-  const onBlurPhoneNumber = () => { };
+  const onBlurPhoneNumber = () => {};
 
   const onChangePhoneNumber = (value: string) => {
     phoneRef.current.value = value;
-    validatePhoneNumber(value);
+    validatePhoneNumber();
   };
 
   const onChangeLicenseNumber = (value: string) => {
     licenseRef.current.value = value;
-    validateLicense(value);
   };
-  const onBlurAddress = () => { };
+  const onBlurAddress = () => {};
 
-  const onChangeAddress = (value: string, latitude: string, longitude: string) => {
+  const onChangeAddress = (
+    value: string,
+    latitude: string,
+    longitude: string,
+  ) => {
     addressRef.current.value = value;
     setOnSearchAddress(value ?? '');
     validateAddress(value ?? '');
-    setGeomatricAddress({ latitude, longitude })
-    console.log('valueChnage latitude', value, latitude, longitude)
+    setGeomatricAddress({ latitude, longitude });
+    console.log('valueChnage latitude', value, latitude, longitude);
   };
 
   const getImageUrl = (url: string) => {
@@ -68,15 +71,14 @@ const ProviderAddressController = () => {
     if (phoneRef.current.value && onSearchAddress) {
       if (licenseRef.current.value && !licensePicture) {
         Alert.alert(t('select_license_picture'));
-      } else if (
-        !licenseRef.current.value ||
-        (licenseRef.current.value === undefined && licensePicture)
-      ) {
-        setLicenseError(t('License number required'));
       } else {
         setProviderProfile({
           ...(providerProfile as ProviderProfile),
-          address: { address: onSearchAddress, latitude: geomatricAddress.latitude, longitude: geomatricAddress.longitude },
+          address: {
+            address: onSearchAddress,
+            latitude: geomatricAddress.latitude,
+            longitude: geomatricAddress.longitude,
+          },
           phoneNumber: phoneRef.current.value,
           licensenumber: licenseRef.current.value,
           licensepicture: licensePicture,
@@ -92,10 +94,10 @@ const ProviderAddressController = () => {
   const onPressBack = () => setCurrentStep('details');
   const isValidPhoneNumber = (p: string) => numericPattern.test(p);
 
-  const validatePhoneNumber = (value: string) => {
-    if (!value?.length) {
+  const validatePhoneNumber = () => {
+    if (!phoneRef.current.value) {
       setPhoneError(t('phone_number_required'));
-    } else if (!isValidPhoneNumber(value)) {
+    } else if (!isValidPhoneNumber(phoneRef.current.value)) {
       setPhoneError(t('number_not_valid'));
     } else setPhoneError('');
   };
@@ -103,11 +105,6 @@ const ProviderAddressController = () => {
   const validateAddress = (value: string) => {
     if (value?.length < 4) setAddressError(t('fill_address'));
     else setAddressError('');
-  };
-
-  const validateLicense = (value: string) => {
-    if (value?.length < 4) setLicenseError(t('License number required'));
-    else setLicenseError('');
   };
 
   return {

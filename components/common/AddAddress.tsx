@@ -2,6 +2,7 @@ import {
   Alert,
   FlatList,
   Image,
+  Keyboard,
   StyleSheet,
   TouchableOpacity,
   View,

@@ -11,6 +11,7 @@ import { Order } from 'libs/types/OrderTypes';
 import useToast from 'components/common/useToast';
 import {
   ARRIVED,
+  ESTIMATE_ARRIVAL,
   ON_THE_WAY,
   ORDER_ACCEPTED,
   ORDER_CREATED,
@@ -34,6 +35,7 @@ const SearchDoctorController = () => {
   const { showToast } = useToast();
   const navigation = useNavigation<any>();
   const [isBookOrder, setIsBookOrder] = useState(false);
+  const [showDoctor, setShowDoctor] = useState(false);
 
   const [showTimer, setShowTimer] = useState(false);
 
@@ -53,9 +55,27 @@ const SearchDoctorController = () => {
     if (previousScreen == 'Create Order') {
       createOrder();
     } else if (currentOrder) {
+      if (
+        currentOrder?.orderStatus === ON_THE_WAY ||
+        currentOrder?.orderStatus === ORDER_ACCEPTED
+      ) {
+        setShowLoader(false);
+        setShowDoctor(true);
+        setShowTimer(true);
+        setProviderStatus(ON_THE_WAY);
+      } else if (currentOrder?.orderStatus === ARRIVED) {
+        setShowLoader(false);
+        setShowDoctor(true);
+        setShowTimer(false);
+        setProviderStatus(ARRIVED);
+      } else if (currentOrder?.orderStatus === ESTIMATE_ARRIVAL) {
+        setShowLoader(false);
+        setIsBookOrder(true);
+        setProviderStatus(ESTIMATE_ARRIVAL);
+      }
       setProviderLocation({
-        latitude: parseFloat(currentOrder.providerDetails.currentLatitude),
-        longitude: parseFloat(currentOrder.providerDetails.currentLongitude),
+        latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),
+        longitude: parseFloat(currentOrder?.providerDetails.currentLongitude),
       });
     }
 
@@ -121,11 +141,17 @@ const SearchDoctorController = () => {
     switch (evenTitle) {
       case ORDER_ACCEPTED:
         showToast('Order Accepted!', 'Your order is accepted!', '');
-        setLocalData('ORDER', { orderStatus: ORDER_ACCEPTED });
-        setProviderStatus('On the way');
+        setLocalData('ORDER', { orderStatus: ON_THE_WAY });
+        setProviderStatus(ON_THE_WAY);
         setShowTimer(true);
         break;
       case ON_THE_WAY:
+        setLocalData('ORDER', { orderStatus: ON_THE_WAY });
+        setProviderStatus(ON_THE_WAY);
+        break;
+      case ESTIMATE_ARRIVAL:
+        setLocalData('ORDER', { orderStatus: ESTIMATE_ARRIVAL });
+        setProviderStatus(ESTIMATE_ARRIVAL);
         break;
       case ARRIVED:
         setLocalData('ORDER', {
@@ -206,7 +232,7 @@ const SearchDoctorController = () => {
     const orderBookResponse = await BookOrderRequest({
       orderStatus: ORDER_STARTED,
       provider_id: currentOrder?.providerDetails.providerId,
-      order_id: currentOrder.orderId,
+      order_id: currentOrder?.orderId,
       distance: Math.round(calculateDistance()).toString(),
       time: Math.round(calculateTime().minutes).toString(),
     });
@@ -231,8 +257,8 @@ const SearchDoctorController = () => {
       longitude: parseFloat(currentLocationOfUser?.longitude),
     };
     const ProviderLocation = {
-      latitude: parseFloat(currentOrder.providerDetails.currentLatitude),
-      longitude: parseFloat(currentOrder.providerDetails.currentLongitude),
+      latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),
+      longitude: parseFloat(currentOrder?.providerDetails.currentLongitude),
     };
     const distance = haversine(ProviderLocation, userCurrentLocation, {
       unit: 'km',
@@ -274,6 +300,8 @@ const SearchDoctorController = () => {
     providerStatus,
     isBookOrder,
     setIsBookOrder,
+    showDoctor,
+    setShowDoctor,
   };
 };
 

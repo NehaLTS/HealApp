@@ -16,41 +16,24 @@ const ProviderArrivalInfo = ({
   doctorName: string;
 }) => {
   return (
-    <View style={styles.modalView}>
-      <TouchableOpacity
-        style={{
-          alignItems: 'center',
-          flexDirection: 'row',
-          gap: getWidth(16),
-          width: '100%',
-        }}
-        onPress={onPress}
-      >
+    <TouchableOpacity style={styles.modalView} onPress={onPress}>
+      <View style={styles.modalContainer}>
         <Image
           source={require('../../assets/icon/physio.png')}
           style={styles.icon}
         />
         <View style={styles.notificationContainer}>
           <Text style={styles.notificationTitle} title={doctorName} />
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: getWidth(10),
-            }}
-          >
-            <Text style={styles.notificationText} title={`Status:`} />
-            <Text style={{ color: colors.white }} title={status} />
-          </View>
+          <Text style={styles.notificationText} title={`Status:  ${status}`} />
         </View>
-        <TouchableOpacity style={styles.callButton}>
-          <Image
-            source={require('../../assets/icon/phonecall.png')}
-            style={styles.phoneIcon}
-          />
-        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.callButton}>
+        <Image
+          source={require('../../assets/icon/phonecall.png')}
+          style={styles.phoneIcon}
+        />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -58,9 +41,10 @@ export default ProviderArrivalInfo;
 
 const styles = StyleSheet.create({
   modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: getWidth(10),
+    flex: 1,
   },
   centeredView: {
     flex: 1,
@@ -70,9 +54,15 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: colors.primary,
     borderRadius: getHeight(20),
-    padding: getHeight(15),
+    padding: getHeight(10),
     elevation: getWidth(20),
     shadowColor: colors.black,
+    width: '100%',
+    paddingVertical: getHeight(15),
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: getWidth(10),
+    justifyContent: 'space-between',
   },
   notificationText: {
     fontFamily: fontFamily.medium,
@@ -88,7 +78,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: getWidth(16),
+    gap: getWidth(10),
   },
 
   notificationContainer: {
@@ -98,6 +88,7 @@ const styles = StyleSheet.create({
     fontSize: getWidth(fontSize.textL),
     fontFamily: fontFamily.medium,
     color: colors.white,
+    flexWrap: 'wrap',
   },
 
   callButton: {
@@ -107,7 +98,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: getHeight(12),
     borderRadius: getHeight(30),
-    paddingRight: getWidth(13),
   },
   phoneIcon: {
     width: getHeight(16),

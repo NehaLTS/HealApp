@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
 import Geolocation from 'react-native-geolocation-service';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
 interface Position {
   coords: {
@@ -16,7 +14,6 @@ interface GeocodeResult {
 }
 
 const useCurrentAddress = () => {
-
   const getCurrentLocation = (): Promise<Position> => {
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition(
@@ -55,7 +52,11 @@ const useCurrentAddress = () => {
           const { latitude, longitude } = location.coords;
           const address = await getCurrentAddressFromAPI(latitude, longitude);
           if (address !== null) {
-            const fulAddres = { address: address, latitude: latitude, longitude: longitude }
+            const fulAddres = {
+              address: address,
+              latitude: latitude,
+              longitude: longitude,
+            };
             resolve(fulAddres); // Resolve the Promise with the address
           }
         }

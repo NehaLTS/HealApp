@@ -23,6 +23,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  DeviceEventEmitter,
   I18nManager,
   Image,
   ScrollView,
@@ -36,6 +37,14 @@ import HomeViewController from './HomeViewController';
 import { DotLoader } from 'components/common/Loader';
 import { Order } from 'libs/types/OrderTypes';
 import StarRating from 'components/common/StarRating';
+import {
+  ARRIVED,
+  ON_THE_WAY,
+  ORDER_ACCEPTED,
+  TREATMENTCOMPLETED,
+  providerStatusOnHeader,
+} from 'libs/constants/Constant';
+import SearchDoctor from './SearchDoctor';
 const HomeScreen = () => {
   const { t } = useTranslation();
   const {
@@ -66,13 +75,67 @@ const HomeScreen = () => {
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
   const [currentAddress, setCurrentAddress] = useState<string>('');
-  const [currentOrder, setCurrentOrder] = useState<Order>();
+  const [currentOrder, setCurrentOrder] = useState<Order>({
+    orderId: '',
+    providerDetails: {
+      providerId: '',
+      providerName: '',
+      providerAddress: '',
+      providerProfilePicture: '',
+      providerRating: '',
+      phoneNumber: '',
+      currentLatitude: '',
+      currentLongitude: '',
+    },
+    orderPrice: '',
+    orderStatus: '',
+    orderServices: [],
+    message: '',
+  });
+
+  const setStatusOnEventFire = (evenTitle: string) => {
+    switch (evenTitle) {
+      case ORDER_ACCEPTED:
+        setLocalData('ORDER', { orderStatus: ON_THE_WAY });
+        setCurrentOrder({ ...currentOrder, orderStatus: ON_THE_WAY });
+        break;
+      case ON_THE_WAY:
+        setLocalData('ORDER', { orderStatus: ON_THE_WAY });
+        setCurrentOrder({ ...currentOrder, orderStatus: ON_THE_WAY });
+        break;
+      case ARRIVED:
+        setLocalData('ORDER', {
+          orderStatus: ARRIVED,
+        });
+        setCurrentOrder({ ...currentOrder, orderStatus: ARRIVED });
+        break;
+
+      case TREATMENTCOMPLETED:
+        navigation.navigate(NavigationRoutes.TreatmentCompleted);
+        break;
+
+      default:
+        setCurrentOrder({ ...currentOrder, orderStatus: 'Estimated arrival' });
+        break;
+    }
+  };
+  const getEventUpdate = () => {
+    DeviceEventEmitter.addListener('ClientOrderListener', (event) => {
+      if (event.data && event.data.status) {
+        console.log('ClientOrderListener1', event.data);
+        setStatusOnEventFire(event.data.status);
+      }
+    });
+  };
+
   useEffect(() => {
     getCurrentOrder();
-  }, []);
+    getEventUpdate();
+  }, [currentOrder?.orderStatus]);
+
   const getCurrentOrder = async () => {
     const order: Order = (await getLocalData('ORDER')) as Order;
-    console.log('order details is ', order);
+    console.log('order details is', order);
     setCurrentOrder(order);
   };
   useUpdateEffect(() => {
@@ -256,12 +319,22 @@ const HomeScreen = () => {
           }}
         >
           <ProviderArrivalInfo
-            status={currentOrder.orderStatus ?? ''}
+            status={
+              `${'Doctor'}${' '}${providerStatusOnHeader(
+                currentOrder?.orderStatus ?? '',
+              )}` ?? ''
+            }
             doctorName={currentOrder.providerDetails.providerName}
             onPress={() => {
-              navigation.navigate(NavigationRoutes.SearchDoctor, {
-                currentOrder: currentOrder,
-              });
+              if (currentOrder.orderStatus === TREATMENTCOMPLETED) {
+                navigation.navigate(NavigationRoutes.TreatmentCompleted, {
+                  currentOrder: currentOrder,
+                });
+              } else {
+                navigation.navigate(NavigationRoutes.SearchDoctor, {
+                  currentOrder: currentOrder,
+                });
+              }
             }}
           />
         </View>

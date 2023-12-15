@@ -38,6 +38,12 @@ import useUpdateEffect from 'libs/UseUpdateEffect';
 import useToast from 'components/common/useToast';
 import { RNHeader } from 'components/common/Header';
 import NavigationRoutes from 'navigator/NavigationRoutes';
+import {
+  ARRIVED,
+  ON_THE_WAY,
+  ORDER_ACCEPTED,
+  providerStatusOnHeader,
+} from 'libs/constants/Constant';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -67,11 +73,12 @@ const SearchDoctor = () => {
     providerStatus,
     isBookOrder,
     setIsBookOrder,
+    showDoctor,
+    setShowDoctor,
   } = SearchDoctorController();
-
+  console.log('providerStatus', providerStatus);
   const { setRemainingTime } = UseClientUserContext();
   const localData = getLocalData('ORDER');
-  const [showDoctor, setShowDoctor] = useState(false);
 
   // const [loader, setLoader] = useState(true);
   const [disabled, setDisable] = useState(false);
@@ -161,17 +168,6 @@ const SearchDoctor = () => {
     }
   }, [secondLoader]);
 
-  const providerStatusOnHeader = (statusOfArriving: string) => {
-    switch (statusOfArriving) {
-      case 'Arrived':
-        return 'has arrived';
-      case 'On the way':
-        return 'on the way';
-      default:
-        return 'is found';
-    }
-  };
-
   return (
     <>
       {RNHeader(
@@ -188,7 +184,7 @@ const SearchDoctor = () => {
       >
         {renderToast()}
         <View>
-          {showTimer && providerStatus !== 'Arrived' && (
+          {showTimer && providerStatus !== ARRIVED && (
             <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
           )}
           <Text
@@ -328,7 +324,9 @@ const SearchDoctor = () => {
                 }}
                 isPrimary={showRateAlert}
                 showBothCards={showRateAlert && providerLocation != undefined}
-                status={providerStatus}
+                status={`${'Doctor'}${' '}${providerStatusOnHeader(
+                  providerStatus,
+                )}`}
                 showProvider={providerLocation != undefined}
                 time={calculateTime()}
                 providerData={currentOrder.providerDetails}
@@ -337,7 +335,7 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-        {providerStatus !== 'Arrived' || !showTimer ? (
+        {providerStatus !== ARRIVED && !showTimer && (
           <View>
             <Button
               title={
@@ -376,20 +374,6 @@ const SearchDoctor = () => {
                     : ''
               }
             />
-          </View>
-        ) : (
-          <View style={{ height: getHeight(100) }}>
-            {/* <Button
-              title={'Next'}
-              isPrimary
-              isSmall
-              onPress={() => {
-                navigation.navigate(NavigationRoutes.TreatmentCompleted);
-              }}
-              width={'30%'}
-              height={getHeight(dimens.imageS)}
-              style={{ alignSelf: 'center', marginBottom: 10 }}
-            /> */}
           </View>
         )}
       </ScrollView>

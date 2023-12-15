@@ -24,7 +24,7 @@ const TreatmentCompletedScreen = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [rating, setRating] = useState(0);
   const route = useRoute<any>();
-  const { userId } = UseClientUserContext()
+  const { userId } = UseClientUserContext();
 
   const currentOrder: Order = getLocalData('ORDER') as Order;
 
@@ -39,10 +39,17 @@ const TreatmentCompletedScreen = () => {
       })
         .then((res) => {
           console.log('object', res);
-          // if (res.isSucessfull) {
-          setShowViews('Rating_View');
-
-          // }
+          if (res.isSuccessful) {
+            setShowViews('Rating_View');
+            setLocalData('ORDER', {
+              orderId: '',
+              providerDetails: undefined,
+              orderPrice: '',
+              orderStatus: '',
+              orderServices: [],
+              message: '',
+            });
+          }
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -56,8 +63,8 @@ const TreatmentCompletedScreen = () => {
 
   const onApproveRating = async () => {
     try {
-      setIsLoading(false)
-      console.log("currentOrder.providerDetails.providerId", currentOrder)
+      setIsLoading(false);
+      console.log('currentOrder.providerDetails.providerId', currentOrder);
       await ProviderRating({
         provider_id: '6',
         client_id: userId,
@@ -66,18 +73,9 @@ const TreatmentCompletedScreen = () => {
         .then((res) => {
           console.log('object', res);
 
-          if (res.msg === "successfully created") {
+          if (res.msg === 'successfully created') {
             setShowViews('Tip_View');
-            setLocalData('ORDER', {
-              orderId: '',
-              providerDetails: undefined,
-              orderPrice: '',
-              orderStatus: '',
-              orderServices: [],
-              message: '',
-            });
           }
-
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -101,12 +99,16 @@ const TreatmentCompletedScreen = () => {
         {showViews === 'Rating_View' && (
           <RatingView onPress={onApproveRating} rating={setRating} />
         )}
-        {showViews === 'Tip_View' && <DoctorTipView onPress={() => {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: NavigationRoutes.ClientHome }],
-          });
-        }} />}
+        {showViews === 'Tip_View' && (
+          <DoctorTipView
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: NavigationRoutes.ClientHome }],
+              });
+            }}
+          />
+        )}
       </View>
     </>
   );

@@ -23,6 +23,7 @@ const HomeScreenControlller = () => {
     order?.extraData?.orderAccepted ?? false,
   );
   const { userId, providerProfile, token } = UseProviderUserContext();
+  const { currentLocationOfUser } = UseClientUserContext();
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
 
@@ -84,10 +85,13 @@ const HomeScreenControlller = () => {
   }, []);
 
   const getSummaryofDay = async () => {
-    let daySummary = await getProviderDaySummary({
-      provider_id: userId,
-      created_date_time: new Date().toDateString(),
-    }, token);
+    let daySummary = await getProviderDaySummary(
+      {
+        provider_id: userId,
+        created_date_time: new Date().toDateString(),
+      },
+      token,
+    );
 
     setProviderDaySummary(daySummary);
   };
@@ -139,7 +143,6 @@ const HomeScreenControlller = () => {
           forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
         },
       );
-
     } else {
       console.log('updateDtaaApiFunction');
 

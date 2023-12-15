@@ -44,6 +44,7 @@ const OrderFormController = ({
   );
   const ageRef = React.useRef<any>('');
   const phoneRef = React.useRef<any>('');
+  const otherReasonsRef = React.useRef<any>('');
   const { currentLocationOfUser } = UseClientUserContext();
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
@@ -270,6 +271,7 @@ const OrderFormController = ({
     isShowIcon,
     setIsShowIcon,
     currentLocationOfUser,
+    otherReasonsRef,
   };
 };
 

@@ -29,13 +29,13 @@ const OrderFormView = ({
   setOrder,
   order,
   hideTreatmentMenu,
-  onPressWhenHealer
+  onPressWhenHealer,
 }: {
   treatmentReason: treatment;
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
-  hideTreatmentMenu: boolean
-  onPressWhenHealer: () => void
+  hideTreatmentMenu: boolean;
+  onPressWhenHealer: () => void;
 }) => {
   const {
     activeButton,
@@ -65,6 +65,7 @@ const OrderFormView = ({
     isShowIcon,
     setIsShowIcon,
     currentLocationOfUser,
+    otherReasonsRef,
   } = OrderFormController({ setOrder, order, onPressWhenHealer });
 
   const { t } = useTranslation();
@@ -81,6 +82,11 @@ const OrderFormView = ({
           defaultValue={order?.Additional_notes}
           onTouchStart={() => setIsModalVisible(true)}
           caretHidden
+          isSearch
+          onClearInputText={() => {
+            setOrder({ ...order, Additional_notes: '' });
+            setOtherReasons('');
+          }}
         />
       </View>
     );
@@ -111,7 +117,6 @@ const OrderFormView = ({
                 height={getHeight(dimens?.marginL)}
                 borderRadius={getWidth(dimens?.marginS)}
                 lineHeight={dimens?.sideMargin + dimens?.borderBold}
-
               />
             ),
           )
@@ -149,6 +154,7 @@ const OrderFormView = ({
         onBackdropPress={() => setIsModalVisible(false)}
       >
         <Input
+          ref={otherReasonsRef}
           placeholder={t('describe_symptoms')}
           inputValue={otherReasons ?? ''}
           multiline
@@ -162,6 +168,7 @@ const OrderFormView = ({
           returnKeyType="done"
           blurOnSubmit
           autoFocus
+          onLayout={() => otherReasonsRef?.current?.focus()}
         />
       </Modal>
     </>
@@ -170,7 +177,7 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-        0 ? (
+      0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             <TouchableOpacity
@@ -227,13 +234,27 @@ const OrderFormView = ({
             style={styles.locationIcon}
           />
         </TouchableOpacity>
-        {console.log("adresssON OrdeVeie", order)}
-        <Text style={styles.streetAddress} title={order?.address ?? ''} />
-        <TextButton
-          title={t('edit')}
-          fontSize={getHeight(fontSize.textM)}
+        <TouchableOpacity
+          style={{
+            paddingLeft: getWidth(dimens.sideMargin),
+            flex: 0.97,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
           onPress={() => setIsVisible(true)}
-        />
+        >
+          <Text
+            style={{ ...styles.streetAddress, width: '85%' }}
+            title={order?.address ?? ''}
+          />
+          <Text style={styles.streetAddress} title={t('edit')} />
+          {/* <TextButton
+            title={t('edit')}
+            fontSize={getHeight(fontSize.textM)}
+            onPress={() => setIsVisible(true)}
+          /> */}
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -257,8 +278,9 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
-              }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
+                  order?.phonenumber
+                }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}
@@ -466,10 +488,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   streetAddress: {
-    paddingHorizontal: getWidth(dimens.sideMargin),
     fontSize: getHeight(fontSize.textM),
-    flex: 0.97,
-    textAlign: 'left',
   },
   inputStyle: {
     borderWidth: 0,
@@ -499,5 +518,6 @@ const styles = StyleSheet.create({
   modalInput: {
     height: getHeight(dimens.imageS),
     color: colors.black,
+    flex: 1,
   },
 });
