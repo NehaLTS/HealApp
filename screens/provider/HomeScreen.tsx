@@ -48,7 +48,7 @@ const HomeScreen = () => {
     available?.isProviderAvailable,
   );
 
-  const [isCancelOrder, setIsCancelOrder] = useState();
+  const [isCancelOrder, setIsCancelOrder] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isSeeMore, setIsSeeMore] = useState(
     order?.extraData?.isSeeMore ?? false,

@@ -71,7 +71,11 @@ const OrderFormView = ({
   } = OrderFormController({ setOrder, order, onPressWhenHealer });
 
   const { t } = useTranslation();
-  console.log('currentLocationOfUser', order?.reason);
+  const abc = treatmentReason?.reason.find(
+    (i) => i?.name?.en === supplier?.speciality_name,
+  );
+  console.log('treatmentReason', treatmentReason?.reason);
+  console.log('treatmentReason1111', abc);
 
   const showFilledData = () => {
     return (

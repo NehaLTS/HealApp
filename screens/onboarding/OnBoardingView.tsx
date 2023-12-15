@@ -39,7 +39,7 @@ const OnBoardingView = () => {
   const { setToken, setUserId, setProviderProfile, setCurrentStep } =
     UseProviderUserContext();
 
-  const getLocalUserData = async () => {
+  const getLocalUserData = () => {
     console.log('token is ', userResponse?.token);
 
     const userLanguage = userResponse?.user?.language ?? 'en';
