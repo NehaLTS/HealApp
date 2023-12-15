@@ -66,7 +66,7 @@ const HomeScreen = () => {
     isVisible,
     setIsVisible,
     remainingTime,
-    currentLocationOfUser,
+    userLocation,
     setSearchProviderList,
     setDropdownVisible,
     dropdownVisible,
@@ -75,7 +75,7 @@ const HomeScreen = () => {
   const navigation = useNavigation<any>();
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
-  const [currentAddress, setCurrentAddress] = useState<string>('');
+  const [currentAddress, setCurrentAddress] = useState<string>(userLocation?.currentLocation?.address ?? '');
   const [currentOrder, setCurrentOrder] = useState<Order>({
     orderId: '',
     providerDetails: {
@@ -140,8 +140,8 @@ const HomeScreen = () => {
     setCurrentOrder(order);
   };
   useUpdateEffect(() => {
-    setCurrentAddress(currentLocationOfUser?.address ?? '');
-  }, [currentLocationOfUser]);
+    setCurrentAddress(userLocation?.currentLocation?.address ?? '');
+  }, [userLocation]);
   const headerTitle = () => (
     <View style={styles.headerTitleContainer}>
       <View style={styles.headerTitle}>
@@ -163,8 +163,8 @@ const HomeScreen = () => {
         <AddAddress
           address={(data, latitude, longitude) => {
             setCurrentAddress(data);
-            // setCurrentLocationOfUser({
-            //   ...currentLocationOfUser,
+            // setUserLocation({
+            //   ...userLocation,
             //   address: data,
             // });
           }}

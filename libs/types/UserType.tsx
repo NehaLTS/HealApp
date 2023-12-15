@@ -136,7 +136,7 @@ export interface ClientProfile {
   profilePicture?: string;
   phoneNumber: string;
   email?: string;
-  address?: currentLocationOfUser;
+  address?: string;
   city?: string;
   state?: string;
   country?: string;
@@ -165,7 +165,7 @@ export interface ProviderProfile {
   speciality: ProviderSpeciality;
   phoneNumber: string;
   email?: string;
-  address?: currentLocationOfUser;
+  address?: string;
   city?: string;
   state?: string;
   country?: string;
@@ -267,9 +267,13 @@ export interface ProviderRating {
   ratings: string;
 }
 
-export interface currentLocationOfUser {
-  latitude: string;
-  longitude: string;
+export interface userLocation {
+  currentLocation?: userlocationType
+  onboardingLocation?: userlocationType
+}
+export interface userlocationType {
+  latitude?: string;
+  longitude?: string;
   address?: string;
 }
 

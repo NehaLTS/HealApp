@@ -43,11 +43,11 @@ const HomeViewController = () => {
     setCurrentStep,
     setUserId,
     setToken,
-    setCurrentLocationOfUser,
+    setUserLocation,
     setOrderDetails,
     setRemainingTime,
     remainingTime,
-    currentLocationOfUser,
+    userLocation,
   } = UseClientUserContext();
   const orderList = list.home.providerList;
   const [searchProviderList, setSearchProviderList] = useState<any>();
@@ -58,15 +58,20 @@ const HomeViewController = () => {
   const location = async () => {
     await fetchCurrentAddress()
       .then((address: any) => {
-        setCurrentLocationOfUser({
-          latitude: address.latitude,
-          longitude: address.longitude,
-          address: address.address.toString() ?? '',
-        });
+
+        setUserLocation((prevState) => (
+          {
+            ...prevState,
+            currentLocation: {
+              latitude: address.latitude,
+              longitude: address.longitude,
+              address: address.address ?? '',
+            },
+            onboardingLocation: prevState?.onboardingLocation
+          }));
 
         Sentry.captureMessage(
-          `Client Flow currentLocationOfUser FOR:-${
-            userProfile?.firstName ?? ''
+          `Client Flow userLocation FOR:-${userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
         );
       })
@@ -78,7 +83,7 @@ const HomeViewController = () => {
   useEffect(() => {
     location();
     getBannerAd();
-    console.log('SetCuree', currentLocationOfUser);
+    console.log('SetCuree', userLocation);
     // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then((status) => {
     //   if (status === RESULTS.GRANTED) {
     //     // Location permission is already granted
@@ -152,8 +157,7 @@ const HomeViewController = () => {
     console.log('data on search response', JSON.stringify(res));
     if (res.length > 0) {
       Sentry.captureMessage(
-        `Client Flow ON CHANGE SEARCH API  FOR:-${
-          userProfile?.firstName ?? ''
+        `Client Flow ON CHANGE SEARCH API  FOR:-${userProfile?.firstName ?? ''
         }---- ${res}`,
       );
       console.log('search result', res);
@@ -174,8 +178,7 @@ const HomeViewController = () => {
     if (res?.message) {
       setIsDataNotFound(false);
       Sentry.captureMessage(
-        `On Search response gave Message' for:-${
-          userProfile?.firstName
+        `On Search response gave Message' for:-${userProfile?.firstName
         }---- ${JSON.stringify(res?.message)}`,
       );
     } else {
@@ -231,7 +234,7 @@ const HomeViewController = () => {
     isVisible,
     setIsVisible,
     remainingTime,
-    currentLocationOfUser,
+    userLocation,
     setSearchProviderList,
     dropdownVisible,
     setDropdownVisible,

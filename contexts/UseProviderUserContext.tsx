@@ -1,7 +1,7 @@
 import {
   ProviderProfile,
   ProviderServices,
-  currentLocationOfUser,
+  userLocation,
   onboardStep,
 } from 'libs/types/UserType';
 import React, { createContext } from 'react';
@@ -17,10 +17,10 @@ export interface ProviderUserContextFields {
   setProviderProfile: React.Dispatch<React.SetStateAction<ProviderProfile>>;
   providerServices: ProviderServices;
   setProviderServices: React.Dispatch<React.SetStateAction<ProviderServices>>;
-  setCurrentLocationOfUser: React.Dispatch<
-    React.SetStateAction<currentLocationOfUser>
+  setUserLocation: React.Dispatch<
+    React.SetStateAction<userLocation>
   >;
-  currentLocationOfUser: currentLocationOfUser;
+  userLocation: userLocation;
 }
 
 export const ProviderUserContext = createContext<ProviderUserContextFields>(

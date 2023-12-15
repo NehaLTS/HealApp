@@ -191,12 +191,14 @@ const LoginViewController = () => {
       const googleId = userData.user.providerData[0].uid;
 
       /** To handle Google auth request to API */
+      console.log("GoogleSgnUpuserData", userData)
       if (email && googleId) {
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
           googleId,
           device_token: device_Token,
         });
+        console.log("GoogleSgnUp", res)
         if (res?.isSuccessful === true) {
           handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
@@ -225,6 +227,7 @@ const LoginViewController = () => {
           device_token: device_Token,
         });
         setLocalData('USER', res);
+
         if (res?.isSuccessful === true) {
           handleAuthResponse(res, '');
         } else {

@@ -82,13 +82,13 @@ const LoginViewController = () => {
     let userDetails = response.user;
     //save details in context
     setToken(response.token);
-    console.log("response.token", response.token)
+    console.log("response.token", response)
     setUserId(response.id);
     setUserProfile({
       firstName: userDetails?.firstname,
       lastName: userDetails?.lastname,
       phoneNumber: userDetails?.phone_number,
-      address: userDetails?.address,
+      address: { address: userDetails?.address, latitude: userDetails.latitude ?? '', longitude: userDetails.longitude ?? '' },
       city: userDetails?.city,
       state: userDetails?.state,
       country: userDetails?.country,
@@ -173,7 +173,7 @@ const LoginViewController = () => {
         const googleId = userData.user?.uid ?? '';
         /** To handle Google auth request to API */
         const res = await onSubmitGoogleAuthRequest({ email, googleId, device_token: device_Token });
-
+        console.log("GoogleSgnUp", res)
         setIsLoading(false);
         if (res?.isSuccessful === true) {
           handleAuthSuccessResponse(res, userData?.user?.photoURL);

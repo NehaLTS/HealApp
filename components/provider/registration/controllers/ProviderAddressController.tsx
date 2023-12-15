@@ -1,5 +1,5 @@
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
-import { ProviderProfile, currentLocationOfUser } from 'libs/types/UserType';
+import { ProviderProfile, userLocation } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,15 +21,16 @@ const ProviderAddressController = () => {
     setCurrentStep,
     setProviderProfile,
     providerProfile,
-    currentLocationOfUser,
+    userLocation,
+    setUserLocation
   } = UseProviderUserContext();
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState(
-    currentLocationOfUser?.address ?? '',
+    userLocation?.currentLocation?.address ?? '',
   );
   const [geomatricAddress, setGeomatricAddress] = useState(
-    currentLocationOfUser ?? '',
+    userLocation ?? '',
   );
   useEffect(() => {
     if (providerProfile?.firstName) {
@@ -39,7 +40,7 @@ const ProviderAddressController = () => {
     }
   }, []);
 
-  const onBlurPhoneNumber = () => {};
+  const onBlurPhoneNumber = () => { };
 
   const onChangePhoneNumber = (value: string) => {
     phoneRef.current.value = value;
@@ -49,7 +50,7 @@ const ProviderAddressController = () => {
   const onChangeLicenseNumber = (value: string) => {
     licenseRef.current.value = value;
   };
-  const onBlurAddress = () => {};
+  const onBlurAddress = () => { };
 
   const onChangeAddress = (
     value: string,
@@ -59,7 +60,7 @@ const ProviderAddressController = () => {
     addressRef.current.value = value;
     setOnSearchAddress(value ?? '');
     validateAddress(value ?? '');
-    setGeomatricAddress({ latitude, longitude });
+    setGeomatricAddress({ onboardingLocation: { latitude: latitude, longitude: longitude } })
     console.log('valueChnage latitude', value, latitude, longitude);
   };
 
@@ -74,16 +75,20 @@ const ProviderAddressController = () => {
       } else {
         setProviderProfile({
           ...(providerProfile as ProviderProfile),
-          address: {
-            address: onSearchAddress,
-            latitude: geomatricAddress.latitude,
-            longitude: geomatricAddress.longitude,
-          },
+          address: onSearchAddress,
           phoneNumber: phoneRef.current.value,
           licensenumber: licenseRef.current.value,
           licensepicture: licensePicture,
         });
         setCurrentStep('payment');
+
+        setUserLocation((prevState) => ({
+          ...prevState,
+          onboardingLocation: {
+            address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
+          },
+          currentLocation: prevState?.currentLocation
+        }));
       }
     } else {
       if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));

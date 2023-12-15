@@ -66,7 +66,7 @@ const OrderFormView = ({
     setIsSubmitDetail,
     isShowIcon,
     setIsShowIcon,
-    currentLocationOfUser,
+    userLocation,
     otherReasonsRef,
   } = OrderFormController({ setOrder, order, onPressWhenHealer });
 
@@ -113,11 +113,7 @@ const OrderFormView = ({
                 key={index}
                 title={item.name?.en}
                 isSmall
-                isPrimary={
-                  activeButton?.includes?.(item?.reason_id)
-                  // ||
-                  // item.name?.en === supplier?.speciality_name
-                }
+                isPrimary={activeButton?.includes?.(item?.reason_id) ?? false}
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
                 fontSized={getHeight(fontSize?.textM)}
@@ -184,7 +180,7 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-      0 ? (
+        0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             <TouchableOpacity
@@ -193,7 +189,7 @@ const OrderFormView = ({
               onPress={() => handleItemPress(item)}
             >
               <View style={styles.checkBox}>
-                {activeCheckbox.includes(item?.menu_id) && (
+                {activeCheckbox?.includes(item?.menu_id) && (
                   <Image
                     source={require('assets/icon/check.png')}
                     style={styles.image}
@@ -232,7 +228,7 @@ const OrderFormView = ({
           onPress={() =>
             setOrder({
               ...order,
-              address: currentLocationOfUser?.address?.toString() ?? '',
+              address: userLocation?.currentLocation?.address?.toString() ?? '',
             })
           }
         >
@@ -285,9 +281,8 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
-                  order?.phonenumber
-                }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
+              }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}

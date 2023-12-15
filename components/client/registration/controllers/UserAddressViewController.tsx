@@ -1,7 +1,7 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
-import { ClientProfile, currentLocationOfUser } from 'libs/types/UserType';
+import { ClientProfile, userLocation } from 'libs/types/UserType';
 // import uploadImage from 'libs/uploadImage';
 import { generateRandomName, numericPattern } from 'libs/utility/Utils';
 import React, { useState, useTransition } from 'react';
@@ -16,7 +16,8 @@ const UserAddressViewController = () => {
     userProfile,
     userId,
     token,
-    currentLocationOfUser,
+    setUserLocation,
+    userLocation,
   } = UseClientUserContext();
   const [isShowModal, setIsShowModal] = useState(false);
   const addressRef = React.useRef<any>('');
@@ -29,10 +30,10 @@ const UserAddressViewController = () => {
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState(
-    currentLocationOfUser?.address ?? '',
+    userLocation?.currentLocation?.address ?? '',
   );
   const [geomatricAddress, setGeomatricAddress] = useState(
-    currentLocationOfUser ?? '',
+    userLocation ?? '',
   );
 
   const { t } = useTranslation();
@@ -51,7 +52,7 @@ const UserAddressViewController = () => {
     else setIdNumberError('');
   };
 
-  const onBlurIdNumber = () => {};
+  const onBlurIdNumber = () => { };
 
   const onChangeAddress = (
     value: string,
@@ -60,7 +61,7 @@ const UserAddressViewController = () => {
   ) => {
     setOnSearchAddress(value ?? '');
     validateAddress(value ?? '');
-    setGeomatricAddress({ latitude, longitude });
+    setGeomatricAddress({ onboardingLocation: { latitude: latitude, longitude: longitude } })
     console.log('valueChnage latitude', value, latitude, longitude);
   };
 
@@ -96,11 +97,7 @@ const UserAddressViewController = () => {
       setIsLoader(true);
       setUserProfile({
         ...(userProfile as ClientProfile),
-        address: {
-          address: onSearchAddress,
-          latitude: geomatricAddress.latitude,
-          longitude: geomatricAddress.longitude,
-        },
+        address: onSearchAddress,
         date_of_birth: dateOfBirth.toString(),
         idNumber: idNumberRef.current.value,
         city: '',
@@ -108,16 +105,21 @@ const UserAddressViewController = () => {
         country: '',
         profilePicture: profilePicture ?? '',
       });
+      setUserLocation((prevState) => ({
+        ...prevState,
+        onboardingLocation: {
+          address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
+        },
+        currentLocation: prevState?.currentLocation
+      }));
+
+
 
       //Update User Profile
       const res = await onUpdateUserProfile?.(
         {
           ...userProfile,
-          address: {
-            address: onSearchAddress,
-            latitude: geomatricAddress.latitude,
-            longitude: geomatricAddress.longitude,
-          },
+          address: onSearchAddress,
           date_of_birth: dateOfBirth.toString(),
           idNumber: idNumberRef.current.value,
           city: '',
@@ -135,11 +137,7 @@ const UserAddressViewController = () => {
         firstName: userProfile?.firstName,
         lastName: userProfile?.lastName,
         phoneNumber: userProfile?.phoneNumber,
-        address: {
-          address: onSearchAddress,
-          latitude: geomatricAddress.latitude,
-          longitude: geomatricAddress.longitude,
-        },
+        address: onSearchAddress,
         city: '',
         state: '',
         country: '',

@@ -3,7 +3,7 @@ import {
   ClientProfile,
   OrderDetail,
   RemaingTime,
-  currentLocationOfUser,
+  userLocation,
   onboardStep,
 } from 'libs/types/UserType';
 import React, { createContext } from 'react';
@@ -19,10 +19,10 @@ export interface ClientUserContextFields {
   userProfile: ClientProfile;
   setUserProfile: React.Dispatch<React.SetStateAction<ClientProfile>>;
   orderDetails: OrderDetail;
-  setCurrentLocationOfUser: React.Dispatch<
-    React.SetStateAction<currentLocationOfUser>
+  setUserLocation: React.Dispatch<
+    React.SetStateAction<userLocation>
   >;
-  currentLocationOfUser: currentLocationOfUser;
+  userLocation: userLocation;
   setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>;
   setRemainingTime: React.Dispatch<React.SetStateAction<RemaingTime>>;
   remainingTime: RemaingTime;

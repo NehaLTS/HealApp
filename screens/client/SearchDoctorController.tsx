@@ -24,7 +24,7 @@ const SearchDoctorController = () => {
   const route = useRoute<any>();
   const { BookOrderRequest, providerLocationSearch, orderProvider } =
     ClientOrderServices();
-  const { currentLocationOfUser } = UseClientUserContext();
+  const { userLocation } = UseClientUserContext();
   const [showRateAlert, setShowRateAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
   const [disabled, setDisable] = useState(false);
@@ -86,12 +86,13 @@ const SearchDoctorController = () => {
     setShowLoader(true);
 
     let orderDetails = route?.params?.orderDetails;
-    let heardDetail = route?.params?.heardDetail ?? '';
-    const res = await orderProvider({
-      ...orderDetails,
-      services: heardDetail ? '1' : orderDetails.services,
-    });
-
+    let heardDetail = route?.params?.heardDetail ?? ''
+    const res = await orderProvider({ ...orderDetails, services: heardDetail ? "1" : orderDetails.services });
+    Sentry.captureMessage(
+      `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(
+        res,
+      )}`,
+    );
     console.log(' RESPINSE+++++', res);
 
     if (res?.orderId) {
@@ -249,8 +250,8 @@ const SearchDoctorController = () => {
 
   const calculateDistance = () => {
     const userCurrentLocation = {
-      latitude: parseFloat(currentLocationOfUser?.latitude),
-      longitude: parseFloat(currentLocationOfUser?.longitude),
+      latitude: parseFloat(userLocation?.onboardingLocation?.latitude ?? userLocation?.currentLocation?.latitude ?? '0.0'),
+      longitude: parseFloat(userLocation?.onboardingLocation?.longitude ?? userLocation?.currentLocation?.longitude ?? '0.0'),
     };
     const ProviderLocation = {
       latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),

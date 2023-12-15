@@ -23,7 +23,7 @@ const HomeScreenControlller = () => {
     order?.extraData?.orderAccepted ?? false,
   );
   const { userId, providerProfile, token } = UseProviderUserContext();
-  const { currentLocationOfUser } = UseClientUserContext();
+  const { userLocation } = UseClientUserContext();
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
 
@@ -209,8 +209,8 @@ const HomeScreenControlller = () => {
       status: 'accept',
       provider_id: userId,
       order_id: order?.orderId ?? '1',
-      latitude: providerProfile?.address?.latitude?.toString() ?? '',
-      longitude: providerProfile?.address?.longitude?.toString() ?? '',
+      latitude: userLocation.onboardingLocation?.latitude ?? userLocation.currentLocation?.latitude ?? '',
+      longitude: userLocation.onboardingLocation?.longitude ?? userLocation.onboardingLocation?.longitude ?? '',
     })
       .then((res) => {
         console.log('ordereAcceptedRes', res);

@@ -45,7 +45,7 @@ const SearchDoctor = () => {
   const previousScreen = route?.params?.previousScreen;
 
   const { t } = useTranslation();
-  const { setCurrentLocationOfUser } = UseClientUserContext();
+  const { setUserLocation, userProfile, userLocation } = UseClientUserContext();
   const [currentLocation, setCurrentLocation] = useState<Location>();
   const {
     handleNextButtonPress,
@@ -93,10 +93,20 @@ const SearchDoctor = () => {
           longitudeDelta: LATITUDE_DELTA,
           timestamp: position.timestamp,
         });
-        setCurrentLocationOfUser({
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString(),
-        });
+        // setOrder((prevOrder) => ({
+        //   ...prevOrder,
+        //   reason: updatedSelectedResourceType,
+        // })
+        setUserLocation((prevState) => ({
+          ...prevState,
+          currentLocation: {
+            latitude: position.coords.latitude.toString(),
+            longitude: position.coords.longitude.toString(),
+            address: prevState?.currentLocation?.address,
+          },
+          onboardingLocation: prevState?.onboardingLocation
+
+        }));
       },
       (error) => {
         console.log('Error getting location: ' + error.message);
@@ -118,6 +128,7 @@ const SearchDoctor = () => {
   // }, []);
 
   useEffect(() => {
+    console.log("userProfile.address?.latitude", userProfile.address)
     createNotificationListeners();
 
     //TODO: Vandana why this is used?
@@ -147,6 +158,7 @@ const SearchDoctor = () => {
   };
 
   useUpdateEffect(() => {
+
     if (secondLoader) {
       setShowCancelTextButton(true);
       setTimeout(() => {
@@ -154,6 +166,7 @@ const SearchDoctor = () => {
       }, 180000);
     }
   }, [secondLoader]);
+
 
   return (
     <>
@@ -179,7 +192,7 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
@@ -194,28 +207,34 @@ const SearchDoctor = () => {
             focusable
             showsBuildings
             showsIndoors
-            initialRegion={
-              providerLocation
-                ? {
-                    ...providerLocation,
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02,
-                    title: 'provider',
-                    timestamp: '',
-                  }
-                : currentLocation
-            }
-            region={
-              providerLocation
-                ? {
-                    ...providerLocation,
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02,
-                    title: 'provider',
-                    timestamp: '',
-                  }
-                : currentLocation
-            }
+            initialRegion={providerLocation ? {
+              ...providerLocation,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+              title: 'provider',
+
+            } : userLocation.onboardingLocation && userLocation.onboardingLocation?.latitude && userLocation.onboardingLocation?.longitude ? {
+              latitude: parseFloat(userLocation.onboardingLocation?.latitude),
+              longitude: parseFloat(userLocation.onboardingLocation?.longitude),
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+              title: 'Client',
+
+            } : currentLocation}
+            region={providerLocation ? {
+              ...providerLocation,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+              title: 'provider',
+
+            } : userLocation.onboardingLocation && userLocation.onboardingLocation?.latitude && userLocation.onboardingLocation?.longitude ? {
+              latitude: parseFloat(userLocation.onboardingLocation?.latitude),
+              longitude: parseFloat(userLocation.onboardingLocation?.longitude),
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
+              title: 'Client',
+
+            } : currentLocation}
             style={{ flex: 1 }}
           >
             {/* {currentLocation !== undefined &&
@@ -235,17 +254,16 @@ const SearchDoctor = () => {
                   apikey={'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o'}
                 />
               )} */}
-            {currentLocation !== undefined &&
-              currentLocation.latitude !== 0.0 && (
-                <Marker
-                  coordinate={{
-                    latitude: currentLocation.latitude,
-                    longitude: currentLocation.longitude,
-                  }}
-                  pinColor={colors.primary}
-                  title="Your Location"
-                ></Marker>
-              )}
+            {userProfile && userProfile?.address && (
+              <Marker
+                coordinate={{
+                  latitude: userLocation && userLocation?.onboardingLocation && userLocation.onboardingLocation?.latitude ? parseFloat(userLocation.onboardingLocation?.latitude) : currentLocation?.latitude ?? 0.0,
+                  longitude: userLocation && userLocation?.onboardingLocation && userLocation.onboardingLocation?.longitude ? parseFloat(userLocation.onboardingLocation?.longitude) : currentLocation?.longitude ?? 0.0
+                }}
+                pinColor={colors.primary}
+                title="Your Location"
+              ></Marker>
+            )}
             {providerLocation !== undefined &&
               providerLocation.latitude !== 0.0 &&
               !showLoader && (
@@ -268,8 +286,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                          currentOrder.providerDetails
-                            ?.providerProfilePicture ? (
+                            currentOrder.providerDetails
+                              ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -302,8 +320,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -335,9 +353,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                providerLocation.latitude !== 0.0 &&
-                !showLoader &&
-                !showCancelButton
+                  providerLocation.latitude !== 0.0 &&
+                  !showLoader &&
+                  !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -353,7 +371,7 @@ const SearchDoctor = () => {
               <TextButton
                 style={{ alignSelf: 'center' }}
                 title={t('cancel')}
-                onPress={() => {}}
+                onPress={() => { }}
                 fontSize={getHeight(fontSize.textXl)}
               />
             )}
@@ -362,11 +380,11 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                showLoader
+                  showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>

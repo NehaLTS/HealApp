@@ -19,7 +19,7 @@ import {
   ProviderProfile,
   ProviderServices,
   onboardStep,
-  currentLocationOfUser,
+  userLocation,
   RemaingTime,
 } from 'libs/types/UserType';
 import { ClientUserContext } from 'contexts/UseClientUserContext';
@@ -46,8 +46,8 @@ const App = () => {
   const [providerServices, setProviderServices] =
     useState<ProviderServices>(null);
   const [orderDetails, setOrderDetails] = useState<OrderDetail>(null);
-  const [currentLocationOfUser, setCurrentLocationOfUser] =
-    useState<currentLocationOfUser>(null);
+  const [userLocation, setUserLocation] =
+    useState<userLocation>(null);
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
   const [treatmentsMenu, setTreatmentsMenu] = useState<treatment>(null);
   /** To Initialize Google SDk */
@@ -65,11 +65,14 @@ const App = () => {
     Geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setCurrentLocationOfUser({
-          // ...currentLocationOfUser,
-          latitude: latitude.toString(),
-          longitude: longitude.toString(),
-        });
+        setUserLocation((prevState) => ({
+          ...prevState,
+          currentLocation: {
+            latitude: latitude.toString(),
+            longitude: longitude.toString(),
+          },
+          onboardingLocation: prevState?.onboardingLocation
+        }));
       },
       (error) => {
         console.log('Error getting location: ' + error.message);
@@ -124,8 +127,8 @@ const App = () => {
             setUserProfile,
             orderDetails,
             setOrderDetails,
-            setCurrentLocationOfUser,
-            currentLocationOfUser,
+            setUserLocation,
+            userLocation,
             setRemainingTime,
             remainingTime,
             treatmentsMenu,
@@ -144,8 +147,8 @@ const App = () => {
               setProviderProfile,
               providerServices,
               setProviderServices,
-              setCurrentLocationOfUser,
-              currentLocationOfUser,
+              setUserLocation,
+              userLocation,
             }}
           >
             <NavigationContainer

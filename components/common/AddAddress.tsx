@@ -36,9 +36,9 @@ const AddAddress = ({
 
 
 }) => {
-  const { currentLocationOfUser, setUserProfile } = UseClientUserContext();
+  const { userLocation, setUserProfile } = UseClientUserContext();
   const [searchAddress, setSearchAddress] = useState(
-    defaultValue || currentLocationOfUser?.address,
+    defaultValue || userLocation?.currentLocation?.address,
   );
   const [addressValue, setAddressValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);

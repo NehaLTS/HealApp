@@ -199,7 +199,7 @@ const UserAddressView = () => {
         address={onChangeAddress}
         isVisible={isVisible}
         onClose={() => setIsVisible(false)}
-        defaultValue={onSearchAddress.address ?? ''}
+        defaultValue={onSearchAddress ?? ''}
       />
     </>
   );

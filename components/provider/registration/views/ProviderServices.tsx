@@ -45,7 +45,7 @@ const ProviderServices = () => {
     <>
       <Text style={styles.textS} title={t('services_you')} />
       <View style={styles.servicesContainer}>
-        {services.length > 0 ? (
+        {services?.length > 0 ? (
           <ScrollView
             contentContainerStyle={styles.containerStyle}
             style={{ height: '100%' }}

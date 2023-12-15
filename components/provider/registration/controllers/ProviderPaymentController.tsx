@@ -21,7 +21,7 @@ const ProviderPaymentController = () => {
   const accountRef = React.useRef<any>('');
   const [isLoading, setIsLoading] = useState(false);
   const { OnUpdateProviderUserDetails } = AuthServicesProvider();
-  const { currentLocationOfUser } = UseClientUserContext();
+  const { userLocation } = UseClientUserContext();
   const { t } = useTranslation();
   const providerServicesData = getLocalData('PROVIDERSERVICES');
 
@@ -123,13 +123,13 @@ const ProviderPaymentController = () => {
       console.log(
         'locationUpdate',
         latitude,
-        latitude !== '' ? latitude : currentLocationOfUser.latitude,
+        latitude !== '' ? latitude : userLocation?.onboardingLocation?.latitude,
       );
       const res = await OnUpdateProviderUserDetails?.(
         {
           firstname: providerProfile?.firstName ?? '',
           lastname: providerProfile?.lastName ?? '',
-          address: providerProfile?.address?.address ?? '',
+          address: providerProfile?.address ?? '',
           city: '',
           state: '',
           country: '',
@@ -145,9 +145,9 @@ const ProviderPaymentController = () => {
           business_registration_number: registrationNumberRef.current.value,
           account: accountRef.current.value,
           specialty_id: providerProfile.speciality.id,
-          latitude: latitude !== '' ? latitude : currentLocationOfUser.latitude,
+          latitude: latitude !== '' ? latitude : userLocation?.onboardingLocation?.latitude ?? '',
           longitude:
-            longitude !== '' ? longitude : currentLocationOfUser.longitude,
+            longitude !== '' ? longitude : userLocation?.onboardingLocation?.longitude ?? ''
         },
         token,
       );

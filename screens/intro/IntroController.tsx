@@ -13,7 +13,6 @@ const IntroController = () => {
   const navigation = useNavigation<any>();
   const [isLanguageChanged, setIsLanguageChanged] = useState(false);
   const { setLanguageCode } = useTranslationContext();
-  const { currentLocationOfUser} = UseClientUserContext();
   const continueAsClient = () => {
     navigation.reset({
       index: 0,
