@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: getHeight(fontSize.textM),
-    width: '60%',
+    width: '55%',
     flexWrap: 'wrap',
     textAlign: 'left',
   },
