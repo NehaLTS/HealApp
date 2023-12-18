@@ -17,7 +17,7 @@ import { ProviderHomeDetails } from 'libs/types/ProvierTypes';
 
 const HomeScreenControlller = () => {
   const order = getLocalData('PROVIDERORDER');
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
@@ -85,16 +85,19 @@ const HomeScreenControlller = () => {
   }, []);
 
   const getSummaryofDay = async () => {
+    let currentdate = new Date();
+    let dateMDY = `${currentdate.getFullYear()}-${
+      currentdate.getMonth() + 1
+    }-${currentdate.getDate()}`;
 
-    console.log("new Date().toDateString()", new Date().toDateString())
     let daySummary = await getProviderDaySummary(
       {
         provider_id: userId,
-        created_date_time: new Date().toDateString(),
+        created_date_time: dateMDY,
       },
       token,
     );
-    console.log("daySummary123", daySummary)
+    console.log('daySummary123', daySummary);
 
     setProviderDaySummary(daySummary);
   };
@@ -209,8 +212,14 @@ const HomeScreenControlller = () => {
       orderStatus: 'accept',
       provider_id: userId,
       order_id: order?.orderId ?? '1',
-      latitude: userLocation.onboardingLocation?.latitude?.toString() ?? userLocation.currentLocation?.latitude ?? '',
-      longitude: userLocation.onboardingLocation?.longitude?.toString() ?? userLocation.currentLocation?.longitude ?? '',
+      latitude:
+        userLocation.onboardingLocation?.latitude?.toString() ??
+        userLocation.currentLocation?.latitude ??
+        '',
+      longitude:
+        userLocation.onboardingLocation?.longitude?.toString() ??
+        userLocation.currentLocation?.longitude ??
+        '',
     })
       .then((res) => {
         console.log('ordereAcceptedRes', res);
@@ -257,6 +266,7 @@ const HomeScreenControlller = () => {
     onLogoutButtonPress,
     TreatementEnded,
     providerDaySummary,
+    getSummaryofDay,
   };
 };
 

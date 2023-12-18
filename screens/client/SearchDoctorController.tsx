@@ -36,7 +36,7 @@ const SearchDoctorController = () => {
   const navigation = useNavigation<any>();
   const [isBookOrder, setIsBookOrder] = useState(false);
   const [showDoctor, setShowDoctor] = useState(false);
-
+  const [providerNotFound, setProviderNotFound] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
 
   const previousScreen = route?.params?.previousScreen;
@@ -86,15 +86,18 @@ const SearchDoctorController = () => {
     setShowLoader(true);
 
     let orderDetails = route?.params?.orderDetails;
-    let heardDetail = route?.params?.heardDetail ?? ''
-    console.log("search orderDetails", orderDetails)
-    const res = await orderProvider({ ...orderDetails, services: heardDetail ? "1" : orderDetails.services });
+    let heardDetail = route?.params?.heardDetail ?? '';
+    console.log('search orderDetails', orderDetails);
+    const res = await orderProvider({
+      ...orderDetails,
+      services: heardDetail ? '1' : orderDetails.services,
+    });
     Sentry.captureMessage(
       `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(
         res,
       )}`,
     );
-    console.log(' RESPINSE+++++', res);
+    console.log('RESPINSE+++++', res);
 
     if (res?.orderId) {
       setTimeout(() => {
@@ -124,6 +127,7 @@ const SearchDoctorController = () => {
       });
     } else {
       setShowLoader(false);
+      setProviderNotFound(true);
       Alert.alert('No Nearby Doctor found', 'Sorry Please try again later', [
         {
           text: 'OK',
@@ -201,6 +205,11 @@ const SearchDoctorController = () => {
       //   longitude: parseFloat(event.data.longitude),
       // });
     });
+
+    return () => {
+      console.log('called here 1111111');
+      DeviceEventEmitter.removeAllListeners('ClientOrderListener');
+    };
   };
 
   const permissionHelper = {
@@ -251,8 +260,16 @@ const SearchDoctorController = () => {
 
   const calculateDistance = () => {
     const userCurrentLocation = {
-      latitude: parseFloat(userLocation?.onboardingLocation?.latitude ?? userLocation?.currentLocation?.latitude ?? '0.0'),
-      longitude: parseFloat(userLocation?.onboardingLocation?.longitude ?? userLocation?.currentLocation?.longitude ?? '0.0'),
+      latitude: parseFloat(
+        userLocation?.onboardingLocation?.latitude ??
+          userLocation?.currentLocation?.latitude ??
+          '0.0',
+      ),
+      longitude: parseFloat(
+        userLocation?.onboardingLocation?.longitude ??
+          userLocation?.currentLocation?.longitude ??
+          '0.0',
+      ),
     };
     const ProviderLocation = {
       latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),
@@ -300,6 +317,7 @@ const SearchDoctorController = () => {
     setIsBookOrder,
     showDoctor,
     setShowDoctor,
+    providerNotFound,
   };
 };
 

@@ -27,7 +27,7 @@ const CardView = ({ item, index, isSearch }: any) => {
   const onPaymentAdd = () => setIsAddPayment(true);
   const { userProfile } = UseClientUserContext();
   const { t } = useTranslation();
-  console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);
+
   const onPressOrder = () => {
     if (userProfile?.isPaymentAdded) {
       if (item?.name === 'Alternative medicine') {
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: getHeight(dimens.paddingL),
+    zIndex: 1,
   },
   container: {
     flexDirection: 'row',

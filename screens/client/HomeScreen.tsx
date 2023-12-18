@@ -17,7 +17,11 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import useUpdateEffect from 'libs/UseUpdateEffect';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import {
+  deleteOrder,
+  getLocalData,
+  setLocalData,
+} from 'libs/datastorage/useLocalStorage';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -75,7 +79,9 @@ const HomeScreen = () => {
   const navigation = useNavigation<any>();
   const timeOutRef = useRef<NodeJS.Timeout | undefined>();
   const [timeToArrive, setTimeToArrive] = useState(remainingTime?.minutes);
-  const [currentAddress, setCurrentAddress] = useState<string>(userLocation?.currentLocation?.address ?? '');
+  const [currentAddress, setCurrentAddress] = useState<string>(
+    userLocation?.currentLocation?.address ?? '',
+  );
   const [currentOrder, setCurrentOrder] = useState<Order>({
     orderId: '',
     providerDetails: {
@@ -365,14 +371,18 @@ const HomeScreen = () => {
                 orderServices: [],
                 message: '',
               });
-              setLocalData('ORDER', {
-                orderId: '',
-                providerDetails: undefined,
-                orderPrice: '',
-                orderStatus: '',
-                orderServices: [],
-                message: '',
-              });
+
+              //delete current order
+              deleteOrder();
+
+              // setLocalData('ORDER', {
+              //   orderId: '',
+              //   providerDetails: undefined,
+              //   orderPrice: '',
+              //   orderStatus: '',
+              //   orderServices: [],
+              //   message: '',
+              // });
             }}
           />
         </View>

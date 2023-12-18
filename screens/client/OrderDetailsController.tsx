@@ -150,13 +150,19 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${
+              !order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
       }
-      console.log('userLocation.latitude,', userLocation, "user", user);
-      console.log("(userProfile as ClientProfile)?.address?.address", (userProfile as ClientProfile), order, (userProfile as ClientProfile)?.address?.address)
+      console.log('userLocation.latitude,', userLocation, 'user', user);
+      console.log(
+        '(userProfile as ClientProfile)?.address?.address',
+        userProfile as ClientProfile,
+        order,
+        (userProfile as ClientProfile)?.address?.address,
+      );
 
       if (showSummary) {
         let orderDetails = {
@@ -180,11 +186,15 @@ const OrderDetailsController = () => {
           TotalCost: order?.services
             .reduce((total, item) => total + parseInt(item.price, 10), 0)
             .toString(),
-          latitude: userLocation.onboardingLocation?.latitude ?? userLocation.currentLocation?.latitude,
-          longitude: userLocation.onboardingLocation?.longitude ?? userLocation.currentLocation?.longitude,
+          latitude:
+            userLocation.onboardingLocation?.latitude ??
+            userLocation.currentLocation?.latitude,
+          longitude:
+            userLocation.onboardingLocation?.longitude ??
+            userLocation.currentLocation?.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
         };
-        console.log("(userProfile userLocation", userLocation)
+        console.log('(userProfile userLocation', userLocation);
         Sentry.captureMessage(
           `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${orderDetails}`,
         );

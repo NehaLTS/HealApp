@@ -40,7 +40,7 @@ const ProviderArrivalInfo = ({
             />
           </View>
         </View>
-        <TouchableOpacity style={styles.callButton}>
+        <TouchableOpacity style={styles.callButton} disabled>
           <Image
             source={require('../../assets/icon/phonecall.png')}
             style={styles.phoneIcon}

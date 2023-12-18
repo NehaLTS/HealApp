@@ -42,10 +42,16 @@ const OrderDetails = () => {
     heardDetail,
   } = OrderDetailsController();
   const { t } = useTranslation();
-  const [pendingOrder, setPendingOrder] = useState<string>('');
+  const [pendingOrder, setPendingOrder] = useState<boolean>(false);
   useEffect(() => {
-    const pendingOrder: Order = getLocalData('ORDER') as Order;
-    setPendingOrder(pendingOrder?.orderId);
+    const currentOrder: Order = getLocalData('ORDER') as Order;
+
+    console.log('called here currentOrder  ', currentOrder);
+
+    if (currentOrder) {
+      console.log('called here 1111');
+      setPendingOrder(true);
+    }
   }, []);
   console.log('pendingOrder', pendingOrder);
   const HeaderTitle = () => (
@@ -135,7 +141,7 @@ const OrderDetails = () => {
             style={styles.buttonOrder}
             onPress={handleNextButtonPress}
             width={'30%'}
-            disabled={isLoading || pendingOrder !== undefined || pendingOrder}
+            disabled={isLoading || pendingOrder}
           />
           {/* } */}
           {showSummary && (

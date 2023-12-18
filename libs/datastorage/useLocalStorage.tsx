@@ -23,7 +23,7 @@ type StorageObject = {
   PROVIDERSERVICES: ProviderServices[];
   ORDER: Order | ClientOrder;
   PROVIDERORDER: ProviderOrder;
-  LOCATION: userLocation
+  LOCATION: userLocation;
 };
 
 export const setLocalData = <K extends StorageKeys>(
@@ -46,4 +46,8 @@ export const getLocalData = <K extends StorageKeys>(
 
 export const deleteLocalData = () => {
   dataStorage.clearAll();
+};
+
+export const deleteOrder = () => {
+  dataStorage.delete('ORDER');
 };

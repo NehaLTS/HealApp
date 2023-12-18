@@ -62,6 +62,7 @@ const SearchDoctor = () => {
     setIsBookOrder,
     showDoctor,
     setShowDoctor,
+    providerNotFound,
   } = SearchDoctorController();
   console.log('providerStatus', providerStatus);
   const { setRemainingTime } = UseClientUserContext();
@@ -191,6 +192,8 @@ const SearchDoctor = () => {
                 providerLocation.latitude === 0.0) ||
               showLoader
                 ? t('looking_doctor')
+                : providerNotFound
+                ? 'Provider not found.'
                 : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
           />
@@ -333,10 +336,12 @@ const SearchDoctor = () => {
                           <Text
                             style={styles.doctorName}
                             title={`${currentOrder.providerDetails?.providerName}`}
+                            numberOfLines={2}
                           />
                           <Text
                             style={styles.doctoraddress}
                             title={`${currentOrder.providerDetails?.providerAddress}`}
+                            numberOfLines={2}
                           />
                         </View>
                       </View>
@@ -375,7 +380,7 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-        {providerStatus !== ARRIVED && !showTimer && (
+        {providerStatus !== ARRIVED && !showTimer && !providerNotFound && (
           <View>
             <Button
               title={
@@ -460,7 +465,7 @@ const styles = StyleSheet.create({
     padding: getWidth(dimens.marginS),
     borderRadius: 8,
     flexDirection: 'row',
-    width: '70%',
+    width: '100%',
     gap: getHeight(10),
   },
   doctorIcon: {
@@ -471,11 +476,12 @@ const styles = StyleSheet.create({
   },
   doctorName: {
     fontSize: getHeight(fontSize.textS),
-    width: '60%',
+    width: '100%',
   },
   doctoraddress: {
     fontSize: getHeight(fontSize.textS),
-    width: '60%',
+    width: '100%',
+    flexWrap: 'wrap',
   },
   imageContainer: {
     marginRight: getHeight(dimens.paddingXs),
@@ -486,11 +492,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
+    width: '70%',
+    maxWidth: '70%',
   },
   markerContainer: {
     alignItems: 'center',
     justifyContent: 'flex-end',
     flexDirection: 'column-reverse',
+    maxWidth: '90%',
   },
   locationMarker: {
     width: getWidth(dimens.marginL + dimens.borderBold),

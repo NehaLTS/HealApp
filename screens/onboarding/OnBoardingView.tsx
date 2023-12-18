@@ -82,7 +82,7 @@ const OnBoardingView = () => {
     SplashScreen?.hide();
   };
   useEffect(() => {
-    //  deleteLocalData();
+    // deleteLocalData();
     getLocalUserData();
   }, []);
 

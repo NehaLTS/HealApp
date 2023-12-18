@@ -13,7 +13,11 @@ import { colors } from 'designToken/colors';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import Loader from 'components/common/Loader';
 import { Order } from 'libs/types/OrderTypes';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import {
+  deleteOrder,
+  getLocalData,
+  setLocalData,
+} from 'libs/datastorage/useLocalStorage';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 
@@ -41,14 +45,7 @@ const TreatmentCompletedScreen = () => {
           console.log('object', res);
           if (res.isSuccessful) {
             setShowViews('Rating_View');
-            setLocalData('ORDER', {
-              orderId: '',
-              providerDetails: undefined,
-              orderPrice: '',
-              orderStatus: '',
-              orderServices: [],
-              message: '',
-            });
+            deleteOrder();
           }
         })
         .catch((error) => {

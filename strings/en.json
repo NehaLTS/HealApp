@@ -183,18 +183,18 @@
       },
       {
         "provider_type_id": 2,
-        "image": "assets/icon/physio.png",
-        "name": "Physio - home visit"
-      },
-      {
-        "provider_type_id": 3,
         "image": "assets/icon/nurse.png",
         "name": "Nurse - home visit"
       },
       {
-        "provider_type_id": 4,
+        "provider_type_id": 3,
         "image": "assets/icon/healer.png",
         "name": "Alternative medicine"
+      },
+      {
+        "provider_type_id": 4,
+        "image": "assets/icon/physio.png",
+        "name": "Physio - home visit"
       }
     ]
   }

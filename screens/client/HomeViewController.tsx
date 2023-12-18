@@ -3,6 +3,7 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import {
   deleteLocalData,
+  deleteOrder,
   getLocalData,
   setLocalData,
 } from 'libs/datastorage/useLocalStorage';
@@ -54,32 +55,31 @@ const HomeViewController = () => {
   const [searchProviderList, setSearchProviderList] = useState<any>();
   //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
   const providerList = orderList;
-  const locationData = getLocalData('LOCATION')
+  const locationData = getLocalData('LOCATION');
 
   const { fetchCurrentAddress } = useCurrentAddress();
   const location = async () => {
     await fetchCurrentAddress()
       .then((address: any) => {
-
-        setUserLocation((prevState) => (
-          {
-            ...prevState,
-            currentLocation: {
-              latitude: address.latitude,
-              longitude: address.longitude,
-              address: address.address ?? '',
-            },
-            onboardingLocation: prevState?.onboardingLocation
-          }));
+        setUserLocation((prevState) => ({
+          ...prevState,
+          currentLocation: {
+            latitude: address.latitude,
+            longitude: address.longitude,
+            address: address.address ?? '',
+          },
+          onboardingLocation: prevState?.onboardingLocation,
+        }));
         setLocalData('LOCATION', {
           currentLocation: {
             latitude: address.latitude,
             longitude: address.longitude,
             address: address.address ?? '',
           },
-        })
+        });
         Sentry.captureMessage(
-          `Client Flow userLocation FOR:-${userProfile?.firstName ?? ''
+          `Client Flow userLocation FOR:-${
+            userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
         );
       })
@@ -89,7 +89,7 @@ const HomeViewController = () => {
   };
 
   useEffect(() => {
-    setUserLocation({ ...locationData })
+    setUserLocation({ ...locationData });
     location();
     getBannerAd();
     console.log('SetCuree', userLocation);
@@ -166,7 +166,8 @@ const HomeViewController = () => {
     console.log('data on search response', JSON.stringify(res));
     if (res.length > 0) {
       Sentry.captureMessage(
-        `Client Flow ON CHANGE SEARCH API  FOR:-${userProfile?.firstName ?? ''
+        `Client Flow ON CHANGE SEARCH API  FOR:-${
+          userProfile?.firstName ?? ''
         }---- ${res}`,
       );
       console.log('search result', res);
@@ -187,7 +188,8 @@ const HomeViewController = () => {
     if (res?.message) {
       setIsDataNotFound(false);
       Sentry.captureMessage(
-        `On Search response gave Message' for:-${userProfile?.firstName
+        `On Search response gave Message' for:-${
+          userProfile?.firstName
         }---- ${JSON.stringify(res?.message)}`,
       );
     } else {

@@ -71,11 +71,6 @@ const OrderFormView = ({
   } = OrderFormController({ setOrder, order, onPressWhenHealer });
 
   const { t } = useTranslation();
-  const abc = treatmentReason?.reason.find(
-    (i) => i?.name?.en === supplier?.speciality_name,
-  );
-  console.log('treatmentReason', treatmentReason?.reason);
-  console.log('treatmentReason1111', abc);
 
   const showFilledData = () => {
     return (
@@ -184,7 +179,7 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-        0 ? (
+      0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             <TouchableOpacity
@@ -285,8 +280,9 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
-              }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
+                  order?.phonenumber
+                }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}
