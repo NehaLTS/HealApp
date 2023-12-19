@@ -117,6 +117,7 @@ const ProviderPaymentController = () => {
       setProviderProfile({
         ...(providerProfile as ProviderProfile),
         bankDetails: bankDetails,
+        profilePicture: profilePicture,
       });
       setIsLoading(true);
       console.log('providerServicesData', providerServicesData);
@@ -145,9 +146,14 @@ const ProviderPaymentController = () => {
           business_registration_number: registrationNumberRef.current.value,
           account: accountRef.current.value,
           specialty_id: providerProfile.speciality.id,
-          latitude: latitude !== '' ? latitude : userLocation?.onboardingLocation?.latitude ?? '',
+          latitude:
+            latitude !== ''
+              ? latitude
+              : userLocation?.onboardingLocation?.latitude ?? '',
           longitude:
-            longitude !== '' ? longitude : userLocation?.onboardingLocation?.longitude ?? ''
+            longitude !== ''
+              ? longitude
+              : userLocation?.onboardingLocation?.longitude ?? '',
         },
         token,
       );
@@ -232,6 +238,7 @@ const ProviderPaymentController = () => {
     setIsShowModal,
     isLoading,
     profilePicture,
+    setIsLoading,
   };
 };
 

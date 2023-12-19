@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import ProviderAddressController from '../controllers/ProviderAddressController';
 import Button from 'components/common/Button';
 import AddAddress from 'components/common/AddAddress';
+import Loader from 'components/common/Loader';
 
 const ProviderAddress = () => {
   const { t } = useTranslation();
@@ -40,12 +41,10 @@ const ProviderAddress = () => {
     onPressBack,
     isVisible,
     setIsVisible,
+    isLoading,
+    setIsLoading,
   } = ProviderAddressController();
 
-  console.log(
-    'licenseRef.current?.value?.length',
-    licenseRef.current?.value?.length,
-  );
   const getUploadImageView = () => (
     <View style={styles.iconContainer}>
       <Text style={styles.text}>{t('upload_license')}</Text>
@@ -79,12 +78,14 @@ const ProviderAddress = () => {
         isShowModal={isShowModal}
         closeModal={setIsShowModal}
         imageUri={getImageUrl}
+        isLoading={setIsLoading}
       />
     </View>
   );
 
   return (
     <>
+      {isLoading && <Loader />}
       <View style={styles.inputContainer}>
         <Input
           placeholder={t('phone_number')}
@@ -93,7 +94,7 @@ const ProviderAddress = () => {
           onBlur={onBlurPhoneNumber}
           onChangeText={onChangePhoneNumber}
           ref={phoneRef}
-          defaultValue={''}
+          defaultValue={providerProfile?.phoneNumber ?? ''}
           inputValue={providerProfile?.phoneNumber ?? ''}
           errorMessage={phoneError}
           returnKeyType={'next'}
@@ -110,7 +111,7 @@ const ProviderAddress = () => {
           onBlur={onBlurPhoneNumber}
           onChangeText={(v) => onChangeLicenseNumber(v)}
           ref={licenseRef}
-          defaultValue={''}
+          defaultValue={providerProfile?.licensenumber ?? ''}
           inputValue={providerProfile?.licensenumber ?? ''}
           returnKeyType={'done'}
           onClearInputText={() => licenseRef.current.clear()}

@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
 import Dropdown from 'components/common/Dropdown';
 import { fontFamily } from 'designToken/fontFamily';
+import Loader from 'components/common/Loader';
 
 const ProviderDetail = () => {
   const { t } = useTranslation();
@@ -41,6 +42,8 @@ const ProviderDetail = () => {
     specialityList,
     onPressBack,
     onPressNext,
+    isLoading,
+    setIsLoading,
   } = ProviderDetailController();
 
   const renderSpecialityItems = (item: ProviderSpeciality) => {
@@ -53,6 +56,7 @@ const ProviderDetail = () => {
 
   return (
     <>
+      {isLoading && <Loader />}
       <Input
         placeholder={t('first_name')}
         onBlur={onBlurFirstName}
@@ -137,6 +141,7 @@ const ProviderDetail = () => {
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
           imageUri={getImageUrl}
+          isLoading={setIsLoading}
         />
       </View>
 

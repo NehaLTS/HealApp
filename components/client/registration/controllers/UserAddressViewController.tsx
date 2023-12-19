@@ -32,9 +32,7 @@ const UserAddressViewController = () => {
   const [onSearchAddress, setOnSearchAddress] = useState(
     userLocation?.currentLocation?.address ?? '',
   );
-  const [geomatricAddress, setGeomatricAddress] = useState(
-    userLocation ?? '',
-  );
+  const [geomatricAddress, setGeomatricAddress] = useState(userLocation ?? '');
 
   const { t } = useTranslation();
   const [profilePicture, setProfilePicture] = useState(
@@ -52,7 +50,7 @@ const UserAddressViewController = () => {
     else setIdNumberError('');
   };
 
-  const onBlurIdNumber = () => { };
+  const onBlurIdNumber = () => {};
 
   const onChangeAddress = (
     value: string,
@@ -61,7 +59,9 @@ const UserAddressViewController = () => {
   ) => {
     setOnSearchAddress(value ?? '');
     validateAddress(value ?? '');
-    setGeomatricAddress({ onboardingLocation: { latitude: latitude, longitude: longitude } })
+    setGeomatricAddress({
+      onboardingLocation: { latitude: latitude, longitude: longitude },
+    });
     console.log('valueChnage latitude', value, latitude, longitude);
   };
 
@@ -108,17 +108,19 @@ const UserAddressViewController = () => {
       setUserLocation((prevState) => ({
         ...prevState,
         onboardingLocation: {
-          address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
+          address: onSearchAddress,
+          latitude: geomatricAddress.onboardingLocation?.latitude,
+          longitude: geomatricAddress.onboardingLocation?.longitude,
         },
-        currentLocation: prevState?.currentLocation
+        currentLocation: prevState?.currentLocation,
       }));
       setLocalData('LOCATION', {
         onboardingLocation: {
-          address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
-
-        }
-      })
-
+          address: onSearchAddress,
+          latitude: geomatricAddress.onboardingLocation?.latitude,
+          longitude: geomatricAddress.onboardingLocation?.longitude,
+        },
+      });
 
       //Update User Profile
       const res = await onUpdateUserProfile?.(
@@ -194,6 +196,7 @@ const UserAddressViewController = () => {
     onSearchAddress,
     isLoader,
     setDateOfBirthError,
+    setIsLoader,
   };
 };
 

@@ -44,10 +44,12 @@ const ProviderPayment = () => {
     onPressBack,
     isLoading,
     profilePicture,
+    setIsLoading,
   } = ProviderPaymentController();
 
   return (
     <>
+      {isLoading && <Loader />}
       <Input
         placeholder={t('business_registration')}
         keyboardType="numeric"
@@ -55,7 +57,7 @@ const ProviderPayment = () => {
         onBlur={onBlurRegistrationNumber}
         onChangeText={onChangeRegistrationNumber}
         ref={registrationNumberRef}
-        defaultValue={''}
+        defaultValue={providerProfile?.bankDetails?.registrationNumber ?? ''}
         inputValue={providerProfile?.bankDetails?.registrationNumber ?? ''}
         errorMessage={registrationError}
         returnKeyType={'next'}
@@ -71,7 +73,7 @@ const ProviderPayment = () => {
           onBlur={onBlurBankName}
           onChangeText={onChangeBankName}
           ref={bankNameRef}
-          defaultValue={''}
+          defaultValue={providerProfile?.bankDetails?.bankname ?? ''}
           inputValue={providerProfile?.bankDetails?.bankname ?? ''}
           errorMessage={bankNameError}
           returnKeyType={'next'}
@@ -86,7 +88,7 @@ const ProviderPayment = () => {
           onBlur={onBlurBranchType}
           onChangeText={onChangeBranchType}
           ref={branchRef}
-          defaultValue={''}
+          defaultValue={providerProfile?.bankDetails?.branchname ?? ''}
           inputValue={providerProfile?.bankDetails?.branchname ?? ''}
           errorMessage={branchError}
           returnKeyType={'next'}
@@ -94,7 +96,7 @@ const ProviderPayment = () => {
           onClearInputText={() => branchRef.current.clear()}
         />
       </View>
-      {isLoading && <Loader />}
+
       <Input
         placeholder={t('bank_account')}
         inputStyle={styles.input}
@@ -103,7 +105,7 @@ const ProviderPayment = () => {
         onBlur={onBlurAccount}
         onChangeText={onChangeAccount}
         ref={accountRef}
-        defaultValue={''}
+        defaultValue={providerProfile?.bankDetails?.accountnumber ?? ''}
         inputValue={providerProfile?.bankDetails?.accountnumber ?? ''}
         errorMessage={accountError}
         onClearInputText={() => accountRef.current.clear()}
@@ -141,6 +143,7 @@ const ProviderPayment = () => {
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
           imageUri={getImageUrl}
+          isLoading={setIsLoading}
         />
       </View>
 

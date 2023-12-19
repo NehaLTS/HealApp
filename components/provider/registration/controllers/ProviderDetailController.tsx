@@ -6,27 +6,31 @@ import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 const ProviderDetailController = () => {
+  const { setCurrentStep, setProviderProfile, providerProfile, token } =
+    UseProviderUserContext();
   const firstNameRef = React.useRef<any>('');
   const lastNameRef = React.useRef<any>('');
   const [isShowModal, setIsShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [firstNameError, setFirstNameError] = useState('');
   const [lastNameError, setLastNameError] = useState('');
   const [providerTypeError, setProviderTypeError] = useState('');
   const [specialityError, setSpecialityError] = useState('');
   const [providerTypeList, setProviderTypeList] = useState<ProviderType[]>([]);
   const [specialityList, setSpecialityList] = useState<ProviderSpeciality[]>(
-    [],
+    providerProfile?.provider?.specialties ?? [],
   );
   console.log('specialityList', providerTypeList);
-  const [idPicture, setIdPicture] = useState('');
+  const [idPicture, setIdPicture] = useState(providerProfile?.idPicture ?? '');
   const { t } = useTranslation();
   const { onGetProviderTypes } = AuthServicesProvider();
-  const { setCurrentStep, setProviderProfile, providerProfile, token } =
-    UseProviderUserContext();
 
-  const [selectedProvider, setSelectedProvider] = useState<ProviderType>();
+  const [selectedProvider, setSelectedProvider] = useState<ProviderType>(
+    providerProfile?.provider,
+  );
   const [selectedSpecialty, setSelectedSpeciality] =
-    useState<ProviderSpeciality>();
+    useState<ProviderSpeciality>(providerProfile?.speciality);
+
   console.log('selectedProvider', selectedProvider);
   console.log('selectedSpecialty', selectedSpecialty);
   const onBlurFirstName = () => validateFirstName();
@@ -44,10 +48,9 @@ const ProviderDetailController = () => {
   const onBlurProviderType = () => validateProviderType();
 
   const onChangeProviderType = (value: ProviderType) => {
-
     setSelectedProvider(value);
     setProviderTypeError('');
-    if (value.specialties) setSpecialityList(value.specialties);
+    if (value?.specialties) setSpecialityList(value?.specialties);
   };
 
   const onBlurSpeciality = () => validateSpeciality();
@@ -135,11 +138,12 @@ const ProviderDetailController = () => {
       idPicture
     ) {
       setProviderProfile({
+        ...providerProfile,
         firstName: firstNameRef.current.value,
         lastName: lastNameRef.current.value,
         provider: selectedProvider,
         speciality: selectedSpecialty,
-        phoneNumber: '',
+        idPicture: idPicture,
       });
       setCurrentStep('address');
     } else {
@@ -182,6 +186,8 @@ const ProviderDetailController = () => {
     getImageUrl,
     setIsShowModal,
     idPicture,
+    isLoading,
+    setIsLoading,
   };
 };
 

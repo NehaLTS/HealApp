@@ -672,6 +672,7 @@ const HomeScreen = () => {
               isShowModal={isShowModal}
               closeModal={setIsShowModal}
               imageUri={getImageUrl}
+              // isLoading={() => null}
             />
           </>
         ) : (

@@ -49,6 +49,7 @@ const UserAddressView = () => {
     onSearchAddress,
     isLoader,
     setDateOfBirthError,
+    setIsLoader,
   } = UserAddressViewController();
   const currentDate = new Date();
 
@@ -74,6 +75,7 @@ const UserAddressView = () => {
 
   return (
     <>
+      {isLoader && <Loader />}
       {open && (
         <DatePicker
           modal
@@ -95,7 +97,6 @@ const UserAddressView = () => {
         />
       )}
       <View style={styles.inputContainer}>
-        {isLoader && <Loader />}
         <Input
           placeholder={t('address')}
           inputStyle={styles.input}
@@ -182,6 +183,7 @@ const UserAddressView = () => {
             isShowModal={isShowModal}
             closeModal={setIsShowModal}
             imageUri={getImageUrl}
+            isLoading={setIsLoader}
           />
         </View>
       </View>

@@ -172,10 +172,12 @@ export interface ProviderProfile {
   licensenumber?: string;
   licensepicture?: string;
   bankDetails?: ProviderBankDetails;
-  services?: ProviderServices[]
+  services?: ProviderServices[];
+  specialityList?: ProviderSpeciality[];
 }
 
 export interface ProviderType {
+  specialties?: ProviderSpeciality[];
   name: HealLanguageType;
   id: string;
 }
@@ -268,8 +270,8 @@ export interface ProviderRating {
 }
 
 export interface userLocation {
-  currentLocation?: userlocationType
-  onboardingLocation?: userlocationType
+  currentLocation?: userlocationType;
+  onboardingLocation?: userlocationType;
 }
 export interface userlocationType {
   latitude?: string;

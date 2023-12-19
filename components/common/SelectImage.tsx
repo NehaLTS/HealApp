@@ -3,7 +3,7 @@ import { Alert, Text, TouchableOpacity, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { colors } from 'designToken/colors';
 import { fontWeight } from 'designToken/fontWeights';
-import { getHeight, getWidth } from 'libs/StyleHelper';
+import { getHeight } from 'libs/StyleHelper';
 import Modal from 'react-native-modal/dist/modal';
 import uploadImage from 'libs/uploadImage';
 
@@ -11,10 +11,12 @@ const SelectImage = ({
   imageUri,
   closeModal,
   isShowModal,
+  isLoading,
 }: {
   imageUri: (path: string) => void;
   closeModal: (path: boolean) => void;
   isShowModal: boolean;
+  isLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [width, setWidth] = useState(250);
   const [height, setHeight] = useState(250);
@@ -25,15 +27,31 @@ const SelectImage = ({
       height,
       cropping: true,
     })
-      .then((image) => {
-        imageUri(image?.path ?? '');
+      .then(async (image) => {
+        image.path.length && (image?.path ?? '');
         setHeight(height);
         setWidth(width);
         closeModal(false);
-        console.log('gallery image******', image);
+        const imagePath = image?.path;
+        const folderName = 'images/users';
+        const fileName = 'profile.jpg';
+        try {
+          isLoading(true);
+          let getImage = await uploadImage(imagePath, folderName, fileName);
+          console.log('getImage', getImage);
+          if (getImage) {
+            imageUri(getImage);
+            isLoading(false);
+          }
+        } catch {
+          console.log('Filed upload image');
+        }
       })
-      .catch((error) => {
-        console.log('error gallery', error);
+      .catch((error: Error) => {
+        console.log('error camera', error);
+        if (error.message.includes('permission')) {
+          Alert.alert('Please give Camera Permission from Settings');
+        }
       });
   };
 
@@ -43,30 +61,28 @@ const SelectImage = ({
       height,
       cropping: true,
     })
-      .then((image) => {
-        image.path.length && imageUri(image?.path ?? '');
+      .then(async (image) => {
+        image.path.length && (image?.path ?? '');
         setHeight(height);
         setWidth(width);
         closeModal(false);
-        console.log('camera image******', image);
-        // console.log(image)
-        // const imagePath = image?.path;
-        // const folderName = 'images/users';
-        // const fileName = 'profile.jpg';
-        // uploadImage(imagePath, folderName, fileName)
-        //   .then((downloadURL) => {
-        //     // Handle the downloadURL as needed
-        //     console.log('Download URL:', downloadURL);
-
-        //   })
-        //   .catch((error) => {
-        //     // Handle any errors
-        //     console.error('Error uploading image:', error);
-        //   });
+        const imagePath = image?.path;
+        const folderName = 'images/users';
+        const fileName = 'profile.jpg';
+        try {
+          isLoading(true);
+          let getImage = await uploadImage(imagePath, folderName, fileName);
+          console.log('getImage', getImage);
+          if (getImage) {
+            imageUri(getImage);
+            isLoading(false);
+          }
+        } catch {
+          console.log('Filed upload image');
+        }
       })
       .catch((error: Error) => {
         console.log('error camera', error);
-
         if (error.message.includes('permission')) {
           Alert.alert('Please give Camera Permission from Settings');
         }

@@ -8,40 +8,42 @@ import { Alert } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 
 const ProviderAddressController = () => {
-  const [phoneError, setPhoneError] = useState('');
-  const [addressError, setAddressError] = useState('');
-  const [licenseError, setLicenseError] = useState('');
-
-  const [licensePicture, setLicensePicture] = useState('');
-  const [isShowModal, setIsShowModal] = useState(false);
-  const [isShowAddressodal, setIsShowAddressodal] = useState(false);
-  const phoneRef = React.useRef<any>('');
-  const licenseRef = React.useRef<any>('');
-  const addressRef = React.useRef<any>('');
   const {
     setCurrentStep,
     setProviderProfile,
     providerProfile,
     userLocation,
-    setUserLocation
+    setUserLocation,
   } = UseProviderUserContext();
+  const [phoneError, setPhoneError] = useState('');
+  const [addressError, setAddressError] = useState('');
+  const [licenseError, setLicenseError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [licensePicture, setLicensePicture] = useState(
+    providerProfile?.licensepicture ?? '',
+  );
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowAddressodal, setIsShowAddressodal] = useState(false);
+  const phoneRef = React.useRef<any>('');
+  const licenseRef = React.useRef<any>('');
+  const addressRef = React.useRef<any>('');
+
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [onSearchAddress, setOnSearchAddress] = useState(
-    userLocation?.currentLocation?.address ?? '',
+    providerProfile?.address ?? '',
   );
-  const [geomatricAddress, setGeomatricAddress] = useState(
-    userLocation ?? '',
-  );
-  useEffect(() => {
-    if (providerProfile?.firstName) {
-      phoneRef.current.value = providerProfile?.phoneNumber;
-      licenseRef.current.value = providerProfile?.licensenumber;
-      addressRef.current.value = providerProfile?.address;
-    }
-  }, []);
-
-  const onBlurPhoneNumber = () => { };
+  const [geomatricAddress, setGeomatricAddress] = useState(userLocation ?? '');
+  console.log('providerProfile', providerProfile);
+  // useEffect(() => {
+  //   if (providerProfile?.firstName) {
+  //     phoneRef.current.value = providerProfile?.phoneNumber;
+  //     licenseRef.current.value = providerProfile?.licensenumber;
+  //     addressRef.current.value = providerProfile?.address;
+  //   }
+  // }, []);
+  console.log('address screen', providerProfile);
+  const onBlurPhoneNumber = () => {};
 
   const onChangePhoneNumber = (value: string) => {
     phoneRef.current.value = value;
@@ -51,7 +53,7 @@ const ProviderAddressController = () => {
   const onChangeLicenseNumber = (value: string) => {
     licenseRef.current.value = value;
   };
-  const onBlurAddress = () => { };
+  const onBlurAddress = () => {};
 
   const onChangeAddress = (
     value: string,
@@ -61,7 +63,9 @@ const ProviderAddressController = () => {
     addressRef.current.value = value;
     setOnSearchAddress(value ?? '');
     validateAddress(value ?? '');
-    setGeomatricAddress({ onboardingLocation: { latitude: latitude, longitude: longitude } })
+    setGeomatricAddress({
+      onboardingLocation: { latitude: latitude, longitude: longitude },
+    });
     console.log('valueChnage latitude', value, latitude, longitude);
   };
 
@@ -75,7 +79,7 @@ const ProviderAddressController = () => {
         Alert.alert(t('select_license_picture'));
       } else {
         setProviderProfile({
-          ...(providerProfile as ProviderProfile),
+          ...providerProfile,
           address: onSearchAddress,
           phoneNumber: phoneRef.current.value,
           licensenumber: licenseRef.current.value,
@@ -86,16 +90,19 @@ const ProviderAddressController = () => {
         setUserLocation((prevState) => ({
           ...prevState,
           onboardingLocation: {
-            address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
+            address: onSearchAddress,
+            latitude: geomatricAddress.onboardingLocation?.latitude,
+            longitude: geomatricAddress.onboardingLocation?.longitude,
           },
-          currentLocation: prevState?.currentLocation
+          currentLocation: prevState?.currentLocation,
         }));
         setLocalData('LOCATION', {
           onboardingLocation: {
-            address: onSearchAddress, latitude: geomatricAddress.onboardingLocation?.latitude, longitude: geomatricAddress.onboardingLocation?.longitude
-
-          }
-        })
+            address: onSearchAddress,
+            latitude: geomatricAddress.onboardingLocation?.latitude,
+            longitude: geomatricAddress.onboardingLocation?.longitude,
+          },
+        });
       }
     } else {
       if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
@@ -144,6 +151,8 @@ const ProviderAddressController = () => {
     onPressBack,
     isVisible,
     setIsVisible,
+    isLoading,
+    setIsLoading,
   };
 };
 
