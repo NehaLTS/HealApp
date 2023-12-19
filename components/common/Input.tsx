@@ -72,7 +72,7 @@ const Input = forwardRef(
     const moveText = useRef(new Animated.Value(inputValue ? 1 : 0)).current;
     const fontSizeAnim = useRef(
       new Animated.Value(
-        inputValue ? getWidth(fontSize.textS) : getWidth(fontSize.textL - 1),
+        inputValue ? getHeight(fontSize.textS) : getHeight(fontSize.textL - 1),
       ),
     ).current;
 
@@ -86,7 +86,7 @@ const Input = forwardRef(
           useNativeDriver: false,
         }),
         Animated.timing(fontSizeAnim, {
-          toValue: getWidth(fontSize.textS),
+          toValue: getHeight(fontSize.textS),
           duration: 200,
           useNativeDriver: false,
         }),
@@ -101,7 +101,7 @@ const Input = forwardRef(
             useNativeDriver: false,
           }),
           Animated.timing(fontSizeAnim, {
-            toValue: getWidth(fontSize.textL),
+            toValue: getHeight(fontSize.textL),
             duration: 200,
             useNativeDriver: false,
           }),
@@ -111,7 +111,7 @@ const Input = forwardRef(
 
     const translateY = moveText.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, -20],
+      outputRange: [0, -21],
     });
 
     const labelStyle = {
@@ -221,10 +221,10 @@ const Input = forwardRef(
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
-    borderWidth: getWidth(dimens.borderBold),
-    borderRadius: getWidth(dimens.marginS),
+    borderWidth: getHeight(dimens.borderBold),
+    borderRadius: getHeight(dimens.marginS),
     flexDirection: 'row',
-    height: getHeight(dimens.imageS),
+    minHeight: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
     minWidth: '24%',
   },
@@ -258,12 +258,13 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     top: getHeight(dimens.marginS + 1),
-    left: getHeight(dimens.paddingXs + dimens.borderThin),
+    left: getWidth(dimens.paddingXs + dimens.borderThin),
     backgroundColor: colors.offWhite,
     color: colors.black,
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
     fontFamily: fontFamily.regular,
     fontSize: getHeight(fontSize.textL),
+    lineHeight: getHeight(22),
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),

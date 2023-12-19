@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS),
-    width: getWidth(dimens.imageS),
+    width: getHeight(dimens.imageS),
     borderRadius: getHeight(dimens.paddingS),
   },
   text: {
@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
   editImage: {
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
+    resizeMode: 'center',
     // paddingLeft: getWidth(5)
   },
   inputContainer: {

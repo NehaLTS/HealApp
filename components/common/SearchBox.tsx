@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
     borderWidth: getWidth(dimens.borderThin),
-    borderRadius: getWidth(dimens.marginS),
+    borderRadius: getHeight(dimens.marginS),
     borderColor: colors.primary,
     flexDirection: 'row',
     marginVertical: getHeight(dimens.marginL),
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     flex: 1,
     alignSelf: 'flex-end',
-    borderRadius: getWidth(dimens.marginS),
+    borderRadius: getHeight(dimens.marginS),
     marginLeft: getHeight(dimens.marginS),
     fontFamily: fontFamily.regular,
     height: getHeight(36),

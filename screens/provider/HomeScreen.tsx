@@ -591,8 +591,8 @@ const HomeScreen = () => {
             title={t('take_order')}
             style={styles.takeOrderButton}
             isSmall
-            width={getWidth(150)}
-            height={getWidth(36)}
+            width={getHeight(150)}
+            height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             background={colors.white}
             onPress={onPressTreatmentEnd}
@@ -622,8 +622,8 @@ const HomeScreen = () => {
             title={t('yes')}
             style={styles.takeOrderButton}
             isSmall
-            width={getWidth(80)}
-            height={getWidth(36)}
+            width={getHeight(80)}
+            height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             onPress={() => onConfirmCancelOrder('yes')}
           />
@@ -631,8 +631,8 @@ const HomeScreen = () => {
             title={t('no')}
             style={styles.takeOrderButton}
             isSmall
-            width={getWidth(80)}
-            height={getWidth(36)}
+            width={getHeight(80)}
+            height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             onPress={() => onConfirmCancelOrder('no')}
           />
@@ -688,7 +688,7 @@ const HomeScreen = () => {
           style={styles.takeOrderButton}
           isSmall
           isPrimary
-          height={getWidth(36)}
+          height={getHeight(36)}
           fontSized={getHeight(fontSize.textL - dimens.borderThin)}
           onPress={isAddDocument ? onPressUpload : handleAddDocument}
         />
@@ -724,7 +724,7 @@ const HomeScreen = () => {
       {dropdownVisible && (
         <View style={styles.dropdown}>
           <TextButton
-            title={'Logout'}
+            title={t('logout')}
             onPress={onLogoutButtonPress}
             fontSize={getHeight(18)}
             style={styles.logout}
@@ -1030,7 +1030,7 @@ const styles = StyleSheet.create({
   },
   detailCardContainer: {
     width: '100%',
-    padding: getWidth(dimens.marginL),
+    padding: getHeight(dimens.marginL),
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: getHeight(dimens.marginS),
@@ -1131,11 +1131,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    top: getHeight(43),
+    top: getHeight(45),
     right: getHeight(0),
     backgroundColor: colors.offWhite,
     borderRadius: getHeight(5),
-    borderWidth: getHeight(1),
+    borderWidth: getWidth(1),
     borderColor: colors.primary,
     padding: getHeight(10),
     width: getHeight(100),

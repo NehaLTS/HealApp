@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     height: getHeight(dimens.imageS + 8),
-    width: getWidth(dimens.imageS + 2),
+    width: getHeight(dimens.imageS + 2),
     borderRadius: getHeight(dimens.paddingS),
     resizeMode: 'contain',
   },
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.paddingL + 2),
     width: getWidth(dimens.paddingL),
     marginTop: getHeight(dimens.paddingS),
+    resizeMode: 'center',
   },
   editProfile: {
     height: getHeight(dimens.imageS + 8),

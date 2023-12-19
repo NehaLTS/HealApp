@@ -11,11 +11,13 @@ const ProviderArrivalInfo = ({
   onCancelOrder,
   status,
   doctorName,
+  onPressCall,
 }: {
   onPress: () => void;
   onCancelOrder: () => void;
   status: string;
   doctorName: string;
+  onPressCall: () => void;
 }) => {
   return (
     <TouchableOpacity style={styles.modalView} onPress={onPress}>
@@ -40,7 +42,7 @@ const ProviderArrivalInfo = ({
             />
           </View>
         </View>
-        <TouchableOpacity style={styles.callButton} disabled>
+        <TouchableOpacity style={styles.callButton} onPress={onPressCall}>
           <Image
             source={require('../../assets/icon/phonecall.png')}
             style={styles.phoneIcon}

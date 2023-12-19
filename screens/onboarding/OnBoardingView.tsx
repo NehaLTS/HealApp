@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Animated, Image, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import logo from '../../assets/icon/logo.png';
+import logo from '../../assets/icon/healLogo.png';
 import Button from '../../components/common/Button';
 import { colors } from '../../designToken/colors';
 import { dimens } from '../../designToken/dimens';
@@ -132,7 +132,7 @@ const OnBoardingView = () => {
         ))}
       </Swiper>
       <View style={styles.buttonContainer}>
-        <Button title={t('skip')} width={'25%'} onPress={onPressSkip} />
+        <Button title={t('skip')} width={'24%'} onPress={onPressSkip} />
       </View>
     </View>
   );
@@ -153,17 +153,19 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
   },
   logo: {
-    width: getWidth(330),
-    height: getHeight(380),
+    // width: getWidth(300),
+    // height: getHeight(380),
     alignSelf: 'center',
-    flex: 0.4,
+    flex: 0.3,
+    resizeMode: 'center',
+    marginBottom: getHeight(20),
   },
   buttonContainer: {
     flex: 0.12,
     paddingTop: getHeight(dimens.paddingXs),
   },
   activeDotStyle: {
-    width: getWidth(dimens.marginM),
+    width: getHeight(dimens.marginM),
   },
   containerStyle: {
     flex: 0.48,

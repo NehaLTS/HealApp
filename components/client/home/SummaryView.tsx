@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
   },
   locationIcon: {
-    width: getWidth(dimens.sideMargin),
+    width: getHeight(dimens.sideMargin),
     height: getHeight(dimens.marginM),
     resizeMode: 'contain',
   },
@@ -237,8 +237,7 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     flexDirection: 'row',
-    gap: getWidth(dimens.marginS + dimens.marginS),
-    marginBottom: 10,
+    gap: getHeight(dimens.marginS + dimens.marginS),
     alignItems: 'center',
   },
   voltaireText: {
@@ -273,13 +272,12 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
-    marginTop: getWidth(dimens.marginM),
-    marginBottom: getWidth(dimens.marginM),
-    justifyContent: 'space-between',
+    marginTop: getHeight(dimens.marginM),
+    marginBottom: getHeight(dimens.marginM),
+    gap: getWidth(40),
   },
   patientAndAddress: {
     flexDirection: 'column',
-    width: '50%',
   },
   total: {
     fontFamily: fontFamily.medium,

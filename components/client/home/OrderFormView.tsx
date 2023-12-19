@@ -410,10 +410,10 @@ const styles = StyleSheet.create({
     fontSize: getHeight(11),
   },
   checkBox: {
-    width: getWidth(dimens.sideMargin + dimens.borderBold),
-    height: getWidth(dimens.sideMargin + dimens.borderBold),
-    borderRadius: getWidth(dimens.borderThin),
-    borderWidth: getWidth(dimens.borderThin),
+    width: getHeight(dimens.sideMargin + dimens.borderBold),
+    height: getHeight(dimens.sideMargin + dimens.borderBold),
+    borderRadius: getHeight(dimens.borderThin),
+    borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.black,
     justifyContent: 'center',
     alignItems: 'center',
@@ -456,11 +456,11 @@ const styles = StyleSheet.create({
     marginLeft: getWidth(dimens.marginS),
   },
   inputContainer: {
-    borderWidth: getWidth(dimens.borderBold),
-    borderRadius: getWidth(dimens.marginS),
+    borderWidth: getHeight(dimens.borderBold),
+    borderRadius: getHeight(dimens.marginS),
     borderColor: colors.primary,
     paddingHorizontal: getWidth(dimens.marginS),
-    paddingBottom: getWidth(dimens.marginS),
+    paddingBottom: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.marginS + 4),
   },
   arrowIcon: {
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
     height: getHeight(117),
   },
   image: {
-    width: getWidth(dimens.paddingS),
+    width: getHeight(dimens.paddingS),
     height: getHeight(dimens.paddingS),
     resizeMode: 'contain',
   },

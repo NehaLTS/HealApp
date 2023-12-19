@@ -121,7 +121,7 @@ const AddAddress = ({
         <Input
           ref={inputRef}
           onLayout={() => inputRef.current.focus()}
-          inputPlaceholder={'Search address'}
+          inputPlaceholder={t('search_address')}
           type={'fullStreetAddress'}
           inputStyle={[{ minWidth: '84%' }]}
           onChangeText={handleInputChange}
@@ -154,16 +154,11 @@ const AddAddress = ({
           )}
         />
       ) : addressValue.length === 0 ? (
-        <Text style={styles.addressNotFound} title={'Search your address.'} />
+        <Text style={styles.addressNotFound} title={t('your_address')} />
       ) : addressValue.length > 0 && isLoading ? (
         <Loader isSmall />
       ) : (
-        <Text
-          style={styles.addressNotFound}
-          title={
-            'Address not found.\nPlease try again or enter a different address.'
-          }
-        />
+        <Text style={styles.addressNotFound} title={t('address_not_found')} />
       )}
     </RNModal>
   );

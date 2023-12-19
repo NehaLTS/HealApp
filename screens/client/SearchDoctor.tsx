@@ -380,32 +380,36 @@ const SearchDoctor = () => {
           ) : null}
         </View>
 
-        {providerStatus !== ARRIVED && !showTimer && !providerNotFound && (
+        {providerStatus !== ARRIVED && (
           <View>
-            <Button
-              title={
-                providerLocation !== undefined &&
-                providerLocation.latitude !== 0.0 &&
-                !showLoader &&
-                !showCancelButton
-                  ? t('order')
-                  : t('cancel')
-              }
-              isPrimary
-              isSmall
-              onPress={onPressOrder}
-              width={'30%'}
-              height={getHeight(dimens.imageS)}
-              style={{ alignSelf: 'center', marginBottom: 10 }}
-              disabled={isBookOrder}
-            />
-            {showCancelTextButton && !showLoader && (
-              <TextButton
-                style={{ alignSelf: 'center' }}
-                title={t('cancel')}
-                onPress={() => {}}
-                fontSize={getHeight(fontSize.textXl)}
+            {!showTimer && !providerNotFound && (
+              <Button
+                title={
+                  providerLocation !== undefined &&
+                  providerLocation.latitude !== 0.0 &&
+                  !showLoader &&
+                  !showCancelButton
+                    ? t('order')
+                    : t('cancel')
+                }
+                isPrimary
+                isSmall
+                onPress={onPressOrder}
+                width={'30%'}
+                height={getHeight(dimens.imageS)}
+                style={{ alignSelf: 'center', marginBottom: 10 }}
+                disabled={isBookOrder}
               />
+            )}
+            {!showLoader && (
+              <>
+                <TextButton
+                  style={{ alignSelf: 'center' }}
+                  title={t('cancel')}
+                  onPress={() => {}}
+                  fontSize={getHeight(fontSize.textXl)}
+                />
+              </>
             )}
             <Text
               style={styles.noFee}
@@ -414,9 +418,7 @@ const SearchDoctor = () => {
                   providerLocation.latitude === 0.0) ||
                 showLoader
                   ? t('no_fee_collected')
-                  : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                  : t('3_minutes_to_cancel')
               }
             />
           </View>
@@ -465,13 +467,13 @@ const styles = StyleSheet.create({
     padding: getWidth(dimens.marginS),
     borderRadius: 8,
     flexDirection: 'row',
-    width: '100%',
+    width: '90%',
     gap: getHeight(10),
   },
   doctorIcon: {
-    width: getWidth(dimens.imageS),
+    width: getHeight(dimens.imageS),
     height: getHeight(dimens.imageS),
-    resizeMode: 'cover',
+    resizeMode: 'center',
     borderRadius: getHeight(dimens.imageS),
   },
   doctorName: {

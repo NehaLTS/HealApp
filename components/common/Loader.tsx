@@ -1,5 +1,5 @@
 import { colors } from 'designToken/colors';
-import { getWidth } from 'libs/StyleHelper';
+import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -66,7 +66,7 @@ export const LoaderLarge = () => {
         source={require('assets/icon/circle.png')}
         style={{
           width: getWidth(280),
-          height: getWidth(280),
+          height: getHeight(280),
           resizeMode: 'center',
           transform: [{ rotate: spin }],
         }}
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   dot: {
     width: getWidth(10),
     height: getWidth(10),
-    borderRadius: getWidth(10),
+    borderRadius: getHeight(10),
     backgroundColor: colors.primary,
   },
 });

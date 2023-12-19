@@ -8,9 +8,11 @@ import Input from 'components/common/Input';
 import { colors } from 'designToken/colors';
 import { fontSize } from 'designToken/fontSizes';
 import Button from 'components/common/Button';
+import { useTranslation } from 'react-i18next';
 
 const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
   const tipAmounts = ['5 NIS', '10 NIS', '15 NIS', 'Other'];
+  const { t } = useTranslation();
 
   return (
     <>
@@ -31,14 +33,11 @@ const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
           style={styles.familyDoctorText}
         />
         <Text
-          title={'Liked our services?'}
+          title={t('liked_services')}
           style={{ fontSize: getHeight(18), marginBottom: getHeight(50) }}
         />
       </View>
-      <Text
-        title={'You can also leave the tip if you wish'}
-        style={styles.tipText}
-      />
+      <Text title={t('you_can_leave')} style={styles.tipText} />
       <View style={styles.buttonContainer}>
         {tipAmounts.map((title, index) => (
           <Button
@@ -59,7 +58,7 @@ const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
         }}
       >
         <Button
-          title={'Done'}
+          title={t('done')}
           isPrimary
           isSmall
           style={{ alignSelf: 'center' }}
@@ -79,10 +78,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.imageM + dimens.marginL),
     resizeMode: 'contain',
   },
-  starIcon: {
-    height: getHeight(dimens.marginL),
-    width: getWidth(dimens.marginL),
-  },
+
   container: {
     alignItems: 'center',
     gap: getHeight(8),
@@ -94,7 +90,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flexDirection: 'row',
-    gap: getHeight(20),
+    gap: getWidth(20),
     marginTop: getHeight(dimens.marginM),
     marginBottom: getHeight(dimens.imageS),
   },
@@ -111,15 +107,16 @@ const styles = StyleSheet.create({
   rating: {
     position: 'absolute',
     bottom: getHeight(-11),
-    right: getWidth(dimens.imageS + dimens.imageS),
+    right: getWidth(115),
     fontSize: getHeight(fontSize.textM),
   },
   star: {
     position: 'absolute',
     bottom: getHeight(dimens.marginS),
-    right: getWidth(dimens.imageS + dimens.imageS),
+    right: getWidth(112),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
+    resizeMode: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',

@@ -5,8 +5,16 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { dimens } from 'designToken/dimens';
 import { colors } from 'designToken/colors';
 
-const Checkbox = ({ isWhite, isChecked }: { isWhite?: boolean, isChecked?: boolean }) => {
-  const [activeCheckbox, setActiveCheckbox] = React.useState(isChecked ?? false);
+const Checkbox = ({
+  isWhite,
+  isChecked,
+}: {
+  isWhite?: boolean;
+  isChecked?: boolean;
+}) => {
+  const [activeCheckbox, setActiveCheckbox] = React.useState(
+    isChecked ?? false,
+  );
   return (
     <TouchableOpacity
       style={{ ...styles.checkboxContainer }}
@@ -16,8 +24,8 @@ const Checkbox = ({ isWhite, isChecked }: { isWhite?: boolean, isChecked?: boole
         style={[
           styles.checkBox,
           isWhite && {
-            width: getWidth(27),
-            height: getWidth(27),
+            width: getHeight(27),
+            height: getHeight(27),
             borderColor: colors.white,
           },
         ]}
@@ -34,7 +42,7 @@ const Checkbox = ({ isWhite, isChecked }: { isWhite?: boolean, isChecked?: boole
         )}
       </View>
       {!isWhite && (
-        <Text style={{ fontSize: getWidth(fontSize.textM + 1) }}>text</Text>
+        <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>text</Text>
       )}
     </TouchableOpacity>
   );
@@ -55,9 +63,9 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   checkBox: {
-    width: getWidth(dimens.sideMargin + dimens.borderBold),
-    height: getWidth(dimens.sideMargin + dimens.borderBold),
-    borderRadius: getWidth(dimens.borderThin),
+    width: getHeight(dimens.sideMargin + dimens.borderBold),
+    height: getHeight(dimens.sideMargin + dimens.borderBold),
+    borderRadius: getHeight(dimens.borderThin),
     borderWidth: getWidth(dimens.borderThin),
     borderColor: colors.black,
     justifyContent: 'center',

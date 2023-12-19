@@ -173,7 +173,16 @@
   "on_way": "on the way",
   "arrived": "arrived",
   "cvv_invalid": "cvv invalid",
-
+  "search_address": "Search address",
+  "your_address": "Search your address.",
+  "address_not_found": "Address not found.\nPlease try again or enter a different address.",
+  "logout": "Logout",
+  "approve_payment": "Approve payment",
+  "add_favourites": "Add to favourites",
+  "treatment_end": "Treatment is ended",
+  "done": "Done",
+  "liked_services": "Liked our services?",
+  "you_can_leave": "You can also leave the tip if you wish",
   "home": {
     "providerList": [
       {

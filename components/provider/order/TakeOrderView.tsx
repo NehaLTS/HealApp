@@ -23,14 +23,13 @@ const TakeOrderView = ({
   onPressSeeMore,
   onPressCancelOrder,
   isModalVisible,
-  onPressUpdateArrive
-
+  onPressUpdateArrive,
 }: {
   order: any;
   onPressSeeMore: () => void;
   onPressCancelOrder: () => void;
   isModalVisible: boolean;
-  onPressUpdateArrive: () => void
+  onPressUpdateArrive: () => void;
 }) => {
   const { t } = useTranslation();
   const [seconds, setSeconds] = React.useState(300);
@@ -48,8 +47,9 @@ const TakeOrderView = ({
     const formatTime = (time: number) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
-        }${remainingSeconds}`;
+      return `${minutes}:${
+        remainingSeconds < 10 ? '0' : ''
+      }${remainingSeconds}`;
     };
 
     return (
@@ -119,11 +119,14 @@ const TakeOrderView = ({
                     style={styles.details}
                     title={
                       JSON.parse?.(order?.OrderReceive?.services)?.length > 1
-                        ? `${index !==
-                          JSON.parse?.(order?.OrderReceive?.services)?.length - 1
-                          ? ` ${service?.service_name}, `
-                          : ` ${service?.service_name}`
-                        }`
+                        ? `${
+                            index !==
+                            JSON.parse?.(order?.OrderReceive?.services)
+                              ?.length -
+                              1
+                              ? ` ${service?.service_name}, `
+                              : ` ${service?.service_name}`
+                          }`
                         : service?.service_name
                     }
                     entering={FadeInLeft.duration(400).delay(700)}
@@ -135,12 +138,17 @@ const TakeOrderView = ({
         )}
         <AnimatedText
           style={styles.otherDetails}
-          title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-            }    ${order?.OrderReceive?.distance !== 'undefined'
+          title={`${order?.OrderReceive?.firstname}  ${
+            order?.OrderReceive?.lastname
+          }    ${
+            order?.OrderReceive?.distance !== 'undefined'
               ? order?.OrderReceive?.time
               : 0
-            } km, ~${order?.OrderReceive?.time !== 'undefined' ? order?.OrderReceive?.time : 0
-            } min`}
+          } km, ~${
+            order?.OrderReceive?.time !== 'undefined'
+              ? order?.OrderReceive?.time
+              : 0
+          } min`}
           entering={FadeInLeft.duration(400).delay(600)}
         />
         <AnimatedText
@@ -231,16 +239,15 @@ const TakeOrderView = ({
             onPress={onPressCancelOrder}
           />
           <Button
-            title={"Update you arrived"}
+            title={'Update you arrived'}
             style={styles.takeOrderButton}
             isSmall
-            width={getWidth(150)}
-            height={getWidth(36)}
+            width={getHeight(150)}
+            height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             background={colors.white}
             onPress={onPressUpdateArrive}
           />
-
         </View>
         {/* )} */}
       </Animated.View>

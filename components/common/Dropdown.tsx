@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(4),
     position: 'absolute',
     right: 0,
+    resizeMode: 'contain',
   },
   placeholder: {
     color: colors.black,

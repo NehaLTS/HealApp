@@ -8,6 +8,7 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Image,
   KeyboardAvoidingView,
@@ -24,6 +25,7 @@ const RatingView = ({
   onPress: () => void;
   rating: React.Dispatch<React.SetStateAction<number>>;
 }) => {
+  const { t } = useTranslation();
   return (
     <>
       <KeyboardAvoidingView behavior={'height'} keyboardVerticalOffset={10}>
@@ -66,7 +68,7 @@ const RatingView = ({
           />
 
           <Button
-            title={'Next'}
+            title={t('next')}
             isPrimary
             isSmall
             width={'30%'}
@@ -120,15 +122,16 @@ const styles = StyleSheet.create({
   rating: {
     position: 'absolute',
     bottom: getHeight(-11),
-    right: getWidth(dimens.imageS + dimens.imageS),
+    right: getWidth(115),
     fontSize: getHeight(fontSize.textM),
   },
   star: {
     position: 'absolute',
     bottom: getHeight(dimens.marginS),
-    right: getWidth(dimens.imageS + dimens.imageS),
+    right: getWidth(112),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
+    resizeMode: 'contain',
   },
   tellText: {
     textAlign: 'center',

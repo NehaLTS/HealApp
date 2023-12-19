@@ -286,8 +286,9 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.paddingXs),
   },
   googlePay: {
-    height: getHeight(dimens.paddingL + dimens.borderBold),
+    height: getWidth(dimens.paddingL + dimens.borderBold),
     width: getWidth(dimens.marginL + dimens.borderBold),
+    resizeMode: 'center',
   },
   inputContainer: {
     gap: getHeight(dimens.paddingL),
@@ -295,7 +296,8 @@ const styles = StyleSheet.create({
   },
   creditCard: {
     width: getWidth(dimens.paddingL),
-    height: getHeight(dimens.marginM),
+    height: getWidth(dimens.marginM),
+    resizeMode: 'center',
   },
   googlePayContainer: {
     flexDirection: 'row',
@@ -356,8 +358,9 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.paddingS),
   },
   cardImages: {
-    height: getHeight(dimens.paddingL),
+    height: getWidth(dimens.paddingL),
     width: getWidth(dimens.paddingL),
+    resizeMode: 'center',
   },
   cardDetailContainer: {
     flexDirection: 'row',

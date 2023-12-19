@@ -30,6 +30,7 @@ import {
   DeviceEventEmitter,
   I18nManager,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   TouchableHighlight,
@@ -203,7 +204,7 @@ const HomeScreen = () => {
       {dropdownVisible && (
         <View style={styles.dropdown}>
           <TextButton
-            title={'Logout'}
+            title={t('logout')}
             onPress={onLogoutButtonPress}
             fontSize={getHeight(18)}
           />
@@ -353,6 +354,11 @@ const HomeScreen = () => {
                 });
               }
             }}
+            onPressCall={() => {
+              Linking.openURL(
+                `tel:${currentOrder?.providerDetails?.phoneNumber}`,
+              );
+            }}
             onCancelOrder={() => {
               setCurrentOrder({
                 orderId: '',
@@ -374,15 +380,6 @@ const HomeScreen = () => {
 
               //delete current order
               deleteOrder();
-
-              // setLocalData('ORDER', {
-              //   orderId: '',
-              //   providerDetails: undefined,
-              //   orderPrice: '',
-              //   orderStatus: '',
-              //   orderServices: [],
-              //   message: '',
-              // });
             }}
           />
         </View>
@@ -484,7 +481,7 @@ const styles = StyleSheet.create({
     right: getHeight(1),
     backgroundColor: colors.offWhite,
     borderRadius: getHeight(5),
-    borderWidth: 1,
+    borderWidth: getWidth(1),
     borderColor: colors.primary,
     padding: getHeight(10),
     width: getHeight(100),

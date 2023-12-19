@@ -8,6 +8,7 @@ import { fontFamily } from 'designToken/fontFamily';
 import { colors } from 'designToken/colors';
 import Button from 'components/common/Button';
 import { Order } from 'libs/types/OrderTypes';
+import { useTranslation } from 'react-i18next';
 
 const TreatmentEnd = ({
   onPress,
@@ -16,9 +17,10 @@ const TreatmentEnd = ({
   onPress: () => void;
   currentOrder: Order;
 }) => {
+  const { t } = useTranslation();
   return (
     <>
-      <Text title={'Treatment is ended'} style={styles.treatmentText} />
+      <Text title={t('treatment_end')} style={styles.treatmentText} />
       <View style={styles.imageContainer}>
         <View style={styles.doctorIconContainer}>
           <Image
@@ -48,7 +50,7 @@ const TreatmentEnd = ({
               source={require('../../../assets/icon/heart.png')}
               style={styles.heartIcon}
             />
-            <Text title={'Add to favourites'} style={styles.text} />
+            <Text title={t('add_favourites')} style={styles.text} />
           </View>
         </View>
       </View>
@@ -66,7 +68,7 @@ const TreatmentEnd = ({
           />
         </View>
         <View style={{ gap: getWidth(10) }}>
-          <Text title={'Order summary'} style={styles.order} />
+          <Text title={t('summary')} style={styles.order} />
           <View style={{ gap: 8 }}>
             {currentOrder?.orderServices.map((item, index) => (
               <Text
@@ -76,7 +78,7 @@ const TreatmentEnd = ({
               />
             ))}
             <View style={{ flexDirection: 'row' }}>
-              <Text title={'Total - '} style={styles.total} />
+              <Text title={t('total')} style={styles.total} />
               <Text title={currentOrder?.orderPrice} style={styles.text} />
             </View>
           </View>
@@ -89,7 +91,7 @@ const TreatmentEnd = ({
         }}
       >
         <Button
-          title={'Approve payment'}
+          title={t('approve_payment')}
           isPrimary
           isSmall
           style={{ alignSelf: 'center' }}
@@ -121,6 +123,7 @@ const styles = StyleSheet.create({
     right: getHeight(dimens.marginS + 8),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
+    resizeMode: 'center',
   },
   imageContainer: {
     flexDirection: 'row',

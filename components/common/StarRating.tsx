@@ -54,9 +54,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   star: {
-    width: getWidth(34),
+    width: getHeight(34),
     height: getHeight(34),
     marginHorizontal: getWidth(5),
+    resizeMode: 'center',
   },
 });
 

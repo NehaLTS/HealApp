@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   activeButtonView: {
     height: getHeight(dimens.marginL),
     width: getHeight(dimens.marginL),
-    borderRadius: getWidth(dimens.marginS),
+    borderRadius: getHeight(dimens.marginS),
     alignItems: 'center',
     justifyContent: 'center',
   },

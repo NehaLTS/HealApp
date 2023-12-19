@@ -14,7 +14,9 @@ export const providerStatusOnHeader = (statusOfArriving: string) => {
       return 'on the way';
     case ORDER_ACCEPTED:
       return 'on the way';
-    default:
+    case ESTIMATE_ARRIVAL:
       return 'is found';
+    default:
+      return null;
   }
 };

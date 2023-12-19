@@ -68,19 +68,21 @@ const ToggleButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    width: getWidth(92),
+    width: getHeight(92),
     height: getHeight(55),
     borderRadius: getHeight(50),
-    borderWidth: getWidth(5),
+    borderWidth: getHeight(5),
     borderColor: colors.secondary,
     justifyContent: 'center',
     paddingHorizontal: getWidth(8),
+    resizeMode: 'center',
   },
   handle: {
-    width: getWidth(28),
-    height: getWidth(28),
-    borderRadius: getWidth(20),
+    width: getHeight(28),
+    height: getHeight(28),
+    borderRadius: getHeight(20),
     backgroundColor: colors.secondary,
+    resizeMode: 'center',
   },
 });
 

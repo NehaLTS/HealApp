@@ -126,8 +126,8 @@ const ArrivedView = ({
             title={'Treatment is ended'}
             style={styles.takeOrderButton}
             isSmall
-            width={getWidth(150)}
-            height={getWidth(36)}
+            width={getHeight(150)}
+            height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             background={colors.white}
             onPress={onPressTreatmentEnd}

@@ -84,7 +84,7 @@ const Button = ({
           minWidth: width ?? '38%',
           height: height ?? getHeight(dimens.buttonHeight),
           borderRadius:
-            borderRadius ?? getWidth(dimens.marginS / dimens.borderBold),
+            borderRadius ?? getHeight(dimens.marginS / dimens.borderBold),
         },
       ]}
       disabled={disabled}
@@ -115,7 +115,7 @@ const Button = ({
 };
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getWidth(dimens.borderThin),
+    borderWidth: getHeight(dimens.borderThin),
     alignItems: 'center',
     justifyContent: 'center',
     height: getWidth(dimens.buttonHeight),
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   buttonTitle: {
-    fontSize: getWidth(fontSize.heading),
+    fontSize: getHeight(fontSize.heading),
     // lineHeight: getHeight(dimens.marginL),
   },
 });
