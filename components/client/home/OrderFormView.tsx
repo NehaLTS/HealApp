@@ -23,6 +23,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import OrderFormController from './OrderFormController';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 
 const OrderFormView = ({
   treatmentReason,
@@ -67,6 +68,7 @@ const OrderFormView = ({
     isShowIcon,
     setIsShowIcon,
     userLocation,
+    setUserLocation,
     otherReasonsRef,
   } = OrderFormController({ setOrder, order, onPressWhenHealer });
 
@@ -179,7 +181,7 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-      0 ? (
+        0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             <TouchableOpacity
@@ -224,12 +226,21 @@ const OrderFormView = ({
       <Text title={t('address')} style={styles.addressText} />
       <View style={styles.locationContainer}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
             setOrder({
               ...order,
               address: userLocation?.currentLocation?.address?.toString() ?? '',
             })
-          }
+            setUserLocation((prevState) => ({
+              ...prevState,
+              onboardingLocation: {
+                latitude: userLocation?.currentLocation?.latitude,
+                longitude: userLocation?.currentLocation?.longitude,
+                address: userLocation?.currentLocation?.address?.toString() ?? ''
+              },
+              currentLocation: prevState?.currentLocation
+            }))
+          }}
         >
           <Image
             source={require('../../../assets/icon/location.png')}
@@ -280,9 +291,8 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
-                  order?.phonenumber
-                }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
+              }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}
