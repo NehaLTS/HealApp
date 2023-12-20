@@ -1,6 +1,7 @@
 import {
   Alert,
   FlatList,
+  I18nManager,
   Image,
   Keyboard,
   StyleSheet,
@@ -189,6 +190,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: '91%',
     fontSize: getHeight(fontSize.textM),
+    textAlign: I18nManager.isRTL ? 'left' : 'right',
   },
   closeButton: {
     width: '16%',

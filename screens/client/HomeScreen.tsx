@@ -186,6 +186,7 @@ const HomeScreen = () => {
     <TouchableOpacity
       onPress={onPressBack}
       disabled={searchSpecialist?.length === 0}
+      activeOpacity={1}
     >
       <Image
         source={searchSpecialist?.length !== 0 ? arrowBack : logo}

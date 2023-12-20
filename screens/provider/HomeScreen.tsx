@@ -27,6 +27,7 @@ import useToast from 'components/common/useToast';
 import { ProviderOrderReceive } from 'libs/types/OrderTypes';
 import {
   DeviceEventEmitter,
+  I18nManager,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -469,7 +470,7 @@ const HomeScreen = () => {
         }}
       >
         <TextButton
-          title={'See on Waze '}
+          title={t('see_waze')}
           fontSize={getHeight(fontSize.textXl)}
           style={{
             ...styles.seeOnWaze,
@@ -509,7 +510,7 @@ const HomeScreen = () => {
             textAlign: 'center',
             marginBottom: 0,
           }}
-          title={'You have a new order!'}
+          title={t('new_order')}
           entering={FadeInUp.duration(400).delay(400)}
         />
 
@@ -733,21 +734,12 @@ const HomeScreen = () => {
       )}
     </View>
   );
-  const headerLeft = () => (
-    <TouchableOpacity>
-      <Image source={logo} style={styles.logo} />
-    </TouchableOpacity>
-  );
+  const headerLeft = () => <Image source={logo} style={styles.logo} />;
   const treatmentFinished = () => (
     <>
-      <Text
-        title={
-          'Treatment is finished!\n Do you want to stay\n available for further orders?'
-        }
-        style={styles.end}
-      />
+      <Text title={t('treatment_finished')} style={styles.end} />
       <Button
-        title={'Confirm'}
+        title={t('confirm')}
         isPrimary
         isSmall
         style={{ alignSelf: 'center' }}
@@ -763,14 +755,9 @@ const HomeScreen = () => {
   );
   const stillAvailable = () => (
     <>
-      <Text
-        title={
-          'Great! You stay on duty.\nWe’ll inform you when is the next\norder comes next.'
-        }
-        style={styles.end}
-      />
+      <Text title={t('you_stay_on_duty')} style={styles.end} />
       <Button
-        title={'Ok'}
+        title={t('ok')}
         isPrimary
         isSmall
         style={{ alignSelf: 'center' }}
@@ -824,10 +811,10 @@ const HomeScreen = () => {
                   style={styles.middleOrderText}
                   title={
                     isCancelOrder
-                      ? 'The order is cancelled'
+                      ? t('order_is_cancelled')
                       : notification
-                      ? 'You have a new order!'
-                      : 'No orders ...yet'
+                      ? t('new_order')
+                      : t('no_orders_yet')
                   }
                 />
               </>
@@ -841,21 +828,21 @@ const HomeScreen = () => {
               {DetailCard(
                 providerDaySummary?.providerDetails?.orderDetails?.total_clients.toString() ??
                   '0',
-                'Clients today',
+                t('clients_today'),
               )}
               {DetailCard(
                 providerDaySummary?.providerDetails?.orderDetails
                   ?.avg_arrival_time !== undefined
                   ? `${providerDaySummary?.providerDetails?.orderDetails?.avg_arrival_time.toString()}${' min'}`
                   : '0 min',
-                'Average arrival time',
+                t('arrival_time'),
               )}
               {DetailCard(
                 providerDaySummary?.providerDetails?.walletDetails
                   ?.wallet_amount !== undefined
                   ? `${providerDaySummary?.providerDetails?.walletDetails?.wallet_amount.toString()}${' ₪'}`
                   : '0 ₪',
-                'My balance',
+                t('balance'),
               )}
             </>
           )}
@@ -905,7 +892,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginM),
   },
   headerContainer: {
-    flexDirection: 'row',
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 0.13,
@@ -968,6 +955,7 @@ const styles = StyleSheet.create({
   },
   seeOnWaze: {
     color: colors.white,
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
   footerContainer: {
     position: 'absolute',
@@ -1039,6 +1027,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: getHeight(fontSize.headingL),
     color: colors.primary,
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
   cardContainer: {
     flex: 0.73,
@@ -1066,6 +1055,7 @@ const styles = StyleSheet.create({
   },
   addDocument: {
     fontSize: getHeight(fontSize.heading - 2),
+    textAlign: I18nManager.isRTL ? 'right' : 'left',
   },
   timerContainer: {
     borderWidth: getHeight(1),

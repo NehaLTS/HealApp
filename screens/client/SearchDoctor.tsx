@@ -193,7 +193,7 @@ const SearchDoctor = () => {
               showLoader
                 ? t('looking_doctor')
                 : providerNotFound
-                ? 'Provider not found.'
+                ? t('provider_not_found')
                 : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
           />

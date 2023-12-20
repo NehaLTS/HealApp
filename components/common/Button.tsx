@@ -115,10 +115,10 @@ const Button = ({
 };
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getWidth(dimens.borderThin),
     alignItems: 'center',
     justifyContent: 'center',
-    height: getWidth(dimens.buttonHeight),
+    height: getHeight(dimens.buttonHeight),
     // borderRadius: getWidth(dimens.marginS / dimens.borderBold),
     zIndex: 1,
   },

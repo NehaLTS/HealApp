@@ -1,7 +1,7 @@
 import { colors } from 'designToken/colors';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { I18nManager, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
   Easing,
   Extrapolate,
@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(50),
     borderWidth: getHeight(5),
     borderColor: colors.secondary,
-    justifyContent: 'center',
-    paddingHorizontal: getWidth(8),
+    paddingHorizontal: getHeight(8),
     resizeMode: 'center',
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
   },
   handle: {
     width: getHeight(28),
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(20),
     backgroundColor: colors.secondary,
     resizeMode: 'center',
+    alignSelf: 'center',
   },
 });
 

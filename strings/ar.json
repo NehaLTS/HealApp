@@ -182,5 +182,20 @@
   "treatment_end": "انتهاء العلاج",
   "done": "تم",
   "liked_services": "هل أعجبتك خدماتنا؟",
-  "you_can_leave": "يمكنك أيضًا ترك بقشيش إذا كنت ترغب"
+  "you_can_leave": "يمكنك أيضًا ترك بقشيش إذا كنت ترغب",
+  "how_you_rate": "كيف تقيم طبيبنا؟",
+  "you_want_to_tell_us": "هل هناك شيء آخر تريد أن تخبرنا به؟",
+  "what_like_about_services": "ما الذي أعجبك في خدماتنا؟",
+  "provider_not_found": "المزود غير موجود.",
+  "see_waze": "رؤية على Waze",
+  "new_order": "لديك طلب جديد!",
+  "treatment_finished": "انتهى العلاج!\nهل ترغب في البقاء\nمتاحًا للطلبات الأخرى؟",
+  "confirm": "تأكيد",
+  "you_stay_on_duty": "رائع! أنت مستمر في الخدمة.\nسنخبرك عندما يأتي الطلب التالي.",
+  "ok": "حسناً",
+  "order_is_cancelled": "تم إلغاء الطلب",
+  "no_orders_yet": "لا يوجد طلبات حتى الآن",
+  "clients_today": "العملاء اليوم",
+  "arrival_time": "متوسط وقت الوصول",
+  "balance": "رصيدي"
 }

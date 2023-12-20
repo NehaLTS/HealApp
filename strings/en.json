@@ -183,6 +183,22 @@
   "done": "Done",
   "liked_services": "Liked our services?",
   "you_can_leave": "You can also leave the tip if you wish",
+
+  "how_you_rate": "How do you rate our doctor?",
+  "you_want_to_tell_us": "Something else you want to tell us?",
+  "what_like_about_services": "What did you like about our services?",
+  "provider_not_found": "Provider not found.",
+  "see_waze": "See on Waze",
+  "new_order": "You have a new order!",
+  "treatment_finished": "Treatment is finished!\n Do you want to stay\n available for further orders?",
+  "confirm": "Confirm",
+  "you_stay_on_duty": "Great! You stay on duty.\nWe’ll inform you when is the next\norder comes next.",
+  "ok": "Ok",
+  "order_is_cancelled": "The order is cancelled",
+  "no_orders_yet": "No orders ...yet",
+  "clients_today": "Clients today",
+  "arrival_time": "Average arrival time",
+  "balance": "My balance",
   "home": {
     "providerList": [
       {

@@ -47,7 +47,7 @@ const RatingView = ({
               style={styles.familyDoctorText}
             />
             <Text
-              title={'How do you rate our doctor?'}
+              title={t('how_you_rate')}
               style={{ fontSize: getHeight(18) }}
             />
             <View style={styles.image}>
@@ -55,12 +55,9 @@ const RatingView = ({
             </View>
           </View>
 
-          <Text
-            title={'Something else you want to tell us?'}
-            style={styles.tellText}
-          />
+          <Text title={t('you_want_to_tell_us')} style={styles.tellText} />
           <Input
-            inputPlaceholder={'What did you like about our services?'}
+            inputPlaceholder={t('what_like_about_services')}
             inputStyle={styles.description}
             placeholderTextColor={colors.grey}
             style={styles.placeholder}

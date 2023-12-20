@@ -182,5 +182,20 @@
   "treatment_end": "סיום טיפול",
   "done": "בוצע",
   "liked_services": "אהבת את השירותים שלנו?",
-  "you_can_leave": "תוכלו גם להשאיר טיפ אם תרצו"
+  "you_can_leave": "תוכלו גם להשאיר טיפ אם תרצו",
+  "how_you_rate": "איך אתה מדרג את הרופא שלנו?",
+  "you_want_to_tell_us": "משהו אחר שתרצה לספר לנו?",
+  "what_like_about_services": "מה אהבת על השירותים שלנו?",
+  "provider_not_found": "ספק לא נמצא.",
+  "see_waze": "ראה ב־Waze",
+  "new_order": "יש לך הזמנה חדשה!",
+  "treatment_finished": "הטיפול הסתיים!\nהאם ברצונך להישאר\nזמין להזמנות נוספות?",
+  "confirm": "אישור",
+  "you_stay_on_duty": "נהדר! אתה נשאר במשמרת.\nנודיע לך כשההזמנה הבאה תגיע.",
+  "ok": "אישור",
+  "order_is_cancelled": "ההזמנה בוטלה",
+  "no_orders_yet": "אין הזמנות... עדיין",
+  "clients_today": "לקוחות היום",
+  "arrival_time": "זמן הגעה ממוצע",
+  "balance": "היתרה שלי"
 }
