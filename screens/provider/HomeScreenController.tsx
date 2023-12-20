@@ -86,9 +86,8 @@ const HomeScreenControlller = () => {
 
   const getSummaryofDay = async () => {
     let currentdate = new Date();
-    let dateMDY = `${currentdate.getFullYear()}-${
-      currentdate.getMonth() + 1
-    }-${currentdate.getDate()}`;
+    let dateMDY = `${currentdate.getFullYear()}-${currentdate.getMonth() + 1
+      }-${currentdate.getDate()}`;
 
     let daySummary = await getProviderDaySummary(
       {
@@ -213,11 +212,11 @@ const HomeScreenControlller = () => {
       provider_id: userId,
       order_id: order?.orderId ?? '1',
       latitude:
-        userLocation.onboardingLocation?.latitude?.toString() ??
+
         userLocation.currentLocation?.latitude ??
         '',
       longitude:
-        userLocation.onboardingLocation?.longitude?.toString() ??
+
         userLocation.currentLocation?.longitude ??
         '',
     })

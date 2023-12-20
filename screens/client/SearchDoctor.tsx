@@ -31,6 +31,7 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { Marker } from 'react-native-maps';
 import SearchDoctorController from './SearchDoctorController';
+import MapViewDirections from 'react-native-maps-directions';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -62,6 +63,7 @@ const SearchDoctor = () => {
     setIsBookOrder,
     showDoctor,
     setShowDoctor,
+    focusOnPath,
     providerNotFound,
   } = SearchDoctorController();
   console.log('providerStatus', providerStatus);
@@ -190,11 +192,11 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : providerNotFound
-                ? t('provider_not_found')
-                : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
+                  ? t('provider_not_found')
+                  : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
           />
         </View>
@@ -206,43 +208,17 @@ const SearchDoctor = () => {
             showsTraffic
             focusable
             showsBuildings
+
             showsIndoors
-            initialRegion={
-              providerLocation
-                ? {
-                    ...providerLocation,
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02,
-                    title: 'provider',
-                  }
-                : userLocation.onboardingLocation &&
-                  userLocation.onboardingLocation?.latitude &&
-                  userLocation.onboardingLocation?.longitude
-                ? {
-                    latitude: parseFloat(
-                      userLocation.onboardingLocation?.latitude,
-                    ),
-                    longitude: parseFloat(
-                      userLocation.onboardingLocation?.longitude,
-                    ),
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02,
-                    title: 'Client',
-                  }
-                : currentLocation
-            }
+
+
             region={
               providerLocation
-                ? {
-                    ...providerLocation,
-                    latitudeDelta: 0.02,
-                    longitudeDelta: 0.02,
-                    title: 'provider',
-                  }
+                ? focusOnPath
                 : userLocation.onboardingLocation &&
                   userLocation.onboardingLocation?.latitude &&
                   userLocation.onboardingLocation?.longitude
-                ? {
+                  ? {
                     latitude: parseFloat(
                       userLocation.onboardingLocation?.latitude,
                     ),
@@ -253,40 +229,24 @@ const SearchDoctor = () => {
                     longitudeDelta: 0.02,
                     title: 'Client',
                   }
-                : currentLocation
+                  : currentLocation
             }
             style={{ flex: 1 }}
           >
-            {/* {currentLocation !== undefined &&
-              currentLocation.latitude !== 0.0 &&
-              providerLocation &&
-              providerLocation.latitude !== 0.0 &&
-              !loader && (
-                <MapViewDirections
-                  strokeWidth={5}
-                  splitWaypoints
-                  
-                  strokeColor={colors.invalid}
-                  geodesic
-                  optimizeWaypoints
-                  origin={providerLocation}
-                  destination={currentLocation}
-                  apikey={'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o'}
-                />
-              )} */}
+
             {userProfile && userProfile?.address && (
               <Marker
                 coordinate={{
                   latitude:
                     userLocation &&
-                    userLocation?.onboardingLocation &&
-                    userLocation.onboardingLocation?.latitude
+                      userLocation?.onboardingLocation &&
+                      userLocation.onboardingLocation?.latitude
                       ? parseFloat(userLocation.onboardingLocation?.latitude)
                       : currentLocation?.latitude ?? 0.0,
                   longitude:
                     userLocation &&
-                    userLocation?.onboardingLocation &&
-                    userLocation.onboardingLocation?.longitude
+                      userLocation?.onboardingLocation &&
+                      userLocation.onboardingLocation?.longitude
                       ? parseFloat(userLocation.onboardingLocation?.longitude)
                       : currentLocation?.longitude ?? 0.0,
                 }}
@@ -316,8 +276,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                          currentOrder.providerDetails
-                            ?.providerProfilePicture ? (
+                            currentOrder.providerDetails
+                              ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -349,11 +309,28 @@ const SearchDoctor = () => {
                   </View>
                 </Marker>
               )}
+            {/* {currentLocation !== undefined &&
+              userLocation.onboardingLocation && userLocation.onboardingLocation?.latitude && userLocation.onboardingLocation?.longitude &&
+              providerLocation &&
+              providerLocation.latitude !== 0.0 &&
+              !showLoader && (
+                <MapViewDirections
+                  strokeWidth={5}
+
+
+                  strokeColor={colors.invalid}
+                  geodesic
+                  optimizeWaypoints
+                  origin={providerLocation}
+                  destination={{ latitude: parseFloat(userLocation.onboardingLocation?.latitude), longitude: parseFloat(userLocation.onboardingLocation?.longitude) }}
+                  apikey={'AIzaSyDwwnPwWC3jWCPDnwB7tA8yFiDgGjZLo9o'}
+                />
+              )} */}
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -382,23 +359,29 @@ const SearchDoctor = () => {
 
         {providerStatus !== ARRIVED && (
           <View>
-            {!showTimer && !providerNotFound && (
-              <Button
-                title={
-                  providerLocation !== undefined &&
+            <Button
+              title={
+                providerLocation !== undefined &&
                   providerLocation.latitude !== 0.0 &&
                   !showLoader &&
                   !showCancelButton
-                    ? t('order')
-                    : t('cancel')
-                }
-                isPrimary
-                isSmall
-                onPress={onPressOrder}
-                width={'30%'}
-                height={getHeight(dimens.imageS)}
-                style={{ alignSelf: 'center', marginBottom: 10 }}
-                disabled={isBookOrder}
+                  ? t('order')
+                  : t('cancel')
+              }
+              isPrimary
+              isSmall
+              onPress={onPressOrder}
+              width={'30%'}
+              height={getHeight(dimens.imageS)}
+              style={{ alignSelf: 'center', marginBottom: 10 }}
+              disabled={isBookOrder}
+            />
+            {showCancelTextButton && !showLoader && (
+              <TextButton
+                style={{ alignSelf: 'center' }}
+                title={t('cancel')}
+                onPress={() => { }}
+                fontSize={getHeight(fontSize.textXl)}
               />
             )}
             {!showLoader && (
@@ -406,7 +389,7 @@ const SearchDoctor = () => {
                 <TextButton
                   style={{ alignSelf: 'center' }}
                   title={t('cancel')}
-                  onPress={() => {}}
+                  onPress={() => { }}
                   fontSize={getHeight(fontSize.textXl)}
                 />
               </>
@@ -416,9 +399,11 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                showLoader
+                  showLoader
                   ? t('no_fee_collected')
-                  : t('3_minutes_to_cancel')
+                  : showCancelTextButton || showCancelButton
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>
