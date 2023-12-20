@@ -376,14 +376,7 @@ const SearchDoctor = () => {
               style={{ alignSelf: 'center', marginBottom: 10 }}
               disabled={isBookOrder}
             />
-            {showCancelTextButton && !showLoader && (
-              <TextButton
-                style={{ alignSelf: 'center' }}
-                title={t('cancel')}
-                onPress={() => { }}
-                fontSize={getHeight(fontSize.textXl)}
-              />
-            )}
+
             {!showLoader && (
               <>
                 <TextButton
