@@ -6,7 +6,7 @@ import {
   getLocalData,
   setLocalData,
 } from 'libs/datastorage/useLocalStorage';
-import { Location } from 'libs/types/UserType';
+import { Location, ProviderProfile } from 'libs/types/UserType';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
@@ -22,7 +22,8 @@ const HomeScreenControlller = () => {
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
   );
-  const { userId, providerProfile, token } = UseProviderUserContext();
+  const { userId, providerProfile, token, setProviderProfile } =
+    UseProviderUserContext();
   const { userLocation } = UseClientUserContext();
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
@@ -246,6 +247,7 @@ const HomeScreenControlller = () => {
   };
   const onLogoutButtonPress = () => {
     deleteLocalData();
+    setProviderProfile({} as ProviderProfile);
     navigation.navigate(NavigationRoutes.IntroStack);
   };
   //  const ProviderAvailability=()=>{

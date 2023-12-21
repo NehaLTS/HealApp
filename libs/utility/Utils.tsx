@@ -17,7 +17,7 @@ export const generateRandomName = () => {
 };
 
 export const getProviderImage = (type: string) => {
-  const image = type.includes('Doctor')
+  const image = type?.includes('Doctor')
     ? doctor
     : type?.includes('Nurse')
     ? nurse

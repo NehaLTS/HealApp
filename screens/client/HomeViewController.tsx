@@ -1,14 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import {
   deleteLocalData,
-  deleteOrder,
   getLocalData,
   setLocalData,
 } from 'libs/datastorage/useLocalStorage';
 import { Banner, search_provider } from 'libs/types/ProvierTypes';
 import { ClientProfile } from 'libs/types/UserType';
+import { useCurrentAddress } from 'libs/useCurrentAddress';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import {
@@ -18,8 +19,6 @@ import {
   TextInputKeyPressEventData,
 } from 'react-native';
 import list from '../../strings/en.json';
-import { useCurrentAddress } from 'libs/useCurrentAddress';
-import * as Sentry from '@sentry/react-native';
 
 interface Location {
   latitude: number;
@@ -204,11 +203,14 @@ const HomeViewController = () => {
   };
 
   const onLogoutButtonPress = () => {
+    setUserProfile({} as ClientProfile);
     deleteLocalData();
-    navigation.navigate(NavigationRoutes.IntroStack);
-    if (dropdownVisible) {
-      setDropdownVisible(false);
-    }
+    setTimeout(() => {
+      navigation.navigate(NavigationRoutes.IntroStack);
+      if (dropdownVisible) {
+        setDropdownVisible(false);
+      }
+    }, 2000);
   };
 
   const onTouchStart = () => setIsTouchStart(false);

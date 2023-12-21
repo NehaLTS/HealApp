@@ -11,6 +11,8 @@ import Header from '../../components/common/Header';
 import { fontSize } from '../../designToken/fontSizes';
 import IntroController from './IntroController';
 import Text from 'components/common/Text';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 
 const IntroScreen = () => {
   const { t } = useTranslation();
