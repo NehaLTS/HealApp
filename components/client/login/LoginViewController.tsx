@@ -34,7 +34,7 @@ const LoginViewController = () => {
   const passwordRef = React.useRef<any>('');
   const { showToast, renderToast } = useToast();
   const { t } = useTranslation();
-  const device_Token = getLocalData('USER')?.deviceToken
+  const device_Token = getLocalData('USER')?.deviceToken;
 
   const onChangeEmail = (value: string) => {
     emailRef.current.value = value;
@@ -68,7 +68,11 @@ const LoginViewController = () => {
 
   const handleSignIn = () => {
     if (!emailError && !passwordError)
-      onPressLoginButton(emailRef.current.value, passwordRef.current.value, device_Token);
+      onPressLoginButton(
+        emailRef.current.value,
+        passwordRef.current.value,
+        device_Token,
+      );
   };
 
   /** To handle Response from API after authentication request */
@@ -82,13 +86,17 @@ const LoginViewController = () => {
     let userDetails = response.user;
     //save details in context
     setToken(response.token);
-    console.log("response.token", response)
+    console.log('response.token', response);
     setUserId(response.id);
     setUserProfile({
       firstName: userDetails?.firstname,
       lastName: userDetails?.lastname,
       phoneNumber: userDetails?.phone_number,
-      address: { address: userDetails?.address, latitude: userDetails.latitude ?? '', longitude: userDetails.longitude ?? '' },
+      address: {
+        address: userDetails?.address,
+        latitude: userDetails.latitude ?? '',
+        longitude: userDetails.longitude ?? '',
+      },
       city: userDetails?.city,
       state: userDetails?.state,
       country: userDetails?.country,
@@ -140,11 +148,19 @@ const LoginViewController = () => {
   };
 
   /** To handle User auth via email and password */
-  const onPressLoginButton = async (email: string, password: string, device_token: string) => {
+  const onPressLoginButton = async (
+    email: string,
+    password: string,
+    device_token: string,
+  ) => {
     try {
       if (email != '' || password != '') {
         setIsLoading(true);
-        const res = await onSubmitAuthRequest({ email, password, device_token });
+        const res = await onSubmitAuthRequest({
+          email,
+          password,
+          device_token,
+        });
         console.log('sign in client by email and password', res);
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
@@ -165,15 +181,19 @@ const LoginViewController = () => {
   };
   /** To handle Google login  button click*/
   const onPressGoogleButton = async () => {
-    setIsLoading(true);
     /** To process Google login from firestore */
     onGoogleAuthProcessing().then(async (userData) => {
       try {
+        setIsLoading(true);
         const email = userData?.user?.email ?? '';
         const googleId = userData.user?.uid ?? '';
         /** To handle Google auth request to API */
-        const res = await onSubmitGoogleAuthRequest({ email, googleId, device_token: device_Token });
-        console.log("GoogleSgnUp", res)
+        const res = await onSubmitGoogleAuthRequest({
+          email,
+          googleId,
+          device_token: device_Token,
+        });
+        console.log('GoogleSgnUp', res);
         setIsLoading(false);
         if (res?.isSuccessful === true) {
           handleAuthSuccessResponse(res, userData?.user?.photoURL);
@@ -185,6 +205,8 @@ const LoginViewController = () => {
         }
       } catch (err) {
         console.log('Error occurred!');
+        setIsLoading(false);
+      } finally {
         setIsLoading(false);
       }
     });
@@ -198,7 +220,11 @@ const LoginViewController = () => {
       try {
         const email = userData.user.email ?? '';
         const facebookId = userData.additionalUserInfo?.profile?.id;
-        const res = await onSubmitFBAuthRequest({ email, facebookId, device_token: device_Token });
+        const res = await onSubmitFBAuthRequest({
+          email,
+          facebookId,
+          device_token: device_Token,
+        });
         setIsLoading(false);
 
         if (res?.isSuccessful === true) {
@@ -211,6 +237,8 @@ const LoginViewController = () => {
         }
       } catch (err) {
         console.log('Error occurred!');
+      } finally {
+        setIsLoading(false);
       }
     });
   };

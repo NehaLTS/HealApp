@@ -85,7 +85,7 @@ const TreatmentCompletedScreen = () => {
   };
   return (
     <>
-      {/* {isLoading && <Loader />} */}
+      {isLoading && <Loader />}
       <View style={styles.container}>
         {showViews === 'Treatmen_End' && (
           <TreatmentEnd

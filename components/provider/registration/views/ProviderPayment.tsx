@@ -46,7 +46,7 @@ const ProviderPayment = () => {
     profilePicture,
     setIsLoading,
   } = ProviderPaymentController();
-
+  console.log('providerProfile222', providerProfile);
   return (
     <>
       {isLoading && <Loader />}

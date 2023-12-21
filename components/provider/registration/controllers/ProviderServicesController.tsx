@@ -11,14 +11,15 @@ import { Alert } from 'react-native';
 const ProviderServicesController = () => {
   const { onGetProviderService, AddProviderServices } = AuthServicesProvider();
   const navigation = useNavigation();
-  const { providerProfile, setCurrentStep, token, userId } = UseProviderUserContext();
+  const { providerProfile, setCurrentStep, token, userId } =
+    UseProviderUserContext();
   const [services, setServices] = useState<ProviderServices[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPrescriptionSelected, setIsPrescriptionSelected] = useState(false);
   const [selectedServices, setSelectedServices] = useState<ProviderServices[]>(
     [],
   );
-
+  console.log('providerProfile888', providerProfile);
   const [activeCheckbox, setActiveCheckbox] = useState<number[]>([]);
   const service = JSON.stringify(selectedServices);
   const getProviderServices = async () => {
@@ -33,7 +34,8 @@ const ProviderServicesController = () => {
     if (response && response.services) {
       setServices(response.services);
       Sentry.captureMessage(
-        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${providerProfile?.firstName ?? ''
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
+          providerProfile?.firstName ?? ''
         }---- ${response.services}`,
       );
     }
@@ -89,11 +91,13 @@ const ProviderServicesController = () => {
       );
       if (response?.isSuccessful) {
         Sentry.captureMessage(
-          `Provider flow SELECTED SERVICES API HITfor:-${providerProfile?.firstName ?? ''
+          `Provider flow SELECTED SERVICES API HITfor:-${
+            providerProfile?.firstName ?? ''
           }---- ${JSON.stringify(response)}`,
         );
         Sentry.captureMessage(
-          `Provider flow SELECTED SERVICES for:-${providerProfile?.firstName ?? ''
+          `Provider flow SELECTED SERVICES for:-${
+            providerProfile?.firstName ?? ''
           }---- ${selectedServices}`,
         );
         setLocalData('PROVIDERSERVICES', selectedServices);

@@ -54,7 +54,7 @@ const SearchBox = forwardRef(
 const styles = StyleSheet.create({
   inputContainer: {
     alignItems: 'center',
-    borderWidth: getWidth(dimens.borderThin),
+    borderWidth: getHeight(dimens.borderThin),
     borderRadius: getHeight(dimens.marginS),
     borderColor: colors.primary,
     flexDirection: 'row',

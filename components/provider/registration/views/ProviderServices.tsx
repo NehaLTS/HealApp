@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textM),
   },
   servicesContainer: {
-    borderWidth: getWidth(dimens.borderBold),
+    borderWidth: getHeight(dimens.borderBold),
     borderRadius: getHeight(5),
     borderColor: colors.primary,
     height: '65%',

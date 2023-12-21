@@ -70,6 +70,7 @@ const ProviderAddressController = () => {
   };
 
   const getImageUrl = (url: string) => {
+    console.log('url111', url);
     setLicensePicture(url);
   };
 

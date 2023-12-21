@@ -69,7 +69,7 @@ const RatingView = ({
             isPrimary
             isSmall
             width={'30%'}
-            style={{ alignSelf: 'center', marginTop: '36%' }}
+            style={{ alignSelf: 'center', marginTop: getHeight(100) }}
             onPress={onPress}
           />
         </ScrollView>

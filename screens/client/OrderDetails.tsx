@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
-    height: '100%',
   },
   arrowBack: {
     width: getWidth(dimens.paddingS + dimens.borderBold),

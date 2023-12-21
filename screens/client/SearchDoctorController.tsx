@@ -39,7 +39,7 @@ const SearchDoctorController = () => {
   const [showDoctor, setShowDoctor] = useState(false);
   const [providerNotFound, setProviderNotFound] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
-  const [focusOnPath, setFocusOnPath] = useState<Location>()
+  const [focusOnPath, setFocusOnPath] = useState<Location>();
   const previousScreen = route?.params?.previousScreen;
   const [providerStatus, setProviderStatus] = useState<string>(
     previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : '',
@@ -52,21 +52,42 @@ const SearchDoctorController = () => {
   // const orderId = route?.params?.orderId ?? '';
   // const providerData = route?.params?.providerData ?? '';
 
-  const focusBetweenClientAndProvider = (providerSetLocation: { latitude: string, longitude: string }) => {
-    console.log("providerSetLocation", providerSetLocation)
+  const focusBetweenClientAndProvider = (providerSetLocation: {
+    latitude: string;
+    longitude: string;
+  }) => {
+    console.log('providerSetLocation', providerSetLocation);
     setTimeout(() => {
-
-
-      if (providerSetLocation && userLocation && userLocation?.onboardingLocation && userLocation?.onboardingLocation?.latitude && userLocation?.onboardingLocation?.longitude) {
+      if (
+        providerSetLocation &&
+        userLocation &&
+        userLocation?.onboardingLocation &&
+        userLocation?.onboardingLocation?.latitude &&
+        userLocation?.onboardingLocation?.longitude
+      ) {
         const centerPoint = {
-          latitude: (parseFloat(providerSetLocation.latitude) + parseFloat(userLocation?.onboardingLocation?.latitude)) / 2,
-          longitude: (parseFloat(providerSetLocation.longitude) + parseFloat(userLocation?.onboardingLocation?.longitude)) / 2,
+          latitude:
+            (parseFloat(providerSetLocation.latitude) +
+              parseFloat(userLocation?.onboardingLocation?.latitude)) /
+            2,
+          longitude:
+            (parseFloat(providerSetLocation.longitude) +
+              parseFloat(userLocation?.onboardingLocation?.longitude)) /
+            2,
         };
 
         // Calculate the distance between provider and client for determining zoom level
         const distance = Math.sqrt(
-          Math.pow(parseFloat(providerSetLocation.latitude) - parseFloat(userLocation?.onboardingLocation?.latitude), 2) +
-          Math.pow(parseFloat(providerSetLocation.longitude) - parseFloat(userLocation?.onboardingLocation?.longitude), 2)
+          Math.pow(
+            parseFloat(providerSetLocation.latitude) -
+              parseFloat(userLocation?.onboardingLocation?.latitude),
+            2,
+          ) +
+            Math.pow(
+              parseFloat(providerSetLocation.longitude) -
+                parseFloat(userLocation?.onboardingLocation?.longitude),
+              2,
+            ),
         );
 
         const bufferFactor = 1.2;
@@ -78,19 +99,32 @@ const SearchDoctorController = () => {
         };
 
         const boundingBox = {
-          latitude: (parseFloat(providerSetLocation.latitude) + parseFloat(userLocation?.onboardingLocation?.latitude)) / 2,
-          longitude: (parseFloat(providerSetLocation.longitude) + parseFloat(userLocation?.onboardingLocation?.longitude)) / 2,
-          latitudeDelta: Math.abs(parseFloat(providerSetLocation.longitude) - parseFloat(userLocation?.onboardingLocation?.latitude)) * 2,
-          longitudeDelta: Math.abs(parseFloat(providerSetLocation.longitude) - parseFloat(userLocation?.onboardingLocation?.longitude)) * 2,
+          latitude:
+            (parseFloat(providerSetLocation.latitude) +
+              parseFloat(userLocation?.onboardingLocation?.latitude)) /
+            2,
+          longitude:
+            (parseFloat(providerSetLocation.longitude) +
+              parseFloat(userLocation?.onboardingLocation?.longitude)) /
+            2,
+          latitudeDelta:
+            Math.abs(
+              parseFloat(providerSetLocation.longitude) -
+                parseFloat(userLocation?.onboardingLocation?.latitude),
+            ) * 2,
+          longitudeDelta:
+            Math.abs(
+              parseFloat(providerSetLocation.longitude) -
+                parseFloat(userLocation?.onboardingLocation?.longitude),
+            ) * 2,
         };
 
-
-        setFocusOnPath(region)
+        setFocusOnPath(region);
       } else {
-        return null
+        return null;
       }
     }, 1000);
-  }
+  };
 
   useEffect(() => {
     if (previousScreen == 'Create Order') {
@@ -161,7 +195,10 @@ const SearchDoctorController = () => {
         orderStatus: res.orderStatus,
         orderServices: res.orderServices,
       });
-      focusBetweenClientAndProvider({ latitude: res.providerDetails.currentLatitude, longitude: res.providerDetails.currentLongitude })
+      focusBetweenClientAndProvider({
+        latitude: res.providerDetails.currentLatitude,
+        longitude: res.providerDetails.currentLongitude,
+      });
 
       setProviderLocation({
         latitude: parseFloat(res.providerDetails.currentLatitude),
@@ -219,13 +256,15 @@ const SearchDoctorController = () => {
    * Listener to get event updates
    */
   const getEventUpdate = () => {
-
     DeviceEventEmitter.addListener('ClientOrderListener', (event) => {
       if (event.data && event.data.status)
         setStatusOnEventFire(event.data.status);
 
       if (event.data && event.data.latitude) {
-        focusBetweenClientAndProvider({ latitude: event.data.latitude, longitude: event.data.longitude })
+        focusBetweenClientAndProvider({
+          latitude: event.data.latitude,
+          longitude: event.data.longitude,
+        });
 
         setProviderLocation({
           latitude: parseFloat(event.data.latitude),
@@ -294,7 +333,7 @@ const SearchDoctorController = () => {
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
-      Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
+      // Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
     } else {
       //Gurpreet to change it to cancel button
@@ -307,13 +346,13 @@ const SearchDoctorController = () => {
     const userCurrentLocation = {
       latitude: parseFloat(
         userLocation?.onboardingLocation?.latitude ??
-        userLocation?.currentLocation?.latitude ??
-        '0.0',
+          userLocation?.currentLocation?.latitude ??
+          '0.0',
       ),
       longitude: parseFloat(
         userLocation?.onboardingLocation?.longitude ??
-        userLocation?.currentLocation?.longitude ??
-        '0.0',
+          userLocation?.currentLocation?.longitude ??
+          '0.0',
       ),
     };
     const ProviderLocation = {

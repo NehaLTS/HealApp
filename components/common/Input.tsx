@@ -185,7 +185,7 @@ const Input = forwardRef(
             <TouchableOpacity
               style={{
                 marginRight: getWidth(6),
-                borderWidth: getWidth(1),
+                borderWidth: getHeight(1),
                 borderRadius: getHeight(20),
                 borderColor: colors.disabled,
               }}

@@ -62,7 +62,7 @@ const HomeScreen = () => {
     order?.extraData?.isNotification ?? false,
   );
   console.log('notification', notification);
-  console.log(' isNotification ', order?.extraData?.isNotification);
+  console.log(' isNotification ', order);
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
@@ -238,6 +238,7 @@ const HomeScreen = () => {
         orderStatus: event.data.status,
       });
       if (event.data.status === 'Arrived' || orderStatus === 'Arrived Order') {
+        console.log('event.data.status', event.data.status);
         setTotalPricesOfServices(totalPrice());
         setIsArrived(true);
         setLocalData('PROVIDERORDER', {
@@ -558,7 +559,7 @@ const HomeScreen = () => {
               </>
             )}
             <AnimatedText
-              style={{ ...styles.details, fontSize: getWidth(fontSize.textL) }}
+              style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
               title={`${order?.OrderReceive?.firstname}  ${
                 order?.OrderReceive?.lastname
               }    ${
@@ -1125,7 +1126,7 @@ const styles = StyleSheet.create({
     right: getHeight(0),
     backgroundColor: colors.offWhite,
     borderRadius: getHeight(5),
-    borderWidth: getWidth(1),
+    borderWidth: getHeight(1),
     borderColor: colors.primary,
     padding: getHeight(10),
     width: getHeight(100),

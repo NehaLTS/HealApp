@@ -61,58 +61,60 @@ const DoctorDetailCard = ({
               style={styles.doctorTitle}
               title={`${providerData?.providerName}`}
             />
-            <TouchableOpacity onPress={onPressCard}>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+              }}
+              onPress={onPressCard}
+            >
               <Image
                 source={require('../../../assets/icon/cancel.png')}
                 style={styles.cancel}
               />
             </TouchableOpacity>
           </View>
-          <View style={{}}>
-            <View style={styles.detailItem}>
-              <View style={styles.doctorIconContainer}>
-                {providerData && providerData?.providerProfilePicture ? (
-                  <Image
-                    source={{ uri: providerData?.providerProfilePicture }}
-                    style={styles.doctorIcon}
-                  />
-                ) : (
-                  <Image
-                    source={require('../../../assets/icon/doctorIcon.png')}
-                    style={styles.doctorIcon}
-                  />
-                )}
-
+          <View style={styles.detailItem}>
+            <View style={styles.doctorIconContainer}>
+              {providerData && providerData?.providerProfilePicture ? (
                 <Image
-                  source={require('../../../assets/icon/star.png')}
-                  style={styles.starIcon}
+                  source={{ uri: providerData?.providerProfilePicture }}
+                  style={styles.doctorIcon}
                 />
-                <Text
-                  style={styles.rating}
-                  title={providerData.providerRating}
+              ) : (
+                <Image
+                  source={require('../../../assets/icon/doctorIcon.png')}
+                  style={styles.doctorIcon}
                 />
-              </View>
-              <View style={styles.detailsContainer}>
-                <Text style={styles.arrivalText} title={status} />
-                <Text
-                  style={styles.time}
-                  title={`${Math.round(
-                    time.minutes === 0 ? time.seconds : time.minutes,
-                  )}${t(' min')}`}
+              )}
+
+              <Image
+                source={require('../../../assets/icon/star.png')}
+                style={styles.starIcon}
+              />
+              <Text style={styles.rating} title={providerData.providerRating} />
+            </View>
+            <View style={styles.detailsContainer}>
+              <Text style={styles.arrivalText} title={status} />
+              <Text
+                style={styles.time}
+                title={`${Math.round(
+                  time.minutes === 0 ? time.seconds : time.minutes,
+                )}${t(' min')}`}
+              />
+              <TouchableOpacity
+                style={styles.details}
+                onPress={() => {
+                  Linking.openURL(`tel:${providerData?.phoneNumber}`);
+                }}
+              >
+                <Image
+                  source={require('../../../assets/icon/phonecall.png')}
+                  style={styles.phoneIcon}
                 />
-                <TouchableOpacity
-                  style={styles.details}
-                  onPress={() => {
-                    Linking.openURL(`tel:${providerData?.phoneNumber}`);
-                  }}
-                >
-                  <Image
-                    source={require('../../../assets/icon/phonecall.png')}
-                    style={styles.phoneIcon}
-                  />
-                  <Text style={styles.title} title={t('call_doctor')} />
-                </TouchableOpacity>
-              </View>
+                <Text style={styles.title} title={t('call_doctor')} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: getHeight(20),
     color: colors.black,
     fontFamily: fontFamily.medium,
-    width: '50%',
+    width: '90%',
     flexWrap: 'wrap',
   },
   detailItem: {
@@ -247,15 +249,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cancel: {
-    width: getHeight(dimens.marginL),
+    width: getHeight(28),
     height: getHeight(28),
     resizeMode: 'contain',
-    position: 'absolute',
-    top: getHeight(-13),
-    left: getWidth(70),
   },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
   },
 });

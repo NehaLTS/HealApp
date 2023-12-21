@@ -40,7 +40,10 @@ const OrderDetailsController = () => {
     client_id: '',
     patient_type: { type: 'me', age: '' },
     patient_name: (userProfile as ClientProfile)?.firstName ?? '',
-    address: userLocation.onboardingLocation?.address ?? userLocation.currentLocation?.address ?? '',
+    address:
+      userLocation.onboardingLocation?.address ??
+      userLocation.currentLocation?.address ??
+      '',
     city: (userProfile as ClientProfile)?.city ?? '',
     phonenumber: (userProfile as ClientProfile)?.phoneNumber ?? '',
     Date_of_birth: '',
@@ -150,7 +153,8 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${
+              !order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -160,7 +164,7 @@ const OrderDetailsController = () => {
         '(userProfile as ClientProfile)?.address?.address',
         userProfile as ClientProfile,
         order,
-        (userProfile as ClientProfile)?.address?.address,
+        (userProfile as ClientProfile)?.address,
       );
 
       if (showSummary) {

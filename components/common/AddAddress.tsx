@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: '91%',
     fontSize: getHeight(fontSize.textM),
-    textAlign: I18nManager.isRTL ? 'left' : 'right',
+    textAlign: 'left',
   },
   closeButton: {
     width: '16%',

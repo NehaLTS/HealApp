@@ -99,7 +99,10 @@ const CardView = ({ item, index, isSearch }: any) => {
             />
           </TouchableOpacity>
         ) : (
-          <View style={styles.specialistList}>
+          <TouchableOpacity
+            style={styles.specialistList}
+            onPress={onPressOrder}
+          >
             <View style={styles.container}>
               <Image
                 source={getProviderImage(item?.name)}
@@ -116,7 +119,7 @@ const CardView = ({ item, index, isSearch }: any) => {
               height={36}
               onPress={onPressOrder}
             />
-          </View>
+          </TouchableOpacity>
         )}
       </Animated.View>
       {paymentModal()}

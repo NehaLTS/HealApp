@@ -80,6 +80,7 @@ const ProviderDetailController = () => {
   }, []);
 
   const getImageUrl = (url: string) => {
+    console.log('url000', url);
     setIdPicture(url);
     // const imagePath = url;
     // const folderName = 'images/users';

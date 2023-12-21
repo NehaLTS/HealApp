@@ -86,8 +86,9 @@ const HomeScreenControlller = () => {
 
   const getSummaryofDay = async () => {
     let currentdate = new Date();
-    let dateMDY = `${currentdate.getFullYear()}-${currentdate.getMonth() + 1
-      }-${currentdate.getDate()}`;
+    let dateMDY = `${currentdate.getFullYear()}-${
+      currentdate.getMonth() + 1
+    }-${currentdate.getDate()}`;
 
     let daySummary = await getProviderDaySummary(
       {
@@ -211,14 +212,8 @@ const HomeScreenControlller = () => {
       orderStatus: 'accept',
       provider_id: userId,
       order_id: order?.orderId ?? '1',
-      latitude:
-
-        userLocation.currentLocation?.latitude ??
-        '',
-      longitude:
-
-        userLocation.currentLocation?.longitude ??
-        '',
+      latitude: userLocation.currentLocation?.latitude ?? '',
+      longitude: userLocation.currentLocation?.longitude ?? '',
     })
       .then((res) => {
         console.log('ordereAcceptedRes', res);
@@ -239,7 +234,7 @@ const HomeScreenControlller = () => {
           );
         }
 
-        Alert.alert('ordereAccepted' + res?.status);
+        // Alert.alert('ordereAccepted' + res?.status);
       })
       .catch((error) => {
         Sentry.captureMessage(

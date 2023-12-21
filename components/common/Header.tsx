@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   logo: {
-    width: getWidth(dimens.imageS - 4),
+    width: '10%',
     height: getHeight(43),
     resizeMode: 'contain',
   },
@@ -176,8 +176,9 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.headingL),
   },
   headerRight: {
-    padding: getHeight(dimens.sideMargin),
+    paddingHorizontal: getWidth(dimens.sideMargin),
     fontSize: getHeight(fontSize.textL),
+    paddingVertical: getHeight(dimens.sideMargin),
   },
   header: {
     backgroundColor: colors.white,

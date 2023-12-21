@@ -10,7 +10,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -70,9 +70,28 @@ const OrderFormView = ({
     userLocation,
     setUserLocation,
     otherReasonsRef,
-  } = OrderFormController({ setOrder, order, onPressWhenHealer });
+  } = OrderFormController({
+    setOrder,
+    order,
+    onPressWhenHealer,
+  });
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const getPreselectedReason = treatmentReason?.reason?.find(
+      (item) => item?.name.en === supplier?.speciality_name,
+    );
+    console.log('getPreselectedReason', getPreselectedReason);
+
+    if (getPreselectedReason !== undefined && getPreselectedReason) {
+      setOrder({
+        ...order,
+        reason: [getPreselectedReason],
+      });
+      onSelectReasons(getPreselectedReason);
+    }
+  }, [treatmentReason]);
 
   const showFilledData = () => {
     return (
@@ -119,7 +138,7 @@ const OrderFormView = ({
                 width={'30%'}
                 fontSized={getHeight(fontSize?.textM)}
                 height={getHeight(dimens?.marginL)}
-                borderRadius={getWidth(dimens?.marginS)}
+                borderRadius={getHeight(dimens?.marginS)}
                 lineHeight={dimens?.sideMargin + dimens?.borderBold}
               />
             ),
@@ -136,7 +155,7 @@ const OrderFormView = ({
             title={t('other')}
             fontSized={getHeight(fontSize.textM + 1)}
             height={getHeight(dimens.marginL)}
-            borderRadius={getWidth(dimens.marginS)}
+            borderRadius={getHeight(dimens.marginS)}
             lineHeight={dimens.sideMargin + dimens.borderBold}
             onPress={() => setIsModalVisible(true)}
           />
@@ -420,8 +439,8 @@ const styles = StyleSheet.create({
     fontSize: getHeight(11),
   },
   checkBox: {
-    width: getHeight(dimens.sideMargin + dimens.borderBold),
-    height: getHeight(dimens.sideMargin + dimens.borderBold),
+    width: getHeight(20),
+    height: getHeight(20),
     borderRadius: getHeight(dimens.borderThin),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.black,
@@ -430,8 +449,8 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     alignItems: 'center',
-    borderWidth: getWidth(dimens.borderThin),
-    borderRadius: getWidth(dimens.marginS),
+    borderWidth: getHeight(dimens.borderThin),
+    borderRadius: getHeight(dimens.marginS),
     borderColor: colors.disabled,
     flexDirection: 'row',
     paddingVertical: getHeight(dimens.paddingXs + dimens.borderBold),
@@ -449,10 +468,11 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'row',
-    gap: getWidth(dimens.marginM),
+    gap: getHeight(dimens.marginM),
     alignItems: 'center',
     marginBottom: getHeight(dimens.marginS),
     alignSelf: 'flex-start',
+    paddingLeft: getWidth(2),
   },
   button: {
     flexDirection: 'row',
@@ -460,7 +480,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   locationIcon: {
-    width: getWidth(dimens.sideMargin),
+    width: getHeight(dimens.sideMargin),
     height: getHeight(dimens.marginM),
     resizeMode: 'contain',
     marginLeft: getWidth(dimens.marginS),

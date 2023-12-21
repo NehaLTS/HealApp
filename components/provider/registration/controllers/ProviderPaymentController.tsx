@@ -32,7 +32,7 @@ const ProviderPaymentController = () => {
       ? providerProfile.profilePicture
       : '',
   );
-
+  console.log('providerProfile11', providerProfile);
   const onBlurRegistrationNumber = () => validateRegistrationNumber();
 
   const onChangeRegistrationNumber = (value: string) => {
@@ -55,6 +55,7 @@ const ProviderPaymentController = () => {
   const onChangeAccount = (value: string) => (accountRef.current.value = value);
 
   const getImageUrl = (url: string) => {
+    console.log('url333', url);
     setProfilePicture(url);
   };
 
@@ -136,7 +137,7 @@ const ProviderPaymentController = () => {
           country: '',
 
           phone_number: providerProfile?.phoneNumber ?? '',
-          profile_picture: providerProfile?.profilePicture ?? '',
+          profile_picture: profilePicture ?? '',
           provider_id: userId ?? '',
           provider_type_id: providerProfile?.provider.id ?? '',
           license_number: providerProfile?.licensenumber ?? '',
@@ -158,7 +159,7 @@ const ProviderPaymentController = () => {
         token,
       );
 
-      console.log('response udpate is ', res);
+      console.log('response patch', res);
 
       if (res?.msg) {
         setLocalData('USERPROFILE', {
@@ -169,7 +170,7 @@ const ProviderPaymentController = () => {
           state: '',
           country: '',
           phoneNumber: providerProfile.phoneNumber ?? '',
-          profilePicture: providerProfile.profilePicture ?? '',
+          profilePicture: profilePicture ?? '',
           provider: providerProfile.provider,
           speciality: providerProfile.speciality,
           licensenumber: providerProfile.licensenumber ?? '',

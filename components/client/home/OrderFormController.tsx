@@ -1,6 +1,6 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
-import { TreatmentMenu } from 'libs/types/ProvierTypes';
+import { TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useState } from 'react';
@@ -16,15 +16,15 @@ const OrderFormController = ({
   onPressWhenHealer: () => void;
 }) => {
   const uniqueReasonIds: number[] = [];
-  order?.reason.forEach((item) => {
-    if (!uniqueReasonIds.includes(item.reason_id)) {
-      uniqueReasonIds.push(item.reason_id);
+  order?.reason?.forEach((item) => {
+    if (!uniqueReasonIds?.includes?.(item?.reason_id)) {
+      uniqueReasonIds?.push?.(item?.reason_id ?? '');
     }
   });
   const uniqueMenuIds: number[] = [];
   order?.services?.forEach((item) => {
-    if (!uniqueMenuIds.includes(item.menu_id)) {
-      uniqueMenuIds.push(item.menu_id);
+    if (!uniqueMenuIds?.includes(item.menu_id)) {
+      uniqueMenuIds?.push(item.menu_id);
     }
   });
 
@@ -130,29 +130,6 @@ const OrderFormController = ({
   };
 
   const onSelectReasons = (item: any) => {
-    // const updatedActiveButton = [...activeButton];
-    // const itemIndex = updatedActiveButton.indexOf(item.reason_id);
-
-    // if (itemIndex !== -1) {
-    //   updatedActiveButton.splice(itemIndex, 1);
-    // } else {
-    //   updatedActiveButton.push(item.reason_id);
-    // }
-    // setActiveButton(updatedActiveButton);
-    // const updatedSelectedResourceType = selectedResourceType.includes((item))
-    //   ? selectedResourceType.filter((selectedItem) => {
-    //     if(selectedItem !== item)
-    //   {
-    //     return { reason_id:item.reason_id, name:item?.name?.en}
-    //     // return selectedItem.en
-    //   }})
-    //   : [...selectedResourceType, { reason_id:item.reason_id, name:item?.name?.en}];
-    // setSelectedResourceType(updatedSelectedResourceType);
-    // setOrder((prevOrder) => ({
-    //   ...prevOrder,
-    //   reason: updatedSelectedResourceType,
-    // }));
-
     const updatedActiveButton = [...activeButton];
     const itemIndex = updatedActiveButton.indexOf(item.reason_id);
 
@@ -172,9 +149,6 @@ const OrderFormController = ({
       reason: updatedSelectedResourceType,
     }));
     console.log('updatedSelectedResourceType', updatedSelectedResourceType);
-    // if (updatedSelectedResourceType.length > 0) {
-    //   onPressWhenHealer()
-    // }
   };
 
   const onMeTogglePress = (item: string) => {
@@ -244,17 +218,17 @@ const OrderFormController = ({
       onboardingLocation: {
         latitude: latitude,
         longitude: longitude,
-        address: address
+        address: address,
       },
-      currentLocation: prevState?.currentLocation
-    }))
+      currentLocation: prevState?.currentLocation,
+    }));
     setLocalData('LOCATION', {
       onboardingLocation: {
         latitude: latitude,
         longitude: longitude,
-        address: address
-      }
-    })
+        address: address,
+      },
+    });
   };
 
   const onSubmitDescription = () => {

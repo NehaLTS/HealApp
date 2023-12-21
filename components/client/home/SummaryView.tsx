@@ -11,6 +11,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { OrderDetail } from 'libs/types/UserType';
 import React from 'react';
 import {
+  Dimensions,
   I18nManager,
   Image,
   KeyboardAvoidingView,
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
   },
   locationContainer: {
     flexDirection: 'row',
-    gap: getHeight(dimens.marginS + dimens.marginS),
+    gap: getHeight(dimens.marginS),
     alignItems: 'center',
   },
   voltaireText: {
@@ -274,10 +275,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: getHeight(dimens.marginM),
     marginBottom: getHeight(dimens.marginM),
-    gap: getWidth(40),
+    gap: getWidth(20),
   },
   patientAndAddress: {
     flexDirection: 'column',
+    minWidth: Dimensions.get('screen').width > 400 ? '29%' : '50%',
   },
   total: {
     fontFamily: fontFamily.medium,

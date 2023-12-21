@@ -246,7 +246,6 @@ const HomeScreen = () => {
     speciality_name: entry?.speciality_name,
   }));
 
-  console.log('reasonSelected', providersList);
   const getProviderSearchList = () => {
     return transformedData?.map((itemData: any, index: number) => (
       <CardView item={itemData} index={index} key={index} isSearch />
@@ -267,7 +266,6 @@ const HomeScreen = () => {
       </View>
     );
   };
-  console.log('isDataNotFound', isDataNotFound);
   return (
     <>
       <View style={styles.headerContainer}>
@@ -282,10 +280,10 @@ const HomeScreen = () => {
       >
         <ScrollView
           contentContainerStyle={{
-            paddingBottom: getHeight(20),
-            height: '100%',
+            paddingBottom: getHeight(30),
           }}
           keyboardShouldPersistTaps="always"
+          style={{ flex: 1 }}
         >
           {isTouchStart && searchSpecialist?.length === 0 && (
             <TouchableOpacity
@@ -315,7 +313,12 @@ const HomeScreen = () => {
           {searchSpecialist?.length === 0 ? (
             getProviderList()
           ) : isDataNotFound ? (
-            <View style={{ paddingHorizontal: getWidth(dimens.marginM) }}>
+            <View
+              style={{
+                paddingHorizontal: getWidth(dimens.marginM),
+                zIndex: 1,
+              }}
+            >
               {providersList.length === 0 && transformedData?.length === 0
                 ? getSearchList()
                 : getProviderSearchList()}
@@ -408,13 +411,13 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
   },
   logo: {
-    width: getWidth(dimens.imageS),
+    width: getWidth(dimens.imageS - 4),
     height: getHeight(40),
     resizeMode: 'contain',
   },
   avatar: {
     height: getHeight(45),
-    width: getWidth(45),
+    width: getHeight(45),
     resizeMode: 'contain',
   },
   header: {
@@ -482,7 +485,7 @@ const styles = StyleSheet.create({
     right: getHeight(1),
     backgroundColor: colors.offWhite,
     borderRadius: getHeight(5),
-    borderWidth: getWidth(1),
+    borderWidth: getHeight(1),
     borderColor: colors.primary,
     padding: getHeight(10),
     width: getHeight(100),

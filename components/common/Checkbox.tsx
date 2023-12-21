@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     width: getHeight(dimens.sideMargin + dimens.borderBold),
     height: getHeight(dimens.sideMargin + dimens.borderBold),
     borderRadius: getHeight(dimens.borderThin),
-    borderWidth: getWidth(dimens.borderThin),
+    borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.black,
     justifyContent: 'center',
     alignItems: 'center',
