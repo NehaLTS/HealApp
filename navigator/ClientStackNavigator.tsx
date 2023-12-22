@@ -22,7 +22,7 @@ const ClientStackNavigator = () => {
         options={{ headerShown: false }}
         name={NavigationRoutes.ClientHome}
         component={HomeScreen}
-        // component={lazy(() => import('..//screens/client/HomeScreen'))}
+      // component={lazy(() => import('..//screens/client/HomeScreen'))}
       />
       {/* /> */}
       <Stack.Screen
@@ -52,6 +52,12 @@ const ClientStackNavigator = () => {
         name={NavigationRoutes.HealerHome}
         options={{ headerShown: false }}
         component={lazy(() => import('../screens/client/HealerHomeView'))}
+      />
+
+      <Stack.Screen
+        name={NavigationRoutes.UserProfile}
+        options={{ headerShown: false }}
+        component={lazy(() => import('../screens/client/UserProfile'))}
       />
     </Stack.Navigator>
   );

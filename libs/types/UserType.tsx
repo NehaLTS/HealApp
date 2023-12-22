@@ -286,3 +286,35 @@ export interface paymentApproved {
   services: string;
   treatment_completed: string;
 }
+
+export interface AddToWallet {
+  client_id: string;
+  wallet_amount: string
+}
+
+export interface OrderCancelByClient {
+  order_id: string;
+  orderTime: string
+}
+export interface OrderCancelByClientRespnse {
+  isSuccessful: string;
+  msg: string;
+  clientAmount: string;
+  providerAmount: string
+}
+
+export interface PaymentHistoryType {
+  transaction_id: number;
+  amount: number;
+  timestamp: string;
+  transaction_type: string;
+  order_id: number;
+  description: string;
+  client_id: number;
+}
+export interface PaymentToOrder {
+  heal_amount: string;
+  order_cost: string;
+  total_order_cost: string;
+  order_id: string;
+}

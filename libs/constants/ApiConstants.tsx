@@ -15,6 +15,10 @@ export const ORDER_PROVIDER = 'users/createClientOrder';
 export const GET_LOCATION_SEARCH = 'users/getProviderFromSearch';
 export const BOOK_ORDER = 'providers/providerOrder';
 export const HEALER_SERVICES = 'users/getHealerData';
+export const ADD_TO_WALLET = 'users/updateClientAmount';
+export const ORDER_CANCEL_FROM_CLIENT = 'providers/cancelOrderByClient'
+export const PAYMENT_HISTORY = 'users/getPaymentHistory'
+export const PAYMENT_FOR_ORDER = 'users/holdClientPayment'
 // export const SEARCH_API = 'location/getSearchProviderType'
 
 //Provider API
@@ -38,6 +42,7 @@ export const PROVIDER_USER_DETAILS = 'users/getProviderDetails';
 export const ORDER_PAYMENT = 'providers/payLoadOrder';
 export const PROVIDER_RATING = 'providers/createProviderRatings';
 export const TREATMENT_COMPLETED = 'providers/completedTreatment';
+
 
 export const POST = 'POST';
 export const GET = 'GET';

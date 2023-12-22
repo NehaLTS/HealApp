@@ -32,6 +32,7 @@ import Geolocation from 'react-native-geolocation-service';
 import MapView, { Marker } from 'react-native-maps';
 import SearchDoctorController from './SearchDoctorController';
 import MapViewDirections from 'react-native-maps-directions';
+import AddPaymentToWallet from 'components/client/home/AddPaymentToWallet';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -64,7 +65,9 @@ const SearchDoctor = () => {
     showDoctor,
     setShowDoctor,
     focusOnPath,
+    showAddToWallet,
     providerNotFound,
+    orderCancel
   } = SearchDoctorController();
   console.log('providerStatus 111', providerStatus);
   const { setRemainingTime } = UseClientUserContext();
@@ -192,11 +195,11 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : providerNotFound
-                ? t('provider_not_found')
-                : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
+                  ? t('provider_not_found')
+                  : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
             }
           />
         </View>
@@ -215,7 +218,7 @@ const SearchDoctor = () => {
                 : userLocation.onboardingLocation &&
                   userLocation.onboardingLocation?.latitude &&
                   userLocation.onboardingLocation?.longitude
-                ? {
+                  ? {
                     latitude: parseFloat(
                       userLocation.onboardingLocation?.latitude,
                     ),
@@ -226,7 +229,7 @@ const SearchDoctor = () => {
                     longitudeDelta: 0.02,
                     title: 'Client',
                   }
-                : currentLocation
+                  : currentLocation
             }
             style={{ flex: 1 }}
           >
@@ -235,14 +238,14 @@ const SearchDoctor = () => {
                 coordinate={{
                   latitude:
                     userLocation &&
-                    userLocation?.onboardingLocation &&
-                    userLocation.onboardingLocation?.latitude
+                      userLocation?.onboardingLocation &&
+                      userLocation.onboardingLocation?.latitude
                       ? parseFloat(userLocation.onboardingLocation?.latitude)
                       : currentLocation?.latitude ?? 0.0,
                   longitude:
                     userLocation &&
-                    userLocation?.onboardingLocation &&
-                    userLocation.onboardingLocation?.longitude
+                      userLocation?.onboardingLocation &&
+                      userLocation.onboardingLocation?.longitude
                       ? parseFloat(userLocation.onboardingLocation?.longitude)
                       : currentLocation?.longitude ?? 0.0,
                 }}
@@ -272,8 +275,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                          currentOrder.providerDetails
-                            ?.providerProfilePicture ? (
+                            currentOrder.providerDetails
+                              ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -325,8 +328,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -358,9 +361,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                providerLocation.latitude !== 0.0 &&
-                !showLoader &&
-                !showCancelButton
+                  providerLocation.latitude !== 0.0 &&
+                  !showLoader &&
+                  !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -378,7 +381,7 @@ const SearchDoctor = () => {
                 <TextButton
                   style={{ alignSelf: 'center' }}
                   title={t('cancel')}
-                  onPress={() => {}}
+                  onPress={orderCancel}
                   fontSize={getHeight(fontSize.textXl)}
                 />
               </>
@@ -388,15 +391,18 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                showLoader
+                  showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>
         )}
+        {
+          showAddToWallet && <AddPaymentToWallet isShowInputView={false} />
+        }
       </ScrollView>
     </>
   );

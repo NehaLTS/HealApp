@@ -203,9 +203,29 @@ const OrderFormView = ({
         0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
+            // <>{item?.menu_id === 1 ? <View
+            //   key={index}
+            //   style={styles.checkboxContainer}>
+            //   <View style={styles.checkBox}>
+
+            //     <Image
+            //       source={require('assets/icon/check.png')}
+            //       style={styles.image}
+            //     />
+
+            //   </View>
+            //   <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+            //     {item?.name?.en.charAt(0).toUpperCase() +
+            //       item?.name?.en.slice(1)}
+            //   </Text>
+            //   <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+            //     {item.price}
+            //   </Text>
+            // </View> :
             <TouchableOpacity
               key={index}
               style={styles.checkboxContainer}
+              disabled={index === 0}
               onPress={() => handleItemPress(item)}
             >
               <View style={styles.checkBox}>
@@ -220,7 +240,12 @@ const OrderFormView = ({
                 {item?.name?.en.charAt(0).toUpperCase() +
                   item?.name?.en.slice(1)}
               </Text>
+              <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                {item.price}
+              </Text>
             </TouchableOpacity>
+            // }
+            // </>
           ),
         )
       ) : (

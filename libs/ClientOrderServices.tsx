@@ -2,6 +2,7 @@ import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { BodyInit, HeadersInit } from './api/ApiTypes';
 import { sendRequest } from './api/RequestHandler';
 import {
+  ADD_TO_WALLET,
   BOOK_ORDER,
   GET,
   GET_AD_BANNER,
@@ -9,9 +10,12 @@ import {
   GET_SEARCH_LIST,
   GET_SEARCH_PROVIDER,
   GET_TREATMENT_MENU,
+  ORDER_CANCEL_FROM_CLIENT,
   ORDER_PAYMENT,
   ORDER_PROVIDER,
   PATCH,
+  PAYMENT_FOR_ORDER,
+  PAYMENT_HISTORY,
   POST,
   PROVIDER_RATING,
 } from './constants/ApiConstants';
@@ -22,7 +26,7 @@ import {
   search_provider,
   treatment,
 } from './types/ProvierTypes';
-import { BookOrderRequest, OrderPayment, ProviderRating } from './types/UserType';
+import { AddToWallet, BookOrderRequest, OrderCancelByClient, OrderCancelByClientRespnse, OrderPayment, PaymentHistoryType, PaymentToOrder, ProviderRating } from './types/UserType';
 import { Order } from './types/OrderTypes';
 const access_token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzQsImlhdCI6MTY5ODk4NjY5NCwiZXhwIjoxNjk5MDE5MDk0fQ.6nHvRnfJwgmgnCo0zYLf9yO2kvDIxJ0IZALJCB_PHr0';
@@ -150,6 +154,46 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     })
 
+  const AddPaymentInWallet = (body: AddToWallet): Promise<any> =>
+    sendRequest(ADD_TO_WALLET, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
+
+  const OrderCancelFromClient = (body: OrderCancelByClient): Promise<OrderCancelByClientRespnse> =>
+    sendRequest(ORDER_CANCEL_FROM_CLIENT, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
+  const PaymentHistory = (body: { client_id: string }): Promise<PaymentHistoryType[]> =>
+    sendRequest(PAYMENT_HISTORY, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+  const PaymentForOrder = (body: PaymentToOrder): Promise<any> =>
+    sendRequest(PAYMENT_FOR_ORDER, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
   return {
     getBannerAds,
     treatmentMenu,
@@ -159,6 +203,10 @@ export const ClientOrderServices = () => {
     BookOrderRequest,
     searchList,
     OrderPayment,
-    ProviderRating
+    ProviderRating,
+    AddPaymentInWallet,
+    OrderCancelFromClient,
+    PaymentHistory,
+    PaymentForOrder
   };
 };

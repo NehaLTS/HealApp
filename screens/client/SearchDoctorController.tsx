@@ -19,11 +19,12 @@ import {
   TREATMENTCOMPLETED,
 } from 'libs/constants/Constant';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import { Location } from 'libs/types/UserType';
+import { Location, OrderCancelByClientRespnse } from 'libs/types/UserType';
+import { paymentsendToApi } from 'libs/ClientOrderPayment';
 
 const SearchDoctorController = () => {
   const route = useRoute<any>();
-  const { BookOrderRequest, providerLocationSearch, orderProvider } =
+  const { BookOrderRequest, OrderCancelFromClient, orderProvider, PaymentForOrder } =
     ClientOrderServices();
   const { userLocation } = UseClientUserContext();
   const [showRateAlert, setShowRateAlert] = useState(false);
@@ -44,9 +45,12 @@ const SearchDoctorController = () => {
   const [providerStatus, setProviderStatus] = useState<string>(
     previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : '',
   );
+  const payment = getLocalData('WALLETDETAIL')
   const [currentOrder, setCurrentOrder] = useState<Order>(
     route?.params?.currentOrder,
   );
+  const [orderTime, setOrderTime] = useState<string>('')
+  const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false)
   // const orderData = getLocalData('ORDER')?.providerDetail
   // const orderDetails:Order=route?.params?.orderDetails;
   // const orderId = route?.params?.orderId ?? '';
@@ -80,14 +84,14 @@ const SearchDoctorController = () => {
         const distance = Math.sqrt(
           Math.pow(
             parseFloat(providerSetLocation.latitude) -
-              parseFloat(userLocation?.onboardingLocation?.latitude),
+            parseFloat(userLocation?.onboardingLocation?.latitude),
             2,
           ) +
-            Math.pow(
-              parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.longitude),
-              2,
-            ),
+          Math.pow(
+            parseFloat(providerSetLocation.longitude) -
+            parseFloat(userLocation?.onboardingLocation?.longitude),
+            2,
+          ),
         );
 
         const bufferFactor = 1.2;
@@ -110,12 +114,12 @@ const SearchDoctorController = () => {
           latitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.latitude),
+              parseFloat(userLocation?.onboardingLocation?.latitude),
             ) * 2,
           longitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.longitude),
+              parseFloat(userLocation?.onboardingLocation?.longitude),
             ) * 2,
         };
 
@@ -271,23 +275,7 @@ const SearchDoctorController = () => {
           longitude: parseFloat(event.data.longitude),
         });
       }
-      // setLocalData('ORDER', {
-      //   orderStatus:
-      //     event.notification.title === 'Accept Order'
-      //       ? 'On the way'
-      //       : event.notification.title === 'Arrived Order'
-      //       ? 'Arrived'
-      //       : 'Estimated arrival',
-      // });
       console.log('DoctorNotification', JSON.stringify(event));
-
-      // setTimeout(() => {
-      //   setShowCancelButton(false);
-      // }, 300000);
-      // setProviderLocation({
-      //   latitude: parseFloat(event.data.latitude),
-      //   longitude: parseFloat(event.data.longitude),
-      // });
     });
 
     return () => {
@@ -314,9 +302,27 @@ const SearchDoctorController = () => {
     );
   };
 
+
+  const sendPaymentData = () => {
+    let totalCost = route?.params?.orderDetails.TotalCost;
+    const shotAmounts = parseFloat(totalCost) - 500
+    const amount = paymentsendToApi(500, shotAmounts)
+    PaymentForOrder({
+      heal_amount: amount.appAmount.toString(),
+      order_cost: amount.orderAmount.toString(),
+      total_order_cost: amount.totalAmount.toString(),
+      order_id: currentOrder?.providerDetails.providerId
+    }).then((res) => {
+      console.log('PAyment data sent', res)
+    }).catch((error) => {
+      console.log('Error Occured', error.toString())
+    })
+
+  }
+
   const handleNextButtonPress = async () => {
     console.log('  orderData..', currentOrder);
-
+    setShowAddToWallet(false)
     //disable order button here Gurpreet
 
     //TODO:Vandana why we are passing status as accept here
@@ -330,12 +336,23 @@ const SearchDoctorController = () => {
 
     console.log('gurpreet', orderBookResponse);
     if (orderBookResponse?.isSuccessful) {
+      const ORDER_TIME = new Date().getTime()
+      console.log("ORDER_TIME", ORDER_TIME)
+      setOrderTime(ORDER_TIME.toString())
+      sendPaymentData()
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
+      console.log('insidee', orderBookResponse);
+
       // Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
-    } else {
+    } else if (orderBookResponse.msg === 'Wallet information not found for the client') {
+      setShowAddToWallet(true)
+
+    }
+    else {
+
       //Gurpreet to change it to cancel button
       setIsBookOrder(false);
     }
@@ -346,13 +363,13 @@ const SearchDoctorController = () => {
     const userCurrentLocation = {
       latitude: parseFloat(
         userLocation?.onboardingLocation?.latitude ??
-          userLocation?.currentLocation?.latitude ??
-          '0.0',
+        userLocation?.currentLocation?.latitude ??
+        '0.0',
       ),
       longitude: parseFloat(
         userLocation?.onboardingLocation?.longitude ??
-          userLocation?.currentLocation?.longitude ??
-          '0.0',
+        userLocation?.currentLocation?.longitude ??
+        '0.0',
       ),
     };
     const ProviderLocation = {
@@ -382,7 +399,20 @@ const SearchDoctorController = () => {
     };
     return time;
   };
+  const orderCancel = () => {
+    OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
+      Alert.alert(res.msg)
+      if (res.isSuccessful) {
+        const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
+        setLocalData('WALLETDETAIL', {
+          wallet_amount: newAmount.toString()
+        })
+      }
 
+    }).catch((error) => {
+      Alert.alert('Error Occured', error.toString())
+    })
+  }
   return {
     permissionHelper: permissionHelper,
     forceAlert,
@@ -403,6 +433,8 @@ const SearchDoctorController = () => {
     setShowDoctor,
     focusOnPath,
     providerNotFound,
+    showAddToWallet,
+    orderCancel
   };
 };
 

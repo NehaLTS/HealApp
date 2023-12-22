@@ -100,7 +100,7 @@ const DoctorDetailCard = ({
               <Text
                 style={styles.time}
                 title={`${Math.round(
-                  time.minutes === 0 ? time.seconds : time.minutes,
+                  time.minutes + 1 ?? 0 + 1,
                 )}${t(' min')}`}
               />
               <TouchableOpacity

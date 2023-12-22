@@ -9,6 +9,8 @@ import { enableScreens } from 'react-native-screens';
 import './i18n.tsx';
 import fb from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
+import { DeviceEventEmitter, Vibration, Platform } from 'react-native';
+
 enableScreens(true)
 
 const config = {
@@ -25,9 +27,9 @@ const config = {
 
 let app;
 if (fb.apps.length === 0) {
-   fb.initializeApp(config )
+  fb.initializeApp(config)
 } else {
-    fb.app()
+  fb.app()
 }
 
 // if (!fb.apps.length) {
@@ -38,6 +40,21 @@ if (fb.apps.length === 0) {
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
+  const { notification } = remoteMessage;
+
+  if (notification?.title === "Provider Notification") {
+    DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
+    console.log("ProviderOrderListener")
+  } else if (notification?.title === "Client Notification") {
+    console.log("ClientORder")
+    DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
+  } else {
+
+    DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
+    DeviceEventEmitter.emit('ClientOrderListener', remoteMessage);
+  }
+
+
 });
 
 

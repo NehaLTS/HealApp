@@ -198,11 +198,14 @@ const HomeScreen = () => {
     <View style={{ position: 'relative', zIndex: 999 }}>
       <TouchableHighlight
         underlayColor="transparent"
-        onPress={() => setDropdownVisible(!dropdownVisible)}
+        onPress={() => {
+          navigation.navigate(NavigationRoutes.UserProfile);
+          // setDropdownVisible(!dropdownVisible)
+        }}
       >
         <Image source={avatar} style={styles.avatar} />
       </TouchableHighlight>
-      {dropdownVisible && (
+      {/* {dropdownVisible && (
         <View style={styles.dropdown}>
           <TextButton
             title={t('logout')}
@@ -210,7 +213,7 @@ const HomeScreen = () => {
             fontSize={getHeight(18)}
           />
         </View>
-      )}
+      )} */}
     </View>
   );
   const getProviderList = () => {

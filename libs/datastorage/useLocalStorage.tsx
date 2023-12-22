@@ -1,6 +1,7 @@
 import { ClientOrder, Order, ProviderOrder } from 'libs/types/OrderTypes';
 import { MMKV } from 'react-native-mmkv';
 import {
+  AddToWallet,
   ClientProfile,
   ProviderProfile,
   ProviderServices,
@@ -16,7 +17,8 @@ type StorageKeys =
   | 'PROVIDERSERVICES'
   | 'ORDER'
   | 'PROVIDERORDER'
-  | 'LOCATION';
+  | 'LOCATION'
+  | 'WALLETDETAIL';
 type StorageObject = {
   USERPROFILE: ClientProfile | UserTypeProvider | ProviderProfile;
   USER: any;
@@ -24,6 +26,7 @@ type StorageObject = {
   ORDER: Order | ClientOrder;
   PROVIDERORDER: ProviderOrder;
   LOCATION: userLocation;
+  WALLETDETAIL: AddToWallet;
 };
 
 export const setLocalData = <K extends StorageKeys>(

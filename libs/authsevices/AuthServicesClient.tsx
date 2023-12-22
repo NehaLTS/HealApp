@@ -2,7 +2,6 @@ import { sendRequest } from "../api/RequestHandler";
 import {
   CREATE_CARD_DETAILS,
   CREATE_SIGNUP,
-  CREDITED_CARD_DETAILS,
   FACEBOOK_LOGIN_API,
   GET,
   GET_CREATE_CARD_DETAILS,
@@ -155,6 +154,7 @@ export const AuthServicesClient = () => {
     }).then((res) => {
       return res;
     });
+
   return {
     onSubmitAuthRequest,
     onSubmitGoogleAuthRequest,

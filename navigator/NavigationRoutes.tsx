@@ -12,7 +12,7 @@ enum NavigationRoutes {
   SearchDoctor = 'SearchDoctor',
   TreatmentCompleted = 'TreatmentCompleted',
   HealerHome = 'HealerHomeView',
-
+  UserProfile = 'UserProfile',
   //Provider Routes
   ProviderStack = 'ProviderStack',
   ProviderLogin = 'ProviderLogin',

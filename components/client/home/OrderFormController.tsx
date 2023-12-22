@@ -3,7 +3,7 @@ import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 
 const OrderFormController = ({
@@ -25,6 +25,7 @@ const OrderFormController = ({
   order?.services?.forEach((item) => {
     if (!uniqueMenuIds?.includes(item.menu_id)) {
       uniqueMenuIds?.push(item.menu_id);
+      console.log('uniqueMenuIds', uniqueMenuIds)
     }
   });
 
@@ -36,7 +37,7 @@ const OrderFormController = ({
   const [otherReasons, setOtherReasons] = useState(order?.Additional_notes);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
-  const [activeCheckbox, setActiveCheckbox] = useState<number[]>(uniqueMenuIds);
+  const [activeCheckbox, setActiveCheckbox] = useState<number[]>([1, ...uniqueMenuIds]);
   const [selectedResourceType, setSelectedResourceType] = useState<any[]>(
     order?.reason,
   );
@@ -71,6 +72,9 @@ const OrderFormController = ({
     const formattedDate = birthDate.toLocaleString('en-US', options as any);
     return formattedDate;
   }
+
+
+
 
   function calculateAgeFromDate(dateString: string) {
     const parts = dateString.split(' ');
@@ -174,11 +178,16 @@ const OrderFormController = ({
     // });
   };
 
+
   const handleItemPress = (item: TreatmentMenu) => {
     const updatedActiveCheckbox = [...activeCheckbox];
     const itemIndex = updatedActiveCheckbox.indexOf(item?.menu_id);
-    let updatedSelectedMenu: TreatmentMenu[]; // Explicitly define the type
-
+    let updatedSelectedMenu: TreatmentMenu[] = [{
+      menu_id: 1,
+      name: { en: 'Basic', he: '', hi: '' },
+      price: "500",
+      provider_type_id: 0
+    }]; // Explicitly define the type
     if (itemIndex !== -1) {
       updatedActiveCheckbox.splice(itemIndex, 1);
     } else {

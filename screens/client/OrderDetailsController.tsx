@@ -59,7 +59,21 @@ const OrderDetailsController = () => {
     isOrderForOther: false,
     provider_type_id: 0,
   });
-
+  useEffect(() => {
+    const PROVIDER_TYPE_ID =
+      supplier.name === 'Alternative medicine'
+        ? '1'
+        : supplier?.provider_type_id.toString();
+    setOrder((prevOrder) => ({
+      ...prevOrder,
+      services: [...prevOrder.services, {
+        menu_id: 1,
+        name: { en: 'Basic', he: '', hi: '' },
+        price: "500",
+        provider_type_id: PROVIDER_TYPE_ID
+      }],
+    }));
+  }, [])
   const treatmentReasons = async () => {
     const PROVIDER_TYPE_ID =
       supplier.name === 'Alternative medicine'
@@ -153,8 +167,7 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${
-              !order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -180,14 +193,14 @@ const OrderDetailsController = () => {
             : order?.patient_type?.age ?? '',
           // services: order.services[0].menu_id.toString(),
 
-          services: concatenatedIds.toString(),
+          services: [...concatenatedIds.toString(), '1'],
           symptoms: JSON.stringify(symptoms),
           Additional_notes: order?.Additional_notes,
           Estimate_arrival: order?.Estimate_arrival,
           Instructions_for_arrival: order?.Instructions_for_arrival,
           Payment_mode: order?.Payment_mode,
-          TotalCost: order?.services
-            .reduce((total, item) => total + parseInt(item.price, 10), 0)
+          TotalCost: (order?.services
+            .reduce((total, item) => total + parseInt(item.price, 10), 0))
             .toString(),
           latitude:
             userLocation.onboardingLocation?.latitude ??
