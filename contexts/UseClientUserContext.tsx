@@ -19,9 +19,7 @@ export interface ClientUserContextFields {
   userProfile: ClientProfile;
   setUserProfile: React.Dispatch<React.SetStateAction<ClientProfile>>;
   orderDetails: OrderDetail;
-  setUserLocation: React.Dispatch<
-    React.SetStateAction<userLocation>
-  >;
+  setUserLocation: React.Dispatch<React.SetStateAction<userLocation>>;
   userLocation: userLocation;
   setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>;
   setRemainingTime: React.Dispatch<React.SetStateAction<RemaingTime>>;

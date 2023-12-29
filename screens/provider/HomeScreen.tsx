@@ -18,7 +18,11 @@ import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
-import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
+import {
+  deleteLocalData,
+  getLocalData,
+  setLocalData,
+} from 'libs/datastorage/useLocalStorage';
 import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,14 +44,18 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import RNRestart from 'react-native-restart';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
   const available = getLocalData('USER');
   const order = getLocalData('PROVIDERORDER');
+  const { t, i18n } = useTranslation();
   const [isAvailable, setIsAvailable] = useState(
     available?.isProviderAvailable,
   );
+  const languageRef = React.useRef<any>(i18n.language);
 
   const [isCancelOrder, setIsCancelOrder] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -82,10 +90,11 @@ const HomeScreen = () => {
     OnPressTakeOrder,
     updateLocation,
     providerLocation,
-    onLogoutButtonPress,
+    navigation,
     TreatementEnded,
     providerDaySummary,
     getSummaryofDay,
+    setProviderProfile,
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(
     getHeight(order?.extraData?.modalHeight ?? 360),
@@ -105,7 +114,7 @@ const HomeScreen = () => {
       id: eventServices?.services?.menu_id ?? -1,
     },
   ]);
-  const { t } = useTranslation();
+
   useEffect(() => {
     setUserLocation({ ...locationData });
     createNotificationListeners();
@@ -263,8 +272,9 @@ const HomeScreen = () => {
     };
   }, [acceptOrder || isArrived || orderStatus]);
 
-  const onPressToggle = (available: boolean) => {
+  const onPressToggle = (available: boolean, isLogout?: boolean) => {
     console.log('available', available);
+    //TODO: Uncomment this code to add license number
     // if ((localData as ProviderProfile)?.licensenumber === '') {
     //   setIsVisibleLicense(true);
     // } else {
@@ -278,15 +288,35 @@ const HomeScreen = () => {
       { provider_id: userId, availability: availability.toString() },
       token,
     ).then((res) => {
+      if (res?.isSuccessful && isLogout) {
+        deleteLocalData();
+        setProviderProfile({} as ProviderProfile);
+        navigation.navigate(NavigationRoutes.IntroStack);
+        setLocalData('USER', {
+          user: {
+            language: languageRef.current,
+          },
+        });
+        I18nManager.forceRTL(true);
+        I18nManager.allowRTL(true);
+        RNRestart.restart();
+      }
+
       Sentry.captureMessage(
         `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
       );
       console.log('availabitity status', JSON.stringify(res), available);
     });
-
-    getSummaryofDay();
+    if (!isLogout) {
+      getSummaryofDay();
+    }
     // }
   };
+
+  const onLogoutButtonPress = () => {
+    onPressToggle(false, true);
+  };
+
   const onPressSeeMore = () => {
     if (isSeeMore) {
       modalHeight.value = withSpring(getHeight(360));
@@ -387,15 +417,23 @@ const HomeScreen = () => {
 
   const orderDetailView = () => (
     <>
+      <AnimatedText
+        style={{
+          ...styles.details,
+          fontSize: getHeight(fontSize.heading),
+          textAlign: 'center',
+          marginBottom: getHeight(20),
+        }}
+        title={t('new_order')}
+        entering={FadeInUp.duration(400).delay(400)}
+      />
       {order &&
-        order?.OrderReceive &&
-        order?.OrderReceive?.symptoms &&
         order?.OrderReceive?.symptoms?.length > 0 &&
         JSON?.parse(order?.OrderReceive?.symptoms)?.map?.(
           (item: any, index: number) => (
             <AnimatedText
               key={index}
-              style={{ ...styles.details, marginTop: getHeight(20) }}
+              style={{ ...styles.details }}
               title={item?.name}
               entering={FadeInLeft.duration(400).delay(500)}
             />
@@ -411,7 +449,7 @@ const HomeScreen = () => {
               paddingBottom: getHeight(16),
               fontSize: getHeight(fontSize.textXl - 1),
             }}
-            title={`Ordered: `}
+            title={`${t('ordered')} `}
             entering={FadeInLeft.duration(400).delay(600)}
           >
             {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
@@ -504,17 +542,6 @@ const HomeScreen = () => {
           height: modalHeight,
         }}
       >
-        <AnimatedText
-          style={{
-            ...styles.details,
-            fontSize: getHeight(fontSize.heading),
-            textAlign: 'center',
-            marginBottom: 0,
-          }}
-          title={t('new_order')}
-          entering={FadeInUp.duration(400).delay(400)}
-        />
-
         {isSeeMore ? (
           orderDetailView()
         ) : (
@@ -534,7 +561,7 @@ const HomeScreen = () => {
               <>
                 <AnimatedText
                   style={styles.details}
-                  title={`Ordered: `}
+                  title={`${t('ordered')} `}
                   entering={FadeInLeft.duration(400).delay(600)}
                 >
                   {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
@@ -930,6 +957,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: getHeight(dimens.paddingS),
     fontSize: getHeight(fontSize.textXl),
+    textAlign: 'left',
   },
   smallText: {
     color: colors.white,
@@ -941,6 +969,7 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.paddingS),
     fontSize: getHeight(fontSize.textL),
     paddingLeft: getWidth(3),
+    textAlign: 'left',
   },
   takeOrderButton: {
     backgroundColor: colors.white,

@@ -50,8 +50,10 @@ import {
   providerStatusOnHeader,
 } from 'libs/constants/Constant';
 import SearchDoctor from './SearchDoctor';
+import DoctorTipView from 'components/client/home/DoctorTipView';
+import { getTitle } from 'libs/utility/Utils';
 const HomeScreen = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     providerList,
     bannerAds,
@@ -185,12 +187,16 @@ const HomeScreen = () => {
   const headerLeft = () => (
     <TouchableOpacity
       onPress={onPressBack}
-      disabled={searchSpecialist?.length === 0}
+      disabled={isTouchStart}
       activeOpacity={1}
+      style={{
+        paddingRight: !isTouchStart ? getWidth(32) : 0,
+        paddingVertical: !isTouchStart ? getHeight(10) : 0,
+      }}
     >
       <Image
-        source={searchSpecialist?.length !== 0 ? arrowBack : logo}
-        style={searchSpecialist?.length !== 0 ? styles.arrowBack : styles.logo}
+        source={!isTouchStart ? arrowBack : logo}
+        style={!isTouchStart ? styles.arrowBack : styles.logo}
       />
     </TouchableOpacity>
   );
@@ -235,7 +241,11 @@ const HomeScreen = () => {
           marginVertical: getHeight(dimens.paddingXs + 2),
           width: 'auto',
         }}
-        title={`\u25CF ${item?.name?.en}`}
+        title={
+          I18nManager.isRTL
+            ? `${getTitle(item?.name, i18n)}  \u25CF`
+            : `\u25CF  ${getTitle(item?.name, i18n)}`
+        }
         onPress={() => {
           setSearchSpecialist(item?.name?.en);
           setSearchProviderList(item);
@@ -276,6 +286,7 @@ const HomeScreen = () => {
         {headerTitle()}
         {headerRight()}
       </View>
+
       <TouchableOpacity
         onPress={onPressBack}
         style={styles.container}
@@ -312,6 +323,8 @@ const HomeScreen = () => {
             inputMode={'search'}
             onKeyPress={handleKeyPress}
             onFocus={onTouchStart}
+            isShowCross={searchSpecialist?.length > 0}
+            onClearInputText={() => setSearchSpecialist('')}
           />
           {searchSpecialist?.length === 0 ? (
             getProviderList()
@@ -432,7 +445,7 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   headerTitle: {
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+    flexDirection: 'row',
     alignItems: 'center',
     gap: dimens.paddingS,
     minWidth: '100%',
@@ -460,6 +473,7 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: 'center',
+    transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   text: {
     fontSize: getHeight(fontSize.textM),
@@ -475,12 +489,11 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: colors.white,
     paddingHorizontal: getWidth(dimens.marginM),
-    paddingVertical: getHeight(8),
-    zIndex: 99999,
+    zIndex: 1,
+    paddingTop: getHeight(10),
   },
   dropdown: {
     position: 'absolute',

@@ -24,6 +24,7 @@ import {
 import Modal from 'react-native-modal';
 import OrderFormController from './OrderFormController';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { getTitle } from 'libs/utility/Utils';
 
 const OrderFormView = ({
   treatmentReason,
@@ -76,7 +77,7 @@ const OrderFormView = ({
     onPressWhenHealer,
   });
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const getPreselectedReason = treatmentReason?.reason?.find(
@@ -100,7 +101,6 @@ const OrderFormView = ({
           inputPlaceholder={t('describe_where')}
           inputStyle={styles.modalInput}
           placeholderTextColor={colors.grey}
-          style={styles.modalInput}
           numberOfLines={2}
           defaultValue={order?.Additional_notes}
           onTouchStart={() => setIsModalVisible(true)}
@@ -131,7 +131,7 @@ const OrderFormView = ({
             (item: Reason, index: number) => (
               <Button
                 key={index}
-                title={item.name?.en}
+                title={getTitle(item?.name, i18n)}
                 isSmall
                 isPrimary={activeButton?.includes?.(item?.reason_id) ?? false}
                 onPress={() => onSelectReasons(item)}
@@ -200,7 +200,7 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-        0 ? (
+      0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
             // <>{item?.menu_id === 1 ? <View
@@ -237,8 +237,8 @@ const OrderFormView = ({
                 )}
               </View>
               <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                {item?.name?.en.charAt(0).toUpperCase() +
-                  item?.name?.en.slice(1)}
+                {getTitle(item?.name, i18n)?.charAt(0).toUpperCase() +
+                  getTitle(item?.name, i18n)?.slice(1)}
               </Text>
               <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
                 {item.price}
@@ -274,16 +274,17 @@ const OrderFormView = ({
             setOrder({
               ...order,
               address: userLocation?.currentLocation?.address?.toString() ?? '',
-            })
+            });
             setUserLocation((prevState) => ({
               ...prevState,
               onboardingLocation: {
                 latitude: userLocation?.currentLocation?.latitude,
                 longitude: userLocation?.currentLocation?.longitude,
-                address: userLocation?.currentLocation?.address?.toString() ?? ''
+                address:
+                  userLocation?.currentLocation?.address?.toString() ?? '',
               },
-              currentLocation: prevState?.currentLocation
-            }))
+              currentLocation: prevState?.currentLocation,
+            }));
           }}
         >
           <Image
@@ -302,7 +303,11 @@ const OrderFormView = ({
           onPress={() => setIsVisible(true)}
         >
           <Text
-            style={{ ...styles.streetAddress, width: '85%' }}
+            style={{
+              ...styles.streetAddress,
+              width: '85%',
+              textAlign: 'left',
+            }}
             title={order?.address ?? ''}
           />
           <Text style={styles.streetAddress} title={t('edit')} />
@@ -335,13 +340,13 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
-              }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
+                  order?.phonenumber
+                }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}
           isSmall
-          width={'45%'}
           fontSized={getHeight(fontSize.textL)}
           height={getHeight(dimens.marginL + 6)}
           onPress={() => {
@@ -522,6 +527,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginL + dimens.paddingXs),
     width: getWidth(dimens.marginL + dimens.paddingXs),
     resizeMode: 'center',
+    transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   textInput: {
     borderBottomWidth: getHeight(dimens.borderThin),

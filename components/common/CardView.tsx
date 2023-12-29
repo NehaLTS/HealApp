@@ -17,7 +17,7 @@ import Animated, {
   FadeInDown,
   FadeInUp,
 } from 'react-native-reanimated';
-import { getProviderImage } from 'libs/utility/Utils';
+import { getProviderImage, getProviderName } from 'libs/utility/Utils';
 import { useTranslation } from 'react-i18next';
 
 const CardView = ({ item, index, isSearch }: any) => {
@@ -29,8 +29,8 @@ const CardView = ({ item, index, isSearch }: any) => {
   const { t } = useTranslation();
 
   const onPressOrder = () => {
-    if (userProfile?.isPaymentAdded) {
-      if (item?.name === 'Alternative medicine') {
+    if (userProfile?.isPaymentAdded && userProfile?.card_number !== undefined) {
+      if (item?.provider_type_id === 3) {
         navigation.navigate(NavigationRoutes.HealerHome, {
           supplier: item,
         });
@@ -43,7 +43,6 @@ const CardView = ({ item, index, isSearch }: any) => {
       setModalVisible(true);
     }
   };
-  // console.log('userProfile?.isPaymentAdded', userProfile?.isPaymentAdded);
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
@@ -70,7 +69,7 @@ const CardView = ({ item, index, isSearch }: any) => {
         </>
       ) : (
         <View style={styles.paymentContainer}>
-          <UserPaymentView isFromHome item={item} />
+          <UserPaymentView isFromHome item={item} isFromSummary />
         </View>
       )}
     </Modal>
@@ -81,6 +80,7 @@ const CardView = ({ item, index, isSearch }: any) => {
         key={index}
         entering={FadeInUp.duration(200).easing(Easing.ease)}
         exiting={FadeInDown.duration(10).easing(Easing.ease)}
+        style={{}}
       >
         {!isSearch ? (
           <TouchableOpacity
@@ -89,13 +89,13 @@ const CardView = ({ item, index, isSearch }: any) => {
             activeOpacity={1}
           >
             <Image
-              source={getProviderImage(item?.name)}
+              source={getProviderImage(item?.name, item?.provider_type_id)}
               style={styles.specialistIcon}
             />
             <Text
               numberOfLines={2}
               style={styles.specialist}
-              title={item?.name}
+              title={getProviderName(item?.provider_type_id)}
             />
           </TouchableOpacity>
         ) : (
@@ -105,10 +105,13 @@ const CardView = ({ item, index, isSearch }: any) => {
           >
             <View style={styles.container}>
               <Image
-                source={getProviderImage(item?.name)}
+                source={getProviderImage(item?.name, item?.provider_type_id)}
                 style={styles.specialistIcon}
               />
-              <Text style={styles.specialistSearched} title={item?.name} />
+              <Text
+                style={styles.specialistSearched}
+                title={getProviderName(item?.provider_type_id)}
+              />
             </View>
             <Button
               title={t('order')}

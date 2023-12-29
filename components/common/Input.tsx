@@ -284,6 +284,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginL + dimens.paddingXs),
     width: getWidth(dimens.marginL + dimens.paddingXs),
     resizeMode: 'center',
+    transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   removeImage: {
     height: getHeight(22),

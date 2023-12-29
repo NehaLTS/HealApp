@@ -99,9 +99,7 @@ const DoctorDetailCard = ({
               <Text style={styles.arrivalText} title={status} />
               <Text
                 style={styles.time}
-                title={`${Math.round(
-                  time.minutes + 1 ?? 0 + 1,
-                )}${t(' min')}`}
+                title={`${Math.round(time.minutes + 1 ?? 0 + 1)}${t(' min')}`}
               />
               <TouchableOpacity
                 style={styles.details}
@@ -187,6 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
     width: '90%',
     flexWrap: 'wrap',
+    textAlign: 'left',
   },
   detailItem: {
     gap: getWidth(dimens.marginM),
@@ -205,6 +204,7 @@ const styles = StyleSheet.create({
     width: getHeight(110),
     height: getHeight(110),
     resizeMode: 'contain',
+    borderRadius: getHeight(60),
   },
   starIcon: {
     position: 'absolute',

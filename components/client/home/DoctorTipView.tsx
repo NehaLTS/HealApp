@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
   const tipAmounts = ['5 NIS', '10 NIS', '15 NIS', 'Other'];
   const { t } = useTranslation();
+  const [addTip, setAddTip] = React.useState<number | null>(null);
 
   return (
     <>
@@ -21,11 +22,13 @@ const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
           source={require('../../../assets/icon/doctorIcon.png')}
           style={styles.doctorIcon}
         />
-        <Image
-          source={require('../../../assets/icon/star.png')}
-          style={styles.star}
-        />
-        <Text style={styles.rating} title={'4.8'} />
+        <View style={styles.providerRating}>
+          <Image
+            source={require('../../../assets/icon/star.png')}
+            style={styles.star}
+          />
+          <Text style={styles.rating} title={'4.8'} />
+        </View>
       </View>
       <View style={styles.container}>
         <Text
@@ -48,6 +51,8 @@ const DoctorTipView = ({ onPress }: { onPress: () => void }) => {
             width={'20%'}
             height={40}
             borderRadius={10}
+            isPrimary={addTip === index}
+            onPress={() => setAddTip(index)}
           />
         ))}
       </View>
@@ -105,15 +110,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rating: {
-    position: 'absolute',
-    bottom: getHeight(-11),
-    right: getWidth(115),
     fontSize: getHeight(fontSize.textM),
   },
   star: {
-    position: 'absolute',
-    bottom: getHeight(dimens.marginS),
-    right: getWidth(112),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
     resizeMode: 'center',
@@ -131,5 +130,10 @@ const styles = StyleSheet.create({
   imagecontainer: {
     alignItems: 'center',
     marginTop: getHeight(dimens.imageXs),
+  },
+  providerRating: {
+    position: 'absolute',
+    bottom: 0,
+    right: getWidth(112),
   },
 });

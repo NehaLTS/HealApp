@@ -15,9 +15,10 @@ import { ProviderSpeciality, ProviderType } from 'libs/types/UserType';
 import Dropdown from 'components/common/Dropdown';
 import { fontFamily } from 'designToken/fontFamily';
 import Loader from 'components/common/Loader';
+import { getTitle } from 'libs/utility/Utils';
 
 const ProviderDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     firstNameRef,
     lastNameRef,
@@ -46,12 +47,13 @@ const ProviderDetail = () => {
     setIsLoading,
   } = ProviderDetailController();
 
+  console.log('selectedProvider', selectedProvider);
   const renderSpecialityItems = (item: ProviderSpeciality) => {
-    return <Text style={styles.textItem} title={item?.name.en} />;
+    return <Text style={styles.textItem} title={getTitle(item?.name, i18n)} />;
   };
 
   const renderProviderItems = (item: ProviderType) => {
-    return <Text style={styles.textItem} title={item?.name.en} />;
+    return <Text style={styles.textItem} title={getTitle(item?.name, i18n)} />;
   };
 
   return (
@@ -90,8 +92,24 @@ const ProviderDetail = () => {
 
       <Dropdown
         data={providerTypeList}
-        labelField="name.en"
-        valueField="name.en"
+        labelField={
+          i18n.language === 'ru'
+            ? 'name.ru'
+            : i18n.language === 'he'
+            ? 'name.he'
+            : i18n.language === 'ar'
+            ? 'name.ar'
+            : 'name.en'
+        }
+        valueField={
+          i18n.language === 'ru'
+            ? 'name.ru'
+            : i18n.language === 'he'
+            ? 'name.he'
+            : i18n.language === 'ar'
+            ? 'name.ar'
+            : 'name.en'
+        }
         placeholder={t('type_of_provider')}
         value={selectedProvider}
         onChange={onChangeProviderType}
@@ -101,8 +119,24 @@ const ProviderDetail = () => {
 
       <Dropdown
         data={specialityList}
-        labelField="name.en"
-        valueField="name.en"
+        labelField={
+          i18n.language === 'ru'
+            ? 'name.ru'
+            : i18n.language === 'he'
+            ? 'name.he'
+            : i18n.language === 'ar'
+            ? 'name.ar'
+            : 'name.en'
+        }
+        valueField={
+          i18n.language === 'ru'
+            ? 'name.ru'
+            : i18n.language === 'he'
+            ? 'name.he'
+            : i18n.language === 'ar'
+            ? 'name.ar'
+            : 'name.en'
+        }
         placeholder={t('specialty')}
         value={selectedSpecialty}
         onChange={onChangeSpeciality}

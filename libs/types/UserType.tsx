@@ -33,8 +33,10 @@ export interface UserTypeProvider {
 
 export interface HealLanguageType {
   en: string;
-  hi: string;
+  hi?: string;
   he: string;
+  ar: string;
+  ru: string;
 }
 
 type UserProvider = {
@@ -136,7 +138,7 @@ export interface ClientProfile {
   profilePicture?: string;
   phoneNumber: string;
   email?: string;
-  address?: string;
+  address?: userlocationType;
   city?: string;
   state?: string;
   country?: string;
@@ -289,18 +291,18 @@ export interface paymentApproved {
 
 export interface AddToWallet {
   client_id: string;
-  wallet_amount: string
+  wallet_amount: string;
 }
 
 export interface OrderCancelByClient {
   order_id: string;
-  orderTime: string
+  orderTime: string;
 }
 export interface OrderCancelByClientRespnse {
   isSuccessful: string;
   msg: string;
   clientAmount: string;
-  providerAmount: string
+  providerAmount: string;
 }
 
 export interface PaymentHistoryType {

@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import {
   StyleProp,
+  StyleSheet,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
@@ -37,6 +38,7 @@ const TextButton = ({
       <Text
         style={[
           style,
+          styles.title,
           { fontSize: fs ?? getHeight(fontSize.heading) },
           isActive && { textDecorationLine: 'underline' },
         ]}
@@ -47,3 +49,9 @@ const TextButton = ({
 };
 
 export default TextButton;
+
+const styles = StyleSheet.create({
+  title: {
+    textAlign: 'left',
+  },
+});

@@ -245,11 +245,12 @@ const HomeScreenControlller = () => {
       });
     //  }, );
   };
-  const onLogoutButtonPress = () => {
-    deleteLocalData();
-    setProviderProfile({} as ProviderProfile);
-    navigation.navigate(NavigationRoutes.IntroStack);
-  };
+  // const onLogoutButtonPress = () => {
+  //   deleteLocalData();
+  //   setProviderProfile({} as ProviderProfile);
+  //   navigation.navigate(NavigationRoutes.IntroStack);
+  //   onPressToggle()
+  // };
   //  const ProviderAvailability=()=>{
   //   providerAvailabilityStatus( {provider_id:order?.eventData?.providerId})
   //  }
@@ -259,10 +260,11 @@ const HomeScreenControlller = () => {
     updateLocation,
     providerLocation,
     setAcceptOrder,
-    onLogoutButtonPress,
+    navigation,
     TreatementEnded,
     providerDaySummary,
     getSummaryofDay,
+    setProviderProfile,
   };
 };
 

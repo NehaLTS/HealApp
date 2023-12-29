@@ -25,7 +25,7 @@ const OrderFormController = ({
   order?.services?.forEach((item) => {
     if (!uniqueMenuIds?.includes(item.menu_id)) {
       uniqueMenuIds?.push(item.menu_id);
-      console.log('uniqueMenuIds', uniqueMenuIds)
+      console.log('uniqueMenuIds', uniqueMenuIds);
     }
   });
 
@@ -37,7 +37,10 @@ const OrderFormController = ({
   const [otherReasons, setOtherReasons] = useState(order?.Additional_notes);
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
-  const [activeCheckbox, setActiveCheckbox] = useState<number[]>([1, ...uniqueMenuIds]);
+  const [activeCheckbox, setActiveCheckbox] = useState<number[]>([
+    1,
+    ...uniqueMenuIds,
+  ]);
   const [selectedResourceType, setSelectedResourceType] = useState<any[]>(
     order?.reason,
   );
@@ -72,9 +75,6 @@ const OrderFormController = ({
     const formattedDate = birthDate.toLocaleString('en-US', options as any);
     return formattedDate;
   }
-
-
-
 
   function calculateAgeFromDate(dateString: string) {
     const parts = dateString.split(' ');
@@ -143,8 +143,8 @@ const OrderFormController = ({
       updatedActiveButton.push(item.reason_id);
     }
     setActiveButton(updatedActiveButton);
-    const updatedSelectedResourceType = selectedResourceType.includes(item)
-      ? selectedResourceType.filter((selectedItem) => selectedItem !== item)
+    const updatedSelectedResourceType = selectedResourceType?.includes(item)
+      ? selectedResourceType?.filter((selectedItem) => selectedItem !== item)
       : [...selectedResourceType, item];
 
     setSelectedResourceType(updatedSelectedResourceType);
@@ -178,16 +178,17 @@ const OrderFormController = ({
     // });
   };
 
-
   const handleItemPress = (item: TreatmentMenu) => {
     const updatedActiveCheckbox = [...activeCheckbox];
     const itemIndex = updatedActiveCheckbox.indexOf(item?.menu_id);
-    let updatedSelectedMenu: TreatmentMenu[] = [{
-      menu_id: 1,
-      name: { en: 'Basic', he: '', hi: '' },
-      price: "500",
-      provider_type_id: 0
-    }]; // Explicitly define the type
+    let updatedSelectedMenu: TreatmentMenu[] = [
+      {
+        menu_id: 1,
+        name: { en: 'Basic', he: '', hi: '' },
+        price: '500',
+        provider_type_id: 0,
+      },
+    ]; // Explicitly define the type
     if (itemIndex !== -1) {
       updatedActiveCheckbox.splice(itemIndex, 1);
     } else {
@@ -278,7 +279,7 @@ const OrderFormController = ({
     setIsShowIcon,
     userLocation,
     otherReasonsRef,
-    setUserLocation
+    setUserLocation,
   };
 };
 

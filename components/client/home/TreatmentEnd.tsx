@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Text from 'components/common/Text';
 import { getHeight, getWidth } from 'libs/StyleHelper';
@@ -9,6 +9,8 @@ import { colors } from 'designToken/colors';
 import Button from 'components/common/Button';
 import { Order } from 'libs/types/OrderTypes';
 import { useTranslation } from 'react-i18next';
+import like from '../../../assets/icon/likeOn.png';
+import unLike from '../../../assets/icon/likeOff.png';
 
 const TreatmentEnd = ({
   onPress,
@@ -18,55 +20,61 @@ const TreatmentEnd = ({
   currentOrder: Order;
 }) => {
   const { t } = useTranslation();
+  const [likeProfile, setLikeProfile] = React.useState(false);
+  const onLikeProfile = () => {
+    setLikeProfile(!likeProfile);
+  };
   return (
     <>
       <Text title={t('treatment_end')} style={styles.treatmentText} />
       <View style={styles.imageContainer}>
         <View style={styles.doctorIconContainer}>
           <Image
-            source={require('../../../assets/icon/doctorIcon.png')}
+            source={
+              currentOrder?.providerDetails?.providerProfilePicture
+                ? { uri: currentOrder?.providerDetails?.providerProfilePicture }
+                : require('../../../assets/icon/doctorIcon.png')
+            }
             style={styles.doctorIcon}
           />
-          <Image
-            source={require('../../../assets/icon/star.png')}
-            style={styles.starIcon}
-          />
-          <Text
-            style={styles.rating}
-            title={currentOrder?.providerDetails?.providerRating}
-          />
+          <View style={styles.providerRating}>
+            <Image
+              source={require('../../../assets/icon/star.png')}
+              style={styles.starIcon}
+            />
+            <Text
+              style={styles.rating}
+              title={currentOrder?.providerDetails?.providerRating}
+            />
+          </View>
         </View>
-        <View style={{ justifyContent: 'center' }}>
+        <View>
           <Text
             title={currentOrder?.providerDetails?.providerName}
             style={{
               fontSize: getHeight(fontSize.textXl),
-              width: '70%',
               flexWrap: 'wrap',
+              textAlign: 'left',
+              minWidth: '50%',
+              width: '90%',
             }}
           />
           <View style={styles.container}>
-            <Image
-              source={require('../../../assets/icon/heart.png')}
-              style={styles.heartIcon}
-            />
+            <TouchableOpacity onPress={onLikeProfile}>
+              <Image
+                source={likeProfile ? like : unLike}
+                style={styles.heartIcon}
+              />
+            </TouchableOpacity>
             <Text title={t('add_favourites')} style={styles.text} />
           </View>
         </View>
       </View>
       <View style={styles.Container}>
-        <View
-          style={{
-            width: '30%',
-            alignItems: 'center',
-            marginLeft: getWidth(20),
-          }}
-        >
-          <Image
-            source={require('../../../assets/icon/cardboard.png')}
-            style={styles.doctorCard}
-          />
-        </View>
+        <Image
+          source={require('../../../assets/icon/cardboard.png')}
+          style={styles.doctorCard}
+        />
         <View style={{ gap: getWidth(10) }}>
           <Text title={t('summary')} style={styles.order} />
           <View style={{ gap: 8 }}>
@@ -107,43 +115,42 @@ export default TreatmentEnd;
 
 const styles = StyleSheet.create({
   doctorIcon: {
-    width: getWidth(110),
-    height: getHeight(120),
+    width: getHeight(102),
+    height: getHeight(102),
     resizeMode: 'contain',
+    borderRadius: getHeight(55),
   },
   doctorCard: {
-    width: getWidth(100),
-    height: getHeight(110),
+    width: getWidth(102),
+    height: getHeight(102),
     resizeMode: 'contain',
     // marginLeft: getWidth(25),
   },
   starIcon: {
-    position: 'absolute',
-    bottom: getHeight(dimens.marginS),
-    right: getHeight(dimens.marginS + 8),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
     resizeMode: 'center',
   },
   imageContainer: {
     flexDirection: 'row',
-    gap: getHeight(dimens.imageXs),
-    justifyContent: 'center',
+    gap: getHeight(dimens.marginL),
     marginBottom: getHeight(dimens.imageS + dimens.marginL),
+    alignItems: 'center',
   },
   Container: {
     flexDirection: 'row',
-    gap: getHeight(dimens.imageXs),
-    justifyContent: 'center',
+    gap: getHeight(dimens.marginL),
     marginBottom: getHeight(dimens.imageS + dimens.marginL),
+    alignItems: 'center',
   },
   heartIcon: {
-    width: getWidth(dimens.marginM),
-    height: getHeight(dimens.marginM),
-    resizeMode: 'contain',
+    width: getHeight(20),
+    height: getHeight(20),
+    resizeMode: 'center',
   },
   text: {
     fontSize: getHeight(fontSize.textM),
+    textAlign: 'left',
   },
   treatmentText: {
     textAlign: 'center',
@@ -158,22 +165,24 @@ const styles = StyleSheet.create({
   },
   doctorIconContainer: {
     position: 'relative',
-    width: '30%',
-    alignItems: 'center',
-    marginLeft: getHeight(20),
   },
   order: {
     fontSize: getHeight(20),
+    textAlign: 'left',
   },
   rating: {
-    position: 'absolute',
-    bottom: getHeight(-11),
-    right: getHeight(dimens.paddingXs),
     fontSize: getHeight(fontSize.textM),
     color: colors.secondary,
+    textAlign: 'left',
   },
   total: {
     fontFamily: fontFamily.medium,
     fontSize: getHeight(fontSize.textM),
+  },
+  providerRating: {
+    position: 'absolute',
+    bottom: getHeight(-8),
+    right: getWidth(0),
+    alignItems: 'center',
   },
 });

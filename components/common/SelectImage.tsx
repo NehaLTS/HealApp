@@ -6,6 +6,7 @@ import { fontWeight } from 'designToken/fontWeights';
 import { getHeight } from 'libs/StyleHelper';
 import Modal from 'react-native-modal/dist/modal';
 import uploadImage from 'libs/uploadImage';
+import { useTranslation } from 'react-i18next';
 
 const SelectImage = ({
   imageUri,
@@ -20,6 +21,7 @@ const SelectImage = ({
 }) => {
   const [width, setWidth] = useState(250);
   const [height, setHeight] = useState(250);
+  const { t } = useTranslation();
 
   const handleImagePicker = () => {
     ImagePicker?.openPicker?.({
@@ -50,7 +52,7 @@ const SelectImage = ({
       .catch((error: Error) => {
         console.log('error camera', error);
         if (error.message.includes('permission')) {
-          Alert.alert('Please give Camera Permission from Settings');
+          Alert.alert(t('camera_permission'));
         }
       });
   };
@@ -84,13 +86,17 @@ const SelectImage = ({
       .catch((error: Error) => {
         console.log('error camera', error);
         if (error.message.includes('permission')) {
-          Alert.alert('Please give Camera Permission from Settings');
+          Alert.alert(t('camera_permission'));
         }
       });
   };
 
   return (
-    <Modal isVisible={isShowModal} style={{ justifyContent: 'flex-end' }}>
+    <Modal
+      isVisible={isShowModal}
+      style={{ justifyContent: 'flex-end' }}
+      onBackdropPress={() => closeModal(false)}
+    >
       <View
         style={{
           width: '100%',
@@ -119,7 +125,7 @@ const SelectImage = ({
                 fontWeight: fontWeight.semiBold,
               }}
             >
-              {'Choose from Gallery'}
+              {t('choose_gallery')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -136,7 +142,7 @@ const SelectImage = ({
                 fontWeight: fontWeight.semiBold,
               }}
             >
-              {'Take a Photo'}
+              {t('take_photo')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -156,7 +162,7 @@ const SelectImage = ({
               fontWeight: fontWeight.semiBold,
             }}
           >
-            {'Close'}
+            {t('close')}
           </Text>
         </TouchableOpacity>
       </View>

@@ -42,18 +42,18 @@ const ToggleButton = ({
     });
   }, [isEnabled, isDisabled, onChange, toggleValue]);
 
-  const handlePosition = useAnimatedStyle(() => {
-    const translateX = interpolate(
-      toggleValue.value,
-      [0, 1],
-      [0, 38],
-      Extrapolate.CLAMP,
-    );
+  // const handlePosition = useAnimatedStyle(() => {
+  //   const translateX = interpolate(
+  //     toggleValue.value,
+  //     [0, 1],
+  //     [0, 38],
+  //     Extrapolate.CLAMP,
+  //   );
 
-    return {
-      transform: [{ translateX }],
-    };
-  });
+  //   return {
+  //     transform: [{ translateX }],
+  //   };
+  // });
 
   return (
     <TouchableOpacity
@@ -61,7 +61,12 @@ const ToggleButton = ({
       onPress={toggleSwitch}
       style={styles.button}
     >
-      <Animated.View style={[styles.handle, handlePosition]} />
+      <Animated.View
+        style={[
+          styles.handle,
+          isEnabled ? { right: getHeight(8) } : { left: getHeight(8) },
+        ]}
+      />
     </TouchableOpacity>
   );
 };
@@ -84,6 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
     resizeMode: 'center',
     alignSelf: 'center',
+    position: 'absolute',
   },
 });
 

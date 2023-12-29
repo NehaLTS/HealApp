@@ -66,14 +66,17 @@ const OrderDetailsController = () => {
         : supplier?.provider_type_id.toString();
     setOrder((prevOrder) => ({
       ...prevOrder,
-      services: [...prevOrder.services, {
-        menu_id: 1,
-        name: { en: 'Basic', he: '', hi: '' },
-        price: "500",
-        provider_type_id: PROVIDER_TYPE_ID
-      }],
+      services: [
+        ...prevOrder.services,
+        {
+          menu_id: 1,
+          name: { en: 'Basic', he: '', hi: '' },
+          price: '500',
+          provider_type_id: PROVIDER_TYPE_ID,
+        },
+      ],
     }));
-  }, [])
+  }, []);
   const treatmentReasons = async () => {
     const PROVIDER_TYPE_ID =
       supplier.name === 'Alternative medicine'
@@ -123,7 +126,7 @@ const OrderDetailsController = () => {
   const TotalCost = order?.services
     .reduce((total, item) => total + parseInt(item.price, 10), 0)
     .toString();
-  // console.log('order.  transformedItems', symptoms)
+  console.log('hello', concatenatedIds);
   const handleNextButtonPress = async () => {
     console.log('order111', order);
     let isLocationPermissionOn = await checkLocationPermission();
@@ -167,7 +170,8 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${
+              !order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -182,7 +186,7 @@ const OrderDetailsController = () => {
 
       if (showSummary) {
         let orderDetails = {
-          client_id: userId.toString(),
+          client_id: userId?.toString(),
           patient_type: order.patient_type.type ?? '',
           patient_name: order.patient_name,
           address: order?.address ?? '',
@@ -193,15 +197,15 @@ const OrderDetailsController = () => {
             : order?.patient_type?.age ?? '',
           // services: order.services[0].menu_id.toString(),
 
-          services: [...concatenatedIds.toString(), '1'],
+          services: `${concatenatedIds}, 1`,
           symptoms: JSON.stringify(symptoms),
           Additional_notes: order?.Additional_notes,
           Estimate_arrival: order?.Estimate_arrival,
           Instructions_for_arrival: order?.Instructions_for_arrival,
           Payment_mode: order?.Payment_mode,
-          TotalCost: (order?.services
-            .reduce((total, item) => total + parseInt(item.price, 10), 0))
-            .toString(),
+          TotalCost: order?.services
+            .reduce((total, item) => total + parseInt(item.price, 10), 0)
+            ?.toString(),
           latitude:
             userLocation.onboardingLocation?.latitude ??
             userLocation.currentLocation?.latitude,
@@ -222,10 +226,10 @@ const OrderDetailsController = () => {
         });
       }
       if (order?.isOrderForOther && order?.patient_type?.age === '') {
-        Alert.alert('Please submit Age and phone number.');
+        Alert.alert(t('submit_age_phone'));
       }
     } else {
-      Alert.alert('Please Enable Location Permission');
+      Alert.alert(t('enable_location'));
     }
   };
   return {

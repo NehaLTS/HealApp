@@ -22,7 +22,7 @@
   "address": "Адрес*",
   "date_of_birth": "Дата рождения*",
   "id_number": "Идентификационный номер*",
-  "add_a_profile_photo": "Добавить фотографию профиля",
+  "add_a_profile_photo": "Требуется фото профиля",
   "skip_for_later": "Пропустить на потом",
   "profile_photo": "Фото профиля",
   "add_credit_card": "Добавить кредитную карту",
@@ -117,11 +117,11 @@
   "number_not_valid": "Неверный номер телефона",
   "card_number_required": "Требуется номер карты",
   "card_number_short": "Номер карты слишком короткий",
-  "expiry_number_required": "Требуется\nсрок действия",
-  "expiry_number_short": "Слишком короткий\nсрок действия",
+  "expiry_number_required": "Требуется срок действия",
+  "expiry_number_short": "Слишком короткий срок действия",
   "cvv_required": "Требуется CVV",
-  "cvv_number_short": "Слишком короткий\nCVV",
-  "expiry_date_required": "Требуется\nсрок действия",
+  "cvv_number_short": "Слишком короткий CVV",
+  "expiry_date_required": "Требуется срок действия",
   "select_license_picture": "Пожалуйста, выберите фотографию лицензии",
   "service_required": "Требуется название услуги",
   "price_required": "Требуется цена",
@@ -151,7 +151,7 @@
   "looking_doctor": "Поиск врача",
   "doctor_found": "Врач найден!",
   "no_fee_collected": "*Плата не взимается",
-  "doctor_arrived": "Врач прибыл",
+  "has_arrived": "Врач прибыл",
   "3_minutes_to_cancel": "*У вас есть 3 минуты для бесплатной отмены заказа",
   "chest_pain": "Боль в груди",
   "see_details": "Посмотреть подробности",
@@ -167,6 +167,7 @@
   "now_you_available": "Теперь вы доступны\nдля приема заказов",
   "switch_toggle": "Переключите переключатель на 'Доступно',\nчтобы начать принимать заказы",
   "you_have_5_minutes": "У вас есть 5 минут, чтобы отменить заказ бесплатно",
+  "client_have_5_minutes": "У клиента есть 5 минут на бесплатную отмену заказа",
   "voltaren_shot": "укол вольтарен, укол клаксена",
   "less_details": "Показать меньше деталей",
   "found": "найден",
@@ -197,5 +198,54 @@
   "no_orders_yet": "Пока нет заказов",
   "clients_today": "Клиенты сегодня",
   "arrival_time": "Среднее время прибытия",
-  "balance": "Мой баланс"
+  "balance": "Мой баланс",
+  "ordered": "Заказано:",
+  "call_client": "Позвонить клиенту",
+  "update_arrived": "Обновить ваше прибытие",
+  "you_arrived": "Вы прибыли",
+  "patient_text": "Пациент",
+  "services_provided": "Предоставленные услуги",
+  "treatment_ended": "Лечение завершено",
+  "total_text": "Итого",
+  "provider_text": "Поставщик услуг",
+  "no_nearby_provider": "Врачи поблизости не найдены",
+  "try_again_later": "Извините, пожалуйста, попробуйте позже",
+  "order_accepted": "Заказ принят!",
+  "order_is_accepted": "Ваш заказ принят!",
+  "location_required": "Требуется доступ к местоположению",
+  "location_required_text": "Пожалуйста, разрешите доступ к местоположению в настройках или включите GPS и перезапустите приложение",
+  "location_permission": "Разрешение на местоположение",
+  "location_permission_text": "Это приложение требует доступ к вашему местоположению.",
+  "ask_me_later": "Спросите меня позже",
+  "take_photo": "Сделать фото",
+  "choose_gallery": "Выбрать из галереи",
+  "healer_title": "Какого рода лечение\nвы ищете?",
+  "camera_permission": "Пожалуйста, предоставьте разрешение на камеру из настроек",
+  "enable_location": "Пожалуйста, разрешите доступ к местоположению",
+  "submit_age_phone": "Пожалуйста, предоставьте возраст и номер телефона.",
+  "select_services_provide": "Пожалуйста, выберите предоставляемые вами услуги.",
+  "home": {
+    "providerList": [
+      {
+        "provider_type_id": 1,
+        "image": "assets/icon/doctor.png",
+        "name": "Врач - визит на дом"
+      },
+      {
+        "provider_type_id": 2,
+        "image": "assets/icon/nurse.png",
+        "name": "Медсестра - визит на дом"
+      },
+      {
+        "provider_type_id": 3,
+        "image": "assets/icon/healer.png",
+        "name": "Альтернативная медицина"
+      },
+      {
+        "provider_type_id": 4,
+        "image": "assets/icon/physio.png",
+        "name": "Физиотерапия - визит на дом"
+      }
+    ]
+  }
 }

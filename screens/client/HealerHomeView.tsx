@@ -1,51 +1,46 @@
+import { useNavigation, useRoute } from '@react-navigation/native';
+import Loader from 'components/common/Loader';
 import Text from 'components/common/Text';
-import React, { useEffect, useState } from 'react';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import downArrow from '../../assets/icon/downArrow.png';
-import arrowBack from '../../assets/icon/arrowBack.png';
-import physio from '../../assets/icon/physio.png';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import NavigationRoutes from 'navigator/NavigationRoutes';
-import { getProviderImage } from 'libs/utility/Utils';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
-import { UseClientUserContext } from 'contexts/UseClientUserContext';
-import Loader from 'components/common/Loader';
+import { getProviderImage } from 'libs/utility/Utils';
+import NavigationRoutes from 'navigator/NavigationRoutes';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import arrowBack from '../../assets/icon/arrowBack.png';
 
 const HealerHomeView = () => {
   const route = useRoute<any>();
-  const [isSelected, setIsSelected] = useState<number>(-1)
-  const navigation = useNavigation();
-  const { healerServices } = AuthServicesClient()
-  const { token } = UseClientUserContext()
-  const [healerServcesData, setHealerServicesData] = useState<any>([])
-  const [showLoader, setShowLoader] = useState<boolean>(true)
-
+  const { t } = useTranslation();
+  const [isSelected, setIsSelected] = useState<number>(-1);
+  const navigation = useNavigation<any>();
+  const { healerServices } = AuthServicesClient();
+  const { token } = UseClientUserContext();
+  const [healerServicesData, setHealerServicesData] = useState<any>([]);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
   useEffect(() => {
-    healerServices(token).then((res) => {
-      console.log("healerServices", res)
-      setHealerServicesData(res)
-      setShowLoader(false)
-    }
-
-    ).catch((error) => {
-      console.log("hearlerError", error)
-
-    })
-  }, [])
-
-
-
+    healerServices(token)
+      .then((res) => {
+        console.log('healerServices', res);
+        setHealerServicesData(res);
+        setShowLoader(false);
+      })
+      .catch((error) => {
+        console.log('hearlerError', error);
+      });
+  }, []);
+  console.log('healerServicesData', healerServicesData);
   const headerLeft = () => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
       <Image source={arrowBack} style={styles.arrowBack} />
@@ -53,7 +48,13 @@ const HealerHomeView = () => {
   );
   const headerTitle = () => (
     <TouchableOpacity>
-      <Image source={getProviderImage(route?.params?.supplier?.name)} style={styles.physio} />
+      <Image
+        source={getProviderImage(
+          route?.params?.supplier?.name,
+          route?.params?.supplier?.provider_type_id,
+        )}
+        style={styles.physio}
+      />
     </TouchableOpacity>
   );
   const headerRight = () => (
@@ -67,29 +68,35 @@ const HealerHomeView = () => {
         {headerRight()}
       </View>
       <View style={styles.container}>
-        <Text
-          title={'What kind of treatment\nare you looking for?'}
-          style={styles.heading}
-        />
+        <Text title={t('healer_title')} style={styles.heading} />
         <ScrollView style={{ width: '100%' }}>
-          {showLoader ? <Loader />
-            :
+          {showLoader ? (
+            <Loader />
+          ) : (
             <>
-              {healerServcesData.map((card, index) => (
-                <TouchableOpacity key={card.provider_type_id} style={[styles.cardContainer, { backgroundColor: index === isSelected ? colors.secondary : colors.white }]} onPress={() => {
-                  setIsSelected(index)
-                  console.log("Healercard", card)
-                  navigation.navigate(NavigationRoutes.OrderDetails, {
-                    supplier: route?.params?.supplier,
-                    selectedHealerServices: card
-                  });
-                }}>
+              {healerServicesData?.map((card: any, index: number) => (
+                <TouchableOpacity
+                  key={index}
+                  style={[
+                    styles.cardContainer,
+                    {
+                      backgroundColor:
+                        index === isSelected ? colors.secondary : colors.white,
+                    },
+                  ]}
+                  onPress={() => {
+                    setIsSelected(index);
+                    navigation.navigate(NavigationRoutes.OrderDetails, {
+                      supplier: route?.params?.supplier,
+                      selectedHealerServices: card,
+                    });
+                  }}
+                >
                   <Text title={card.specialty} style={styles.text} />
-                  {/* <Image source={downArrow} style={styles.downArrow} /> */}
                 </TouchableOpacity>
               ))}
             </>
-          }
+          )}
         </ScrollView>
       </View>
     </>
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: getHeight(20),
+    paddingVertical: getHeight(20),
     backgroundColor: colors.white,
   },
   cardContainer: {
@@ -109,10 +116,10 @@ const styles = StyleSheet.create({
     borderRadius: getHeight(dimens.marginS),
     padding: getHeight(dimens.marginM),
     marginBottom: getHeight(dimens.marginM),
-    width: '100%',
     shadowColor: colors.black,
     elevation: getWidth(11),
     position: 'relative',
+    marginHorizontal: getWidth(20),
   },
   text: {
     fontSize: getHeight(fontSize.textM),
@@ -140,9 +147,10 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   arrowBack: {
-    width: getWidth(18),
-    height: getHeight(18),
+    width: getWidth(20),
+    height: getHeight(20),
     resizeMode: 'contain',
+    transform: [{ rotate: '180deg' }],
   },
   physio: {
     width: getWidth(50),

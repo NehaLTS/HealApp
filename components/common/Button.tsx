@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: getHeight(dimens.buttonHeight),
+    paddingHorizontal: getWidth(10),
     // borderRadius: getWidth(dimens.marginS / dimens.borderBold),
     zIndex: 1,
   },

@@ -15,6 +15,9 @@ import {
   View,
 } from 'react-native';
 import ProviderServicesController from '../controllers/ProviderServicesController';
+import { getTitle } from 'libs/utility/Utils';
+import { useTranslation } from 'react-i18next';
+import { ProviderSpeciality } from 'libs/types/UserType';
 
 const ProviderServices = () => {
   const {
@@ -27,6 +30,7 @@ const ProviderServices = () => {
     onPrescriptionSelected,
     activeCheckbox,
   } = ProviderServicesController();
+  const { i18n } = useTranslation();
 
   const getFooterView = () => (
     <View style={styles.footerContainer}>
@@ -52,7 +56,10 @@ const ProviderServices = () => {
           >
             {services.map((item, index) => (
               <View key={index} style={styles.serviceRow}>
-                <Text style={styles.serviceText} title={item.name.en} />
+                <Text
+                  style={styles.serviceText}
+                  title={getTitle(item?.name, i18n)}
+                />
                 <View style={styles.serviceRight}>
                   <Text style={styles.serviceText} title={'$ ' + item.price} />
                   <TouchableOpacity

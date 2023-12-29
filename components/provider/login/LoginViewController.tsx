@@ -66,8 +66,6 @@ const LoginViewController = () => {
     if (!passwordRef.current.value) setPasswordError(t('password_required'));
     else if (passwordRef.current.value.length < 5)
       setPasswordError(t('must_be_8_characters'));
-    else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError(t(`password_must_have_special_character`));
     else setPasswordError('');
   };
 
@@ -191,14 +189,14 @@ const LoginViewController = () => {
       const googleId = userData.user.providerData[0].uid;
 
       /** To handle Google auth request to API */
-      console.log("GoogleSgnUpuserData", userData)
+      console.log('GoogleSgnUpuserData', userData);
       if (email && googleId) {
         const res = await onSubmitGoogleAuthRequestProvider({
           email,
           googleId,
           device_token: device_Token,
         });
-        console.log("GoogleSgnUp", res)
+        console.log('GoogleSgnUp', res);
         if (res?.isSuccessful === true) {
           handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {

@@ -77,12 +77,12 @@ const TakeOrderView = ({
             textAlign: 'center',
             marginBottom: 0,
           }}
-          title={'Order accepted'}
+          title={t('order_accepted')}
           entering={FadeInUp.duration(400).delay(400)}
         />
         <AnimatedText
           style={{ ...styles.smallText, marginBottom: getHeight(10) }}
-          title={'*Client has 5 minutes to cancel an order for free'}
+          title={t('client_have_5_minutes')}
           entering={ZoomIn.duration(400).delay(300)}
           numberOfLines={1}
         />
@@ -109,7 +109,7 @@ const TakeOrderView = ({
                 paddingBottom: getHeight(16),
                 fontSize: getHeight(fontSize.textXl - 1),
               }}
-              title={`Ordered: `}
+              title={`${t('ordered')} `}
               entering={FadeInLeft.duration(400).delay(600)}
             >
               {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
@@ -170,7 +170,7 @@ const TakeOrderView = ({
           }}
         >
           <TextButton
-            title={'See on Waze '}
+            title={`${t('see_waze')} `}
             fontSize={getHeight(fontSize.textXl)}
             style={{
               ...styles.seeOnWaze,
@@ -196,7 +196,7 @@ const TakeOrderView = ({
           }}
         >
           <TextButton
-            title={'Call the client'}
+            title={t('call_client')}
             onPress={() => {
               Linking.openURL(`tel:${order?.OrderReceive?.phone_number}`);
             }}
@@ -239,7 +239,7 @@ const TakeOrderView = ({
             onPress={onPressCancelOrder}
           />
           <Button
-            title={'Update you arrived'}
+            title={t('update_arrived')}
             style={styles.takeOrderButton}
             isSmall
             width={getHeight(150)}

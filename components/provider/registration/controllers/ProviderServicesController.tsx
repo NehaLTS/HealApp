@@ -7,8 +7,10 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
 import { Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const ProviderServicesController = () => {
+  const { t } = useTranslation();
   const { onGetProviderService, AddProviderServices } = AuthServicesProvider();
   const navigation = useNavigation();
   const { providerProfile, setCurrentStep, token, userId } =
@@ -20,6 +22,7 @@ const ProviderServicesController = () => {
     [],
   );
   console.log('providerProfile888', providerProfile);
+  console.log('selectedServices++++++++', selectedServices);
   const [activeCheckbox, setActiveCheckbox] = useState<number[]>([]);
   const service = JSON.stringify(selectedServices);
   const getProviderServices = async () => {
@@ -110,7 +113,7 @@ const ProviderServicesController = () => {
         setIsLoading(false);
       }
     } else {
-      Alert.alert('Please select services you provide.');
+      Alert.alert(t('select_services_provide'));
     }
   };
   return {

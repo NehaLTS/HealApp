@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 import OrderDetailsController from './OrderDetailsController';
 import { useTranslation } from 'react-i18next';
-import { getProviderImage } from 'libs/utility/Utils';
+import { getProviderImage, getProviderName } from 'libs/utility/Utils';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import Loader from 'components/common/Loader';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
@@ -57,13 +57,13 @@ const OrderDetails = () => {
   const HeaderTitle = () => (
     <View style={styles.servicesContainer}>
       <Image
-        source={getProviderImage(supplier?.name)}
+        source={getProviderImage(supplier?.name, supplier?.provider_type_id)}
         style={styles.specialistIcon}
       />
       <Text
         numberOfLines={2}
         style={styles.specialist}
-        title={supplier?.name}
+        title={getProviderName(supplier?.provider_type_id)}
       />
     </View>
   );
@@ -91,6 +91,11 @@ const OrderDetails = () => {
     if (showSummary) {
       BackHandler.addEventListener('hardwareBackPress', () => {
         setShowSummary(false);
+        return true;
+      });
+    } else {
+      BackHandler.addEventListener('hardwareBackPress', () => {
+        navigation.goBack();
         return true;
       });
     }
@@ -166,6 +171,7 @@ const styles = StyleSheet.create({
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: 'contain',
     top: 8,
+    transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   header: {
     backgroundColor: colors.white,

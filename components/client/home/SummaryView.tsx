@@ -23,6 +23,7 @@ import SummaryViewController from './SummaryViewController';
 import { useTranslation } from 'react-i18next';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { healerType } from 'libs/types/OrderTypes';
+import { getTitle } from 'libs/utility/Utils';
 interface SummaryViewProps {
   setShowSummary: (value: boolean) => void;
   order: OrderDetail;
@@ -45,7 +46,7 @@ const SummaryView = ({
     arrivalRef,
   } = SummaryViewController({ order });
   const { userProfile } = UseClientUserContext();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const paymentModal = () => (
     <Modal
@@ -53,6 +54,8 @@ const SummaryView = ({
       backdropOpacity={1}
       isVisible={isVisible}
       style={styles.modalContainer}
+      animationInTiming={400}
+      animationIn={'fadeInUp'}
     >
       <View style={styles.paymentContainer}>
         <UserPaymentView
@@ -115,10 +118,10 @@ const SummaryView = ({
               order?.reason?.length > 1
                 ? `${
                     index !== order?.reason?.length - 1
-                      ? `${item?.name?.en}, `
-                      : `${item?.name?.en}`
+                      ? `${getTitle(item?.name, i18n)}, `
+                      : `${getTitle(item?.name, i18n)}`
                   }`
-                : item?.name?.en
+                : getTitle(item?.name, i18n)
             }
             style={styles.textSmall}
           />
@@ -135,8 +138,8 @@ const SummaryView = ({
         <Text
           key={index}
           title={
-            item?.name?.en.charAt(0).toUpperCase() +
-            item?.name?.en.slice(1) +
+            getTitle(item?.name, i18n)?.charAt(0).toUpperCase() +
+            getTitle(item?.name, i18n)?.slice(1) +
             ' - ' +
             item?.price
           }
@@ -147,11 +150,7 @@ const SummaryView = ({
         <Text title={t('total')} style={styles.total} />
         <Text title={`${totalPrice} NIS`} style={styles.Small} />
       </View>
-      <Text
-        title={t('if_the_doctor')}
-        style={styles.payForIt}
-        numberOfLines={1}
-      />
+      <Text title={t('if_the_doctor')} style={styles.payForIt} />
     </>
   );
 
@@ -178,7 +177,7 @@ const SummaryView = ({
       {getSummaryHeader()}
       {getPersonalDetail()}
       {SymptomsView()}
-      {isHealer ? <></> : getServicesView()}
+      {!isHealer && getServicesView()}
       {getCardView()}
       <Text title={t('arrival')} style={styles.text} />
       <Text title={t('60_min')} style={styles.textSmall} />
@@ -200,6 +199,8 @@ const SummaryView = ({
           }
           style={styles.placeholder}
           multiline
+          returnKeyType="done"
+          blurOnSubmit
         />
       </View>
       {isVisible && paymentModal()}
@@ -279,7 +280,7 @@ const styles = StyleSheet.create({
   },
   patientAndAddress: {
     flexDirection: 'column',
-    minWidth: Dimensions.get('screen').width > 400 ? '29%' : '50%',
+    minWidth: Dimensions.get('screen').width > 400 ? '29%' : '47%',
   },
   total: {
     fontFamily: fontFamily.medium,
@@ -313,7 +314,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   placeholder: {
-    // marginTop: getHeight(-20),
     paddingLeft: getWidth(dimens.marginS),
     fontFamily: fontFamily.regular,
     color: colors.black,

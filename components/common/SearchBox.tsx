@@ -10,16 +10,22 @@ import {
   StyleSheet,
   TextInput,
   TextInputProps,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import remove from 'assets/icon/remove.png';
 
 const SearchBox = forwardRef(
   (
     {
       isTouchStart,
+      isShowCross,
+      onClearInputText,
       ...props
     }: {
       isTouchStart?: boolean;
+      isShowCross?: boolean;
+      onClearInputText?: () => void;
     } & TextInputProps,
     ref,
   ) => {
@@ -46,6 +52,19 @@ const SearchBox = forwardRef(
           ref={ref as React.LegacyRef<TextInput>}
           {...props}
         />
+        {isShowCross && (
+          <TouchableOpacity
+            style={{
+              marginRight: getWidth(6),
+              borderWidth: getHeight(1),
+              borderRadius: getHeight(20),
+              borderColor: colors.disabled,
+            }}
+            onPress={onClearInputText}
+          >
+            <Image source={remove} style={styles.removeImage} />
+          </TouchableOpacity>
+        )}
       </View>
     );
   },

@@ -18,7 +18,11 @@ import {
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
 } from 'react-native';
-import list from '../../strings/en.json';
+import enList from '../../strings/en.json';
+import arList from '../../strings/ar.json';
+import heList from '../../strings/he.json';
+import ruList from '../../strings/ru.json';
+import { useTranslation } from 'react-i18next';
 
 interface Location {
   latitude: number;
@@ -50,10 +54,25 @@ const HomeViewController = () => {
     remainingTime,
     userLocation,
   } = UseClientUserContext();
-  const orderList = list.home.providerList;
+  const { i18n } = useTranslation();
+
+  let providerList;
+  switch (i18n.language) {
+    case 'ar':
+      providerList = arList.home.providerList;
+      break;
+    case 'he':
+      providerList = heList.home.providerList;
+      break;
+    case 'ru':
+      providerList = ruList.home.providerList;
+      break;
+    default:
+      providerList = enList.home.providerList;
+      break;
+  }
+
   const [searchProviderList, setSearchProviderList] = useState<any>();
-  //TODO: Vandana to get it from en.json. It's declared in Home under Provider List. Also create a type in this class and pass it here
-  const providerList = orderList;
   const locationData = getLocalData('LOCATION');
 
   const { fetchCurrentAddress } = useCurrentAddress();
@@ -214,18 +233,17 @@ const HomeViewController = () => {
   };
 
   const onTouchStart = () => setIsTouchStart(false);
-  const onBlur = () => setIsTouchStart(true);
+  const onBlur = () => {
+    // if (providersList?.length === 0) {
+    //   setIsTouchStart(true);
+    // }
+    Keyboard.dismiss();
+  };
   const onPressBack = () => {
     Keyboard.dismiss();
     setProvidersList([]);
     setSearchSpecialist('');
     setIsTouchStart(true);
-    if (searchSpecialist.length > 0) {
-      setIsTouchStart(false);
-    }
-    if (dropdownVisible) {
-      setDropdownVisible(false);
-    }
   };
 
   return {

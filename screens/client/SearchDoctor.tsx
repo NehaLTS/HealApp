@@ -16,12 +16,18 @@ import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import useUpdateEffect from 'libs/UseUpdateEffect';
-import { ARRIVED, providerStatusOnHeader } from 'libs/constants/Constant';
+import {
+  ARRIVED,
+  ESTIMATE_ARRIVAL,
+  ON_THE_WAY,
+  ORDER_ACCEPTED,
+} from 'libs/constants/Constant';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
 import { Location } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  I18nManager,
   Image,
   ScrollView,
   StyleSheet,
@@ -67,7 +73,7 @@ const SearchDoctor = () => {
     focusOnPath,
     showAddToWallet,
     providerNotFound,
-    orderCancel
+    orderCancel,
   } = SearchDoctorController();
   console.log('providerStatus 111', providerStatus);
   const { setRemainingTime } = UseClientUserContext();
@@ -86,6 +92,22 @@ const SearchDoctor = () => {
       <Image source={arrowBack} style={styles.arrowBack} />
     </TouchableOpacity>
   );
+
+  const providerStatusOnHeader = (statusOfArriving: string) => {
+    switch (statusOfArriving) {
+      case ARRIVED:
+        return t('has_arrived');
+      case ON_THE_WAY:
+        return t('on_way');
+      case ORDER_ACCEPTED:
+        return t('on_way');
+      case ESTIMATE_ARRIVAL:
+        return t('found');
+      default:
+        return null;
+    }
+  };
+
   useEffect(() => {
     let watchId: any;
 
@@ -195,11 +217,13 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-                showLoader
+              showLoader
                 ? t('looking_doctor')
                 : providerNotFound
-                  ? t('provider_not_found')
-                  : `${'Provider'}${' '}${providerStatusOnHeader(providerStatus)}`
+                ? t('provider_not_found')
+                : `${t('provider_text')}${' '}${providerStatusOnHeader(
+                    providerStatus,
+                  )}`
             }
           />
         </View>
@@ -218,7 +242,7 @@ const SearchDoctor = () => {
                 : userLocation.onboardingLocation &&
                   userLocation.onboardingLocation?.latitude &&
                   userLocation.onboardingLocation?.longitude
-                  ? {
+                ? {
                     latitude: parseFloat(
                       userLocation.onboardingLocation?.latitude,
                     ),
@@ -229,7 +253,7 @@ const SearchDoctor = () => {
                     longitudeDelta: 0.02,
                     title: 'Client',
                   }
-                  : currentLocation
+                : currentLocation
             }
             style={{ flex: 1 }}
           >
@@ -238,14 +262,14 @@ const SearchDoctor = () => {
                 coordinate={{
                   latitude:
                     userLocation &&
-                      userLocation?.onboardingLocation &&
-                      userLocation.onboardingLocation?.latitude
+                    userLocation?.onboardingLocation &&
+                    userLocation.onboardingLocation?.latitude
                       ? parseFloat(userLocation.onboardingLocation?.latitude)
                       : currentLocation?.latitude ?? 0.0,
                   longitude:
                     userLocation &&
-                      userLocation?.onboardingLocation &&
-                      userLocation.onboardingLocation?.longitude
+                    userLocation?.onboardingLocation &&
+                    userLocation.onboardingLocation?.longitude
                       ? parseFloat(userLocation.onboardingLocation?.longitude)
                       : currentLocation?.longitude ?? 0.0,
                 }}
@@ -275,8 +299,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                            currentOrder.providerDetails
-                              ?.providerProfilePicture ? (
+                          currentOrder.providerDetails
+                            ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -328,8 +352,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-            providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -345,7 +369,7 @@ const SearchDoctor = () => {
                 }}
                 isPrimary={showRateAlert}
                 showBothCards={showRateAlert && providerLocation != undefined}
-                status={`${'Provider'}${' '}${providerStatusOnHeader(
+                status={`${t('provider_text')}${' '}${providerStatusOnHeader(
                   providerStatus,
                 )}`}
                 showProvider={providerLocation != undefined}
@@ -361,9 +385,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !showLoader &&
-                  !showCancelButton
+                providerLocation.latitude !== 0.0 &&
+                !showLoader &&
+                !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -391,18 +415,16 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                  showLoader
+                showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                    ? t('3_minutes_to_cancel')
-                    : ''
+                  ? t('3_minutes_to_cancel')
+                  : ''
               }
             />
           </View>
         )}
-        {
-          showAddToWallet && <AddPaymentToWallet isShowInputView={false} />
-        }
+        {showAddToWallet && <AddPaymentToWallet isShowInputView={false} />}
       </ScrollView>
     </>
   );
@@ -419,6 +441,7 @@ const styles = StyleSheet.create({
     width: getWidth(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: 'center',
+    transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   header: {
     backgroundColor: colors.white,

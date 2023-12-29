@@ -35,11 +35,13 @@ const RatingView = ({
               source={require('../../../assets/icon/doctorIcon.png')}
               style={styles.doctorIcon}
             />
-            <Image
-              source={require('../../../assets/icon/star.png')}
-              style={styles.star}
-            />
-            <Text style={styles.rating} title={'4.8'} />
+            <View style={styles.providerRating}>
+              <Image
+                source={require('../../../assets/icon/star.png')}
+                style={styles.star}
+              />
+              <Text style={styles.rating} title={'4.8'} />
+            </View>
           </View>
           <View style={styles.container}>
             <Text
@@ -117,15 +119,9 @@ const styles = StyleSheet.create({
     color: colors.black,
   },
   rating: {
-    position: 'absolute',
-    bottom: getHeight(-11),
-    right: getWidth(115),
     fontSize: getHeight(fontSize.textM),
   },
   star: {
-    position: 'absolute',
-    bottom: getHeight(dimens.marginS),
-    right: getWidth(112),
     width: getWidth(dimens.marginM),
     height: getHeight(dimens.marginM),
     resizeMode: 'contain',
@@ -142,5 +138,10 @@ const styles = StyleSheet.create({
   imagecontainer: {
     alignItems: 'center',
     marginTop: getHeight(dimens.imageXs),
+  },
+  providerRating: {
+    position: 'absolute',
+    bottom: 0,
+    right: getWidth(112),
   },
 });

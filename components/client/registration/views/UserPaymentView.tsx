@@ -71,6 +71,7 @@ const UserPaymentView = ({
             flexDirection: 'row',
             gap: getHeight(dimens.imageXs),
             marginBottom: getHeight(dimens.imageXs + 2),
+            alignItems: 'center',
           }}
         >
           <Image source={logo} style={styles.logo} />
@@ -227,6 +228,11 @@ const UserPaymentView = ({
                 onPress={onPressNext}
                 isSmall
                 width={'30%'}
+                disabled={
+                  cardNumberError?.length > 0 &&
+                  cvvError?.length > 0 &&
+                  cardExpiryError?.length > 0
+                }
               />
               {isFromSummary && (
                 <TextButton
@@ -261,7 +267,7 @@ const UserPaymentView = ({
       {!isCardDetails && !isFromHome && (
         <TextButton
           fontSize={getHeight(fontSize.textXl)}
-          containerStyle={{ flex: 0.08 }}
+          containerStyle={{ flex: 0.08, alignSelf: 'center' }}
           style={styles.skipLaterText}
           title={t('skip_for_later')}
           onPress={() =>
@@ -369,7 +375,7 @@ const styles = StyleSheet.create({
     marginBottom: getHeight(dimens.borderBold),
   },
   expireDate: {
-    minWidth: '30%',
+    minWidth: '40%',
   },
   loading: {
     left: '44%',
@@ -393,7 +399,7 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   title: {
-    fontSize: getHeight(fontSize.headingL),
+    fontSize: getHeight(fontSize.textXl),
     textAlign: 'center',
   },
 });

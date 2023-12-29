@@ -5,8 +5,9 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useLayoutEffect } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import LocalizationController from './LocalizationController';
+import RNModal from './Modal';
 import Text from './Text';
 
 export const defaultHeaderStyle = {
@@ -18,7 +19,13 @@ export const defaultHeaderStyle = {
   headerTintColor: 'transparent',
   headerBackVisible: false,
 };
-// TODO: Need to change dropdown UI later
+const languages = [
+  { code: 'en', name: 'English', title: 'English' },
+  { code: 'he', name: 'Hebrew', title: 'עִברִית' },
+  { code: 'ar', name: 'Arabic', title: 'العربي' },
+  { code: 'ru', name: 'Russian', title: 'русский' },
+];
+
 const Header = ({
   title,
   isHideTitle,
@@ -41,75 +48,51 @@ const Header = ({
         { justifyContent: isHideTitle ? 'flex-end' : 'space-between' },
       ]}
     >
-      {title?.length && (
+      {title && (
         <>
           <Image source={logo} style={styles.logo} />
           <Text style={styles.title} title={title} />
         </>
       )}
-      {/** TODO: Update the title according to selected language  */}
       <Text
         style={styles.headerRight}
         onPress={onChangeLanguage}
         title={currentLanguage.toUpperCase()}
       />
-      {isLanguageChanged && (
-        //  TODO: Update this code in optimized way
+      <RNModal
+        onBackdropPress={() => setIsLanguageChanged(false)}
+        isVisible={isLanguageChanged}
+        backdropOpacity={0}
+        animationIn={'zoomInUp'}
+        animationOut={'zoomOut'}
+        animationInTiming={300}
+        animationOutTiming={300}
+      >
         <View style={styles.languageContainer}>
-          <Text
-            style={[
-              styles.language,
-              {
-                color: currentLanguage === 'en' ? colors.primary : colors.black,
-              },
-            ]}
-            onPress={() => {
-              handleLanguageChange('en');
-              setIsLanguageChanged(false);
-            }}
-            title={'English'}
-          />
-          <Text
-            style={[
-              styles.language,
-              {
-                color: currentLanguage === 'he' ? colors.primary : colors.black,
-              },
-            ]}
-            onPress={() => {
-              handleLanguageChange('he');
-              setIsLanguageChanged(false);
-            }}
-            title={'עִברִית'}
-          />
-          <Text
-            style={[
-              styles.language,
-              {
-                color: currentLanguage === 'ar' ? colors.primary : colors.black,
-              },
-            ]}
-            onPress={() => {
-              handleLanguageChange('ar');
-              setIsLanguageChanged(false);
-            }}
-            title={'العربي'}
-          />
-          <Text
-            style={[
-              styles.language,
-              {
-                color: currentLanguage === 'ru' ? colors.primary : colors.black,
-              },
-            ]}
-            onPress={() => {
-              handleLanguageChange('ru');
-              setIsLanguageChanged(false);
-            }}
-            title={'русский'}
-          />
+          {languages.map((lang) => (
+            <TouchableOpacity
+              key={lang.code}
+              onPress={() => {
+                handleLanguageChange(lang.code);
+                setIsLanguageChanged(false);
+              }}
+            >
+              <Text
+                style={[
+                  styles.language,
+                  {
+                    color:
+                      currentLanguage === lang.code
+                        ? colors.primary
+                        : colors.black,
+                  },
+                ]}
+                title={lang.title}
+              />
+            </TouchableOpacity>
+          ))}
         </View>
-      )}
+      </RNModal>
     </View>
   );
 };
@@ -141,6 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     width: '100%',
     paddingLeft: getWidth(16),
+    zIndex: 1,
   },
   language: {
     alignSelf: 'flex-end',
@@ -155,11 +139,10 @@ const styles = StyleSheet.create({
     maxWidth: getHeight(120),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.primary,
-    zIndex: 1,
     borderRadius: getHeight(dimens.marginS),
-    right: getHeight(dimens.sideMargin),
+    right: 0,
     backgroundColor: colors.offWhite,
-    top: dimens.marginL + dimens.marginS,
+    top: dimens.marginL,
     justifyContent: 'space-between',
   },
   logo: {

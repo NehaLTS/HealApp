@@ -6,6 +6,12 @@ import physio from 'assets/icon/physio.png';
 import doctorOnline from 'assets/icon/doctorOnline.png';
 import { PERMISSIONS, check, RESULTS } from 'react-native-permissions';
 import { Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import enList from '../../strings/en.json';
+import arList from '../../strings/ar.json';
+import heList from '../../strings/he.json';
+import ruList from '../../strings/ru.json';
+import { HealLanguageType } from 'libs/types/UserType';
 
 export const passwordPattern =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]+$/;
@@ -16,19 +22,52 @@ export const generateRandomName = () => {
   return randomstring;
 };
 
-export const getProviderImage = (type: string) => {
-  const image = type?.includes('Doctor')
-    ? doctor
-    : type?.includes('Nurse')
-    ? nurse
-    : type?.includes('Healer') || type?.includes('Alternative')
-    ? healer
-    : type?.includes('Physio')
-    ? physio
-    : type?.includes('Clinics')
-    ? clinic
-    : doctorOnline;
+export const getProviderImage = (type: string, id: number) => {
+  const image =
+    type?.includes('Doctor') || id === 1
+      ? doctor
+      : type?.includes('Nurse') || id === 2
+      ? nurse
+      : type?.includes('Healer') || type?.includes('Alternative') || id === 3
+      ? healer
+      : type?.includes('Physio') || id === 4
+      ? physio
+      : type?.includes('Clinics')
+      ? clinic
+      : doctorOnline;
   return image;
+};
+
+export const getTitle = (item: HealLanguageType, i18n: any) => {
+  const title = item?.[i18n.language]?.length
+    ? item?.[i18n.language]
+    : item?.en;
+  return title;
+};
+
+export const getProviderName = (id: number) => {
+  const { i18n } = useTranslation();
+  const provider = () => {
+    switch (i18n.language) {
+      case 'ar':
+        return arList.home.providerList?.find(
+          (item) => item?.provider_type_id === id,
+        )?.name;
+      case 'he':
+        return heList.home.providerList?.find(
+          (item) => item?.provider_type_id === id,
+        )?.name;
+      case 'ru':
+        return ruList.home.providerList?.find(
+          (item) => item?.provider_type_id === id,
+        )?.name;
+      default:
+        return enList.home.providerList?.find(
+          (item) => item?.provider_type_id === id,
+        )?.name;
+    }
+  };
+  return provider();
 };
 
 export const checkLocationPermission = (): Promise<boolean> => {

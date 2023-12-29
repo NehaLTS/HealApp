@@ -92,7 +92,8 @@ const UserAddressViewController = () => {
     if (
       onSearchAddress &&
       dateOfBirth.toString() &&
-      idNumberRef.current.value
+      idNumberRef.current.value &&
+      profilePicture
     ) {
       setIsLoader(true);
       setUserProfile({
@@ -164,6 +165,7 @@ const UserAddressViewController = () => {
       if (!onSearchAddress?.length) setAddressError(t('address_required'));
       if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
       if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
+      if (!profilePicture) Alert.alert(t('add_a_profile_photo'));
     }
   };
 

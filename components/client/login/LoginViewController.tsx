@@ -61,8 +61,6 @@ const LoginViewController = () => {
     if (!passwordRef.current.value) setPasswordError(t('password_required'));
     else if (passwordRef.current.value.length < 5)
       setPasswordError(t('must_be_8_characters'));
-    else if (!isValidPassword(passwordRef.current.value))
-      setPasswordError(t(`password_must_have_special_character`));
     else setPasswordError('');
   };
 
@@ -93,9 +91,9 @@ const LoginViewController = () => {
       lastName: userDetails?.lastname,
       phoneNumber: userDetails?.phone_number,
       address: {
-        address: userDetails?.address,
-        latitude: userDetails.latitude ?? '',
-        longitude: userDetails.longitude ?? '',
+        address: userDetails?.address.toString(),
+        latitude: userDetails.latitude.toString() ?? '',
+        longitude: userDetails.longitude.toString() ?? '',
       },
       city: userDetails?.city,
       state: userDetails?.state,
@@ -107,6 +105,8 @@ const LoginViewController = () => {
       idNumber: userDetails?.id_number,
       email: userDetails?.email,
       isPaymentAdded: response.isPayment,
+      card_number: userDetails?.credit_card_number,
+      expire_date: userDetails?.expire_date,
     });
 
     setLocalData('USERPROFILE', {
@@ -124,6 +124,8 @@ const LoginViewController = () => {
       idNumber: userDetails.id_number,
       email: userDetails.email,
       isPaymentAdded: response.isPayment,
+      card_number: userDetails?.credit_card_number,
+      expire_date: userDetails?.expire_date,
     });
     setLocalData('USER', {
       token: response.token,
@@ -165,11 +167,7 @@ const LoginViewController = () => {
         setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
         else
-          showToast(
-            'Login Failed',
-            'Please check your email and password and try again.',
-            'error',
-          );
+          showToast(t('login_failed'), t('check_email_and_password'), 'error');
       }
       // else  showToast("", "Please enter email or password", "warning")
     } catch (error) {

@@ -1,6 +1,12 @@
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useRef, useState } from 'react';
-import { Image, PanResponder, StyleSheet, View } from 'react-native';
+import {
+  I18nManager,
+  Image,
+  PanResponder,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 const filledStar = require('assets/icon/star.png');
 const unfilledStar = require('assets/icon/ratingStar.png');
@@ -14,12 +20,16 @@ const StarRating = ({
 
   const handlePanResponderMove = (_: any, gestureState: { moveX: number }) => {
     const numberOfStars = 5;
-    const ratingValue = Math.floor(gestureState.moveX / 50);
+    let ratingValue = Math.floor(gestureState.moveX / 50);
 
-    if (ratingValue > 0 && ratingValue <= numberOfStars) {
-      setRating(ratingValue);
-      getRating(ratingValue);
+    if (I18nManager.isRTL) {
+      ratingValue = numberOfStars - ratingValue;
     }
+
+    ratingValue = Math.max(0, Math.min(numberOfStars, ratingValue));
+
+    setRating(ratingValue);
+    getRating(ratingValue);
   };
 
   const panResponder = useRef(
@@ -30,7 +40,7 @@ const StarRating = ({
   ).current;
 
   const stars = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 5; i >= 1; i--) {
     stars.push(
       <Image
         key={i}
@@ -42,7 +52,7 @@ const StarRating = ({
 
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
-      {stars}
+      {I18nManager.isRTL ? stars.reverse() : stars}
     </View>
   );
 };

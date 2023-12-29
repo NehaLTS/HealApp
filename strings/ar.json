@@ -22,7 +22,7 @@
   "address": "عنوان*",
   "date_of_birth": "تاريخ الميلاد*",
   "id_number": "رقم الهوية*",
-  "add_a_profile_photo": "أضف صورة الملف الشخصي",
+  "add_a_profile_photo": "الصورة الشخصية مطلوبة",
   "skip_for_later": "تخطي في وقت لاحق",
   "profile_photo": "صورة الملف الشخصي",
   "add_credit_card": "إضافة بطاقة الائتمان",
@@ -117,11 +117,11 @@
   "number_not_valid": "رقم الهاتف غير صالح",
   "card_number_required": "رقم البطاقة مطلوب",
   "card_number_short": "رقم البطاقة قصير جدًا",
-  "expiry_number_required": "التاريخ الانتهاء\nمطلوب",
-  "expiry_number_short": "الرقم الانتهاء\n قصير جداً",
+  "expiry_number_required": "التاريخ الانتهاء مطلوب",
+  "expiry_number_short": "الرقم الانتهاء قصير جداً",
   "cvv_required": "CVV مطلوب",
-  "cvv_number_short": "رقم CVV\n قصير جداً",
-  "expiry_date_required": "التاريخ الانتهاء\n مطلوب",
+  "cvv_number_short": "رقم CVV قصير جداً",
+  "expiry_date_required": "التاريخ الانتهاء مطلوب",
   "select_license_picture": "يرجى تحديد صورة الرخصة",
   "service_required": "اسم الخدمة مطلوب",
   "price_required": "السعر مطلوب",
@@ -151,7 +151,7 @@
   "looking_doctor": "البحث عن طبيب",
   "doctor_found": "تم العثور على الطبيب!",
   "no_fee_collected": "*لن يتم جمع أي رسوم",
-  "doctor_arrived": "وصل الطبيب",
+  "has_arrived": "وصل الطبيب",
   "3_minutes_to_cancel": "*لديك 3 دقائق لإلغاء الطلب مجانًا",
   "chest_pain": "ألم في الصدر",
   "see_details": "رؤية المزيد من التفاصيل",
@@ -167,6 +167,7 @@
   "now_you_available": "الآن أنت متاح\nلقبول الطلبات",
   "switch_toggle": "تبديل التبديل لتصبح متاحًا\nلبدء استقبال الطلبات",
   "you_have_5_minutes": "لديك 5 دقائق لإلغاء الطلب مجانًا",
+  "client_have_5_minutes": "للعميل 5 دقائق لإلغاء الطلب مجانًا",
   "voltaren_shot": "حقنة فولتارين، حقنة كلاكسين",
   "less_details": "رؤية أقل تفاصيل",
   "found": "تم العثور على",
@@ -197,5 +198,54 @@
   "no_orders_yet": "لا يوجد طلبات حتى الآن",
   "clients_today": "العملاء اليوم",
   "arrival_time": "متوسط وقت الوصول",
-  "balance": "رصيدي"
+  "balance": "رصيدي",
+  "ordered": "تم الطلب:",
+  "call_client": "اتصل بالعميل",
+  "update_arrived": "قم بتحديث وصولك",
+  "you_arrived": "لقد وصلت",
+  "patient_text": "المريض",
+  "services_provided": "الخدمات المقدمة",
+  "treatment_ended": "انتهى العلاج",
+  "total_text": "الإجمالي",
+  "provider_text": "مقدم الخدمة",
+  "no_nearby_provider": "لم يتم العثور على طبيب قريب",
+  "try_again_later": "عذرًا، يرجى المحاولة مرة أخرى لاحقًا",
+  "order_accepted": "تم قبول الطلب!",
+  "order_is_accepted": "تم قبول طلبك!",
+  "location_required": "الوصول إلى الموقع مطلوب",
+  "location_required_text": "يرجى السماح بالوصول إلى الموقع في الإعدادات أو تشغيل GPS وإعادة تشغيل التطبيق",
+  "location_permission": "إذن الموقع",
+  "location_permission_text": "هذا التطبيق يتطلب الوصول إلى موقعك.",
+  "ask_me_later": "اسألني لاحقًا",
+  "take_photo": "التقاط صورة",
+  "choose_gallery": "اختيار من المعرض",
+  "healer_title": "ما نوع العلاج\nالذي تبحث عنه؟",
+  "camera_permission": "يرجى منح إذن الكاميرا من الإعدادات",
+  "enable_location": "يرجى تمكين إذن الموقع",
+  "submit_age_phone": "يرجى تقديم العمر ورقم الهاتف.",
+  "select_services_provide": "يرجى تحديد الخدمات التي تقدمها.",
+  "home": {
+    "providerList": [
+      {
+        "provider_type_id": 1,
+        "image": "assets/icon/doctor.png",
+        "name": "طبيب - زيارة منزلية"
+      },
+      {
+        "provider_type_id": 2,
+        "image": "assets/icon/nurse.png",
+        "name": "ممرضة - زيارة منزلية"
+      },
+      {
+        "provider_type_id": 3,
+        "image": "assets/icon/healer.png",
+        "name": "الطب البديل"
+      },
+      {
+        "provider_type_id": 4,
+        "image": "assets/icon/physio.png",
+        "name": "علاج طبيعي - زيارة منزلية"
+      }
+    ]
+  }
 }

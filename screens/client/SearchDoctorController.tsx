@@ -21,11 +21,17 @@ import {
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { Location, OrderCancelByClientRespnse } from 'libs/types/UserType';
 import { paymentsendToApi } from 'libs/ClientOrderPayment';
+import { useTranslation } from 'react-i18next';
 
 const SearchDoctorController = () => {
   const route = useRoute<any>();
-  const { BookOrderRequest, OrderCancelFromClient, orderProvider, PaymentForOrder } =
-    ClientOrderServices();
+  const { t } = useTranslation();
+  const {
+    BookOrderRequest,
+    OrderCancelFromClient,
+    orderProvider,
+    PaymentForOrder,
+  } = ClientOrderServices();
   const { userLocation } = UseClientUserContext();
   const [showRateAlert, setShowRateAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
@@ -45,12 +51,12 @@ const SearchDoctorController = () => {
   const [providerStatus, setProviderStatus] = useState<string>(
     previousScreen !== 'HOME_CLIENT' ? 'Estimated arrival' : '',
   );
-  const payment = getLocalData('WALLETDETAIL')
+  const payment = getLocalData('WALLETDETAIL');
   const [currentOrder, setCurrentOrder] = useState<Order>(
     route?.params?.currentOrder,
   );
-  const [orderTime, setOrderTime] = useState<string>('')
-  const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false)
+  const [orderTime, setOrderTime] = useState<string>('');
+  const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false);
   // const orderData = getLocalData('ORDER')?.providerDetail
   // const orderDetails:Order=route?.params?.orderDetails;
   // const orderId = route?.params?.orderId ?? '';
@@ -84,14 +90,14 @@ const SearchDoctorController = () => {
         const distance = Math.sqrt(
           Math.pow(
             parseFloat(providerSetLocation.latitude) -
-            parseFloat(userLocation?.onboardingLocation?.latitude),
+              parseFloat(userLocation?.onboardingLocation?.latitude),
             2,
           ) +
-          Math.pow(
-            parseFloat(providerSetLocation.longitude) -
-            parseFloat(userLocation?.onboardingLocation?.longitude),
-            2,
-          ),
+            Math.pow(
+              parseFloat(providerSetLocation.longitude) -
+                parseFloat(userLocation?.onboardingLocation?.longitude),
+              2,
+            ),
         );
 
         const bufferFactor = 1.2;
@@ -114,12 +120,12 @@ const SearchDoctorController = () => {
           latitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-              parseFloat(userLocation?.onboardingLocation?.latitude),
+                parseFloat(userLocation?.onboardingLocation?.latitude),
             ) * 2,
           longitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-              parseFloat(userLocation?.onboardingLocation?.longitude),
+                parseFloat(userLocation?.onboardingLocation?.longitude),
             ) * 2,
         };
 
@@ -211,9 +217,9 @@ const SearchDoctorController = () => {
     } else {
       setShowLoader(false);
       setProviderNotFound(true);
-      Alert.alert('No Nearby Doctor found', 'Sorry Please try again later', [
+      Alert.alert(t('no_nearby_provider'), t('try_again_later'), [
         {
-          text: 'OK',
+          text: t('ok'),
           onPress: () => {
             navigation.goBack();
           },
@@ -225,7 +231,7 @@ const SearchDoctorController = () => {
   const setStatusOnEventFire = (evenTitle: string) => {
     switch (evenTitle) {
       case ORDER_ACCEPTED:
-        showToast('Order Accepted!', 'Your order is accepted!', '');
+        showToast(t('order_accepted'), t('order_is_accepted'), '');
         setLocalData('ORDER', { orderStatus: ON_THE_WAY });
         setProviderStatus(ON_THE_WAY);
         setShowTimer(true);
@@ -285,44 +291,44 @@ const SearchDoctorController = () => {
   };
 
   const permissionHelper = {
-    title: 'Location Permission',
-    message: 'This app requires access to your location.',
-    buttonNeutral: 'Ask Me Later',
-    buttonNegative: 'Cancel',
-    buttonPositive: 'OK',
+    title: t('location_permission'),
+    message: t('location_permission_text'),
+    buttonNeutral: 'ask_me_later',
+    buttonNegative: t('cancel'),
+    buttonPositive: t('ok'),
   };
 
   // functions
   const forceAlert = () => {
     Alert.alert(
-      'Location access required',
-      'Kindly allow location access in settings or turn on gps and restart app',
-      [{ text: 'OK', onPress: () => Linking.openSettings() }],
+      t('location_required'),
+      t('location_required_text'),
+      [{ text: t('ok'), onPress: () => Linking.openSettings() }],
       { cancelable: false },
     );
   };
 
-
   const sendPaymentData = () => {
     let totalCost = route?.params?.orderDetails.TotalCost;
-    const shotAmounts = parseFloat(totalCost) - 500
-    const amount = paymentsendToApi(500, shotAmounts)
+    const shotAmounts = parseFloat(totalCost) - 500;
+    const amount = paymentsendToApi(500, shotAmounts);
     PaymentForOrder({
       heal_amount: amount.appAmount.toString(),
       order_cost: amount.orderAmount.toString(),
       total_order_cost: amount.totalAmount.toString(),
-      order_id: currentOrder?.providerDetails.providerId
-    }).then((res) => {
-      console.log('PAyment data sent', res)
-    }).catch((error) => {
-      console.log('Error Occured', error.toString())
+      order_id: currentOrder?.providerDetails.providerId,
     })
-
-  }
+      .then((res) => {
+        console.log('PAyment data sent', res);
+      })
+      .catch((error) => {
+        console.log('Error Occured', error.toString());
+      });
+  };
 
   const handleNextButtonPress = async () => {
     console.log('  orderData..', currentOrder);
-    setShowAddToWallet(false)
+    setShowAddToWallet(false);
     //disable order button here Gurpreet
 
     //TODO:Vandana why we are passing status as accept here
@@ -336,10 +342,10 @@ const SearchDoctorController = () => {
 
     console.log('gurpreet', orderBookResponse);
     if (orderBookResponse?.isSuccessful) {
-      const ORDER_TIME = new Date().getTime()
-      console.log("ORDER_TIME", ORDER_TIME)
-      setOrderTime(ORDER_TIME.toString())
-      sendPaymentData()
+      const ORDER_TIME = new Date().getTime();
+      console.log('ORDER_TIME', ORDER_TIME);
+      setOrderTime(ORDER_TIME.toString());
+      sendPaymentData();
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
@@ -347,12 +353,11 @@ const SearchDoctorController = () => {
 
       // Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
-    } else if (orderBookResponse.msg === 'Wallet information not found for the client') {
-      setShowAddToWallet(true)
-
-    }
-    else {
-
+    } else if (
+      orderBookResponse.msg === 'Wallet information not found for the client'
+    ) {
+      setShowAddToWallet(true);
+    } else {
       //Gurpreet to change it to cancel button
       setIsBookOrder(false);
     }
@@ -363,13 +368,13 @@ const SearchDoctorController = () => {
     const userCurrentLocation = {
       latitude: parseFloat(
         userLocation?.onboardingLocation?.latitude ??
-        userLocation?.currentLocation?.latitude ??
-        '0.0',
+          userLocation?.currentLocation?.latitude ??
+          '0.0',
       ),
       longitude: parseFloat(
         userLocation?.onboardingLocation?.longitude ??
-        userLocation?.currentLocation?.longitude ??
-        '0.0',
+          userLocation?.currentLocation?.longitude ??
+          '0.0',
       ),
     };
     const ProviderLocation = {
@@ -400,19 +405,25 @@ const SearchDoctorController = () => {
     return time;
   };
   const orderCancel = () => {
-    OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
-      Alert.alert(res.msg)
-      if (res.isSuccessful) {
-        const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
-        setLocalData('WALLETDETAIL', {
-          wallet_amount: newAmount.toString()
-        })
-      }
-
-    }).catch((error) => {
-      Alert.alert('Error Occured', error.toString())
+    OrderCancelFromClient({
+      order_id: currentOrder?.orderId,
+      orderTime: orderTime,
     })
-  }
+      .then((res: OrderCancelByClientRespnse) => {
+        Alert.alert(res.msg);
+        if (res.isSuccessful) {
+          const newAmount =
+            parseFloat(payment?.wallet_amount ?? '0') +
+            parseFloat(res.clientAmount);
+          setLocalData('WALLETDETAIL', {
+            wallet_amount: newAmount.toString(),
+          });
+        }
+      })
+      .catch((error) => {
+        Alert.alert('Error Occured', error.toString());
+      });
+  };
   return {
     permissionHelper: permissionHelper,
     forceAlert,
@@ -434,7 +445,7 @@ const SearchDoctorController = () => {
     focusOnPath,
     providerNotFound,
     showAddToWallet,
-    orderCancel
+    orderCancel,
   };
 };
 

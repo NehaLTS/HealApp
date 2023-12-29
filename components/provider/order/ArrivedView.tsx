@@ -45,7 +45,7 @@ const ArrivedView = ({
             textAlign: 'center',
             marginBottom: 0,
           }}
-          title={'You arrived'}
+          title={t('you_arrived')}
           entering={FadeInUp.duration(400).delay(400)}
         />
         <AnimatedText
@@ -53,7 +53,7 @@ const ArrivedView = ({
             ...styles.details,
             marginTop: getHeight(20),
           }}
-          title={'Patient'}
+          title={t('patient_text')}
           entering={FadeInLeft.duration(400).delay(500)}
         />
         {order?.order?.OrderReceive?.length ||
@@ -66,7 +66,7 @@ const ArrivedView = ({
           ))}
         <AnimatedText
           style={styles.serviceProvidedText}
-          title={'Services provided'}
+          title={t('services_provided')}
           entering={FadeInUp.duration(400).delay(700)}
         />
         {order &&
@@ -75,19 +75,19 @@ const ArrivedView = ({
           JSON.parse?.(order?.OrderReceive?.services)?.map?.(
             (item: any, index: number) => (
               <View key={index} style={styles.servicesProvided}>
+                <AnimatedText
+                  style={{ ...styles.smallText }}
+                  title={`${item?.service_name ?? ''}`}
+                  entering={FadeInLeft.duration(400).delay(800)}
+                />
                 <View style={styles.servicesLeftView}>
-                  <AnimatedText
-                    style={{ ...styles.smallText, minWidth: getWidth(90) }}
-                    title={`${item?.service_name ?? ''}`}
-                    entering={FadeInLeft.duration(400).delay(800)}
-                  />
                   <AnimatedText
                     style={styles.smallText}
                     title={`${item?.service_price} NIS`}
                     entering={FadeInLeft.duration(400).delay(900)}
                   />
+                  <Checkbox isWhite isChecked={true} />
                 </View>
-                <Checkbox isWhite isChecked={true} />
               </View>
             ),
           )}
@@ -106,7 +106,7 @@ const ArrivedView = ({
         <View style={styles.totalContainer}>
           <AnimatedText
             style={styles.smallText}
-            title={'Total'}
+            title={t('total_text')}
             entering={FadeInLeft.duration(400).delay(500)}
           />
           <AnimatedText
@@ -123,7 +123,7 @@ const ArrivedView = ({
           }}
         >
           <Button
-            title={'Treatment is ended'}
+            title={t('treatment_ended')}
             style={styles.takeOrderButton}
             isSmall
             width={getHeight(150)}
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: getHeight(dimens.paddingS),
     fontSize: getHeight(fontSize.textXl),
+    textAlign: 'left',
   },
   servicesProvided: {
     flexDirection: 'row',
@@ -176,6 +177,7 @@ const styles = StyleSheet.create({
   servicesLeftView: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: getWidth(20),
   },
   addIcon: {
     height: getHeight(dimens.marginL),
@@ -190,6 +192,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: getHeight(fontSize.textM),
     alignSelf: 'center',
+    textAlign: 'left',
   },
   serviceProvidedText: {
     fontSize: getHeight(20),
