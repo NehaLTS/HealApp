@@ -47,9 +47,8 @@ const TakeOrderView = ({
     const formatTime = (time: number) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${
-        remainingSeconds < 10 ? '0' : ''
-      }${remainingSeconds}`;
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
+        }${remainingSeconds}`;
     };
 
     return (
@@ -119,15 +118,14 @@ const TakeOrderView = ({
                     style={styles.details}
                     title={
                       JSON.parse?.(order?.OrderReceive?.services)?.length > 1
-                        ? `${
-                            index !==
-                            JSON.parse?.(order?.OrderReceive?.services)
-                              ?.length -
-                              1
-                              ? ` ${service?.service_name}, `
-                              : ` ${service?.service_name}`
-                          }`
-                        : service?.service_name
+                        ? `${index !==
+                          JSON.parse?.(order?.OrderReceive?.services)
+                            ?.length -
+                          1
+                          ? ` ${service?.service_name}, `
+                          : ` ${service?.service_name}`
+                        }`
+                        : service?.service_name.en
                     }
                     entering={FadeInLeft.duration(400).delay(700)}
                   />
@@ -138,17 +136,14 @@ const TakeOrderView = ({
         )}
         <AnimatedText
           style={styles.otherDetails}
-          title={`${order?.OrderReceive?.firstname}  ${
-            order?.OrderReceive?.lastname
-          }    ${
-            order?.OrderReceive?.distance !== 'undefined'
+          title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+            }    ${order?.OrderReceive?.distance !== 'undefined'
               ? order?.OrderReceive?.time
               : 0
-          } km, ~${
-            order?.OrderReceive?.time !== 'undefined'
+            } km, ~${order?.OrderReceive?.time !== 'undefined'
               ? order?.OrderReceive?.time
               : 0
-          } min`}
+            } min`}
           entering={FadeInLeft.duration(400).delay(600)}
         />
         <AnimatedText

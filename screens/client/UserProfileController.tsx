@@ -4,7 +4,7 @@ import {
   deleteLocalData,
   setLocalData,
 } from 'libs/datastorage/useLocalStorage';
-import { ClientProfile, PaymentHistoryType } from 'libs/types/UserType';
+import { ClientProfile, PaymentHistoryType, ProviderProfile } from 'libs/types/UserType';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';

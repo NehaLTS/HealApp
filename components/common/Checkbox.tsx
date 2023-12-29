@@ -8,17 +8,19 @@ import { colors } from 'designToken/colors';
 const Checkbox = ({
   isWhite,
   isChecked,
+  onPress
 }: {
   isWhite?: boolean;
   isChecked?: boolean;
+  onPress: () => void
 }) => {
-  const [activeCheckbox, setActiveCheckbox] = React.useState(
-    isChecked ?? false,
-  );
+
+
+
   return (
     <TouchableOpacity
       style={{ ...styles.checkboxContainer }}
-      onPress={() => setActiveCheckbox(!activeCheckbox)}
+      onPress={onPress}
     >
       <View
         style={[
@@ -30,7 +32,7 @@ const Checkbox = ({
           },
         ]}
       >
-        {activeCheckbox && (
+        {isChecked && (
           <Image
             source={
               isWhite

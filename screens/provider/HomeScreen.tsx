@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next';
 import useToast from 'components/common/useToast';
 import { ProviderOrderReceive } from 'libs/types/OrderTypes';
 import {
+  Alert,
   DeviceEventEmitter,
   I18nManager,
   Image,
@@ -46,6 +47,8 @@ import Animated, {
 import HomeScreenControlller from './HomeScreenController';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import RNRestart from 'react-native-restart';
+import { paymentsendToApi } from 'libs/ClientOrderPayment';
+import AddNewService from 'components/common/AddNewService';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -272,6 +275,9 @@ const HomeScreen = () => {
     };
   }, [acceptOrder || isArrived || orderStatus]);
 
+  useEffect(() => {
+    getSummaryofDay();
+  }, [orderStatus === "Payment Done"]);
   const onPressToggle = (available: boolean, isLogout?: boolean) => {
     console.log('available', available);
     //TODO: Uncomment this code to add license number
@@ -341,9 +347,9 @@ const HomeScreen = () => {
     }
   };
 
-  const totalPrice = () => {
+  const totalPrice = (services?: any) => {
     if (order && eventServices?.length > 0) {
-      const servicesArray = eventServices;
+      const servicesArray = services ?? eventServices;
 
       // Calculate the total service price
       const totalServicePrice = servicesArray.reduce(
@@ -363,7 +369,9 @@ const HomeScreen = () => {
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
   };
-  const onPressTreatmentEnd = async () => {
+  const onPressTreatmentEnd = async (services?: any) => {
+
+
     if (!isArrived) {
       OnPressTakeOrder();
       modalHeight.value = withSpring(getHeight(652));
@@ -376,11 +384,15 @@ const HomeScreen = () => {
         },
       });
     } else {
+      const shotAmounts = parseFloat(totalPrice(services)) - 500
+      const amount = paymentsendToApi(500, shotAmounts)
+      console.log(amount, 'amount at treatment end')
       await TreatementEnded({
         order_id: order?.orderId ?? '1',
+        total_order_price: amount.totalAmount.toString(),
+        TotalCost: amount.orderAmount.toString(),
+        service_charge: amount.appAmount.toString(),
         currency: 'NIS',
-        total_price: totalPrice(),
-        services: order?.OrderReceive?.services,
         treatment_completed: 'completed',
       })
         .then((res) => {
@@ -459,11 +471,10 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     eventServices?.length > 1
-                      ? `${
-                          index !== eventServices?.length - 1
-                            ? ` ${service?.service_name}, `
-                            : ` ${service?.service_name}`
-                        }`
+                      ? `${index !== eventServices?.length - 1
+                        ? ` ${service?.service_name}, `
+                        : ` ${service?.service_name}`
+                      }`
                       : service?.service_name
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -475,17 +486,14 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.OrderReceive?.firstname}  ${
-          order?.OrderReceive?.lastname
-        }    ${
-          order?.OrderReceive?.distance !== 'undefined'
+        title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+          }    ${order?.OrderReceive?.distance !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-        } km, ~${
-          order?.OrderReceive?.time !== 'undefined'
+          } km, ~${order?.OrderReceive?.time !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-        } min`}
+          } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -571,11 +579,10 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           eventServices?.length > 1
-                            ? `${
-                                index !== eventServices?.length - 1
-                                  ? ` ${service?.service_name}, `
-                                  : ` ${service?.service_name}`
-                              }`
+                            ? `${index !== eventServices?.length - 1
+                              ? ` ${service?.service_name}, `
+                              : ` ${service?.service_name}`
+                            }`
                             : service?.service_name
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -587,17 +594,14 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-              title={`${order?.OrderReceive?.firstname}  ${
-                order?.OrderReceive?.lastname
-              }    ${
-                order?.OrderReceive?.distance !== 'undefined'
+              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+                }    ${order?.OrderReceive?.distance !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-              } km, ~${
-                order?.OrderReceive?.time !== 'undefined'
+                } km, ~${order?.OrderReceive?.time !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-              } min`}
+                } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -701,7 +705,7 @@ const HomeScreen = () => {
               isShowModal={isShowModal}
               closeModal={setIsShowModal}
               imageUri={getImageUrl}
-              // isLoading={() => null}
+            // isLoading={() => null}
             />
           </>
         ) : (
@@ -841,8 +845,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? t('order_is_cancelled')
                       : notification
-                      ? t('new_order')
-                      : t('no_orders_yet')
+                        ? t('new_order')
+                        : t('no_orders_yet')
                   }
                 />
               </>
@@ -855,7 +859,7 @@ const HomeScreen = () => {
             <>
               {DetailCard(
                 providerDaySummary?.providerDetails?.orderDetails?.total_clients.toString() ??
-                  '0',
+                '0',
                 t('clients_today'),
               )}
               {DetailCard(
@@ -883,7 +887,7 @@ const HomeScreen = () => {
         <ArrivedView
           order={order}
           isModalVisible={isArrived}
-          onPressAddService={() => setIsVisible(true)}
+
           totalPricesOfServices={totalPricesOfServices}
           onPressTreatmentEnd={onPressTreatmentEnd}
         />
@@ -905,7 +909,9 @@ const HomeScreen = () => {
             });
           }}
         />
+
       </TouchableOpacity>
+
       {renderToast()}
     </>
   );

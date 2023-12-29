@@ -59,11 +59,12 @@ const OrderDetailsController = () => {
     isOrderForOther: false,
     provider_type_id: 0,
   });
+  const PROVIDER_TYPE_ID =
+    supplier.name === 'Alternative medicine'
+      ? '1'
+      : supplier?.provider_type_id.toString();
   useEffect(() => {
-    const PROVIDER_TYPE_ID =
-      supplier.name === 'Alternative medicine'
-        ? '1'
-        : supplier?.provider_type_id.toString();
+
     setOrder((prevOrder) => ({
       ...prevOrder,
       services: [
@@ -121,8 +122,26 @@ const OrderDetailsController = () => {
       id: item?.reason_id,
     };
   });
-
-  const concatenatedIds = order.services.map((item) => item.menu_id).join(',');
+  // {
+  //   menu_id: 1,
+  //   name: { en: 'Basic', he: '', hi: '' },
+  //   price: "500",
+  //   provider_type_id: PROVIDER_TYPE_ID
+  // }
+  const basicIncude = order.services.some(item => item.menu_id === 1);
+  console.log("basicIncude", basicIncude)
+  let updateArray: any[];
+  if (basicIncude) {
+    updateArray = order.services
+  } else {
+    updateArray = [{
+      menu_id: 1,
+      name: { en: 'Basic', he: '', hi: '' },
+      price: "500",
+      provider_type_id: PROVIDER_TYPE_ID
+    }, ...order.services]
+  }
+  const concatenatedIds = updateArray.map((item) => item.menu_id).join(',');
   const TotalCost = order?.services
     .reduce((total, item) => total + parseInt(item.price, 10), 0)
     .toString();
@@ -170,8 +189,7 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${
-              !order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -197,15 +215,15 @@ const OrderDetailsController = () => {
             : order?.patient_type?.age ?? '',
           // services: order.services[0].menu_id.toString(),
 
-          services: `${concatenatedIds}, 1`,
+          services: concatenatedIds,
           symptoms: JSON.stringify(symptoms),
           Additional_notes: order?.Additional_notes,
           Estimate_arrival: order?.Estimate_arrival,
           Instructions_for_arrival: order?.Instructions_for_arrival,
           Payment_mode: order?.Payment_mode,
-          TotalCost: order?.services
-            .reduce((total, item) => total + parseInt(item.price, 10), 0)
-            ?.toString(),
+          TotalCost: (updateArray
+            .reduce((total, item) => total + parseFloat(item.price), 0))
+            .toString(),
           latitude:
             userLocation.onboardingLocation?.latitude ??
             userLocation.currentLocation?.latitude,
@@ -214,6 +232,7 @@ const OrderDetailsController = () => {
             userLocation.currentLocation?.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
         };
+        console.log('updateArray', updateArray, "TotalCost", orderDetails.TotalCost)
         console.log('(userProfile userLocation', userLocation);
         Sentry.captureMessage(
           `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${orderDetails}`,

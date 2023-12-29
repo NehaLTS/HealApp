@@ -4,6 +4,7 @@ import { sendRequest } from './api/RequestHandler';
 import {
   ADD_TO_WALLET,
   BOOK_ORDER,
+  CLIENT_WALLET_AMOUNT,
   GET,
   GET_AD_BANNER,
   GET_LOCATION_SEARCH,
@@ -96,10 +97,13 @@ export const ClientOrderServices = () => {
     Estimate_arrival: string;
     Instructions_for_arrival: string;
     Payment_mode: string;
-    TotalCost: string;
     latitude: string;
     longitude: string;
     provider_type_id: string;
+    TotalCost: string;
+    service_charge: string,
+    total_order_price: string
+    currency: string
   }): Promise<Order> =>
     sendRequest(ORDER_PROVIDER, {
       method: POST,
@@ -194,6 +198,16 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     })
 
+  const ClientWallentAmount = (body: { client_id: string }): Promise<any> =>
+    sendRequest(CLIENT_WALLET_AMOUNT, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
   return {
     getBannerAds,
     treatmentMenu,
@@ -207,6 +221,7 @@ export const ClientOrderServices = () => {
     AddPaymentInWallet,
     OrderCancelFromClient,
     PaymentHistory,
-    PaymentForOrder
+    PaymentForOrder,
+    ClientWallentAmount
   };
 };

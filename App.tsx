@@ -50,6 +50,7 @@ const App = () => {
     useState<userLocation>(null);
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
   const [treatmentsMenu, setTreatmentsMenu] = useState<treatment>(null);
+  const [walletAmount, setWalletAmount] = useState<string>('0')
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -133,6 +134,9 @@ const App = () => {
             remainingTime,
             treatmentsMenu,
             setTreatmentsMenu,
+            walletAmount,
+            setWalletAmount
+
           }}
         >
           <ProviderUserContext.Provider

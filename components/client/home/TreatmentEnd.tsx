@@ -11,6 +11,7 @@ import { Order } from 'libs/types/OrderTypes';
 import { useTranslation } from 'react-i18next';
 import like from '../../../assets/icon/likeOn.png';
 import unLike from '../../../assets/icon/likeOff.png';
+import { paymentsendToApi } from 'libs/ClientOrderPayment';
 
 const TreatmentEnd = ({
   onPress,
@@ -24,6 +25,21 @@ const TreatmentEnd = ({
   const onLikeProfile = () => {
     setLikeProfile(!likeProfile);
   };
+
+  const payAbleAmount = () => {
+    let totalAmount = 0
+    let totalCost = currentOrder?.orderServices.map((item, index) => {
+      totalAmount = totalAmount + parseFloat(item.servicePrice)
+      console.log("approvePAymer", totalAmount)
+      return totalAmount
+    })
+    const lastIndex = totalCost.length - 1;
+    const lastValue = totalCost[lastIndex];
+
+    const shotAmounts = lastValue - 500
+    const amount = paymentsendToApi(500, shotAmounts)
+    return amount
+  }
   return (
     <>
       <Text title={t('treatment_end')} style={styles.treatmentText} />
@@ -85,9 +101,10 @@ const TreatmentEnd = ({
                 style={styles.text}
               />
             ))}
+            <Text title={`${'App Service Price'} - ${payAbleAmount().appAmount.toString()}`} style={styles.text} />
             <View style={{ flexDirection: 'row' }}>
               <Text title={t('total')} style={styles.total} />
-              <Text title={currentOrder?.orderPrice} style={styles.text} />
+              <Text title={payAbleAmount().totalAmount.toString()} style={styles.text} />
             </View>
           </View>
         </View>

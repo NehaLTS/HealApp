@@ -1,5 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import arrowBack from 'assets/icon/arrowBack.png';
+import AddPaymentToWallet from 'components/client/home/AddPaymentToWallet';
 import DoctorDetailCard from 'components/client/home/DoctorDetailCard';
 import ArrivalTime from 'components/common/ArrivalTime';
 import Button from 'components/common/Button';
@@ -22,12 +23,15 @@ import {
   ON_THE_WAY,
   ORDER_ACCEPTED,
 } from 'libs/constants/Constant';
-import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { Location } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   I18nManager,
+
+
+
   Image,
   ScrollView,
   StyleSheet,
@@ -37,8 +41,6 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { Marker } from 'react-native-maps';
 import SearchDoctorController from './SearchDoctorController';
-import MapViewDirections from 'react-native-maps-directions';
-import AddPaymentToWallet from 'components/client/home/AddPaymentToWallet';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
@@ -174,6 +176,10 @@ const SearchDoctor = () => {
     if (!showCancelButton && !showLoader) {
       handleNextButtonPress();
     } else {
+      setLocalData('ORDER', {
+        orderId: ''
+      })
+
       //TODO : Vandana why we are setting Local data here
       //NOTE: Here we want to empty local data
       //  setLocalData('ORDER', currentOrder);
@@ -217,11 +223,11 @@ const SearchDoctor = () => {
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-              showLoader
+                showLoader
                 ? t('looking_doctor')
                 : providerNotFound
-                ? t('provider_not_found')
-                : `${t('provider_text')}${' '}${providerStatusOnHeader(
+                  ? t('provider_not_found')
+                  : `${t('provider_text')}${' '}${providerStatusOnHeader(
                     providerStatus,
                   )}`
             }
@@ -242,7 +248,7 @@ const SearchDoctor = () => {
                 : userLocation.onboardingLocation &&
                   userLocation.onboardingLocation?.latitude &&
                   userLocation.onboardingLocation?.longitude
-                ? {
+                  ? {
                     latitude: parseFloat(
                       userLocation.onboardingLocation?.latitude,
                     ),
@@ -253,7 +259,7 @@ const SearchDoctor = () => {
                     longitudeDelta: 0.02,
                     title: 'Client',
                   }
-                : currentLocation
+                  : currentLocation
             }
             style={{ flex: 1 }}
           >
@@ -262,14 +268,14 @@ const SearchDoctor = () => {
                 coordinate={{
                   latitude:
                     userLocation &&
-                    userLocation?.onboardingLocation &&
-                    userLocation.onboardingLocation?.latitude
+                      userLocation?.onboardingLocation &&
+                      userLocation.onboardingLocation?.latitude
                       ? parseFloat(userLocation.onboardingLocation?.latitude)
                       : currentLocation?.latitude ?? 0.0,
                   longitude:
                     userLocation &&
-                    userLocation?.onboardingLocation &&
-                    userLocation.onboardingLocation?.longitude
+                      userLocation?.onboardingLocation &&
+                      userLocation.onboardingLocation?.longitude
                       ? parseFloat(userLocation.onboardingLocation?.longitude)
                       : currentLocation?.longitude ?? 0.0,
                 }}
@@ -299,8 +305,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                          currentOrder.providerDetails
-                            ?.providerProfilePicture ? (
+                            currentOrder.providerDetails
+                              ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -352,8 +358,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-          providerLocation !== undefined &&
-          providerLocation.latitude !== 0.0 ? (
+            providerLocation !== undefined &&
+            providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -385,9 +391,9 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                providerLocation.latitude !== 0.0 &&
-                !showLoader &&
-                !showCancelButton
+                  providerLocation.latitude !== 0.0 &&
+                  !showLoader &&
+                  !showCancelButton
                   ? t('order')
                   : t('cancel')
               }
@@ -399,13 +405,13 @@ const SearchDoctor = () => {
               style={{ alignSelf: 'center', marginBottom: 10 }}
               disabled={isBookOrder}
             />
-
             {!showLoader && (
+
               <>
                 <TextButton
                   style={{ alignSelf: 'center' }}
                   title={t('cancel')}
-                  onPress={orderCancel}
+                  onPress={() => { orderCancel() }}
                   fontSize={getHeight(fontSize.textXl)}
                 />
               </>
@@ -415,16 +421,18 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                showLoader
+                  showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton || showCancelButton
-                  ? t('3_minutes_to_cancel')
-                  : ''
+                    ? t('3_minutes_to_cancel')
+                    : ''
               }
             />
           </View>
         )}
-        {showAddToWallet && <AddPaymentToWallet isShowInputView={false} />}
+        {
+          showAddToWallet && <AddPaymentToWallet isShowInputView={false} fromMap={true} />
+        }
       </ScrollView>
     </>
   );

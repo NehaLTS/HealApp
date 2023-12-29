@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
@@ -32,19 +32,20 @@ const HomeViewController = () => {
   const navigation = useNavigation();
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
-  const { getBannerAds, searchProviders, searchList } = ClientOrderServices();
+  const { getBannerAds, searchProviders, searchList, ClientWallentAmount } = ClientOrderServices();
   const [isVisible, setIsVisible] = useState(false);
   const [providersList, setProvidersList] = useState<search_provider[]>([]);
   const [searchedList, setSearchedList] = useState<any[]>([]);
   const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [user, setUser] = useState<ClientProfile>();
+  const WalletDetail = getLocalData('WALLETDETAIL')
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const {
     userProfile,
     setUserProfile,
-
+    userId,
     setCurrentStep,
     setUserId,
     setToken,
@@ -53,6 +54,7 @@ const HomeViewController = () => {
     setRemainingTime,
     remainingTime,
     userLocation,
+    setWalletAmount
   } = UseClientUserContext();
   const { i18n } = useTranslation();
 
@@ -96,8 +98,7 @@ const HomeViewController = () => {
           },
         });
         Sentry.captureMessage(
-          `Client Flow userLocation FOR:-${
-            userProfile?.firstName ?? ''
+          `Client Flow userLocation FOR:-${userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
         );
       })
@@ -107,6 +108,7 @@ const HomeViewController = () => {
   };
 
   useEffect(() => {
+    setWalletAmount(WalletDetail?.wallet_amount ?? '0')
     setUserLocation({ ...locationData });
     location();
     getBannerAd();
@@ -154,6 +156,17 @@ const HomeViewController = () => {
   //     Alert.alert('Please turn on your permission');
   //   }
   // };
+  useFocusEffect(() => {
+    ClientWallentAmount({ client_id: userId }).then((res) => {
+      console.log('wallentAmout wwwres', res[0].wallet_amount)
+
+
+      setLocalData('WALLETDETAIL', {
+        client_id: userId,
+        wallet_amount: res[0].wallet_amount.toString()
+      })
+    })
+  })
 
   const onPressBanner = () => Linking.openURL(bannerAds[0]?.destinationUrl);
 
@@ -184,8 +197,7 @@ const HomeViewController = () => {
     console.log('data on search response', JSON.stringify(res));
     if (res.length > 0) {
       Sentry.captureMessage(
-        `Client Flow ON CHANGE SEARCH API  FOR:-${
-          userProfile?.firstName ?? ''
+        `Client Flow ON CHANGE SEARCH API  FOR:-${userProfile?.firstName ?? ''
         }---- ${res}`,
       );
       console.log('search result', res);
@@ -206,8 +218,7 @@ const HomeViewController = () => {
     if (res?.message) {
       setIsDataNotFound(false);
       Sentry.captureMessage(
-        `On Search response gave Message' for:-${
-          userProfile?.firstName
+        `On Search response gave Message' for:-${userProfile?.firstName
         }---- ${JSON.stringify(res?.message)}`,
       );
     } else {

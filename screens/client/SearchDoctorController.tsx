@@ -90,14 +90,14 @@ const SearchDoctorController = () => {
         const distance = Math.sqrt(
           Math.pow(
             parseFloat(providerSetLocation.latitude) -
-              parseFloat(userLocation?.onboardingLocation?.latitude),
+            parseFloat(userLocation?.onboardingLocation?.latitude),
             2,
           ) +
-            Math.pow(
-              parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.longitude),
-              2,
-            ),
+          Math.pow(
+            parseFloat(providerSetLocation.longitude) -
+            parseFloat(userLocation?.onboardingLocation?.longitude),
+            2,
+          ),
         );
 
         const bufferFactor = 1.2;
@@ -120,12 +120,12 @@ const SearchDoctorController = () => {
           latitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.latitude),
+              parseFloat(userLocation?.onboardingLocation?.latitude),
             ) * 2,
           longitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.longitude),
+              parseFloat(userLocation?.onboardingLocation?.longitude),
             ) * 2,
         };
 
@@ -169,62 +169,79 @@ const SearchDoctorController = () => {
 
   const createOrder = async () => {
     setShowLoader(true);
-
+    setShowAddToWallet(false)
+    let totalCost = route?.params?.orderDetails.TotalCost;
+    const shotAmounts = parseFloat(totalCost) - 500
+    const amount = paymentsendToApi(500, shotAmounts)
     let orderDetails = route?.params?.orderDetails;
     let heardDetail = route?.params?.heardDetail ?? '';
     console.log('search orderDetails', orderDetails);
-    const res = await orderProvider({
-      ...orderDetails,
-      services: heardDetail ? '1' : orderDetails.services,
-    });
-    Sentry.captureMessage(
-      `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(
-        res,
-      )}`,
-    );
-    console.log('RESPINSE+++++', res);
+    const clientBalance = parseFloat(payment?.wallet_amount ?? '0')
 
-    if (res?.orderId) {
-      setTimeout(() => {
-        setShowLoader(false);
-      }, 10000);
-      setShowRateAlert(false);
-      setCurrentOrder({
-        orderId: res?.orderId,
-        providerDetails: {
-          providerId: res.providerDetails.providerId,
-          providerName: res.providerDetails.providerName,
-          providerAddress: res.providerDetails.providerAddress,
-          providerProfilePicture: res.providerDetails.providerProfilePicture,
-          providerRating: res.providerDetails.providerRating,
-          phoneNumber: res.providerDetails.phoneNumber,
-          currentLatitude: res.providerDetails.currentLatitude,
-          currentLongitude: res.providerDetails.currentLongitude,
-        },
-        orderPrice: res.orderPrice,
-        orderStatus: res.orderStatus,
-        orderServices: res.orderServices,
-      });
-      focusBetweenClientAndProvider({
-        latitude: res.providerDetails.currentLatitude,
-        longitude: res.providerDetails.currentLongitude,
-      });
+    if (amount.walletMinimumAmount > clientBalance) {
+      Alert.alert(`You should have minimum amount of ${amount.walletMinimumAmount.toString()} in your wallet`)
+      setShowAddToWallet(true)
+      console.log("setShowAddToWallet")
 
-      setProviderLocation({
-        latitude: parseFloat(res.providerDetails.currentLatitude),
-        longitude: parseFloat(res.providerDetails.currentLongitude),
-      });
     } else {
-      setShowLoader(false);
-      setProviderNotFound(true);
-      Alert.alert(t('no_nearby_provider'), t('try_again_later'), [
-        {
-          text: t('ok'),
-          onPress: () => {
-            navigation.goBack();
+      setShowAddToWallet(false)
+
+      const res = await orderProvider({
+        ...orderDetails,
+        total_order_price: amount.totalAmount.toString(),
+        service_charge: amount.appAmount.toString(),
+        services: heardDetail ? '1' : orderDetails.services,
+        currency: 'NIS'
+      });
+      Sentry.captureMessage(
+        `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(
+          res,
+        )}`,
+      );
+      console.log('RESPINSE+++++', res);
+
+      if (res?.orderId) {
+        setTimeout(() => {
+          setShowLoader(false);
+        }, 10000);
+        setShowRateAlert(false);
+        setCurrentOrder({
+          orderId: res?.orderId,
+          providerDetails: {
+            providerId: res.providerDetails.providerId,
+            providerName: res.providerDetails.providerName,
+            providerAddress: res.providerDetails.providerAddress,
+            providerProfilePicture: res.providerDetails.providerProfilePicture,
+            providerRating: res.providerDetails.providerRating,
+            phoneNumber: res.providerDetails.phoneNumber,
+            currentLatitude: res.providerDetails.currentLatitude,
+            currentLongitude: res.providerDetails.currentLongitude,
           },
-        },
-      ]);
+          orderPrice: res.orderPrice,
+          orderStatus: res.orderStatus,
+          orderServices: res.orderServices,
+        });
+        focusBetweenClientAndProvider({
+          latitude: res.providerDetails.currentLatitude,
+          longitude: res.providerDetails.currentLongitude,
+        });
+
+        setProviderLocation({
+          latitude: parseFloat(res.providerDetails.currentLatitude),
+          longitude: parseFloat(res.providerDetails.currentLongitude),
+        });
+      } else {
+        setShowLoader(false);
+        setProviderNotFound(true);
+        Alert.alert(t('no_nearby_provider'), t('try_again_later'), [
+          {
+            text: t('ok'),
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]);
+      }
     }
   };
 
@@ -308,44 +325,30 @@ const SearchDoctorController = () => {
     );
   };
 
-  const sendPaymentData = () => {
-    let totalCost = route?.params?.orderDetails.TotalCost;
-    const shotAmounts = parseFloat(totalCost) - 500;
-    const amount = paymentsendToApi(500, shotAmounts);
-    PaymentForOrder({
-      heal_amount: amount.appAmount.toString(),
-      order_cost: amount.orderAmount.toString(),
-      total_order_cost: amount.totalAmount.toString(),
-      order_id: currentOrder?.providerDetails.providerId,
-    })
-      .then((res) => {
-        console.log('PAyment data sent', res);
-      })
-      .catch((error) => {
-        console.log('Error Occured', error.toString());
-      });
-  };
+
+
 
   const handleNextButtonPress = async () => {
-    console.log('  orderData..', currentOrder);
-    setShowAddToWallet(false);
-    //disable order button here Gurpreet
+
+
 
     //TODO:Vandana why we are passing status as accept here
+
     const orderBookResponse = await BookOrderRequest({
-      orderStatus: ORDER_STARTED,
-      provider_id: currentOrder?.providerDetails.providerId,
-      order_id: currentOrder?.orderId,
-      distance: Math.round(calculateDistance()).toString(),
-      time: Math.round(calculateTime().minutes).toString(),
+      // orderStatus: ORDER_STARTED,
+      provider_id: currentOrder?.providerDetails.providerId.toString(),
+      order_id: currentOrder?.orderId.toString(),
+      // distance: Math.round(calculateDistance()).toString(),
+      // time: Math.round(calculateTime().minutes).toString(),
     });
 
     console.log('gurpreet', orderBookResponse);
+
+    orderBookResponse
     if (orderBookResponse?.isSuccessful) {
-      const ORDER_TIME = new Date().getTime();
-      console.log('ORDER_TIME', ORDER_TIME);
-      setOrderTime(ORDER_TIME.toString());
-      sendPaymentData();
+      const ORDER_TIME = new Date().getTime()
+      console.log("ORDER_TIME", ORDER_TIME)
+      setOrderTime(ORDER_TIME.toString())
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
@@ -353,28 +356,30 @@ const SearchDoctorController = () => {
 
       // Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
-    } else if (
-      orderBookResponse.msg === 'Wallet information not found for the client'
-    ) {
-      setShowAddToWallet(true);
-    } else {
+    }
+    else {
+
       //Gurpreet to change it to cancel button
       setIsBookOrder(false);
+      console.log("clientOrderElse")
     }
     setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
+
+
+
   };
 
   const calculateDistance = () => {
     const userCurrentLocation = {
       latitude: parseFloat(
         userLocation?.onboardingLocation?.latitude ??
-          userLocation?.currentLocation?.latitude ??
-          '0.0',
+        userLocation?.currentLocation?.latitude ??
+        '0.0',
       ),
       longitude: parseFloat(
         userLocation?.onboardingLocation?.longitude ??
-          userLocation?.currentLocation?.longitude ??
-          '0.0',
+        userLocation?.currentLocation?.longitude ??
+        '0.0',
       ),
     };
     const ProviderLocation = {
@@ -405,25 +410,25 @@ const SearchDoctorController = () => {
     return time;
   };
   const orderCancel = () => {
-    OrderCancelFromClient({
-      order_id: currentOrder?.orderId,
-      orderTime: orderTime,
-    })
-      .then((res: OrderCancelByClientRespnse) => {
-        Alert.alert(res.msg);
-        if (res.isSuccessful) {
-          const newAmount =
-            parseFloat(payment?.wallet_amount ?? '0') +
-            parseFloat(res.clientAmount);
-          setLocalData('WALLETDETAIL', {
-            wallet_amount: newAmount.toString(),
-          });
-        }
+    OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
+
+      console.log("cancel reaposnse", res)
+      setLocalData('ORDER', {
+        orderId: ''
       })
-      .catch((error) => {
-        Alert.alert('Error Occured', error.toString());
-      });
-  };
+      if (res.isSuccessful) {
+
+        const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
+        setLocalData('WALLETDETAIL', {
+          wallet_amount: newAmount.toString()
+        })
+      }
+
+    }).catch((error) => {
+      Alert.alert('Error Occured', error.toString())
+    })
+    navigation.goBack();
+  }
   return {
     permissionHelper: permissionHelper,
     forceAlert,

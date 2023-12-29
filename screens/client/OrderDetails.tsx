@@ -48,7 +48,7 @@ const OrderDetails = () => {
 
     console.log('called here currentOrder  ', currentOrder);
 
-    if (currentOrder) {
+    if (currentOrder?.orderId !== undefined) {
       console.log('called here 1111');
       setPendingOrder(true);
     }

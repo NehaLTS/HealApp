@@ -21,6 +21,8 @@ export interface ClientUserContextFields {
   orderDetails: OrderDetail;
   setUserLocation: React.Dispatch<React.SetStateAction<userLocation>>;
   userLocation: userLocation;
+  walletAmount: string;
+  setWalletAmount: React.Dispatch<React.SetStateAction<string>>;
   setOrderDetails: React.Dispatch<React.SetStateAction<OrderDetail>>;
   setRemainingTime: React.Dispatch<React.SetStateAction<RemaingTime>>;
   remainingTime: RemaingTime;

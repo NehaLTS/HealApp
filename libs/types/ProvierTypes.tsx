@@ -91,9 +91,10 @@ export interface PoviderLocation {
 
 export interface TreatementEnded {
   order_id: string;
-  currency: string;
-  total_price: string;
-  services: string;
+  TotalCost: string;
+  service_charge: string,
+  total_order_price: string
+  currency: string
   treatment_completed: string;
 }
 

@@ -1,3 +1,4 @@
+import AddNewService from 'components/common/AddNewService';
 import Button from 'components/common/Button';
 import Checkbox from 'components/common/Checkbox';
 import RNModal from 'components/common/Modal';
@@ -7,23 +8,96 @@ import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import React from 'react';
+import { TreatmentMenu } from 'libs/types/ProvierTypes';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
+import ProviderServices from '../registration/views/ProviderServices';
 
 const ArrivedView = ({
   order,
   isModalVisible,
-  onPressAddService,
   totalPricesOfServices,
   onPressTreatmentEnd,
 }: {
   order: any;
   isModalVisible: boolean;
-  onPressAddService: () => void;
   totalPricesOfServices: string;
-  onPressTreatmentEnd: () => void;
+  onPressTreatmentEnd: (services?: any) => void;
 }) => {
+  const [updatedServices, setUpdatedServices] = React.useState<any[]>(order?.OrderReceive?.services)
+  const [activeCheckbox, setActiveCheckbox] = React.useState<boolean[]>([]);
+  console.log("updatedServices trea", updatedServices, activeCheckbox)
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  // Function to initialize checkboxes and selected items when order details are available
+
+
+  useEffect(() => {
+    console.log("hiii")
+
+    if (order && order.OrderReceive && order.OrderReceive?.services?.length > 0) {
+      setUpdatedServices(order.OrderReceive?.service)
+      const initialCheckboxes = Array(order.OrderReceive.services.length).fill(true);
+      setActiveCheckbox(initialCheckboxes);
+
+      console.log("hiii", updatedServices)
+      // Initialize selected items based on initial checkboxes
+      // const initialSelectedItems = order.OrderReceive.services.filter((item, index: number) => initialCheckboxes[index]);
+      // setUpdatedServices(initialSelectedItems);
+    }
+  }, [order]);
+
+  // Function to handle checkbox press
+  const onPressCheckBox = (item: any, index: number) => {
+
+    console.log('order.OrderReceive?.services', order.OrderReceive?.services, updatedServices, item.menu_id)
+    const updatedCheckboxes = [...activeCheckbox];
+    updatedCheckboxes[index] = !updatedCheckboxes[index];
+    setActiveCheckbox(updatedCheckboxes);
+    const orderService = JSON.parse(order.OrderReceive?.services)
+    let newArray = orderService.filter(itemSelected => itemSelected.menu_id !== item.menu_id);
+    // const newItem = updatedServices as unknown as any
+    // if (!itemToSet) {
+    //   newItem.push(orderService[index])
+    //   setUpdatedServices(newItem)
+
+
+    // } else {
+
+    // }
+    setUpdatedServices(newArray)
+    console.log(orderService[index], newArray, "typeOf orderService change, newArray")
+    // setUpdatedServices(updatedServices.filter((itemInside) => {
+    //   itemInside !== item
+    // }))
+
+    // Update selected items based on checked checkboxes
+    // const updatedSelectedItems = order?.OrderReceive?.services?.filter((_, i) => updatedCheckboxes[i]) ?? [];
+    // setSelectedItems(updatedSelectedItems);
+    // if (
+    //   updatedServices.find((selectedItem) => selectedItem.menu_id === item.menu_id)
+    // ) {
+    //   updatedSelectedMenu = updatedServices.filter(
+    //     (selectedItem) => selectedItem.menu_id !== item.menu_id,
+    //   );
+    // } else {
+    //   updatedSelectedMenu = [...updatedServices, item];
+    // }
+    // Update selected items based on checkbox status
+    // const updatedSelectedItems = order.OrderReceive.services.filter((item, i: number) => updatedCheckboxes[i]);
+    // setUpdatedServices(updatedSelectedItems);
+    console.log("updatedSelectedItems..ttt.", newArray)
+  };
+  const onPressAddService = () => {
+    setIsVisible(true)
+  }
+
+  const AddNewServicesData = (data: any) => {
+    console.log("data new services", data)
+
+  }
+
   return (
     <RNModal
       coverScreen
@@ -86,7 +160,7 @@ const ArrivedView = ({
                     title={`${item?.service_price} NIS`}
                     entering={FadeInLeft.duration(400).delay(900)}
                   />
-                  <Checkbox isWhite isChecked={true} />
+                  <Checkbox isWhite isChecked={activeCheckbox[index]} onPress={() => onPressCheckBox(item, index)} />
                 </View>
               </View>
             ),
@@ -95,7 +169,7 @@ const ArrivedView = ({
           activeOpacity={0.8}
           style={styles.addServiceContainer}
           onPress={onPressAddService}
-          disabled={true}
+          disabled={false}
         >
           <Image
             source={require('assets/icon/addServiceWhite.png')}
@@ -111,7 +185,7 @@ const ArrivedView = ({
           />
           <AnimatedText
             style={styles.totalAmount}
-            title={`${totalPricesOfServices?.toString()} NIS`}
+            title={`${Number(parseFloat(totalPricesOfServices).toFixed(5))?.toString()} NIS`}
             entering={FadeInLeft.duration(400).delay(500)}
           />
         </View>
@@ -130,7 +204,10 @@ const ArrivedView = ({
             height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             background={colors.white}
-            onPress={onPressTreatmentEnd}
+            onPress={() => {
+              console.log(updatedServices, "....updatedServices")
+              onPressTreatmentEnd(updatedServices)
+            }}
           />
         </View>
       </Animated.View>
