@@ -148,6 +148,7 @@ const OrderFormController = ({
       : [...selectedResourceType, item];
 
     setSelectedResourceType(updatedSelectedResourceType);
+    console.log('updatedSelectedResourceType', updatedSelectedResourceType);
     setOrder((prevOrder) => ({
       ...prevOrder,
       reason: updatedSelectedResourceType,

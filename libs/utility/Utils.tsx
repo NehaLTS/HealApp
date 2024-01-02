@@ -96,6 +96,10 @@ export const checkLocationPermission = (): Promise<boolean> => {
     });
 };
 
+export const getImagesPath = (imageData: any[], purpose: any) => {
+  return imageData.find((image) => image.type === purpose)?.downloadURL || null;
+};
+
 // export const getGemomatrichLocationFromPlaceId = async (placeId: any) => {
 
 //   const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=geometry&key=${apiKey}`;

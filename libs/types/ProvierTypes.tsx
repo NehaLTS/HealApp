@@ -5,9 +5,9 @@ export interface Providers {
 }
 export interface Name {
   en: string;
-  ar: string;
-  ru: string
+  ru: string;
   he: string;
+  ar: string;
 }
 export interface Specialty {
   id?: number;
@@ -93,29 +93,46 @@ export interface PoviderLocation {
 export interface TreatementEnded {
   order_id: string;
   TotalCost: string;
-  service_charge: string,
-  total_order_price: string
-  currency: string
+  service_charge: string;
+  total_order_price: string;
+  currency: string;
   treatment_completed: string;
 }
 
-
 export interface ProviderHomeDetails {
-  isSuccessful: boolean,
-  providerDetails: ProviderHomeOrderDetail
+  isSuccessful: boolean;
+  providerDetails: ProviderHomeOrderDetail;
 }
 
 export interface ProviderHomeOrderDetail {
-  orderDetails: ProviderOrderDetail,
-  walletDetails: WalletDetail
+  orderDetails: ProviderOrderDetail;
+  walletDetails: WalletDetail;
 }
 
 export interface ProviderOrderDetail {
-  provider_id: number,
-  total_clients: number,
-  avg_arrival_time: number
+  provider_id: number;
+  total_clients: number;
+  avg_arrival_time: number;
 }
 
 export interface WalletDetail {
-  wallet_amount: number
+  wallet_amount: number;
+}
+
+export interface ServiceProfile {
+  menu_id: number;
+  name: Name;
+  service_price: string;
+}
+export interface Symptom {
+  name: Name;
+  id: number;
+}
+export interface OrderDetails {
+  TotalCost: number;
+  address: string;
+  currency: string;
+  modifiedServices: ServiceProfile[];
+  ratings: string;
+  symptoms: string;
 }

@@ -75,15 +75,26 @@ const ProviderAddressController = () => {
   };
 
   const onPressNext = () => {
-    if (phoneRef.current.value && onSearchAddress) {
+    if (
+      !phoneError &&
+      !addressError &&
+      phoneRef?.current?.value?.length > 0 &&
+      onSearchAddress?.length > 0
+    ) {
       if (licenseRef.current.value && !licensePicture) {
         Alert.alert(t('select_license_picture'));
       } else {
         setProviderProfile({
           ...providerProfile,
           address: onSearchAddress,
-          phoneNumber: phoneRef.current.value,
-          licensenumber: licenseRef.current.value,
+          phoneNumber:
+            phoneRef?.current?.value?.length > 0
+              ? phoneRef?.current?.value
+              : providerProfile?.phoneNumber,
+          licensenumber:
+            licenseRef?.current?.value?.length > 0
+              ? licenseRef?.current?.value
+              : providerProfile?.licensenumber,
           licensepicture: licensePicture,
         });
         setCurrentStep('payment');
@@ -106,8 +117,8 @@ const ProviderAddressController = () => {
         });
       }
     } else {
-      if (!phoneRef.current.value) setPhoneError(t('phone_number_required'));
-      if (!onSearchAddress) setAddressError(t('address_required'));
+      if (!phoneRef?.current?.value) setPhoneError(t('phone_number_required'));
+      if (!onSearchAddress?.length) setAddressError(t('address_required'));
     }
   };
 

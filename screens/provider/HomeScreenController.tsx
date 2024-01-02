@@ -6,7 +6,11 @@ import {
   getLocalData,
   setLocalData,
 } from 'libs/datastorage/useLocalStorage';
-import { Location, ProviderProfile, ProviderServices } from 'libs/types/UserType';
+import {
+  Location,
+  ProviderProfile,
+  ProviderServices,
+} from 'libs/types/UserType';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
@@ -18,7 +22,9 @@ import { ProviderHomeDetails } from 'libs/types/ProvierTypes';
 const HomeScreenControlller = () => {
   const order = getLocalData('PROVIDERORDER');
   const navigation = useNavigation<any>();
-  const [servicesFromApi, setServicesFromAPi] = useState<ProviderServices[]>([]);
+  const [servicesFromApi, setServicesFromAPi] = useState<ProviderServices[]>(
+    [],
+  );
 
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
@@ -28,7 +34,7 @@ const HomeScreenControlller = () => {
   const { userLocation } = UseClientUserContext();
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
-
+  const [showSidebar, setShowSidebar] = useState(false);
   const [providerLocation, setProviderLocation] = useState<Location>({
     latitude: 0.0,
     longitude: 0.0,
@@ -43,7 +49,7 @@ const HomeScreenControlller = () => {
     providerAvailabilityStatus,
     TreatementEnded,
     getProviderDaySummary,
-    onGetProviderService
+    onGetProviderService,
   } = AuthServicesProvider();
 
   const sendFCMMessage = async () => {
@@ -89,8 +95,9 @@ const HomeScreenControlller = () => {
 
   const getSummaryofDay = async () => {
     let currentdate = new Date();
-    let dateMDY = `${currentdate.getFullYear()}-${currentdate.getMonth() + 1
-      }-${currentdate.getDate()}`;
+    let dateMDY = `${currentdate.getFullYear()}-${
+      currentdate.getMonth() + 1
+    }-${currentdate.getDate()}`;
 
     let daySummary = await getProviderDaySummary(
       {
@@ -112,11 +119,12 @@ const HomeScreenControlller = () => {
       },
       token,
     );
-    console.log("newSevices", response)
+    console.log('newSevices', response);
     if (response && response.services) {
       setServicesFromAPi(response.services);
       Sentry.captureMessage(
-        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${providerProfile?.firstName ?? ''
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
+          providerProfile?.firstName ?? ''
         }---- ${response.services}`,
       );
     }
@@ -272,6 +280,15 @@ const HomeScreenControlller = () => {
   //  const ProviderAvailability=()=>{
   //   providerAvailabilityStatus( {provider_id:order?.eventData?.providerId})
   //  }
+
+  const onPressProfileTab = (title: string) => {
+    console.log('title', title);
+    setShowSidebar(false);
+    navigation.navigate(NavigationRoutes.ProviderProfile, {
+      screen: title,
+    });
+  };
+
   return {
     OnPressTakeOrder,
     acceptOrder,
@@ -284,7 +301,10 @@ const HomeScreenControlller = () => {
     getSummaryofDay,
     setProviderProfile,
     servicesFromApi,
-    getProviderServices
+    getProviderServices,
+    onPressProfileTab,
+    showSidebar,
+    setShowSidebar,
   };
 };
 

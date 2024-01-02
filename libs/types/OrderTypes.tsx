@@ -1,3 +1,5 @@
+import { Name } from './ProvierTypes';
+
 export interface Order {
   orderId: string;
   providerDetails: PROVIDERDETAILS;
@@ -26,11 +28,11 @@ export interface OrderServices {
 export interface ProviderOrder {
   latitude?: string;
   longitude?: string;
-  OrderReceive?: ProviderOrderReceive
+  OrderReceive?: ProviderOrderReceive;
   onPaymentAprroved?: boolean;
   orderId?: string;
   orderStatus?: string;
-  extraData?: extraProps
+  extraData?: extraProps;
 }
 
 export interface ProviderOrderReceive {
@@ -51,9 +53,8 @@ export interface ClientOrder {
   longitude?: string;
   orderId?: string;
   orderStatus?: string;
-  treatementEnd?: OnTreatementEnd
+  treatementEnd?: OnTreatementEnd;
 }
-
 
 export interface OnTreatementEnd {
   firstname: string;
@@ -65,14 +66,23 @@ export interface OnTreatementEnd {
 export interface extraProps {
   isArrived?: boolean;
   isNotification?: boolean;
-  isSeeMore?: boolean,
-  modalHeight?: number,
-  isCancelOrder?: boolean,
-  orderAccepted?: boolean,
-  totalPrice?: string
+  isSeeMore?: boolean;
+  modalHeight?: number;
+  isCancelOrder?: boolean;
+  orderAccepted?: boolean;
+  totalPrice?: string;
 }
 export interface healerType {
-  price: string,
-  provider_type_id: string,
-  specialty: string
+  price: string;
+  provider_type_id: string;
+  specialty: string;
+}
+
+export interface OrderHistory {
+  S_No: number;
+  TotalCost: number;
+  currency: string;
+  patient_name: string;
+  created_date_time: string;
+  order_id: number;
 }

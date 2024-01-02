@@ -47,6 +47,7 @@ const SummaryView = ({
   } = SummaryViewController({ order });
   const { userProfile } = UseClientUserContext();
   const { t, i18n } = useTranslation();
+  console.log('order', order);
 
   const paymentModal = () => (
     <Modal
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
   },
   patientAndAddress: {
     flexDirection: 'column',
-    minWidth: Dimensions.get('screen').width > 400 ? '29%' : '47%',
+    minWidth: Dimensions.get('screen').width > 500 ? '29%' : '47%',
   },
   total: {
     fontFamily: fontFamily.medium,

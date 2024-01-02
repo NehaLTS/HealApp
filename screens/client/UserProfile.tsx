@@ -32,18 +32,49 @@ const UserProfile = () => {
   const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false);
   const walletData = getLocalData('WALLETDETAIL');
 
-  const renderItem = ({ item, index }: { item: PaymentHistoryType, index: number }) => {
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: PaymentHistoryType;
+    index: number;
+  }) => {
     return (
-      <View style={{ flexDirection: 'row', borderBottomWidth: getWidth(2), justifyContent: 'space-between', padding: getWidth(10) }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          borderBottomWidth: getWidth(2),
+          justifyContent: 'space-between',
+          padding: getWidth(10),
+        }}
+      >
         <Text title={item.transaction_type} style={styles.paymentHistoryText} />
         <View style={{ flexDirection: 'row' }}>
           <Text title={item.amount} style={styles.paymentHistoryText} />
-          <Text title={item.transaction_type === 'debit' ? '-' : item.transaction_type === 'credit' ? '+' : ''} style={[{ fontWeight: 'bold', color: item.transaction_type === 'debit' ? colors.invalid : item.transaction_type === 'credit' ? 'green' : '' }]} />
+          <Text
+            title={
+              item.transaction_type === 'debit'
+                ? '-'
+                : item.transaction_type === 'credit'
+                ? '+'
+                : ''
+            }
+            style={[
+              {
+                fontWeight: 'bold',
+                color:
+                  item.transaction_type === 'debit'
+                    ? colors.invalid
+                    : item.transaction_type === 'credit'
+                    ? 'green'
+                    : '',
+              },
+            ]}
+          />
         </View>
       </View>
-    )
-
-  }
+    );
+  };
 
   return (
     <View style={styles.mainContainer}>

@@ -4,6 +4,8 @@ import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderBankDetails, ProviderProfile } from 'libs/types/UserType';
+import uploadImage from 'libs/uploadImage';
+import { getImagesPath } from 'libs/utility/Utils';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
@@ -59,6 +61,21 @@ const ProviderPaymentController = () => {
     setProfilePicture(url);
   };
 
+  const imagePaths = [
+    {
+      imagePath: providerProfile?.idPicture,
+      type: 'idPicture',
+    },
+    {
+      imagePath: providerProfile?.licensepicture,
+      type: 'license',
+    },
+    {
+      imagePath: profilePicture,
+      type: 'profilePicture',
+    },
+  ].filter((imageData) => imageData?.imagePath);
+  console.log('imagePaths', imagePaths);
   const validateRegistrationNumber = () => {
     if (!registrationNumberRef.current.value) {
       setRegistrationError(t('registration_required'));
@@ -102,117 +119,139 @@ const ProviderPaymentController = () => {
         console.log('location....', location);
       })
       .catch((error) => console.warn(error));
+    setIsLoading(true);
+    await uploadImage(imagePaths)
+      .then(async (images) => {
+        console.log('Uploaded images:', images);
 
-    if (
-      registrationNumberRef.current.value &&
-      bankNameRef.current.value &&
-      accountRef.current.value &&
-      branchRef.current.value &&
-      profilePicture
-    ) {
-      let bankDetails: ProviderBankDetails = {
-        registrationNumber: registrationNumberRef.current.value,
-        bankname: bankNameRef.current.value,
-        accountnumber: accountRef.current.value,
-        branchname: branchRef.current.value,
-      };
-      setProviderProfile({
-        ...(providerProfile as ProviderProfile),
-        bankDetails: bankDetails,
-        profilePicture: profilePicture,
-      });
-      setIsLoading(true);
-      console.log('providerServicesData', providerServicesData);
-      console.log(
-        'locationUpdate',
-        latitude,
-        latitude !== '' ? latitude : userLocation?.onboardingLocation?.latitude,
-      );
-      const res = await OnUpdateProviderUserDetails?.(
-        {
-          firstname: providerProfile?.firstName ?? '',
-          lastname: providerProfile?.lastName ?? '',
-          address: providerProfile?.address ?? '',
-          city: '',
-          state: '',
-          country: '',
+        if (images?.length > 0) {
+          if (
+            registrationNumberRef.current.value &&
+            bankNameRef.current.value &&
+            accountRef.current.value &&
+            branchRef.current.value &&
+            profilePicture
+          ) {
+            let bankDetails: ProviderBankDetails = {
+              registrationNumber: registrationNumberRef.current.value,
+              bankname: bankNameRef.current.value,
+              accountnumber: accountRef.current.value,
+              branchname: branchRef.current.value,
+            };
+            setProviderProfile({
+              ...(providerProfile as ProviderProfile),
+              bankDetails: bankDetails,
+              profilePicture: getImagesPath(images, 'profilePicture'),
+              licensepicture: getImagesPath(images, 'license'),
+              idPicture: getImagesPath(images, 'idPicture'),
+            });
 
-          phone_number: providerProfile?.phoneNumber ?? '',
-          profile_picture: profilePicture ?? '',
-          provider_id: userId ?? '',
-          provider_type_id: providerProfile?.provider.id ?? '',
-          license_number: providerProfile?.licensenumber ?? '',
-          upload_license_picture: providerProfile?.licensepicture ?? '',
-          bank_name: bankNameRef.current.value,
-          branch: branchRef.current.value,
-          business_registration_number: registrationNumberRef.current.value,
-          account: accountRef.current.value,
-          specialty_id: providerProfile.speciality.id,
-          latitude:
-            latitude !== ''
-              ? latitude
-              : userLocation?.onboardingLocation?.latitude ?? '',
-          longitude:
-            longitude !== ''
-              ? longitude
-              : userLocation?.onboardingLocation?.longitude ?? '',
-        },
-        token,
-      );
+            console.log('providerServicesData', providerServicesData);
+            console.log(
+              'locationUpdate',
+              latitude,
+              latitude !== ''
+                ? latitude
+                : userLocation?.onboardingLocation?.latitude,
+            );
+            const res = await OnUpdateProviderUserDetails?.(
+              {
+                firstname: providerProfile?.firstName ?? '',
+                lastname: providerProfile?.lastName ?? '',
+                address: providerProfile?.address ?? '',
+                city: '',
+                state: '',
+                country: '',
 
-      console.log('response patch', res);
+                phone_number: providerProfile?.phoneNumber ?? '',
+                profile_picture: profilePicture ?? '',
+                provider_id: userId ?? '',
+                provider_type_id: providerProfile?.provider.id ?? '',
+                license_number: providerProfile?.licensenumber ?? '',
+                upload_license_picture: providerProfile?.licensepicture ?? '',
+                bank_name: bankNameRef.current.value,
+                branch: branchRef.current.value,
+                business_registration_number:
+                  registrationNumberRef.current.value,
+                account: accountRef.current.value,
+                specialty_id: providerProfile.speciality.id,
+                latitude:
+                  latitude !== ''
+                    ? latitude
+                    : userLocation?.onboardingLocation?.latitude ?? '',
+                longitude:
+                  longitude !== ''
+                    ? longitude
+                    : userLocation?.onboardingLocation?.longitude ?? '',
+              },
+              token,
+            );
 
-      if (res?.msg) {
-        setLocalData('USERPROFILE', {
-          firstName: providerProfile.firstName ?? '',
-          lastName: providerProfile.lastName ?? '',
-          address: providerProfile?.address,
-          city: '',
-          state: '',
-          country: '',
-          phoneNumber: providerProfile.phoneNumber ?? '',
-          profilePicture: profilePicture ?? '',
-          provider: providerProfile.provider,
-          speciality: providerProfile.speciality,
-          licensenumber: providerProfile.licensenumber ?? '',
-          licensepicture: providerProfile.licensepicture ?? '',
-          bankDetails: {
-            bankname: bankNameRef.current.value,
-            branchname: branchRef.current.value,
-            registrationNumber: registrationNumberRef.current.value,
-            accountnumber: accountRef.current.value,
-          },
-        });
+            console.log('response patch', res);
 
-        if (
-          providerProfile?.provider?.name?.en === 'Doctor' ||
-          providerProfile?.provider?.name?.en === 'Nurse'
-        ) {
-          setCurrentStep('services');
-        } else {
-          setCurrentStep('addServices');
+            if (res?.msg) {
+              setLocalData('USERPROFILE', {
+                firstName: providerProfile.firstName ?? '',
+                lastName: providerProfile.lastName ?? '',
+                address: providerProfile?.address,
+                city: '',
+                state: '',
+                country: '',
+                phoneNumber: providerProfile.phoneNumber ?? '',
+                provider: providerProfile.provider,
+                speciality: providerProfile.speciality,
+                licensenumber: providerProfile.licensenumber ?? '',
+                profilePicture: getImagesPath(images, 'profilePicture'),
+                licensepicture:
+                  getImagesPath(images, 'license')?.length > 0
+                    ? getImagesPath(images, 'license')
+                    : '',
+                idPicture: getImagesPath(images, 'idPicture'),
+                bankDetails: {
+                  bankname: bankNameRef.current.value,
+                  branchname: branchRef.current.value,
+                  registrationNumber: registrationNumberRef.current.value,
+                  accountnumber: accountRef.current.value,
+                },
+              });
+
+              if (
+                providerProfile?.provider?.name?.en === 'Doctor' ||
+                providerProfile?.provider?.name?.en === 'Nurse'
+              ) {
+                setCurrentStep('services');
+              } else {
+                setCurrentStep('addServices');
+              }
+            } else {
+              setIsLoading(false);
+              Alert.alert(t('some_error'));
+            }
+
+            setIsLoading(false);
+
+            console.log('respionse is ', res);
+
+            // setCurrentStep('payment');
+          } else {
+            setIsLoading(false);
+            if (!registrationNumberRef.current.value)
+              setRegistrationError(t('registration_required'));
+            if (!bankNameRef.current.value)
+              setBankNameError(t('bank_required'));
+            if (!accountRef.current.value)
+              setAccountError(t('bank_account_required'));
+            if (!branchRef.current.value) setBranchError(t('branch_required'));
+            if (!profilePicture) {
+              Alert.alert('Please add Profile picture');
+            }
+          }
         }
-      } else {
-        Alert.alert(t('some_error'));
-      }
-
-      setIsLoading(false);
-
-      console.log('respionse is ', res);
-
-      // setCurrentStep('payment');
-    } else {
-      if (!registrationNumberRef.current.value)
-        setRegistrationError(t('registration_required'));
-      if (!bankNameRef.current.value) setBankNameError(t('bank_required'));
-      if (!accountRef.current.value)
-        setAccountError(t('bank_account_required'));
-      if (!branchRef.current.value) setBranchError(t('branch_required'));
-      if (!profilePicture) {
-
-        Alert.alert("Please add Profile picture")
-      }
-    }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error('Error uploading images:', error);
+      });
   };
 
   const onPressBack = () => {

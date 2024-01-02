@@ -101,7 +101,10 @@ const OrderDetailsController = () => {
       treatmentsMenu !== null &&
       treatmentsMenu?.treatmentMenu !== undefined
     ) {
-      console.log('treatmentsMenu', JSON.stringify(treatmentsMenu.reason[0].name));
+      console.log(
+        'treatmentsMenu',
+        JSON.stringify(treatmentsMenu.reason[0].name),
+      );
       const checkExisting = treatmentsMenu?.treatmentMenu?.some((item) => {
         return item.provider_type_id;
       });
@@ -132,18 +135,21 @@ const OrderDetailsController = () => {
     supplier.name === 'Alternative medicine'
       ? '1'
       : supplier?.provider_type_id?.toString();
-  const basicIncude = order.services.some(item => item.menu_id === 1);
-  console.log("basicIncude", basicIncude)
+  const basicIncude = order.services.some((item) => item.menu_id === 1);
+  console.log('basicIncude', basicIncude);
   let updateArray: any[];
   if (basicIncude) {
-    updateArray = order.services
+    updateArray = order.services;
   } else {
-    updateArray = [{
-      menu_id: 1,
-      name: { en: 'Basic', he: '', hi: '' },
-      price: "500",
-      provider_type_id: PROVIDER_TYPE_ID
-    }, ...order.services]
+    updateArray = [
+      {
+        menu_id: 1,
+        name: { en: 'Basic', he: '', hi: '' },
+        price: '500',
+        provider_type_id: PROVIDER_TYPE_ID,
+      },
+      ...order.services,
+    ];
   }
   const concatenatedIds = updateArray.map((item) => item.menu_id).join(',');
   const TotalCost = order?.services
@@ -193,7 +199,8 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${
+              !order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -225,8 +232,8 @@ const OrderDetailsController = () => {
           Estimate_arrival: order?.Estimate_arrival,
           Instructions_for_arrival: order?.Instructions_for_arrival,
           Payment_mode: order?.Payment_mode,
-          TotalCost: (updateArray
-            .reduce((total, item) => total + parseFloat(item.price), 0))
+          TotalCost: updateArray
+            .reduce((total, item) => total + parseFloat(item.price), 0)
             .toString(),
           latitude:
             userLocation.onboardingLocation?.latitude ??
@@ -236,7 +243,12 @@ const OrderDetailsController = () => {
             userLocation.currentLocation?.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
         };
-        console.log('updateArray', updateArray, "TotalCost", orderDetails.TotalCost)
+        console.log(
+          'updateArray',
+          updateArray,
+          'TotalCost',
+          orderDetails.TotalCost,
+        );
         console.log('(userProfile userLocation', userLocation);
         Sentry.captureMessage(
           `Client Flow  ORDER ALL DETAILS FOR:-${user?.firstName}---- ${orderDetails}`,

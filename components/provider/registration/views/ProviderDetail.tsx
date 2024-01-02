@@ -65,7 +65,10 @@ const ProviderDetail = () => {
         onChangeText={onChangeFirstName}
         ref={firstNameRef}
         defaultValue={
-          providerProfile?.firstName ? providerProfile?.firstName : ''
+          firstNameRef?.current?.value?.length > 0 &&
+          firstNameRef?.current?.value !== undefined
+            ? firstNameRef.current.value
+            : providerProfile?.firstName
         }
         inputValue={providerProfile?.firstName ?? ''}
         errorMessage={firstNameError}
@@ -81,7 +84,10 @@ const ProviderDetail = () => {
         onChangeText={onChangeLastName}
         onBlur={onBlurLastName}
         defaultValue={
-          providerProfile?.firstName ? providerProfile?.firstName : ''
+          lastNameRef?.current?.value?.length > 0 &&
+          lastNameRef?.current?.value !== undefined
+            ? lastNameRef?.current?.value
+            : providerProfile?.lastName
         }
         ref={lastNameRef}
         inputValue={providerProfile?.lastName ?? ''}
@@ -111,7 +117,11 @@ const ProviderDetail = () => {
             : 'name.en'
         }
         placeholder={t('type_of_provider')}
-        value={selectedProvider}
+        value={
+          providerProfile?.provider
+            ? providerProfile?.provider
+            : selectedProvider
+        }
         onChange={onChangeProviderType}
         renderItem={renderProviderItems}
         errorMessage={providerTypeError}
@@ -175,7 +185,6 @@ const ProviderDetail = () => {
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
           imageUri={getImageUrl}
-          isLoading={setIsLoading}
         />
       </View>
 

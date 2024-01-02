@@ -50,7 +50,7 @@ const Input = forwardRef(
         | 'telephoneNumber'
         | 'password'
         | 'numeric'
-        | 'dateOfBirth';
+        | any;
       inputStyle?: StyleProp<TextStyle>;
       errorMessage?: string;
       containerWidth?: DimensionValue;
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     borderWidth: getHeight(dimens.borderBold),
     borderRadius: getHeight(dimens.marginS),
     flexDirection: 'row',
-    minHeight: getHeight(dimens.imageS),
+    height: getHeight(dimens.imageS),
     backgroundColor: colors.offWhite,
     minWidth: '24%',
   },

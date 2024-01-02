@@ -183,7 +183,6 @@ const UserAddressView = () => {
             isShowModal={isShowModal}
             closeModal={setIsShowModal}
             imageUri={getImageUrl}
-            isLoading={setIsLoader}
           />
         </View>
       </View>

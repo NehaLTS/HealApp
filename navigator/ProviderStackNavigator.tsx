@@ -50,6 +50,11 @@ const ProviderStackNavigator = () => {
               ),
           )}
         />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name={NavigationRoutes.ProviderProfile}
+          component={lazy(() => import('../screens/profile/ProviderProfile'))}
+        />
       </Stack.Navigator>
     </UserContextProvider.Provider>
   );

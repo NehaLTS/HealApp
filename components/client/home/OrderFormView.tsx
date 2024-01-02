@@ -81,7 +81,7 @@ const OrderFormView = ({
 
   useEffect(() => {
     const getPreselectedReason = treatmentReason?.reason?.find(
-      (item) => item?.name.en === supplier?.speciality_name,
+      (item) => item?.name?.en === supplier?.speciality_name,
     );
     console.log('getPreselectedReason', getPreselectedReason);
 

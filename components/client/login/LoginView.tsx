@@ -39,61 +39,55 @@ const LoginView = ({}: {}) => {
   return (
     <>
       {renderToast()}
-      <KeyboardAvoidingView
-        style={styles.inputContainer}
-        behavior={'height'}
-        keyboardVerticalOffset={20}
-      >
-        <ScrollView>
-          {isLoading && <Loader />}
-          <Input
-            ref={emailRef}
-            placeholder={t('email')}
-            defaultValue={emailRef.current.value}
-            errorMessage={emailError}
-            onChangeText={onChangeEmail}
-            type="emailAddress"
-            inputValue={emailRef.current.value}
-            onBlur={onBlurEmail}
-            returnKeyType={'next'}
-            onSubmitEditing={() => passwordRef.current.focus()}
-            onClearInputText={() => emailRef.current.clear()}
-          />
+      <View style={styles.inputContainer}>
+        {isLoading && <Loader />}
+        <Input
+          ref={emailRef}
+          placeholder={t('email')}
+          defaultValue={emailRef.current.value}
+          errorMessage={emailError}
+          onChangeText={onChangeEmail}
+          type="emailAddress"
+          inputValue={emailRef.current.value}
+          onBlur={onBlurEmail}
+          returnKeyType={'next'}
+          onSubmitEditing={() => passwordRef.current.focus()}
+          onClearInputText={() => emailRef.current.clear()}
+        />
 
-          <Input
-            ref={passwordRef}
-            placeholder={t('password')}
-            type="password"
-            defaultValue={passwordRef.current.value}
-            errorMessage={passwordError}
-            onChangeText={onChangePassword}
-            inputStyle={styles.password}
-            inputValue={passwordRef.current.value}
-            onSubmitEditing={onBlurPassword}
-            returnKeyType={'done'}
-            onClearInputText={() => passwordRef.current.clear()}
-          />
-          <TextButton
-            fontSize={getHeight(fontSize.textS)}
-            isActive
-            title={t('forgot_password')}
-            containerStyle={styles.forgotPassword}
-          />
-          <Button
-            title={t('sign_in')}
-            isPrimary
-            isSmall
-            style={styles.signInButton}
-            onPress={handleSignIn}
-            disabled={
-              passwordError.length > 0 ||
-              emailError.length > 0 ||
-              emailRef.current.value == null ||
-              passwordRef.current.value == null
-            }
-          />
-        </ScrollView>
-      </KeyboardAvoidingView>
+        <Input
+          ref={passwordRef}
+          placeholder={t('password')}
+          type="password"
+          defaultValue={passwordRef.current.value}
+          errorMessage={passwordError}
+          onChangeText={onChangePassword}
+          inputStyle={styles.password}
+          inputValue={passwordRef.current.value}
+          onSubmitEditing={onBlurPassword}
+          returnKeyType={'done'}
+          onClearInputText={() => passwordRef.current.clear()}
+        />
+        <TextButton
+          fontSize={getHeight(fontSize.textS)}
+          isActive
+          title={t('forgot_password')}
+          containerStyle={styles.forgotPassword}
+        />
+        <Button
+          title={t('sign_in')}
+          isPrimary
+          isSmall
+          style={styles.signInButton}
+          onPress={handleSignIn}
+          disabled={
+            passwordError.length > 0 ||
+            emailError.length > 0 ||
+            emailRef.current.value == null ||
+            passwordRef.current.value == null
+          }
+        />
+      </View>
       <GetSignInFooter />
     </>
   );

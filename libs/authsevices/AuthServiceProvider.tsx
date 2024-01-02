@@ -6,6 +6,8 @@ import {
   CREATE_SIGNUP_PROVIDER,
   FACEBOOK_LOGIN_API,
   GET,
+  GET_ORDER_DETAILS,
+  GET_ORDER_HISTORY,
   GET_PROVIDER_SERVICE,
   GET_PROVIDER_TYPES,
   GET_USER_SERVICES,
@@ -243,6 +245,32 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
+  const onGetOrderHistory = (
+    providerId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<any> =>
+    sendRequest(GET_ORDER_HISTORY, {
+      method: POST,
+      body: {
+        provider_id: providerId,
+        page: page,
+        pageSize: pageSize,
+      } as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+      } as unknown as HeadersInit,
+    });
+  const onGetOrderDetails = (orderId: string): Promise<any> =>
+    sendRequest(GET_ORDER_DETAILS, {
+      method: POST,
+      body: { order_id: orderId } as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
+
   return {
     OnProviderSignIn,
     onSubmitGoogleAuthRequestProvider,
@@ -259,5 +287,7 @@ export const AuthServicesProvider = () => {
     AddProviderServices,
     TreatementEnded,
     getProviderDaySummary,
+    onGetOrderHistory,
+    onGetOrderDetails,
   };
 };

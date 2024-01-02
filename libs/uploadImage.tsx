@@ -13,30 +13,56 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-const uploadImage = async (
-  imagePath: RequestInfo,
-  folderName: string,
-  fileName: string,
-) => {
+// const uploadImage = async (imagePath: RequestInfo) => {
+//   const folderName = 'images/users';
+//   const fileName = 'profile.jpg';
+//   try {
+//     // Fetch the image as a blob
+//     const response = await fetch(imagePath);
+//     const blob = await response.blob();
+
+//     // Create a reference to the storage location
+//     const storageRef = ref(storage, `${folderName}/${fileName}`);
+
+//     // Upload the image
+//     const snapshot = await uploadBytes(storageRef, blob);
+
+//     // Get the download URL
+//     const downloadURL = await getDownloadURL(snapshot.ref);
+
+//     return downloadURL;
+//   } catch (error) {
+//     console.error('Error uploading image:', error);
+//     throw error;
+//   }
+// };
+
+const uploadImages = async (imageData: any) => {
+  const folderName = 'images/users';
+  const uploadTasks = [];
+
   try {
-    // Fetch the image as a blob
-    const response = await fetch(imagePath);
-    const blob = await response.blob();
+    const uploadImage = async (imageInfo: any) => {
+      const { imagePath, type } = imageInfo;
+      const fileName = imagePath.substring(imagePath.lastIndexOf('/') + 1);
+      const response = await fetch(imagePath);
+      const blob = await response.blob();
+      const storageRef = ref(storage, `${folderName}/${fileName}`);
+      const snapshot = await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      return { downloadURL, type };
+    };
 
-    // Create a reference to the storage location
-    const storageRef = ref(storage, `${folderName}/${fileName}`);
+    for (const imageInfo of imageData) {
+      uploadTasks.push(uploadImage(imageInfo));
+    }
 
-    // Upload the image
-    const snapshot = await uploadBytes(storageRef, blob);
-
-    // Get the download URL
-    const downloadURL = await getDownloadURL(snapshot.ref);
-
-    return downloadURL;
+    const uploadedImages = await Promise.all(uploadTasks);
+    return uploadedImages;
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error('Error uploading images:', error);
     throw error;
   }
 };
 
-export default uploadImage;
+export default uploadImages;

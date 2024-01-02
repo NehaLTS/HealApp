@@ -21,6 +21,7 @@ const TextButton = ({
   style,
   isCapitalize,
   containerStyle,
+  isRightAlign,
   ...props
 }: {
   title: string;
@@ -29,6 +30,7 @@ const TextButton = ({
   fontSize?: number;
   style?: StyleProp<TextStyle>;
   isCapitalize?: boolean;
+  isRightAlign?: boolean;
   containerStyle?: StyleProp<ViewStyle>;
 } & FunctionComponent<AnimatedProps<TouchableOpacity>> &
   TouchableOpacityProps &
@@ -39,7 +41,10 @@ const TextButton = ({
         style={[
           style,
           styles.title,
-          { fontSize: fs ?? getHeight(fontSize.heading) },
+          {
+            fontSize: fs ?? getHeight(fontSize.heading),
+            textAlign: isRightAlign ? 'right' : 'left',
+          },
           isActive && { textDecorationLine: 'underline' },
         ]}
         title={isCapitalize ? title?.toLocaleUpperCase() : title}

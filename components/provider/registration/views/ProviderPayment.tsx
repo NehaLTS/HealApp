@@ -143,7 +143,6 @@ const ProviderPayment = () => {
           isShowModal={isShowModal}
           closeModal={setIsShowModal}
           imageUri={getImageUrl}
-          isLoading={setIsLoading}
         />
       </View>
 

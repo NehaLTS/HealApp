@@ -32,14 +32,15 @@ const HomeViewController = () => {
   const navigation = useNavigation();
   const [bannerAds, setBannerAds] = useState<Banner[]>([]);
   const [isTouchStart, setIsTouchStart] = useState(true);
-  const { getBannerAds, searchProviders, searchList, ClientWallentAmount } = ClientOrderServices();
+  const { getBannerAds, searchProviders, searchList, ClientWallentAmount } =
+    ClientOrderServices();
   const [isVisible, setIsVisible] = useState(false);
   const [providersList, setProvidersList] = useState<search_provider[]>([]);
   const [searchedList, setSearchedList] = useState<any[]>([]);
   const [searchSpecialist, setSearchSpecialist] = useState<string>('');
   const [isDataNotFound, setIsDataNotFound] = useState<boolean>(true);
   const [user, setUser] = useState<ClientProfile>();
-  const WalletDetail = getLocalData('WALLETDETAIL')
+  const WalletDetail = getLocalData('WALLETDETAIL');
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const {
@@ -54,7 +55,7 @@ const HomeViewController = () => {
     setRemainingTime,
     remainingTime,
     userLocation,
-    setWalletAmount
+    setWalletAmount,
   } = UseClientUserContext();
   const { i18n } = useTranslation();
 
@@ -98,7 +99,8 @@ const HomeViewController = () => {
           },
         });
         Sentry.captureMessage(
-          `Client Flow userLocation FOR:-${userProfile?.firstName ?? ''
+          `Client Flow userLocation FOR:-${
+            userProfile?.firstName ?? ''
           }---- ${address.toString()}`,
         );
       })
@@ -108,7 +110,7 @@ const HomeViewController = () => {
   };
 
   useEffect(() => {
-    setWalletAmount(WalletDetail?.wallet_amount ?? '0')
+    setWalletAmount(WalletDetail?.wallet_amount ?? '0');
     setUserLocation({ ...locationData });
     location();
     getBannerAd();
@@ -158,15 +160,14 @@ const HomeViewController = () => {
   // };
   useFocusEffect(() => {
     ClientWallentAmount({ client_id: userId }).then((res) => {
-      console.log('wallentAmout wwwres', res[0].wallet_amount)
-
+      console.log('wallentAmout wwwres', res[0].wallet_amount);
 
       setLocalData('WALLETDETAIL', {
         client_id: userId,
-        wallet_amount: res[0].wallet_amount.toString()
-      })
-    })
-  })
+        wallet_amount: res[0].wallet_amount.toString(),
+      });
+    });
+  });
 
   const onPressBanner = () => Linking.openURL(bannerAds[0]?.destinationUrl);
 
@@ -197,7 +198,8 @@ const HomeViewController = () => {
     console.log('data on search response', JSON.stringify(res));
     if (res.length > 0) {
       Sentry.captureMessage(
-        `Client Flow ON CHANGE SEARCH API  FOR:-${userProfile?.firstName ?? ''
+        `Client Flow ON CHANGE SEARCH API  FOR:-${
+          userProfile?.firstName ?? ''
         }---- ${res}`,
       );
       console.log('search result', res);
@@ -211,14 +213,15 @@ const HomeViewController = () => {
   const onSearchDone = async (item: string) => {
     const res = await searchProviders({
       name: item?.toLowerCase(),
-      latitude: '30.377305039494523',
-      longitude: '76.78137416040587',
+      latitude: userProfile?.address?.latitude?.toString() ?? '',
+      longitude: userProfile?.address?.longitude?.toString() ?? '',
     });
     console.log('onSearchDone', res);
     if (res?.message) {
       setIsDataNotFound(false);
       Sentry.captureMessage(
-        `On Search response gave Message' for:-${userProfile?.firstName
+        `On Search response gave Message' for:-${
+          userProfile?.firstName
         }---- ${JSON.stringify(res?.message)}`,
       );
     } else {

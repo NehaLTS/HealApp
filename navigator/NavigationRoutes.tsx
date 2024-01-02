@@ -19,6 +19,7 @@ enum NavigationRoutes {
   ProviderHome = 'ProviderHome',
   ProviderOnboardDetails = 'ProviderOnboardDetails',
   ProviderConfirmation = 'ProviderConfirmation',
+  ProviderProfile = 'ProviderProfile',
 }
 
 export default NavigationRoutes;

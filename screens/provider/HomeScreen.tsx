@@ -49,6 +49,8 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import RNRestart from 'react-native-restart';
 import { paymentsendToApi } from 'libs/ClientOrderPayment';
 import AddNewService from 'components/common/AddNewService';
+import { getTitle } from 'libs/utility/Utils';
+import Sidebar from 'components/common/Sidebar';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
@@ -99,7 +101,10 @@ const HomeScreen = () => {
     getSummaryofDay,
     setProviderProfile,
     servicesFromApi,
-    getProviderServices
+    getProviderServices,
+    onPressProfileTab,
+    showSidebar,
+    setShowSidebar,
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(
     getHeight(order?.extraData?.modalHeight ?? 360),
@@ -107,6 +112,7 @@ const HomeScreen = () => {
   const { providerAvailabilityStatus } = AuthServicesProvider();
   const { userId, token, providerProfile, setUserLocation } =
     UseProviderUserContext();
+  console.log('order?.OrderReceive?.services', order?.OrderReceive?.services);
   const eventServices =
     order && order?.OrderReceive && order?.OrderReceive?.services
       ? JSON.parse(order?.OrderReceive?.services)
@@ -279,7 +285,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getSummaryofDay();
-  }, [orderStatus === "Payment Done"]);
+  }, [orderStatus === 'Payment Done']);
   const onPressToggle = (available: boolean, isLogout?: boolean) => {
     console.log('available', available);
     //TODO: Uncomment this code to add license number
@@ -305,23 +311,20 @@ const HomeScreen = () => {
             language: languageRef.current,
           },
         });
-        navigation.navigate(NavigationRoutes.IntroStack);
-
         if (
           I18nManager.isRTL &&
-          (languageRef.current == 'en' || languageRef.current == 'ru')
+          (languageRef.current === 'en' || languageRef.current === 'ru')
         ) {
           I18nManager.forceRTL(false);
           I18nManager.allowRTL(false);
         } else if (
           !I18nManager.isRTL &&
-          (languageRef.current == 'he' || languageRef.current == 'ar')
+          (languageRef.current === 'he' || languageRef.current === 'ar')
         ) {
           I18nManager.forceRTL(true);
           I18nManager.allowRTL(true);
         }
-
-        // RNRestart.restart();
+        RNRestart.restart();
       }
 
       Sentry.captureMessage(
@@ -386,8 +389,6 @@ const HomeScreen = () => {
     setIsCancelOrder(true);
   };
   const onPressTreatmentEnd = async (services?: any) => {
-
-
     if (!isArrived) {
       OnPressTakeOrder();
       modalHeight.value = withSpring(getHeight(652));
@@ -400,9 +401,9 @@ const HomeScreen = () => {
         },
       });
     } else {
-      const shotAmounts = parseFloat(totalPrice(services)) - 500
-      const amount = paymentsendToApi(500, shotAmounts)
-      console.log(amount, 'amount at treatment end')
+      const shotAmounts = parseFloat(totalPrice(services)) - 500;
+      const amount = paymentsendToApi(500, shotAmounts);
+      console.log(amount, 'amount at treatment end');
       await TreatementEnded({
         order_id: order?.orderId ?? '1',
         total_order_price: amount.totalAmount.toString(),
@@ -467,7 +468,7 @@ const HomeScreen = () => {
             />
           ),
         )}
-      {order?.OrderReceive?.services && (
+      {order?.OrderReceive?.services?.length > 0 && (
         <>
           <AnimatedText
             style={{
@@ -487,11 +488,12 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     eventServices?.length > 1
-                      ? `${index !== eventServices?.length - 1
-                        ? ` ${service?.service_name?.en}, `
-                        : ` ${service?.service_name?.en}`
-                      }`
-                      : service?.service_name
+                      ? `${
+                          index !== eventServices?.length - 1
+                            ? ` ${getTitle(service?.service_name, i18n)}, `
+                            : ` ${getTitle(service?.service_name, i18n)}`
+                        }`
+                      : getTitle(service?.service_name, i18n)
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
                 />
@@ -502,14 +504,17 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-          }    ${order?.OrderReceive?.distance !== 'undefined'
+        title={`${order?.OrderReceive?.firstname}  ${
+          order?.OrderReceive?.lastname
+        }    ${
+          order?.OrderReceive?.distance !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-          } km, ~${order?.OrderReceive?.time !== 'undefined'
+        } km, ~${
+          order?.OrderReceive?.time !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-          } min`}
+        } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -576,12 +581,12 @@ const HomeScreen = () => {
                   <AnimatedText
                     key={index}
                     style={{ ...styles.details, marginTop: getHeight(20) }}
-                    title={item?.name}
+                    title={item?.name ?? ''}
                     entering={FadeInLeft.duration(400).delay(500)}
                   />
                 ),
               )}
-            {order?.OrderReceive?.services && (
+            {order?.OrderReceive?.services?.length && (
               <>
                 <AnimatedText
                   style={styles.details}
@@ -595,11 +600,15 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           eventServices?.length > 1
-                            ? `${index !== eventServices?.length - 1
-                              ? ` ${service?.service_name?.en}, `
-                              : ` ${service?.service_name?.en}`
-                            }`
-                            : service?.service_name
+                            ? `${
+                                index !== eventServices?.length - 1
+                                  ? ` ${getTitle(
+                                      service?.service_name,
+                                      i18n,
+                                    )}, `
+                                  : ` ${getTitle(service?.service_name, i18n)}`
+                              }`
+                            : getTitle(service?.service_name, i18n)
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
                       />
@@ -610,14 +619,17 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-                }    ${order?.OrderReceive?.distance !== 'undefined'
+              title={`${order?.OrderReceive?.firstname}  ${
+                order?.OrderReceive?.lastname
+              }    ${
+                order?.OrderReceive?.distance !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-                } km, ~${order?.OrderReceive?.time !== 'undefined'
+              } km, ~${
+                order?.OrderReceive?.time !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-                } min`}
+              } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -721,7 +733,6 @@ const HomeScreen = () => {
               isShowModal={isShowModal}
               closeModal={setIsShowModal}
               imageUri={getImageUrl}
-            // isLoading={() => null}
             />
           </>
         ) : (
@@ -766,21 +777,9 @@ const HomeScreen = () => {
   };
 
   const headerRight = () => (
-    <View style={{ position: 'relative', zIndex: 999 }}>
-      <TouchableOpacity onPress={() => setDropdownVisible(!dropdownVisible)}>
-        <Image source={avatar} style={styles.avatar} />
-      </TouchableOpacity>
-      {dropdownVisible && (
-        <View style={styles.dropdown}>
-          <TextButton
-            title={t('logout')}
-            onPress={onLogoutButtonPress}
-            fontSize={getHeight(18)}
-            style={styles.logout}
-          />
-        </View>
-      )}
-    </View>
+    <TouchableOpacity onPressIn={() => setShowSidebar(true)}>
+      <Image source={avatar} style={styles.avatar} />
+    </TouchableOpacity>
   );
   const headerLeft = () => <Image source={logo} style={styles.logo} />;
   const treatmentFinished = () => (
@@ -825,6 +824,12 @@ const HomeScreen = () => {
   };
   return (
     <>
+      <Sidebar
+        isVisible={showSidebar}
+        onClose={() => setShowSidebar(false)}
+        isProviderProfile
+        onPress={onPressProfileTab}
+      />
       <View style={styles.header}>
         {headerLeft()}
         {headerRight()}
@@ -861,8 +866,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? t('order_is_cancelled')
                       : notification
-                        ? t('new_order')
-                        : t('no_orders_yet')
+                      ? t('new_order')
+                      : t('no_orders_yet')
                   }
                 />
               </>
@@ -875,7 +880,7 @@ const HomeScreen = () => {
             <>
               {DetailCard(
                 providerDaySummary?.providerDetails?.orderDetails?.total_clients.toString() ??
-                '0',
+                  '0',
                 t('clients_today'),
               )}
               {DetailCard(
@@ -926,7 +931,6 @@ const HomeScreen = () => {
             });
           }}
         />
-
       </TouchableOpacity>
 
       {renderToast()}

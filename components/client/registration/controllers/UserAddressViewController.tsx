@@ -1,9 +1,15 @@
+import { useProfiler } from '@sentry/react-native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { AuthServicesClient } from 'libs/authsevices/AuthServicesClient';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ClientProfile, userLocation } from 'libs/types/UserType';
+import uploadImage from 'libs/uploadImage';
 // import uploadImage from 'libs/uploadImage';
-import { generateRandomName, numericPattern } from 'libs/utility/Utils';
+import {
+  generateRandomName,
+  getImagesPath,
+  numericPattern,
+} from 'libs/utility/Utils';
 import React, { useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
@@ -38,6 +44,13 @@ const UserAddressViewController = () => {
   const [profilePicture, setProfilePicture] = useState(
     userProfile && userProfile.profilePicture ? userProfile.profilePicture : '',
   );
+
+  const imagePaths = [
+    {
+      imagePath: userProfile?.profilePicture,
+      type: 'profilePicture',
+    },
+  ]?.filter((imageData) => imageData?.imagePath);
 
   const validateAddress = (value: string) => {
     if (value?.length < 4) setAddressError(t('fill_address'));
@@ -89,84 +102,91 @@ const UserAddressViewController = () => {
 
   const onPressNext = async () => {
     console.log('userId is ', userId);
-    if (
-      onSearchAddress &&
-      dateOfBirth.toString() &&
-      idNumberRef.current.value &&
-      profilePicture
-    ) {
-      setIsLoader(true);
-      setUserProfile({
-        ...(userProfile as ClientProfile),
-        address: onSearchAddress,
-        date_of_birth: dateOfBirth.toString(),
-        idNumber: idNumberRef.current.value,
-        city: '',
-        state: '',
-        country: '',
-        profilePicture: profilePicture ?? '',
+
+    await uploadImage(imagePaths)
+      .then(async (images) => {
+        if (
+          onSearchAddress &&
+          dateOfBirth.toString() &&
+          idNumberRef.current.value &&
+          profilePicture
+        ) {
+          setIsLoader(true);
+          setUserProfile({
+            ...(userProfile as ClientProfile),
+            address: onSearchAddress,
+            date_of_birth: dateOfBirth.toString(),
+            idNumber: idNumberRef.current.value,
+            city: '',
+            state: '',
+            country: '',
+            profilePicture: getImagesPath(images, 'profilePicture') ?? '',
+          });
+          setUserLocation((prevState) => ({
+            ...prevState,
+            onboardingLocation: {
+              address: onSearchAddress,
+              latitude: geomatricAddress.onboardingLocation?.latitude,
+              longitude: geomatricAddress.onboardingLocation?.longitude,
+            },
+            currentLocation: prevState?.currentLocation,
+          }));
+          setLocalData('LOCATION', {
+            onboardingLocation: {
+              address: onSearchAddress,
+              latitude: geomatricAddress.onboardingLocation?.latitude,
+              longitude: geomatricAddress.onboardingLocation?.longitude,
+            },
+          });
+
+          //Update User Profile
+          const res = await onUpdateUserProfile?.(
+            {
+              ...userProfile,
+              address: onSearchAddress,
+              date_of_birth: dateOfBirth.toString(),
+              idNumber: idNumberRef.current.value,
+              city: '',
+              state: '',
+              country: '',
+              profilePicture: getImagesPath(images, 'profilePicture') ?? '',
+            },
+            userId,
+            token,
+          );
+
+          console.log('response is ', res, 'token', token);
+
+          setLocalData('USERPROFILE', {
+            firstName: userProfile?.firstName,
+            lastName: userProfile?.lastName,
+            phoneNumber: userProfile?.phoneNumber,
+            address: onSearchAddress,
+            city: '',
+            state: '',
+            country: '',
+            profilePicture: getImagesPath(images, 'profilePicture') ?? '',
+            date_of_birth: dateOfBirth?.toString(),
+            idNumber: idNumberRef.current.value,
+          });
+
+          setIsLoader(false);
+          console.log('res', res);
+          if (res?.isSuccessful) {
+            setCurrentStep('payment');
+          } else {
+            Alert.alert(t('error_occurred'));
+          }
+        } else {
+          if (!onSearchAddress?.length) setAddressError(t('address_required'));
+          if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
+          if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
+          if (!profilePicture) Alert.alert(t('add_a_profile_photo'));
+        }
+      })
+      .catch((error) => {
+        console.error('Error uploading images:', error);
       });
-      setUserLocation((prevState) => ({
-        ...prevState,
-        onboardingLocation: {
-          address: onSearchAddress,
-          latitude: geomatricAddress.onboardingLocation?.latitude,
-          longitude: geomatricAddress.onboardingLocation?.longitude,
-        },
-        currentLocation: prevState?.currentLocation,
-      }));
-      setLocalData('LOCATION', {
-        onboardingLocation: {
-          address: onSearchAddress,
-          latitude: geomatricAddress.onboardingLocation?.latitude,
-          longitude: geomatricAddress.onboardingLocation?.longitude,
-        },
-      });
-
-      //Update User Profile
-      const res = await onUpdateUserProfile?.(
-        {
-          ...userProfile,
-          address: onSearchAddress,
-          date_of_birth: dateOfBirth.toString(),
-          idNumber: idNumberRef.current.value,
-          city: '',
-          state: '',
-          country: '',
-          profilePicture: profilePicture ?? '',
-        },
-        userId,
-        token,
-      );
-
-      console.log('response is ', res, 'token', token);
-
-      setLocalData('USERPROFILE', {
-        firstName: userProfile?.firstName,
-        lastName: userProfile?.lastName,
-        phoneNumber: userProfile?.phoneNumber,
-        address: onSearchAddress,
-        city: '',
-        state: '',
-        country: '',
-        profilePicture: profilePicture ?? '',
-        date_of_birth: dateOfBirth?.toString(),
-        idNumber: idNumberRef.current.value,
-      });
-
-      setIsLoader(false);
-      console.log('res', res);
-      if (res?.isSuccessful) {
-        setCurrentStep('payment');
-      } else {
-        Alert.alert(t('error_occurred'));
-      }
-    } else {
-      if (!onSearchAddress?.length) setAddressError(t('address_required'));
-      if (!idNumberRef.current.value) setIdNumberError(t('id_required'));
-      if (!dateOfBirth) setDateOfBirthError(t('birth_date_required'));
-      if (!profilePicture) Alert.alert(t('add_a_profile_photo'));
-    }
   };
 
   const onPressBack = () => {

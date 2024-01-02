@@ -29,7 +29,7 @@ const ProviderDetailController = () => {
     providerProfile?.provider,
   );
   const [selectedSpecialty, setSelectedSpeciality] =
-    useState<ProviderSpeciality>(providerProfile?.speciality);
+    useState<ProviderSpeciality | null>(providerProfile?.speciality ?? null);
 
   console.log('selectedProvider', selectedProvider);
   console.log('selectedSpecialty', selectedSpecialty);
@@ -49,6 +49,7 @@ const ProviderDetailController = () => {
 
   const onChangeProviderType = (value: ProviderType) => {
     setSelectedProvider(value);
+    setSelectedSpeciality(null);
     setProviderTypeError('');
     if (value?.specialties) setSpecialityList(value?.specialties);
   };
@@ -129,7 +130,8 @@ const ProviderDetailController = () => {
       setSpecialityError('');
     }
   };
-
+  console.log('firstNameRef+++++++', firstNameRef?.current?.value);
+  console.log('lastNameRef+++++++', lastNameRef?.current?.value);
   const onPressNext = () => {
     console.log("selectedSpecialty", selectedSpecialty)
     if (
@@ -141,8 +143,16 @@ const ProviderDetailController = () => {
     ) {
       setProviderProfile({
         ...providerProfile,
-        firstName: firstNameRef.current.value,
-        lastName: lastNameRef.current.value,
+        firstName:
+          firstNameRef?.current?.value?.length > 0 &&
+          firstNameRef?.current?.value !== undefined
+            ? firstNameRef.current.value
+            : providerProfile?.firstName,
+        lastName:
+          lastNameRef?.current?.value?.length > 0 &&
+          lastNameRef?.current?.value !== undefined
+            ? lastNameRef?.current?.value
+            : providerProfile?.lastName,
         provider: selectedProvider,
         speciality: selectedSpecialty,
         idPicture: idPicture,

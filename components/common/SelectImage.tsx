@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 import { colors } from 'designToken/colors';
 import { fontWeight } from 'designToken/fontWeights';
 import { getHeight } from 'libs/StyleHelper';
-import Modal from 'react-native-modal/dist/modal';
-import uploadImage from 'libs/uploadImage';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import Modal from 'react-native-modal/dist/modal';
 
 const SelectImage = ({
   imageUri,
   closeModal,
   isShowModal,
-  isLoading,
 }: {
   imageUri: (path: string) => void;
   closeModal: (path: boolean) => void;
   isShowModal: boolean;
-  isLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [width, setWidth] = useState(250);
   const [height, setHeight] = useState(250);
@@ -29,25 +26,11 @@ const SelectImage = ({
       height,
       cropping: true,
     })
-      .then(async (image) => {
-        image.path.length && (image?.path ?? '');
+      .then((image) => {
+        imageUri(image?.path ?? '');
         setHeight(height);
         setWidth(width);
         closeModal(false);
-        const imagePath = image?.path;
-        const folderName = 'images/users';
-        const fileName = 'profile.jpg';
-        try {
-          isLoading(true);
-          let getImage = await uploadImage(imagePath, folderName, fileName);
-          console.log('getImage', getImage);
-          if (getImage) {
-            imageUri(getImage);
-            isLoading(false);
-          }
-        } catch {
-          console.log('Filed upload image');
-        }
       })
       .catch((error: Error) => {
         console.log('error camera', error);
@@ -63,25 +46,11 @@ const SelectImage = ({
       height,
       cropping: true,
     })
-      .then(async (image) => {
-        image.path.length && (image?.path ?? '');
+      .then((image) => {
+        image.path.length && imageUri(image?.path ?? '');
         setHeight(height);
         setWidth(width);
         closeModal(false);
-        const imagePath = image?.path;
-        const folderName = 'images/users';
-        const fileName = 'profile.jpg';
-        try {
-          isLoading(true);
-          let getImage = await uploadImage(imagePath, folderName, fileName);
-          console.log('getImage', getImage);
-          if (getImage) {
-            imageUri(getImage);
-            isLoading(false);
-          }
-        } catch {
-          console.log('Filed upload image');
-        }
       })
       .catch((error: Error) => {
         console.log('error camera', error);
