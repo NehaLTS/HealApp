@@ -103,6 +103,8 @@ const UserPaymentViewController = ({ item }: any) => {
   };
 
   const onPressNext = async () => {
+    console.log("paymebtDetail added ONPressNext", userProfile?.isPaymentAdded, userProfile?.card_number)
+
     if (card?.length === 19 && expiry?.length === 5 && cvv?.length === 3) {
       setUserProfile({
         ...userProfile,
@@ -122,6 +124,8 @@ const UserPaymentViewController = ({ item }: any) => {
   };
 
   const onPressStartUsingHeal = async (isFromHome: boolean) => {
+    console.log("paymebtDetail added", userProfile?.isPaymentAdded, userProfile?.card_number)
+
     if (card?.length === 19 && expiry?.length === 5 && cvv?.length === 3) {
       setIsLoader(true);
       const res = await onCreateCreditCardDetails(
@@ -134,13 +138,19 @@ const UserPaymentViewController = ({ item }: any) => {
         },
         token,
       );
-
+      console.log('response paymnet', JSON.stringify(res))
       if (res?.isSuccessful) {
         //TODO: Vandana to save in Local data with isPaymentAdded as true
         setLocalData('USERPROFILE', {
           isPaymentAdded: true,
           card_number: card,
           expire_date: expiry,
+        });
+        setUserProfile({
+          ...userProfile,
+          card_number: card,
+          expire_date: expiry,
+          isPaymentAdded: true
         });
         setIsLoader(false);
         if (isFromHome)

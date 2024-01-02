@@ -274,6 +274,7 @@ const HomeScreen = () => {
           isPrimary
           isSmall
           width={'70%'}
+          style={{ backgroundColor: 'red' }}
           onPress={onPressBack}
         />
       </View>
@@ -287,63 +288,57 @@ const HomeScreen = () => {
         {headerRight()}
       </View>
 
-      <TouchableOpacity
-        onPress={onPressBack}
-        style={styles.container}
-        activeOpacity={1}
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: getHeight(30),
+        }}
+        keyboardShouldPersistTaps="always"
+        style={{ flex: 1 }}
       >
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: getHeight(30),
-          }}
-          keyboardShouldPersistTaps="always"
-          style={{ flex: 1 }}
-        >
-          {isTouchStart && searchSpecialist?.length === 0 && (
-            <TouchableOpacity
-              style={{ marginHorizontal: getWidth(dimens.marginM) }}
-              onPress={onPressBanner}
-            >
-              <Image
-                style={styles.banner}
-                source={{
-                  uri:
-                    bannerAds?.[0]?.imageurl ??
-                    'https://png.pngtree.com/background/20210709/original/pngtree-sky-beautiful-scenery-wood-hd-photo-picture-image_368833.jpg',
-                }}
-              />
-            </TouchableOpacity>
-          )}
-          <SearchBox
-            isTouchStart={isTouchStart && searchSpecialist?.length === 0}
-            placeholder={t('what_treatment')}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            defaultValue={searchSpecialist}
-            inputMode={'search'}
-            onKeyPress={handleKeyPress}
-            onFocus={onTouchStart}
-            isShowCross={searchSpecialist?.length > 0}
-            onClearInputText={() => setSearchSpecialist('')}
-          />
-          {searchSpecialist?.length === 0 ? (
-            getProviderList()
-          ) : isDataNotFound ? (
-            <View
-              style={{
-                paddingHorizontal: getWidth(dimens.marginM),
-                zIndex: 1,
+        {isTouchStart && searchSpecialist?.length === 0 && (
+          <TouchableOpacity
+            style={{ marginHorizontal: getWidth(dimens.marginM) }}
+            onPress={onPressBanner}
+          >
+            <Image
+              style={styles.banner}
+              source={{
+                uri:
+                  bannerAds?.[0]?.imageurl ??
+                  'https://png.pngtree.com/background/20210709/original/pngtree-sky-beautiful-scenery-wood-hd-photo-picture-image_368833.jpg',
               }}
-            >
-              {providersList.length === 0 && transformedData?.length === 0
-                ? getSearchList()
-                : getProviderSearchList()}
-            </View>
-          ) : (
-            noSearchedView()
-          )}
-        </ScrollView>
-      </TouchableOpacity>
+            />
+          </TouchableOpacity>
+        )}
+        <SearchBox
+          isTouchStart={isTouchStart && searchSpecialist?.length === 0}
+          placeholder={t('what_treatment')}
+          onBlur={onBlur}
+          onChangeText={onChange}
+          defaultValue={searchSpecialist}
+          inputMode={'search'}
+          onKeyPress={handleKeyPress}
+          onFocus={onTouchStart}
+          isShowCross={searchSpecialist?.length > 0}
+          onClearInputText={() => setSearchSpecialist('')}
+        />
+        {searchSpecialist?.length === 0 ? (
+          getProviderList()
+        ) : isDataNotFound ? (
+          <View
+            style={{
+              paddingHorizontal: getWidth(dimens.marginM),
+              zIndex: 1,
+            }}
+          >
+            {providersList.length === 0 && transformedData?.length === 0
+              ? getSearchList()
+              : getProviderSearchList()}
+          </View>
+        ) : (
+          noSearchedView()
+        )}
+      </ScrollView>
 
       {currentOrder?.orderId && (
         <View

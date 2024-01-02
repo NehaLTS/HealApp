@@ -65,7 +65,7 @@ const OnBoardingView = () => {
         console.log('provider services', providerServices?.['0']);
         if (userData && userData.firstName) {
           if (!providerServices?.['0']) {
-            if (userData?.provider?.name.en === ('Doctor' || 'Nurse')) {
+            if (userData?.provider?.name?.en === ('Doctor' || 'Nurse')) {
               setCurrentStep('services');
             } else {
               setCurrentStep('addServices');

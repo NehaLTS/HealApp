@@ -6,7 +6,7 @@ import {
   getLocalData,
   setLocalData,
 } from 'libs/datastorage/useLocalStorage';
-import { Location, ProviderProfile } from 'libs/types/UserType';
+import { Location, ProviderProfile, ProviderServices } from 'libs/types/UserType';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
@@ -18,6 +18,7 @@ import { ProviderHomeDetails } from 'libs/types/ProvierTypes';
 const HomeScreenControlller = () => {
   const order = getLocalData('PROVIDERORDER');
   const navigation = useNavigation<any>();
+  const [servicesFromApi, setServicesFromAPi] = useState<ProviderServices[]>([]);
 
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
@@ -42,6 +43,7 @@ const HomeScreenControlller = () => {
     providerAvailabilityStatus,
     TreatementEnded,
     getProviderDaySummary,
+    onGetProviderService
   } = AuthServicesProvider();
 
   const sendFCMMessage = async () => {
@@ -87,9 +89,8 @@ const HomeScreenControlller = () => {
 
   const getSummaryofDay = async () => {
     let currentdate = new Date();
-    let dateMDY = `${currentdate.getFullYear()}-${
-      currentdate.getMonth() + 1
-    }-${currentdate.getDate()}`;
+    let dateMDY = `${currentdate.getFullYear()}-${currentdate.getMonth() + 1
+      }-${currentdate.getDate()}`;
 
     let daySummary = await getProviderDaySummary(
       {
@@ -103,6 +104,23 @@ const HomeScreenControlller = () => {
     setProviderDaySummary(daySummary);
   };
 
+  const getProviderServices = async () => {
+    let response = await onGetProviderService(
+      {
+        provider_id: providerProfile?.provider?.id,
+        specialty_id: providerProfile?.speciality?.id,
+      },
+      token,
+    );
+    console.log("newSevices", response)
+    if (response && response.services) {
+      setServicesFromAPi(response.services);
+      Sentry.captureMessage(
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${providerProfile?.firstName ?? ''
+        }---- ${response.services}`,
+      );
+    }
+  };
   const updateLocation = (mannualUpdate?: boolean) => {
     if (mannualUpdate) {
       Geolocation.getCurrentPosition(
@@ -265,6 +283,8 @@ const HomeScreenControlller = () => {
     providerDaySummary,
     getSummaryofDay,
     setProviderProfile,
+    servicesFromApi,
+    getProviderServices
   };
 };
 

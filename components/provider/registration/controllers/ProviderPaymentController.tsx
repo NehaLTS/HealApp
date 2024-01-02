@@ -107,7 +107,8 @@ const ProviderPaymentController = () => {
       registrationNumberRef.current.value &&
       bankNameRef.current.value &&
       accountRef.current.value &&
-      branchRef.current.value
+      branchRef.current.value &&
+      profilePicture
     ) {
       let bankDetails: ProviderBankDetails = {
         registrationNumber: registrationNumberRef.current.value,
@@ -207,6 +208,10 @@ const ProviderPaymentController = () => {
       if (!accountRef.current.value)
         setAccountError(t('bank_account_required'));
       if (!branchRef.current.value) setBranchError(t('branch_required'));
+      if (!profilePicture) {
+
+        Alert.alert("Please add Profile picture")
+      }
     }
   };
 

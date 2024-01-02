@@ -29,6 +29,8 @@ const CardView = ({ item, index, isSearch }: any) => {
   const { t } = useTranslation();
 
   const onPressOrder = () => {
+
+    console.log("paymebtDetail added", userProfile?.isPaymentAdded, userProfile?.card_number)
     if (userProfile?.isPaymentAdded && userProfile?.card_number !== undefined) {
       if (item?.provider_type_id === 3) {
         navigation.navigate(NavigationRoutes.HealerHome, {
@@ -69,7 +71,10 @@ const CardView = ({ item, index, isSearch }: any) => {
         </>
       ) : (
         <View style={styles.paymentContainer}>
-          <UserPaymentView isFromHome item={item} isFromSummary />
+          <UserPaymentView isFromHome item={item} isFromSummary onPress={() => {
+            setModalVisible(false)
+            setIsAddPayment(false)
+          }} onPressCancel={() => { setModalVisible(false) }} />
         </View>
       )}
     </Modal>

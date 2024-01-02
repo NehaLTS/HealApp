@@ -1,17 +1,17 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import Text from 'components/common/Text';
-import { getHeight, getWidth } from 'libs/StyleHelper';
-import { dimens } from 'designToken/dimens';
-import { fontSize } from 'designToken/fontSizes';
-import { fontFamily } from 'designToken/fontFamily';
-import { colors } from 'designToken/colors';
 import Button from 'components/common/Button';
-import { Order } from 'libs/types/OrderTypes';
-import { useTranslation } from 'react-i18next';
-import like from '../../../assets/icon/likeOn.png';
-import unLike from '../../../assets/icon/likeOff.png';
+import Text from 'components/common/Text';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { fontFamily } from 'designToken/fontFamily';
+import { fontSize } from 'designToken/fontSizes';
 import { paymentsendToApi } from 'libs/ClientOrderPayment';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { Order } from 'libs/types/OrderTypes';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import unLike from '../../../assets/icon/likeOff.png';
+import like from '../../../assets/icon/likeOn.png';
 
 const TreatmentEnd = ({
   onPress,
@@ -40,6 +40,8 @@ const TreatmentEnd = ({
     const amount = paymentsendToApi(500, shotAmounts)
     return amount
   }
+
+
   return (
     <>
       <Text title={t('treatment_end')} style={styles.treatmentText} />

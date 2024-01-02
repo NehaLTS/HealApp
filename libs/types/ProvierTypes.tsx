@@ -5,7 +5,8 @@ export interface Providers {
 }
 export interface Name {
   en: string;
-  hi: string;
+  ar: string;
+  ru: string
   he: string;
 }
 export interface Specialty {

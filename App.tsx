@@ -33,11 +33,15 @@ import Geocoder from 'react-native-geocoding';
 import { useCurrentAddress } from 'libs/useCurrentAddress';
 import { Platform } from 'react-native';
 import { treatment } from 'libs/types/ProvierTypes';
+import { getLocalData } from 'libs/datastorage/useLocalStorage';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
+
 const App = () => {
-  const [languageCode, setLanguageCode] = React.useState<string>('en');
+  const defaultLanguageCode = getLocalData('USER')?.user?.language
+  console.log('defaultLanguageCode', defaultLanguageCode)
+  const [languageCode, setLanguageCode] = React.useState<string>(defaultLanguageCode ?? 'en');
   const [userProfile, setUserProfile] = useState<ClientProfile>(null);
   const [providerProfile, setProviderProfile] = useState<ProviderProfile>(null);
   const [userId, setUserId] = useState('');

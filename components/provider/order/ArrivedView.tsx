@@ -2,36 +2,43 @@ import AddNewService from 'components/common/AddNewService';
 import Button from 'components/common/Button';
 import Checkbox from 'components/common/Checkbox';
 import RNModal from 'components/common/Modal';
-import { AnimatedText } from 'components/common/Text';
+import Text, { AnimatedText } from 'components/common/Text';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
 import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import React, { useEffect } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
-import ProviderServices from '../registration/views/ProviderServices';
+import { ProviderServices } from 'libs/types/UserType';
+import { getTitle } from 'libs/utility/Utils';
+import { useTranslation } from 'react-i18next';
+import { TreatmentMenu } from 'libs/types/ProvierTypes';
 
 const ArrivedView = ({
   order,
   isModalVisible,
   totalPricesOfServices,
   onPressTreatmentEnd,
+  servicesFromApi,
+  addAnotherService
 }: {
   order: any;
   isModalVisible: boolean;
   totalPricesOfServices: string;
   onPressTreatmentEnd: (services?: any) => void;
+  servicesFromApi: ProviderServices[]
+  addAnotherService: () => void
 }) => {
-  const [updatedServices, setUpdatedServices] = React.useState<any[]>(order?.OrderReceive?.services)
+  const [updatedServices, setUpdatedServices] = React.useState<any[]>([])
   const [activeCheckbox, setActiveCheckbox] = React.useState<boolean[]>([]);
   console.log("updatedServices trea", updatedServices, activeCheckbox)
   const [isVisible, setIsVisible] = React.useState(false);
-
+  const { i18n } = useTranslation();
+  const [totalPrice, setTotalPrice] = React.useState(totalPricesOfServices)
+  const [newServices, setNewServices] = React.useState()
   // Function to initialize checkboxes and selected items when order details are available
-
 
   useEffect(() => {
     console.log("hiii")
@@ -47,54 +54,119 @@ const ArrivedView = ({
       // setUpdatedServices(initialSelectedItems);
     }
   }, [order]);
+  const calculateTotalPrice = (services?: any) => {
+    if (order && services?.length > 0) {
+      const servicesArray = services;
 
+      // Calculate the total service price
+      const totalServicePrice = servicesArray.reduce(
+        (total: number, service: { service_price: string }) => {
+          // Ensure that the service_price is a number before adding it to the total
+          const servicePrice = parseFloat(service.service_price) || 0;
+          return total + servicePrice;
+        },
+        0,
+      );
+      console.log('totalPrice', JSON.stringify(totalServicePrice));
+      setTotalPrice(totalServicePrice)
+      return JSON.stringify(totalServicePrice);
+    } else {
+      return '';
+    }
+  };
   // Function to handle checkbox press
   const onPressCheckBox = (item: any, index: number) => {
 
-    console.log('order.OrderReceive?.services', order.OrderReceive?.services, updatedServices, item.menu_id)
+    console.log('order.OrderReceive?.services', updatedServices, item.menu_id)
     const updatedCheckboxes = [...activeCheckbox];
     updatedCheckboxes[index] = !updatedCheckboxes[index];
     setActiveCheckbox(updatedCheckboxes);
-    const orderService = JSON.parse(order.OrderReceive?.services)
-    let newArray = orderService.filter(itemSelected => itemSelected.menu_id !== item.menu_id);
-    // const newItem = updatedServices as unknown as any
-    // if (!itemToSet) {
-    //   newItem.push(orderService[index])
-    //   setUpdatedServices(newItem)
 
-
-    // } else {
-
-    // }
+    let newArray: any[] = []
+    if (
+      updatedServices?.find(
+        (selectedItem) => selectedItem.menu_id === item.menu_id,
+      )
+    ) {
+      newArray = updatedServices.filter(
+        (selectedItem) => selectedItem.menu_id !== item.menu_id,
+      );
+    } else {
+      newArray = [...updatedServices, item];
+    }
+    let newAddedServices: any = []
+    if (
+      updatedServices.find(
+        (selectedItem) => selectedItem.heal_id === item.heal_id,
+      )
+    ) {
+      newAddedServices = updatedServices.filter(
+        (selectedItem) => selectedItem.heal_id !== item.heal_id,
+      );
+    } else {
+      newAddedServices = [...updatedServices, item];
+    }
     setUpdatedServices(newArray)
-    console.log(orderService[index], newArray, "typeOf orderService change, newArray")
-    // setUpdatedServices(updatedServices.filter((itemInside) => {
-    //   itemInside !== item
-    // }))
+    calculateTotalPrice(newArray)
 
-    // Update selected items based on checked checkboxes
-    // const updatedSelectedItems = order?.OrderReceive?.services?.filter((_, i) => updatedCheckboxes[i]) ?? [];
-    // setSelectedItems(updatedSelectedItems);
-    // if (
-    //   updatedServices.find((selectedItem) => selectedItem.menu_id === item.menu_id)
-    // ) {
-    //   updatedSelectedMenu = updatedServices.filter(
-    //     (selectedItem) => selectedItem.menu_id !== item.menu_id,
-    //   );
-    // } else {
-    //   updatedSelectedMenu = [...updatedServices, item];
-    // }
-    // Update selected items based on checkbox status
-    // const updatedSelectedItems = order.OrderReceive.services.filter((item, i: number) => updatedCheckboxes[i]);
-    // setUpdatedServices(updatedSelectedItems);
+    console.log(newArray, "typeOf orderService change, newArray")
+    setNewServices(newAddedServices)
     console.log("updatedSelectedItems..ttt.", newArray)
   };
   const onPressAddService = () => {
     setIsVisible(true)
+
+    addAnotherService()
   }
 
-  const AddNewServicesData = (data: any) => {
-    console.log("data new services", data)
+
+
+  const getServicesView = () => (
+    <>
+      <Text style={styles.textS} title={t('services_you')} />
+      <View style={styles.servicesContainer}>
+        {servicesFromApi?.length > 0 ? (
+          <ScrollView
+            contentContainerStyle={styles.containerStyle}
+            style={{ height: '100%' }}
+          >
+            {servicesFromApi.map((item, index) => (
+              <View key={index} style={styles.serviceRow}>
+                <Text
+                  style={styles.serviceText}
+                  title={getTitle(item?.name, i18n)}
+                />
+                <View style={styles.serviceRight}>
+                  <Text style={styles.serviceText} title={'$ ' + item.price} />
+                  <Checkbox isChecked={activeCheckbox[index]} onPress={() => onPressCheckBox(item, index)} />
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        ) : (
+          <Text style={styles.textServices} title={t('no_services')} />
+        )}
+      </View>
+    </>
+  );
+  const addAnotherSevicesModal = () => {
+    return <Modal visible={isVisible} >
+      <View>
+        {getServicesView()}
+        <Button
+          title={"Save"}
+          style={styles.takeOrderButton}
+          isSmall
+          width={getHeight(150)}
+          height={getHeight(36)}
+          fontSized={getHeight(fontSize.textL)}
+          background={colors.white}
+          onPress={() => {
+            setIsVisible(false)
+          }}
+        />
+      </View>
+    </Modal>
 
   }
 
@@ -151,7 +223,7 @@ const ArrivedView = ({
               <View key={index} style={styles.servicesProvided}>
                 <AnimatedText
                   style={{ ...styles.smallText }}
-                  title={`${item?.service_name ?? ''}`}
+                  title={`${item?.service_name?.en ?? ''}`}
                   entering={FadeInLeft.duration(400).delay(800)}
                 />
                 <View style={styles.servicesLeftView}>
@@ -185,7 +257,7 @@ const ArrivedView = ({
           />
           <AnimatedText
             style={styles.totalAmount}
-            title={`${Number(parseFloat(totalPricesOfServices).toFixed(5))?.toString()} NIS`}
+            title={`${Number(parseFloat(totalPrice).toFixed(5))?.toString()} NIS`}
             entering={FadeInLeft.duration(400).delay(500)}
           />
         </View>
@@ -211,6 +283,7 @@ const ArrivedView = ({
           />
         </View>
       </Animated.View>
+      {addAnotherSevicesModal()}
     </RNModal>
   );
 };
@@ -296,6 +369,9 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: getHeight(fontSize.textXl),
   },
+  containerStyle: {
+    paddingBottom: getHeight(dimens.marginM),
+  },
   takeOrderButton: {
     backgroundColor: colors.white,
     width: getWidth(150),
@@ -311,5 +387,49 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     marginVertical: getHeight(dimens.paddingL),
+  },
+  serviceText: {
+    fontSize: getHeight(fontSize.textM),
+  },
+  servicesContainer: {
+    borderWidth: getHeight(dimens.borderBold),
+    borderRadius: getHeight(5),
+    borderColor: colors.primary,
+    height: '65%',
+    justifyContent: 'center',
+  },
+  serviceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: getHeight(dimens.marginS),
+    paddingTop: getHeight(dimens.paddingL - dimens.borderBold),
+  },
+  serviceRight: {
+    flexDirection: 'row',
+    gap: getHeight(dimens.sideMargin - dimens.borderBold),
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: getHeight(fontSize.textM),
+    textAlign: 'left',
+  },
+  select: {
+    height: getHeight(dimens.marginL + dimens.borderBold),
+    width: getWidth(dimens.marginL + dimens.borderBold),
+    resizeMode: 'cover',
+    borderRadius: getHeight(dimens.paddingS),
+  },
+  textS: {
+    fontSize: getHeight(fontSize.textXl),
+    marginBottom: getHeight(dimens.sideMargin),
+    marginTop: getHeight(dimens.imageXs),
+    textAlign: 'left',
+  },
+  textAuthority: {
+    fontSize: getHeight(fontSize.textXl),
+  },
+  textServices: {
+    fontSize: getHeight(fontSize.textM),
+    textAlign: 'center',
   },
 });

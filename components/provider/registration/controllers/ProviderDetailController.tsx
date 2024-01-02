@@ -131,6 +131,7 @@ const ProviderDetailController = () => {
   };
 
   const onPressNext = () => {
+    console.log("selectedSpecialty", selectedSpecialty)
     if (
       firstNameRef.current.value &&
       lastNameRef.current.value &&

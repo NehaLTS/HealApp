@@ -98,6 +98,8 @@ const HomeScreen = () => {
     providerDaySummary,
     getSummaryofDay,
     setProviderProfile,
+    servicesFromApi,
+    getProviderServices
   } = HomeScreenControlller();
   const modalHeight = useSharedValue(
     getHeight(order?.extraData?.modalHeight ?? 360),
@@ -111,7 +113,7 @@ const HomeScreen = () => {
       : '';
   const [services, setServices] = useState<any[]>([
     {
-      name: eventServices?.service_name ?? '',
+      name: eventServices?.service_name?.en ?? '',
       description: { en: '', hi: '', he: '' },
       price: eventServices?.services?.service_price ?? '',
       id: eventServices?.services?.menu_id ?? -1,
@@ -296,16 +298,30 @@ const HomeScreen = () => {
     ).then((res) => {
       if (res?.isSuccessful && isLogout) {
         deleteLocalData();
+
         setProviderProfile({} as ProviderProfile);
-        navigation.navigate(NavigationRoutes.IntroStack);
         setLocalData('USER', {
           user: {
             language: languageRef.current,
           },
         });
-        I18nManager.forceRTL(true);
-        I18nManager.allowRTL(true);
-        RNRestart.restart();
+        navigation.navigate(NavigationRoutes.IntroStack);
+
+        if (
+          I18nManager.isRTL &&
+          (languageRef.current == 'en' || languageRef.current == 'ru')
+        ) {
+          I18nManager.forceRTL(false);
+          I18nManager.allowRTL(false);
+        } else if (
+          !I18nManager.isRTL &&
+          (languageRef.current == 'he' || languageRef.current == 'ar')
+        ) {
+          I18nManager.forceRTL(true);
+          I18nManager.allowRTL(true);
+        }
+
+        // RNRestart.restart();
       }
 
       Sentry.captureMessage(
@@ -472,8 +488,8 @@ const HomeScreen = () => {
                   title={
                     eventServices?.length > 1
                       ? `${index !== eventServices?.length - 1
-                        ? ` ${service?.service_name}, `
-                        : ` ${service?.service_name}`
+                        ? ` ${service?.service_name?.en}, `
+                        : ` ${service?.service_name?.en}`
                       }`
                       : service?.service_name
                   }
@@ -580,8 +596,8 @@ const HomeScreen = () => {
                         title={
                           eventServices?.length > 1
                             ? `${index !== eventServices?.length - 1
-                              ? ` ${service?.service_name}, `
-                              : ` ${service?.service_name}`
+                              ? ` ${service?.service_name?.en}, `
+                              : ` ${service?.service_name?.en}`
                             }`
                             : service?.service_name
                         }
@@ -887,9 +903,10 @@ const HomeScreen = () => {
         <ArrivedView
           order={order}
           isModalVisible={isArrived}
-
+          servicesFromApi={servicesFromApi}
           totalPricesOfServices={totalPricesOfServices}
           onPressTreatmentEnd={onPressTreatmentEnd}
+          addAnotherService={getProviderServices}
         />
 
         <TakeOrderView

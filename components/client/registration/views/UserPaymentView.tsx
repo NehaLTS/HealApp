@@ -7,7 +7,7 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import logo from 'assets/icon/healLogo.png';
@@ -211,9 +211,7 @@ const UserPaymentView = ({
           },
         ]}
       >
-        {!isCardDetails ? (
-          <>
-            {/* {!isFromHome && (
+        {/* {!isFromHome && (
               <Button
                 title={t('back')}
                 isSmall
@@ -221,34 +219,37 @@ const UserPaymentView = ({
                 width={'30%'}
               />
             )} */}
-            <View>
-              <Button
-                title={t('next')}
-                isPrimary
-                onPress={onPressNext}
+        {!isCardDetails ? (
+
+
+
+          <View>
+            <Button
+              title={t('next')}
+              isPrimary
+              onPress={onPressNext}
+              isSmall
+              width={'30%'}
+              disabled={
+                cardNumberError?.length > 0 &&
+                cvvError?.length > 0 &&
+                cardExpiryError?.length > 0
+              }
+            />
+            {isFromSummary && (
+              <TextButton
+                title={t('cancel')}
                 isSmall
-                width={'30%'}
-                disabled={
-                  cardNumberError?.length > 0 &&
-                  cvvError?.length > 0 &&
-                  cardExpiryError?.length > 0
-                }
+                style={{
+                  paddingHorizontal: getWidth(10),
+                  alignSelf: 'center',
+                  marginTop: getHeight(16),
+                  zIndex: 11,
+                }}
+                onPress={() => onPressCancel?.()}
               />
-              {isFromSummary && (
-                <TextButton
-                  title={t('cancel')}
-                  isSmall
-                  style={{
-                    paddingHorizontal: getWidth(10),
-                    alignSelf: 'center',
-                    marginTop: getHeight(16),
-                    zIndex: 11,
-                  }}
-                  onPress={() => onPressCancel?.()}
-                />
-              )}
-            </View>
-          </>
+            )}
+          </View>
         ) : (
           <Button
             title={isFromHome ? t('next') : t('start_using_heal')}

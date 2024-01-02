@@ -10,8 +10,9 @@ export const paymentsendToApi = (vistingAmount: number, shotAmount: number) => {
     const totalAmountToCut = amoutToHeal + orderAmount
     const totalAmount = Number(totalAmountToCut.toFixed(5));
     const minimumBalance = totalAmountToCut * 0.40
-    const walletMinimumAmount = Number(minimumBalance.toFixed(5))
-    console.log("paymentsendToApi", "orderAmount: ", orderAmount, "appAmount: ", appAmount, "totalAmount: ", totalAmount)
+    const amountNeddToOrder = totalAmountToCut + minimumBalance
+    const walletMinimumAmount = Number(amountNeddToOrder.toFixed(5))
+    console.log("paymentsendToApi", "orderAmount: ", orderAmount, "appAmount: ", appAmount, "totalAmount: ", totalAmount, "walletMinimumAmount", walletMinimumAmount)
     return {
         orderAmount,
         appAmount,

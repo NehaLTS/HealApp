@@ -35,12 +35,13 @@ export default function UserProfileController() {
   const onLogoutButtonPress = () => {
     deleteLocalData();
     setUserProfile({} as ProviderProfile);
-    navigation.navigate(NavigationRoutes.IntroStack);
     setLocalData('USER', {
       user: {
         language: languageRef.current,
       },
     });
+    navigation.navigate(NavigationRoutes.IntroStack);
+
 
     if (
       I18nManager.isRTL &&
@@ -56,7 +57,7 @@ export default function UserProfileController() {
       I18nManager.forceRTL(true);
       I18nManager.allowRTL(true);
     }
-    RNRestart.restart();
+    // RNRestart.restart();
   };
   return {
     onLogoutButtonPress,

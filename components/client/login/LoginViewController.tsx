@@ -87,21 +87,21 @@ const LoginViewController = () => {
     console.log('response.token', response);
     setUserId(response.id);
     setUserProfile({
-      firstName: userDetails?.firstname,
-      lastName: userDetails?.lastname,
+      firstName: userDetails?.firstname ?? '',
+      lastName: userDetails?.lastname ?? '',
       phoneNumber: userDetails?.phone_number,
       address: {
-        address: userDetails?.address.toString(),
-        latitude: userDetails.latitude.toString() ?? '',
-        longitude: userDetails.longitude.toString() ?? '',
+        address: userDetails?.address ?? '',
+        latitude: userDetails.latitude ?? '',
+        longitude: userDetails.longitude ?? '',
       },
-      city: userDetails?.city,
-      state: userDetails?.state,
-      country: userDetails?.country,
+      city: userDetails?.city ?? '',
+      state: userDetails?.state ?? '',
+      country: userDetails?.country ?? '',
       profilePicture: userDetails?.profile_picture
         ? userDetails?.profile_picture
         : profilePicture,
-      date_of_birth: userDetails?.date_of_birth,
+      date_of_birth: userDetails?.date_of_birth ?? '',
       idNumber: userDetails?.id_number,
       email: userDetails?.email,
       isPaymentAdded: response.isPayment,

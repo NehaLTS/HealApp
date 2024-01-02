@@ -59,12 +59,12 @@ const OrderDetailsController = () => {
     isOrderForOther: false,
     provider_type_id: 0,
   });
-  const PROVIDER_TYPE_ID =
-    supplier.name === 'Alternative medicine'
-      ? '1'
-      : supplier?.provider_type_id.toString();
-  useEffect(() => {
 
+  useEffect(() => {
+    const PROVIDER_TYPE_ID =
+      supplier.name === 'Alternative medicine'
+        ? '1'
+        : supplier?.provider_type_id?.toString();
     setOrder((prevOrder) => ({
       ...prevOrder,
       services: [
@@ -88,7 +88,7 @@ const OrderDetailsController = () => {
       const res = await treatmentMenu({
         provider_type_id: PROVIDER_TYPE_ID,
       });
-      console.log('TreatmentRespons', res);
+      console.log('TreatmentRespons', JSON.stringify(res.reason[0].name));
       setTreatmentReason(res);
       setTreatmentsMenu(res);
     } catch (error) {
@@ -101,7 +101,7 @@ const OrderDetailsController = () => {
       treatmentsMenu !== null &&
       treatmentsMenu?.treatmentMenu !== undefined
     ) {
-      console.log('treatmentsMenu', treatmentsMenu);
+      console.log('treatmentsMenu', JSON.stringify(treatmentsMenu.reason[0].name));
       const checkExisting = treatmentsMenu?.treatmentMenu?.some((item) => {
         return item.provider_type_id;
       });
@@ -118,7 +118,7 @@ const OrderDetailsController = () => {
 
   const symptoms = order.reason.map((item: any) => {
     return {
-      name: item?.name.en, // Assuming you want the English name
+      name: { en: item?.name.en, he: item?.name.he, hi: item?.name.hi }, // Assuming you want the English name
       id: item?.reason_id,
     };
   });
@@ -128,6 +128,10 @@ const OrderDetailsController = () => {
   //   price: "500",
   //   provider_type_id: PROVIDER_TYPE_ID
   // }
+  const PROVIDER_TYPE_ID =
+    supplier.name === 'Alternative medicine'
+      ? '1'
+      : supplier?.provider_type_id?.toString();
   const basicIncude = order.services.some(item => item.menu_id === 1);
   console.log("basicIncude", basicIncude)
   let updateArray: any[];
