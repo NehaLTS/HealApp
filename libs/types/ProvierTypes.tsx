@@ -136,3 +136,8 @@ export interface OrderDetails {
   ratings: string;
   symptoms: string;
 }
+
+export interface UpdateProfile {
+  provider_id: string;
+  profile_picture: string;
+}

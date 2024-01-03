@@ -8,6 +8,7 @@ import {
   GET,
   GET_ORDER_DETAILS,
   GET_ORDER_HISTORY,
+  GET_PROVIDER_PROFILE,
   GET_PROVIDER_SERVICE,
   GET_PROVIDER_TYPES,
   GET_USER_SERVICES,
@@ -20,6 +21,7 @@ import {
   PROVIDER_USER_DETAILS,
   TREATMENT_COMPLETED,
   UPDATE_PROVIDER_LOCATION,
+  UPDATE_PROVIDER_PROFILE,
   UPDATE_SIGNUP_PROVIDER,
 } from '../constants/ApiConstants';
 import { UserType, UserTypeProvider } from '../types/UserType';
@@ -28,6 +30,7 @@ import {
   PoviderLocation,
   ProviderHomeDetails,
   TreatementEnded,
+  UpdateProfile,
 } from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
@@ -245,7 +248,7 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
-  const onGetOrderHistory = (
+  const OnGetOrderHistory = (
     providerId: number,
     page: number,
     pageSize: number,
@@ -259,12 +262,36 @@ export const AuthServicesProvider = () => {
       } as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
+        'x-access-token': token,
       } as unknown as HeadersInit,
     });
-  const onGetOrderDetails = (orderId: string): Promise<any> =>
+
+  const OnGetOrderDetails = (orderId: string): Promise<any> =>
     sendRequest(GET_ORDER_DETAILS, {
       method: POST,
       body: { order_id: orderId } as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
+
+  const UpdateProviderProfile = (body: UpdateProfile): Promise<any> =>
+    sendRequestWitoutToken(UPDATE_PROVIDER_PROFILE, {
+      method: PATCH,
+      body: body as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
+
+  const GetProviderProfiles = (providerId: string): Promise<any> =>
+    sendRequest(GET_PROVIDER_PROFILE, {
+      method: POST,
+      body: {
+        provider_id: providerId,
+      } as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
         'x-access-token': token,
@@ -287,7 +314,9 @@ export const AuthServicesProvider = () => {
     AddProviderServices,
     TreatementEnded,
     getProviderDaySummary,
-    onGetOrderHistory,
-    onGetOrderDetails,
+    OnGetOrderHistory,
+    OnGetOrderDetails,
+    UpdateProviderProfile,
+    GetProviderProfiles,
   };
 };

@@ -18,6 +18,7 @@ import * as Sentry from '@sentry/react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { ProviderHomeDetails } from 'libs/types/ProvierTypes';
+import React from 'react';
 
 const HomeScreenControlller = () => {
   const order = getLocalData('PROVIDERORDER');
@@ -25,12 +26,18 @@ const HomeScreenControlller = () => {
   const [servicesFromApi, setServicesFromAPi] = useState<ProviderServices[]>(
     [],
   );
+  const { UpdateProviderProfile, GetProviderProfiles } = AuthServicesProvider();
 
   const [acceptOrder, setAcceptOrder] = useState(
     order?.extraData?.orderAccepted ?? false,
   );
-  const { userId, providerProfile, token, setProviderProfile } =
-    UseProviderUserContext();
+  const {
+    userId,
+    providerProfile,
+    token,
+    setProviderProfile,
+    setProviderServices,
+  } = UseProviderUserContext();
   const { userLocation } = UseClientUserContext();
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
@@ -42,6 +49,25 @@ const HomeScreenControlller = () => {
     longitudeDelta: 0.02,
     timestamp: 0,
   });
+
+  React.useMemo(async () => {
+    const res = await GetProviderProfiles(userId);
+    console.log('gurepreet', res);
+    if (res?.firstname) {
+      const response = res;
+      setProviderServices(response?.modifiedServices);
+      setProviderProfile({
+        ...providerProfile,
+        profilePicture: response?.profile_picture,
+      });
+      setLocalData('PROVIDERSERVICES', response?.modifiedServices);
+      setLocalData('USERPROFILE', {
+        profilePicture: response?.profile_picture,
+        // firstName: response?.firstname,
+        // lastName: response?.lastname,
+      } as ProviderProfile);
+    }
+  }, []);
 
   const {
     OrderRequst,

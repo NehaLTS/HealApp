@@ -33,7 +33,6 @@ export interface UserTypeProvider {
 
 export interface HealLanguageType {
   en: string;
-  hi?: string;
   he: string;
   ar: string;
   ru: string;
@@ -222,7 +221,8 @@ export interface ProviderBankDetails {
 }
 
 export interface ProviderServices {
-  id: number;
+  service_price?: any;
+  id?: number;
   name: HealLanguageType;
   price: string | number;
   description?: HealLanguageType;

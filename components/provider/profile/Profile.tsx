@@ -15,9 +15,34 @@ import { useNavigation } from '@react-navigation/native';
 import Text from 'components/common/Text';
 import arrowBack from 'assets/icon/arrowBack.png';
 import TextButton from 'components/common/TextButton';
+import {
+  deleteLocalData,
+  getLocalData,
+  setLocalData,
+} from 'libs/datastorage/useLocalStorage';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import { ProviderProfile, ProviderServices } from 'libs/types/UserType';
+import RNRestart from 'react-native-restart';
+import { useTranslation } from 'react-i18next';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
+import SelectImage from 'components/common/SelectImage';
+import uploadImage from 'libs/uploadImage';
+import { getImagesPath, getTitle } from 'libs/utility/Utils';
+import useToast from 'components/common/useToast';
 
 const Profile = () => {
   const navigation = useNavigation<any>();
+  const { setProviderProfile, userId, providerProfile, providerServices } =
+    UseProviderUserContext();
+  const { UpdateProviderProfile, GetProviderProfiles } = AuthServicesProvider();
+  const { t, i18n } = useTranslation();
+  const languageRef = React.useRef<any>(i18n.language);
+  const [profileImage, setProfileImage] = React.useState();
+  const [profilePicture, setProfilePicture] = React.useState(
+    providerProfile?.profilePicture ?? '',
+  );
+  const [isVisible, setIsVisible] = React.useState(false);
+  const { showToast, renderToast } = useToast();
 
   const headerLeft = () => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -27,11 +52,97 @@ const Profile = () => {
   const headerTitle = () => (
     <Text title={'Personal profile'} style={{ fontSize: fontSize.heading }} />
   );
-  const services = [
-    { name: 'Service 1', price: '50' },
-    { name: 'Service 2', price: '80' },
-    { name: 'Service 3', price: '60' },
-  ];
+
+  // React.useMemo(async () => {
+  //   const res = await GetProviderProfiles('40');
+  //   console.log('gurepreet', res);
+  // }, []);
+  const onLogoutButtonPress = () => {
+    deleteLocalData();
+    setProviderProfile({} as ProviderProfile);
+    setLocalData('USER', {
+      user: {
+        language: languageRef.current,
+      },
+    });
+    if (
+      I18nManager.isRTL &&
+      (languageRef.current === 'en' || languageRef.current === 'ru')
+    ) {
+      I18nManager.forceRTL(false);
+      I18nManager.allowRTL(false);
+    } else if (
+      !I18nManager.isRTL &&
+      (languageRef.current === 'he' || languageRef.current === 'ar')
+    ) {
+      I18nManager.forceRTL(true);
+      I18nManager.allowRTL(true);
+    }
+    RNRestart.restart();
+  };
+  const getImageUrl = (url: string) => {
+    console.log('url111', url);
+    setProfilePicture(url);
+    updateProfile(url);
+  };
+
+  const updateProfile = async (url: string) => {
+    const imagePaths = [
+      {
+        imagePath: url,
+        type: 'profilePicture',
+      },
+    ];
+    try {
+      // const images = await uploadImage(imagePaths);
+      await uploadImage(imagePaths)
+        .then(async (images) => {
+          console.log('images', images);
+          if (images?.length > 0) {
+            console.log('userId', userId);
+            const res = await UpdateProviderProfile({
+              provider_id: userId,
+              profile_picture: getImagesPath(images, 'profilePicture') ?? '',
+            });
+            console.log('res', res);
+            if (!res.message) {
+              showToast(
+                t('Uploaded successfully!'),
+                t('Your profile picture is updated successfully.'),
+                'su',
+              );
+              setLocalData('USERPROFILE', {
+                profilePicture: getImagesPath(images, 'profilePicture') ?? '',
+              } as ProviderProfile);
+
+              setProviderProfile({
+                ...providerProfile,
+                profilePicture: getImagesPath(images, 'profilePicture') ?? '',
+              });
+            } else {
+              showToast(
+                t('Failed to upload!'),
+                t('failed to upload your profile picture.'),
+                'error',
+              );
+              setProfilePicture('');
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Error uploading images:', error);
+        });
+    } catch (err) {
+      showToast(
+        t('Failed to upload!'),
+        t('failed to upload your profile picture.'),
+        'error',
+      );
+      setProfilePicture('');
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <View style={styles.headerContainer}>
@@ -41,43 +152,60 @@ const Profile = () => {
       </View>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image
-            source={require('assets/icon/addProfileIcon.png')}
-            style={styles.avatarImage}
-          />
+          <TouchableOpacity onPress={() => setIsVisible(true)}>
+            <Image
+              source={
+                profilePicture
+                  ? { uri: profilePicture }
+                  : require('assets/icon/addProfileIcon.png')
+              }
+              style={styles.avatarImage}
+            />
+          </TouchableOpacity>
           <Text title={'Eynat Linn'} style={styles.text} />
         </View>
-        <View style={styles.divider}></View>
-        <View>
+        <View style={styles.divider}>
           <Text title={'Services you provide'} style={styles.servicesText} />
-          {services.map((service, index) => (
-            <View key={index} style={styles.serviceItem}>
-              <Text title={service.name} style={styles.serviceName} />
-              <Text title={`${service.price} NIS`} style={styles.serviceName} />
-            </View>
-          ))}
+          {(providerServices as unknown as ProviderServices[])?.map(
+            (service, index) => (
+              <View key={index} style={styles.serviceItem}>
+                <Text
+                  title={getTitle(service?.name, i18n)}
+                  style={styles.serviceName}
+                />
+                <Text
+                  title={`${service?.service_price} NIS`}
+                  style={styles.serviceName}
+                />
+              </View>
+            ),
+          )}
+
+          <View style={styles.addImageContainer}>
+            <Image
+              source={require('assets/icon/addServicesBlack.png')}
+              style={styles.addImage}
+            />
+            <Text title={'Add another service'} />
+          </View>
         </View>
-        <View style={styles.addImageContainer}>
-          <Image
-            source={require('assets/icon/addServicesBlack.png')}
-            style={styles.addImage}
-          />
-          <Text title={'Add another service'} />
-        </View>
-        <View style={styles.logoutImageContainer}>
+        <TouchableOpacity
+          onPress={onLogoutButtonPress}
+          style={styles.logoutImageContainer}
+        >
           <Image
             source={require('assets/icon/logout.png')}
             style={styles.logoutImage}
           />
-          <TextButton
-            title={'Log Out'}
-            fontSize={getHeight(16)}
-            onPress={() => {
-              navigation.navigate(NavigationRoutes.IntroStack);
-            }}
-          />
-        </View>
+          <Text title={'Log Out'} />
+        </TouchableOpacity>
       </View>
+      <SelectImage
+        isShowModal={isVisible}
+        closeModal={setIsVisible}
+        imageUri={getImageUrl}
+      />
+      {renderToast()}
     </>
   );
 };
@@ -91,7 +219,6 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
     transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
-
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -106,9 +233,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: getWidth(dimens.marginM),
   },
   avatarImage: {
-    width: getWidth(dimens.imageM),
+    width: getHeight(dimens.imageM),
     height: getHeight(dimens.imageM),
     resizeMode: 'contain',
+    borderRadius: getHeight(80),
   },
   imageContainer: {
     justifyContent: 'center',
@@ -119,11 +247,11 @@ const styles = StyleSheet.create({
     fontSize: getHeight(fontSize.textXl),
   },
   divider: {
-    borderWidth: getHeight(0.3),
+    borderTopWidth: getHeight(dimens.borderThin),
+    borderBottomWidth: getHeight(dimens.borderThin),
     borderColor: colors.disabled,
     marginTop: getHeight(dimens.imageXs),
-    width: '100%',
-    alignSelf: 'center',
+    paddingVertical: getHeight(getHeight(dimens.marginM)),
   },
   serviceItem: {
     flexDirection: 'row',
@@ -134,24 +262,23 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: getHeight(fontSize.textM),
   },
-
   servicesText: {
     fontSize: getHeight(20),
     marginVertical: getHeight(10),
   },
   addImage: {
-    width: getWidth(dimens.imageXs),
+    width: getHeight(dimens.imageXs),
     height: getHeight(dimens.imageXs),
     resizeMode: 'contain',
   },
   addImageContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: getWidth(dimens.imageXs),
+    gap: getHeight(dimens.imageXs),
     paddingVertical: getHeight(dimens.marginM),
   },
   logoutImage: {
-    width: getWidth(dimens.marginL),
+    width: getHeight(dimens.marginL),
     height: getHeight(dimens.marginL),
     resizeMode: 'contain',
   },

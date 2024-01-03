@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 const SummaryViewController = ({ order }: { order: OrderDetail }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const arrivalRef = React.useRef<any>('');
-  const totalPrice: number = order?.services.reduce(
-    (total, item) => total + parseInt(item.price, 10),
+
+  const totalPrice: number | undefined = order?.services?.reduce(
+    (total, item) => total + parseFloat(item?.price || '0'),
     0,
   );
 

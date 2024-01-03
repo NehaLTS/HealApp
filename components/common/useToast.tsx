@@ -1,6 +1,6 @@
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 import Modal from 'react-native-modal/dist/modal';
 import Text from './Text';
 import { colors } from 'designToken/colors';
@@ -41,7 +41,7 @@ const useToast = () => {
       >
         <View
           style={{
-            borderRadius: getWidth(dimens.paddingXs),
+            borderRadius: getHeight(dimens.paddingXs),
             backgroundColor:
               type === 'error'
                 ? '#C74244'
@@ -50,8 +50,8 @@ const useToast = () => {
                 : '#3EAAC5',
             width: '100%',
             justifyContent: 'center',
-            paddingVertical: getWidth(dimens.marginS),
-            paddingHorizontal: getWidth(dimens.sideMargin),
+            paddingVertical: getHeight(dimens.marginS),
+            paddingHorizontal: getHeight(dimens.sideMargin),
             gap: getHeight(4),
             minHeight: getHeight(50),
           }}
@@ -60,7 +60,10 @@ const useToast = () => {
             <Text
               style={{
                 color: colors.white,
-                fontSize: getWidth(fontSize.textS),
+                fontSize:
+                  Dimensions.get('window').width > 500
+                    ? getHeight(fontSize.textM)
+                    : getHeight(fontSize.textS),
                 fontFamily: fontFamily.bold,
               }}
             >
@@ -70,7 +73,10 @@ const useToast = () => {
           <Text
             style={{
               color: colors.white,
-              fontSize: getWidth(fontSize.textS),
+              fontSize:
+                Dimensions.get('window').width > 500
+                  ? getHeight(fontSize.textM)
+                  : getHeight(fontSize.textS),
               fontFamily: fontFamily.medium,
             }}
           >

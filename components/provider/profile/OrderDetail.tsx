@@ -7,6 +7,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { OrderDetails } from 'libs/types/ProvierTypes';
+import { getTitle } from 'libs/utility/Utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
@@ -21,25 +22,24 @@ const OrderDetail = ({
   orderId: string;
   patientName: string;
 }) => {
-  const { i18n } = useTranslation();
-  const { onGetOrderDetails } = AuthServicesProvider();
+  const { i18n, t } = useTranslation();
+  const { OnGetOrderDetails } = AuthServicesProvider();
   const [isLoading, setIsLoading] = React.useState(false);
   const [orderDetails, setOrderDetails] = React.useState<OrderDetails | null>(
     null,
   );
-  // try {
-  // Parse the JSON string into a JavaScript object
+  console.log('orderId123', orderId);
+  const totalPrice: number | undefined = orderDetails?.modifiedServices.reduce(
+    (total, item) => total + parseFloat(item?.service_price || '0'),
+    0,
+  );
+
   const parsedData = () => {
     if (orderDetails !== null) {
-      return JSON.parse(orderDetails.symptoms);
+      return JSON.parse(orderDetails?.symptoms);
     }
   };
 
-  // Now, you can use the parsed data in TypeScript
-  console.log('parsedData', parsedData());
-  // } catch (error) {
-  //   console.error('Error parsing JSON:', error);
-  // }
   const stars = [];
   for (let i = 1; i <= 5; i++) {
     stars.push(
@@ -57,7 +57,7 @@ const OrderDetail = ({
   const getOrderDetails = async () => {
     try {
       setIsLoading(true);
-      const res = await onGetOrderDetails(orderId);
+      const res = await OnGetOrderDetails(orderId);
       console.log('res1111', res);
       setOrderDetails(res);
     } catch (err) {
@@ -98,17 +98,23 @@ const OrderDetail = ({
         </View>
         <View style={styles.itemContainer}>
           <Text style={styles.callReason}>Services provided</Text>
-          <View style={styles.serviceContainer}>
-            <Text style={styles.serviceName}>Service 1</Text>
-            <Text>320 NIS</Text>
-          </View>
+          {orderDetails?.modifiedServices?.map((item, index) => {
+            return (
+              <View key={index} style={styles.serviceContainer}>
+                <Text style={styles.serviceName}>
+                  {getTitle(item?.name, i18n)}
+                </Text>
+                <Text>{`${item?.service_price} NIS`}</Text>
+              </View>
+            );
+          })}
           <View style={styles.serviceContainer}>
             <Text
               style={{ ...styles.serviceName, fontFamily: fontFamily.medium }}
             >
-              Total
+              {t('total')}
             </Text>
-            <Text>{`${orderDetails?.TotalCost} NIS`}</Text>
+            <Text>{`${totalPrice} NIS`}</Text>
           </View>
         </View>
         <View style={styles.itemContainer}>

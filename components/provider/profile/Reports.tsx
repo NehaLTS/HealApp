@@ -44,7 +44,7 @@ export default Reports;
 
 const styles = StyleSheet.create({
   arrowBack: {
-    width: getWidth(dimens.paddingS + dimens.borderBold),
+    width: getHeight(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: 'center',
     transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],

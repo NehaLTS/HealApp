@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import arrowBack from 'assets/icon/arrowBack.png';
-import Loader from 'components/common/Loader';
+import Loader, { LoaderLarge } from 'components/common/Loader';
 import Text from 'components/common/Text';
 import OrderDetail from 'components/provider/profile/OrderDetail';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
@@ -23,7 +23,7 @@ import {
 
 const OrderHistory = () => {
   const navigation = useNavigation();
-  const { onGetOrderHistory } = AuthServicesProvider();
+  const { OnGetOrderHistory } = AuthServicesProvider();
   const { userId } = UseProviderUserContext();
   const [showDetail, setShowDetail] = React.useState<{
     isVisible?: boolean;
@@ -34,8 +34,13 @@ const OrderHistory = () => {
     orderId: '',
     patientName: '',
   });
+  console.log('userId', userId);
+  const chunkSize = 10;
   const [isLoading, setIsLoading] = React.useState(false);
   const [orderHistory, setOrderHistory] = React.useState<OrderList[]>([]);
+  const [startIndex, setStartIndex] = React.useState(0);
+  const [endIndex, setEndIndex] = React.useState(0);
+  const [allDataLoaded, setAllDataLoaded] = React.useState(false);
 
   const headerLeft = () => (
     <TouchableOpacity
@@ -51,7 +56,7 @@ const OrderHistory = () => {
   const headerTitle = () => (
     <Text
       style={styles.title}
-      title={showDetail ? 'Order details' : 'Order history'}
+      title={showDetail?.isVisible ? 'Order details' : 'Order history'}
     />
   );
 
@@ -89,12 +94,25 @@ const OrderHistory = () => {
     }
   };
 
-  const getOrderHistory = async () => {
+  const getOrderHistory = async (isLoading: boolean) => {
     try {
-      setIsLoading(true);
-      const res = await onGetOrderHistory(Number(userId), 1, 10);
-      console.log('res', res);
-      setOrderHistory(res);
+      if (allDataLoaded === false) {
+        setIsLoading(isLoading);
+        const res = await OnGetOrderHistory(
+          Number(userId),
+          startIndex,
+          endIndex,
+        );
+        console.log('res history', res);
+        console.log('length', res?.length);
+        if (!res?.message) {
+          setOrderHistory([...orderHistory, ...res]);
+          setStartIndex(endIndex + 1);
+          setEndIndex(endIndex + chunkSize);
+        } else if (res?.message) {
+          setAllDataLoaded(true);
+        }
+      }
     } catch (err) {
       console.log(err);
     } finally {
@@ -102,59 +120,78 @@ const OrderHistory = () => {
     }
   };
   React.useMemo(() => {
-    getOrderHistory();
+    getOrderHistory(true);
   }, []);
 
   return (
-    <>
+    <View style={styles.mainContainer}>
       {isLoading && <Loader />}
       <View style={styles.headerContainer}>
         {headerLeft()}
         {headerTitle()}
       </View>
-      {!showDetail?.isVisible ? (
-        <FlatList
-          keyboardShouldPersistTaps="always"
-          data={orderHistory}
-          style={{ flex: 1 }}
-          contentContainerStyle={styles.containerStyle}
-          keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => (
-            <RenderItem
-              item={item}
-              onPress={() => {
-                console.log('item?.orderId', item?.order_id);
-                setShowDetail({
-                  isVisible: true,
-                  orderId: item?.order_id?.toString(),
-                  patientName: item?.patient_name,
-                });
-              }}
-            />
-          )}
-        />
+      {showDetail?.isVisible === false ? (
+        orderHistory?.length === 0 && !isLoading ? (
+          <Text
+            style={styles.noHistoryText}
+            title={'No order history found.'}
+          />
+        ) : (
+          <FlatList
+            keyboardShouldPersistTaps="always"
+            data={orderHistory}
+            horizontal={false}
+            style={{ flex: 1 }}
+            contentContainerStyle={styles.containerStyle}
+            keyExtractor={(_, index) => index.toString()}
+            onEndReached={() => getOrderHistory(false)}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={
+              !isLoading && !allDataLoaded ? (
+                <View style={styles.loaderContainer}>
+                  <Loader isSmall />
+                </View>
+              ) : null
+            }
+            renderItem={({ item }) => (
+              <RenderItem
+                item={item}
+                onPress={() => {
+                  setShowDetail({
+                    isVisible: true,
+                    orderId: item?.order_id?.toString(),
+                    patientName: item?.patient_name,
+                  });
+                }}
+              />
+            )}
+          />
+        )
       ) : (
         <OrderDetail
           orderId={showDetail?.orderId ?? ''}
           patientName={showDetail?.patientName ?? ''}
         />
       )}
-    </>
+    </View>
   );
 };
 
 export default OrderHistory;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   arrowBack: {
-    width: getWidth(dimens.paddingS + dimens.borderBold),
+    width: getHeight(dimens.paddingS + dimens.borderBold),
     height: getHeight(dimens.marginM + dimens.borderBold),
     resizeMode: 'center',
     transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   headerContainer: {
     flexDirection: 'row',
-    backgroundColor: colors.white,
     padding: getWidth(dimens.marginM),
     zIndex: 1,
     paddingVertical: getHeight(dimens.marginS),
@@ -191,13 +228,21 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     paddingTop: getHeight(dimens.marginS),
-    backgroundColor: colors.white,
-    flex: 1,
     paddingHorizontal: getWidth(dimens.marginM),
+    paddingBottom: getHeight(dimens.marginL),
   },
   listContainer: {
     borderBottomWidth: getHeight(dimens.borderThin),
     paddingVertical: getHeight(dimens.paddingL),
     borderColor: colors.primary,
+  },
+  noHistoryText: {
+    textAlign: 'center',
+    marginTop: getHeight(dimens.buttonHeight),
+  },
+  loaderContainer: {
+    height: getHeight(dimens.imageS),
+    width: '100%',
+    justifyContent: 'flex-end',
   },
 });

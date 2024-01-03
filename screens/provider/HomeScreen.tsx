@@ -302,31 +302,6 @@ const HomeScreen = () => {
       { provider_id: userId, availability: availability.toString() },
       token,
     ).then((res) => {
-      if (res?.isSuccessful && isLogout) {
-        deleteLocalData();
-
-        setProviderProfile({} as ProviderProfile);
-        setLocalData('USER', {
-          user: {
-            language: languageRef.current,
-          },
-        });
-        if (
-          I18nManager.isRTL &&
-          (languageRef.current === 'en' || languageRef.current === 'ru')
-        ) {
-          I18nManager.forceRTL(false);
-          I18nManager.allowRTL(false);
-        } else if (
-          !I18nManager.isRTL &&
-          (languageRef.current === 'he' || languageRef.current === 'ar')
-        ) {
-          I18nManager.forceRTL(true);
-          I18nManager.allowRTL(true);
-        }
-        RNRestart.restart();
-      }
-
       Sentry.captureMessage(
         `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
       );
