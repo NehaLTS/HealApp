@@ -12,6 +12,12 @@ import arList from '../../strings/ar.json';
 import heList from '../../strings/he.json';
 import ruList from '../../strings/ru.json';
 import { HealLanguageType } from 'libs/types/UserType';
+import { Order } from 'libs/types/OrderTypes';
+import haversine from 'haversine';
+import { UseClientUserContext } from 'contexts/UseClientUserContext';
+
+
+
 
 export const passwordPattern =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$!%*?&])[A-Za-z\d@#$!%*?&]+$/;
@@ -27,14 +33,14 @@ export const getProviderImage = (type: string, id: number) => {
     type?.includes('Doctor') || id === 1
       ? doctor
       : type?.includes('Nurse') || id === 2
-      ? nurse
-      : type?.includes('Healer') || type?.includes('Alternative') || id === 3
-      ? healer
-      : type?.includes('Physio') || id === 4
-      ? physio
-      : type?.includes('Clinics')
-      ? clinic
-      : doctorOnline;
+        ? nurse
+        : type?.includes('Healer') || type?.includes('Alternative') || id === 3
+          ? healer
+          : type?.includes('Physio') || id === 4
+            ? physio
+            : type?.includes('Clinics')
+              ? clinic
+              : doctorOnline;
   return image;
 };
 
@@ -125,3 +131,47 @@ export const getImagesPath = (imageData: any[], purpose: any) => {
 //     console.error('Error fetching place details:', error);
 //   }
 // }
+
+
+
+export const calculateDistance = (currentOrder: Order) => {
+  const { userLocation } = UseClientUserContext();
+  const userCurrentLocation = {
+    latitude: parseFloat(
+      userLocation?.onboardingLocation?.latitude ??
+      userLocation?.currentLocation?.latitude ??
+      '0.0',
+    ),
+    longitude: parseFloat(
+      userLocation?.onboardingLocation?.longitude ??
+      userLocation?.currentLocation?.longitude ??
+      '0.0',
+    ),
+  };
+  const ProviderLocation = {
+    latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),
+    longitude: parseFloat(currentOrder?.providerDetails.currentLongitude),
+  };
+  const distance = haversine(ProviderLocation, userCurrentLocation, {
+    unit: 'km',
+  });
+  console.log('Distance...', distance);
+  return distance;
+};
+
+export const calculateTime = (currentOrder: Order) => {
+
+  const DISTANCE = calculateDistance(currentOrder);
+  const AVERAGE_SPEED = 40;
+  const TIME = DISTANCE / AVERAGE_SPEED;
+  const travelTimeInMinutes = TIME * 60;
+  const travelTimeInHours = Math.floor(TIME / 60);
+  const remainingMinutes = Math.round(TIME % 60);
+  const time = {
+    hour: travelTimeInHours,
+    minutes: travelTimeInMinutes,
+    seconds: TIME,
+    remainig: remainingMinutes,
+  };
+  return time;
+};

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import arrowBack from 'assets/icon/arrowBack.png';
 import avatar from 'assets/icon/avatar.png';
@@ -46,6 +46,7 @@ import {
   ARRIVED,
   ON_THE_WAY,
   ORDER_ACCEPTED,
+  ORDER_CREATED,
   TREATMENTCOMPLETED,
   providerStatusOnHeader,
 } from 'libs/constants/Constant';
@@ -103,7 +104,13 @@ const HomeScreen = () => {
     message: '',
   });
 
+  const getCurrentOrder = async () => {
+    const order: Order = (await getLocalData('ORDER')) as Order;
+    console.log('order details is', order);
+    setCurrentOrder(order);
+  };
   const setStatusOnEventFire = (evenTitle: string) => {
+
     switch (evenTitle) {
       case ORDER_ACCEPTED:
         setLocalData('ORDER', { orderStatus: ON_THE_WAY });
@@ -138,16 +145,19 @@ const HomeScreen = () => {
     });
   };
 
+  useFocusEffect(() => {
+    console.log("clientFoucuseEffect")
+    getEventUpdate();
+
+  });
   useEffect(() => {
+    console.log("ClientOrderShow")
     getCurrentOrder();
     getEventUpdate();
+
   }, [currentOrder?.orderStatus]);
 
-  const getCurrentOrder = async () => {
-    const order: Order = (await getLocalData('ORDER')) as Order;
-    console.log('order details is', order);
-    setCurrentOrder(order);
-  };
+
   useUpdateEffect(() => {
     setCurrentAddress(userLocation?.currentLocation?.address ?? '');
   }, [userLocation]);

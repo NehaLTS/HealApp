@@ -7,8 +7,28 @@ export interface Order {
   orderStatus: string | null;
   orderServices: Array<OrderServices>;
   message?: string;
-}
 
+}
+export interface CLIENTDETAILS {
+  Id: string;
+  providerName: string;
+  providerAddress: string;
+  providerProfilePicture: string;
+  providerRating: string;
+  phoneNumber: string;
+  currentLatitude: string;
+  currentLongitude: string;
+}
+export interface PROVIDERDETAILS {
+  providerId: string;
+  providerName: string;
+  providerAddress: string;
+  providerProfilePicture: string;
+  providerRating: string;
+  phoneNumber: string;
+  currentLatitude: string;
+  currentLongitude: string;
+}
 export interface PROVIDERDETAILS {
   providerId: string;
   providerName: string;
@@ -22,7 +42,7 @@ export interface PROVIDERDETAILS {
 
 export interface OrderServices {
   serviceId: string;
-  serviceName: string;
+  serviceName: Name;
   servicePrice: string;
 }
 export interface ProviderOrder {

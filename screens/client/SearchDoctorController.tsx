@@ -14,13 +14,11 @@ import {
   ESTIMATE_ARRIVAL,
   ON_THE_WAY,
   ORDER_ACCEPTED,
-  ORDER_CREATED,
-  ORDER_STARTED,
   TREATMENTCOMPLETED,
 } from 'libs/constants/Constant';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { Location, OrderCancelByClientRespnse } from 'libs/types/UserType';
-import { paymentsendToApi } from 'libs/ClientOrderPayment';
+import { paymentsendToApi } from 'libs/OrderPayment';
 import { useTranslation } from 'react-i18next';
 
 const SearchDoctorController = () => {
@@ -30,7 +28,6 @@ const SearchDoctorController = () => {
     BookOrderRequest,
     OrderCancelFromClient,
     orderProvider,
-    PaymentForOrder,
   } = ClientOrderServices();
   const { userLocation } = UseClientUserContext();
   const [showRateAlert, setShowRateAlert] = useState(false);
@@ -57,10 +54,7 @@ const SearchDoctorController = () => {
   );
   const [orderTime, setOrderTime] = useState<string>('');
   const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false);
-  // const orderData = getLocalData('ORDER')?.providerDetail
-  // const orderDetails:Order=route?.params?.orderDetails;
-  // const orderId = route?.params?.orderId ?? '';
-  // const providerData = route?.params?.providerData ?? '';
+
 
   const focusBetweenClientAndProvider = (providerSetLocation: {
     latitude: string;
@@ -181,8 +175,6 @@ const SearchDoctorController = () => {
     if (amount.walletMinimumAmount > clientBalance) {
       Alert.alert(`You should have minimum amount of ${amount.walletMinimumAmount.toString()} in your wallet`)
       setShowAddToWallet(true)
-      console.log("setShowAddToWallet")
-
     } else {
       setShowAddToWallet(false)
 
@@ -326,24 +318,13 @@ const SearchDoctorController = () => {
   };
 
 
-
-
   const handleNextButtonPress = async () => {
-
-
-
-    //TODO:Vandana why we are passing status as accept here
-
     const orderBookResponse = await BookOrderRequest({
-      // orderStatus: ORDER_STARTED,
       provider_id: currentOrder?.providerDetails.providerId.toString(),
       order_id: currentOrder?.orderId.toString(),
-      // distance: Math.round(calculateDistance()).toString(),
-      // time: Math.round(calculateTime().minutes).toString(),
+
     });
-
     console.log('gurpreet', orderBookResponse);
-
     orderBookResponse
     if (orderBookResponse?.isSuccessful) {
       const ORDER_TIME = new Date().getTime()
@@ -353,65 +334,17 @@ const SearchDoctorController = () => {
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
       console.log('insidee', orderBookResponse);
-
-      // Alert.alert('orderSendResponse' + JSON.stringify(orderBookResponse));
       setDisable(true);
     }
     else {
-
-      //Gurpreet to change it to cancel button
       setIsBookOrder(false);
       console.log("clientOrderElse")
     }
     setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
-
-
-
   };
 
-  const calculateDistance = () => {
-    const userCurrentLocation = {
-      latitude: parseFloat(
-        userLocation?.onboardingLocation?.latitude ??
-        userLocation?.currentLocation?.latitude ??
-        '0.0',
-      ),
-      longitude: parseFloat(
-        userLocation?.onboardingLocation?.longitude ??
-        userLocation?.currentLocation?.longitude ??
-        '0.0',
-      ),
-    };
-    const ProviderLocation = {
-      latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),
-      longitude: parseFloat(currentOrder?.providerDetails.currentLongitude),
-    };
-    const distance = haversine(ProviderLocation, userCurrentLocation, {
-      unit: 'km',
-    });
-    console.log('Distance...', distance);
-    return distance;
-  };
-
-  const calculateTime = () => {
-    const DISTANCE = calculateDistance();
-    const AVERAGE_SPEED = 40;
-    const TIME = DISTANCE / AVERAGE_SPEED;
-    const travelTimeInMinutes = TIME * 60;
-    const travelTimeInHours = Math.floor(TIME / 60);
-    const remainingMinutes = Math.round(TIME % 60);
-    const travelTimeInSeconds = TIME * 3600;
-    const time = {
-      hour: travelTimeInHours,
-      minutes: travelTimeInMinutes,
-      seconds: TIME,
-      remainig: remainingMinutes,
-    };
-    return time;
-  };
   const orderCancel = () => {
     OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
-
       console.log("cancel reaposnse", res)
       setLocalData('ORDER', {
         orderId: ''
@@ -434,8 +367,6 @@ const SearchDoctorController = () => {
     forceAlert,
     handleNextButtonPress,
     showRateAlert,
-    calculateDistance,
-    calculateTime,
     showLoader,
     disabled,
     currentOrder,

@@ -34,11 +34,14 @@ import { useCurrentAddress } from 'libs/useCurrentAddress';
 import { Platform } from 'react-native';
 import { treatment } from 'libs/types/ProvierTypes';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
+import useNetworkConnection from 'libs/useNetworkConnection';
+import { Order } from 'libs/types/OrderTypes';
 
 const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 
 const App = () => {
+  const { isConnected } = useNetworkConnection()
   const defaultLanguageCode = getLocalData('USER')?.user?.language
   console.log('defaultLanguageCode', defaultLanguageCode)
   const [languageCode, setLanguageCode] = React.useState<string>(defaultLanguageCode ?? 'en');
@@ -55,6 +58,7 @@ const App = () => {
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
   const [treatmentsMenu, setTreatmentsMenu] = useState<treatment>(null);
   const [walletAmount, setWalletAmount] = useState<string>('0')
+  const [providerOrder, setProviderOrder] = useState<Order>(null)
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -112,8 +116,11 @@ const App = () => {
       console.log('Error checking location permission: ' + err);
     }
   };
-
+  if (!isConnected && isConnected != null) {
+    Alert.alert("You are offline", "Please turn on the internet")
+  }
   useEffect(() => {
+    console.log("isConnected", isConnected)
     requestLocationPermission();
   }, []);
 
@@ -157,6 +164,8 @@ const App = () => {
               setProviderServices,
               setUserLocation,
               userLocation,
+              providerOrder,
+              setProviderOrder
             }}
           >
             <NavigationContainer

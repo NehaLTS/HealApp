@@ -52,12 +52,13 @@ const LocalizationController = () => {
         I18nManager.forceRTL(false);
         I18nManager.allowRTL(false);
         // SplashScreen.show();
-        RNRestart.restart();
+        setTimeout(() => RNRestart.Restart(), 1000);
       } else if (!I18nManager.isRTL && (lng == 'he' || lng == 'ar')) {
         // SplashScreen.show();
         I18nManager.forceRTL(true);
         I18nManager.allowRTL(true);
-        RNRestart.restart();
+
+        setTimeout(() => RNRestart.Restart(), 1000);
       }
 
       // if (lng == 'en' || lng === 'ru') {

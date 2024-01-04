@@ -200,52 +200,52 @@ const OrderFormView = ({
     <>
       <Text title={t('treatments')} style={styles.reasonText} />
       {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
-      0 ? (
+        0 ? (
         (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
           (item: TreatmentMenu, index: number) => (
-            // <>{item?.menu_id === 1 ? <View
-            //   key={index}
-            //   style={styles.checkboxContainer}>
-            //   <View style={styles.checkBox}>
-
-            //     <Image
-            //       source={require('assets/icon/check.png')}
-            //       style={styles.image}
-            //     />
-
-            //   </View>
-            //   <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-            //     {item?.name?.en.charAt(0).toUpperCase() +
-            //       item?.name?.en.slice(1)}
-            //   </Text>
-            //   <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-            //     {item.price}
-            //   </Text>
-            // </View> :
-            <TouchableOpacity
+            <>{item?.menu_id === 1 ? <View
               key={index}
-              style={styles.checkboxContainer}
-              disabled={index === 0}
-              onPress={() => handleItemPress(item)}
-            >
+              style={styles.checkboxContainer}>
               <View style={styles.checkBox}>
-                {activeCheckbox?.includes(item?.menu_id) && (
-                  <Image
-                    source={require('assets/icon/check.png')}
-                    style={styles.image}
-                  />
-                )}
+
+                <Image
+                  source={require('assets/icon/check.png')}
+                  style={styles.image}
+                />
+
               </View>
               <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                {getTitle(item?.name, i18n)?.charAt(0).toUpperCase() +
-                  getTitle(item?.name, i18n)?.slice(1)}
+                {item?.name?.en.charAt(0).toUpperCase() +
+                  item?.name?.en.slice(1)}
               </Text>
               <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
                 {item.price}
               </Text>
-            </TouchableOpacity>
-            // }
-            // </>
+            </View> :
+              <TouchableOpacity
+                key={index}
+                style={styles.checkboxContainer}
+                disabled={index === 0}
+                onPress={() => handleItemPress(item)}
+              >
+                <View style={styles.checkBox}>
+                  {activeCheckbox?.includes(item?.menu_id) && (
+                    <Image
+                      source={require('assets/icon/check.png')}
+                      style={styles.image}
+                    />
+                  )}
+                </View>
+                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                  {getTitle(item?.name, i18n)?.charAt(0).toUpperCase() +
+                    getTitle(item?.name, i18n)?.slice(1)}
+                </Text>
+                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                  {item.price}
+                </Text>
+              </TouchableOpacity>
+            }
+            </>
           ),
         )
       ) : (
@@ -340,9 +340,8 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
-                  order?.phonenumber
-                }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
+              }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}

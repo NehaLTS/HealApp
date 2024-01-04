@@ -1,3 +1,4 @@
+import { Order, ProviderOrder } from 'libs/types/OrderTypes';
 import {
   ProviderProfile,
   ProviderServices,
@@ -17,10 +18,10 @@ export interface ProviderUserContextFields {
   setProviderProfile: React.Dispatch<React.SetStateAction<ProviderProfile>>;
   providerServices: ProviderServices;
   setProviderServices: React.Dispatch<React.SetStateAction<ProviderServices>>;
-  setUserLocation: React.Dispatch<
-    React.SetStateAction<userLocation>
-  >;
+  setUserLocation: React.Dispatch<React.SetStateAction<userLocation>>;
   userLocation: userLocation;
+  providerOrder: ProviderOrder
+  setProviderOrder: React.Dispatch<React.SetStateAction<ProviderOrder>>;
 }
 
 export const ProviderUserContext = createContext<ProviderUserContextFields>(

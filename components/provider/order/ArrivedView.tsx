@@ -9,12 +9,14 @@ import { fontSize } from 'designToken/fontSizes';
 import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useEffect } from 'react';
-import { Image, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
 import { ProviderServices } from 'libs/types/UserType';
 import { getTitle } from 'libs/utility/Utils';
 import { useTranslation } from 'react-i18next';
 import { TreatmentMenu } from 'libs/types/ProvierTypes';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
+import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 
 const ArrivedView = ({
   order,
@@ -31,29 +33,34 @@ const ArrivedView = ({
   servicesFromApi: ProviderServices[]
   addAnotherService: () => void
 }) => {
-  const [updatedServices, setUpdatedServices] = React.useState<any[]>([])
+
   const [activeCheckbox, setActiveCheckbox] = React.useState<boolean[]>([]);
-  console.log("updatedServices trea", updatedServices, activeCheckbox)
+
   const [isVisible, setIsVisible] = React.useState(false);
   const { i18n } = useTranslation();
   const [totalPrice, setTotalPrice] = React.useState(totalPricesOfServices)
   const [newServices, setNewServices] = React.useState()
+  const { removeService } = AuthServicesProvider()
   // Function to initialize checkboxes and selected items when order details are available
-
+  const [updatedServices, setUpdatedServices] = React.useState<any>(order &&
+    order?.OrderReceive &&
+    order?.OrderReceive?.services?.length &&
+    JSON.parse?.(order?.OrderReceive?.services))
+  console.log("updatedServices trea", updatedServices, activeCheckbox)
   useEffect(() => {
     console.log("hiii")
 
     if (order && order.OrderReceive && order.OrderReceive?.services?.length > 0) {
-      setUpdatedServices(order.OrderReceive?.service)
+      setUpdatedServices(JSON.parse?.(order?.OrderReceive?.services))
       const initialCheckboxes = Array(order.OrderReceive.services.length).fill(true);
       setActiveCheckbox(initialCheckboxes);
 
-      console.log("hiii", updatedServices)
+      console.log("hiiiindie", updatedServices)
       // Initialize selected items based on initial checkboxes
       // const initialSelectedItems = order.OrderReceive.services.filter((item, index: number) => initialCheckboxes[index]);
       // setUpdatedServices(initialSelectedItems);
     }
-  }, [order]);
+  }, [order && order.OrderReceive]);
   const calculateTotalPrice = (services?: any) => {
     if (order && services?.length > 0) {
       const servicesArray = services;
@@ -91,6 +98,10 @@ const ArrivedView = ({
       newArray = updatedServices.filter(
         (selectedItem) => selectedItem.menu_id !== item.menu_id,
       );
+      removeService({ order_id: order.orderId, services: item.menu_id }).then((res) => {
+        console.log(res, "servics")
+
+      })
     } else {
       newArray = [...updatedServices, item];
     }
@@ -223,7 +234,7 @@ const ArrivedView = ({
               <View key={index} style={styles.servicesProvided}>
                 <AnimatedText
                   style={{ ...styles.smallText }}
-                  title={`${item?.service_name?.en ?? ''}`}
+                  title={`${getTitle(item?.name, i18n)}`}
                   entering={FadeInLeft.duration(400).delay(800)}
                 />
                 <View style={styles.servicesLeftView}>
@@ -232,7 +243,8 @@ const ArrivedView = ({
                     title={`${item?.service_price} NIS`}
                     entering={FadeInLeft.duration(400).delay(900)}
                   />
-                  <Checkbox isWhite isChecked={activeCheckbox[index]} onPress={() => onPressCheckBox(item, index)} />
+
+                  {item.menu_id == 1 ? <Checkbox isWhite isChecked={true} onPress={() => { }} /> : <Checkbox isWhite isChecked={activeCheckbox[index]} onPress={() => onPressCheckBox(item, index)} />}
                 </View>
               </View>
             ),
@@ -241,7 +253,7 @@ const ArrivedView = ({
           activeOpacity={0.8}
           style={styles.addServiceContainer}
           onPress={onPressAddService}
-          disabled={false}
+          disabled={true}
         >
           <Image
             source={require('assets/icon/addServiceWhite.png')}
@@ -257,7 +269,7 @@ const ArrivedView = ({
           />
           <AnimatedText
             style={styles.totalAmount}
-            title={`${Number(parseFloat(totalPrice).toFixed(5))?.toString()} NIS`}
+            title={`${Number(parseFloat(totalPrice).toFixed(5))?.toString() ?? totalPricesOfServices} NIS`}
             entering={FadeInLeft.duration(400).delay(500)}
           />
         </View>

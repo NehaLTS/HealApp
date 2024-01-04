@@ -3,6 +3,25 @@ export const ClientOrderPayment = () => {
 
 }
 
+export const totalPrice = (services: any) => {
+    if (services && services?.length > 0) {
+        const servicesArray = services
+
+        // Calculate the total service price
+        const totalServicePrice = servicesArray.reduce(
+            (total: number, service: { service_price: string }) => {
+                // Ensure that the service_price is a number before adding it to the total
+                const servicePrice = parseFloat(service.service_price) || 0;
+                return total + servicePrice;
+            },
+            0,
+        );
+        console.log('totalPrice', JSON.stringify(totalServicePrice));
+        return JSON.stringify(totalServicePrice);
+    } else {
+        return '';
+    }
+};
 export const paymentsendToApi = (vistingAmount: number, shotAmount: number) => {
     const orderAmount = vistingAmount + shotAmount;
     const amoutToHeal = 0.025 * orderAmount

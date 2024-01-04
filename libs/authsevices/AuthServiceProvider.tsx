@@ -19,6 +19,7 @@ import {
   PROVIDER_AVAILABILITY,
   PROVIDER_SIGNIN,
   PROVIDER_USER_DETAILS,
+  REMOVE_SERVICES,
   TREATMENT_COMPLETED,
   UPDATE_PROVIDER_LOCATION,
   UPDATE_PROVIDER_PROFILE,
@@ -298,6 +299,16 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
+  const removeService = (body: { order_id: string, services: string }): Promise<any> =>
+    sendRequest(REMOVE_SERVICES, {
+      method: PATCH,
+      body: body as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
+
   return {
     OnProviderSignIn,
     onSubmitGoogleAuthRequestProvider,
@@ -318,5 +329,6 @@ export const AuthServicesProvider = () => {
     OnGetOrderDetails,
     UpdateProviderProfile,
     GetProviderProfiles,
+    removeService
   };
 };

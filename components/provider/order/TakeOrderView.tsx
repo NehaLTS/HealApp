@@ -122,10 +122,10 @@ const TakeOrderView = ({
                           JSON.parse?.(order?.OrderReceive?.services)
                             ?.length -
                           1
-                          ? ` ${service?.service_name?.en}, `
-                          : ` ${service?.service_name?.en}`
+                          ? ` ${service?.name?.en}, `
+                          : ` ${service?.name?.en}`
                         }`
-                        : service?.service_name?.en
+                        : service?.name?.en
                     }
                     entering={FadeInLeft.duration(400).delay(700)}
                   />

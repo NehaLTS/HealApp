@@ -121,7 +121,7 @@ const OrderDetailsController = () => {
 
   const symptoms = order.reason.map((item: any) => {
     return {
-      name: { en: item?.name.en, he: item?.name.he, hi: item?.name.hi }, // Assuming you want the English name
+      name: { en: item?.name.en, ar: item?.name.ar, he: item?.name.he }, // Assuming you want the English name
       id: item?.reason_id,
     };
   });

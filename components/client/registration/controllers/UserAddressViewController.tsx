@@ -13,6 +13,7 @@ import {
 import React, { useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
+import moment from "moment";
 
 const UserAddressViewController = () => {
   const { onUpdateUserProfile } = AuthServicesClient();
@@ -63,7 +64,7 @@ const UserAddressViewController = () => {
     else setIdNumberError('');
   };
 
-  const onBlurIdNumber = () => {};
+  const onBlurIdNumber = () => { };
 
   const onChangeAddress = (
     value: string,

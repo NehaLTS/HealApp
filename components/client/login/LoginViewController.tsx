@@ -85,53 +85,53 @@ const LoginViewController = () => {
     //save details in context
     setToken(response.token);
     console.log('response.token', response);
-    setUserId(response.id);
-    setUserProfile({
-      firstName: userDetails?.firstname ?? '',
-      lastName: userDetails?.lastname ?? '',
-      phoneNumber: userDetails?.phone_number,
-      address: {
-        address: userDetails?.address ?? '',
-        latitude: userDetails.latitude ?? '',
-        longitude: userDetails.longitude ?? '',
-      },
-      city: userDetails?.city ?? '',
-      state: userDetails?.state ?? '',
-      country: userDetails?.country ?? '',
-      profilePicture: userDetails?.profile_picture
-        ? userDetails?.profile_picture
-        : profilePicture,
-      date_of_birth: userDetails?.date_of_birth ?? '',
-      idNumber: userDetails?.id_number,
-      email: userDetails?.email,
-      isPaymentAdded: response.isPayment,
-      card_number: userDetails?.credit_card_number,
-      expire_date: userDetails?.expire_date,
-    });
 
-    setLocalData('USERPROFILE', {
-      firstName: userDetails.firstname,
-      lastName: userDetails.lastname,
-      phoneNumber: userDetails.phone_number,
-      address: userDetails.address,
-      city: userDetails.city,
-      state: userDetails.state,
-      country: userDetails.country,
-      profilePicture: userDetails.profile_picture
-        ? userDetails.profile_picture
-        : profilePicture,
-      date_of_birth: userDetails.date_of_birth,
-      idNumber: userDetails.id_number,
-      email: userDetails.email,
-      isPaymentAdded: response.isPayment,
-      card_number: userDetails?.credit_card_number,
-      expire_date: userDetails?.expire_date,
-    });
+    setUserId(response.id);
+    if (response.existing === 'yes') {
+      setUserProfile({
+        firstName: userDetails?.firstname ?? '',
+        lastName: userDetails?.lastname ?? '',
+        phoneNumber: userDetails?.phone_number,
+        address: userDetails?.address ?? '',
+        city: userDetails?.city ?? '',
+        state: userDetails?.state ?? '',
+        country: userDetails?.country ?? '',
+        profilePicture: userDetails?.profile_picture
+          ? userDetails?.profile_picture
+          : profilePicture,
+        date_of_birth: userDetails?.date_of_birth ?? '',
+        idNumber: userDetails?.id_number,
+        email: userDetails?.email,
+        isPaymentAdded: response.isPayment,
+        card_number: userDetails?.credit_card_number,
+        expire_date: userDetails?.expire_date,
+      });
+
+      setLocalData('USERPROFILE', {
+        firstName: userDetails.firstname,
+        lastName: userDetails.lastname,
+        phoneNumber: userDetails.phone_number,
+        address: userDetails.address,
+        city: userDetails.city,
+        state: userDetails.state,
+        country: userDetails.country,
+        profilePicture: userDetails.profile_picture
+          ? userDetails.profile_picture
+          : profilePicture,
+        date_of_birth: userDetails.date_of_birth,
+        idNumber: userDetails.id_number,
+        email: userDetails.email,
+        isPaymentAdded: response.isPayment,
+        card_number: userDetails?.credit_card_number,
+        expire_date: userDetails?.expire_date,
+      });
+    }
     setLocalData('USER', {
       token: response.token,
       userId: response.id,
       isClient: true,
     });
+
 
     //if first name is empty navigate to onboard else to Home
     if (!userDetails.firstname || userDetails.firstname == '') {
@@ -145,6 +145,8 @@ const LoginViewController = () => {
         routes: [{ name: NavigationRoutes.ClientHome }],
       });
     }
+    setIsLoading(false);
+
 
     //navigation.navigate(NavigationRoutes.ClientHome);
   };
@@ -164,7 +166,6 @@ const LoginViewController = () => {
           device_token,
         });
         console.log('sign in client by email and password', res);
-        setIsLoading(false);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
         else
           showToast(t('login_failed'), t('check_email_and_password'), 'error');
@@ -192,7 +193,6 @@ const LoginViewController = () => {
           device_token: device_Token,
         });
         console.log('GoogleSgnUp', res);
-        setIsLoading(false);
         if (res?.isSuccessful === true) {
           handleAuthSuccessResponse(res, userData?.user?.photoURL);
         } else {
@@ -223,7 +223,6 @@ const LoginViewController = () => {
           facebookId,
           device_token: device_Token,
         });
-        setIsLoading(false);
 
         if (res?.isSuccessful === true) {
           handleAuthSuccessResponse(res, '');

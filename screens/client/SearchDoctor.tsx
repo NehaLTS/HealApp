@@ -41,15 +41,12 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import MapView, { Marker } from 'react-native-maps';
 import SearchDoctorController from './SearchDoctorController';
+import { calculateTime } from 'libs/utility/Utils';
 
 const SearchDoctor = () => {
   const navigation = useNavigation();
 
   const route = useRoute<any>();
-  // const providerData = route?.params?.providerData ?? '';
-  // console.log('providerData', providerData);
-  // const providerRemainigTime = route?.params?.remaining;
-  // const orderId = route?.params?.orderId ?? '';
 
   //TODO: Vandana why this is used?
   const previousScreen = route?.params?.previousScreen;
@@ -60,8 +57,6 @@ const SearchDoctor = () => {
   const {
     handleNextButtonPress,
     showRateAlert,
-    calculateTime,
-    calculateDistance,
     currentOrder,
     showLoader,
     providerLocation,
@@ -78,16 +73,9 @@ const SearchDoctor = () => {
     orderCancel,
   } = SearchDoctorController();
   console.log('providerStatus 111', providerStatus);
-  const { setRemainingTime } = UseClientUserContext();
-  const localData = getLocalData('ORDER');
-
-  // const [loader, setLoader] = useState(true);
-  const [disabled, setDisable] = useState(false);
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
-  const [showCancelButton, setShowCancelButton] = useState(false);
-
   const [secondLoader, setSecondLoader] = useState(false);
-  const { showToast, renderToast } = useToast();
+  const { renderToast } = useToast();
 
   const headerLeft = () => (
     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -150,39 +138,29 @@ const SearchDoctor = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (stausOfArriving !== 'Arrived') {
-  //     getEventUpdate();
-  //   }
-  // }, []);
-
   useEffect(() => {
     console.log('userProfile.address?.latitude', userProfile.address);
     createNotificationListeners();
 
-    //TODO: Vandana why this is used?
-    //NOTE: We need to show provider location which is store in local at else provider is not shown when we coming from HOME
-    if (previousScreen === 'HOME_CLIENT') {
-      setProviderLocation({
-        latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
-        longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
-      });
-    }
+    // //TODO: Vandana why this is used?
+    // //NOTE: We need to show provider location which is store in local at else provider is not shown when we coming from HOME
+    // if (previousScreen === 'HOME_CLIENT') {
+    //   setProviderLocation({
+    //     latitude: parseFloat(localData?.eventData?.latitude ?? 0.0),
+    //     longitude: parseFloat(localData?.eventData?.longitude ?? 0.0),
+    //   });
+    // }
   }, []);
 
   const onPressOrder = () => {
     setSecondLoader(true);
     setIsBookOrder(true);
-    if (!showCancelButton && !showLoader) {
+    if (!showLoader) {
       handleNextButtonPress();
     } else {
       setLocalData('ORDER', {
         orderId: ''
       })
-
-      //TODO : Vandana why we are setting Local data here
-      //NOTE: Here we want to empty local data
-      //  setLocalData('ORDER', currentOrder);
       navigation.goBack();
     }
     setTimeout(() => {
@@ -216,7 +194,7 @@ const SearchDoctor = () => {
         {renderToast()}
         <View>
           {showTimer && providerStatus !== ARRIVED && (
-            <ArrivalTime totalTime={Math.round(calculateTime().minutes)} />
+            <ArrivalTime totalTime={Math.round(calculateTime(route?.params?.currentOrder).minutes)} />
           )}
           <Text
             style={styles.lookingDoctor}
@@ -379,7 +357,7 @@ const SearchDoctor = () => {
                   providerStatus,
                 )}`}
                 showProvider={providerLocation != undefined}
-                time={calculateTime()}
+                time={calculateTime(route?.params?.currentOrder)}
                 providerData={currentOrder.providerDetails}
               />
             </View>
@@ -392,8 +370,7 @@ const SearchDoctor = () => {
               title={
                 providerLocation !== undefined &&
                   providerLocation.latitude !== 0.0 &&
-                  !showLoader &&
-                  !showCancelButton
+                  !showLoader
                   ? t('order')
                   : t('cancel')
               }
@@ -423,7 +400,7 @@ const SearchDoctor = () => {
                   providerLocation.latitude === 0.0) ||
                   showLoader
                   ? t('no_fee_collected')
-                  : showCancelTextButton || showCancelButton
+                  : showCancelTextButton
                     ? t('3_minutes_to_cancel')
                     : ''
               }

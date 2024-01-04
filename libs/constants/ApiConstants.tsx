@@ -47,6 +47,7 @@ export const GET_ORDER_HISTORY = 'providers/getOrderHistoryWithPagination';
 export const GET_ORDER_DETAILS = 'providers/getProviderOrderDetails';
 export const UPDATE_PROVIDER_PROFILE = 'providers/updateProviderProfile';
 export const GET_PROVIDER_PROFILE = 'providers/getProviderProfiles';
+export const REMOVE_SERVICES = 'providers/updateEliminateService';
 
 export const POST = 'POST';
 export const GET = 'GET';

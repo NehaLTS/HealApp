@@ -4,7 +4,7 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
-import { paymentsendToApi } from 'libs/ClientOrderPayment';
+import { paymentsendToApi } from 'libs/OrderPayment';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { Order } from 'libs/types/OrderTypes';
 import React from 'react';

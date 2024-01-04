@@ -46,9 +46,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
 import NavigationRoutes from 'navigator/NavigationRoutes';
-import RNRestart from 'react-native-restart';
-import { paymentsendToApi } from 'libs/ClientOrderPayment';
-import AddNewService from 'components/common/AddNewService';
+import { paymentsendToApi, totalPrice } from 'libs/OrderPayment';
 import { getTitle } from 'libs/utility/Utils';
 import Sidebar from 'components/common/Sidebar';
 
@@ -60,10 +58,8 @@ const HomeScreen = () => {
   const [isAvailable, setIsAvailable] = useState(
     available?.isProviderAvailable,
   );
-  const languageRef = React.useRef<any>(i18n.language);
 
   const [isCancelOrder, setIsCancelOrder] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [isSeeMore, setIsSeeMore] = useState(
     order?.extraData?.isSeeMore ?? false,
   );
@@ -74,8 +70,7 @@ const HomeScreen = () => {
   const [notification, setNotification] = useState(
     order?.extraData?.isNotification ?? false,
   );
-  console.log('notification', notification);
-  console.log(' isNotification ', order);
+
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
@@ -85,16 +80,13 @@ const HomeScreen = () => {
   const [showTreatmentFinished, setShowTreatmentFinished] = useState(false);
   const [showStillAvailable, setShowStillAvailable] = useState(false);
   const locationData = getLocalData('LOCATION');
-
   const { showToast, renderToast } = useToast();
-  console.log('showStillAvailable', showStillAvailable);
-  console.log('showTreatmentFinished', showTreatmentFinished);
+
   const {
     acceptOrder,
     setAcceptOrder,
     OnPressTakeOrder,
     updateLocation,
-    providerLocation,
     navigation,
     TreatementEnded,
     providerDaySummary,
@@ -110,31 +102,18 @@ const HomeScreen = () => {
     getHeight(order?.extraData?.modalHeight ?? 360),
   );
   const { providerAvailabilityStatus } = AuthServicesProvider();
-  const { userId, token, providerProfile, setUserLocation } =
-    UseProviderUserContext();
-  console.log('order?.OrderReceive?.services', order?.OrderReceive?.services);
+  const { userId, token, providerProfile, setUserLocation, setProviderOrder } = UseProviderUserContext();
   const eventServices =
     order && order?.OrderReceive && order?.OrderReceive?.services
       ? JSON.parse(order?.OrderReceive?.services)
       : '';
-  const [services, setServices] = useState<any[]>([
-    {
-      name: eventServices?.service_name?.en ?? '',
-      description: { en: '', hi: '', he: '' },
-      price: eventServices?.services?.service_price ?? '',
-      id: eventServices?.services?.menu_id ?? -1,
-    },
-  ]);
+
 
   useEffect(() => {
     setUserLocation({ ...locationData });
     createNotificationListeners();
   }, []);
-  // const ser = JSON.stringify(order?.eventData?.services);
-  console.log('firstname++++++++++++++++', order);
-  // Sentry.captureMessage(
-  //   `Provider notification order data for:-${providerProfile?.firstName}---- ${order}`,
-  // );
+
 
   console.log('services', eventServices.services);
   const getImageUrl = (url: string) => setLicensePicture(url);
@@ -188,6 +167,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
+    let serviceTotalPrice: string = ''
     // onConfirmCancelOrder('yes');
     DeviceEventEmitter.addListener('ProviderOrderListener', (event) => {
       console.log('status of event', event?.data?.status);
@@ -195,40 +175,12 @@ const HomeScreen = () => {
         'providerNotification **** 0000 ***** 00000',
         JSON.stringify(event),
       );
-      // console.log('isArrived', isArrived);
-      // console.log('orderStatus', orderStatus);
-      // console.log('isSeeMore', isSeeMore);
-      // setServices(order?.eventData?.services ?? [])
-      // Sentry.captureMessage(
-      //   `Provider notification event first time for:-${providerProfile?.firstName}---- ${event}`,
-      // );
-      if (event.data?.status === 'Payment Done') {
-        // setIsCancelOrder(false);
-        // setAcceptOrder(false);
-        // setIsArrived(false);
-        // setIsAvailable(false);
-        setNotification(false);
-        // setIsSeeMore(false);
-        // setShowTreatmentFinished(false);
-        // modalHeight.value = withSpring(getHeight(360));
-        // setLocalData('USER', { isProviderAvailable: false });
 
-        // setLocalData('PROVIDERORDER', {
-        //   extraData: {
-        //     modalHeight: 360,
-        //     isCancelOrder: true,
-        //     isArrived: false,
-        //     orderAccepted: false,
-        //     isSeeMore: false,
-        //     isNotification: false,
-        //   },
-        //   orderStatus: '',
-        //   OrderReceive: {} as ProviderOrderReceive,
-        // });
+      if (event.data?.status === 'Payment Done') {
+        setNotification(false);
         showToast('Payment Done!', 'Your Payment is done ', '');
       }
       if (event.data?.status === 'Order created') {
-        setServices(event?.data?.services ?? []);
         setLocalData('PROVIDERORDER', {
           OrderReceive: {
             address: event.data.address,
@@ -245,34 +197,48 @@ const HomeScreen = () => {
           longitude: event.data.longitude,
           orderId: event.data.orderId,
         });
-
+        setProviderOrder({
+          OrderReceive: {
+            address: event.data.address,
+            firstname: event.data.firstname,
+            lastname: event.data.lastname,
+            phone_number: event.data.phone_numbe,
+            providerId: event.data.providerId,
+            distance: event.data.distance,
+            symptoms: event.data.symptoms,
+            services: event.data.services,
+            time: event.data.time,
+          },
+          latitude: event.data.latitude,
+          longitude: event.data.longitude,
+          orderId: event.data.orderId,
+        })
+        serviceTotalPrice = totalPrice(event.data.services)
         console.log('event?.data?.services', event?.data?.services);
         setNotification(true);
       }
       setOrderStatus(event.data?.status);
 
       setLocalData('PROVIDERORDER', {
-        // extraData: {
-        //   isNotification: true,
-        // },
         orderStatus: event.data.status,
       });
       if (event.data.status === 'Arrived' || orderStatus === 'Arrived Order') {
         console.log('event.data.status', event.data.status);
-        setTotalPricesOfServices(totalPrice());
+
+
+        setTotalPricesOfServices(serviceTotalPrice);
         setIsArrived(true);
         setLocalData('PROVIDERORDER', {
           orderStatus: event.data.status,
           extraData: {
             isArrived: true,
-            totalPrice: totalPrice(),
+            totalPrice: serviceTotalPrice
           },
         });
       }
     });
 
-    console.log('PROVIDERORDER', JSON.stringify(order));
-    console.log('order status **********', orderStatus, isArrived);
+
     if (acceptOrder && !isArrived) {
       console.log('accept', acceptOrder);
       updateLocation();
@@ -286,6 +252,7 @@ const HomeScreen = () => {
   useEffect(() => {
     getSummaryofDay();
   }, [orderStatus === 'Payment Done']);
+
   const onPressToggle = (available: boolean, isLogout?: boolean) => {
     console.log('available', available);
     //TODO: Uncomment this code to add license number
@@ -306,6 +273,8 @@ const HomeScreen = () => {
         `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
       );
       console.log('availabitity status', JSON.stringify(res), available);
+    }).catch(() => {
+      setIsAvailable(false);
     });
     if (!isLogout) {
       getSummaryofDay();
@@ -313,9 +282,6 @@ const HomeScreen = () => {
     // }
   };
 
-  const onLogoutButtonPress = () => {
-    onPressToggle(false, true);
-  };
 
   const onPressSeeMore = () => {
     if (isSeeMore) {
@@ -341,28 +307,11 @@ const HomeScreen = () => {
     }
   };
 
-  const totalPrice = (services?: any) => {
-    if (order && eventServices?.length > 0) {
-      const servicesArray = services ?? eventServices;
 
-      // Calculate the total service price
-      const totalServicePrice = servicesArray.reduce(
-        (total: number, service: { service_price: string }) => {
-          // Ensure that the service_price is a number before adding it to the total
-          const servicePrice = parseFloat(service.service_price) || 0;
-          return total + servicePrice;
-        },
-        0,
-      );
-      console.log('totalPrice', JSON.stringify(totalServicePrice));
-      return JSON.stringify(totalServicePrice);
-    } else {
-      return '';
-    }
-  };
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
   };
+
   const onPressTreatmentEnd = async (services?: any) => {
     if (!isArrived) {
       OnPressTakeOrder();
@@ -463,12 +412,11 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     eventServices?.length > 1
-                      ? `${
-                          index !== eventServices?.length - 1
-                            ? ` ${getTitle(service?.service_name, i18n)}, `
-                            : ` ${getTitle(service?.service_name, i18n)}`
-                        }`
-                      : getTitle(service?.service_name, i18n)
+                      ? `${index !== eventServices?.length - 1
+                        ? ` ${getTitle(service?.name, i18n)}, `
+                        : ` ${getTitle(service?.name, i18n)}`
+                      }`
+                      : getTitle(service?.name, i18n)
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
                 />
@@ -479,17 +427,14 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.OrderReceive?.firstname}  ${
-          order?.OrderReceive?.lastname
-        }    ${
-          order?.OrderReceive?.distance !== 'undefined'
+        title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+          }    ${order?.OrderReceive?.distance !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-        } km, ~${
-          order?.OrderReceive?.time !== 'undefined'
+          } km, ~${order?.OrderReceive?.time !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-        } min`}
+          } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -575,15 +520,14 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           eventServices?.length > 1
-                            ? `${
-                                index !== eventServices?.length - 1
-                                  ? ` ${getTitle(
-                                      service?.service_name,
-                                      i18n,
-                                    )}, `
-                                  : ` ${getTitle(service?.service_name, i18n)}`
-                              }`
-                            : getTitle(service?.service_name, i18n)
+                            ? `${index !== eventServices?.length - 1
+                              ? ` ${getTitle(
+                                service?.name,
+                                i18n,
+                              )}, `
+                              : ` ${getTitle(service?.name, i18n)}`
+                            }`
+                            : getTitle(service?.name, i18n)
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
                       />
@@ -594,17 +538,14 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-              title={`${order?.OrderReceive?.firstname}  ${
-                order?.OrderReceive?.lastname
-              }    ${
-                order?.OrderReceive?.distance !== 'undefined'
+              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+                }    ${order?.OrderReceive?.distance !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-              } km, ~${
-                order?.OrderReceive?.time !== 'undefined'
+                } km, ~${order?.OrderReceive?.time !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-              } min`}
+                } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -841,8 +782,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? t('order_is_cancelled')
                       : notification
-                      ? t('new_order')
-                      : t('no_orders_yet')
+                        ? t('new_order')
+                        : t('no_orders_yet')
                   }
                 />
               </>
@@ -855,7 +796,7 @@ const HomeScreen = () => {
             <>
               {DetailCard(
                 providerDaySummary?.providerDetails?.orderDetails?.total_clients.toString() ??
-                  '0',
+                '0',
                 t('clients_today'),
               )}
               {DetailCard(
@@ -901,7 +842,7 @@ const HomeScreen = () => {
               orderStatus: 'Arrived',
               extraData: {
                 isArrived: true,
-                totalPrice: totalPrice(),
+                totalPrice: totalPricesOfServices,
               },
             });
           }}
