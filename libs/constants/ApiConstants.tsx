@@ -45,8 +45,11 @@ export const PROVIDER_RATING = 'providers/createProviderRatings';
 export const TREATMENT_COMPLETED = 'providers/completedTreatment';
 export const GET_ORDER_HISTORY = 'providers/getOrderHistoryWithPagination';
 export const GET_ORDER_DETAILS = 'providers/getProviderOrderDetails';
+export const PROVIDER_LANGUAGE = 'providers/updateProviderLanguage'
 export const UPDATE_PROVIDER_PROFILE = 'providers/updateProviderProfile';
 export const GET_PROVIDER_PROFILE = 'providers/getProviderProfiles';
+export const GET_PROVIDER_REPORT = 'providers/getReports'
+export const GET_PROVIDER_Payment = 'providers/getPayment'
 export const REMOVE_SERVICES = 'providers/updateEliminateService';
 
 export const POST = 'POST';

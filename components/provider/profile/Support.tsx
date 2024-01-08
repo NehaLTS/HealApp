@@ -1,6 +1,7 @@
 import {
   I18nManager,
   Image,
+  Linking,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -13,18 +14,36 @@ import Text from 'components/common/Text';
 import { fontSize } from 'designToken/fontSizes';
 import { useNavigation } from '@react-navigation/native';
 import arrowBack from 'assets/icon/arrowBack.png';
+import { useTranslation } from 'react-i18next';
 
 const Support = () => {
   const navigation = useNavigation<any>();
+  const { t } = useTranslation()
 
   const headerLeft = () => (
-    <TouchableOpacity onPress={() => navigation.goBack()}>
+    <TouchableOpacity style={styles.backArrow}
+      onPress={() => navigation.goBack()}
+    >
       <Image source={arrowBack} style={styles.arrowBack} />
     </TouchableOpacity>
   );
   const headerTitle = () => (
-    <Text title={'Support'} style={{ fontSize: fontSize.heading }} />
+    <Text
+      style={styles.title}
+      title={t('support')}
+    />
   );
+  const handleChatWithUs = () => {
+    const whatsappLink = 'whatsapp://send?phone=123456789';
+
+    Linking.canOpenURL(whatsappLink).then((supported) => {
+      if (supported) {
+        return Linking.openURL(whatsappLink);
+      } else {
+        console.error("WhatsApp is not installed on your device");
+      }
+    }).catch((err) => console.error('An error occurred', err));
+  };
   return (
     <>
       <View style={styles.headerContainer}>
@@ -39,16 +58,16 @@ const Support = () => {
           />
         </View>
         <View style={styles.chatContainer}>
-          <View style={styles.innerContainer}>
+          <TouchableOpacity onPress={handleChatWithUs} style={styles.innerContainer}>
             <Text
-              title={'Chat with us'}
+              title={t('chat_with')}
               style={{ fontSize: getHeight(fontSize.textXl) }}
             />
             <Image
               source={require('assets/icon/whatsappIcon.png')}
               style={styles.iconImage}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </>
@@ -60,11 +79,13 @@ export default Support;
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     backgroundColor: colors.white,
+    padding: getWidth(dimens.marginM),
     zIndex: 1,
+    paddingVertical: getHeight(dimens.marginS),
     alignItems: 'center',
-    padding: getHeight(20),
+    gap: getWidth(dimens.marginM),
+    paddingTop: getHeight(dimens.marginM),
   },
   container: {
     backgroundColor: colors.white,
@@ -86,8 +107,8 @@ const styles = StyleSheet.create({
     borderWidth: getHeight(dimens.borderThin),
     borderRadius: getHeight(dimens.marginS),
     flexDirection: 'row',
-    minHeight: getHeight(dimens.imageS + 10),
-    borderColor: 'rgba(96, 214, 105, 1)',
+    minHeight: getHeight(dimens.imageS + 5),
+    borderColor: colors.green,
     backgroundColor: colors.white,
     marginTop: getHeight(dimens.imageXs),
   },
@@ -109,4 +130,13 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
     transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
+  title: {
+    fontSize: getHeight(fontSize.heading - dimens.borderBold),
+    textAlign: 'center',
+    width: '70%',
+  },
+  backArrow: {
+    paddingRight: getWidth(15),
+    paddingVertical: getHeight(5),
+  }
 });

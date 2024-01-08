@@ -20,9 +20,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const OrderHistory = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation()
   const { OnGetOrderHistory } = AuthServicesProvider();
   const { userId } = UseProviderUserContext();
   const [showDetail, setShowDetail] = React.useState<{
@@ -56,7 +58,7 @@ const OrderHistory = () => {
   const headerTitle = () => (
     <Text
       style={styles.title}
-      title={showDetail?.isVisible ? 'Order details' : 'Order history'}
+      title={showDetail?.isVisible ? t('order_details') : t('order_history')}
     />
   );
 

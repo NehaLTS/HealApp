@@ -25,21 +25,37 @@ const OrderDetail = ({
   const { i18n, t } = useTranslation();
   const { OnGetOrderDetails } = AuthServicesProvider();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [orderDetails, setOrderDetails] = React.useState<OrderDetails | null>(
-    null,
+  const [orderDetails, setOrderDetails] = React.useState<any>(
   );
   console.log('orderId123', orderId);
   const totalPrice: number | undefined = orderDetails?.modifiedServices.reduce(
-    (total, item) => total + parseFloat(item?.service_price || '0'),
+    (total: number, item: { service_price: any; }) => total + parseFloat(item?.service_price || '0'),
     0,
   );
 
-  const parsedData = () => {
-    if (orderDetails !== null) {
-      return JSON.parse(orderDetails?.symptoms);
-    }
-  };
+  // const parsedArray = JSON.parse(orderDetails?.symptoms);
 
+  // const stringWithoutBackslashes = JSON.stringify(parsedArray);
+  const parsedData = () => {
+    if (orderDetails !== null && typeof orderDetails.symptoms === 'string') {
+      const symptomsString = orderDetails.symptoms.replace(/\\/g, '');
+      try {
+        return JSON.parse(symptomsString);
+      } catch (error) {
+        console.error('Error parsing JSON:', error);
+        return null;
+      }
+    }
+    return null;
+  };
+  console.log("first", parsedData)
+  // const parsedData = () => {
+  //   if (orderDetails !== null) {
+  //     const symptomsString = orderDetails.symptoms.replace(/\\/g, '');
+  //     return JSON.parse(symptomsString);
+  //   }
+  // };
+  // console.log('symptoms', (stringWithoutBackslashes))
   const stars = [];
   for (let i = 1; i <= 5; i++) {
     stars.push(
@@ -76,29 +92,27 @@ const OrderDetail = ({
       <View style={styles.container}>
         <Text style={styles.clientName}>{patientName}</Text>
         <View style={styles.itemContainer}>
-          <Text style={styles.callReason}>Reason of call</Text>
+          <Text style={styles.callReason}>{t("reason_call")}</Text>
           <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
-            {orderDetails?.symptoms?.length &&
+            {orderDetails?.symptoms?.length > 0 &&
               parsedData()?.map?.((item: any, index: number) => (
                 <Text
                   key={index}
                   title={
-                    item?.name
-                    // parsedData()?.length > 1
-                    //   ? `${
-                    //       index !== orderDetails?.symptoms?.length - 1
-                    //         ? `${getTitle(item?.name, i18n)}, `
-                    //         : `${getTitle(item?.name, i18n)}`
-                    //     }`
-                    //   : getTitle(item?.name, i18n)
+                    parsedData()?.length > 1
+                      ? `${index !== parsedData()?.length - 1
+                        ? `${getTitle(item?.name, i18n)}, `
+                        : `${getTitle(item?.name, i18n)}`
+                      }`
+                      : getTitle(item?.name, i18n)
                   }
                 />
               ))}
           </View>
         </View>
         <View style={styles.itemContainer}>
-          <Text style={styles.callReason}>Services provided</Text>
-          {orderDetails?.modifiedServices?.map((item, index) => {
+          <Text style={styles.callReason}>{t("services_provided")}</Text>
+          {orderDetails?.modifiedServices?.map((item: any, index: any) => {
             return (
               <View key={index} style={styles.serviceContainer}>
                 <Text style={styles.serviceName}>
@@ -118,11 +132,11 @@ const OrderDetail = ({
           </View>
         </View>
         <View style={styles.itemContainer}>
-          <Text style={styles.callReason}>Address</Text>
+          <Text style={styles.callReason}>{t("address_")}</Text>
           <Text>{orderDetails?.address}</Text>
         </View>
         <View style={styles.itemContainer}>
-          <Text style={styles.callReason}>Rating given</Text>
+          <Text style={styles.callReason}>{t("rating")}</Text>
           <View style={styles.starContainer}>{stars}</View>
         </View>
       </View>

@@ -45,13 +45,14 @@ const Profile = () => {
   const { showToast, renderToast } = useToast();
 
   const headerLeft = () => (
-    <TouchableOpacity onPress={() => navigation.goBack()}>
+    <TouchableOpacity
+      style={styles.arrowBackButton}
+      onPress={() => navigation.goBack()}
+    >
       <Image source={arrowBack} style={styles.arrowBack} />
     </TouchableOpacity>
   );
-  const headerTitle = () => (
-    <Text title={'Personal profile'} style={{ fontSize: fontSize.heading }} />
-  );
+  const headerTitle = () => <Text style={styles.title} title={t('personal_profile')} />;
 
   // React.useMemo(async () => {
   //   const res = await GetProviderProfiles('40');
@@ -148,7 +149,6 @@ const Profile = () => {
       <View style={styles.headerContainer}>
         {headerLeft()}
         {headerTitle()}
-        {headerLeft()}
       </View>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -162,7 +162,7 @@ const Profile = () => {
               style={styles.avatarImage}
             />
           </TouchableOpacity>
-          <Text title={'Eynat Linn'} style={styles.text} />
+          <Text title={`${providerProfile?.firstName} ${providerProfile?.lastName}`} style={styles.text} />
         </View>
         <View style={styles.divider}>
           <Text title={'Services you provide'} style={styles.servicesText} />
@@ -221,11 +221,13 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     backgroundColor: colors.white,
+    padding: getWidth(dimens.marginM),
     zIndex: 1,
+    paddingVertical: getHeight(dimens.marginS),
     alignItems: 'center',
-    padding: getHeight(20),
+    gap: getWidth(dimens.marginM),
+    paddingTop: getHeight(dimens.marginM),
   },
   container: {
     backgroundColor: colors.white,
@@ -294,5 +296,14 @@ const styles = StyleSheet.create({
   },
   logOutText: {
     fontSize: getHeight(fontSize.textL),
+  },
+  title: {
+    fontSize: getHeight(fontSize.heading - dimens.borderBold),
+    textAlign: 'center',
+    width: '70%',
+  },
+  arrowBackButton: {
+    paddingRight: getWidth(dimens.sideMargin),
+    paddingVertical: getHeight(dimens.marginS / dimens.borderBold),
   },
 });

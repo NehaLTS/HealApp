@@ -8,7 +8,9 @@ import {
   GET,
   GET_ORDER_DETAILS,
   GET_ORDER_HISTORY,
+  GET_PROVIDER_Payment,
   GET_PROVIDER_PROFILE,
+  GET_PROVIDER_REPORT,
   GET_PROVIDER_SERVICE,
   GET_PROVIDER_TYPES,
   GET_USER_SERVICES,
@@ -17,6 +19,7 @@ import {
   PATCH,
   POST,
   PROVIDER_AVAILABILITY,
+  PROVIDER_LANGUAGE,
   PROVIDER_SIGNIN,
   PROVIDER_USER_DETAILS,
   REMOVE_SERVICES,
@@ -32,6 +35,7 @@ import {
   ProviderHomeDetails,
   TreatementEnded,
   UpdateProfile,
+
 } from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
@@ -266,7 +270,6 @@ export const AuthServicesProvider = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
-
   const OnGetOrderDetails = (orderId: string): Promise<any> =>
     sendRequest(GET_ORDER_DETAILS, {
       method: POST,
@@ -276,7 +279,17 @@ export const AuthServicesProvider = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
-
+  const onGetProviderLanguage = (provider_id: string, language: string): Promise<any> =>
+    sendRequest(PROVIDER_LANGUAGE, {
+      method: PATCH,
+      body: {
+        provider_id: provider_id, language: language
+      } as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
   const UpdateProviderProfile = (body: UpdateProfile): Promise<any> =>
     sendRequestWitoutToken(UPDATE_PROVIDER_PROFILE, {
       method: PATCH,
@@ -298,6 +311,31 @@ export const AuthServicesProvider = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
+  const GetProviderReport = (providerId: string, created_date_time: string, filter: string): Promise<any> =>
+    sendRequest(GET_PROVIDER_REPORT, {
+      method: POST,
+      body: {
+        provider_id: providerId,
+        created_date_time: created_date_time,
+        filter: filter
+      } as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
+  const GetProviderPayment = (providerId: string, created_date_time: string,): Promise<any> =>
+    sendRequest(GET_PROVIDER_Payment, {
+      method: POST,
+      body: {
+        provider_id: providerId,
+        created_date_time: created_date_time,
+      } as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
 
   const removeService = (body: { order_id: string, services: string }): Promise<any> =>
     sendRequest(REMOVE_SERVICES, {
@@ -308,6 +346,8 @@ export const AuthServicesProvider = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
+
+
 
   return {
     OnProviderSignIn,
@@ -327,8 +367,11 @@ export const AuthServicesProvider = () => {
     getProviderDaySummary,
     OnGetOrderHistory,
     OnGetOrderDetails,
-    UpdateProviderProfile,
+    onGetProviderLanguage,
     GetProviderProfiles,
+    UpdateProviderProfile,
+    GetProviderReport,
+    GetProviderPayment,
     removeService
   };
 };

@@ -13,6 +13,7 @@ import language from 'assets/icon/language.png';
 import Text from './Text';
 import TextButton from './TextButton';
 import { fontSize } from 'designToken/fontSizes';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar = ({
   isVisible,
@@ -27,13 +28,15 @@ const Sidebar = ({
 }) => {
   const icons = [profile, history, report, money, support, language];
   console.log('isVisible111', isVisible);
+  const { t } = useTranslation()
+
   const titles = [
-    'Personal profile',
-    'Order history',
-    'Reports',
-    'Payments',
-    'Support',
-    'Languages',
+    { id: 'Profile', title: t('personal_profile') },
+    { id: 'OrderHistory', title: t('order_history') },
+    { id: 'Reports', title: t('reports') },
+    { id: 'Payments', title: t('payments') },
+    { id: 'Support', title: t('support') },
+    { id: 'Language', title: t('languages') },
   ];
   return (
     <RNModal
@@ -58,12 +61,12 @@ const Sidebar = ({
                 fontSize={getHeight(fontSize.textL)}
                 key={index}
                 style={styles.title}
-                title={item}
+                title={item.title}
                 isRightAlign
                 containerStyle={{
                   alignSelf: 'flex-end',
                 }}
-                onPress={() => onPress(item)}
+                onPress={() => onPress(item.id)}
               />
             );
           })}
@@ -87,6 +90,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 12, // For Android
+
   },
   container: {
     gap: getHeight(dimens.marginL),

@@ -10,10 +10,10 @@ import React from 'react';
 const ProviderProfile = () => {
   const route = useRoute<any>();
   const screen = route?.params?.screen ?? '';
-
+  console.log('screen', screen)
   const renderScreen = () => {
     switch (screen) {
-      case 'Order history':
+      case 'OrderHistory':
         return <OrderHistory />;
       case 'Reports':
         return <Reports />;
@@ -21,9 +21,9 @@ const ProviderProfile = () => {
         return <Payments />;
       case 'Support':
         return <Support />;
-      case 'Personal profile':
+      case 'Profile':
         return <Profile />;
-      case 'Languages':
+      case 'Language':
         return <Language />;
     }
   };
