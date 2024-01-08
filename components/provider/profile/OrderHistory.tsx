@@ -44,6 +44,7 @@ const OrderHistory = () => {
   const [endIndex, setEndIndex] = React.useState(0);
   const [allDataLoaded, setAllDataLoaded] = React.useState(false);
 
+  console.log('index+++++', startIndex, endIndex);
   const headerLeft = () => (
     <TouchableOpacity
       style={{
@@ -98,9 +99,15 @@ const OrderHistory = () => {
 
   const getOrderHistory = async (isLoading: boolean) => {
     try {
-      setIsLoading(isLoading);
       if (allDataLoaded === false) {
-        const res = await OnGetOrderHistory(Number(50), startIndex, endIndex);
+        setIsLoading(isLoading);
+        const res = await OnGetOrderHistory(
+          Number(userId),
+          startIndex,
+          endIndex,
+        );
+        console.log('res history', res);
+        console.log('length', res?.length);
         if (!res?.message) {
           setOrderHistory([...orderHistory, ...res]);
           setStartIndex(endIndex + 1);
@@ -121,20 +128,17 @@ const OrderHistory = () => {
 
   return (
     <View style={styles.mainContainer}>
+      {isLoading && <Loader />}
       <View style={styles.headerContainer}>
         {headerLeft()}
         {headerTitle()}
       </View>
       {showDetail?.isVisible === false ? (
-        orderHistory?.length === 0 ? (
-          isLoading ? (
-            <Loader />
-          ) : (
-            <Text
-              style={styles.noHistoryText}
-              title={'No order history found.'}
-            />
-          )
+        orderHistory?.length === 0 && !isLoading ? (
+          <Text
+            style={styles.noHistoryText}
+            title={'No order history found.'}
+          />
         ) : (
           <FlatList
             keyboardShouldPersistTaps="always"
@@ -144,7 +148,7 @@ const OrderHistory = () => {
             contentContainerStyle={styles.containerStyle}
             keyExtractor={(_, index) => index.toString()}
             onEndReached={() => getOrderHistory(false)}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={2}
             ListFooterComponent={
               !isLoading && !allDataLoaded ? (
                 <View style={styles.loaderContainer}>

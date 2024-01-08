@@ -41,11 +41,11 @@ const Sidebar = ({
   return (
     <RNModal
       isVisible={isVisible}
-      backdropOpacity={0}
+      backdropOpacity={0.1}
       animationIn={I18nManager.isRTL ? 'slideInLeft' : 'slideInRight'}
       animationOut={I18nManager.isRTL ? 'slideOutLeft' : 'slideOutRight'}
-      animationInTiming={300}
-      animationOutTiming={300}
+      animationInTiming={400}
+      animationOutTiming={400}
       style={{
         justifyContent: 'flex-end',
         alignItems: 'flex-end',

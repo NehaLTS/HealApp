@@ -6,13 +6,14 @@ import { UseUserContextProvider } from 'contexts/useUserContextProvider';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontSize } from 'designToken/fontSizes';
-import { getHeight, getWidth } from 'libs/StyleHelper';
+import { getHeight } from 'libs/StyleHelper';
 import React, { useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
 import ProviderConfirmationController from '../controllers/ProviderConfirmationController';
+import RNModal from 'components/common/Modal';
 
-const ProviderConfirmation = () => {
+const ProviderConfirmation = ({ isVisible }: { isVisible: boolean }) => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { userDataProvider } = UseUserContextProvider();
@@ -24,35 +25,32 @@ const ProviderConfirmation = () => {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={
-            userDataProvider.profile_picture?.length
-              ? { uri: userDataProvider.profile_picture }
-              : require('../../../../assets/icon/provider.png')
-          }
-          style={styles.finalIcon}
-        />
+    <RNModal
+      isVisible={isVisible}
+      backdropOpacity={0.5}
+      animationIn={'zoomInUp'}
+      animationOut={'zoomOut'}
+      animationInTiming={400}
+      animationOutTiming={400}
+    >
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
+          <Image
+            source={
+              userDataProvider.profile_picture?.length
+                ? { uri: userDataProvider.profile_picture }
+                : require('../../../../assets/icon/provider.png')
+            }
+            style={styles.finalIcon}
+          />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>{t('waiting_text')}</Text>
+          <Text style={styles.queryText}>{t('ask_question_text')}</Text>
+          <Text style={styles.number}>+972-555-00-11</Text>
+        </View>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{t('waiting_text')}</Text>
-        <Text style={styles.queryText}>{t('ask_question_text')}</Text>
-        <Text style={styles.number}>+972-555-00-11</Text>
-      </View>
-      <Button
-        title={'Next'}
-        isPrimary
-        isSmall
-        width={getWidth(85)}
-        style={{
-          alignSelf: 'center',
-        }}
-        onPress={onPressNext}
-        fontSized={getWidth(15)}
-        height={getHeight(34)}
-      />
-    </View>
+    </RNModal>
   );
 };
 
@@ -60,9 +58,10 @@ export default ProviderConfirmation;
 
 const styles = StyleSheet.create({
   textContainer: {
-    padding: getHeight(dimens.marginM + dimens.borderBold),
     marginHorizontal: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.marginL + dimens.marginM),
+    backgroundColor: 'background: rgba(249, 247, 247, 1)',
+    paddingVertical: getHeight(dimens.paddingL),
   },
   text: {
     textAlign: 'center',
@@ -75,8 +74,8 @@ const styles = StyleSheet.create({
   },
   finalIcon: {
     height: getHeight(dimens.imageM),
-    width: getWidth(dimens.imageM - 12),
-    borderRadius: getWidth(dimens.imageM),
+    width: getHeight(dimens.imageM),
+    borderRadius: getHeight(dimens.imageM),
     resizeMode: 'contain',
   },
   queryText: {
@@ -85,11 +84,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   container: {
-    flex: 1,
     backgroundColor: colors.white,
+    alignSelf: 'center',
+    borderRadius: getHeight(dimens.marginS),
+    paddingVertical: getHeight(dimens.imageS),
+    paddingHorizontal: getHeight(dimens.marginL),
+    width: '80%',
   },
   imageContainer: {
     alignItems: 'center',
-    paddingTop: getHeight(dimens.marginL + dimens.marginM),
   },
 });

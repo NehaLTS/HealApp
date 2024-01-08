@@ -41,7 +41,7 @@ const ProviderStackNavigator = () => {
           component={lazy(() => import('../screens/provider/HomeScreen'))}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name={NavigationRoutes.ProviderConfirmation}
           component={lazy(
             () =>
@@ -49,7 +49,7 @@ const ProviderStackNavigator = () => {
                 '../components/provider/registration/views/ProviderConfirmation'
               ),
           )}
-        />
+        /> */}
         <Stack.Screen
           options={{ headerShown: false }}
           name={NavigationRoutes.ProviderProfile}

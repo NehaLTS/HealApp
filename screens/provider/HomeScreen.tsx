@@ -16,10 +16,7 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import {
-  getLocalData,
-  setLocalData
-} from 'libs/datastorage/useLocalStorage';
+import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
 import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,23 +29,20 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import Animated, {
-  FadeInLeft,
-  FadeInUp
-} from 'react-native-reanimated';
+import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
+import ProviderConfirmation from 'components/provider/registration/views/ProviderConfirmation';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
   const order = getLocalData('PROVIDERORDER');
 
   const { t, i18n } = useTranslation();
-  console.log('order...', order)
+  console.log('order...', order);
   const [isShowModal, setIsShowModal] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [showTreatmentFinished, setShowTreatmentFinished] = useState(false);
   const [showStillAvailable, setShowStillAvailable] = useState(false);
   const locationData = getLocalData('LOCATION');
   const { renderToast } = useToast();
@@ -81,7 +75,10 @@ const HomeScreen = () => {
     isCancelOrder,
     isAddDocument,
     isArrived,
-    setIsArrived
+    setIsArrived,
+    isLoading,
+    showTreatmentFinished,
+    setShowTreatmentFinished,
   } = HomeScreenControlller();
 
   const { setUserLocation } = UseProviderUserContext();
@@ -90,13 +87,10 @@ const HomeScreen = () => {
       ? JSON.parse(order?.OrderReceive?.services)
       : '';
 
-
   useEffect(() => {
     setUserLocation({ ...locationData });
     createNotificationListeners();
   }, []);
-
-
 
   const orderDetailView = () => (
     <>
@@ -142,10 +136,11 @@ const HomeScreen = () => {
                   style={styles.details}
                   title={
                     eventServices?.length > 1
-                      ? `${index !== eventServices?.length - 1
-                        ? ` ${getTitle(service?.name, i18n)}, `
-                        : ` ${getTitle(service?.name, i18n)}`
-                      }`
+                      ? `${
+                          index !== eventServices?.length - 1
+                            ? ` ${getTitle(service?.name, i18n)}, `
+                            : ` ${getTitle(service?.name, i18n)}`
+                        }`
                       : getTitle(service?.name, i18n)
                   }
                   entering={FadeInLeft.duration(400).delay(700)}
@@ -157,14 +152,17 @@ const HomeScreen = () => {
       )}
       <AnimatedText
         style={styles.otherDetails}
-        title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-          }    ${order?.OrderReceive?.distance !== 'undefined'
+        title={`${order?.OrderReceive?.firstname}  ${
+          order?.OrderReceive?.lastname
+        }    ${
+          order?.OrderReceive?.distance !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-          } km, ~${order?.OrderReceive?.time !== 'undefined'
+        } km, ~${
+          order?.OrderReceive?.time !== 'undefined'
             ? order?.OrderReceive?.time
             : 0
-          } min`}
+        } min`}
         entering={FadeInLeft.duration(400).delay(600)}
       />
       <AnimatedText
@@ -250,13 +248,11 @@ const HomeScreen = () => {
                         style={styles.details}
                         title={
                           eventServices?.length > 1
-                            ? `${index !== eventServices?.length - 1
-                              ? ` ${getTitle(
-                                service?.name,
-                                i18n,
-                              )}, `
-                              : ` ${getTitle(service?.name, i18n)}`
-                            }`
+                            ? `${
+                                index !== eventServices?.length - 1
+                                  ? ` ${getTitle(service?.name, i18n)}, `
+                                  : ` ${getTitle(service?.name, i18n)}`
+                              }`
                             : getTitle(service?.name, i18n)
                         }
                         entering={FadeInLeft.duration(400).delay(700)}
@@ -268,14 +264,17 @@ const HomeScreen = () => {
             )}
             <AnimatedText
               style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
-              title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-                }    ${order?.OrderReceive?.distance !== 'undefined'
+              title={`${order?.OrderReceive?.firstname}  ${
+                order?.OrderReceive?.lastname
+              }    ${
+                order?.OrderReceive?.distance !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-                } km, ~${order?.OrderReceive?.time !== 'undefined'
+              } km, ~${
+                order?.OrderReceive?.time !== 'undefined'
                   ? order?.OrderReceive?.time
                   : 0
-                } min`}
+              } min`}
               entering={FadeInLeft.duration(400).delay(700)}
             />
           </>
@@ -476,6 +475,7 @@ const HomeScreen = () => {
         isProviderProfile
         onPress={onPressProfileTab}
       />
+      <ProviderConfirmation isVisible={false} />
       <View style={styles.header}>
         {headerLeft()}
         {headerRight()}
@@ -485,7 +485,6 @@ const HomeScreen = () => {
         style={styles.container}
         onPress={outsideClick}
       >
-        {/* <View> */}
         <View style={styles.headerContainer}>
           <FadeInText title={t('not_available')} isActive={!isAvailable} />
           <ToggleButton
@@ -501,7 +500,6 @@ const HomeScreen = () => {
             title={isAvailable ? t('now_you_available') : t('switch_toggle')}
           />
         )}
-
         <View style={styles.cardContainer}>
           {isAvailable ? (
             !showTreatmentFinished && !showStillAvailable ? (
@@ -512,8 +510,8 @@ const HomeScreen = () => {
                     isCancelOrder
                       ? t('order_is_cancelled')
                       : notification
-                        ? t('new_order')
-                        : t('no_orders_yet')
+                      ? t('new_order')
+                      : t('no_orders_yet')
                   }
                 />
               </>
@@ -526,7 +524,7 @@ const HomeScreen = () => {
             <>
               {DetailCard(
                 providerDaySummary?.providerDetails?.orderDetails?.total_clients.toString() ??
-                '0',
+                  '0',
                 t('clients_today'),
               )}
               {DetailCard(
@@ -559,13 +557,14 @@ const HomeScreen = () => {
           totalPricesOfServices={totalPricesOfServices}
           onPressTreatmentEnd={onPressTreatmentEnd}
           addAnotherService={getProviderServices}
+          isLoading={isLoading}
         />
-
         <TakeOrderView
           order={order}
           onPressSeeMore={onPressSeeMore}
           isModalVisible={acceptOrder}
           onPressCancelOrder={onPressCancelOrder}
+          isLoading={isLoading}
           onPressUpdateArrive={() => {
             updateLocation(true);
             setIsArrived(true);

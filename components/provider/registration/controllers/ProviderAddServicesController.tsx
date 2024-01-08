@@ -116,7 +116,7 @@ const ProviderAddServicesController = () => {
   const onApprove = () => {
     navigation.reset({
       index: 0,
-      routes: [{ name: NavigationRoutes.ProviderConfirmation }],
+      routes: [{ name: NavigationRoutes.ProviderHome }],
     });
   };
 

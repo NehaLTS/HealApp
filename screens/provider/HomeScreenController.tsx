@@ -54,18 +54,22 @@ const HomeScreenControlller = () => {
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
   const [showSidebar, setShowSidebar] = useState(false);
-  const [isArrived, setIsArrived] = useState(order?.extraData?.isArrived ?? false);
+  const [isArrived, setIsArrived] = useState(
+    order?.extraData?.isArrived ?? false,
+  );
   const [notification, setNotification] = useState(
     order?.extraData?.isNotification ?? false,
   );
 
   const [isVisibleLicense, setIsVisibleLicense] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isAddDocument, setIsAddDocument] = useState(false);
   const [licensePicture, setLicensePicture] = useState('');
   const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
   const [isShowModal, setIsShowModal] = useState(false);
-  const [totalPricesOfServices, setTotalPricesOfServices] = useState<string>('');
+  const [totalPricesOfServices, setTotalPricesOfServices] =
+    useState<string>('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [showTreatmentFinished, setShowTreatmentFinished] = useState(false);
   const [isSeeMore, setIsSeeMore] = useState(
@@ -76,7 +80,7 @@ const HomeScreenControlller = () => {
   const modalHeight = useSharedValue(
     getHeight(order?.extraData?.modalHeight ?? 360),
   );
-  console.log(notification, "notification Home Screen")
+  console.log(notification, 'notification Home Screen');
 
   React.useMemo(async () => {
     const res = await GetProviderProfiles(userId);
@@ -143,14 +147,11 @@ const HomeScreenControlller = () => {
     }
   };
 
-  useEffect(() => {
-    getSummaryofDay();
-  }, []);
-
   const getSummaryofDay = async () => {
     let currentdate = new Date();
-    let dateMDY = `${currentdate.getFullYear()}-${currentdate.getMonth() + 1
-      }-${currentdate.getDate()}`;
+    let dateMDY = `${currentdate.getFullYear()}-${
+      currentdate.getMonth() + 1
+    }-${currentdate.getDate()}`;
 
     let daySummary = await getProviderDaySummary(
       {
@@ -164,6 +165,10 @@ const HomeScreenControlller = () => {
     setProviderDaySummary(daySummary);
   };
 
+  useEffect(() => {
+    getSummaryofDay();
+  }, []);
+
   const getProviderServices = async () => {
     let response = await onGetProviderService(
       {
@@ -176,13 +181,16 @@ const HomeScreenControlller = () => {
     if (response && response.services) {
       setServicesFromAPi(response.services);
       Sentry.captureMessage(
-        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${providerProfile?.firstName ?? ''
+        `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
+          providerProfile?.firstName ?? ''
         }---- ${response.services}`,
       );
     }
   };
 
   const manuallUpadteLocaion = () => {
+    setIsLoading(true);
+
     Geolocation.getCurrentPosition(
       (position) => {
         // Alert.alert('WatchPostion');
@@ -205,14 +213,17 @@ const HomeScreenControlller = () => {
           latitude: position.coords.latitude.toString(),
           longitude: position.coords.longitude.toString(),
         }).then((res) => {
+          if (res.msg) {
+            setIsLoading(false);
+          }
           Sentry.captureMessage(
             `Provider notification event 'update location api response' for:-${providerProfile?.firstName}---- ${res}`,
           );
           console.log('gurepeet', res);
-
         });
       },
       (error) => {
+        setIsLoading(false);
         Sentry.captureMessage(
           `Provider notification event 'update location api error' for:-${providerProfile?.firstName}---- ${error.message}`,
         );
@@ -226,13 +237,11 @@ const HomeScreenControlller = () => {
         forceLocationManager: false, // Use the LocationManager on Android, even if Google Play Services are available
       },
     );
-  }
+  };
 
   const updateArrivedStatusDynamical = () => {
-
     Geolocation.watchPosition(
       (position) => {
-
         Sentry.captureMessage(
           `Provider notification event watchPosition check for:-${providerProfile?.firstName}---- `,
         );
@@ -242,12 +251,9 @@ const HomeScreenControlller = () => {
           order_id: order?.orderId ?? '1',
           latitude: position.coords.latitude.toString(),
           longitude: position.coords.longitude.toString(),
-        }).then((res) => {
-
-        });
+        }).then((res) => {});
       },
       (error) => {
-
         console.log('Error getting location: ' + error.message);
       },
       {
@@ -261,17 +267,16 @@ const HomeScreenControlller = () => {
         showsBackgroundLocationIndicator: true,
       },
     );
-  }
+  };
   const updateLocation = (mannualUpdate?: boolean) => {
     if (mannualUpdate) {
-      manuallUpadteLocaion()
+      manuallUpadteLocaion();
     } else {
-      updateArrivedStatusDynamical
+      updateArrivedStatusDynamical;
     }
   };
 
   const OnPressTakeOrder = () => {
-
     setAcceptOrder(true);
     OrderRequst({
       orderStatus: 'accept',
@@ -283,7 +288,6 @@ const HomeScreenControlller = () => {
       .then((res) => {
         console.log('ordereAcceptedRes', res);
         if (!res?.message) {
-
           setAcceptOrder(true);
           setLocalData('PROVIDERORDER', {
             extraData: {
@@ -292,14 +296,13 @@ const HomeScreenControlller = () => {
               orderAccepted: true,
             },
           });
+        } else {
+          Alert.alert('Message:- ', res?.message);
         }
-        else { Alert.alert("Message:- ", res?.message) }
       })
       .catch((error) => {
-
         Alert.alert('Some error is occur', error);
       });
-
   };
 
   const onPressProfileTab = (title: string) => {
@@ -309,8 +312,6 @@ const HomeScreenControlller = () => {
       screen: title,
     });
   };
-
-
 
   const getImageUrl = (url: string) => setLicensePicture(url);
 
@@ -364,7 +365,7 @@ const HomeScreenControlller = () => {
   };
 
   useEffect(() => {
-    let serviceTotalPrice: string = ''
+    let serviceTotalPrice: string = '';
     // onConfirmCancelOrder('yes');
     DeviceEventEmitter.addListener('ProviderOrderListener', (event) => {
       console.log('status of event', event?.data?.status);
@@ -409,9 +410,14 @@ const HomeScreenControlller = () => {
           latitude: event.data.latitude,
           longitude: event.data.longitude,
           orderId: event.data.orderId,
-        })
-        serviceTotalPrice = totalPrice(JSON.parse(event?.data?.services))
-        console.log('event?.data?.services', event?.data?.services, JSON.parse(event?.data?.services), serviceTotalPrice);
+        });
+        serviceTotalPrice = totalPrice(JSON.parse(event?.data?.services));
+        console.log(
+          'event?.data?.services',
+          event?.data?.services,
+          JSON.parse(event?.data?.services),
+          serviceTotalPrice,
+        );
         setNotification(true);
       }
       setOrderStatus(event.data?.status);
@@ -422,19 +428,17 @@ const HomeScreenControlller = () => {
       if (event.data.status === 'Arrived' || orderStatus === 'Arrived Order') {
         console.log('event.data.status', event.data.status);
 
-
         setTotalPricesOfServices(serviceTotalPrice);
         setIsArrived(true);
         setLocalData('PROVIDERORDER', {
           orderStatus: event.data.status,
           extraData: {
             isArrived: true,
-            totalPrice: serviceTotalPrice
+            totalPrice: serviceTotalPrice,
           },
         });
       }
     });
-
 
     if (acceptOrder && !isArrived) {
       console.log('accept', acceptOrder);
@@ -447,7 +451,6 @@ const HomeScreenControlller = () => {
   }, [acceptOrder || isArrived || orderStatus]);
 
   useEffect(() => {
-
     getSummaryofDay();
   }, [orderStatus === 'Payment Done']);
   // .toLocaleString()
@@ -467,20 +470,21 @@ const HomeScreenControlller = () => {
     providerAvailabilityStatus(
       { provider_id: userId, availability: availability.toString() },
       token,
-    ).then((res) => {
-      Sentry.captureMessage(
-        `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
-      );
-      console.log('availabitity status', JSON.stringify(res), available);
-    }).catch(() => {
-      setIsAvailable(false);
-    });
+    )
+      .then((res) => {
+        Sentry.captureMessage(
+          `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
+        );
+        console.log('availabitity status', JSON.stringify(res), available);
+      })
+      .catch(() => {
+        setIsAvailable(false);
+      });
     if (!isLogout) {
       getSummaryofDay();
     }
     // }
   };
-
 
   const onPressSeeMore = () => {
     if (isSeeMore) {
@@ -506,23 +510,22 @@ const HomeScreenControlller = () => {
     }
   };
 
-
   const onPressCancelOrder = () => {
     setIsCancelOrder(true);
   };
-
 
   const orderAccept = () => {
     OnPressTakeOrder();
     modalHeight.value = withSpring(getHeight(652));
     setIsSeeMore(true);
-  }
+  };
 
   const onPressTreatmentEnd = async (services?: any) => {
-    console.log("treatemntEndServices", services)
+    console.log('treatemntEndServices', services);
     const shotAmounts = parseFloat(totalPrice(services)) - 500;
     const amount = paymentsendToApi(500, shotAmounts);
     console.log(amount, 'amount at treatment end');
+    setIsLoading(true);
     await TreatementEnded({
       order_id: order?.orderId ?? '1',
       total_order_price: amount.totalAmount.toString(),
@@ -551,11 +554,15 @@ const HomeScreenControlller = () => {
             orderStatus: '',
             OrderReceive: {} as ProviderOrderReceive,
           });
-
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          showToast('Failed!', 'Treatment end is failed.', 'error');
         }
       })
-      .catch((err) => console.error('treatement ended error', err));
-
+      .catch((err) => {
+        console.error('treatement ended error', err), setIsLoading(false);
+      });
   };
 
   return {
@@ -591,7 +598,9 @@ const HomeScreenControlller = () => {
     isCancelOrder,
     isAddDocument,
     isArrived,
-    setIsArrived
+    setIsArrived,
+    isLoading,
+    setIsLoading,
   };
 };
 

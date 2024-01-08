@@ -9,7 +9,15 @@ import { fontSize } from 'designToken/fontSizes';
 import { t } from 'i18next';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useEffect } from 'react';
-import { Alert, Image, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
 import { ProviderServices } from 'libs/types/UserType';
 import { getTitle } from 'libs/utility/Utils';
@@ -18,6 +26,7 @@ import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { totalPrice } from 'libs/OrderPayment';
+import Loader from 'components/common/Loader';
 
 const ArrivedView = ({
   order,
@@ -25,79 +34,101 @@ const ArrivedView = ({
   totalPricesOfServices,
   onPressTreatmentEnd,
   servicesFromApi,
-  addAnotherService
+  addAnotherService,
+  isLoading,
 }: {
   order: any;
   isModalVisible: boolean;
   totalPricesOfServices: string;
   onPressTreatmentEnd: (services?: any) => void;
-  servicesFromApi: ProviderServices[]
-  addAnotherService: () => void
+  servicesFromApi: ProviderServices[];
+  addAnotherService: () => void;
+  isLoading: boolean;
 }) => {
-
   const [activeCheckbox, setActiveCheckbox] = React.useState<boolean[]>([]);
 
   const [isVisible, setIsVisible] = React.useState(false);
   const { i18n } = useTranslation();
-  const [orderTotalPrice, setOrderTotalPrice] = React.useState(totalPricesOfServices)
-  const [newServices, setNewServices] = React.useState()
-  const { removeService, addServiceWhenTreatmentEnd } = AuthServicesProvider()
+  const [orderTotalPrice, setOrderTotalPrice] = React.useState(
+    totalPricesOfServices,
+  );
+  const [newServices, setNewServices] = React.useState();
+  const { removeService, addServiceWhenTreatmentEnd } = AuthServicesProvider();
   // Function to initialize checkboxes and selected items when order details are available
-  const [updatedServices, setUpdatedServices] = React.useState<any>(order &&
-    order?.OrderReceive &&
-    order?.OrderReceive?.services?.length &&
-    JSON.parse?.(order?.OrderReceive?.services))
-  console.log("updatedServices trea", updatedServices, activeCheckbox, "totalPricesOfServices", totalPricesOfServices)
+  const [updatedServices, setUpdatedServices] = React.useState<any>(
+    order &&
+      order?.OrderReceive &&
+      order?.OrderReceive?.services?.length &&
+      JSON.parse?.(order?.OrderReceive?.services),
+  );
+  console.log(
+    'updatedServices trea',
+    updatedServices,
+    activeCheckbox,
+    'totalPricesOfServices',
+    totalPricesOfServices,
+  );
   useEffect(() => {
-    console.log("hiii")
+    console.log('hiii');
 
-    if (order && order.OrderReceive && order.OrderReceive?.services?.length > 0) {
-      setUpdatedServices(JSON.parse?.(order?.OrderReceive?.services))
-      setOrderTotalPrice(totalPrice(JSON.parse?.(order?.OrderReceive?.services)))
-      const initialCheckboxes = Array(order.OrderReceive.services.length).fill(true);
+    if (
+      order &&
+      order.OrderReceive &&
+      order.OrderReceive?.services?.length > 0
+    ) {
+      setUpdatedServices(JSON.parse?.(order?.OrderReceive?.services));
+      setOrderTotalPrice(
+        totalPrice(JSON.parse?.(order?.OrderReceive?.services)),
+      );
+      const initialCheckboxes = Array(order.OrderReceive.services.length).fill(
+        true,
+      );
       setActiveCheckbox(initialCheckboxes);
     }
   }, [order && order.OrderReceive]);
 
   // Function to handle checkbox press
   const onPressCheckBox = (item: any, index: number) => {
-
-    console.log('order.OrderReceive?.services', updatedServices, item.menu_id)
+    console.log('order.OrderReceive?.services', updatedServices, item.menu_id);
     const updatedCheckboxes = [...activeCheckbox];
     updatedCheckboxes[index] = !updatedCheckboxes[index];
     setActiveCheckbox(updatedCheckboxes);
 
-    let newArray: any[] = []
+    let newArray: any[] = [];
     if (
       updatedServices?.find(
-        (selectedItem) => selectedItem.menu_id === item.menu_id,
+        (selectedItem: { menu_id: any }) =>
+          selectedItem.menu_id === item.menu_id,
       )
     ) {
       newArray = updatedServices.filter(
-        (selectedItem) => selectedItem.menu_id !== item.menu_id,
+        (selectedItem: { menu_id: any }) =>
+          selectedItem.menu_id !== item.menu_id,
       );
-      removeService({ order_id: order.orderId, services: item.menu_id }).then((res) => {
-        console.log(res, "removeServices")
-
-      })
+      removeService({ order_id: order.orderId, services: item.menu_id }).then(
+        (res) => {
+          console.log(res, 'removeServices');
+        },
+      );
     } else {
       newArray = [...updatedServices, item];
-      addServiceWhenTreatmentEnd({ order_id: order.orderId, services: item.menu_id }).then((res) => {
-        console.log("AddServices", res)
-      })
+      addServiceWhenTreatmentEnd({
+        order_id: order.orderId,
+        services: item.menu_id,
+      }).then((res) => {
+        console.log('AddServices', res);
+      });
     }
 
-    setUpdatedServices(newArray)
-    setOrderTotalPrice(totalPrice(newArray))
-    console.log(newArray, "typeOf orderService change, newArray")
+    setUpdatedServices(newArray);
+    setOrderTotalPrice(totalPrice(newArray));
+    console.log(newArray, 'typeOf orderService change, newArray');
   };
   const onPressAddService = () => {
-    setIsVisible(true)
+    setIsVisible(true);
 
-    addAnotherService()
-  }
-
-
+    addAnotherService();
+  };
 
   const getServicesView = () => (
     <>
@@ -116,7 +147,10 @@ const ArrivedView = ({
                 />
                 <View style={styles.serviceRight}>
                   <Text style={styles.serviceText} title={'$ ' + item.price} />
-                  <Checkbox isChecked={activeCheckbox[index]} onPress={() => onPressCheckBox(item, index)} />
+                  <Checkbox
+                    isChecked={activeCheckbox[index]}
+                    onPress={() => onPressCheckBox(item, index)}
+                  />
                 </View>
               </View>
             ))}
@@ -128,25 +162,26 @@ const ArrivedView = ({
     </>
   );
   const addAnotherSevicesModal = () => {
-    return <Modal visible={isVisible} >
-      <View>
-        {getServicesView()}
-        <Button
-          title={"Save"}
-          style={styles.takeOrderButton}
-          isSmall
-          width={getHeight(150)}
-          height={getHeight(36)}
-          fontSized={getHeight(fontSize.textL)}
-          background={colors.white}
-          onPress={() => {
-            setIsVisible(false)
-          }}
-        />
-      </View>
-    </Modal>
-
-  }
+    return (
+      <Modal visible={isVisible}>
+        <View>
+          {getServicesView()}
+          <Button
+            title={'Save'}
+            style={styles.takeOrderButton}
+            isSmall
+            width={getHeight(150)}
+            height={getHeight(36)}
+            fontSized={getHeight(fontSize.textL)}
+            background={colors.white}
+            onPress={() => {
+              setIsVisible(false);
+            }}
+          />
+        </View>
+      </Modal>
+    );
+  };
 
   return (
     <RNModal
@@ -156,6 +191,11 @@ const ArrivedView = ({
       backdropOpacity={0.5}
       backdropColor={colors.transparent}
     >
+      {isLoading && (
+        <View style={styles.loader}>
+          <Loader isSmall color={colors.white} />
+        </View>
+      )}
       <Animated.View
         style={{
           ...styles.modalView,
@@ -211,7 +251,15 @@ const ArrivedView = ({
                     entering={FadeInLeft.duration(400).delay(900)}
                   />
 
-                  {item.menu_id == 1 ? <Checkbox isWhite isChecked={true} onPress={() => { }} /> : <Checkbox isWhite isChecked={activeCheckbox[index]} onPress={() => onPressCheckBox(item, index)} />}
+                  {item.menu_id == 1 ? (
+                    <Checkbox isWhite isChecked={true} onPress={() => {}} />
+                  ) : (
+                    <Checkbox
+                      isWhite
+                      isChecked={activeCheckbox[index]}
+                      onPress={() => onPressCheckBox(item, index)}
+                    />
+                  )}
                 </View>
               </View>
             ),
@@ -256,8 +304,8 @@ const ArrivedView = ({
             fontSized={getHeight(fontSize.textL)}
             background={colors.white}
             onPress={() => {
-              console.log(updatedServices, "....updatedServices")
-              onPressTreatmentEnd(updatedServices)
+              console.log(updatedServices, '....updatedServices');
+              onPressTreatmentEnd(updatedServices);
             }}
           />
         </View>
@@ -306,11 +354,11 @@ const styles = StyleSheet.create({
   servicesLeftView: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: getWidth(20),
+    gap: getHeight(20),
   },
   addIcon: {
     height: getHeight(dimens.marginL),
-    width: getWidth(dimens.marginL),
+    width: getHeight(dimens.marginL),
     resizeMode: 'contain',
   },
   textAdd: {
@@ -334,15 +382,15 @@ const styles = StyleSheet.create({
   addServiceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: getWidth(dimens.imageXs),
-    borderTopWidth: getWidth(1),
+    gap: getHeight(dimens.imageXs),
+    borderTopWidth: getHeight(1),
     borderColor: colors.white,
     paddingVertical: getHeight(24),
   },
   totalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: getWidth(dimens.marginL),
+    gap: getHeight(dimens.marginL),
   },
   totalAmount: {
     color: colors.white,
@@ -410,5 +458,13 @@ const styles = StyleSheet.create({
   textServices: {
     fontSize: getHeight(fontSize.textM),
     textAlign: 'center',
+  },
+  loader: {
+    position: 'absolute',
+    zIndex: 1,
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

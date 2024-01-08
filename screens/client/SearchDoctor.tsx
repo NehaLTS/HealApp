@@ -29,9 +29,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   I18nManager,
-
-
-
   Image,
   ScrollView,
   StyleSheet,
@@ -50,6 +47,7 @@ const SearchDoctor = () => {
 
   //TODO: Vandana why this is used?
   const previousScreen = route?.params?.previousScreen;
+  console.log('first+++++++++++', route?.params?.currentOrder);
 
   const { t } = useTranslation();
   const { setUserLocation, userProfile, userLocation } = UseClientUserContext();
@@ -159,8 +157,8 @@ const SearchDoctor = () => {
       handleNextButtonPress();
     } else {
       setLocalData('ORDER', {
-        orderId: ''
-      })
+        orderId: '',
+      });
       navigation.goBack();
     }
     setTimeout(() => {
@@ -194,18 +192,22 @@ const SearchDoctor = () => {
         {renderToast()}
         <View>
           {showTimer && providerStatus !== ARRIVED && (
-            <ArrivalTime totalTime={Math.round(calculateTime(route?.params?.currentOrder).minutes)} />
+            <ArrivalTime
+              totalTime={Math.round(
+                calculateTime(route?.params?.currentOrder).minutes,
+              )}
+            />
           )}
           <Text
             style={styles.lookingDoctor}
             title={
               (providerLocation !== undefined &&
                 providerLocation.latitude === 0.0) ||
-                showLoader
+              showLoader
                 ? t('looking_doctor')
                 : providerNotFound
-                  ? t('provider_not_found')
-                  : `${t('provider_text')}${' '}${providerStatusOnHeader(
+                ? t('provider_not_found')
+                : `${t('provider_text')}${' '}${providerStatusOnHeader(
                     providerStatus,
                   )}`
             }
@@ -226,7 +228,7 @@ const SearchDoctor = () => {
                 : userLocation.onboardingLocation &&
                   userLocation.onboardingLocation?.latitude &&
                   userLocation.onboardingLocation?.longitude
-                  ? {
+                ? {
                     latitude: parseFloat(
                       userLocation.onboardingLocation?.latitude,
                     ),
@@ -237,7 +239,7 @@ const SearchDoctor = () => {
                     longitudeDelta: 0.02,
                     title: 'Client',
                   }
-                  : currentLocation
+                : currentLocation
             }
             style={{ flex: 1 }}
           >
@@ -246,14 +248,14 @@ const SearchDoctor = () => {
                 coordinate={{
                   latitude:
                     userLocation &&
-                      userLocation?.onboardingLocation &&
-                      userLocation.onboardingLocation?.latitude
+                    userLocation?.onboardingLocation &&
+                    userLocation.onboardingLocation?.latitude
                       ? parseFloat(userLocation.onboardingLocation?.latitude)
                       : currentLocation?.latitude ?? 0.0,
                   longitude:
                     userLocation &&
-                      userLocation?.onboardingLocation &&
-                      userLocation.onboardingLocation?.longitude
+                    userLocation?.onboardingLocation &&
+                    userLocation.onboardingLocation?.longitude
                       ? parseFloat(userLocation.onboardingLocation?.longitude)
                       : currentLocation?.longitude ?? 0.0,
                 }}
@@ -283,8 +285,8 @@ const SearchDoctor = () => {
                       <View style={styles.marker}>
                         <View style={styles.imageContainer}>
                           {currentOrder &&
-                            currentOrder.providerDetails
-                              ?.providerProfilePicture ? (
+                          currentOrder.providerDetails
+                            ?.providerProfilePicture ? (
                             <Image
                               source={{
                                 uri: currentOrder.providerDetails
@@ -336,8 +338,8 @@ const SearchDoctor = () => {
           </MapView>
 
           {showDoctor &&
-            providerLocation !== undefined &&
-            providerLocation.latitude !== 0.0 ? (
+          providerLocation !== undefined &&
+          providerLocation.latitude !== 0.0 ? (
             <View
               style={{
                 zIndex: 2,
@@ -369,8 +371,8 @@ const SearchDoctor = () => {
             <Button
               title={
                 providerLocation !== undefined &&
-                  providerLocation.latitude !== 0.0 &&
-                  !showLoader
+                providerLocation.latitude !== 0.0 &&
+                !showLoader
                   ? t('order')
                   : t('cancel')
               }
@@ -383,12 +385,13 @@ const SearchDoctor = () => {
               disabled={isBookOrder}
             />
             {!showLoader && (
-
               <>
                 <TextButton
                   style={{ alignSelf: 'center' }}
                   title={t('cancel')}
-                  onPress={() => { orderCancel() }}
+                  onPress={() => {
+                    orderCancel();
+                  }}
                   fontSize={getHeight(fontSize.textXl)}
                 />
               </>
@@ -398,18 +401,18 @@ const SearchDoctor = () => {
               title={
                 (providerLocation !== undefined &&
                   providerLocation.latitude === 0.0) ||
-                  showLoader
+                showLoader
                   ? t('no_fee_collected')
                   : showCancelTextButton
-                    ? t('3_minutes_to_cancel')
-                    : ''
+                  ? t('3_minutes_to_cancel')
+                  : ''
               }
             />
           </View>
         )}
-        {
-          showAddToWallet && <AddPaymentToWallet isShowInputView={false} fromMap={true} />
-        }
+        {showAddToWallet && (
+          <AddPaymentToWallet isShowInputView={false} fromMap={true} />
+        )}
       </ScrollView>
     </>
   );

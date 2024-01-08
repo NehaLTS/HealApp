@@ -1,6 +1,7 @@
 import mobile from 'assets/icon/mobile.png';
 import waze from 'assets/icon/waze.png';
 import Button from 'components/common/Button';
+import Loader from 'components/common/Loader';
 import RNModal from 'components/common/Modal';
 import { AnimatedText } from 'components/common/Text';
 import TextButton from 'components/common/TextButton';
@@ -25,12 +26,14 @@ const TakeOrderView = ({
   onPressCancelOrder,
   isModalVisible,
   onPressUpdateArrive,
+  isLoading,
 }: {
   order: any;
   onPressSeeMore: () => void;
   onPressCancelOrder: () => void;
   isModalVisible: boolean;
   onPressUpdateArrive: () => void;
+  isLoading: boolean;
 }) => {
   const { t, i18n } = useTranslation();
   const [seconds, setSeconds] = React.useState(300);
@@ -48,8 +51,9 @@ const TakeOrderView = ({
     const formatTime = (time: number) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
-        }${remainingSeconds}`;
+      return `${minutes}:${
+        remainingSeconds < 10 ? '0' : ''
+      }${remainingSeconds}`;
     };
 
     return (
@@ -64,6 +68,11 @@ const TakeOrderView = ({
       backdropOpacity={0.5}
       backdropColor={colors.transparent}
     >
+      {isLoading && (
+        <View style={styles.loader}>
+          <Loader isSmall color={colors.white} />
+        </View>
+      )}
       <Animated.View
         style={{
           ...styles.modalView,
@@ -119,13 +128,14 @@ const TakeOrderView = ({
                     style={styles.details}
                     title={
                       JSON.parse?.(order?.OrderReceive?.services)?.length > 1
-                        ? `${index !==
-                          JSON.parse?.(order?.OrderReceive?.services)
-                            ?.length -
-                          1
-                          ? ` ${service?.name?.en}, `
-                          : ` ${service?.name?.en}`
-                        }`
+                        ? `${
+                            index !==
+                            JSON.parse?.(order?.OrderReceive?.services)
+                              ?.length -
+                              1
+                              ? ` ${service?.name?.en}, `
+                              : ` ${service?.name?.en}`
+                          }`
                         : service?.name?.en
                     }
                     entering={FadeInLeft.duration(400).delay(700)}
@@ -137,14 +147,17 @@ const TakeOrderView = ({
         )}
         <AnimatedText
           style={styles.otherDetails}
-          title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
-            }    ${order?.OrderReceive?.distance !== 'undefined'
+          title={`${order?.OrderReceive?.firstname}  ${
+            order?.OrderReceive?.lastname
+          }    ${
+            order?.OrderReceive?.distance !== 'undefined'
               ? order?.OrderReceive?.time
               : 0
-            } km, ~${order?.OrderReceive?.time !== 'undefined'
+          } km, ~${
+            order?.OrderReceive?.time !== 'undefined'
               ? order?.OrderReceive?.time
               : 0
-            } min`}
+          } min`}
           entering={FadeInLeft.duration(400).delay(600)}
         />
         <AnimatedText
@@ -356,5 +369,13 @@ const styles = StyleSheet.create({
   },
   timerText: {
     color: colors.white,
+  },
+  loader: {
+    position: 'absolute',
+    zIndex: 1,
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -20,16 +20,13 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import { Location, OrderCancelByClientRespnse } from 'libs/types/UserType';
 import { paymentsendToApi } from 'libs/OrderPayment';
 import { useTranslation } from 'react-i18next';
-import moment from "moment";
+import moment from 'moment';
 
 const SearchDoctorController = () => {
   const route = useRoute<any>();
   const { t } = useTranslation();
-  const {
-    BookOrderRequest,
-    OrderCancelFromClient,
-    orderProvider,
-  } = ClientOrderServices();
+  const { BookOrderRequest, OrderCancelFromClient, orderProvider } =
+    ClientOrderServices();
   const { userLocation } = UseClientUserContext();
   const [showRateAlert, setShowRateAlert] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
@@ -56,7 +53,7 @@ const SearchDoctorController = () => {
   const [orderTime, setOrderTime] = useState<string>('');
   const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false);
   const [nowEnableCancelApi, setNowEnableCancelApi] = useState<boolean>(false);
-
+  console.log('currentOrder', currentOrder);
   const focusBetweenClientAndProvider = (providerSetLocation: {
     latitude: string;
     longitude: string;
@@ -85,14 +82,14 @@ const SearchDoctorController = () => {
         const distance = Math.sqrt(
           Math.pow(
             parseFloat(providerSetLocation.latitude) -
-            parseFloat(userLocation?.onboardingLocation?.latitude),
+              parseFloat(userLocation?.onboardingLocation?.latitude),
             2,
           ) +
-          Math.pow(
-            parseFloat(providerSetLocation.longitude) -
-            parseFloat(userLocation?.onboardingLocation?.longitude),
-            2,
-          ),
+            Math.pow(
+              parseFloat(providerSetLocation.longitude) -
+                parseFloat(userLocation?.onboardingLocation?.longitude),
+              2,
+            ),
         );
 
         const bufferFactor = 1.2;
@@ -115,12 +112,12 @@ const SearchDoctorController = () => {
           latitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-              parseFloat(userLocation?.onboardingLocation?.latitude),
+                parseFloat(userLocation?.onboardingLocation?.latitude),
             ) * 2,
           longitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-              parseFloat(userLocation?.onboardingLocation?.longitude),
+                parseFloat(userLocation?.onboardingLocation?.longitude),
             ) * 2,
         };
 
@@ -164,27 +161,29 @@ const SearchDoctorController = () => {
 
   const createOrder = async () => {
     setShowLoader(true);
-    setShowAddToWallet(false)
+    setShowAddToWallet(false);
     let totalCost = route?.params?.orderDetails.TotalCost;
-    const shotAmounts = parseFloat(totalCost) - 500
-    const amount = paymentsendToApi(500, shotAmounts)
+    const shotAmounts = parseFloat(totalCost) - 500;
+    const amount = paymentsendToApi(500, shotAmounts);
     let orderDetails = route?.params?.orderDetails;
     let heardDetail = route?.params?.heardDetail ?? '';
-    console.log('search orderDetails', orderDetails);
-    const clientBalance = parseFloat(payment?.wallet_amount ?? '0')
+    console.log('search orderDetails', amount);
+    const clientBalance = parseFloat(payment?.wallet_amount ?? '0');
 
     if (amount.walletMinimumAmount > clientBalance) {
-      Alert.alert(`You should have minimum amount of ${amount.walletMinimumAmount.toString()} in your wallet`)
-      setShowAddToWallet(true)
+      Alert.alert(
+        `You should have minimum amount of ${amount.walletMinimumAmount.toString()} in your wallet`,
+      );
+      setShowAddToWallet(true);
     } else {
-      setShowAddToWallet(false)
+      setShowAddToWallet(false);
 
       const res = await orderProvider({
         ...orderDetails,
         total_order_price: amount.totalAmount.toString(),
         service_charge: amount.appAmount.toString(),
         services: heardDetail ? '1' : orderDetails.services,
-        currency: 'NIS'
+        currency: 'NIS',
       });
       Sentry.captureMessage(
         `Client flow ON PRESS ORDER BUTTON ON SUMMARY SCREEN RESPONSE for:-${JSON.stringify(
@@ -318,63 +317,75 @@ const SearchDoctorController = () => {
     );
   };
 
-
   const handleNextButtonPress = async () => {
-    const TIME = new Date().toLocaleTimeString()
-    const newDate = new Date().toLocaleDateString()
-    const formatDate = moment(newDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
-    const ORDER_TIME = formatDate + ' ' + TIME
+    const TIME = new Date().toLocaleTimeString();
+    const newDate = new Date().toLocaleDateString();
+    const formatDate = moment(newDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const ORDER_TIME = formatDate + ' ' + TIME;
     const orderBookResponse = await BookOrderRequest({
-      orderStatus: "accept",
-      provider_id: currentOrder?.providerDetails.providerId.toString(),
-      order_id: currentOrder?.orderId.toString(),
+      orderStatus: 'accept',
+      provider_id: currentOrder?.providerDetails?.providerId?.toString(),
+      order_id: currentOrder?.orderId?.toString(),
       time: TIME,
-      distance: ''
-
+      distance: '',
     });
     console.log('gurpreet', orderBookResponse);
-    orderBookResponse
+    orderBookResponse;
     if (orderBookResponse?.isSuccessful) {
+      console.log(
+        'ORDER_TIMEHome',
+        ORDER_TIME,
+        'newDate',
+        newDate,
+        'formatDate',
+        formatDate,
+        'format',
+        new Date(),
+      );
 
-      console.log("ORDER_TIMEHome", ORDER_TIME, "newDate", newDate, "formatDate", formatDate, "format", new Date())
-
-      console.log("ORDER_TIME", ORDER_TIME)
-      setOrderTime(ORDER_TIME)
-      setNowEnableCancelApi(true)
+      console.log('ORDER_TIME', ORDER_TIME);
+      setOrderTime(ORDER_TIME);
+      setNowEnableCancelApi(true);
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
-      console.log('insidee', JSON.stringify(orderBookResponse), JSON.stringify(orderBookResponse.services[0].name));
+      console.log(
+        'insidee',
+        JSON.stringify(orderBookResponse),
+        JSON.stringify(orderBookResponse.services[0].name),
+      );
       setDisable(true);
-    }
-    else {
+    } else {
       setIsBookOrder(false);
-      console.log("clientOrderElse")
+      console.log('clientOrderElse');
     }
     setLocalData('ORDER', { ...currentOrder, orderStatus: 'Created' });
   };
 
   const orderCancel = () => {
     if (nowEnableCancelApi) {
-      OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
-        console.log("cancel reaposnse", res)
-        setLocalData('ORDER', {
-          orderId: ''
-        })
-        if (res.isSuccessful) {
-
-          // const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
-          // setLocalData('WALLETDETAIL', {
-          //   wallet_amount: newAmount.toString()
-          // })
-        }
-
-      }).catch((error) => {
-        Alert.alert('Error Occured', error.toString())
+      OrderCancelFromClient({
+        order_id: currentOrder?.orderId,
+        orderTime: orderTime,
       })
+        .then((res: OrderCancelByClientRespnse) => {
+          console.log('cancel reaposnse', res);
+          setLocalData('ORDER', {
+            orderId: '',
+          });
+          if (res.isSuccessful) {
+            // const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
+            // setLocalData('WALLETDETAIL', {
+            //   wallet_amount: newAmount.toString()
+            // })
+          }
+        })
+        .catch((error) => {
+          Alert.alert('Error Occured', error.toString());
+        });
     }
     navigation.goBack();
-  }
+  };
   return {
     permissionHelper: permissionHelper,
     forceAlert,

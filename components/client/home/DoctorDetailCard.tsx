@@ -38,7 +38,7 @@ const DoctorDetailCard = ({
   onPressCard: () => void;
 }) => {
   const { t } = useTranslation();
-  console.log('ratingData', providerData);
+  console.log('ratingData', time);
   return (
     <>
       {isPrimary || showBothCards ? (
@@ -99,7 +99,9 @@ const DoctorDetailCard = ({
               <Text style={styles.arrivalText} title={status} />
               <Text
                 style={styles.time}
-                title={`${Math.round(time.minutes + 1 ?? 0 + 1)}${t(' min')}`}
+                title={`${Math.round(
+                  (Number.isNaN(time?.minutes) ? 0 : time.minutes) + 1 ?? 0 + 1,
+                )}${t(' min')}`}
               />
               <TouchableOpacity
                 style={styles.details}

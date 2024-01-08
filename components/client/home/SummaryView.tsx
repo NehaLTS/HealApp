@@ -47,7 +47,14 @@ const SummaryView = ({
   } = SummaryViewController({ order });
   const { userProfile } = UseClientUserContext();
   const { t, i18n } = useTranslation();
-  console.log('order', order);
+  console.log('order', order?.services);
+
+  const formatNumber = (num: number) => {
+    num = parseFloat(num?.toString());
+    return num.toFixed(4).replace(/(?:\.0*|(\.\d+?)0+)$/, '$1');
+  };
+
+  const serviceCharge: string = formatNumber((totalPrice ?? 0) * 0.025);
 
   const paymentModal = () => (
     <Modal
@@ -119,10 +126,10 @@ const SummaryView = ({
               order?.reason?.length > 1
                 ? `${
                     index !== order?.reason?.length - 1
-                      ? `${getTitle(item?.name, i18n)}, `
-                      : `${getTitle(item?.name, i18n)}`
+                      ? `${getTitle(item?.specialty_name, i18n)}, `
+                      : `${getTitle(item?.specialty_name, i18n)}`
                   }`
-                : getTitle(item?.name, i18n)
+                : getTitle(item?.specialty_name, i18n)
             }
             style={styles.textSmall}
           />
@@ -139,17 +146,26 @@ const SummaryView = ({
         <Text
           key={index}
           title={
-            getTitle(item?.name, i18n)?.charAt(0).toUpperCase() +
-            getTitle(item?.name, i18n)?.slice(1) +
+            getTitle(item?.services_name, i18n)?.charAt(0)?.toUpperCase() +
+            getTitle(item?.services_name, i18n)?.slice(1) +
             ' - ' +
             item?.price
           }
           style={styles.voltaireText}
         />
       ))}
+      <Text
+        title={`Service charges - ${serviceCharge}`}
+        style={styles.voltaireText}
+      />
       <View style={{ flexDirection: 'row' }}>
         <Text title={t('total')} style={styles.total} />
-        <Text title={`${totalPrice} NIS`} style={styles.Small} />
+        <Text
+          title={`${formatNumber(
+            (totalPrice ?? 0) + Number(serviceCharge),
+          )} NIS`}
+          style={styles.Small}
+        />
       </View>
       <Text title={t('if_the_doctor')} style={styles.payForIt} />
     </>
