@@ -94,7 +94,7 @@ const OrderFormView = ({
       });
       onSelectReasons(getPreselectedReason);
     }
-    // setTreatmentMenuOfReason([...treatmentReason[0]?.services])
+    if (treatmentReason && treatmentReason[0]?.services) setTreatmentMenuOfReason([...treatmentReason[0]?.services])
 
   }, [treatmentReason]);
 

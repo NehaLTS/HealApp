@@ -39,6 +39,7 @@ const CardView = ({ item, index, isSearch }: any) => {
       } else {
         navigation.navigate(NavigationRoutes.OrderDetails, {
           supplier: item,
+          isFromSearch: isSearch
         });
       }
     } else {
