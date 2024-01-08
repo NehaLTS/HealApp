@@ -137,7 +137,7 @@ export interface ClientProfile {
   profilePicture?: string;
   phoneNumber: string;
   email?: string;
-  address?: userlocationType;
+  address?: string;
   city?: string;
   state?: string;
   country?: string;
@@ -254,11 +254,11 @@ export interface SearcProviderLocation {
 }
 
 export interface BookOrderRequest {
-  // orderStatus: string;
+  orderStatus: string;
   provider_id: string;
   order_id: string;
-  // distance: string;
-  // time: string;
+  distance: string;
+  time: string;
 }
 
 export interface OrderPayment {

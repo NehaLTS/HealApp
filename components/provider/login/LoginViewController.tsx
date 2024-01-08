@@ -200,6 +200,8 @@ const LoginViewController = () => {
         if (res?.isSuccessful === true) {
           handleAuthResponse(res, userData?.user?.photoURL ?? '');
         } else {
+          setIsLoading(false);
+
           Alert.alert(t('login_failed'), t('check_email_and_password'));
         }
       }

@@ -12,15 +12,16 @@ import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import unLike from '../../../assets/icon/likeOff.png';
 import like from '../../../assets/icon/likeOn.png';
+import { getTitle } from 'libs/utility/Utils';
 
 const TreatmentEnd = ({
   onPress,
   currentOrder,
 }: {
   onPress: () => void;
-  currentOrder: Order;
+  currentOrder: any;
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [likeProfile, setLikeProfile] = React.useState(false);
   const onLikeProfile = () => {
     setLikeProfile(!likeProfile);
@@ -29,7 +30,7 @@ const TreatmentEnd = ({
   const payAbleAmount = () => {
     let totalAmount = 0
     let totalCost = currentOrder?.orderServices.map((item, index) => {
-      totalAmount = totalAmount + parseFloat(item.servicePrice)
+      totalAmount = totalAmount + parseFloat(item.service_price)
       console.log("approvePAymer", totalAmount)
       return totalAmount
     })
@@ -99,7 +100,7 @@ const TreatmentEnd = ({
             {currentOrder?.orderServices.map((item, index) => (
               <Text
                 key={index}
-                title={`${item?.serviceName} - ${item?.servicePrice}`}
+                title={`${getTitle(item?.name, i18n)} - ${item?.service_price}`}
                 style={styles.text}
               />
             ))}

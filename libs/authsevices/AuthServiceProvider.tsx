@@ -1,6 +1,7 @@
 import { sendRequest, sendRequestWitoutToken } from '../api/RequestHandler';
 import {
   ADD_PROVIDER_SERVICE,
+  ADD_SERVICE_WHEN_TREATEMENT_END,
   CREATE_HEALPROVIDER_SERVICES,
   CREATE_PROVIDER_SEVICES,
   CREATE_SIGNUP_PROVIDER,
@@ -347,7 +348,15 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
-
+  const addServiceWhenTreatmentEnd = (body: { order_id: string, services: string }): Promise<any> =>
+    sendRequest(ADD_SERVICE_WHEN_TREATEMENT_END, {
+      method: PATCH,
+      body: body as unknown as BodyInit,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      } as unknown as HeadersInit,
+    });
 
   return {
     OnProviderSignIn,
@@ -372,6 +381,7 @@ export const AuthServicesProvider = () => {
     UpdateProviderProfile,
     GetProviderReport,
     GetProviderPayment,
-    removeService
+    removeService,
+    addServiceWhenTreatmentEnd
   };
 };

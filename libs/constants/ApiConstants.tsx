@@ -51,6 +51,7 @@ export const GET_PROVIDER_PROFILE = 'providers/getProviderProfiles';
 export const GET_PROVIDER_REPORT = 'providers/getReports'
 export const GET_PROVIDER_Payment = 'providers/getPayment'
 export const REMOVE_SERVICES = 'providers/updateEliminateService';
+export const ADD_SERVICE_WHEN_TREATEMENT_END = 'providers/updateIntegrateService'
 
 export const POST = 'POST';
 export const GET = 'GET';

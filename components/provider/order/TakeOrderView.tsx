@@ -9,6 +9,7 @@ import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
+import { getTitle } from 'libs/utility/Utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Linking, StyleSheet, View } from 'react-native';
@@ -31,7 +32,7 @@ const TakeOrderView = ({
   isModalVisible: boolean;
   onPressUpdateArrive: () => void;
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [seconds, setSeconds] = React.useState(300);
   const CountdownTimer = () => {
     React.useEffect(() => {
@@ -93,7 +94,7 @@ const TakeOrderView = ({
               <AnimatedText
                 key={index}
                 style={{ ...styles.details, marginTop: getHeight(20) }}
-                title={item?.name}
+                title={`${getTitle(item?.name, i18n)}` ?? ''}
                 entering={FadeInLeft.duration(400).delay(500)}
               />
             ),

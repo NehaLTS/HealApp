@@ -57,7 +57,6 @@ export interface ProviderOrder {
 
 export interface ProviderOrderReceive {
   address: string;
-
   distance: string;
   firstname: string;
   lastname: string;

@@ -20,6 +20,7 @@ import NavigationRoutes from 'navigator/NavigationRoutes';
 import { Location, OrderCancelByClientRespnse } from 'libs/types/UserType';
 import { paymentsendToApi } from 'libs/OrderPayment';
 import { useTranslation } from 'react-i18next';
+import moment from "moment";
 
 const SearchDoctorController = () => {
   const route = useRoute<any>();
@@ -54,7 +55,7 @@ const SearchDoctorController = () => {
   );
   const [orderTime, setOrderTime] = useState<string>('');
   const [showAddToWallet, setShowAddToWallet] = useState<boolean>(false);
-
+  const [nowEnableCancelApi, setNowEnableCancelApi] = useState<boolean>(false);
 
   const focusBetweenClientAndProvider = (providerSetLocation: {
     latitude: string;
@@ -319,21 +320,31 @@ const SearchDoctorController = () => {
 
 
   const handleNextButtonPress = async () => {
+    const TIME = new Date().toLocaleTimeString()
+    const newDate = new Date().toLocaleDateString()
+    const formatDate = moment(newDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
+    const ORDER_TIME = formatDate + ' ' + TIME
     const orderBookResponse = await BookOrderRequest({
+      orderStatus: "accept",
       provider_id: currentOrder?.providerDetails.providerId.toString(),
       order_id: currentOrder?.orderId.toString(),
+      time: TIME,
+      distance: ''
 
     });
     console.log('gurpreet', orderBookResponse);
     orderBookResponse
     if (orderBookResponse?.isSuccessful) {
-      const ORDER_TIME = new Date().getTime()
+
+      console.log("ORDER_TIMEHome", ORDER_TIME, "newDate", newDate, "formatDate", formatDate, "format", new Date())
+
       console.log("ORDER_TIME", ORDER_TIME)
-      setOrderTime(ORDER_TIME.toString())
+      setOrderTime(ORDER_TIME)
+      setNowEnableCancelApi(true)
       Sentry.captureMessage(
         `orderSendResponse ${JSON.stringify(orderBookResponse)}`,
       );
-      console.log('insidee', orderBookResponse);
+      console.log('insidee', JSON.stringify(orderBookResponse), JSON.stringify(orderBookResponse.services[0].name));
       setDisable(true);
     }
     else {
@@ -344,22 +355,24 @@ const SearchDoctorController = () => {
   };
 
   const orderCancel = () => {
-    OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
-      console.log("cancel reaposnse", res)
-      setLocalData('ORDER', {
-        orderId: ''
-      })
-      if (res.isSuccessful) {
-
-        const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
-        setLocalData('WALLETDETAIL', {
-          wallet_amount: newAmount.toString()
+    if (nowEnableCancelApi) {
+      OrderCancelFromClient({ order_id: currentOrder?.orderId, orderTime: orderTime }).then((res: OrderCancelByClientRespnse) => {
+        console.log("cancel reaposnse", res)
+        setLocalData('ORDER', {
+          orderId: ''
         })
-      }
+        if (res.isSuccessful) {
 
-    }).catch((error) => {
-      Alert.alert('Error Occured', error.toString())
-    })
+          // const newAmount = parseFloat(payment?.wallet_amount ?? '0') + parseFloat(res.clientAmount)
+          // setLocalData('WALLETDETAIL', {
+          //   wallet_amount: newAmount.toString()
+          // })
+        }
+
+      }).catch((error) => {
+        Alert.alert('Error Occured', error.toString())
+      })
+    }
     navigation.goBack();
   }
   return {

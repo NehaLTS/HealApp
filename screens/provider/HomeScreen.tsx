@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react-native';
 import avatar from 'assets/icon/avatar.png';
 import logo from 'assets/icon/healLogo.png';
 import waze from 'assets/icon/waze.png';
@@ -17,92 +16,75 @@ import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { createNotificationListeners } from 'libs/Notification';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import {
-  deleteLocalData,
   getLocalData,
-  setLocalData,
+  setLocalData
 } from 'libs/datastorage/useLocalStorage';
 import { ProviderProfile } from 'libs/types/UserType';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Sidebar from 'components/common/Sidebar';
 import useToast from 'components/common/useToast';
-import { ProviderOrderReceive } from 'libs/types/OrderTypes';
+import { getTitle } from 'libs/utility/Utils';
 import {
-  Alert,
-  DeviceEventEmitter,
   I18nManager,
   Image,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import Animated, {
   FadeInLeft,
-  FadeInUp,
-  useSharedValue,
-  withSpring,
+  FadeInUp
 } from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
-import NavigationRoutes from 'navigator/NavigationRoutes';
-import { paymentsendToApi, totalPrice } from 'libs/OrderPayment';
-import { getTitle } from 'libs/utility/Utils';
-import Sidebar from 'components/common/Sidebar';
 
 const HomeScreen = () => {
   const localData = getLocalData('USERPROFILE');
-  const available = getLocalData('USER');
   const order = getLocalData('PROVIDERORDER');
+
   const { t, i18n } = useTranslation();
-  const [isAvailable, setIsAvailable] = useState(
-    available?.isProviderAvailable,
-  );
-
-  const [isCancelOrder, setIsCancelOrder] = useState(false);
-  const [isSeeMore, setIsSeeMore] = useState(
-    order?.extraData?.isSeeMore ?? false,
-  );
-  const [isArrived, setIsArrived] = useState(
-    order?.extraData?.isArrived ?? false,
-  );
-  const [isVisibleLicense, setIsVisibleLicense] = useState(false);
-  const [notification, setNotification] = useState(
-    order?.extraData?.isNotification ?? false,
-  );
-
-  const [isAddDocument, setIsAddDocument] = useState(false);
-  const [licensePicture, setLicensePicture] = useState('');
-  const [orderStatus, setOrderStatus] = useState(order?.orderStatus ?? '');
+  console.log('order...', order)
   const [isShowModal, setIsShowModal] = useState(false);
-  const [totalPricesOfServices, setTotalPricesOfServices] = useState('');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [showTreatmentFinished, setShowTreatmentFinished] = useState(false);
   const [showStillAvailable, setShowStillAvailable] = useState(false);
   const locationData = getLocalData('LOCATION');
-  const { showToast, renderToast } = useToast();
+  const { renderToast } = useToast();
 
   const {
     acceptOrder,
-    setAcceptOrder,
-    OnPressTakeOrder,
+
+    orderAccept,
     updateLocation,
-    navigation,
-    TreatementEnded,
     providerDaySummary,
-    getSummaryofDay,
-    setProviderProfile,
     servicesFromApi,
     getProviderServices,
     onPressProfileTab,
+    onPressTreatmentEnd,
     showSidebar,
     setShowSidebar,
+    modalHeight,
+    onPressCancelOrder,
+    notification,
+    isAvailable,
+    isSeeMore,
+    onPressSeeMore,
+    onConfirmCancelOrder,
+    getImageUrl,
+    handleAddDocument,
+    onPressToggle,
+    onPressUpload,
+    totalPricesOfServices,
+    licensePicture,
+    isCancelOrder,
+    isAddDocument,
+    isArrived,
+    setIsArrived
   } = HomeScreenControlller();
-  const modalHeight = useSharedValue(
-    getHeight(order?.extraData?.modalHeight ?? 360),
-  );
-  const { providerAvailabilityStatus } = AuthServicesProvider();
-  const { userId, token, providerProfile, setUserLocation, setProviderOrder } = UseProviderUserContext();
+
+  const { setUserLocation } = UseProviderUserContext();
   const eventServices =
     order && order?.OrderReceive && order?.OrderReceive?.services
       ? JSON.parse(order?.OrderReceive?.services)
@@ -115,258 +97,6 @@ const HomeScreen = () => {
   }, []);
 
 
-  console.log('services', eventServices.services);
-  const getImageUrl = (url: string) => setLicensePicture(url);
-  const onPressUpload = () => {
-    if (licensePicture?.length) {
-      setLocalData('USERPROFILE', {
-        licensepicture: licensePicture,
-      });
-      setIsAvailable(true);
-      setLocalData('USER', { isProviderAvailable: true });
-      setIsAddDocument(false);
-      setIsVisibleLicense(false);
-    }
-  };
-
-  const handleAddDocument = () => {
-    setIsAddDocument(true);
-  };
-  const onConfirmCancelOrder = (pressOn: string) => {
-    if (pressOn === 'yes') {
-      setIsCancelOrder(false);
-      setAcceptOrder(false);
-      setIsArrived(false);
-      // setIsAvailable(false);
-      setNotification(false);
-      setIsSeeMore(false);
-      modalHeight.value = withSpring(getHeight(360));
-      // setLocalData('USER', { isProviderAvailable: false });
-
-      setLocalData('PROVIDERORDER', {
-        extraData: {
-          modalHeight: 360,
-          isCancelOrder: true,
-          isArrived: false,
-          orderAccepted: false,
-          isSeeMore: false,
-          isNotification: false,
-        },
-        orderStatus: '',
-        OrderReceive: {} as ProviderOrderReceive,
-      });
-    } else {
-      setIsCancelOrder(false);
-
-      setLocalData('PROVIDERORDER', {
-        extraData: {
-          isCancelOrder: false,
-        },
-      });
-    }
-  };
-
-  useEffect(() => {
-    let serviceTotalPrice: string = ''
-    // onConfirmCancelOrder('yes');
-    DeviceEventEmitter.addListener('ProviderOrderListener', (event) => {
-      console.log('status of event', event?.data?.status);
-      console.log(
-        'providerNotification **** 0000 ***** 00000',
-        JSON.stringify(event),
-      );
-
-      if (event.data?.status === 'Payment Done') {
-        setNotification(false);
-        showToast('Payment Done!', 'Your Payment is done ', '');
-      }
-      if (event.data?.status === 'Order created') {
-        setLocalData('PROVIDERORDER', {
-          OrderReceive: {
-            address: event.data.address,
-            firstname: event.data.firstname,
-            lastname: event.data.lastname,
-            phone_number: event.data.phone_numbe,
-            providerId: event.data.providerId,
-            distance: event.data.distance,
-            symptoms: event.data.symptoms,
-            services: event.data.services,
-            time: event.data.time,
-          },
-          latitude: event.data.latitude,
-          longitude: event.data.longitude,
-          orderId: event.data.orderId,
-        });
-        setProviderOrder({
-          OrderReceive: {
-            address: event.data.address,
-            firstname: event.data.firstname,
-            lastname: event.data.lastname,
-            phone_number: event.data.phone_numbe,
-            providerId: event.data.providerId,
-            distance: event.data.distance,
-            symptoms: event.data.symptoms,
-            services: event.data.services,
-            time: event.data.time,
-          },
-          latitude: event.data.latitude,
-          longitude: event.data.longitude,
-          orderId: event.data.orderId,
-        })
-        serviceTotalPrice = totalPrice(event.data.services)
-        console.log('event?.data?.services', event?.data?.services);
-        setNotification(true);
-      }
-      setOrderStatus(event.data?.status);
-
-      setLocalData('PROVIDERORDER', {
-        orderStatus: event.data.status,
-      });
-      if (event.data.status === 'Arrived' || orderStatus === 'Arrived Order') {
-        console.log('event.data.status', event.data.status);
-
-
-        setTotalPricesOfServices(serviceTotalPrice);
-        setIsArrived(true);
-        setLocalData('PROVIDERORDER', {
-          orderStatus: event.data.status,
-          extraData: {
-            isArrived: true,
-            totalPrice: serviceTotalPrice
-          },
-        });
-      }
-    });
-
-
-    if (acceptOrder && !isArrived) {
-      console.log('accept', acceptOrder);
-      updateLocation();
-    }
-
-    return () => {
-      DeviceEventEmitter.removeAllListeners('OrderListener');
-    };
-  }, [acceptOrder || isArrived || orderStatus]);
-
-  useEffect(() => {
-    getSummaryofDay();
-  }, [orderStatus === 'Payment Done']);
-
-  const onPressToggle = (available: boolean, isLogout?: boolean) => {
-    console.log('available', available);
-    //TODO: Uncomment this code to add license number
-    // if ((localData as ProviderProfile)?.licensenumber === '') {
-    //   setIsVisibleLicense(true);
-    // } else {
-    setLocalData('USER', {
-      isProviderAvailable: available,
-    });
-    setIsAvailable(available);
-    const availability = available ? 1 : 0;
-
-    providerAvailabilityStatus(
-      { provider_id: userId, availability: availability.toString() },
-      token,
-    ).then((res) => {
-      Sentry.captureMessage(
-        `first notification available status for:-${providerProfile?.firstName}---- ${res}`,
-      );
-      console.log('availabitity status', JSON.stringify(res), available);
-    }).catch(() => {
-      setIsAvailable(false);
-    });
-    if (!isLogout) {
-      getSummaryofDay();
-    }
-    // }
-  };
-
-
-  const onPressSeeMore = () => {
-    if (isSeeMore) {
-      modalHeight.value = withSpring(getHeight(360));
-      setIsSeeMore(false);
-
-      setLocalData('PROVIDERORDER', {
-        extraData: {
-          isSeeMore: false,
-          modalHeight: 360,
-        },
-      });
-    } else {
-      modalHeight.value = withSpring(getHeight(652));
-      setIsSeeMore(true);
-
-      setLocalData('PROVIDERORDER', {
-        extraData: {
-          isSeeMore: true,
-          modalHeight: 652,
-        },
-      });
-    }
-  };
-
-
-  const onPressCancelOrder = () => {
-    setIsCancelOrder(true);
-  };
-
-  const onPressTreatmentEnd = async (services?: any) => {
-    if (!isArrived) {
-      OnPressTakeOrder();
-      modalHeight.value = withSpring(getHeight(652));
-      setIsSeeMore(true);
-
-      setLocalData('PROVIDERORDER', {
-        extraData: {
-          modalHeight: 652,
-          isSeeMore: true,
-        },
-      });
-    } else {
-      const shotAmounts = parseFloat(totalPrice(services)) - 500;
-      const amount = paymentsendToApi(500, shotAmounts);
-      console.log(amount, 'amount at treatment end');
-      await TreatementEnded({
-        order_id: order?.orderId ?? '1',
-        total_order_price: amount.totalAmount.toString(),
-        TotalCost: amount.orderAmount.toString(),
-        service_charge: amount.appAmount.toString(),
-        currency: 'NIS',
-        treatment_completed: 'completed',
-      })
-        .then((res) => {
-          console.log('Treatement Ended response', res);
-          if (res?.isSuccessful) {
-            // onPressToggle(false);
-            setShowTreatmentFinished(true);
-            setAcceptOrder(false);
-            setIsArrived(false);
-            // setIsAvailable(false);
-            setNotification(false);
-            modalHeight.value = withSpring(getHeight(360));
-            setIsSeeMore(false);
-            // setLocalData('USER', { isProviderAvailable: false });
-            setLocalData('PROVIDERORDER', {
-              extraData: {
-                modalHeight: 360,
-                isSeeMore: false,
-                isNotification: false,
-                isArrived: false,
-                orderAccepted: false,
-              },
-              orderStatus: '',
-              OrderReceive: {} as ProviderOrderReceive,
-            });
-            Sentry.captureMessage(
-              `Provider notification event TREATMENT END BUTTON PRESSED for:-${providerProfile?.firstName}----`,
-            );
-          }
-        })
-        .catch((err) => console.error('treatement ended error', err));
-    }
-  };
 
   const orderDetailView = () => (
     <>
@@ -387,7 +117,7 @@ const HomeScreen = () => {
             <AnimatedText
               key={index}
               style={{ ...styles.details }}
-              title={item?.name}
+              title={`${getTitle(item?.name, i18n)}` ?? ''}
               entering={FadeInLeft.duration(400).delay(500)}
             />
           ),
@@ -501,7 +231,7 @@ const HomeScreen = () => {
                   <AnimatedText
                     key={index}
                     style={{ ...styles.details, marginTop: getHeight(20) }}
-                    title={item?.name ?? ''}
+                    title={`${getTitle(item?.name, i18n)}` ?? ''}
                     entering={FadeInLeft.duration(400).delay(500)}
                   />
                 ),
@@ -572,7 +302,7 @@ const HomeScreen = () => {
             height={getHeight(36)}
             fontSized={getHeight(fontSize.textL)}
             background={colors.white}
-            onPress={onPressTreatmentEnd}
+            onPress={orderAccept}
           />
           <TextButton
             title={t('cancel_order')}
@@ -821,6 +551,7 @@ const HomeScreen = () => {
           {getMissingDocsView()}
         </View>
         {/* </View> */}
+
         <ArrivedView
           order={order}
           isModalVisible={isArrived}

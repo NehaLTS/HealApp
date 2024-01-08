@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { TreatmentMenu } from 'libs/types/ProvierTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
+import { totalPrice } from 'libs/OrderPayment';
 
 const ArrivedView = ({
   order,
@@ -38,49 +39,26 @@ const ArrivedView = ({
 
   const [isVisible, setIsVisible] = React.useState(false);
   const { i18n } = useTranslation();
-  const [totalPrice, setTotalPrice] = React.useState(totalPricesOfServices)
+  const [orderTotalPrice, setOrderTotalPrice] = React.useState(totalPricesOfServices)
   const [newServices, setNewServices] = React.useState()
-  const { removeService } = AuthServicesProvider()
+  const { removeService, addServiceWhenTreatmentEnd } = AuthServicesProvider()
   // Function to initialize checkboxes and selected items when order details are available
   const [updatedServices, setUpdatedServices] = React.useState<any>(order &&
     order?.OrderReceive &&
     order?.OrderReceive?.services?.length &&
     JSON.parse?.(order?.OrderReceive?.services))
-  console.log("updatedServices trea", updatedServices, activeCheckbox)
+  console.log("updatedServices trea", updatedServices, activeCheckbox, "totalPricesOfServices", totalPricesOfServices)
   useEffect(() => {
     console.log("hiii")
 
     if (order && order.OrderReceive && order.OrderReceive?.services?.length > 0) {
       setUpdatedServices(JSON.parse?.(order?.OrderReceive?.services))
+      setOrderTotalPrice(totalPrice(JSON.parse?.(order?.OrderReceive?.services)))
       const initialCheckboxes = Array(order.OrderReceive.services.length).fill(true);
       setActiveCheckbox(initialCheckboxes);
-
-      console.log("hiiiindie", updatedServices)
-      // Initialize selected items based on initial checkboxes
-      // const initialSelectedItems = order.OrderReceive.services.filter((item, index: number) => initialCheckboxes[index]);
-      // setUpdatedServices(initialSelectedItems);
     }
   }, [order && order.OrderReceive]);
-  const calculateTotalPrice = (services?: any) => {
-    if (order && services?.length > 0) {
-      const servicesArray = services;
 
-      // Calculate the total service price
-      const totalServicePrice = servicesArray.reduce(
-        (total: number, service: { service_price: string }) => {
-          // Ensure that the service_price is a number before adding it to the total
-          const servicePrice = parseFloat(service.service_price) || 0;
-          return total + servicePrice;
-        },
-        0,
-      );
-      console.log('totalPrice', JSON.stringify(totalServicePrice));
-      setTotalPrice(totalServicePrice)
-      return JSON.stringify(totalServicePrice);
-    } else {
-      return '';
-    }
-  };
   // Function to handle checkbox press
   const onPressCheckBox = (item: any, index: number) => {
 
@@ -99,30 +77,19 @@ const ArrivedView = ({
         (selectedItem) => selectedItem.menu_id !== item.menu_id,
       );
       removeService({ order_id: order.orderId, services: item.menu_id }).then((res) => {
-        console.log(res, "servics")
+        console.log(res, "removeServices")
 
       })
     } else {
       newArray = [...updatedServices, item];
+      addServiceWhenTreatmentEnd({ order_id: order.orderId, services: item.menu_id }).then((res) => {
+        console.log("AddServices", res)
+      })
     }
-    let newAddedServices: any = []
-    if (
-      updatedServices.find(
-        (selectedItem) => selectedItem.heal_id === item.heal_id,
-      )
-    ) {
-      newAddedServices = updatedServices.filter(
-        (selectedItem) => selectedItem.heal_id !== item.heal_id,
-      );
-    } else {
-      newAddedServices = [...updatedServices, item];
-    }
-    setUpdatedServices(newArray)
-    calculateTotalPrice(newArray)
 
+    setUpdatedServices(newArray)
+    setOrderTotalPrice(totalPrice(newArray))
     console.log(newArray, "typeOf orderService change, newArray")
-    setNewServices(newAddedServices)
-    console.log("updatedSelectedItems..ttt.", newArray)
   };
   const onPressAddService = () => {
     setIsVisible(true)
@@ -269,7 +236,7 @@ const ArrivedView = ({
           />
           <AnimatedText
             style={styles.totalAmount}
-            title={`${Number(parseFloat(totalPrice).toFixed(5))?.toString() ?? totalPricesOfServices} NIS`}
+            title={`${orderTotalPrice} NIS`}
             entering={FadeInLeft.duration(400).delay(500)}
           />
         </View>

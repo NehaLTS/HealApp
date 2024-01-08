@@ -1,14 +1,9 @@
-export const ClientOrderPayment = () => {
-
-
-}
 
 export const totalPrice = (services: any) => {
-    if (services && services?.length > 0) {
-        const servicesArray = services
-
+    console.log("services totalPQRICE", services)
+    if (services && services.length > 0) {
         // Calculate the total service price
-        const totalServicePrice = servicesArray.reduce(
+        const totalServicePrice = services.reduce(
             (total: number, service: { service_price: string }) => {
                 // Ensure that the service_price is a number before adding it to the total
                 const servicePrice = parseFloat(service.service_price) || 0;
@@ -31,7 +26,7 @@ export const paymentsendToApi = (vistingAmount: number, shotAmount: number) => {
     const minimumBalance = totalAmountToCut * 0.40
     const amountNeddToOrder = totalAmountToCut + minimumBalance
     const walletMinimumAmount = Number(amountNeddToOrder.toFixed(5))
-    console.log("paymentsendToApi", "orderAmount: ", orderAmount, "appAmount: ", appAmount, "totalAmount: ", totalAmount, "walletMinimumAmount", walletMinimumAmount)
+    console.log("paymentsendToApi", "vistingAmoun: ", vistingAmount, shotAmount, "shotAmount", "orderAmount: ", orderAmount, "appAmount: ", appAmount, "totalAmount: ", totalAmount, "walletMinimumAmount", walletMinimumAmount)
     return {
         orderAmount,
         appAmount,

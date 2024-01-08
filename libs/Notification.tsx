@@ -44,9 +44,7 @@ export const createNotificationListeners = () => {
   // Handle incoming messages in the foreground
   const unsubscribeOnMessage = messaging().onMessage(async (remoteMessage) => {
     const { notification } = remoteMessage;
-    Sentry.captureMessage(
-      `first notification ---- ${JSON.stringify(remoteMessage)}`,
-    );
+
     if (notification?.title === "Provider Notification") {
       DeviceEventEmitter.emit('ProviderOrderListener', remoteMessage);
       console.log("ProviderOrderListener")

@@ -182,14 +182,7 @@ const OrderFormController = ({
   const handleItemPress = (item: TreatmentMenu) => {
     const updatedActiveCheckbox = [...activeCheckbox];
     const itemIndex = updatedActiveCheckbox.indexOf(item?.menu_id);
-    let updatedSelectedMenu: TreatmentMenu[] = [
-      {
-        menu_id: 1,
-        name: { en: 'Basic', he: '', hi: '' },
-        price: '500',
-        provider_type_id: 0,
-      },
-    ]; // Explicitly define the type
+    let updatedSelectedMenu: TreatmentMenu[] = []; // Explicitly define the type
     if (itemIndex !== -1) {
       updatedActiveCheckbox.splice(itemIndex, 1);
     } else {
@@ -208,7 +201,17 @@ const OrderFormController = ({
     setSelectedMenu(updatedSelectedMenu);
     setOrder((prevOrder) => ({
       ...prevOrder,
-      services: updatedSelectedMenu,
+      services: [{
+        menu_id: 1,
+        name: {
+          en: 'Basic',
+          ru: '',
+          he: '',
+          ar: '',
+        },
+        price: '500',
+        provider_type_id: 0,
+      }, ...updatedSelectedMenu]
     }));
   };
 

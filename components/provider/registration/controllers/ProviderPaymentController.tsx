@@ -154,40 +154,39 @@ const ProviderPaymentController = () => {
                 ? latitude
                 : userLocation?.onboardingLocation?.latitude,
             );
-            const res = await OnUpdateProviderUserDetails?.(
-              {
-                firstname: providerProfile?.firstName ?? '',
-                lastname: providerProfile?.lastName ?? '',
-                address: providerProfile?.address ?? '',
-                city: '',
-                state: '',
-                country: '',
 
-                phone_number: providerProfile?.phoneNumber ?? '',
-                profile_picture: profilePicture ?? '',
-                provider_id: userId ?? '',
-                provider_type_id: providerProfile?.provider.id ?? '',
-                license_number: providerProfile?.licensenumber ?? '',
-                upload_license_picture: providerProfile?.licensepicture ?? '',
-                bank_name: bankNameRef.current.value,
-                branch: branchRef.current.value,
-                business_registration_number:
-                  registrationNumberRef.current.value,
-                account: accountRef.current.value,
-                specialty_id: providerProfile.speciality.id,
-                latitude:
-                  latitude !== ''
-                    ? latitude
-                    : userLocation?.onboardingLocation?.latitude ?? '',
-                longitude:
-                  longitude !== ''
-                    ? longitude
-                    : userLocation?.onboardingLocation?.longitude ?? '',
-              },
-              token,
-            );
+            const boddTpUpdate = {
+              firstname: providerProfile?.firstName ?? '',
+              lastname: providerProfile?.lastName ?? '',
+              address: providerProfile?.address ?? '',
+              city: '',
+              state: '',
+              country: '',
 
-            console.log('response patch', res);
+              phone_number: providerProfile?.phoneNumber ?? '',
+              profile_picture: getImagesPath(images, 'profilePicture') ?? '',
+              provider_id: userId ?? '',
+              provider_type_id: providerProfile?.provider.id ?? '',
+              license_number: providerProfile?.licensenumber ?? '',
+              upload_license_picture: providerProfile?.licensepicture ?? '',
+              bank_name: bankNameRef.current.value,
+              branch: branchRef.current.value,
+              business_registration_number:
+                registrationNumberRef.current.value,
+              account: accountRef.current.value,
+              specialty_id: providerProfile.speciality.id,
+              latitude:
+                latitude !== ''
+                  ? latitude
+                  : userLocation?.onboardingLocation?.latitude ?? '',
+              longitude:
+                longitude !== ''
+                  ? longitude
+                  : userLocation?.onboardingLocation?.longitude ?? '',
+            }
+            const res = await OnUpdateProviderUserDetails?.(boddTpUpdate, token);
+
+            console.log('response patch', res, boddTpUpdate);
 
             if (res?.msg) {
               setLocalData('USERPROFILE', {

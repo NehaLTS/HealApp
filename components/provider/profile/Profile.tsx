@@ -79,7 +79,7 @@ const Profile = () => {
       I18nManager.forceRTL(true);
       I18nManager.allowRTL(true);
     }
-    RNRestart.restart();
+    RNRestart.Restart();
   };
   const getImageUrl = (url: string) => {
     console.log('url111', url);

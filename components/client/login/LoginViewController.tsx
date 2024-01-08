@@ -167,8 +167,11 @@ const LoginViewController = () => {
         });
         console.log('sign in client by email and password', res);
         if (res?.isSuccessful === true) handleAuthSuccessResponse(res, '');
-        else
+        else {
+          setIsLoading(false);
+
           showToast(t('login_failed'), t('check_email_and_password'), 'error');
+        }
       }
       // else  showToast("", "Please enter email or password", "warning")
     } catch (error) {
@@ -227,6 +230,8 @@ const LoginViewController = () => {
         if (res?.isSuccessful === true) {
           handleAuthSuccessResponse(res, '');
         } else {
+          setIsLoading(false);
+
           Alert.alert(
             'Login Failed',
             'Please check your email and password and try again.',
