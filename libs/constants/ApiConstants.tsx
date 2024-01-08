@@ -20,6 +20,7 @@ export const ORDER_CANCEL_FROM_CLIENT = 'providers/cancelOrderByClient';
 export const PAYMENT_HISTORY = 'users/getPaymentHistory';
 export const PAYMENT_FOR_ORDER = 'users/holdClientPayment';
 export const CLIENT_WALLET_AMOUNT = 'users/getClientAmount';
+export const GET_PROVIDER_RESONS = 'providers/getTreatmentByReason'
 // export const SEARCH_API = 'location/getSearchProviderType'
 
 //Provider API

@@ -8,6 +8,7 @@ import {
   GET,
   GET_AD_BANNER,
   GET_LOCATION_SEARCH,
+  GET_PROVIDER_RESONS,
   GET_SEARCH_LIST,
   GET_SEARCH_PROVIDER,
   GET_TREATMENT_MENU,
@@ -42,10 +43,10 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     });
   const searchProviders = (body: {
-    name: string;
+    specialty_id: string;
     longitude: string;
     latitude: string;
-  }): Promise<search_provider> =>
+  }): Promise<search_provider[]> =>
     sendRequest(GET_SEARCH_PROVIDER, {
       method: POST,
       body: body as unknown as BodyInit,
@@ -85,6 +86,8 @@ export const ClientOrderServices = () => {
 
   const orderProvider = (body: {
     client_id: string;
+    heal_id: string;
+    specialty_id: string;
     patient_type: string;
     patient_name: string;
     address: string;
@@ -104,6 +107,7 @@ export const ClientOrderServices = () => {
     service_charge: string,
     total_order_price: string
     currency: string
+
   }): Promise<Order> =>
     sendRequest(ORDER_PROVIDER, {
       method: POST,
@@ -208,6 +212,16 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     })
 
+  const GetResonsForOrder = (body: { provider_type_id: string }): Promise<any> =>
+    sendRequest(GET_PROVIDER_RESONS, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
   return {
     getBannerAds,
     treatmentMenu,
@@ -222,6 +236,7 @@ export const ClientOrderServices = () => {
     OrderCancelFromClient,
     PaymentHistory,
     PaymentForOrder,
-    ClientWallentAmount
+    ClientWallentAmount,
+    GetResonsForOrder
   };
 };

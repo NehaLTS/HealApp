@@ -253,13 +253,13 @@ const HomeScreen = () => {
         }}
         title={
           I18nManager.isRTL
-            ? `${getTitle(item?.name, i18n)}  \u25CF`
-            : `\u25CF  ${getTitle(item?.name, i18n)}`
+            ? `${item?.name.en ? getTitle(item?.name, i18n) : item?.name}  \u25CF`
+            : `\u25CF  ${item?.name.en ? getTitle(item?.name, i18n) : item?.name}`
         }
         onPress={() => {
           setSearchSpecialist(item?.name?.en);
           setSearchProviderList(item);
-          onSearchDone(item?.name?.en);
+          onSearchDone(item?.specialty_id);
         }}
       />
     ));

@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { treatment } from 'libs/types/ProvierTypes';
+import { Reason, treatment } from 'libs/types/ProvierTypes';
 import { ClientProfile, OrderDetail, userLocation } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
@@ -15,7 +15,7 @@ const OrderDetailsController = () => {
   const { t } = useTranslation();
   const [showSummary, setShowSummary] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { treatmentMenu, orderProvider } = ClientOrderServices();
+  const { treatmentMenu, GetResonsForOrder } = ClientOrderServices();
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation<any>();
@@ -24,13 +24,10 @@ const OrderDetailsController = () => {
     orderDetails,
     userProfile: user,
     userId,
-    treatmentsMenu,
-    setTreatmentsMenu,
+    treatmentsReason,
+    setTreatmentsReason
   } = UseClientUserContext();
-  const [treatmentReason, setTreatmentReason] = useState<treatment>({
-    treatmentMenu: [],
-    reason: [],
-  });
+  const [treatmentReason, setTreatmentReason] = useState<Reason[]>([]);
   console.log('userProfile0', userProfile);
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
@@ -61,19 +58,15 @@ const OrderDetailsController = () => {
   });
 
   useEffect(() => {
-    const PROVIDER_TYPE_ID =
-      supplier.name === 'Alternative medicine'
-        ? '1'
-        : supplier?.provider_type_id?.toString();
     setOrder((prevOrder) => ({
       ...prevOrder,
       services: [
         ...prevOrder.services,
         {
-          menu_id: 1,
-          name: { en: 'Basic', he: '', hi: '' },
+          heal_id: 1,
+          services_name: { en: 'Basic', he: '', hi: '' },
           price: '500',
-          provider_type_id: PROVIDER_TYPE_ID,
+          currency: "NIS",
         },
       ],
     }));
@@ -85,44 +78,46 @@ const OrderDetailsController = () => {
         : supplier?.provider_type_id.toString();
 
     try {
-      const res = await treatmentMenu({
+      const res = await GetResonsForOrder({
         provider_type_id: PROVIDER_TYPE_ID,
       });
-      console.log('TreatmentRespons', JSON.stringify(res.reason[0].name));
+      console.log('TreatmentRespons', JSON.stringify(res));
       setTreatmentReason(res);
-      setTreatmentsMenu(res);
+      setTreatmentsReason(res)
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    if (
-      treatmentsMenu !== null &&
-      treatmentsMenu?.treatmentMenu !== undefined
-    ) {
-      console.log(
-        'treatmentsMenu',
-        JSON.stringify(treatmentsMenu.reason[0].name),
-      );
-      const checkExisting = treatmentsMenu?.treatmentMenu?.some((item) => {
-        return item.provider_type_id;
-      });
-      if (checkExisting) {
-        setTreatmentReason(treatmentsMenu);
-      } else {
-        treatmentReasons();
-      }
-      // if(treatmentsMenu.)
-    } else {
-      treatmentReasons();
-    }
+    treatmentReasons();
+    // if (
+    //   treatmentsReason !== null &&
+    //   treatmentsReason !== undefined
+    // ) {
+    //   console.log(
+    //     'treatmentsMenu',
+    //     JSON.stringify(treatmentsReason[0].specialty_name.en),
+    //   );
+    //   const checkExisting = treatmentsReason?.some((item) => {
+    //     return item.specialty_id;
+    //   });
+    //   if (checkExisting) {
+    //     setTreatmentReason(treatmentsReason);
+    //     setTreatmentsReason(treatmentsReason)
+    //   } else {
+    //     treatmentReasons();
+    //   }
+    //   // if(treatmentsMenu.)
+    // } else {
+    //   treatmentReasons();
+    // }
   }, []);
 
-  const symptoms = order.reason.map((item: any) => {
+  const symptoms = order.reason.map((item: Reason) => {
     return {
-      name: { en: item?.name.en, ar: item?.name.ar, he: item?.name.he }, // Assuming you want the English name
-      id: item?.reason_id,
+      name: { en: item?.specialty_name.en, ar: item?.specialty_name.ar, he: item?.specialty_name.he }, // Assuming you want the English name
+      id: item?.specialty_id,
     };
   });
   // {
@@ -142,19 +137,12 @@ const OrderDetailsController = () => {
     updateArray = order.services;
   } else {
     updateArray = [
-      {
-        menu_id: 1,
-        name: { en: 'Basic', he: '', hi: '' },
-        price: '500',
-        provider_type_id: PROVIDER_TYPE_ID,
-      },
+
       ...order.services,
     ];
   }
-  const concatenatedIds = updateArray.map((item) => item.menu_id).join(',');
-  const TotalCost = order?.services
-    .reduce((total, item) => total + parseInt(item.price, 10), 0)
-    .toString();
+  const concatenatedIds = updateArray.map((item) => item.heal_id).join(',');
+  const concatenatedsymptomsIds = symptoms.map((item) => item.id).join(',');
   console.log('hello', concatenatedIds);
   const handleNextButtonPress = async () => {
     console.log('order111', order);
@@ -199,8 +187,7 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${
-              !order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -242,6 +229,8 @@ const OrderDetailsController = () => {
             userLocation.onboardingLocation?.longitude ??
             userLocation.currentLocation?.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
+          heal_id: concatenatedIds,
+          specialty_id: concatenatedsymptomsIds
         };
         console.log(
           'updateArray',

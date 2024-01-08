@@ -1,6 +1,6 @@
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { setLocalData } from 'libs/datastorage/useLocalStorage';
-import { TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
+import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
 import { numericPattern } from 'libs/utility/Utils';
 import React, { useEffect, useState } from 'react';
@@ -17,14 +17,14 @@ const OrderFormController = ({
 }) => {
   const uniqueReasonIds: number[] = [];
   order?.reason?.forEach((item) => {
-    if (!uniqueReasonIds?.includes?.(item?.reason_id)) {
-      uniqueReasonIds?.push?.(item?.reason_id ?? '');
+    if (!uniqueReasonIds?.includes?.(item?.specialty_id)) {
+      uniqueReasonIds?.push?.(item?.specialty_id ?? '');
     }
   });
   const uniqueMenuIds: number[] = [];
   order?.services?.forEach((item) => {
-    if (!uniqueMenuIds?.includes(item.menu_id)) {
-      uniqueMenuIds?.push(item.menu_id);
+    if (!uniqueMenuIds?.includes(item.heal_id)) {
+      uniqueMenuIds?.push(item.heal_id);
       console.log('uniqueMenuIds', uniqueMenuIds);
     }
   });
@@ -41,7 +41,7 @@ const OrderFormController = ({
     1,
     ...uniqueMenuIds,
   ]);
-  const [selectedResourceType, setSelectedResourceType] = useState<any[]>(
+  const [selectedResourceType, setSelectedResourceType] = useState<Reason[]>(
     order?.reason,
   );
   const [selectedMenu, setSelectedMenu] = useState<TreatmentMenu[]>(
@@ -56,6 +56,7 @@ const OrderFormController = ({
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
   const [moveNext, setMoveNext] = useState<Boolean>(false);
+  const [treatmentMenu, setTreatmentMenu] = useState<TreatmentMenu[]>([]);
   function calculateBirthDate(age: number) {
     const currentDate = new Date();
     const birthYear = currentDate.getFullYear() - age;
@@ -133,22 +134,26 @@ const OrderFormController = ({
     }
   };
 
-  const onSelectReasons = (item: any) => {
+  const onSelectReasons = (item: Reason) => {
     const updatedActiveButton = [...activeButton];
-    const itemIndex = updatedActiveButton.indexOf(item.reason_id);
+    const itemIndex = updatedActiveButton.indexOf(item.specialty_id);
 
     if (itemIndex !== -1) {
       updatedActiveButton.splice(itemIndex, 1);
     } else {
-      updatedActiveButton.push(item.reason_id);
+      updatedActiveButton.push(item.specialty_id);
     }
     setActiveButton(updatedActiveButton);
     const updatedSelectedResourceType = selectedResourceType?.includes(item)
       ? selectedResourceType?.filter((selectedItem) => selectedItem !== item)
       : [...selectedResourceType, item];
-
+    const treamentMeanuOFReasons: any[] = []
+    updatedSelectedResourceType.filter((item) => {
+      treamentMeanuOFReasons.push(...item.services)
+    })
     setSelectedResourceType(updatedSelectedResourceType);
-    console.log('updatedSelectedResourceType', updatedSelectedResourceType);
+    setTreatmentMenu(treamentMeanuOFReasons);
+    console.log('updatedSelectedResourceType ', updatedSelectedResourceType, "treamentMeanuOFReasons", treamentMeanuOFReasons);
     setOrder((prevOrder) => ({
       ...prevOrder,
       reason: updatedSelectedResourceType,
@@ -181,37 +186,38 @@ const OrderFormController = ({
 
   const handleItemPress = (item: TreatmentMenu) => {
     const updatedActiveCheckbox = [...activeCheckbox];
-    const itemIndex = updatedActiveCheckbox.indexOf(item?.menu_id);
+    const itemIndex = updatedActiveCheckbox.indexOf(item?.heal_id);
     let updatedSelectedMenu: TreatmentMenu[] = []; // Explicitly define the type
     if (itemIndex !== -1) {
       updatedActiveCheckbox.splice(itemIndex, 1);
     } else {
-      updatedActiveCheckbox.push(item.menu_id);
+      updatedActiveCheckbox.push(item.heal_id);
     }
     setActiveCheckbox(updatedActiveCheckbox);
     if (
-      selectedMenu.find((selectedItem) => selectedItem.menu_id === item.menu_id)
+      selectedMenu.find((selectedItem) => selectedItem.heal_id === item.heal_id)
     ) {
       updatedSelectedMenu = selectedMenu.filter(
-        (selectedItem) => selectedItem.menu_id !== item.menu_id,
+        (selectedItem) => selectedItem.heal_id !== item.heal_id,
       );
     } else {
       updatedSelectedMenu = [...selectedMenu, item];
     }
     setSelectedMenu(updatedSelectedMenu);
+    // services: [{
+    //   heal_id: 1,
+    //   services_name: {
+    //     en: 'Basic',
+    //     ru: '',
+    //     he: '',
+    //     ar: '',
+    //   },
+    //   price: '500',
+    //   currency: "NIS"
+    // }, ...updatedSelectedMenu]
     setOrder((prevOrder) => ({
       ...prevOrder,
-      services: [{
-        menu_id: 1,
-        name: {
-          en: 'Basic',
-          ru: '',
-          he: '',
-          ar: '',
-        },
-        price: '500',
-        provider_type_id: 0,
-      }, ...updatedSelectedMenu]
+      services: [...updatedSelectedMenu]
     }));
   };
 
@@ -284,6 +290,7 @@ const OrderFormController = ({
     userLocation,
     otherReasonsRef,
     setUserLocation,
+    treatmentMenu
   };
 };
 

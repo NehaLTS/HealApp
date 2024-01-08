@@ -33,21 +33,23 @@ export interface Banner {
   destinationUrl: string;
 }
 
+
 export interface treatment {
   treatmentMenu: TreatmentMenu[];
   reason: Reason[];
 }
 
 export interface Reason {
-  reason_id: number;
-  name: Name;
+  specialty_id: number;
+  specialty_name: Name;
+  services: TreatmentMenu[];
 }
 
 export interface TreatmentMenu {
-  menu_id: number;
-  name: Name;
+  heal_id: number;
+  services_name: Name;
   price: string;
-  provider_type_id: number;
+  currency: number;
 }
 
 export interface order_provider {

@@ -10,7 +10,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { OrderDetail } from 'libs/types/UserType';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -34,7 +34,7 @@ const OrderFormView = ({
   onPressWhenHealer,
   supplier,
 }: {
-  treatmentReason: treatment;
+  treatmentReason: Reason[];
   setOrder: React.Dispatch<React.SetStateAction<OrderDetail>>;
   order: OrderDetail;
   hideTreatmentMenu: boolean;
@@ -71,6 +71,7 @@ const OrderFormView = ({
     userLocation,
     setUserLocation,
     otherReasonsRef,
+    treatmentMenu
   } = OrderFormController({
     setOrder,
     order,
@@ -78,12 +79,13 @@ const OrderFormView = ({
   });
 
   const { t, i18n } = useTranslation();
+  const [treatmentMenuOfReason, setTreatmentMenuOfReason] = useState<TreatmentMenu[]>([])
 
   useEffect(() => {
-    const getPreselectedReason = treatmentReason?.reason?.find(
-      (item) => item?.name?.en === supplier?.speciality_name,
+    const getPreselectedReason = treatmentReason?.find(
+      (item) => item?.specialty_id === supplier?.specialty_id
     );
-    console.log('getPreselectedReason', getPreselectedReason);
+    console.log('getPreselectedReason', getPreselectedReason, treatmentReason[0], supplier);
 
     if (getPreselectedReason !== undefined && getPreselectedReason) {
       setOrder({
@@ -92,7 +94,17 @@ const OrderFormView = ({
       });
       onSelectReasons(getPreselectedReason);
     }
+    // setTreatmentMenuOfReason([...treatmentReason[0]?.services])
+
   }, [treatmentReason]);
+
+  useEffect(() => {
+    if (treatmentMenu.length > 0) {
+      setTreatmentMenuOfReason([...treatmentMenu])
+    }
+
+  }, [treatmentMenu])
+
 
   const showFilledData = () => {
     return (
@@ -126,14 +138,14 @@ const OrderFormView = ({
             : 'space-between',
         }}
       >
-        {(treatmentReason as unknown as treatment)?.reason?.length ? (
-          (treatmentReason as unknown as treatment)?.reason.map(
+        {(treatmentReason as unknown as Reason[])?.length ? (
+          (treatmentReason as unknown as Reason[])?.map(
             (item: Reason, index: number) => (
               <Button
                 key={index}
-                title={getTitle(item?.name, i18n)}
+                title={getTitle(item?.specialty_name, i18n)}
                 isSmall
-                isPrimary={activeButton?.includes?.(item?.reason_id) ?? false}
+                isPrimary={activeButton?.includes?.(item?.specialty_id) ?? false}
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
                 fontSized={getHeight(fontSize?.textM)}
@@ -198,12 +210,15 @@ const OrderFormView = ({
   );
   const getTreatmentsView = () => (
     <>
+      {console.log("treatmentMenuOfReason", treatmentMenuOfReason, treatmentMenu)}
       <Text title={t('treatments')} style={styles.reasonText} />
-      {((treatmentReason as unknown as treatment)?.treatmentMenu?.length ?? 0) >
+
+      {(treatmentMenuOfReason?.length ?? 0) >
         0 ? (
-        (treatmentReason as unknown as treatment)?.treatmentMenu?.map(
+        treatmentMenuOfReason?.map(
           (item: TreatmentMenu, index: number) => (
-            <>{item?.menu_id === 1 ? <View
+            <>
+              {/* {item?.heal_id === 1 ? <View
               key={index}
               style={styles.checkboxContainer}>
               <View style={styles.checkBox}>
@@ -215,21 +230,21 @@ const OrderFormView = ({
 
               </View>
               <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                {item?.name?.en.charAt(0).toUpperCase() +
-                  item?.name?.en.slice(1)}
+                {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
+                  getTitle(item?.services_name, i18n)?.slice(1)}
               </Text>
               <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                {item.price}
+                {item.price + " " + item.currency}
               </Text>
-            </View> :
+            </View> : */}
               <TouchableOpacity
                 key={index}
                 style={styles.checkboxContainer}
-                disabled={index === 0}
+
                 onPress={() => handleItemPress(item)}
               >
                 <View style={styles.checkBox}>
-                  {activeCheckbox?.includes(item?.menu_id) && (
+                  {activeCheckbox?.includes(item?.heal_id) && (
                     <Image
                       source={require('assets/icon/check.png')}
                       style={styles.image}
@@ -237,14 +252,14 @@ const OrderFormView = ({
                   )}
                 </View>
                 <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                  {getTitle(item?.name, i18n)?.charAt(0).toUpperCase() +
-                    getTitle(item?.name, i18n)?.slice(1)}
+                  {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
+                    getTitle(item?.services_name, i18n)?.slice(1)}
                 </Text>
                 <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                  {item.price}
+                  {item.price + " " + item.currency}
                 </Text>
               </TouchableOpacity>
-            }
+              {/* } */}
             </>
           ),
         )

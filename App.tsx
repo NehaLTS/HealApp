@@ -32,7 +32,7 @@ import { Alert } from 'react-native';
 import Geocoder from 'react-native-geocoding';
 import { useCurrentAddress } from 'libs/useCurrentAddress';
 import { Platform } from 'react-native';
-import { treatment } from 'libs/types/ProvierTypes';
+import { Reason, treatment } from 'libs/types/ProvierTypes';
 import { getLocalData } from 'libs/datastorage/useLocalStorage';
 import useNetworkConnection from 'libs/useNetworkConnection';
 import { Order } from 'libs/types/OrderTypes';
@@ -56,9 +56,10 @@ const App = () => {
   const [userLocation, setUserLocation] =
     useState<userLocation>(null);
   const [remainingTime, setRemainingTime] = useState<RemaingTime>(null);
-  const [treatmentsMenu, setTreatmentsMenu] = useState<treatment>(null);
+  const [treatmentsReason, setTreatmentsReason] = useState<Reason[]>(null);
   const [walletAmount, setWalletAmount] = useState<string>('0')
   const [providerOrder, setProviderOrder] = useState<Order>(null)
+
   /** To Initialize Google SDk */
   GoogleSignin.configure({
     webClientId:
@@ -143,8 +144,8 @@ const App = () => {
             userLocation,
             setRemainingTime,
             remainingTime,
-            treatmentsMenu,
-            setTreatmentsMenu,
+            treatmentsReason,
+            setTreatmentsReason,
             walletAmount,
             setWalletAmount
 

@@ -45,6 +45,8 @@ const CardView = ({ item, index, isSearch }: any) => {
       setModalVisible(true);
     }
   };
+
+  console.log("item....", item)
   const paymentModal = () => (
     <Modal
       backdropColor={colors.white}
@@ -94,7 +96,7 @@ const CardView = ({ item, index, isSearch }: any) => {
             activeOpacity={1}
           >
             <Image
-              source={getProviderImage(item?.name, item?.provider_type_id)}
+              source={getProviderImage(item?.specialty_name, item?.provider_type_id)}
               style={styles.specialistIcon}
             />
             <Text
@@ -110,7 +112,7 @@ const CardView = ({ item, index, isSearch }: any) => {
           >
             <View style={styles.container}>
               <Image
-                source={getProviderImage(item?.name, item?.provider_type_id)}
+                source={getProviderImage(item?.specialty_name, item?.provider_type_id)}
                 style={styles.specialistIcon}
               />
               <Text

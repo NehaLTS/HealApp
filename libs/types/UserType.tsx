@@ -1,3 +1,5 @@
+import { Reason } from "./ProvierTypes";
+
 export interface UserType {
   existing?: string;
   isSuccessful: boolean;
@@ -199,9 +201,11 @@ export interface OrderDetail {
   Payment_mode: string;
   TotalCost: string;
   menu_id: string;
-  reason: any[];
+  reason: Reason[];
   provider_type_id: number;
   isOrderForOther: boolean;
+  heal_id?: string;
+  specialty_id?: string;
 }
 
 export interface RemaingTime {

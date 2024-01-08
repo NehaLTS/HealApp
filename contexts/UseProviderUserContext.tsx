@@ -20,7 +20,7 @@ export interface ProviderUserContextFields {
   setProviderServices: React.Dispatch<React.SetStateAction<ProviderServices>>;
   setUserLocation: React.Dispatch<React.SetStateAction<userLocation>>;
   userLocation: userLocation;
-  providerOrder: ProviderOrder
+  providerOrder: ProviderOrder;
   setProviderOrder: React.Dispatch<React.SetStateAction<ProviderOrder>>;
 }
 
