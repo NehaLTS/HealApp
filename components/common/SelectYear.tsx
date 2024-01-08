@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: getHeight(dimens.sideMargin),
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getWidth(dimens.borderThin),
     borderColor: colors.primary,
     borderRadius: getHeight(dimens.marginS),
     justifyContent: 'space-between',

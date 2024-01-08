@@ -1,33 +1,26 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import DoctorTipView from 'components/client/home/DoctorTipView';
 import RatingView from 'components/client/home/RatingView';
 import TreatmentEnd from 'components/client/home/TreatmentEnd';
-import React, { useState } from 'react';
-import arrowBack from 'assets/icon/arrowBack.png';
-
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { getHeight, getWidth } from 'libs/StyleHelper';
-import { dimens } from 'designToken/dimens';
-import { RNHeader } from 'components/common/Header';
-import { colors } from 'designToken/colors';
-import { ClientOrderServices } from 'libs/ClientOrderServices';
 import Loader from 'components/common/Loader';
-import { Order } from 'libs/types/OrderTypes';
-import {
-  deleteOrder,
-  getLocalData,
-  setLocalData,
-} from 'libs/datastorage/useLocalStorage';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { colors } from 'designToken/colors';
+import { dimens } from 'designToken/dimens';
+import { ClientOrderServices } from 'libs/ClientOrderServices';
+import { getHeight, getWidth } from 'libs/StyleHelper';
+import { deleteOrder, getLocalData } from 'libs/datastorage/useLocalStorage';
+import { Order } from 'libs/types/OrderTypes';
 import NavigationRoutes from 'navigator/NavigationRoutes';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 const TreatmentCompletedScreen = () => {
-  const [showViews, setShowViews] = useState('Treatmen_End');
-  const navigation = useNavigation();
+  const [showViews, setShowViews] = useState('Treatment_End');
+  const navigation = useNavigation<any>();
   const { OrderPayment, ProviderRating } = ClientOrderServices();
   const [isLoading, setIsLoading] = React.useState(false);
   const [rating, setRating] = useState(0);
-  const route = useRoute<any>();
+  // const route = useRoute<any>();
   const { userId } = UseClientUserContext();
 
   const currentOrder: Order = getLocalData('ORDER') as Order;
@@ -38,21 +31,15 @@ const TreatmentCompletedScreen = () => {
   const onApprovePayment = async () => {
     try {
       setIsLoading(true);
-      await OrderPayment({
+      const res = await OrderPayment({
         order_id: currentOrder?.orderId,
-      })
-        .then((res) => {
-          console.log('object', res);
-          if (res.isSuccessful) {
-            setShowViews('Rating_View');
-            deleteOrder();
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+      });
+      if (res.isSuccessful) {
+        setShowViews('Rating_View');
+        deleteOrder();
+      }
     } catch {
-      console.error('Error:');
+      (err: Error) => console.error('Error catch:', err.message);
     } finally {
       setIsLoading(false);
     }
@@ -60,25 +47,17 @@ const TreatmentCompletedScreen = () => {
 
   const onApproveRating = async () => {
     try {
-      setIsLoading(false);
-      console.log('currentOrder.providerDetails.providerId', currentOrder);
-      await ProviderRating({
-        provider_id: '6',
+      setIsLoading(true);
+      const res = await ProviderRating({
+        provider_id: currentOrder?.providerDetails?.providerId,
         client_id: userId,
         ratings: rating?.toString(),
-      })
-        .then((res) => {
-          console.log('object', res);
-
-          if (res.msg === 'successfully created') {
-            setShowViews('Tip_View');
-          }
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
+      });
+      if (res?.msg === 'successfully created') {
+        setShowViews('Tip_View');
+      }
     } catch {
-      console.error('Error catch:');
+      (err: Error) => console.error('Error catch:', err.message);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +66,7 @@ const TreatmentCompletedScreen = () => {
     <>
       {isLoading && <Loader />}
       <View style={styles.container}>
-        {showViews === 'Treatmen_End' && (
+        {showViews === 'Treatment_End' && (
           <TreatmentEnd
             onPress={onApprovePayment}
             currentOrder={currentOrder}

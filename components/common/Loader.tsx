@@ -4,19 +4,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Animated,
+  ColorValue,
   Easing,
   StyleSheet,
   View,
 } from 'react-native';
 import RNModal from './Modal';
-const Loader = ({ isSmall }: { isSmall?: boolean }) => {
+const Loader = ({
+  isSmall,
+  color,
+}: {
+  isSmall?: boolean;
+  color?: ColorValue;
+}) => {
   return (
     <>
       {isSmall ? (
         <ActivityIndicator
           style={styles.loading}
           size={'large'}
-          color={colors.primary}
+          color={color ?? colors.primary}
         />
       ) : (
         <RNModal

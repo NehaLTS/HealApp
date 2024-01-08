@@ -36,7 +36,6 @@ import {
   ProviderHomeDetails,
   TreatementEnded,
   UpdateProfile,
-
 } from 'libs/types/ProvierTypes';
 import { BodyInit, HeadersInit } from '../api/ApiTypes';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
@@ -280,11 +279,15 @@ export const AuthServicesProvider = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
-  const onGetProviderLanguage = (provider_id: string, language: string): Promise<any> =>
+  const UpdateProviderLanguage = (
+    provider_id: string,
+    language: string,
+  ): Promise<any> =>
     sendRequest(PROVIDER_LANGUAGE, {
       method: PATCH,
       body: {
-        provider_id: provider_id, language: language
+        provider_id: provider_id,
+        language: language,
       } as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
@@ -312,20 +315,27 @@ export const AuthServicesProvider = () => {
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
-  const GetProviderReport = (providerId: string, created_date_time: string, filter: string): Promise<any> =>
+  const GetProviderReport = (
+    providerId: string,
+    created_date_time: string,
+    filter: string,
+  ): Promise<any> =>
     sendRequest(GET_PROVIDER_REPORT, {
       method: POST,
       body: {
         provider_id: providerId,
         created_date_time: created_date_time,
-        filter: filter
+        filter: filter,
       } as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',
         'x-access-token': token,
       } as unknown as HeadersInit,
     });
-  const GetProviderPayment = (providerId: string, created_date_time: string,): Promise<any> =>
+  const GetProviderPayment = (
+    providerId: string,
+    created_date_time: string,
+  ): Promise<any> =>
     sendRequest(GET_PROVIDER_Payment, {
       method: POST,
       body: {
@@ -338,7 +348,10 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
-  const removeService = (body: { order_id: string, services: string }): Promise<any> =>
+  const removeService = (body: {
+    order_id: string;
+    services: string;
+  }): Promise<any> =>
     sendRequest(REMOVE_SERVICES, {
       method: PATCH,
       body: body as unknown as BodyInit,
@@ -348,7 +361,10 @@ export const AuthServicesProvider = () => {
       } as unknown as HeadersInit,
     });
 
-  const addServiceWhenTreatmentEnd = (body: { order_id: string, services: string }): Promise<any> =>
+  const addServiceWhenTreatmentEnd = (body: {
+    order_id: string;
+    services: string;
+  }): Promise<any> =>
     sendRequest(ADD_SERVICE_WHEN_TREATEMENT_END, {
       method: PATCH,
       body: body as unknown as BodyInit,
@@ -376,12 +392,12 @@ export const AuthServicesProvider = () => {
     getProviderDaySummary,
     OnGetOrderHistory,
     OnGetOrderDetails,
-    onGetProviderLanguage,
+    UpdateProviderLanguage,
     GetProviderProfiles,
     UpdateProviderProfile,
     GetProviderReport,
     GetProviderPayment,
     removeService,
-    addServiceWhenTreatmentEnd
+    addServiceWhenTreatmentEnd,
   };
 };

@@ -264,7 +264,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: getHeight(dimens.paddingXs + dimens.borderBold),
     fontFamily: fontFamily.regular,
     fontSize: getHeight(fontSize.textL),
-    lineHeight: getHeight(22),
   },
   errorImage: {
     width: getWidth(dimens.sideMargin),

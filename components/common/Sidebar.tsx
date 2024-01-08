@@ -1,4 +1,4 @@
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Dimensions, I18nManager, Image, StyleSheet, View } from 'react-native';
 import React from 'react';
 import RNModal from './Modal';
 import { getHeight, getWidth } from 'libs/StyleHelper';
@@ -28,7 +28,7 @@ const Sidebar = ({
 }) => {
   const icons = [profile, history, report, money, support, language];
   console.log('isVisible111', isVisible);
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const titles = [
     { id: 'Profile', title: t('personal_profile') },
@@ -42,8 +42,8 @@ const Sidebar = ({
     <RNModal
       isVisible={isVisible}
       backdropOpacity={0}
-      animationIn={'slideInRight'}
-      animationOut={'slideOutRight'}
+      animationIn={I18nManager.isRTL ? 'slideInLeft' : 'slideInRight'}
+      animationOut={I18nManager.isRTL ? 'slideOutLeft' : 'slideOutRight'}
       animationInTiming={300}
       animationOutTiming={300}
       style={{
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 12, // For Android
-
   },
   container: {
     gap: getHeight(dimens.marginL),

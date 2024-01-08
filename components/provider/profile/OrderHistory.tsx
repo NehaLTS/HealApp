@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 
 const OrderHistory = () => {
   const navigation = useNavigation();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { OnGetOrderHistory } = AuthServicesProvider();
   const { userId } = UseProviderUserContext();
   const [showDetail, setShowDetail] = React.useState<{
@@ -98,15 +98,9 @@ const OrderHistory = () => {
 
   const getOrderHistory = async (isLoading: boolean) => {
     try {
+      setIsLoading(isLoading);
       if (allDataLoaded === false) {
-        setIsLoading(isLoading);
-        const res = await OnGetOrderHistory(
-          Number(userId),
-          startIndex,
-          endIndex,
-        );
-        console.log('res history', res);
-        console.log('length', res?.length);
+        const res = await OnGetOrderHistory(Number(50), startIndex, endIndex);
         if (!res?.message) {
           setOrderHistory([...orderHistory, ...res]);
           setStartIndex(endIndex + 1);
@@ -127,17 +121,20 @@ const OrderHistory = () => {
 
   return (
     <View style={styles.mainContainer}>
-      {isLoading && <Loader />}
       <View style={styles.headerContainer}>
         {headerLeft()}
         {headerTitle()}
       </View>
       {showDetail?.isVisible === false ? (
-        orderHistory?.length === 0 && !isLoading ? (
-          <Text
-            style={styles.noHistoryText}
-            title={'No order history found.'}
-          />
+        orderHistory?.length === 0 ? (
+          isLoading ? (
+            <Loader />
+          ) : (
+            <Text
+              style={styles.noHistoryText}
+              title={'No order history found.'}
+            />
+          )
         ) : (
           <FlatList
             keyboardShouldPersistTaps="always"

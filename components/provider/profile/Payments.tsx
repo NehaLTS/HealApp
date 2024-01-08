@@ -22,14 +22,14 @@ import {
 
 const Payments = () => {
   const navigation = useNavigation<any>();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const { GetProviderPayment } = AuthServicesProvider();
-  const { userId } = UseProviderUserContext()
+  const { userId } = UseProviderUserContext();
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fallAnimation] = useState(new Animated.Value(-100));
-  console.log('selectedYear', selectedYear)
+  console.log('selectedYear', selectedYear);
   const [paymentData, setPaymentData] = useState({
     all_earnings: 0,
     payment_to_heal: 0,
@@ -56,9 +56,11 @@ const Payments = () => {
   };
   const fetchPaymentData = async () => {
     try {
-      //true
-      setIsLoading(true)
-      const fetchedPaymentData = await GetProviderPayment('50', selectedYear?.toString());
+      setIsLoading(true);
+      const fetchedPaymentData = await GetProviderPayment(
+        userId,
+        selectedYear?.toString(),
+      );
       console.log('Fetched payment data:', fetchedPaymentData);
       if (fetchedPaymentData) {
         setPaymentData(fetchedPaymentData);
@@ -66,12 +68,13 @@ const Payments = () => {
     } catch (error) {
       console.error('Error fetching payment data:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     fetchPaymentData();
   }, [selectedYear]);
+
   useEffect(() => {
     Animated.timing(fallAnimation, {
       toValue: 0,
@@ -80,7 +83,13 @@ const Payments = () => {
     }).start();
   }, [isLoading]);
 
-  const FallingItemView = ({ title, amount }: { title: string, amount: string }) => {
+  const FallingItemView = ({
+    title,
+    amount,
+  }: {
+    title: string;
+    amount: string;
+  }) => {
     return (
       <Animated.View
         style={{
@@ -123,7 +132,6 @@ const Payments = () => {
         ) : (
           <Loader />
         )}
-
       </View>
     </>
   );
