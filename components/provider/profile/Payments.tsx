@@ -80,16 +80,16 @@ const Payments = () => {
         style={styles.itemContainer}
         entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
           .duration(400)
-          .delay(400 + index * 100)}
+          .delay(400)}
       >
         <AnimatedText
           entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
             .duration(400)
-            .delay(600 + index * 100)}
+            .delay(400 + index * 100)}
           title={title}
         />
         <AnimatedText
-          entering={FadeInRight.duration(400).delay(600 + index * 100)}
+          entering={FadeInRight.duration(400).delay(400 + index * 100)}
           style={styles.price}
           title={`${amount} NIS`}
         />
