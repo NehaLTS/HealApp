@@ -8,36 +8,42 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import Button from './Button';
+import RNModal from './Modal';
 import Text from './Text';
 
-const AlertView = ({ titles }: { titles: string[] }) => {
+const AlertView = ({ title, onPress }: { title: string, onPress: () => void }) => {
   const navigation = useNavigation<any>();
   const { t } = useTranslation()
   return (
     <>
-
-      <View style={styles.modalContent}>
-        <View style={styles.header}>
-          <Text style={styles.message} title={'INFO'} />
-          <View style={styles.subHeadingContainer}>
-            {titles.map((title: string, index: any) => (
-              <Text key={index} style={styles.subHeading} title={title} />
-            ))}
-
+      <RNModal
+        isVisible
+        backdropOpacity={0}
+        animationIn={'zoomInUp'}
+        animationOut={'zoomOut'}
+        animationInTiming={300}
+        animationOutTiming={300}
+      >
+        <View style={styles.modalContent}>
+          <View style={styles.header}>
+            <Text style={styles.message} title={'INFO'} />
+            <View style={styles.subHeadingContainer}>
+              <Text style={styles.subHeading} title={title} />
+              <Text style={styles.subHeading} title={t('try_again_later')} />
+            </View>
           </View>
-        </View>
 
-        <View style={styles.buttonContainer}>
-          <Button
-            title={t('ok')}
-            // isPrimary
-            isSmall
-            fontSized={getHeight(fontSize.textXl)}
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-          {/* <Button
+          <View style={styles.buttonContainer}>
+            <Button
+              title={t('ok')}
+              isPrimary
+              isSmall
+              fontSized={getHeight(fontSize.textXl)}
+              // onPress={() => {
+              //   navigation.goBack();
+              // }}
+              onPress={onPress} />
+            {/* <Button
             title={'Cancel'}
             isSmall
             fontSized={18}
@@ -45,8 +51,10 @@ const AlertView = ({ titles }: { titles: string[] }) => {
 
             }}
           /> */}
+          </View>
         </View>
-      </View>
+      </RNModal>
+
     </>
   );
 };
@@ -58,11 +66,10 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.medium,
   },
   buttonContainer: {
-    // gap: 60,
     alignSelf: "center",
     flexDirection: "row",
-    marginBottom: getHeight(dimens.marginL)
-
+    marginBottom: getHeight(dimens.marginM),
+    marginTop: getHeight(dimens.marginL)
   },
   buttonText: {
     textAlign: 'center',
@@ -70,7 +77,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   modalContent: {
-    backgroundColor: colors.lightGrey,
+    backgroundColor: colors.white,
     padding: getHeight(dimens.marginM),
     borderRadius: getHeight(dimens.marginS),
     // height: '100%',
@@ -83,7 +90,8 @@ const styles = StyleSheet.create({
   message: {
     fontSize: getHeight(20),
     fontFamily: fontFamily.medium,
-    marginBottom: 6,
+    marginBottom: getHeight(dimens.marginS)
+
   },
   subHeading: {
     fontSize: getHeight(fontSize.textL),
@@ -92,9 +100,10 @@ const styles = StyleSheet.create({
   },
   subHeadingContainer: {
     marginBottom: 10,
-    height: '50%',
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "column",
+    columnGap: getHeight(8)
 
   },
 });

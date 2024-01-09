@@ -70,6 +70,7 @@ const SearchDoctor = () => {
     showAddToWallet,
     providerNotFound,
     orderCancel,
+    setProviderNotFound
   } = SearchDoctorController();
   console.log('providerStatus 111', providerStatus);
   const [showCancelTextButton, setShowCancelTextButton] = useState(true);
@@ -194,11 +195,11 @@ const SearchDoctor = () => {
           style={styles.alertContainer}
         >
           {providerNotFound && (
-            <AlertView titles={[
-              t('no_nearby_provider'),
-              t('try_again_later'),
-            ]}
-              onpress={navigation.goBack()}
+            <AlertView title={t('no_nearby_provider')}
+              onPress={() => {
+                console.log('AlertView pressed');
+                navigation.goBack();
+              }}
             />
           )}
         </View>
@@ -517,9 +518,9 @@ const styles = StyleSheet.create({
   },
   alertContainer: {
     position: 'absolute',
-    top: '30%',
+    top: '10%',
     left: '25%',
-    transform: [{ translateX: -50 }, { translateY: -50 }],
+    transform: [{ translateX: -40 }, { translateY: -40 }],
     zIndex: 9999
   },
 });
