@@ -66,6 +66,7 @@ const RegistrationView = () => {
           isActive
           style={styles.forgotPassword}
           title={t('forgot_password')}
+          disabled
         />
         <Button
           title={t('sign_up')}

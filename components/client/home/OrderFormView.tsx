@@ -73,7 +73,7 @@ const OrderFormView = ({
     otherReasonsRef,
     treatmentMenu,
     setSelectedReasontMenuItem,
-    selectedReasontMenuItem
+    selectedReasontMenuItem,
   } = OrderFormController({
     setOrder,
     order,
@@ -81,14 +81,21 @@ const OrderFormView = ({
   });
 
   const { t, i18n } = useTranslation();
-  const [treatmentMenuOfReason, setTreatmentMenuOfReason] = useState<TreatmentMenu[]>([])
-
+  const [treatmentMenuOfReason, setTreatmentMenuOfReason] = useState<
+    TreatmentMenu[]
+  >([]);
 
   useEffect(() => {
+    if (treatmentReason?.length === 0) return;
     const getPreselectedReason = treatmentReason?.find(
-      (item) => item?.specialty_id === supplier?.specialty_id
+      (item) => item?.specialty_id === supplier?.specialty_id,
     );
-    console.log('getPreselectedReason', getPreselectedReason, treatmentReason[0], supplier);
+    console.log(
+      'getPreselectedReason',
+      getPreselectedReason,
+      treatmentReason[0],
+      supplier,
+    );
 
     if (getPreselectedReason !== undefined && getPreselectedReason) {
       setOrder({
@@ -98,18 +105,15 @@ const OrderFormView = ({
       onSelectReasons(getPreselectedReason);
     }
     if (treatmentReason && treatmentReason[0]?.services) {
-      setSelectedReasontMenuItem([...treatmentReason[0]?.services])
+      setSelectedReasontMenuItem([...treatmentReason[0]?.services]);
     }
-
   }, [treatmentReason]);
 
   useEffect(() => {
     if (treatmentMenu.length > 0) {
-      setTreatmentMenuOfReason([...treatmentMenu])
+      setTreatmentMenuOfReason([...treatmentMenu]);
     }
-
-  }, [treatmentMenu])
-
+  }, [treatmentMenu]);
 
   const showFilledData = () => {
     return (
@@ -150,7 +154,9 @@ const OrderFormView = ({
                 key={index}
                 title={getTitle(item?.specialty_name, i18n)}
                 isSmall
-                isPrimary={activeButton?.includes?.(item?.specialty_id) ?? false}
+                isPrimary={
+                  activeButton?.includes?.(item?.specialty_id) ?? false
+                }
                 onPress={() => onSelectReasons(item)}
                 width={'30%'}
                 fontSized={getHeight(fontSize?.textM)}
@@ -215,59 +221,61 @@ const OrderFormView = ({
   );
   const getTreatmentsView = () => (
     <>
-      {console.log("treatmentMenuOfReason", selectedReasontMenuItem, treatmentMenu)}
+      {console.log(
+        'treatmentMenuOfReason',
+        selectedReasontMenuItem,
+        treatmentMenu,
+      )}
       <Text title={t('treatments')} style={styles.reasonText} />
 
-      {(selectedReasontMenuItem?.length ?? 0) >
-        0 ? (
-        selectedReasontMenuItem?.map(
-          (item: TreatmentMenu, index: number) => (
-            <>
-              {item?.services_name?.en === "Visit" ? <View
-                key={index}
-                style={styles.checkboxContainer}>
+      {(selectedReasontMenuItem?.length ?? 0) > 0 ? (
+        selectedReasontMenuItem?.map((item: TreatmentMenu, index: number) => (
+          <>
+            {item?.services_name?.en === 'Consultation' ? (
+              <View key={index} style={styles.checkboxContainer}>
                 <View style={styles.checkBox}>
-
                   <Image
                     source={require('assets/icon/check.png')}
                     style={styles.image}
                   />
-
                 </View>
                 <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                  {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
+                  {getTitle(item?.services_name, i18n)
+                    ?.charAt(0)
+                    .toUpperCase() +
                     getTitle(item?.services_name, i18n)?.slice(1)}
                 </Text>
                 <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                  {item.price + " " + item.currency}
+                  {item.price + ' ' + item.currency}
                 </Text>
-              </View> :
-                <TouchableOpacity
-                  key={index}
-                  style={styles.checkboxContainer}
-
-                  onPress={() => handleItemPress(item)}
-                >
-                  <View style={styles.checkBox}>
-                    {activeCheckbox?.includes(item?.heal_id) && (
-                      <Image
-                        source={require('assets/icon/check.png')}
-                        style={styles.image}
-                      />
-                    )}
-                  </View>
-                  <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                    {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
-                      getTitle(item?.services_name, i18n)?.slice(1)}
-                  </Text>
-                  <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                    {item.price + " " + item.currency}
-                  </Text>
-                </TouchableOpacity>
-              }
-            </>
-          ),
-        )
+              </View>
+            ) : (
+              <TouchableOpacity
+                key={index}
+                style={styles.checkboxContainer}
+                onPress={() => handleItemPress(item)}
+              >
+                <View style={styles.checkBox}>
+                  {activeCheckbox?.includes(item?.heal_id) && (
+                    <Image
+                      source={require('assets/icon/check.png')}
+                      style={styles.image}
+                    />
+                  )}
+                </View>
+                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                  {getTitle(item?.services_name, i18n)
+                    ?.charAt(0)
+                    .toUpperCase() +
+                    getTitle(item?.services_name, i18n)?.slice(1)}
+                </Text>
+                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                  {item.price + ' ' + item.currency}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </>
+        ))
       ) : (
         <ActivityIndicator
           style={styles.loader}
@@ -360,8 +368,9 @@ const OrderFormView = ({
         <Button
           title={
             isSubmitDetail || order?.patient_type?.type === 'other'
-              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${order?.phonenumber
-              }`
+              ? `${calculateAgeFromDate(order?.patient_type?.age)} y.o., ${
+                  order?.phonenumber
+                }`
               : t('someone_else')
           }
           isPrimary={order?.isOrderForOther}
@@ -521,7 +530,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: getHeight(dimens.marginS),
     paddingLeft: getWidth(2),
-
   },
   button: {
     flexDirection: 'row',
@@ -552,7 +560,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: getHeight(dimens.borderThin),
     width: '90%',
     color: colors.grey,
-    textAlign: I18nManager.isRTL ? 'right' : 'left',
+    textAlign: 'left',
     textAlignVertical: 'bottom',
     paddingBottom: getHeight(dimens.marginS),
   },

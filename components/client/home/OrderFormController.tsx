@@ -50,7 +50,12 @@ const OrderFormController = ({
   const ageRef = React.useRef<any>('');
   const phoneRef = React.useRef<any>('');
   const otherReasonsRef = React.useRef<any>('');
-  const { userLocation, setUserLocation, setSelectedReasontMenuItem, selectedReasontMenuItem } = UseClientUserContext();
+  const {
+    userLocation,
+    setUserLocation,
+    setSelectedReasontMenuItem,
+    selectedReasontMenuItem,
+  } = UseClientUserContext();
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
@@ -146,14 +151,19 @@ const OrderFormController = ({
     const updatedSelectedResourceType = selectedResourceType?.includes(item)
       ? selectedResourceType?.filter((selectedItem) => selectedItem !== item)
       : [...selectedResourceType, item];
-    const treamentMeanuOFReasons: any[] = []
+    const treamentMeanuOFReasons: any[] = [];
     updatedSelectedResourceType.filter((item) => {
-      treamentMeanuOFReasons.push(...item.services)
-    })
-    setSelectedReasontMenuItem(treamentMeanuOFReasons)
+      treamentMeanuOFReasons.push(...item.services);
+    });
+    setSelectedReasontMenuItem(treamentMeanuOFReasons);
     setSelectedResourceType(updatedSelectedResourceType);
     setTreatmentMenu(treamentMeanuOFReasons);
-    console.log('updatedSelectedResourceType ', updatedSelectedResourceType, "treamentMeanuOFReasons", treamentMeanuOFReasons);
+    console.log(
+      'updatedSelectedResourceType ',
+      updatedSelectedResourceType,
+      'treamentMeanuOFReasons',
+      treamentMeanuOFReasons,
+    );
     setOrder((prevOrder) => ({
       ...prevOrder,
       reason: updatedSelectedResourceType,
@@ -215,33 +225,45 @@ const OrderFormController = ({
     //   price: '500',
     //   currency: "NIS"
     // }, ...updatedSelectedMenu]
-    const itemData = selectedReasontMenuItem.filter((item => {
-      if (item.services_name.en === "Visit") return item
-    }))
+    const itemData = selectedReasontMenuItem.filter((item) => {
+      if (item.services_name.en === 'Consultation') return item;
+    });
     const uniqueMap = itemData.reduce((map, obj) => {
-      if (!map[obj.services_name.en] || parseInt(map[obj.services_name.en].price) < parseInt(obj.price)) {
+      if (
+        !map[obj.services_name.en] ||
+        parseInt(map[obj.services_name.en].price) < parseInt(obj.price)
+      ) {
         map[obj.services_name.en] = obj;
       }
       return map;
     }, {});
-    console.log("uniqueMap", uniqueMap.Visit)
+    console.log('uniqueMap', uniqueMap.Consultation);
 
-    console.log("itemData....13", itemData)
-    const servicesAdded = order.services.filter((item) => item.services_name.en !== uniqueMap.Visit.services_name.en)
-    setOrder((prevOrder) => ({
-      ...prevOrder,
-      services: [{
-        heal_id: uniqueMap.Visit.heal_id,
-        services_name: {
-          en: uniqueMap.Visit.services_name.en,
-          ru: uniqueMap.Visit.services_name.ru,
-          he: uniqueMap.Visit.services_name.he,
-          ar: uniqueMap.Visit.services_name.ar,
-        },
-        price: uniqueMap.Visit.price,
-        currency: "NIS"
-      }, ...updatedSelectedMenu]
-    }));
+    console.log('itemData....13', itemData);
+    const servicesAdded = order.services.filter(
+      (item) =>
+        item.services_name.en !== uniqueMap.Consultation.services_name.en,
+    );
+
+    if (uniqueMap && uniqueMap?.Consultation) {
+      setOrder((prevOrder) => ({
+        ...prevOrder,
+        services: [
+          {
+            heal_id: uniqueMap.Consultation.heal_id,
+            services_name: {
+              en: uniqueMap.Consultation.services_name.en,
+              ru: uniqueMap.Consultation.services_name.ru,
+              he: uniqueMap.Consultation.services_name.he,
+              ar: uniqueMap.Consultation.services_name.ar,
+            },
+            price: uniqueMap.Consultation.price,
+            currency: 'NIS',
+          },
+          ...updatedSelectedMenu,
+        ],
+      }));
+    }
   };
 
   const onChangeAddress = (
@@ -315,7 +337,7 @@ const OrderFormController = ({
     setUserLocation,
     treatmentMenu,
     setSelectedReasontMenuItem,
-    selectedReasontMenuItem
+    selectedReasontMenuItem,
   };
 };
 

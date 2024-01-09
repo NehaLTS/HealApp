@@ -162,31 +162,42 @@ const Reports = () => {
               style={{ alignSelf: 'flex-end', marginTop: getHeight(20) }}
             />
             <View style={styles.buttonContainer}>
-              <TextButton
-                title={t('filter')}
-                fontSize={getHeight(14)}
-                style={styles.filterText}
-              />
-              {countActiveFilters() > 0 && (
-                <Text style={styles.filterCount}>{countActiveFilters()}</Text>
-              )}
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {/* <TextButton
+                  title={t('filter')}
+                  fontSize={getHeight(14)}
+                  style={styles.filterText}
+                /> */}
+                <Image
+                  source={require('assets/icon/filter.png')}
+                  style={{
+                    width: getHeight(30),
+                    height: getHeight(30),
+                    resizeMode: 'contain',
+                  }}
+                />
+                {countActiveFilters() > 0 && (
+                  <Text style={styles.filterCount}>{countActiveFilters()}</Text>
+                )}
+              </View>
+
               {filters?.map((item) => (
                 <Button
                   key={item.key}
                   isSmall
                   isPrimary={activeFilters.includes(item.key)}
-                  width={buttonWidths[item.key]}
+                  width={'20%'}
                   fontSized={getHeight(14)}
                   lineHeight={getHeight(20)}
                   borderRadius={getWidth(10)}
-                  height={getHeight(40)}
+                  height={getHeight(30)}
                   title={getTitle(item.label, i18n)}
                   // onPress={() => setSelectedFilter(item.key)}
                   onPress={() => {
                     setIsLoading(false);
                     toggleFilter(item.key);
                   }}
-                  style={{ marginBottom: getHeight(20) }}
+                  style={{ marginBottom: getHeight(10) }}
                 />
               ))}
             </View>
@@ -198,38 +209,6 @@ const Reports = () => {
                 <View style={styles.innerData}>
                   {activeFilters && activeFilters?.length > 0
                     ? Object.keys(filteredReportData).map((key, index) => (
-                      <View style={styles.reportText} key={key}>
-                        <AnimatedText
-                          entering={(I18nManager.isRTL
-                            ? FadeInRight
-                            : FadeInLeft
-                          )
-                            .duration(400)
-                            .delay(400 + index * 100)}
-                        >
-                          {getTitle(
-                            filters.find((filter) => filter.key === key)
-                              ?.label,
-                            i18n,
-                          ) ?? key}
-                        </AnimatedText>
-                        <AnimatedText
-                          entering={(I18nManager.isRTL
-                            ? FadeInRight
-                            : FadeInLeft
-                          )
-                            .duration(400)
-                            .delay(600 + index * 100)}
-                        >
-                          {filteredReportData[key] ?? key}
-                        </AnimatedText>
-                      </View>
-                    ))
-                    : Object.keys(reportData).map((key, index) => {
-                      const title = filters.find(
-                        (filter) => filter.key === key,
-                      );
-                      return (
                         <View style={styles.reportText} key={key}>
                           <AnimatedText
                             entering={(I18nManager.isRTL
@@ -239,7 +218,11 @@ const Reports = () => {
                               .duration(400)
                               .delay(400 + index * 100)}
                           >
-                            {title ? getTitle(title.label, i18n) : key}
+                            {getTitle(
+                              filters.find((filter) => filter.key === key)
+                                ?.label,
+                              i18n,
+                            ) ?? key}
                           </AnimatedText>
                           <AnimatedText
                             entering={(I18nManager.isRTL
@@ -249,11 +232,39 @@ const Reports = () => {
                               .duration(400)
                               .delay(600 + index * 100)}
                           >
-                            {title ? reportData[key] : key}
+                            {filteredReportData[key] || '0'}
                           </AnimatedText>
                         </View>
-                      );
-                    })}
+                      ))
+                    : Object.keys(reportData).map((key, index) => {
+                        const title = filters.find(
+                          (filter) => filter.key === key,
+                        );
+                        return (
+                          <View style={styles.reportText} key={key}>
+                            <AnimatedText
+                              entering={(I18nManager.isRTL
+                                ? FadeInRight
+                                : FadeInLeft
+                              )
+                                .duration(400)
+                                .delay(400 + index * 100)}
+                            >
+                              {title ? getTitle(title.label, i18n) : key}
+                            </AnimatedText>
+                            <AnimatedText
+                              entering={(I18nManager.isRTL
+                                ? FadeInRight
+                                : FadeInLeft
+                              )
+                                .duration(400)
+                                .delay(600 + index * 100)}
+                            >
+                              {reportData[key] || '0'}
+                            </AnimatedText>
+                          </View>
+                        );
+                      })}
                 </View>
               </Animated.View>
             )}
@@ -303,7 +314,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     marginTop: getHeight(20),
-    gap: 10,
+    gap: getHeight(10),
     position: 'relative',
   },
   filterText: {
@@ -318,13 +329,12 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginL),
   },
   filterCount: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    fontSize: getHeight(13),
+    fontSize: getHeight(16),
     fontWeight: 'bold',
+    position: 'absolute',
+    top: getHeight(-16),
+    left: getWidth(12),
+    color: colors.invalid,
   },
   innerData: {
     justifyContent: 'center',

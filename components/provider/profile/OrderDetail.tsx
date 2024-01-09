@@ -176,6 +176,7 @@ const OrderDetail = ({
                 {t('total_text')}
               </AnimatedText>
               <AnimatedText
+                style={styles.serviceName}
                 entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
                   .duration(400)
                   .delay(750)}

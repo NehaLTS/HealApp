@@ -73,6 +73,7 @@ const OrderHistory = () => {
     index: number;
     onPress: () => void;
   }) => {
+    console.log('item', item);
     const date = new Date(item?.created_date_time);
     const formattedDate = date?.toISOString?.()?.split('T')?.[0];
     return (
@@ -104,15 +105,11 @@ const OrderHistory = () => {
     try {
       if (allDataLoaded === false) {
         setIsLoading(isLoading);
-        const res = await OnGetOrderHistory(
-          Number(userId),
-          startIndex,
-          endIndex,
-        );
+        const res = await OnGetOrderHistory(Number(userId), 0, 10);
         console.log('res history', res);
         console.log('length', res?.length);
         if (!res?.message) {
-          setOrderHistory([...orderHistory, ...res]);
+          setOrderHistory(res);
           setStartIndex(endIndex + 1);
           setEndIndex(endIndex + chunkSize);
         } else if (res?.message) {
@@ -151,14 +148,15 @@ const OrderHistory = () => {
             style={{ flex: 1 }}
             contentContainerStyle={styles.containerStyle}
             keyExtractor={(_, index) => index.toString()}
-            onEndReached={() => getOrderHistory(false)}
+            // onEndReached={() => getOrderHistory(false)}
             onEndReachedThreshold={0.5}
             ListFooterComponent={
-              !isLoading && !allDataLoaded ? (
-                <View style={styles.loaderContainer}>
-                  <Loader isSmall />
-                </View>
-              ) : null
+              // !isLoading && !allDataLoaded ? (
+              //   <View style={styles.loaderContainer}>
+              //     <Loader isSmall />
+              //   </View>
+              // ) :
+              null
             }
             renderItem={({ item, index }) => (
               <RenderItem
@@ -231,13 +229,14 @@ const styles = StyleSheet.create({
   nameContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   doctorName: {
     minWidth: '45%',
-    textAlign: I18nManager.isRTL ? 'left' : 'right',
+    textAlign: 'left',
   },
   price: {
-    textAlign: I18nManager.isRTL ? 'left' : 'right',
+    textAlign: 'left',
   },
   containerStyle: {
     paddingTop: getHeight(dimens.marginS),

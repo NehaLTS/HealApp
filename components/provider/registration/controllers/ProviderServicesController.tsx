@@ -37,7 +37,8 @@ const ProviderServicesController = () => {
     if (response && response.services) {
       setServices(response.services);
       const visitService = response.services.find(
-        (service: { name: { en: string } }) => service?.name?.en === 'Visit',
+        (service: { name: { en: string } }) =>
+          service?.name?.en === 'Consultation',
       );
       if (visitService) {
         setSelectedServices([visitService]);
@@ -58,7 +59,7 @@ const ProviderServicesController = () => {
   }, []);
 
   const onSelectServices = (item: any) => {
-    if (item?.name?.en === 'Visit') {
+    if (item?.name?.en === 'Consultation') {
       return;
     }
     console.log('item+++++', item);
@@ -93,7 +94,7 @@ const ProviderServicesController = () => {
   const onPressNext = async () => {
     if (
       selectedServices.length === 1 &&
-      selectedServices[0]?.name?.en === 'Visit'
+      selectedServices[0]?.name?.en === 'Consultation'
     ) {
       Alert.alert(t('select_services_provide'));
       return;

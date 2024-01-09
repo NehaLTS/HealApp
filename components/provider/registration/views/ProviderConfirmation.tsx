@@ -58,7 +58,6 @@ export default ProviderConfirmation;
 
 const styles = StyleSheet.create({
   textContainer: {
-    marginHorizontal: getHeight(dimens.marginS),
     marginTop: getHeight(dimens.marginL + dimens.marginM),
     backgroundColor: 'background: rgba(249, 247, 247, 1)',
     paddingVertical: getHeight(dimens.paddingL),
@@ -88,8 +87,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: getHeight(dimens.marginS),
     paddingVertical: getHeight(dimens.imageS),
-    paddingHorizontal: getHeight(dimens.marginL),
-    width: '80%',
+    paddingHorizontal: getHeight(dimens.marginM),
+    width: '100%',
   },
   imageContainer: {
     alignItems: 'center',

@@ -66,6 +66,7 @@ const LoginView = ({ isSigninSelected }: { isSigninSelected: boolean }) => {
           isActive
           style={styles.forgotPassword}
           title={t('forgot_password')}
+          disabled
         />
         <Button
           title={isSigninSelected ? t('sign_in') : t('sign_up')}

@@ -63,10 +63,12 @@ const Language = () => {
 
   const updateProviderLanguage = async (userId: string, language: string) => {
     const languageCode = getLanguageCode(language);
+
     try {
       setIsLoading(true);
       setSelectedLanguage(languageCode);
       const res = await UpdateProviderLanguage(userId, language);
+      console.log('UpdateProviderLanguage', res);
       if (res?.isSuccessful) {
         handleLanguageChange(languageCode);
       }
@@ -74,6 +76,8 @@ const Language = () => {
       (err: Error) => {
         console.error(err.message);
       };
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -175,11 +179,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   innerCircle: {
-    width: getHeight(dimens.sideMargin),
-    height: getHeight(dimens.sideMargin),
-    minWidth: getHeight(dimens.sideMargin),
-    minHeight: getHeight(dimens.sideMargin),
-    borderRadius: getHeight(dimens.marginS),
+    width: getHeight(dimens.sideMargin + 2),
+    height: getHeight(dimens.sideMargin + 2),
+    minWidth: getHeight(dimens.sideMargin + 2),
+    minHeight: getHeight(dimens.sideMargin + 2),
+    borderRadius: getHeight(dimens.marginS + 2),
     borderColor: colors.black,
     borderWidth: getHeight(dimens.borderBold),
     alignSelf: 'center',

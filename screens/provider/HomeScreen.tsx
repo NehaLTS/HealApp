@@ -504,7 +504,7 @@ const HomeScreen = () => {
         isProviderProfile
         onPress={onPressProfileTab}
       />
-      {profileOnHold && <ProviderConfirmation isVisible={profileOnHold} />}
+      {<ProviderConfirmation isVisible={profileOnHold} />}
       <View style={styles.header}>
         {headerLeft()}
         {headerRight()}

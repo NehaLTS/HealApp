@@ -65,7 +65,7 @@ const ProviderServices = () => {
                   <TouchableOpacity
                     key={index}
                     onPress={() => onSelectServices(item)}
-                    disabled={item?.name?.en === 'Visit'}
+                    disabled={item?.name?.en === 'Consultation'}
                   >
                     <View style={styles.checkbox}>
                       {activeCheckbox?.includes(Number(item?.heal_id)) && (
@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: getHeight(dimens.marginS),
     paddingTop: getHeight(dimens.paddingL - dimens.borderBold),
+    alignItems: 'center',
   },
   serviceRight: {
     flexDirection: 'row',
@@ -193,6 +194,8 @@ const styles = StyleSheet.create({
   checkbox: {
     width: getHeight(dimens.marginL - 3),
     height: getHeight(dimens.marginL - 3),
+    minWidth: getHeight(dimens.marginL - 3),
+    minHeight: getHeight(dimens.marginL - 3),
     borderWidth: getHeight(dimens.borderThin),
     borderColor: colors.black,
     alignItems: 'center',
@@ -227,11 +230,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   innerCircle: {
-    width: getHeight(dimens.sideMargin),
-    height: getHeight(dimens.sideMargin),
-    minWidth: getHeight(dimens.sideMargin),
-    minHeight: getHeight(dimens.sideMargin),
-    borderRadius: getHeight(dimens.marginS),
+    width: getHeight(dimens.sideMargin + 2),
+    height: getHeight(dimens.sideMargin + 2),
+    minWidth: getHeight(dimens.sideMargin + 2),
+    minHeight: getHeight(dimens.sideMargin + 2),
+    borderRadius: getHeight(dimens.marginS + 2),
     borderColor: colors.black,
     borderWidth: getHeight(dimens.borderBold),
     alignSelf: 'center',

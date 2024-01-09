@@ -15,7 +15,8 @@ const OrderDetailsController = () => {
   const { t } = useTranslation();
   const [showSummary, setShowSummary] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { treatmentMenu, GetResonsForOrder, ProviderTreatmentMenu } = ClientOrderServices();
+  const { treatmentMenu, GetResonsForOrder, ProviderTreatmentMenu } =
+    ClientOrderServices();
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation<any>();
@@ -26,13 +27,13 @@ const OrderDetailsController = () => {
     userId,
     treatmentsReason,
     setTreatmentsReason,
-    selectedReasontMenuItem
+    selectedReasontMenuItem,
   } = UseClientUserContext();
   const [treatmentReason, setTreatmentReason] = useState<Reason[]>([]);
   console.log('userProfile0', userProfile);
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
-  const isFromSearch = route?.params?.isFromSearch
+  const isFromSearch = route?.params?.isFromSearch;
   const heardDetail = route?.params?.selectedHealerServices ?? '';
   console.log('supplier', supplier);
   const [order, setOrder] = useState<OrderDetail>({
@@ -75,41 +76,53 @@ const OrderDetailsController = () => {
   //   }));
   // }, []);
 
-
   useEffect(() => {
     if (selectedReasontMenuItem && selectedReasontMenuItem?.length > 0) {
-      const itemData = selectedReasontMenuItem.filter((item => {
-        if (item.services_name.en === "Visit") return item
-      }))
+      const itemData = selectedReasontMenuItem.filter((item) => {
+        if (item.services_name.en === 'Consultation') return item;
+      });
       const uniqueMap = itemData.reduce((map, obj) => {
-        if (!map[obj.services_name.en] || parseInt(map[obj.services_name.en].price) < parseInt(obj.price)) {
-          map[obj.services_name.en] = obj;
+        if (
+          !map[obj?.services_name?.en] ||
+          parseInt(map[obj.services_name.en].price) < parseInt(obj.price)
+        ) {
+          map[obj?.services_name?.en] = obj;
         }
         return map;
       }, {});
-      console.log("uniqueMap", uniqueMap.Visit)
+      console.log('uniqueMap', uniqueMap);
 
-      console.log("itemData....13", itemData)
-      const servicesAdded = order.services.filter((item) => item.services_name.en !== uniqueMap.Visit.services_name.en)
+      console.log('itemData....13', itemData);
+      const servicesAdded = order.services.filter(
+        (item) =>
+          item.services_name.en !== uniqueMap?.Consultation?.services_name.en,
+      );
+      // if (uniqueMap && uniqueMap?.Visit) {
       setOrder((prevOrder) => ({
         ...prevOrder,
         services: [
           ...servicesAdded,
           {
-            heal_id: uniqueMap.Visit.heal_id,
-            services_name: { en: uniqueMap.Visit.services_name.en, he: uniqueMap.Visit.services_name.he, ar: uniqueMap.Visit.services_name.ar, ru: uniqueMap.Visit.services_name.ru },
-            price: uniqueMap.Visit.price,
-            currency: uniqueMap.Visit.currency,
+            heal_id: uniqueMap.Consultation?.heal_id,
+            services_name: {
+              en: uniqueMap?.Consultation?.services_name.en,
+              he: uniqueMap?.Consultation?.services_name.he,
+              ar: uniqueMap?.Consultation?.services_name.ar,
+              ru: uniqueMap?.Consultation?.services_name.ru,
+            },
+            price: uniqueMap?.Consultation?.price,
+            currency: uniqueMap?.Consultation?.currency,
           },
         ],
       }));
+      // }
     }
-
   }, [selectedReasontMenuItem]);
 
   const treatmentReasons = async () => {
     const PROVIDER_TYPE_ID =
-      supplier.name === 'Alternative medicine' || supplier?.provider_type_id === 4
+      supplier.name === 'Alternative medicine' ||
+      supplier?.provider_type_id === 4
         ? '1'
         : supplier?.provider_type_id.toString();
 
@@ -119,25 +132,32 @@ const OrderDetailsController = () => {
       });
       console.log('TreatmentRespons', JSON.stringify(res));
       setTreatmentReason(res);
-      setTreatmentsReason(res)
+      setTreatmentsReason(res);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    console.log("isFromSearch", isFromSearch, "supplier..", supplier)
+    console.log('isFromSearch', isFromSearch, 'supplier..', supplier);
     if (isFromSearch) {
-      ProviderTreatmentMenu({ specialty_id: supplier.specialty_id }).then((response) => {
-        console.log('ProviderTreatmentMenuresponse supplier', response, supplier)
-        setTreatmentReason([{
-          specialty_id: supplier.specialty_id,
-          specialty_name: supplier.specialty_name,
-          services: response
-        }])
-      })
-    }
-    else {
+      ProviderTreatmentMenu({ specialty_id: supplier.specialty_id }).then(
+        (response) => {
+          console.log(
+            'ProviderTreatmentMenuresponse supplier',
+            response,
+            supplier,
+          );
+          setTreatmentReason([
+            {
+              specialty_id: supplier.specialty_id,
+              specialty_name: supplier.specialty_name,
+              services: response,
+            },
+          ]);
+        },
+      );
+    } else {
       treatmentReasons();
     }
     // if (
@@ -165,7 +185,11 @@ const OrderDetailsController = () => {
 
   const symptoms = order.reason.map((item: Reason) => {
     return {
-      name: { en: item?.specialty_name.en, ar: item?.specialty_name.ar, he: item?.specialty_name.he }, // Assuming you want the English name
+      name: {
+        en: item?.specialty_name.en,
+        ar: item?.specialty_name.ar,
+        he: item?.specialty_name.he,
+      }, // Assuming you want the English name
       id: item?.specialty_id,
     };
   });
@@ -175,7 +199,9 @@ const OrderDetailsController = () => {
   //   price: "500",
   //   provider_type_id: PROVIDER_TYPE_ID
   // }
-  const basicIncude = order.services.some((item) => item.services_name === "Visit");
+  const basicIncude = order.services.some(
+    (item) => item.services_name === 'Consultation',
+  );
   console.log('basicIncude', basicIncude);
   let updateArray: any[];
   if (basicIncude) {
@@ -189,7 +215,6 @@ const OrderDetailsController = () => {
       //   provider_type_id: PROVIDER_TYPE_ID
       // }
       ...order.services,
-
     ];
   }
   const concatenatedIds = updateArray.map((item) => item.heal_id).join(',');
@@ -238,7 +263,8 @@ const OrderDetailsController = () => {
           !order?.services?.length
         ) {
           Alert.alert(
-            `please select${!order?.address?.length ? ' address,' : ''} ${!order.reason?.length ? 'reasons' : ''
+            `please select${!order?.address?.length ? ' address,' : ''} ${
+              !order.reason?.length ? 'reasons' : ''
             } ${!order?.services?.length ? 'treatment menu' : ''}`,
           );
         }
@@ -281,7 +307,7 @@ const OrderDetailsController = () => {
             userLocation.currentLocation?.longitude,
           provider_type_id: supplier?.provider_type_id?.toString(),
           heal_id: concatenatedIds,
-          specialty_id: concatenatedsymptomsIds
+          specialty_id: concatenatedsymptomsIds,
         };
         console.log(
           'updateArray',

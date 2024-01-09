@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
-    marginTop: getHeight(dimens.marginL),
+    marginTop: getHeight(dimens.marginM),
   },
 
   selectedImage: {

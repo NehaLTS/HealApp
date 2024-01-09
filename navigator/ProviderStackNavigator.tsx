@@ -37,9 +37,10 @@ const ProviderStackNavigator = () => {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: colors.white,
+        paddingHorizontal: getHeight(20),
       }}
     >
-      <Text style={{ fontSize: getHeight(20), textAlign: 'center' }}>
+      <Text style={{ fontSize: getHeight(18), textAlign: 'center' }}>
         {t('loading_screen_text')}
       </Text>
     </View>
