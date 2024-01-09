@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   iconStyle: {
     height: getHeight(26),
-    width: getWidth(26),
+    width: getHeight(26),
     marginTop: getHeight(4),
     position: 'absolute',
     right: 0,

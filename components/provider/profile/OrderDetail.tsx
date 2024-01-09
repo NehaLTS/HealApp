@@ -1,5 +1,5 @@
 import Loader from 'components/common/Loader';
-import Text from 'components/common/Text';
+import Text, { AnimatedText } from 'components/common/Text';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
@@ -10,6 +10,7 @@ import { getTitle } from 'libs/utility/Utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, StyleSheet, View } from 'react-native';
+import Animated, { FadeInLeft, ZoomIn } from 'react-native-reanimated';
 
 const filledStar = require('assets/icon/star.png');
 const unfilledStar = require('assets/icon/ratingStar.png');
@@ -91,13 +92,24 @@ const OrderDetail = ({
         <Loader />
       ) : (
         <View style={styles.container}>
-          <Text style={styles.clientName}>{patientName}</Text>
+          <AnimatedText
+            entering={ZoomIn.duration(400).delay(400)}
+            style={styles.clientName}
+          >
+            {patientName}
+          </AnimatedText>
           <View style={styles.itemContainer}>
-            <Text style={styles.callReason}>{t('reason_call')}</Text>
+            <AnimatedText
+              entering={FadeInLeft.duration(400).delay(400)}
+              style={styles.callReason}
+            >
+              {t('reason_call')}
+            </AnimatedText>
             <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
               {orderDetails?.symptoms?.length > 0 &&
                 parsedData()?.map?.((item: any, index: number) => (
-                  <Text
+                  <AnimatedText
+                    entering={FadeInLeft.duration(400).delay(400 + index * 150)}
                     key={index}
                     title={
                       parsedData()?.length > 1
@@ -113,36 +125,69 @@ const OrderDetail = ({
             </View>
           </View>
           <View style={styles.itemContainer}>
-            <Text style={styles.callReason}>{t('services_provided')}</Text>
+            <AnimatedText
+              entering={FadeInLeft.duration(400).delay(600)}
+              style={styles.callReason}
+            >
+              {t('services_provided')}
+            </AnimatedText>
             {orderDetails?.modifiedServices?.map((item: any, index: any) => {
               return (
                 <View key={index} style={styles.serviceContainer}>
-                  <Text style={styles.serviceName}>
+                  <AnimatedText
+                    entering={FadeInLeft.duration(400).delay(600 + index * 150)}
+                    style={styles.serviceName}
+                  >
                     {getTitle(item?.name, i18n)}
-                  </Text>
-                  <Text>{`${item?.service_price} NIS`}</Text>
+                  </AnimatedText>
+                  <AnimatedText
+                    entering={FadeInLeft.duration(400).delay(700 + index * 100)}
+                    style={styles.serviceName}
+                  >
+                    {`${item?.service_price} NIS`}
+                  </AnimatedText>
                 </View>
               );
             })}
             <View style={styles.serviceContainer}>
-              <Text
+              <AnimatedText
+                entering={FadeInLeft.duration(400).delay(700)}
                 style={{
                   ...styles.serviceName,
                   fontFamily: fontFamily.medium,
                 }}
               >
                 {t('total_text')}
-              </Text>
-              <Text>{`${totalPrice} NIS`}</Text>
+              </AnimatedText>
+              <AnimatedText
+                entering={FadeInLeft.duration(400).delay(750)}
+              >{`${totalPrice} NIS`}</AnimatedText>
             </View>
           </View>
           <View style={styles.itemContainer}>
-            <Text style={styles.callReason}>{t('address_')}</Text>
-            <Text>{orderDetails?.address}</Text>
+            <AnimatedText
+              entering={FadeInLeft.duration(400).delay(800)}
+              style={styles.callReason}
+            >
+              {t('address_')}
+            </AnimatedText>
+            <AnimatedText entering={FadeInLeft.duration(400).delay(850)}>
+              {orderDetails?.address}
+            </AnimatedText>
           </View>
           <View style={styles.itemContainer}>
-            <Text style={styles.callReason}>{t('rating')}</Text>
-            <View style={styles.starContainer}>{stars}</View>
+            <AnimatedText
+              entering={FadeInLeft.duration(400).delay(900)}
+              style={styles.callReason}
+            >
+              {t('rating')}
+            </AnimatedText>
+            <Animated.View
+              entering={FadeInLeft.duration(400).delay(1000)}
+              style={styles.starContainer}
+            >
+              {stars}
+            </Animated.View>
           </View>
         </View>
       )}

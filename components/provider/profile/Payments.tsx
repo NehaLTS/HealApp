@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import arrowBack from 'assets/icon/arrowBack.png';
 import Loader from 'components/common/Loader';
 import SelectYear from 'components/common/SelectYear';
-import Text from 'components/common/Text';
+import Text, { AnimatedText } from 'components/common/Text';
 import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
@@ -12,13 +12,13 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Animated,
   I18nManager,
   Image,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Animated, { FadeInLeft, FadeInRight } from 'react-native-reanimated';
 
 const Payments = () => {
   const navigation = useNavigation<any>();
@@ -28,7 +28,6 @@ const Payments = () => {
   const { userId } = UseProviderUserContext();
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [fallAnimation] = useState(new Animated.Value(-100));
   console.log('selectedYear', selectedYear);
   const [paymentData, setPaymentData] = useState({
     all_earnings: 0,
@@ -46,14 +45,6 @@ const Payments = () => {
   );
   const headerTitle = () => <Text style={styles.title} title={t('payments')} />;
 
-  const ItemView = ({ title, amount }: { title: string; amount: string }) => {
-    return (
-      <View style={styles.itemContainer}>
-        <Text title={title} />
-        <Text style={styles.price} title={`${amount} NIS`} />
-      </View>
-    );
-  };
   const fetchPaymentData = async () => {
     try {
       setIsLoading(true);
@@ -75,28 +66,29 @@ const Payments = () => {
     fetchPaymentData();
   }, [selectedYear]);
 
-  useEffect(() => {
-    Animated.timing(fallAnimation, {
-      toValue: 0,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
-  }, [isLoading]);
-
   const FallingItemView = ({
     title,
     amount,
+    index,
   }: {
     title: string;
     amount: string;
+    index: number;
   }) => {
     return (
       <Animated.View
-        style={{
-          transform: [{ translateY: fallAnimation }],
-        }}
+        style={styles.itemContainer}
+        entering={FadeInLeft.duration(400).delay(400 + index * 100)}
       >
-        <ItemView title={title} amount={amount} />
+        <AnimatedText
+          entering={FadeInLeft.duration(400).delay(600 + index * 100)}
+          title={title}
+        />
+        <AnimatedText
+          entering={FadeInRight.duration(400).delay(600 + index * 100)}
+          style={styles.price}
+          title={`${amount} NIS`}
+        />
       </Animated.View>
     );
   };
@@ -117,14 +109,17 @@ const Payments = () => {
             }}
           >
             <FallingItemView
+              index={1}
               title={t('earnings')}
               amount={paymentData?.all_earnings?.toString() ?? '0'}
             />
             <FallingItemView
+              index={2}
               title={t('relized_earnings')}
               amount={paymentData?.realized_earnings?.toString() ?? '0'}
             />
             <FallingItemView
+              index={3}
               title={t('payments_heal')}
               amount={paymentData?.payment_to_heal?.toString() ?? '0'}
             />

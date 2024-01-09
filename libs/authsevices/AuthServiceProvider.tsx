@@ -262,8 +262,8 @@ export const AuthServicesProvider = () => {
       method: POST,
       body: {
         provider_id: providerId,
-        page: page,
-        pageSize: pageSize,
+        startingIndex: 21,
+        lastIndex: 25,
       } as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',

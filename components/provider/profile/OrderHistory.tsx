@@ -11,7 +11,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { OrderHistory as OrderList } from 'libs/types/OrderTypes';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   FlatList,
   I18nManager,
@@ -21,6 +21,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 const OrderHistory = () => {
   const navigation = useNavigation();
@@ -65,9 +66,11 @@ const OrderHistory = () => {
 
   const RenderItem = ({
     item,
+    index,
     onPress,
   }: {
     item: OrderList;
+    index: number;
     onPress: () => void;
   }) => {
     const date = new Date(item?.created_date_time);
@@ -97,31 +100,31 @@ const OrderHistory = () => {
     }
   };
 
-  const getOrderHistory = async (isLoading: boolean) => {
-    try {
-      if (allDataLoaded === false) {
-        setIsLoading(isLoading);
-        const res = await OnGetOrderHistory(
-          Number(userId),
-          startIndex,
-          endIndex,
-        );
-        console.log('res history', res);
-        console.log('length', res?.length);
-        if (!res?.message) {
-          setOrderHistory([...orderHistory, ...res]);
-          setStartIndex(endIndex + 1);
-          setEndIndex(endIndex + chunkSize);
-        } else if (res?.message) {
-          setAllDataLoaded(true);
+  const getOrderHistory = useCallback(
+    async (isLoading: boolean) => {
+      try {
+        if (allDataLoaded === false) {
+          setIsLoading(isLoading);
+          const res = await OnGetOrderHistory(Number(50), 21, 25);
+          console.log('res history', res);
+          console.log('length', res?.length);
+          if (!res?.message) {
+            setOrderHistory([...orderHistory, ...res]);
+            setStartIndex(endIndex + 1);
+            setEndIndex(endIndex + chunkSize);
+          } else if (res?.message) {
+            setAllDataLoaded(true);
+          }
         }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [orderHistory],
+  );
+
   React.useMemo(() => {
     getOrderHistory(true);
   }, []);
@@ -148,7 +151,7 @@ const OrderHistory = () => {
             contentContainerStyle={styles.containerStyle}
             keyExtractor={(_, index) => index.toString()}
             onEndReached={() => getOrderHistory(false)}
-            onEndReachedThreshold={2}
+            onEndReachedThreshold={0.5}
             ListFooterComponent={
               !isLoading && !allDataLoaded ? (
                 <View style={styles.loaderContainer}>
@@ -156,9 +159,10 @@ const OrderHistory = () => {
                 </View>
               ) : null
             }
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <RenderItem
                 item={item}
+                index={index}
                 onPress={() => {
                   setShowDetail({
                     isVisible: true,

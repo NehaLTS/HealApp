@@ -155,7 +155,13 @@ const ProviderDetail = () => {
       />
 
       <View style={styles.iconContainer}>
-        <Text style={styles.text} title={t('upload_id_photo')} />
+        <Text
+          style={{
+            ...styles.text,
+            paddingTop: idPicture ? 0 : getHeight(dimens.marginS),
+          }}
+          title={t('upload_id_photo')}
+        />
         <TouchableOpacity
           activeOpacity={idPicture ? 1 : 0.5}
           onPress={() => setIsShowModal(true)}
@@ -218,7 +224,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: getHeight(dimens.marginS),
     alignItems: 'center',
-    marginTop: getHeight(dimens.sideMargin),
+    marginTop: getHeight(dimens.marginL),
   },
 
   selectedImage: {

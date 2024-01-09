@@ -35,13 +35,13 @@ const ProviderAddressController = () => {
   );
   const [geomatricAddress, setGeomatricAddress] = useState(userLocation ?? '');
   console.log('providerProfile', providerProfile);
-  // useEffect(() => {
-  //   if (providerProfile?.firstName) {
-  //     phoneRef.current.value = providerProfile?.phoneNumber;
-  //     licenseRef.current.value = providerProfile?.licensenumber;
-  //     addressRef.current.value = providerProfile?.address;
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (providerProfile?.phoneNumber) {
+      phoneRef.current.value = providerProfile?.phoneNumber;
+      licenseRef.current.value = providerProfile?.licensenumber;
+      addressRef.current.value = providerProfile?.address;
+    }
+  }, []);
   console.log('address screen', providerProfile);
   const onBlurPhoneNumber = () => {};
 
@@ -117,7 +117,8 @@ const ProviderAddressController = () => {
         });
       }
     } else {
-      if (!phoneRef?.current?.value) setPhoneError(t('phone_number_required'));
+      if (!phoneRef?.current?.value || !providerProfile?.phoneNumber)
+        setPhoneError(t('phone_number_required'));
       if (!onSearchAddress?.length) setAddressError(t('address_required'));
     }
   };

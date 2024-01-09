@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   footerContainer: {
-    flex: 0.8,
+    flex: 0.75,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'flex-end',

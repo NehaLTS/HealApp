@@ -115,7 +115,7 @@ const Button = ({
 };
 const styles = StyleSheet.create({
   button: {
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getWidth(dimens.borderThin),
     alignItems: 'center',
     justifyContent: 'center',
     height: getHeight(dimens.buttonHeight),
