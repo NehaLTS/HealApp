@@ -50,7 +50,7 @@ const OrderFormController = ({
   const ageRef = React.useRef<any>('');
   const phoneRef = React.useRef<any>('');
   const otherReasonsRef = React.useRef<any>('');
-  const { userLocation, setUserLocation, setSelectedReasontMenuItem } = UseClientUserContext();
+  const { userLocation, setUserLocation, setSelectedReasontMenuItem, selectedReasontMenuItem } = UseClientUserContext();
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
@@ -215,9 +215,32 @@ const OrderFormController = ({
     //   price: '500',
     //   currency: "NIS"
     // }, ...updatedSelectedMenu]
+    const itemData = selectedReasontMenuItem.filter((item => {
+      if (item.services_name.en === "Visit") return item
+    }))
+    const uniqueMap = itemData.reduce((map, obj) => {
+      if (!map[obj.services_name.en] || parseInt(map[obj.services_name.en].price) < parseInt(obj.price)) {
+        map[obj.services_name.en] = obj;
+      }
+      return map;
+    }, {});
+    console.log("uniqueMap", uniqueMap.Visit)
+
+    console.log("itemData....13", itemData)
+    const servicesAdded = order.services.filter((item) => item.services_name.en !== uniqueMap.Visit.services_name.en)
     setOrder((prevOrder) => ({
       ...prevOrder,
-      services: [...updatedSelectedMenu]
+      services: [{
+        heal_id: uniqueMap.Visit.heal_id,
+        services_name: {
+          en: uniqueMap.Visit.services_name.en,
+          ru: uniqueMap.Visit.services_name.ru,
+          he: uniqueMap.Visit.services_name.he,
+          ar: uniqueMap.Visit.services_name.ar,
+        },
+        price: uniqueMap.Visit.price,
+        currency: "NIS"
+      }, ...updatedSelectedMenu]
     }));
   };
 
@@ -290,7 +313,9 @@ const OrderFormController = ({
     userLocation,
     otherReasonsRef,
     setUserLocation,
-    treatmentMenu
+    treatmentMenu,
+    setSelectedReasontMenuItem,
+    selectedReasontMenuItem
   };
 };
 

@@ -10,7 +10,7 @@ import { dimens } from 'designToken/dimens';
 import { fontFamily } from 'designToken/fontFamily';
 import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
-import { getTitle } from 'libs/utility/Utils';
+import { calculateDistance, getTitle } from 'libs/utility/Utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { I18nManager, Linking, StyleSheet, View } from 'react-native';
@@ -52,9 +52,8 @@ const TakeOrderView = ({
     const formatTime = (time: number) => {
       const minutes = Math.floor(time / 60);
       const remainingSeconds = time % 60;
-      return `${minutes}:${
-        remainingSeconds < 10 ? '0' : ''
-      }${remainingSeconds}`;
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''
+        }${remainingSeconds}`;
     };
 
     return (
@@ -133,14 +132,13 @@ const TakeOrderView = ({
                     style={styles.details}
                     title={
                       JSON.parse?.(order?.OrderReceive?.services)?.length > 1
-                        ? `${
-                            index !==
-                            JSON.parse?.(order?.OrderReceive?.services)
-                              ?.length -
-                              1
-                              ? ` ${service?.name?.en}, `
-                              : ` ${service?.name?.en}`
-                          }`
+                        ? `${index !==
+                          JSON.parse?.(order?.OrderReceive?.services)
+                            ?.length -
+                          1
+                          ? ` ${service?.name?.en}, `
+                          : ` ${service?.name?.en}`
+                        }`
                         : service?.name?.en
                     }
                     entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
@@ -154,20 +152,18 @@ const TakeOrderView = ({
         )}
         <AnimatedText
           style={styles.otherDetails}
-          title={`${order?.OrderReceive?.firstname}  ${
-            order?.OrderReceive?.lastname
-          }    ${
-            order?.OrderReceive?.distance !== 'undefined'
+          title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname
+            }    ${order?.OrderReceive?.distance !== 'undefined'
+              ? order?.OrderReceive?.distance
+              : 0
+            } km, ~${order?.OrderReceive?.time !== 'undefined'
               ? order?.OrderReceive?.time
               : 0
-          } km, ~${
-            order?.OrderReceive?.time !== 'undefined'
-              ? order?.OrderReceive?.time
-              : 0
-          } min`}
+            } min`}
           entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
             .duration(400)
             .delay(600)}
+
         />
         <AnimatedText
           style={{

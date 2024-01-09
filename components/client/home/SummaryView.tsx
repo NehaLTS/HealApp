@@ -51,7 +51,7 @@ const SummaryView = ({
 
   const formatNumber = (num: number) => {
     num = parseFloat(num?.toString());
-    return num.toFixed(4).replace(/(?:\.0*|(\.\d+?)0+)$/, '$1');
+    return num.toFixed(2).replace(/(?:\.0*|(\.\d+?)0+)$/, '$1');
   };
 
   const serviceCharge: string = formatNumber((totalPrice ?? 0) * 0.025);

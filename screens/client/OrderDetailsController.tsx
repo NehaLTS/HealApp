@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
 import { ClientOrderServices } from 'libs/ClientOrderServices';
 import { getLocalData, setLocalData } from 'libs/datastorage/useLocalStorage';
-import { Reason, treatment } from 'libs/types/ProvierTypes';
+import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import { ClientProfile, OrderDetail, userLocation } from 'libs/types/UserType';
 import NavigationRoutes from 'navigator/NavigationRoutes';
 import { useEffect, useState } from 'react';
@@ -59,23 +59,57 @@ const OrderDetailsController = () => {
     provider_type_id: 0,
   });
 
+  // useEffect(() => {
+
+  //   setOrder((prevOrder) => ({
+  //     ...prevOrder,
+  //     services: [
+  //       ...prevOrder.services,
+  //       // {
+  //       //   heal_id: selectedReasontMenuItem.reduce(item=>item.services_name.en),
+  //       //   services_name: { en: 'Basic', he: '', hi: '' },
+  //       //   price: '500',
+  //       //   currency: "NIS",
+  //       // },
+  //     ],
+  //   }));
+  // }, []);
+
+
   useEffect(() => {
-    setOrder((prevOrder) => ({
-      ...prevOrder,
-      services: [
-        ...prevOrder.services,
-        // {
-        //   heal_id: selectedReasontMenuItem.reduce(item=>item.services_name.en),
-        //   services_name: { en: 'Basic', he: '', hi: '' },
-        //   price: '500',
-        //   currency: "NIS",
-        // },
-      ],
-    }));
-  }, []);
+    if (selectedReasontMenuItem && selectedReasontMenuItem?.length > 0) {
+      const itemData = selectedReasontMenuItem.filter((item => {
+        if (item.services_name.en === "Visit") return item
+      }))
+      const uniqueMap = itemData.reduce((map, obj) => {
+        if (!map[obj.services_name.en] || parseInt(map[obj.services_name.en].price) < parseInt(obj.price)) {
+          map[obj.services_name.en] = obj;
+        }
+        return map;
+      }, {});
+      console.log("uniqueMap", uniqueMap.Visit)
+
+      console.log("itemData....13", itemData)
+      const servicesAdded = order.services.filter((item) => item.services_name.en !== uniqueMap.Visit.services_name.en)
+      setOrder((prevOrder) => ({
+        ...prevOrder,
+        services: [
+          ...servicesAdded,
+          {
+            heal_id: uniqueMap.Visit.heal_id,
+            services_name: { en: uniqueMap.Visit.services_name.en, he: uniqueMap.Visit.services_name.he, ar: uniqueMap.Visit.services_name.ar, ru: uniqueMap.Visit.services_name.ru },
+            price: uniqueMap.Visit.price,
+            currency: uniqueMap.Visit.currency,
+          },
+        ],
+      }));
+    }
+
+  }, [selectedReasontMenuItem]);
+
   const treatmentReasons = async () => {
     const PROVIDER_TYPE_ID =
-      supplier.name === 'Alternative medicine'
+      supplier.name === 'Alternative medicine' || supplier?.provider_type_id === 4
         ? '1'
         : supplier?.provider_type_id.toString();
 
@@ -92,7 +126,7 @@ const OrderDetailsController = () => {
   };
 
   useEffect(() => {
-    console.log("isFromSearch", isFromSearch)
+    console.log("isFromSearch", isFromSearch, "supplier..", supplier)
     if (isFromSearch) {
       ProviderTreatmentMenu({ specialty_id: supplier.specialty_id }).then((response) => {
         console.log('ProviderTreatmentMenuresponse supplier', response, supplier)
@@ -148,8 +182,14 @@ const OrderDetailsController = () => {
     updateArray = order.services;
   } else {
     updateArray = [
-
+      // {
+      //   menu_id: 1,
+      //   name: { en: 'Basic', he: '', hi: '' },
+      //   price: "500",
+      //   provider_type_id: PROVIDER_TYPE_ID
+      // }
       ...order.services,
+
     ];
   }
   const concatenatedIds = updateArray.map((item) => item.heal_id).join(',');

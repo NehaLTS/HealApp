@@ -71,7 +71,9 @@ const OrderFormView = ({
     userLocation,
     setUserLocation,
     otherReasonsRef,
-    treatmentMenu
+    treatmentMenu,
+    setSelectedReasontMenuItem,
+    selectedReasontMenuItem
   } = OrderFormController({
     setOrder,
     order,
@@ -80,6 +82,7 @@ const OrderFormView = ({
 
   const { t, i18n } = useTranslation();
   const [treatmentMenuOfReason, setTreatmentMenuOfReason] = useState<TreatmentMenu[]>([])
+
 
   useEffect(() => {
     const getPreselectedReason = treatmentReason?.find(
@@ -94,7 +97,9 @@ const OrderFormView = ({
       });
       onSelectReasons(getPreselectedReason);
     }
-    if (treatmentReason && treatmentReason[0]?.services) setTreatmentMenuOfReason([...treatmentReason[0]?.services])
+    if (treatmentReason && treatmentReason[0]?.services) {
+      setSelectedReasontMenuItem([...treatmentReason[0]?.services])
+    }
 
   }, [treatmentReason]);
 
@@ -210,12 +215,12 @@ const OrderFormView = ({
   );
   const getTreatmentsView = () => (
     <>
-      {console.log("treatmentMenuOfReason", treatmentMenuOfReason, treatmentMenu)}
+      {console.log("treatmentMenuOfReason", selectedReasontMenuItem, treatmentMenu)}
       <Text title={t('treatments')} style={styles.reasonText} />
 
-      {(treatmentMenuOfReason?.length ?? 0) >
+      {(selectedReasontMenuItem?.length ?? 0) >
         0 ? (
-        treatmentMenuOfReason?.map(
+        selectedReasontMenuItem?.map(
           (item: TreatmentMenu, index: number) => (
             <>
               {item?.services_name?.en === "Visit" ? <View

@@ -151,7 +151,7 @@
   "looking_doctor": "Looking for a provider",
   "doctor_found": "Provider is found!",
   "no_fee_collected": "*No fee will be collected",
-  "has_arrived": "Provider has arrived",
+  "has_arrived": "has arrived",
   "3_minutes_to_cancel": "*You have 3 minutes to cancel an order for free",
   "chest_pain": "Chest pain",
   "see_details": "See more details",
@@ -184,7 +184,6 @@
   "done": "Done",
   "liked_services": "Liked our services?",
   "you_can_leave": "You can also leave the tip if you wish",
-
   "how_you_rate": "How do you rate our doctor?",
   "you_want_to_tell_us": "Something else you want to tell us?",
   "what_like_about_services": "What did you like about our services?",

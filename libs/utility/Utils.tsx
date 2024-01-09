@@ -15,6 +15,7 @@ import { HealLanguageType } from 'libs/types/UserType';
 import { Order } from 'libs/types/OrderTypes';
 import haversine from 'haversine';
 import { UseClientUserContext } from 'contexts/UseClientUserContext';
+import { UseProviderUserContext } from 'contexts/UseProviderUserContext';
 
 
 
@@ -134,8 +135,10 @@ export const getImagesPath = (imageData: any[], purpose: any) => {
 
 
 
-export const calculateDistance = (currentOrder: Order) => {
+export const calculateDistance = (currentOrder?: any) => {
+  console.log(" dattacurrentOrder, ", currentOrder)
   const { userLocation } = UseClientUserContext();
+  console.log(" dattacurrentOrder, ", currentOrder, "userLocation", userLocation)
   const userCurrentLocation = {
     latitude: parseFloat(
       userLocation?.onboardingLocation?.latitude ??
@@ -148,10 +151,13 @@ export const calculateDistance = (currentOrder: Order) => {
       '0.0',
     ),
   };
+
   const ProviderLocation = {
     latitude: parseFloat(currentOrder?.providerDetails.currentLatitude),
     longitude: parseFloat(currentOrder?.providerDetails.currentLongitude),
   };
+
+
   const distance = haversine(ProviderLocation, userCurrentLocation, {
     unit: 'km',
   });
@@ -159,7 +165,7 @@ export const calculateDistance = (currentOrder: Order) => {
   return distance;
 };
 
-export const calculateTime = (currentOrder: Order) => {
+export const calculateTime = (currentOrder: any) => {
 
   const DISTANCE = calculateDistance(currentOrder);
   const AVERAGE_SPEED = 40;

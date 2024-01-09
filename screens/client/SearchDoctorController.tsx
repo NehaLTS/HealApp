@@ -323,11 +323,11 @@ const SearchDoctorController = () => {
     const formatDate = moment(newDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
     const ORDER_TIME = formatDate + ' ' + TIME;
     const orderBookResponse = await BookOrderRequest({
-      // orderStatus: "accept",
+      orderStatus: "accept",
       provider_id: currentOrder?.providerDetails.providerId.toString(),
       order_id: currentOrder?.orderId.toString(),
-      // time: TIME,
-      // distance: ''
+      time: TIME,
+      distance: ''
 
     });
     console.log('gurpreet', orderBookResponse);

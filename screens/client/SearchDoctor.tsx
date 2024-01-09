@@ -209,7 +209,7 @@ const SearchDoctor = () => {
           {showTimer && providerStatus !== ARRIVED && (
             <ArrivalTime
               totalTime={Math.round(
-                calculateTime(route?.params?.currentOrder).minutes,
+                calculateTime(currentOrder).minutes,
               )}
             />
           )}
@@ -223,7 +223,7 @@ const SearchDoctor = () => {
                 : providerNotFound
                   ? t('provider_not_found')
                   : `${t('provider_text')}${' '}${providerStatusOnHeader(
-                    providerStatus,
+                    providerStatus
                   )}`
             }
           />
@@ -352,7 +352,7 @@ const SearchDoctor = () => {
                 />
               )} */}
           </MapView>
-
+          {console.log("route?.params?.currentOrder", route?.params?.currentOrder)}
           {showDoctor &&
             providerLocation !== undefined &&
             providerLocation.latitude !== 0.0 ? (
@@ -375,7 +375,7 @@ const SearchDoctor = () => {
                   providerStatus,
                 )}`}
                 showProvider={providerLocation != undefined}
-                time={calculateTime(route?.params?.currentOrder)}
+                time={calculateTime(currentOrder)}
                 providerData={currentOrder.providerDetails}
               />
             </View>
