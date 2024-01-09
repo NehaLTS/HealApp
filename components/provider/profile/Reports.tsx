@@ -87,7 +87,7 @@ const Reports = () => {
     try {
       setIsLoading(true);
       const report = await GetProviderReport(
-        '50',
+        userId,
         selectedYear?.toString(),
         filter,
       );
