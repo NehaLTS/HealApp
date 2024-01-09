@@ -218,22 +218,25 @@ const OrderFormView = ({
         treatmentMenuOfReason?.map(
           (item: TreatmentMenu, index: number) => (
             <>
-              {item?.menu_id === 1 ?
-                <View
-                  key={index}
-                  style={styles.checkboxContainer}>
-                  <View style={styles.checkBox}>
+              {item?.services_name?.en === "Visit" ? <View
+                key={index}
+                style={styles.checkboxContainer}>
+                <View style={styles.checkBox}>
 
-                    <Image
-                      source={require('assets/icon/check.png')}
-                      style={styles.image}
-                    />
-                  </View>
-                  <Text style={{ fontSize: getHeight(fontSize.textM + 1), marginRight: getHeight(67) }}>
-                    {item?.name?.en.charAt(0).toUpperCase() +
-                      item?.name?.en.slice(1)} - {`${item.price} NIS`}
-                  </Text>
-                </View> :
+                  <Image
+                    source={require('assets/icon/check.png')}
+                    style={styles.image}
+                  />
+
+                </View>
+                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                  {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
+                    getTitle(item?.services_name, i18n)?.slice(1)}
+                </Text>
+                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                  {item.price + " " + item.currency}
+                </Text>
+              </View> :
                 <TouchableOpacity
                   key={index}
                   style={styles.checkboxContainer}
@@ -248,9 +251,12 @@ const OrderFormView = ({
                       />
                     )}
                   </View>
-                  <Text style={{ fontSize: getHeight(fontSize.textM + 1), marginRight: getHeight(67) }}>
-                    {item?.name?.en.charAt(0).toUpperCase() +
-                      item?.name?.en.slice(1)} - {`${item.price} NIS`}
+                  <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                    {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
+                      getTitle(item?.services_name, i18n)?.slice(1)}
+                  </Text>
+                  <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
+                    {item.price + " " + item.currency}
                   </Text>
                 </TouchableOpacity>
               }

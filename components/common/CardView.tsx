@@ -113,7 +113,7 @@ const CardView = ({ item, index, isSearch }: any) => {
           >
             <View style={styles.container}>
               <Image
-                source={getProviderImage(item?.specialty_name, item?.provider_type_id)}
+                source={getProviderImage(item?.name, item?.provider_type_id)}
                 style={styles.specialistIcon}
               />
               <Text

@@ -64,10 +64,11 @@ export interface seach_type {
 export interface search_provider {
   provider_name?: Name;
   provider_type_id?: any;
-  speciality_name: any;
+  specialty_name: Name;
   image_url?: string;
-  type: Array<seach_type>;
+  specialty_id: number
 }
+
 
 export interface Provider {
   name: string;

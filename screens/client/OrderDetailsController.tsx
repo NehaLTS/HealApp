@@ -15,7 +15,7 @@ const OrderDetailsController = () => {
   const { t } = useTranslation();
   const [showSummary, setShowSummary] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { treatmentMenu, GetResonsForOrder } = ClientOrderServices();
+  const { treatmentMenu, GetResonsForOrder, ProviderTreatmentMenu } = ClientOrderServices();
   const userData = getLocalData('USER');
   const userProfile = getLocalData?.('USERPROFILE');
   const navigation = useNavigation<any>();
@@ -25,12 +25,14 @@ const OrderDetailsController = () => {
     userProfile: user,
     userId,
     treatmentsReason,
-    setTreatmentsReason
+    setTreatmentsReason,
+    selectedReasontMenuItem
   } = UseClientUserContext();
   const [treatmentReason, setTreatmentReason] = useState<Reason[]>([]);
   console.log('userProfile0', userProfile);
   const route = useRoute<any>();
   const supplier = route?.params?.supplier ?? '';
+  const isFromSearch = route?.params?.isFromSearch
   const heardDetail = route?.params?.selectedHealerServices ?? '';
   console.log('supplier', supplier);
   const [order, setOrder] = useState<OrderDetail>({
@@ -62,12 +64,12 @@ const OrderDetailsController = () => {
       ...prevOrder,
       services: [
         ...prevOrder.services,
-        {
-          heal_id: 1,
-          services_name: { en: 'Basic', he: '', hi: '' },
-          price: '500',
-          currency: "NIS",
-        },
+        // {
+        //   heal_id: selectedReasontMenuItem.reduce(item=>item.services_name.en),
+        //   services_name: { en: 'Basic', he: '', hi: '' },
+        //   price: '500',
+        //   currency: "NIS",
+        // },
       ],
     }));
   }, []);
@@ -90,7 +92,20 @@ const OrderDetailsController = () => {
   };
 
   useEffect(() => {
-    treatmentReasons();
+    console.log("isFromSearch", isFromSearch)
+    if (isFromSearch) {
+      ProviderTreatmentMenu({ specialty_id: supplier.specialty_id }).then((response) => {
+        console.log('ProviderTreatmentMenuresponse supplier', response, supplier)
+        setTreatmentReason([{
+          specialty_id: supplier.specialty_id,
+          specialty_name: supplier.specialty_name,
+          services: response
+        }])
+      })
+    }
+    else {
+      treatmentReasons();
+    }
     // if (
     //   treatmentsReason !== null &&
     //   treatmentsReason !== undefined
@@ -126,11 +141,7 @@ const OrderDetailsController = () => {
   //   price: "500",
   //   provider_type_id: PROVIDER_TYPE_ID
   // }
-  const PROVIDER_TYPE_ID =
-    supplier.name === 'Alternative medicine'
-      ? '1'
-      : supplier?.provider_type_id?.toString();
-  const basicIncude = order.services.some((item) => item.menu_id === 1);
+  const basicIncude = order.services.some((item) => item.services_name === "Visit");
   console.log('basicIncude', basicIncude);
   let updateArray: any[];
   if (basicIncude) {

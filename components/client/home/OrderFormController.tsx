@@ -38,7 +38,6 @@ const OrderFormController = ({
   const [isSubmitDetail, setIsSubmitDetail] = useState(false);
   const [activeButton, setActiveButton] = useState<number[]>(uniqueReasonIds);
   const [activeCheckbox, setActiveCheckbox] = useState<number[]>([
-    1,
     ...uniqueMenuIds,
   ]);
   const [selectedResourceType, setSelectedResourceType] = useState<Reason[]>(
@@ -51,7 +50,7 @@ const OrderFormController = ({
   const ageRef = React.useRef<any>('');
   const phoneRef = React.useRef<any>('');
   const otherReasonsRef = React.useRef<any>('');
-  const { userLocation, setUserLocation } = UseClientUserContext();
+  const { userLocation, setUserLocation, setSelectedReasontMenuItem } = UseClientUserContext();
   const [isVisible, setIsVisible] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [ageError, setAgeError] = useState('');
@@ -151,6 +150,7 @@ const OrderFormController = ({
     updatedSelectedResourceType.filter((item) => {
       treamentMeanuOFReasons.push(...item.services)
     })
+    setSelectedReasontMenuItem(treamentMeanuOFReasons)
     setSelectedResourceType(updatedSelectedResourceType);
     setTreatmentMenu(treamentMeanuOFReasons);
     console.log('updatedSelectedResourceType ', updatedSelectedResourceType, "treamentMeanuOFReasons", treamentMeanuOFReasons);

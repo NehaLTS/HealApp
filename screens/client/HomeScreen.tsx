@@ -266,8 +266,10 @@ const HomeScreen = () => {
   const transformedData = providersList?.map?.((entry) => ({
     name: entry?.provider_name?.en,
     provider_type_id: entry?.provider_type_id,
-    speciality_name: entry?.speciality_name,
+    specialty_name: entry?.specialty_name,
+    specialty_id: entry.specialty_id
   }));
+  console.log("providersListprovidersList", providersList)
 
   const getProviderSearchList = () => {
     return transformedData?.map((itemData: any, index: number) => (

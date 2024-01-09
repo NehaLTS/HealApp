@@ -9,6 +9,7 @@ import {
   GET_AD_BANNER,
   GET_LOCATION_SEARCH,
   GET_PROVIDER_RESONS,
+  GET_PROVIDER_TREATMENT_MEANU,
   GET_SEARCH_LIST,
   GET_SEARCH_PROVIDER,
   GET_TREATMENT_MENU,
@@ -222,6 +223,16 @@ export const ClientOrderServices = () => {
       } as unknown as HeadersInit,
     })
 
+  const ProviderTreatmentMenu = (body: { specialty_id: string }): Promise<any> =>
+    sendRequest(GET_PROVIDER_TREATMENT_MEANU, {
+      method: POST,
+      body: body as unknown as BodyInit,
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      } as unknown as HeadersInit,
+    })
+
   return {
     getBannerAds,
     treatmentMenu,
@@ -237,6 +248,7 @@ export const ClientOrderServices = () => {
     PaymentHistory,
     PaymentForOrder,
     ClientWallentAmount,
-    GetResonsForOrder
+    GetResonsForOrder,
+    ProviderTreatmentMenu
   };
 };

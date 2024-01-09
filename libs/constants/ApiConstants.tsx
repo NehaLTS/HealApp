@@ -21,6 +21,7 @@ export const PAYMENT_HISTORY = 'users/getPaymentHistory';
 export const PAYMENT_FOR_ORDER = 'users/holdClientPayment';
 export const CLIENT_WALLET_AMOUNT = 'users/getClientAmount';
 export const GET_PROVIDER_RESONS = 'providers/getTreatmentByReason'
+export const GET_PROVIDER_TREATMENT_MEANU = 'providers/getSearchProviderTreatmentMenu'
 // export const SEARCH_API = 'location/getSearchProviderType'
 
 //Provider API

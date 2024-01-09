@@ -1,4 +1,4 @@
-import { Reason, treatment } from 'libs/types/ProvierTypes';
+import { Reason, TreatmentMenu, treatment } from 'libs/types/ProvierTypes';
 import {
   ClientProfile,
   OrderDetail,
@@ -28,7 +28,10 @@ export interface ClientUserContextFields {
   remainingTime: RemaingTime;
   treatmentsReason: Reason[];
   setTreatmentsReason: React.Dispatch<React.SetStateAction<Reason[]>>;
+  selectedReasontMenuItem: TreatmentMenu[];
+  setSelectedReasontMenuItem: React.Dispatch<React.SetStateAction<TreatmentMenu[]>>;
 }
+
 
 export const ClientUserContext = createContext<ClientUserContextFields>(
   {} as ClientUserContextFields,

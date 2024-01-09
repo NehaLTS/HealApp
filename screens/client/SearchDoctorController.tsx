@@ -82,14 +82,14 @@ const SearchDoctorController = () => {
         const distance = Math.sqrt(
           Math.pow(
             parseFloat(providerSetLocation.latitude) -
-              parseFloat(userLocation?.onboardingLocation?.latitude),
+            parseFloat(userLocation?.onboardingLocation?.latitude),
             2,
           ) +
-            Math.pow(
-              parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.longitude),
-              2,
-            ),
+          Math.pow(
+            parseFloat(providerSetLocation.longitude) -
+            parseFloat(userLocation?.onboardingLocation?.longitude),
+            2,
+          ),
         );
 
         const bufferFactor = 1.2;
@@ -112,12 +112,12 @@ const SearchDoctorController = () => {
           latitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.latitude),
+              parseFloat(userLocation?.onboardingLocation?.latitude),
             ) * 2,
           longitudeDelta:
             Math.abs(
               parseFloat(providerSetLocation.longitude) -
-                parseFloat(userLocation?.onboardingLocation?.longitude),
+              parseFloat(userLocation?.onboardingLocation?.longitude),
             ) * 2,
         };
 
@@ -323,11 +323,12 @@ const SearchDoctorController = () => {
     const formatDate = moment(newDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
     const ORDER_TIME = formatDate + ' ' + TIME;
     const orderBookResponse = await BookOrderRequest({
-      orderStatus: 'accept',
-      provider_id: currentOrder?.providerDetails?.providerId?.toString(),
-      order_id: currentOrder?.orderId?.toString(),
-      time: TIME,
-      distance: '',
+      // orderStatus: "accept",
+      provider_id: currentOrder?.providerDetails.providerId.toString(),
+      order_id: currentOrder?.orderId.toString(),
+      // time: TIME,
+      // distance: ''
+
     });
     console.log('gurpreet', orderBookResponse);
     orderBookResponse;
