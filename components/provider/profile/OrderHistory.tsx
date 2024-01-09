@@ -84,7 +84,7 @@ const OrderHistory = () => {
         <TouchableOpacity style={styles.detailContainer} onPress={onPress}>
           <View style={styles.nameContainer}>
             <Text style={styles.doctorName} title={item?.patient_name} />
-            <Text title={`${item?.TotalCost} NIS`} />
+            <Text title={`${item?.TotalCost} NIS`} style={styles.price} />
           </View>
           <Image source={arrowBack} style={styles.arrowRight} />
         </TouchableOpacity>
@@ -234,6 +234,10 @@ const styles = StyleSheet.create({
   },
   doctorName: {
     minWidth: '45%',
+    textAlign: I18nManager.isRTL ? 'left' : 'right',
+  },
+  price: {
+    textAlign: I18nManager.isRTL ? 'left' : 'right',
   },
   containerStyle: {
     paddingTop: getHeight(dimens.marginS),

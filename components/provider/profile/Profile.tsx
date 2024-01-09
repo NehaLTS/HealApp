@@ -154,7 +154,7 @@ const Profile = () => {
       </View>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <TouchableOpacity onPress={() => setIsVisible(true)}>
+          <TouchableOpacity onPress={() => setIsVisible(true)} style={styles.image}>
             <Image
               source={
                 profilePicture
@@ -311,4 +311,9 @@ const styles = StyleSheet.create({
     paddingRight: getWidth(dimens.sideMargin),
     paddingVertical: getHeight(dimens.marginS / dimens.borderBold),
   },
+  image: {
+    shadowColor: colors.black,
+    elevation: getWidth(15),
+    borderRadius: getHeight(80),
+  }
 });

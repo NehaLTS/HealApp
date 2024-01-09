@@ -198,6 +198,38 @@ const Reports = () => {
                 <View style={styles.innerData}>
                   {activeFilters && activeFilters?.length > 0
                     ? Object.keys(filteredReportData).map((key, index) => (
+                      <View style={styles.reportText} key={key}>
+                        <AnimatedText
+                          entering={(I18nManager.isRTL
+                            ? FadeInRight
+                            : FadeInLeft
+                          )
+                            .duration(400)
+                            .delay(400 + index * 100)}
+                        >
+                          {getTitle(
+                            filters.find((filter) => filter.key === key)
+                              ?.label,
+                            i18n,
+                          ) ?? key}
+                        </AnimatedText>
+                        <AnimatedText
+                          entering={(I18nManager.isRTL
+                            ? FadeInRight
+                            : FadeInLeft
+                          )
+                            .duration(400)
+                            .delay(600 + index * 100)}
+                        >
+                          {filteredReportData[key] ?? key}
+                        </AnimatedText>
+                      </View>
+                    ))
+                    : Object.keys(reportData).map((key, index) => {
+                      const title = filters.find(
+                        (filter) => filter.key === key,
+                      );
+                      return (
                         <View style={styles.reportText} key={key}>
                           <AnimatedText
                             entering={(I18nManager.isRTL
@@ -207,11 +239,7 @@ const Reports = () => {
                               .duration(400)
                               .delay(400 + index * 100)}
                           >
-                            {getTitle(
-                              filters.find((filter) => filter.key === key)
-                                ?.label,
-                              i18n,
-                            ) ?? key}
+                            {title ? getTitle(title.label, i18n) : key}
                           </AnimatedText>
                           <AnimatedText
                             entering={(I18nManager.isRTL
@@ -221,39 +249,11 @@ const Reports = () => {
                               .duration(400)
                               .delay(600 + index * 100)}
                           >
-                            {filteredReportData[key] ?? key}
+                            {title ? reportData[key] : key}
                           </AnimatedText>
                         </View>
-                      ))
-                    : Object.keys(reportData).map((key, index) => {
-                        const title = filters.find(
-                          (filter) => filter.key === key,
-                        );
-                        return (
-                          <View style={styles.reportText} key={key}>
-                            <AnimatedText
-                              entering={(I18nManager.isRTL
-                                ? FadeInRight
-                                : FadeInLeft
-                              )
-                                .duration(400)
-                                .delay(400 + index * 100)}
-                            >
-                              {title ? getTitle(title.label, i18n) : key}
-                            </AnimatedText>
-                            <AnimatedText
-                              entering={(I18nManager.isRTL
-                                ? FadeInRight
-                                : FadeInLeft
-                              )
-                                .duration(400)
-                                .delay(600 + index * 100)}
-                            >
-                              {title ? reportData[key] : key}
-                            </AnimatedText>
-                          </View>
-                        );
-                      })}
+                      );
+                    })}
                 </View>
               </Animated.View>
             )}
