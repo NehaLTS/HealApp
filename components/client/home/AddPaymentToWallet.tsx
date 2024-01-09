@@ -33,10 +33,10 @@ const AddPaymentToWallet = ({ isShowInputView, fromMap }: { isShowInputView: boo
             setLocalData('WALLETDETAIL', {
                 client_id: userId,
                 wallet_amount: Number(totalNewAmount.toFixed
-                    (5)).toString()
+                    (2)).toString()
             })
             // const addAmount = totalNewAmount.toString()
-            setWalletAmount(Number(totalNewAmount.toFixed(5)).toString())
+            setWalletAmount(Number(totalNewAmount.toFixed(2)).toString())
             setShowInputView(false)
             setVisible(false)
             if (fromMap) {

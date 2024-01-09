@@ -20,12 +20,12 @@ export const totalPrice = (services: any) => {
 export const paymentsendToApi = (vistingAmount: number, shotAmount: number) => {
     const orderAmount = vistingAmount + shotAmount;
     const amoutToHeal = 0.025 * orderAmount
-    const appAmount = Number(amoutToHeal.toFixed(5));
+    const appAmount = Number(amoutToHeal.toFixed(2));
     const totalAmountToCut = amoutToHeal + orderAmount
-    const totalAmount = Number(totalAmountToCut.toFixed(5));
+    const totalAmount = Number(totalAmountToCut.toFixed(2));
     const minimumBalance = totalAmountToCut * 0.40
     const amountNeddToOrder = totalAmountToCut + minimumBalance
-    const walletMinimumAmount = Number(amountNeddToOrder.toFixed(5))
+    const walletMinimumAmount = Number(amountNeddToOrder.toFixed(2))
     console.log("paymentsendToApi", "vistingAmoun: ", vistingAmount, shotAmount, "shotAmount", "orderAmount: ", orderAmount, "appAmount: ", appAmount, "totalAmount: ", totalAmount, "walletMinimumAmount", walletMinimumAmount)
     return {
         orderAmount,
