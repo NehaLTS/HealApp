@@ -61,10 +61,11 @@ const ProviderServices = () => {
                   title={getTitle(item?.name, i18n)}
                 />
                 <View style={styles.serviceRight}>
-                  <Text style={styles.serviceText} title={'$ ' + item.price} />
+                  <Text style={styles.serviceText} title={'$ ' + item?.price} />
                   <TouchableOpacity
                     key={index}
                     onPress={() => onSelectServices(item)}
+                    disabled={item?.name?.en === 'Visit'}
                   >
                     <View style={styles.checkbox}>
                       {activeCheckbox?.includes(Number(item?.heal_id)) && (

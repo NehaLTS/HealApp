@@ -242,6 +242,11 @@
   "log_out": "התנתקות",
   "reports": "דוחות",
   "languages": "שפות",
+  "no_history_found": "לא נמצאה היסטוריית הזמנות.",
+  "loading_screen_text": "אנא המתן,\nאנחנו מכינים הכל בשבילך...",
+  "clear_filter": "נקה מסנן",
+  "filter": "סינון",
+  "install_whatsapp": "וואטסאפ לא מותקן על המכשיר שלך",
   "home": {
     "providerList": [
       {

@@ -242,6 +242,11 @@
   "log_out": "Выйти",
   "reports": "Отчеты",
   "languages": "Языки",
+  "no_history_found": "История заказов не найдена.",
+  "loading_screen_text": "Пожалуйста, подождите,\nмы готовим все для вас...",
+  "clear_filter": "Очистить фильтр",
+  "filter": "Фильтр",
+  "install_whatsapp": "WhatsApp не установлен на вашем устройстве",
   "home": {
     "providerList": [
       {

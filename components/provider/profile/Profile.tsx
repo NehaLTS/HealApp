@@ -52,7 +52,9 @@ const Profile = () => {
       <Image source={arrowBack} style={styles.arrowBack} />
     </TouchableOpacity>
   );
-  const headerTitle = () => <Text style={styles.title} title={t('personal_profile')} />;
+  const headerTitle = () => (
+    <Text style={styles.title} title={t('personal_profile')} />
+  );
 
   // React.useMemo(async () => {
   //   const res = await GetProviderProfiles('40');
@@ -162,10 +164,13 @@ const Profile = () => {
               style={styles.avatarImage}
             />
           </TouchableOpacity>
-          <Text title={`${providerProfile?.firstName} ${providerProfile?.lastName}`} style={styles.text} />
+          <Text
+            title={`${providerProfile?.firstName} ${providerProfile?.lastName}`}
+            style={styles.text}
+          />
         </View>
         <View style={styles.divider}>
-          <Text title={'Services you provide'} style={styles.servicesText} />
+          <Text title={t('services_you')} style={styles.servicesText} />
           {(providerServices as unknown as ProviderServices[])?.map(
             (service, index) => (
               <View key={index} style={styles.serviceItem}>
@@ -186,7 +191,7 @@ const Profile = () => {
               source={require('assets/icon/addServicesBlack.png')}
               style={styles.addImage}
             />
-            <Text title={'Add another service'} />
+            <Text title={t('add_another_service')} />
           </View>
         </View>
         <TouchableOpacity
@@ -197,7 +202,7 @@ const Profile = () => {
             source={require('assets/icon/logout.png')}
             style={styles.logoutImage}
           />
-          <Text title={'Log Out'} />
+          <Text title={t('log_out')} />
         </TouchableOpacity>
       </View>
       <SelectImage

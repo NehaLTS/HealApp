@@ -13,9 +13,10 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import { getTitle } from 'libs/utility/Utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking, StyleSheet, View } from 'react-native';
+import { I18nManager, Linking, StyleSheet, View } from 'react-native';
 import Animated, {
   FadeInLeft,
+  FadeInRight,
   FadeInUp,
   ZoomIn,
 } from 'react-native-reanimated';
@@ -104,7 +105,9 @@ const TakeOrderView = ({
                 key={index}
                 style={{ ...styles.details, marginTop: getHeight(20) }}
                 title={`${getTitle(item?.name, i18n)}` ?? ''}
-                entering={FadeInLeft.duration(400).delay(500)}
+                entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                  .duration(400)
+                  .delay(500)}
               />
             ),
           )}
@@ -119,7 +122,9 @@ const TakeOrderView = ({
                 fontSize: getHeight(fontSize.textXl - 1),
               }}
               title={`${t('ordered')} `}
-              entering={FadeInLeft.duration(400).delay(600)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(600)}
             >
               {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
                 (service: any, index: number) => (
@@ -138,7 +143,9 @@ const TakeOrderView = ({
                           }`
                         : service?.name?.en
                     }
-                    entering={FadeInLeft.duration(400).delay(700)}
+                    entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                      .duration(400)
+                      .delay(700)}
                   />
                 ),
               )}
@@ -158,7 +165,9 @@ const TakeOrderView = ({
               ? order?.OrderReceive?.time
               : 0
           } min`}
-          entering={FadeInLeft.duration(400).delay(600)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(600)}
         />
         <AnimatedText
           style={{
@@ -168,7 +177,9 @@ const TakeOrderView = ({
             paddingBottom: getHeight(16),
           }}
           title={order?.OrderReceive?.address}
-          entering={FadeInLeft.duration(400).delay(800)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(800)}
         />
         <View
           style={{
@@ -184,7 +195,9 @@ const TakeOrderView = ({
             style={{
               ...styles.seeOnWaze,
             }}
-            entering={FadeInLeft.duration(400).delay(1000)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(1000)}
           />
           <Animated.Image
             source={waze}
@@ -193,7 +206,9 @@ const TakeOrderView = ({
               height: getHeight(20),
               resizeMode: 'center',
             }}
-            entering={FadeInLeft.duration(400).delay(1180)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(1180)}
           />
         </View>
         <View
@@ -211,7 +226,9 @@ const TakeOrderView = ({
             }}
             fontSize={getHeight(fontSize.textXl)}
             style={styles.seeOnWaze}
-            entering={FadeInLeft.duration(400).delay(1100)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(1100)}
           />
           <Animated.Image
             source={mobile}
@@ -220,7 +237,9 @@ const TakeOrderView = ({
               height: getHeight(20),
               resizeMode: 'center',
             }}
-            entering={FadeInLeft.duration(400).delay(1180)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(1180)}
           />
         </View>
 

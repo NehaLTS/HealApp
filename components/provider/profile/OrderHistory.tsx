@@ -11,7 +11,7 @@ import { fontSize } from 'designToken/fontSizes';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { OrderHistory as OrderList } from 'libs/types/OrderTypes';
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   FlatList,
   I18nManager,
@@ -100,30 +100,31 @@ const OrderHistory = () => {
     }
   };
 
-  const getOrderHistory = useCallback(
-    async (isLoading: boolean) => {
-      try {
-        if (allDataLoaded === false) {
-          setIsLoading(isLoading);
-          const res = await OnGetOrderHistory(Number(50), 21, 25);
-          console.log('res history', res);
-          console.log('length', res?.length);
-          if (!res?.message) {
-            setOrderHistory([...orderHistory, ...res]);
-            setStartIndex(endIndex + 1);
-            setEndIndex(endIndex + chunkSize);
-          } else if (res?.message) {
-            setAllDataLoaded(true);
-          }
+  const getOrderHistory = async (isLoading: boolean) => {
+    try {
+      if (allDataLoaded === false) {
+        setIsLoading(isLoading);
+        const res = await OnGetOrderHistory(
+          Number(userId),
+          startIndex,
+          endIndex,
+        );
+        console.log('res history', res);
+        console.log('length', res?.length);
+        if (!res?.message) {
+          setOrderHistory([...orderHistory, ...res]);
+          setStartIndex(endIndex + 1);
+          setEndIndex(endIndex + chunkSize);
+        } else if (res?.message) {
+          setAllDataLoaded(true);
         }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
       }
-    },
-    [orderHistory],
-  );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   React.useMemo(() => {
     getOrderHistory(true);
@@ -131,17 +132,17 @@ const OrderHistory = () => {
 
   return (
     <View style={styles.mainContainer}>
-      {isLoading && <Loader />}
       <View style={styles.headerContainer}>
         {headerLeft()}
         {headerTitle()}
       </View>
       {showDetail?.isVisible === false ? (
-        orderHistory?.length === 0 && !isLoading ? (
-          <Text
-            style={styles.noHistoryText}
-            title={'No order history found.'}
-          />
+        orderHistory?.length === 0 ? (
+          isLoading ? (
+            <Loader />
+          ) : (
+            <Text style={styles.noHistoryText} title={t('no_history_found')} />
+          )
         ) : (
           <FlatList
             keyboardShouldPersistTaps="always"
@@ -213,12 +214,13 @@ const styles = StyleSheet.create({
   },
   dateTitle: {
     fontFamily: fontFamily.medium,
+    textAlign: 'left',
   },
   arrowRight: {
-    transform: [{ rotate: '180deg' }],
     width: getWidth(dimens.marginS),
     height: getHeight(dimens.sideMargin),
     resizeMode: 'center',
+    transform: [{ rotate: !I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   detailContainer: {
     flexDirection: 'row',

@@ -11,6 +11,7 @@ import { getHeight, getWidth } from 'libs/StyleHelper';
 import React, { useEffect } from 'react';
 import {
   Alert,
+  I18nManager,
   Image,
   Modal,
   ScrollView,
@@ -18,7 +19,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  FadeInUp,
+} from 'react-native-reanimated';
 import { ProviderServices } from 'libs/types/UserType';
 import { getTitle } from 'libs/utility/Utils';
 import { useTranslation } from 'react-i18next';
@@ -218,14 +223,18 @@ const ArrivedView = ({
             marginTop: getHeight(20),
           }}
           title={t('patient_text')}
-          entering={FadeInLeft.duration(400).delay(500)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(500)}
         />
         {order?.order?.OrderReceive?.length ||
           (order?.OrderReceive !== null && (
             <AnimatedText
               style={{ ...styles.details, fontSize: getHeight(fontSize.textL) }}
               title={`${order?.OrderReceive?.firstname}  ${order?.OrderReceive?.lastname}`}
-              entering={FadeInLeft.duration(400).delay(600)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(600)}
             />
           ))}
         <AnimatedText
@@ -242,13 +251,17 @@ const ArrivedView = ({
                 <AnimatedText
                   style={{ ...styles.smallText }}
                   title={`${getTitle(item?.name, i18n)}`}
-                  entering={FadeInLeft.duration(400).delay(800)}
+                  entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                    .duration(400)
+                    .delay(800)}
                 />
                 <View style={styles.servicesLeftView}>
                   <AnimatedText
                     style={styles.smallText}
                     title={`${item?.service_price} NIS`}
-                    entering={FadeInLeft.duration(400).delay(900)}
+                    entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                      .duration(400)
+                      .delay(900)}
                   />
 
                   {item.menu_id == 1 ? (
@@ -280,12 +293,16 @@ const ArrivedView = ({
           <AnimatedText
             style={styles.smallText}
             title={t('total_text')}
-            entering={FadeInLeft.duration(400).delay(500)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(500)}
           />
           <AnimatedText
             style={styles.totalAmount}
             title={`${orderTotalPrice} NIS`}
-            entering={FadeInLeft.duration(400).delay(500)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(500)}
           />
         </View>
         <View

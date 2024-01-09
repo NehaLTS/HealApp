@@ -9,8 +9,12 @@ import { AuthServicesProvider } from 'libs/authsevices/AuthServiceProvider';
 import { getTitle } from 'libs/utility/Utils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, View } from 'react-native';
-import Animated, { FadeInLeft, ZoomIn } from 'react-native-reanimated';
+import { I18nManager, Image, StyleSheet, View } from 'react-native';
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  ZoomIn,
+} from 'react-native-reanimated';
 
 const filledStar = require('assets/icon/star.png');
 const unfilledStar = require('assets/icon/ratingStar.png');
@@ -100,7 +104,9 @@ const OrderDetail = ({
           </AnimatedText>
           <View style={styles.itemContainer}>
             <AnimatedText
-              entering={FadeInLeft.duration(400).delay(400)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(400)}
               style={styles.callReason}
             >
               {t('reason_call')}
@@ -109,7 +115,9 @@ const OrderDetail = ({
               {orderDetails?.symptoms?.length > 0 &&
                 parsedData()?.map?.((item: any, index: number) => (
                   <AnimatedText
-                    entering={FadeInLeft.duration(400).delay(400 + index * 150)}
+                    entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                      .duration(400)
+                      .delay(400 + index * 150)}
                     key={index}
                     title={
                       parsedData()?.length > 1
@@ -126,7 +134,9 @@ const OrderDetail = ({
           </View>
           <View style={styles.itemContainer}>
             <AnimatedText
-              entering={FadeInLeft.duration(400).delay(600)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(600)}
               style={styles.callReason}
             >
               {t('services_provided')}
@@ -135,13 +145,17 @@ const OrderDetail = ({
               return (
                 <View key={index} style={styles.serviceContainer}>
                   <AnimatedText
-                    entering={FadeInLeft.duration(400).delay(600 + index * 150)}
+                    entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                      .duration(400)
+                      .delay(600 + index * 150)}
                     style={styles.serviceName}
                   >
                     {getTitle(item?.name, i18n)}
                   </AnimatedText>
                   <AnimatedText
-                    entering={FadeInLeft.duration(400).delay(700 + index * 100)}
+                    entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                      .duration(400)
+                      .delay(700 + index * 100)}
                     style={styles.serviceName}
                   >
                     {`${item?.service_price} NIS`}
@@ -151,7 +165,9 @@ const OrderDetail = ({
             })}
             <View style={styles.serviceContainer}>
               <AnimatedText
-                entering={FadeInLeft.duration(400).delay(700)}
+                entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                  .duration(400)
+                  .delay(700)}
                 style={{
                   ...styles.serviceName,
                   fontFamily: fontFamily.medium,
@@ -160,30 +176,43 @@ const OrderDetail = ({
                 {t('total_text')}
               </AnimatedText>
               <AnimatedText
-                entering={FadeInLeft.duration(400).delay(750)}
+                entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                  .duration(400)
+                  .delay(750)}
               >{`${totalPrice} NIS`}</AnimatedText>
             </View>
           </View>
           <View style={styles.itemContainer}>
             <AnimatedText
-              entering={FadeInLeft.duration(400).delay(800)}
-              style={styles.callReason}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(800)}
+              style={{ ...styles.callReason, textAlign: 'left' }}
             >
               {t('address_')}
             </AnimatedText>
-            <AnimatedText entering={FadeInLeft.duration(400).delay(850)}>
+            <AnimatedText
+              style={{ textAlign: 'left' }}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(850)}
+            >
               {orderDetails?.address}
             </AnimatedText>
           </View>
           <View style={styles.itemContainer}>
             <AnimatedText
-              entering={FadeInLeft.duration(400).delay(900)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(900)}
               style={styles.callReason}
             >
               {t('rating')}
             </AnimatedText>
             <Animated.View
-              entering={FadeInLeft.duration(400).delay(1000)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(1000)}
               style={styles.starContainer}
             >
               {stars}

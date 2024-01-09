@@ -33,7 +33,6 @@ export interface Banner {
   destinationUrl: string;
 }
 
-
 export interface treatment {
   treatmentMenu: TreatmentMenu[];
   reason: Reason[];
@@ -66,9 +65,8 @@ export interface search_provider {
   provider_type_id?: any;
   specialty_name: Name;
   image_url?: string;
-  specialty_id: number
+  specialty_id: number;
 }
-
 
 export interface Provider {
   name: string;
@@ -103,6 +101,7 @@ export interface TreatementEnded {
 }
 
 export interface ProviderHomeDetails {
+  onHold?: boolean;
   isSuccessful: boolean;
   providerDetails: ProviderHomeOrderDetail;
 }

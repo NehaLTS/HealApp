@@ -242,6 +242,11 @@
   "log_out": "تسجيل الخروج",
   "reports": "التقارير",
   "languages": "اللغات",
+  "no_history_found": "لم يتم العثور على سجل الطلبات.",
+  "loading_screen_text": "يرجى الانتظار،\nنحن نعد كل شيء لك...",
+  "clear_filter": "مسح الفلتر",
+  "filter": "تصفية",
+  "install_whatsapp": "لم يتم تثبيت واتساب على جهازك",
   "home": {
     "providerList": [
       {

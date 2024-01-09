@@ -255,15 +255,15 @@ export const AuthServicesProvider = () => {
 
   const OnGetOrderHistory = (
     providerId: number,
-    page: number,
-    pageSize: number,
+    startingIndex: number,
+    lastIndex: number,
   ): Promise<any> =>
     sendRequest(GET_ORDER_HISTORY, {
       method: POST,
       body: {
         provider_id: providerId,
-        startingIndex: 21,
-        lastIndex: 25,
+        startingIndex: startingIndex,
+        lastIndex: lastIndex,
       } as unknown as BodyInit,
       headers: {
         'Content-Type': 'application/json',

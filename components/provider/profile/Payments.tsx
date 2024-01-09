@@ -78,10 +78,14 @@ const Payments = () => {
     return (
       <Animated.View
         style={styles.itemContainer}
-        entering={FadeInLeft.duration(400).delay(400 + index * 100)}
+        entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+          .duration(400)
+          .delay(400 + index * 100)}
       >
         <AnimatedText
-          entering={FadeInLeft.duration(400).delay(600 + index * 100)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(600 + index * 100)}
           title={title}
         />
         <AnimatedText

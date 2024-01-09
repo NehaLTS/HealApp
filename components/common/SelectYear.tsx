@@ -5,7 +5,13 @@ import { colors } from 'designToken/colors';
 import { dimens } from 'designToken/dimens';
 import { getHeight, getWidth } from 'libs/StyleHelper';
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  I18nManager,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const SelectYear = ({
   setYear,
@@ -63,12 +69,13 @@ const styles = StyleSheet.create({
     width: getWidth(8),
     height: getHeight(13),
     resizeMode: 'center',
-    transform: [{ rotate: '180deg' }],
+    transform: [{ rotate: !I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   nextImage: {
     width: getWidth(8),
     height: getHeight(13),
     resizeMode: 'center',
+    transform: [{ rotate: I18nManager.isRTL ? '180deg' : '0deg' }],
   },
   yearPickerContainer: {
     flexDirection: 'row',

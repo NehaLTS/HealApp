@@ -15,37 +15,38 @@ import { fontSize } from 'designToken/fontSizes';
 import { useNavigation } from '@react-navigation/native';
 import arrowBack from 'assets/icon/arrowBack.png';
 import { useTranslation } from 'react-i18next';
+import useToast from 'components/common/useToast';
 
 const Support = () => {
   const navigation = useNavigation<any>();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const { showToast, renderToast } = useToast();
 
   const headerLeft = () => (
-    <TouchableOpacity style={styles.backArrow}
+    <TouchableOpacity
+      style={styles.backArrow}
       onPress={() => navigation.goBack()}
     >
       <Image source={arrowBack} style={styles.arrowBack} />
     </TouchableOpacity>
   );
-  const headerTitle = () => (
-    <Text
-      style={styles.title}
-      title={t('support')}
-    />
-  );
+  const headerTitle = () => <Text style={styles.title} title={t('support')} />;
   const handleChatWithUs = () => {
     const whatsappLink = 'whatsapp://send?phone=123456789';
 
-    Linking.canOpenURL(whatsappLink).then((supported) => {
-      if (supported) {
-        return Linking.openURL(whatsappLink);
-      } else {
-        console.error("WhatsApp is not installed on your device");
-      }
-    }).catch((err) => console.error('An error occurred', err));
+    Linking.canOpenURL(whatsappLink)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(whatsappLink);
+        } else {
+          showToast(t('support'), t('install_whatsapp'), 'error');
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
   };
   return (
     <>
+      {renderToast()}
       <View style={styles.headerContainer}>
         {headerLeft()}
         {headerTitle()}
@@ -58,7 +59,10 @@ const Support = () => {
           />
         </View>
         <View style={styles.chatContainer}>
-          <TouchableOpacity onPress={handleChatWithUs} style={styles.innerContainer}>
+          <TouchableOpacity
+            onPress={handleChatWithUs}
+            style={styles.innerContainer}
+          >
             <Text
               title={t('chat_with')}
               style={{ fontSize: getHeight(fontSize.textXl) }}
@@ -100,11 +104,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: getHeight(dimens.marginL),
+    marginVertical: getHeight(dimens.imageS),
   },
   chatContainer: {
     alignItems: 'center',
-    borderWidth: getHeight(dimens.borderThin),
+    borderWidth: getWidth(dimens.borderThin),
     borderRadius: getHeight(dimens.marginS),
     flexDirection: 'row',
     minHeight: getHeight(dimens.imageS + 5),
@@ -113,8 +117,8 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.imageXs),
   },
   iconImage: {
-    width: getWidth(dimens.marginL + 8),
-    height: getHeight(dimens.marginL + 8),
+    width: getHeight(dimens.imageXs),
+    height: getHeight(dimens.imageXs),
     resizeMode: 'contain',
   },
   innerContainer: {
@@ -138,5 +142,5 @@ const styles = StyleSheet.create({
   backArrow: {
     paddingRight: getWidth(15),
     paddingVertical: getHeight(5),
-  }
+  },
 });

@@ -31,7 +31,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  FadeInUp,
+} from 'react-native-reanimated';
 import HomeScreenControlller from './HomeScreenController';
 import ProviderConfirmation from 'components/provider/registration/views/ProviderConfirmation';
 
@@ -79,8 +83,9 @@ const HomeScreen = () => {
     isLoading,
     showTreatmentFinished,
     setShowTreatmentFinished,
+    profileOnHold,
   } = HomeScreenControlller();
-
+  console.log('profileOnHold', profileOnHold);
   const { setUserLocation } = UseProviderUserContext();
   const eventServices =
     order && order?.OrderReceive && order?.OrderReceive?.services
@@ -112,7 +117,9 @@ const HomeScreen = () => {
               key={index}
               style={{ ...styles.details }}
               title={`${getTitle(item?.name, i18n)}` ?? ''}
-              entering={FadeInLeft.duration(400).delay(500)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(500)}
             />
           ),
         )}
@@ -127,7 +134,9 @@ const HomeScreen = () => {
               fontSize: getHeight(fontSize.textXl - 1),
             }}
             title={`${t('ordered')} `}
-            entering={FadeInLeft.duration(400).delay(600)}
+            entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+              .duration(400)
+              .delay(600)}
           >
             {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
               (service: any, index: number) => (
@@ -143,7 +152,9 @@ const HomeScreen = () => {
                         }`
                       : getTitle(service?.name, i18n)
                   }
-                  entering={FadeInLeft.duration(400).delay(700)}
+                  entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                    .duration(400)
+                    .delay(700)}
                 />
               ),
             )}
@@ -163,7 +174,9 @@ const HomeScreen = () => {
             ? order?.OrderReceive?.time
             : 0
         } min`}
-        entering={FadeInLeft.duration(400).delay(600)}
+        entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+          .duration(400)
+          .delay(600)}
       />
       <AnimatedText
         style={{
@@ -173,7 +186,9 @@ const HomeScreen = () => {
           paddingBottom: getHeight(16),
         }}
         title={order?.OrderReceive?.address}
-        entering={FadeInLeft.duration(400).delay(800)}
+        entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+          .duration(400)
+          .delay(800)}
       />
       <View
         style={{
@@ -191,7 +206,9 @@ const HomeScreen = () => {
           style={{
             ...styles.seeOnWaze,
           }}
-          entering={FadeInLeft.duration(400).delay(1000)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(1000)}
         />
         <Animated.Image
           source={waze}
@@ -200,7 +217,9 @@ const HomeScreen = () => {
             height: getHeight(20),
             resizeMode: 'center',
           }}
-          entering={FadeInLeft.duration(400).delay(1180)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(1180)}
         />
       </View>
     </>
@@ -230,7 +249,9 @@ const HomeScreen = () => {
                     key={index}
                     style={{ ...styles.details, marginTop: getHeight(20) }}
                     title={`${getTitle(item?.name, i18n)}` ?? ''}
-                    entering={FadeInLeft.duration(400).delay(500)}
+                    entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                      .duration(400)
+                      .delay(500)}
                   />
                 ),
               )}
@@ -239,7 +260,9 @@ const HomeScreen = () => {
                 <AnimatedText
                   style={styles.details}
                   title={`${t('ordered')} `}
-                  entering={FadeInLeft.duration(400).delay(600)}
+                  entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                    .duration(400)
+                    .delay(600)}
                 >
                   {JSON.parse?.(order?.OrderReceive?.services)?.map?.(
                     (service: any, index: number) => (
@@ -255,7 +278,9 @@ const HomeScreen = () => {
                               }`
                             : getTitle(service?.name, i18n)
                         }
-                        entering={FadeInLeft.duration(400).delay(700)}
+                        entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                          .duration(400)
+                          .delay(700)}
                       />
                     ),
                   )}
@@ -275,7 +300,9 @@ const HomeScreen = () => {
                   ? order?.OrderReceive?.time
                   : 0
               } min`}
-              entering={FadeInLeft.duration(400).delay(700)}
+              entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+                .duration(400)
+                .delay(700)}
             />
           </>
         )}
@@ -284,7 +311,9 @@ const HomeScreen = () => {
           fontSize={getHeight(fontSize.textXl)}
           style={styles.seeMoreButton}
           onPress={onPressSeeMore}
-          entering={FadeInLeft.duration(400).delay(800)}
+          entering={(I18nManager.isRTL ? FadeInRight : FadeInLeft)
+            .duration(400)
+            .delay(800)}
         />
         <View
           style={{
@@ -475,7 +504,7 @@ const HomeScreen = () => {
         isProviderProfile
         onPress={onPressProfileTab}
       />
-      <ProviderConfirmation isVisible={false} />
+      <ProviderConfirmation isVisible={profileOnHold} />
       <View style={styles.header}>
         {headerLeft()}
         {headerRight()}

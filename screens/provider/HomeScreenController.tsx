@@ -54,6 +54,9 @@ const HomeScreenControlller = () => {
   const [providerDaySummary, setProviderDaySummary] =
     useState<ProviderHomeDetails>();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [profileOnHold, setProfileOnHold] = useState(
+    available?.isOnHold ?? false,
+  );
   const [isArrived, setIsArrived] = useState(
     order?.extraData?.isArrived ?? false,
   );
@@ -161,8 +164,13 @@ const HomeScreenControlller = () => {
       token,
     );
     console.log('daySummary123', daySummary);
-
-    setProviderDaySummary(daySummary);
+    if (!daySummary?.onHold) {
+      setProviderDaySummary(daySummary);
+    }
+    setProfileOnHold(daySummary?.onHold ?? false);
+    setLocalData('USER', {
+      isOnHold: daySummary?.onHold ?? false,
+    });
   };
 
   useEffect(() => {
@@ -601,6 +609,7 @@ const HomeScreenControlller = () => {
     setIsArrived,
     isLoading,
     setIsLoading,
+    profileOnHold,
   };
 };
 

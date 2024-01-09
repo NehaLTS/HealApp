@@ -243,6 +243,11 @@
   "log_out": "Log Out",
   "reports": "Reports",
   "languages": "Languages",
+  "no_history_found": "No order history found.",
+  "loading_screen_text": "Please wait,\nwe're getting everything ready for you...",
+  "clear_filter": "Clear Filter",
+  "filter": "Filter",
+  "install_whatsapp": "WhatsApp is not installed on your device",
   "home": {
     "providerList": [
       {

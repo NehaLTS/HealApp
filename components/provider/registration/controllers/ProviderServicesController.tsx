@@ -36,6 +36,14 @@ const ProviderServicesController = () => {
     );
     if (response && response.services) {
       setServices(response.services);
+      const visitService = response.services.find(
+        (service: { name: { en: string } }) => service?.name?.en === 'Visit',
+      );
+      if (visitService) {
+        setSelectedServices([visitService]);
+        setActiveCheckbox([visitService?.heal_id]);
+      }
+
       Sentry.captureMessage(
         `Provider flow GET ALL RELATED SERVICES onGetProviderService(API) for:-${
           providerProfile?.firstName ?? ''
@@ -50,6 +58,10 @@ const ProviderServicesController = () => {
   }, []);
 
   const onSelectServices = (item: any) => {
+    if (item?.name?.en === 'Visit') {
+      return;
+    }
+    console.log('item+++++', item);
     const updatedActiveCheckbox = [...activeCheckbox];
     const itemIndex = updatedActiveCheckbox.indexOf(item?.heal_id);
     let updatedSelectedMenu: any[];
@@ -61,11 +73,11 @@ const ProviderServicesController = () => {
     setActiveCheckbox(updatedActiveCheckbox);
     if (
       selectedServices.find(
-        (selectedItem) => selectedItem.heal_id === item.heal_id,
+        (selectedItem) => selectedItem?.heal_id === item?.heal_id,
       )
     ) {
       updatedSelectedMenu = selectedServices.filter(
-        (selectedItem) => selectedItem.heal_id !== item.heal_id,
+        (selectedItem) => selectedItem?.heal_id !== item?.heal_id,
       );
     } else {
       updatedSelectedMenu = [...selectedServices, item];
@@ -79,10 +91,18 @@ const ProviderServicesController = () => {
   const onPressBack = () => setCurrentStep('payment');
 
   const onPressNext = async () => {
+    if (
+      selectedServices.length === 1 &&
+      selectedServices[0]?.name?.en === 'Visit'
+    ) {
+      Alert.alert(t('select_services_provide'));
+      return;
+    }
+
     if (selectedServices?.length) {
       setIsLoading(true);
       const concatenatedIds = selectedServices
-        .map((item) => item.heal_id)
+        .map((item) => item?.heal_id)
         .join(', ');
 
       let response = await AddProviderServices(

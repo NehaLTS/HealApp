@@ -6,6 +6,7 @@ import NavigationRoutes from './NavigationRoutes';
 import { getHeight } from 'libs/StyleHelper';
 import { colors } from 'designToken/colors';
 import { defaultHeaderStyle } from 'components/common/Header';
+import { useTranslation } from 'react-i18next';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,20 +18,6 @@ interface Components {
   HomeScreen: ComponentType;
   ProviderProfile: ComponentType;
 }
-const LoadingView = () => (
-  <View
-    style={{
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: colors.white,
-    }}
-  >
-    <Text style={{ fontSize: getHeight(20), textAlign: 'center' }}>
-      {" Please wait,\nwe're getting everything ready for you..."}
-    </Text>
-  </View>
-);
 
 const ProviderStackNavigator = () => {
   const [userDataProvider, setUserDataProvider] = useState({});
@@ -41,6 +28,22 @@ const ProviderStackNavigator = () => {
     HomeScreen: null,
     ProviderProfile: null,
   });
+  const { t } = useTranslation();
+
+  const LoadingView = () => (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.white,
+      }}
+    >
+      <Text style={{ fontSize: getHeight(20), textAlign: 'center' }}>
+        {t('loading_screen_text')}
+      </Text>
+    </View>
+  );
 
   useEffect(() => {
     Promise.all([
