@@ -253,13 +253,13 @@ const HomeScreen = () => {
         }}
         title={
           I18nManager.isRTL
-            ? `${item?.name.en ? getTitle(item?.name, i18n) : item?.name}  \u25CF`
-            : `\u25CF  ${item?.name.en ? getTitle(item?.name, i18n) : item?.name}`
+            ? `${getTitle(item?.name, i18n)}  \u25CF`
+            : `\u25CF  ${getTitle(item?.name, i18n)}`
         }
         onPress={() => {
           setSearchSpecialist(item?.name?.en);
           setSearchProviderList(item);
-          onSearchDone(item?.specialty_id);
+          onSearchDone(item?.name?.en);
         }}
       />
     ));
@@ -303,7 +303,7 @@ const HomeScreen = () => {
           paddingBottom: getHeight(30),
         }}
         keyboardShouldPersistTaps="always"
-        style={{ flex: 1 }}
+        style={{ flex: 1, backgroundColor: colors.white }}
       >
         {isTouchStart && searchSpecialist?.length === 0 && (
           <TouchableOpacity
@@ -357,7 +357,7 @@ const HomeScreen = () => {
             alignItems: 'center',
             marginHorizontal: getWidth(dimens.marginM),
             borderRadius: getHeight(20),
-            elevation: getHeight(15),
+            elevation: getWidth(15),
             marginTop: 0,
           }}
         >

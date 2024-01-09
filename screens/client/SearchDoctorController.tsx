@@ -225,14 +225,14 @@ const SearchDoctorController = () => {
       } else {
         setShowLoader(false);
         setProviderNotFound(true);
-        Alert.alert(t('no_nearby_provider'), t('try_again_later'), [
-          {
-            text: t('ok'),
-            onPress: () => {
-              navigation.goBack();
-            },
-          },
-        ]);
+        // Alert.alert(t('no_nearby_provider'), t('try_again_later'), [
+        //   {
+        //     text: t('ok'),
+        //     onPress: () => {
+        //       navigation.goBack();
+        //     },
+        //   },
+        // ]);
       }
     }
   };

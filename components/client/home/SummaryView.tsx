@@ -97,11 +97,10 @@ const SummaryView = ({
             !order?.isOrderForOther
               ? userProfile?.date_of_birth ?? ''
               : order?.patient_type?.age,
-          )} y.o, ${
-            !order?.isOrderForOther
-              ? userProfile?.phoneNumber
-              : order?.phonenumber
-          }`}
+          )} y.o, ${!order?.isOrderForOther
+            ? userProfile?.phoneNumber
+            : order?.phonenumber
+            }`}
           style={styles.textSmall}
         />
       </View>
@@ -124,11 +123,10 @@ const SummaryView = ({
             key={index}
             title={
               order?.reason?.length > 1
-                ? `${
-                    index !== order?.reason?.length - 1
-                      ? `${getTitle(item?.specialty_name, i18n)}, `
-                      : `${getTitle(item?.specialty_name, i18n)}`
-                  }`
+                ? `${index !== order?.reason?.length - 1
+                  ? `${getTitle(item?.specialty_name, i18n)}, `
+                  : `${getTitle(item?.specialty_name, i18n)}`
+                }`
                 : getTitle(item?.specialty_name, i18n)
             }
             style={styles.textSmall}
@@ -149,7 +147,7 @@ const SummaryView = ({
             getTitle(item?.services_name, i18n)?.charAt(0)?.toUpperCase() +
             getTitle(item?.services_name, i18n)?.slice(1) +
             ' - ' +
-            item?.price
+            `${item?.price} NIS`
           }
           style={styles.voltaireText}
         />
@@ -158,7 +156,7 @@ const SummaryView = ({
         title={`Service charges - ${serviceCharge}`}
         style={styles.voltaireText}
       />
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', alignItems: "center" }}>
         <Text title={t('total')} style={styles.total} />
         <Text
           title={`${formatNumber(
@@ -260,14 +258,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   voltaireText: {
-    marginVertical: getHeight(3),
+    marginVertical: getHeight(4),
     fontSize: getHeight(fontSize.textM),
     textAlign: 'left',
     fontFamily: fontFamily.light,
   },
   payForIt: {
     fontSize: getHeight(fontSize.textS),
-    marginTop: getHeight(dimens.borderBold),
+    marginTop: getHeight(6),
   },
   cardDetail: {
     flexDirection: 'row',
@@ -302,12 +300,12 @@ const styles = StyleSheet.create({
   total: {
     fontFamily: fontFamily.medium,
     fontSize: getHeight(fontSize.textM),
-    marginVertical: getHeight(dimens.borderBold + dimens.borderBold),
+    marginVertical: getHeight(5),
   },
   Small: {
     fontSize: getHeight(fontSize.textM),
     fontFamily: fontFamily.light,
-    marginVertical: getHeight(dimens.borderBold + dimens.borderBold),
+    marginVertical: getHeight(5),
   },
   textSmall: {
     fontSize: getHeight(fontSize.textM),

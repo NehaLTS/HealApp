@@ -97,17 +97,17 @@ const TreatmentEnd = ({
         <View style={{ gap: getWidth(10) }}>
           <Text title={t('summary')} style={styles.order} />
           <View style={{ gap: 8 }}>
-            {currentOrder?.orderServices.map((item, index) => (
+            {currentOrder?.orderServices?.map((item, index) => (
               <Text
                 key={index}
                 title={`${getTitle(item?.name, i18n)} - ${item?.service_price}`}
                 style={styles.text}
               />
             ))}
-            <Text title={`${'App Service Price'} - ${payAbleAmount().appAmount.toString()}`} style={styles.text} />
+            <Text title={`${'App Service Price'} - ${payAbleAmount().appAmount.toString()} NIS`} style={styles.text} />
             <View style={{ flexDirection: 'row' }}>
               <Text title={t('total')} style={styles.total} />
-              <Text title={payAbleAmount().totalAmount.toString()} style={styles.text} />
+              <Text title={`${payAbleAmount().totalAmount.toString()} NIS`} style={styles.text} />
             </View>
           </View>
         </View>

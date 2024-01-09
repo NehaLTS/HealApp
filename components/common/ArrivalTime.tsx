@@ -36,25 +36,23 @@ const ArrivalTime = ({ totalTime }: { totalTime: number }) => {
     <View style={styles.mainView}>
       <View style={styles.timeBoxView}>
         <Text
-          title={`${
-            time.minutes <= 0
-              ? '00'
-              : time.minutes < 10
+          title={`${time.minutes <= 0
+            ? '00'
+            : time.minutes < 10
               ? `${0}${time.minutes}`
               : time.minutes
-          }`}
+            }`}
           style={styles.timeText}
         />
       </View>
       <View style={styles.timeBoxView}>
         <Text
-          title={`${
-            time.seconds == 0
-              ? '00'
-              : time.seconds < 10
+          title={`${time.seconds == 0
+            ? '00'
+            : time.seconds < 10
               ? `${0}${time.seconds}`
               : time.seconds
-          }`}
+            }`}
           style={styles.timeText}
         />
       </View>

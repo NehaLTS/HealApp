@@ -218,48 +218,42 @@ const OrderFormView = ({
         treatmentMenuOfReason?.map(
           (item: TreatmentMenu, index: number) => (
             <>
-              {/* {item?.heal_id === 1 ? <View
-              key={index}
-              style={styles.checkboxContainer}>
-              <View style={styles.checkBox}>
+              {item?.menu_id === 1 ?
+                <View
+                  key={index}
+                  style={styles.checkboxContainer}>
+                  <View style={styles.checkBox}>
 
-                <Image
-                  source={require('assets/icon/check.png')}
-                  style={styles.image}
-                />
-
-              </View>
-              <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
-                  getTitle(item?.services_name, i18n)?.slice(1)}
-              </Text>
-              <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                {item.price + " " + item.currency}
-              </Text>
-            </View> : */}
-              <TouchableOpacity
-                key={index}
-                style={styles.checkboxContainer}
-
-                onPress={() => handleItemPress(item)}
-              >
-                <View style={styles.checkBox}>
-                  {activeCheckbox?.includes(item?.heal_id) && (
                     <Image
                       source={require('assets/icon/check.png')}
                       style={styles.image}
                     />
-                  )}
-                </View>
-                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                  {getTitle(item?.services_name, i18n)?.charAt(0).toUpperCase() +
-                    getTitle(item?.services_name, i18n)?.slice(1)}
-                </Text>
-                <Text style={{ fontSize: getHeight(fontSize.textM + 1) }}>
-                  {item.price + " " + item.currency}
-                </Text>
-              </TouchableOpacity>
-              {/* } */}
+                  </View>
+                  <Text style={{ fontSize: getHeight(fontSize.textM + 1), marginRight: getHeight(67) }}>
+                    {item?.name?.en.charAt(0).toUpperCase() +
+                      item?.name?.en.slice(1)} - {`${item.price} NIS`}
+                  </Text>
+                </View> :
+                <TouchableOpacity
+                  key={index}
+                  style={styles.checkboxContainer}
+
+                  onPress={() => handleItemPress(item)}
+                >
+                  <View style={styles.checkBox}>
+                    {activeCheckbox?.includes(item?.heal_id) && (
+                      <Image
+                        source={require('assets/icon/check.png')}
+                        style={styles.image}
+                      />
+                    )}
+                  </View>
+                  <Text style={{ fontSize: getHeight(fontSize.textM + 1), marginRight: getHeight(67) }}>
+                    {item?.name?.en.charAt(0).toUpperCase() +
+                      item?.name?.en.slice(1)} - {`${item.price} NIS`}
+                  </Text>
+                </TouchableOpacity>
+              }
             </>
           ),
         )
@@ -512,11 +506,11 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'row',
-    gap: getHeight(dimens.marginM),
+    gap: getWidth(dimens.marginS + 5),
     alignItems: 'center',
     marginBottom: getHeight(dimens.marginS),
-    alignSelf: 'flex-start',
     paddingLeft: getWidth(2),
+
   },
   button: {
     flexDirection: 'row',
@@ -530,7 +524,7 @@ const styles = StyleSheet.create({
     marginLeft: getWidth(dimens.marginS),
   },
   inputContainer: {
-    borderWidth: getHeight(dimens.borderBold),
+    borderWidth: getWidth(dimens.borderBold),
     borderRadius: getHeight(dimens.marginS),
     borderColor: colors.primary,
     paddingHorizontal: getWidth(dimens.marginS),

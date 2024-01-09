@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     marginTop: getHeight(dimens.marginS),
   },
   elevation: {
-    elevation: getHeight(dimens.paddingS),
+    elevation: getWidth(dimens.paddingS),
     shadowColor: colors.black,
   },
   inputContainer: {
